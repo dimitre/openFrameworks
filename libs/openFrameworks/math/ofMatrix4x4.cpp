@@ -275,7 +275,7 @@ ofQuaternion ofMatrix4x4::getRotate() const
     ofVec3f vs = mat.getScale();
     mat.scale(1./vs.x,1./vs.y,1./vs.z);
 
-    ofVec4f* m = mat._mat;
+    glm::vec4* m = mat._mat;
 
     // Source: Gamasutra, Rotating Objects Using Quaternions
     //
@@ -923,10 +923,10 @@ void ofMatrix4x4::makeLookAtViewMatrix(const ofVec3f& eye,const ofVec3f& center,
 	ofVec3f xaxis = up.getCrossed(zaxis).getNormalized();
 	ofVec3f yaxis = zaxis.getCrossed(xaxis);
 
-	_mat[0].set(xaxis.x, yaxis.x, zaxis.x, 0);
-	_mat[1].set(xaxis.y, yaxis.y, zaxis.y, 0);
-	_mat[2].set(xaxis.z, yaxis.z, zaxis.z, 0);
-	_mat[3].set(-xaxis.dot(eye), -yaxis.dot(eye), -zaxis.dot(eye), 1);
+	_mat[0] = glm::vec4(xaxis.x, yaxis.x, zaxis.x, 0);
+	_mat[1] = glm::vec4(xaxis.y, yaxis.y, zaxis.y, 0);
+	_mat[2] = glm::vec4(xaxis.z, yaxis.z, zaxis.z, 0);
+	_mat[3] = glm::vec4(-xaxis.dot(eye), -yaxis.dot(eye), -zaxis.dot(eye), 1);
 }
 
 void ofMatrix4x4::makeLookAtMatrix(const ofVec3f& eye,const ofVec3f& center,const ofVec3f& up)
@@ -935,10 +935,10 @@ void ofMatrix4x4::makeLookAtMatrix(const ofVec3f& eye,const ofVec3f& center,cons
 	ofVec3f xaxis = up.getCrossed(zaxis).getNormalized();
 	ofVec3f yaxis = zaxis.getCrossed(xaxis);
 
-	_mat[0].set(xaxis.x, xaxis.y, xaxis.z, 0);
-	_mat[1].set(yaxis.x, yaxis.y, yaxis.z, 0);
-	_mat[2].set(zaxis.x, zaxis.y, zaxis.z, 0);
-	_mat[3].set(eye.x, eye.y, eye.z, 1);
+	_mat[0] = glm::vec4(xaxis.x, xaxis.y, xaxis.z, 0);
+	_mat[1] = glm::vec4(yaxis.x, yaxis.y, yaxis.z, 0);
+	_mat[2] = glm::vec4(zaxis.x, zaxis.y, zaxis.z, 0);
+	_mat[3] = glm::vec4(eye.x, eye.y, eye.z, 1);
 }
 
 void ofMatrix4x4::getLookAt(ofVec3f& eye,ofVec3f& center,ofVec3f& up,float lookDistance) const
