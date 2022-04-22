@@ -190,6 +190,7 @@ enum ofTargetPlatform{
 		#define __MACOSX_CORE__
 	#endif
 	#include <unistd.h>
+
 	#include "GL/glew.h"
 	#include <ApplicationServices/ApplicationServices.h>
 

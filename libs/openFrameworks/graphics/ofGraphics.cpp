@@ -1,21 +1,15 @@
 #include "ofGraphics.h"
-#include "ofRendererCollection.h"
-#if !defined(TARGET_OF_IOS) && !defined(TARGET_ANDROID) && !defined(TARGET_EMSCRIPTEN)
-#include "ofCairoRenderer.h"
-#endif
-#include "ofGLRenderer.h"
 
+#include "ofGLRenderer.h"
 
 #ifndef TARGET_WIN32
     #define CALLBACK
 #endif
 
-using namespace std;
-
 //style stuff - new in 006
 static ofVboMesh gradientMesh;
 
-void ofSetCurrentRenderer(shared_ptr<ofBaseRenderer> renderer,bool setDefaults){
+void ofSetCurrentRenderer(std::shared_ptr<ofBaseRenderer> renderer,bool setDefaults){
 	if(setDefaults){
 		ofStyle style = ofGetCurrentRenderer()->getStyle();
 		renderer->setupGraphicDefaults();
@@ -23,71 +17,6 @@ void ofSetCurrentRenderer(shared_ptr<ofBaseRenderer> renderer,bool setDefaults){
 	}
 	ofGetCurrentRenderer() = renderer;
 }
-
-#if !defined(TARGET_OF_IOS) && !defined(TARGET_ANDROID) && !defined(TARGET_EMSCRIPTEN)
-static shared_ptr<ofCairoRenderer> cairoScreenshot;
-static shared_ptr<ofBaseRenderer> storedRenderer;
-static shared_ptr<ofRendererCollection> rendererCollection;
-static bool bScreenShotStarted = false;
-
-
-static void ofEndSaveScreen(){
-	if( bScreenShotStarted ){
-
-		if( cairoScreenshot ){
-			cairoScreenshot->close();
-			rendererCollection.reset();
-			cairoScreenshot.reset();
-		}
-		if( storedRenderer ){
-			ofSetCurrentRenderer(storedRenderer,true);
-			storedRenderer.reset();
-		}
-
-		bScreenShotStarted = false;
-	}
-
-}
-
-static void ofBeginSaveScreen(string filename, ofCairoRenderer::Type type, bool bMultipage, bool b3D, ofRectangle outputsize){
-	if( bScreenShotStarted ) ofEndSaveScreen();
-	
-	storedRenderer = ofGetCurrentRenderer();
-	
-	cairoScreenshot = std::make_unique<ofCairoRenderer>();
-	cairoScreenshot->setup(filename, type, bMultipage, b3D, outputsize);
-
-	rendererCollection = make_shared<ofRendererCollection>();
-	rendererCollection->renderers.push_back(storedRenderer);
-	rendererCollection->renderers.push_back(cairoScreenshot);
-	
-	ofSetCurrentRenderer(rendererCollection, true);
-	cairoScreenshot->background(cairoScreenshot->getStyle().bgColor);
-	bScreenShotStarted = true;
-}
-
-//-----------------------------------------------------------------------------------
-void ofBeginSaveScreenAsPDF(string filename, bool bMultipage, bool b3D, ofRectangle outputsize){
-	ofBeginSaveScreen(filename, ofCairoRenderer::PDF, bMultipage, b3D, outputsize);
-}
-
-//-----------------------------------------------------------------------------------
-void ofEndSaveScreenAsPDF(){
-	ofEndSaveScreen();
-}
-
-//-----------------------------------------------------------------------------------
-void ofBeginSaveScreenAsSVG(string filename, bool bMultipage, bool b3D, ofRectangle outputsize){
-	ofBeginSaveScreen(filename, ofCairoRenderer::SVG, bMultipage, b3D, outputsize);
-}
-
-//-----------------------------------------------------------------------------------
-void ofEndSaveScreenAsSVG(){
-	ofEndSaveScreen();
-}
-
-#endif
-
 
 
 //----------------------------------------------------------
@@ -1119,28 +1048,28 @@ void ofVertex(const glm::vec2 & p){
 }
 
 //----------------------------------------------------------
-void ofVertices( const vector <glm::vec3> & polyPoints ){
+void ofVertices( const std::vector <glm::vec3> & polyPoints ){
 	for( const auto & p: polyPoints ){
 		ofGetCurrentRenderer()->getPath().lineTo(p);
 	}
 }
 
 //----------------------------------------------------------
-void ofVertices( const vector <glm::vec2> & polyPoints ){
+void ofVertices( const std::vector <glm::vec2> & polyPoints ){
 	for( const auto & p: polyPoints ){
 		ofGetCurrentRenderer()->getPath().lineTo(glm::vec3(p, 0.0));
 	}
 }
 
 //----------------------------------------------------------
-void ofVertices( const vector <ofVec3f> & polyPoints ){
+void ofVertices( const std::vector <ofVec3f> & polyPoints ){
 	for( const auto & p: polyPoints ){
 		ofGetCurrentRenderer()->getPath().lineTo(p);
 	}
 }
 
 //----------------------------------------------------------
-void ofVertices( const vector <ofVec2f> & polyPoints ){
+void ofVertices( const std::vector <ofVec2f> & polyPoints ){
 	for( const auto & p: polyPoints ){
 		ofGetCurrentRenderer()->getPath().lineTo(p);
 	}
@@ -1157,28 +1086,28 @@ void ofCurveVertex(float x, float y, float z){
 }
 
 //----------------------------------------------------------
-void ofCurveVertices( const vector <glm::vec3> & curvePoints){
+void ofCurveVertices( const std::vector <glm::vec3> & curvePoints){
 	for( const auto & p: curvePoints ){
 		ofGetCurrentRenderer()->getPath().curveTo(p);
 	}
 }
 
 //----------------------------------------------------------
-void ofCurveVertices( const vector <glm::vec2> & curvePoints){
+void ofCurveVertices( const std::vector <glm::vec2> & curvePoints){
 	for( const auto & p: curvePoints ){
 		ofGetCurrentRenderer()->getPath().curveTo(glm::vec3(p, 0.0));
 	}
 }
 
 //----------------------------------------------------------
-void ofCurveVertices( const vector <ofVec3f> & curvePoints){
+void ofCurveVertices( const std::vector <ofVec3f> & curvePoints){
 	for( const auto & p: curvePoints ){
 		ofGetCurrentRenderer()->getPath().curveTo(p);
 	}
 }
 
 //----------------------------------------------------------
-void ofCurveVertices( const vector <ofVec2f> & curvePoints){
+void ofCurveVertices( const std::vector <ofVec2f> & curvePoints){
 	for( const auto & p: curvePoints ){
 		ofGetCurrentRenderer()->getPath().curveTo(p);
 	}
@@ -1241,7 +1170,7 @@ void ofEndShape(bool bClose){
 // text
 //--------------------------------------------------
 template<>
-void ofDrawBitmapString(const string & textString, float x, float y, float z){
+void ofDrawBitmapString(const std::string & textString, float x, float y, float z){
 	ofGetCurrentRenderer()->drawString(textString,x,y,z);
 }
 
@@ -1256,22 +1185,22 @@ void ofDrawBitmapString(const std::string & textString, const glm::vec2 & p){
 }
 
 //--------------------------------------------------
-void ofDrawBitmapStringHighlight(string text, const glm::vec3& position, const ofColor& background, const ofColor& foreground) {
+void ofDrawBitmapStringHighlight(std::string text, const glm::vec3& position, const ofColor& background, const ofColor& foreground) {
 	ofDrawBitmapStringHighlight(text, position.x, position.y, background, foreground);
 }
 
 //--------------------------------------------------
-void ofDrawBitmapStringHighlight(string text, const glm::vec2& position, const ofColor& background, const ofColor& foreground) {
+void ofDrawBitmapStringHighlight(std::string text, const glm::vec2& position, const ofColor& background, const ofColor& foreground) {
 	ofDrawBitmapStringHighlight(text, position.x, position.y, background, foreground);
 }
 
 //--------------------------------------------------
-void ofDrawBitmapStringHighlight(string text, int x, int y, const ofColor& background, const ofColor& foreground) {
-	vector<string> lines = ofSplitString(text, "\n");
+void ofDrawBitmapStringHighlight(std::string text, int x, int y, const ofColor& background, const ofColor& foreground) {
+	std::vector<std::string> lines = ofSplitString(text, "\n");
 	int maxLineLength = 0;
 	for(int i = 0; i < (int)lines.size(); i++) {
 		// tabs are not rendered
-		const string & line(lines[i]);
+		const std::string & line(lines[i]);
 		int currentLineLength = 0;
 		for(int j = 0; j < (int)line.size(); j++) {
 			if (line[j] == '\t') {

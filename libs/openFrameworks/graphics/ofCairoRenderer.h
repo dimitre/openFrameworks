@@ -1,5 +1,6 @@
 #pragma once
 
+//#ifdef OFLIB_USECAIRO
 
 #include "cairo.h"
 
@@ -207,3 +208,5 @@ private:
 	std::deque <ofStyle> styleHistory;
 	ofPath path;
 };
+
+//#endif

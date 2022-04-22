@@ -1,6 +1,17 @@
 #ifndef OF_MAIN_H
 #define OF_MAIN_H
 
+//#pragma message ( "HALLOWW" )
+
+#ifdef OFLIB_USECAIRO
+//ASXA
+#endif
+
+#if !defined(TARGET_OF_IOS) && !defined(TARGET_ANDROID) && !defined(TARGET_EMSCRIPTEN)
+//	#define OFLIB_USECAIRO
+#endif
+
+
 //--------------------------
 // utils
 #include "ofConstants.h"
@@ -61,10 +72,12 @@
 
 //--------------------------
 // graphics
-#if !defined( TARGET_OF_IOS ) & !defined(TARGET_ANDROID) & !defined(TARGET_EMSCRIPTEN)
-	#include "ofCairoRenderer.h"
-#endif
 #include "ofGraphics.h"
+#ifdef OFLIB_USECAIRO
+	#include "ofCairoRenderer.h"
+	#include "ofGraphicsCairo.h"
+#endif
+
 #include "ofImage.h"
 #include "ofPath.h"
 #include "ofPixels.h"

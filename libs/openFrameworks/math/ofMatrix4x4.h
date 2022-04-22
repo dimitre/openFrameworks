@@ -9,6 +9,7 @@
  */
 
 #pragma once
+#pragma GCC diagnostic ignored "-Wshorten-64-to-32"
 
 #include "ofConstants.h"
 #include "ofVec4f.h"

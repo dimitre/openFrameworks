@@ -851,7 +851,8 @@ void ofAppGLFWWindow::setFullscreen(bool fullscreen){
 		[NSApp setPresentationOptions:NSApplicationPresentationHideMenuBar | NSApplicationPresentationHideDock];
 		NSWindow * cocoaWindow = glfwGetCocoaWindow(windowP);
 
-		[cocoaWindow setStyleMask:NSWindowStyleMaskBorderless];
+//		[cocoaWindow setStyleMask:NSWindowStyleMaskBorderless];
+		[cocoaWindow toggleFullScreen:cocoaWindow];
 
 		int monitorCount;
 		GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
@@ -935,7 +936,9 @@ void ofAppGLFWWindow::setFullscreen(bool fullscreen){
 
 		[NSApp setPresentationOptions:NSApplicationPresentationDefault];
 		NSWindow * cocoaWindow = glfwGetCocoaWindow(windowP);
-		[cocoaWindow setStyleMask: NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable];
+//		[cocoaWindow setStyleMask: NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable];
+
+		[cocoaWindow toggleFullScreen:cocoaWindow];
 
 		//----------------------------------------------------
 		// if we have recorded the screen position, put it there
