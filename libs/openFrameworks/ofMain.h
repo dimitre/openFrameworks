@@ -96,6 +96,7 @@
 #if !defined( TARGET_OF_IOS ) & !defined(TARGET_ANDROID) & !defined(TARGET_EMSCRIPTEN) & !defined(TARGET_RASPBERRY_PI_LEGACY)
 	#include "ofAppGLFWWindow.h"
 	#if !defined( TARGET_LINUX_ARM )
+#pragma warning("GLUTWINDOW")
 		#include "ofAppGlutWindow.h"
 	#endif
 #endif
