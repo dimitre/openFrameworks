@@ -1,0 +1,7 @@
+// GLEW
+HEADER_GLEW = "$(OF_PATH)/libs/glew/include"
+LIB_GLEW = "$(OF_PATH)/libs/glew/lib/osx/glew.a"
+
+OF_CORE_LIBS = $(inherited) $(LIB_GLEW)
+OF_CORE_HEADERS = $(inherited) $(HEADER_GLEW)
+
