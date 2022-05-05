@@ -40,8 +40,6 @@ OF_CORE_FRAMEWORKS = $(inherited) -framework Accelerate -framework AGL -framewor
 
 
 
-
-
 // FREEIMAGE
 HEADER_FREEIMAGE = "$(OF_PATH)/libs/FreeImage/include"
 LIB_FREEIMAGE = "$(OF_PATH)/libs/FreeImage/lib/osx/freeimage.a"
@@ -56,5 +54,7 @@ OF_CORE_HEADERS = $(inherited) $(HEADER_FREEIMAGE)
 #include "Freetype.xcconfig"
 //#include "Cairo.xcconfig"
 
-//ofFmodSoundPlayer.*
-EXCLUDED_SOURCE_FILE_NAMES = $(inherited) ofAppEGLWindow.* ofAppGlutWindow.* ofAppNoWindow.* ofArduino.h ofOpenALSoundPlayer.* ofDirectShowGrabber.* ofDirectShowPlayer.* ofGstUtils.* ofGstVideoGrabber.* ofQTKitGrabber.* ofQTKitMovieRenderer.* ofQTKitPlayer.* ofQtUtils.* ofQuickTimeGrabber.* ofQuickTimePlayer.* ofRtAudioSoundStream.*
+
+
+ALWAYS_SEARCH_USER_PATHS = NO
+DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING = YES
