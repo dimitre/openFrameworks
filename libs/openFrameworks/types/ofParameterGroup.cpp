@@ -83,9 +83,9 @@ const ofParameter<string> & ofParameterGroup::getString(const string& name) cons
 	return get<string>(name);
 }
 
-const ofParameter<ofPoint> & ofParameterGroup::getPoint(const string& name) const{
-	return get<ofPoint>(name);
-}
+//const ofParameter<ofPoint> & ofParameterGroup::getPoint(const string& name) const{
+//	return get<ofPoint>(name);
+//}
 
 const ofParameter<ofDefaultVec2> & ofParameterGroup::getVec2f(const string& name) const{
 	return get<ofDefaultVec2>(name);
@@ -143,9 +143,9 @@ const ofParameter<string> & ofParameterGroup::getString(std::size_t pos) const{
 	return get<string>(pos);
 }
 
-const ofParameter<ofPoint> & ofParameterGroup::getPoint(std::size_t pos)	 const{
-	return get<ofPoint>(pos);
-}
+//const ofParameter<ofPoint> & ofParameterGroup::getPoint(std::size_t pos)	 const{
+//	return get<ofPoint>(pos);
+//}
 
 const ofParameter<ofDefaultVec2> & ofParameterGroup::getVec2f(std::size_t pos) const{
 	return get<ofDefaultVec2>(pos);
@@ -211,9 +211,9 @@ ofParameter<string> & ofParameterGroup::getString(const string& name){
 	return get<string>(name);
 }
 
-ofParameter<ofPoint> & ofParameterGroup::getPoint(const string& name){
-	return get<ofPoint>(name);
-}
+//ofParameter<ofPoint> & ofParameterGroup::getPoint(const string& name){
+//	return get<ofPoint>(name);
+//}
 
 ofParameter<ofDefaultVec2> & ofParameterGroup::getVec2f(const string& name){
 	return get<ofDefaultVec2>(name);
@@ -270,9 +270,9 @@ ofParameter<string> & ofParameterGroup::getString(std::size_t pos){
 	return get<string>(pos);
 }
 
-ofParameter<ofPoint> & ofParameterGroup::getPoint(std::size_t pos){
-	return get<ofPoint>(pos);
-}
+//ofParameter<ofPoint> & ofParameterGroup::getPoint(std::size_t pos){
+//	return get<ofPoint>(pos);
+//}
 
 ofParameter<ofDefaultVec2> & ofParameterGroup::getVec2f(std::size_t pos){
 	return get<ofDefaultVec2>(pos);

@@ -12,12 +12,13 @@
 #pragma GCC diagnostic ignored "-Wshorten-64-to-32"
 
 #include "ofConstants.h"
-#include "ofVec4f.h"
+//#include "ofVec4f.h"
 #include "ofQuaternion.h"
 #include <cmath>
 #include "glm/mat4x4.hpp"
 #include "ofMathConstants.h"
 
+class ofVec4f;
 class ofVec3f;
 
 /// \brief The ofMatrix4x4 is the big class of the math part of openFrameworks.

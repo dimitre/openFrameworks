@@ -36,9 +36,16 @@
 
 #include <iomanip>
 #include "ofMathConstants.h"
-#include "ofVec2f.h"
-#include "ofVec3f.h"
-#include "ofVec4f.h"
+
+#if OF_USE_LEGACY_VECTOR_MATH
+#pragma warning(LEGACY_VECTOR_MATH)
+	#include "ofVec2f.h"
+	#include "ofVec3f.h"
+	#include "ofVec4f.h"
+#else
+	#pragma warning(NO_LEGACY_VECTOR_MATH)
+#endif
+
 #include "ofMatrix3x3.h"
 #include "ofMatrix4x4.h"
 #include "ofQuaternion.h"
