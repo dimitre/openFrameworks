@@ -252,7 +252,10 @@ private:
 
 	int 			nFramesSinceWindowResized;
 	bool			bWindowNeedsShowing;
+
+	#ifdef TARGET_RPI
 	bool			needsResizeCheck = false; /// Just for RPI at this point
+	#endif
 
 	GLFWwindow* 	windowP;
 	

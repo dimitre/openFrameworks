@@ -38,12 +38,12 @@
 #include "ofMathConstants.h"
 
 #if OF_USE_LEGACY_VECTOR_MATH
-#pragma warning(LEGACY_VECTOR_MATH)
+// #pragma warning(LEGACY_VECTOR_MATH)
 	#include "ofVec2f.h"
 	#include "ofVec3f.h"
 	#include "ofVec4f.h"
 #else
-	#pragma warning(NO_LEGACY_VECTOR_MATH)
+	// #pragma warning(NO_LEGACY_VECTOR_MATH)
 #endif
 
 #include "ofMatrix3x3.h"

@@ -642,11 +642,30 @@ ofTrueTypeFont::glyph ofTrueTypeFont::loadGlyph(uint32_t utf8) const{
 	aGlyph.props.advance	= face->glyph->metrics.horiAdvance>>6;
 	aGlyph.props.tW			= aGlyph.props.width;
 	aGlyph.props.tH			= aGlyph.props.height;
+	
+	float scale = fontScale2;
+//	scale = 1.0;
+//	scale = 1;
+	aGlyph.props.height *= scale;
+	aGlyph.props.width *= scale;
+	aGlyph.props.bearingX *= scale;
+	aGlyph.props.bearingY *= scale;
+	aGlyph.props.xmin *= scale;
+	aGlyph.props.xmax *= scale;
+	aGlyph.props.ymin *= scale;
+	aGlyph.props.ymax *= scale;
+	aGlyph.props.advance *= scale;
+	aGlyph.props.tW *= scale;
+	aGlyph.props.tH *= scale;
+
 
 	FT_Bitmap& bitmap= face->glyph->bitmap;
 	int width  = bitmap.width;
 	int height = bitmap.rows;
+	
 	if(width==0 || height==0) return aGlyph;
+	
+	
 
 	// Allocate Memory For The Texture Data.
 	aGlyph.pixels.allocate(width, height, OF_PIXELS_GRAY_ALPHA);
@@ -725,11 +744,36 @@ bool ofTrueTypeFont::load(const ofTrueTypeFontSettings & _settings){
 	if(settings.ranges.empty()){
 		settings.ranges.push_back(ofUnicode::Latin1Supplement);
 	}
+
+
+//	int size = int(scale*settings.fontSize) << 6;
 	int border = 1;
+	int size = settings.fontSize << 6; // same as * 64
 
+	FT_Set_Char_Size( face.get(), size, size, settings.dpi, settings.dpi);
 
-	FT_Set_Char_Size( face.get(), settings.fontSize << 6, settings.fontSize << 6, settings.dpi, settings.dpi);
-	fontUnitScale = (float(settings.fontSize * settings.dpi)) / (72 * face->units_per_EM);
+	fontScale2 = 72.0/(float)settings.dpi;
+	fontScale = (float)settings.dpi/72.0;
+	
+	
+
+	FT_Matrix     matrix;
+	cout << "scale = " << fontScale << endl;
+//	float border = 1 * fontScale2;
+	cout << "scale2 = " << fontScale2 << endl;
+//	float scale = 72.0/(float)settings.dpi;
+	matrix.xx = (FT_Fixed)( fontScale2 * 0x10000L );
+	matrix.xy = (FT_Fixed)( 0 * 0x10000L );
+	matrix.yx = (FT_Fixed)( 0 * 0x10000L );
+	matrix.yy = (FT_Fixed)( fontScale2 * 0x10000L );
+	FT_Set_Transform( face.get(), &matrix, NULL);
+	
+//	FT_Set_Pixel_Sizes( face.get(), settings.fontSize, settings.fontSize);
+	
+//	fontUnitScale = (float(settings.fontSize * settings.dpi)) / (72 * face->units_per_EM);
+	fontUnitScale = 1.0;
+//	cout << fontUnitScale << endl;
+//	fontUnitScale = 1;
 	lineHeight = face->height * fontUnitScale;
 	ascenderHeight = face->ascender * fontUnitScale;
 	descenderHeight = face->descender * fontUnitScale;
@@ -781,7 +825,7 @@ bool ofTrueTypeFont::load(const ofTrueTypeFontSettings & _settings){
 				charOutlinesContour[i].setStrokeWidth(1);
 
 				charOutlinesNonVFlipped[i] = charOutlines[i];
-				charOutlinesNonVFlipped[i].translate({0,cps[i].height,0.f});
+				charOutlinesNonVFlipped[i].translate({0,cps[i].height * fontScale,0.f});
 				charOutlinesNonVFlipped[i].scale(1,-1);
 				charOutlinesNonVFlippedContour[i] = charOutlines[i];
 				charOutlinesNonVFlippedContour[i].setFilled(false);
@@ -1286,7 +1330,7 @@ ofTexture ofTrueTypeFont::getStringTexture(const std::string& str, bool vflip) c
                 }
                  
 				int x = pos.x + g.props.xmin;
-                int y = pos.y;
+                int y = pos.y ;
 				glyphPositions.emplace_back(x, y);
                 
                 if(c == '\t')lineWidth += g.props.advance + getGlyphProperties(' ').advance * spaceSize * TAB_WIDTH;

@@ -52,7 +52,7 @@ OF_CORE_HEADERS = $(inherited) $(HEADER_FREEIMAGE)
 
 //EXCLUDED_SOURCE_FILE_NAMES = $(inherited) ofTrueTypeFont.*
 #include "Freetype.xcconfig"
-//#include "Cairo.xcconfig"
+#include "Cairo.xcconfig"
 
 
 
