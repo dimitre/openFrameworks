@@ -11,6 +11,7 @@
 #include "ofImage.h"
 #include "ofUtils.h"
 #include "ofTrueTypeFont.h"
+#include "ofTrueTypeFont.h"
 
 #include "ofMainLoop.h"
 

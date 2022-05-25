@@ -1,4 +1,5 @@
 #pragma once
+#pragma GCC diagnostic ignored "-Wdeprecated"
 
 #include "ofConstants.h"
 #include <fstream>

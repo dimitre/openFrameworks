@@ -9,28 +9,27 @@ typedef struct _XIM * XIM;
 typedef struct _XIC * XIC;
 #endif
 
+
 class ofBaseApp;
 struct GLFWwindow;
+struct GLFWmonitor; // forward declaration
 class ofCoreEvents;
 template<typename T>
 class ofPixels_;
 typedef ofPixels_<unsigned char> ofPixels;
 
 #ifdef TARGET_OPENGLES
-class ofGLFWWindowSettings: public ofGLESWindowSettings{
+typedef ofGLESWindowSettings ofSetupWindowSettings;
 #else
-class ofGLFWWindowSettings: public ofGLWindowSettings{
+typedef ofGLWindowSettings ofSetupWindowSettings;
 #endif
+
+class ofGLFWWindowSettings: public ofSetupWindowSettings{
 public:
 	ofGLFWWindowSettings(){}
 
-#ifdef TARGET_OPENGLES
-	ofGLFWWindowSettings(const ofGLESWindowSettings & settings)
-	:ofGLESWindowSettings(settings){}
-#else
-	ofGLFWWindowSettings(const ofGLWindowSettings & settings)
-	:ofGLWindowSettings(settings){}
-#endif
+	ofGLFWWindowSettings(const ofSetupWindowSettings & settings)
+	:ofSetupWindowSettings(settings){}
 
 #ifdef TARGET_RASPBERRY_PI
 	int numSamples = 0;
@@ -54,7 +53,27 @@ public:
 	bool multiMonitorFullScreen = false;
 	std::shared_ptr<ofAppBaseWindow> shareContextWith;
 };
+	
+static struct ofMonitors {
+public:
+	ofMonitors() {}
+	~ofMonitors() {}
+	std::vector <ofRectangle> rects;
+	ofRectangle allScreensSpace;
+	ofRectangle rectWindow;
+	bool changed = true;
+	GLFWmonitor** monitors;
 
+} allMonitors;
+
+// TODO: Remove.
+
+static bool updateMonitor = true;
+static bool updatePixelScreenCoordScale = true;
+/// Scale factor from virtual operating-system defined client area extents (as seen in currentW, currentH) to physical framebuffer pixel coordinates (as seen in windowW, windowH).
+
+
+	
 #ifdef TARGET_OPENGLES
 class ofAppGLFWWindow : public ofAppBaseGLESWindow{
 #else
@@ -75,15 +94,12 @@ public:
 	static bool allowsMultiWindow(){ return true; }
 	static bool needsPolling(){ return true; }
 	static void pollEvents();
-
+	
+	float pixelScreenCoordScale;
 
     // this functions are only meant to be called from inside OF don't call them from your code
     using ofAppBaseWindow::setup;
-#ifdef TARGET_OPENGLES
-	void setup(const ofGLESWindowSettings & settings);
-#else
-	void setup(const ofGLWindowSettings & settings);
-#endif
+	void setup(const ofSetupWindowSettings & settings);
 	void setup(const ofGLFWWindowSettings & settings);
 	void update();
 	void draw();
@@ -103,20 +119,32 @@ public:
     void * getWindowContext(){return getGLFWWindow();}
 	ofGLFWWindowSettings getSettings(){ return settings; }
 
-	glm::vec2	getWindowSize();
-	glm::vec2	getScreenSize();
-	glm::vec2 	getWindowPosition();
+	void updateMonitorProperties();
 
-	void setWindowTitle(std::string title);
+	glm::vec2	getWindowSize();
+	glm::vec2 	getWindowPosition();
+#ifdef OLDSTYLE
 	void setWindowPosition(int x, int y);
 	void setWindowShape(int w, int h);
+#endif
 
+	ofRectangle getWindowRectangle();
+
+	glm::vec2	getScreenSize();
+
+	void setWindowTitle(std::string title);
+	
+	void setWindowRectangle(const ofRectangle & rect);
+	
+	static void windowRefreshCallback(GLFWwindow* window);
+	void calculatePixelCoordScale(GLFWwindow* windowP_);
+	
 	void			setOrientation(ofOrientation orientation);
 	ofOrientation	getOrientation();
 
 	ofWindowMode	getWindowMode();
 
-	void		setFullscreen(bool fullscreen);
+	void		setFullscreen(bool fullscreen, bool force = false);
 	void		toggleFullscreen();
 
 	void		enableSetupScreen();
@@ -194,6 +222,11 @@ private:
 	static void 	drop_cb(GLFWwindow* windowP_, int numFiles, const char** dropString);
 	static void		error_cb(int errorCode, const char* errorDescription);
 
+	static void		monitor_cb(GLFWmonitor* monitor, int event);
+	
+//	glfwSetMonitorCallback(monitor_callback);
+
+
 	void close();
 
 	#if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI_LEGACY)
@@ -210,7 +243,7 @@ private:
 	bool			bEnableSetupScreen;
 	int				windowW, windowH;		/// Physical framebuffer pixels extents
 	int				currentW, currentH;		/// Extents of the window client area, which may be scaled by pixelsScreenCoordScale to map to physical framebuffer pixels.
-	float           pixelScreenCoordScale;  /// Scale factor from virtual operating-system defined client area extents (as seen in currentW, currentH) to physical framebuffer pixel coordinates (as seen in windowW, windowH).
+//	float           pixelScreenCoordScale;  /// Scale factor from virtual operating-system defined client area extents (as seen in currentW, currentH) to physical framebuffer pixel coordinates (as seen in windowW, windowH).
 
 	ofRectangle windowRect;
 
@@ -219,13 +252,23 @@ private:
 
 	int 			nFramesSinceWindowResized;
 	bool			bWindowNeedsShowing;
+<<<<<<< HEAD
 	
 	#ifdef TARGET_RASPBERRY_PI 
 	bool			needsResizeCheck = false; /// Just for RPI at this point
 	#endif	
+=======
+
+	#ifdef TARGET_RPI
+	bool			needsResizeCheck = false; /// Just for RPI at this point
+	#endif
+>>>>>>> 39fadc2aa25b52d256f06b69091f52f88a04936e
 
 	GLFWwindow* 	windowP;
-
+	
+	// FIXME: remove or not
+	GLFWmonitor* 	monitorP;
+	
 	int				getCurrentMonitor();
 
 	ofBaseApp *	ofAppPtr;
@@ -238,6 +281,8 @@ private:
     #ifdef TARGET_WIN32
     LONG lExStyle, lStyle;
     #endif // TARGET_WIN32
+	
+	
 };
 
 

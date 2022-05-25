@@ -418,6 +418,8 @@ protected:
 	mutable ofMesh stringQuads;
 
 	/// \endcond
+	///
+	float fontScale, fontScale2;
 
 private:
 #if defined(TARGET_ANDROID) || defined(TARGET_OF_IOS)
@@ -432,4 +434,7 @@ private:
 	static void finishLibraries();
 
 	friend void ofExitCallback();
+	
+	
+	
 };

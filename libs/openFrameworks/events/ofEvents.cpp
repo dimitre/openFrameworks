@@ -608,6 +608,11 @@ bool ofCoreEvents::notifyWindowMoved(int x, int y){
 }
 
 //------------------------------------------
+//bool ofCoreEvents::notifyMonitorEvent() { //ofMonitorEventArgs & monitorEvent
+//	return ofNotifyEvent( monitorChanged );
+//}
+
+//------------------------------------------
 bool ofCoreEvents::notifyDragEvent(ofDragInfo info){
 	return ofNotifyEvent(fileDragEvent, info);
 }
