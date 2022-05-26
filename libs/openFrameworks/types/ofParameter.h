@@ -2,7 +2,9 @@
 
 #include "ofEvents.h"
 #include "ofConstants.h"
-#include "ofPoint.h"
+//#include "ofPoint.h"
+#include "ofMathConstants.h"
+
 #include "ofRectangle.h"
 #include "ofColor.h"
 #include "ofLog.h"
@@ -118,7 +120,7 @@ public:
 	const ofParameter<float> & getFloat(const std::string& name) const;
 	const ofParameter<char> & getChar(const std::string& name) const;
 	const ofParameter<std::string> & getString(const std::string& name) const;
-	const ofParameter<ofPoint> & getPoint(const std::string& name) const;
+//	const ofParameter<ofPoint> & getPoint(const std::string& name) const;
 	const ofParameter<ofDefaultVec2> & getVec2f(const std::string& name) const;
 	const ofParameter<ofDefaultVec3> & getVec3f(const std::string& name) const;
 	const ofParameter<ofDefaultVec4> & getVec4f(const std::string& name) const;
@@ -135,7 +137,7 @@ public:
 	const ofParameter<float> & getFloat(std::size_t pos) const;
 	const ofParameter<char> & getChar(std::size_t pos) const;
 	const ofParameter<std::string> & getString(std::size_t pos) const;
-	const ofParameter<ofPoint> & getPoint(std::size_t pos) const;
+//	const ofParameter<ofPoint> & getPoint(std::size_t pos) const;
 	const ofParameter<ofDefaultVec2> & getVec2f(std::size_t pos) const;
 	const ofParameter<ofDefaultVec3> & getVec3f(std::size_t pos) const;
 	const ofParameter<ofDefaultVec4> & getVec4f(std::size_t pos) const;
@@ -151,7 +153,7 @@ public:
 	ofParameter<float> & getFloat(const std::string& name);
 	ofParameter<char> & getChar(const std::string& name);
 	ofParameter<std::string> & getString(const std::string& name);
-	ofParameter<ofPoint> & getPoint(const std::string& name);
+//	ofParameter<ofPoint> & getPoint(const std::string& name);
 	ofParameter<ofDefaultVec2> & getVec2f(const std::string& name);
 	ofParameter<ofDefaultVec3> & getVec3f(const std::string& name);
 	ofParameter<ofDefaultVec4> & getVec4f(const std::string& name);
@@ -168,7 +170,7 @@ public:
 	ofParameter<float> & getFloat(std::size_t pos);
 	ofParameter<char> & getChar(std::size_t pos);
 	ofParameter<std::string> & getString(std::size_t pos);
-	ofParameter<ofPoint> & getPoint(std::size_t pos);
+//	ofParameter<ofPoint> & getPoint(std::size_t pos);
 	ofParameter<ofDefaultVec2> & getVec2f(std::size_t pos);
 	ofParameter<ofDefaultVec3> & getVec3f(std::size_t pos);
 	ofParameter<ofDefaultVec4> & getVec4f(std::size_t pos);
@@ -368,16 +370,12 @@ namespace priv{
 	};
 
 	// Here we provide some of our own specializations:
+#if OF_USE_LEGACY_VECTOR_MATH
+
 	template<>
 	struct TypeInfo <ofVec2f> {
 		static ofVec2f min() { return ofVec2f(0); }
 		static ofVec2f max() { return ofVec2f(1); }
-	};
-
-	template<>
-	struct TypeInfo <glm::vec2> {
-		static glm::vec2 min() { return glm::vec2(0); }
-		static glm::vec2 max() { return glm::vec2(1); }
 	};
 
 	template<>
@@ -387,15 +385,22 @@ namespace priv{
 	};
 
 	template<>
-	struct TypeInfo <glm::vec3> {
-		static glm::vec3 min() { return glm::vec3(0); }
-		static glm::vec3 max() { return glm::vec3(1); }
-	};
-
-	template<>
 	struct TypeInfo <ofVec4f> {
 		static ofVec4f min() { return ofVec4f(0); }
 		static ofVec4f max() { return ofVec4f(1); }
+   };
+#endif
+
+	template<>
+	struct TypeInfo <glm::vec2> {
+		static glm::vec2 min() { return glm::vec2(0); }
+		static glm::vec2 max() { return glm::vec2(1); }
+	};
+
+	template<>
+	struct TypeInfo <glm::vec3> {
+		static glm::vec3 min() { return glm::vec3(0); }
+		static glm::vec3 max() { return glm::vec3(1); }
 	};
 
 	template<>

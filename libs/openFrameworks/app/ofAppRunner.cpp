@@ -10,6 +10,7 @@
 
 #include "ofImage.h"
 #include "ofTrueTypeFont.h"
+#include "ofTrueTypeFont.h"
 
 #include "ofMainLoop.h"
 

@@ -5,7 +5,7 @@ void ofApp::setup(){
 	ofBackground(54, 54, 54, 255);
 
 	//old OF default is 96 - but this results in fonts looking larger than in other programs.
-	ofTrueTypeFont::setGlobalDpi(72);
+	ofTrueTypeFont::setGlobalDpi(144);
 
 	verdana14.load("verdana.ttf", 14, true, true);
 	verdana14.setLineHeight(18.0f);
@@ -29,6 +29,8 @@ void ofApp::setup(){
 
 	bFirst  = true;
 	typeStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz\n0123456789,:&!?";
+	
+
 
 }
 
@@ -39,6 +41,10 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+	ofAppGLFWWindow * winPtr = (ofAppGLFWWindow*)ofGetWindowPtr();
+	ofSetWindowShape(800  * winPtr->getPixelScreenCoordScale(), 600 * winPtr->getPixelScreenCoordScale() );
+	ofScale(winPtr->getPixelScreenCoordScale(), winPtr->getPixelScreenCoordScale(), 1);
+
 	ofSetColor(225);
 	verdana14.drawString("Font Example - use keyboard to type", 30, 35);
 

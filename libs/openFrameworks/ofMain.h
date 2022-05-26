@@ -26,7 +26,7 @@
 #include "ofGraphicsBaseTypes.h"
 #include "ofTypes.h"
 #include "ofColor.h"
-#include "ofPoint.h"
+//#include "ofPoint.h"
 #include "ofRectangle.h"
 #include "ofParameter.h"
 #include "ofParameterGroup.h"

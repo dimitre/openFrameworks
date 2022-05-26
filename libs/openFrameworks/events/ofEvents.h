@@ -309,6 +309,16 @@ public:
 	:glm::vec2(x,y){}
 };
 
+// MARK: - here
+//ofMonitorEventArgs
+class ofMonitorEventArgs : public ofEventArgs {
+public:
+	ofMonitorEventArgs(){}
+
+//	ofMonitorEventArgs(int x, int y)
+//	:glm::vec2(x,y){}
+};
+
 class ofMessage : public ofEventArgs{
 	public:
 		ofMessage( std::string msg ){
@@ -331,6 +341,9 @@ class ofCoreEvents {
 	ofEvent<ofEventArgs> 		draw;
 	ofEvent<ofEventArgs> 		exit;
 
+//	ofEvent<ofEventArgs> 		monitorChanged;
+
+	
 	ofEvent<ofResizeEventArgs> 	windowResized;
 	ofEvent<ofWindowPosEventArgs> 	windowMoved;
 
@@ -405,6 +418,8 @@ class ofCoreEvents {
 	bool notifyWindowResized(int width, int height);
 	bool notifyWindowMoved(int x, int y);
 
+//	bool notifyMonitorEvent(ofMonitorEventArgs & monitorEvent);
+	
 	bool notifyDragEvent(ofDragInfo info);
 
 private:

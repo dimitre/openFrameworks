@@ -742,6 +742,8 @@
 				<string>$(ARCHS_STANDARD)</string>
 				<key>WARNING_LDFLAGS</key>
 				<string>-no_arch_warnings</string>
+				<key>ENABLE_TESTABILITY</key>
+ 				<string>YES</string>
 			</dict>
 			<key>isa</key>
 			<string>XCBuildConfiguration</string>
