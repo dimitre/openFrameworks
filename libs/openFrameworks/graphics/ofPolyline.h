@@ -7,7 +7,6 @@
 #include "glm/fwd.hpp"
 #include <deque>
 
-
 /// \file
 /// ofPolyLine allows you to combine multiple points into a single vector data
 /// object that can be drawn to the screen, manipulated point by point, and
