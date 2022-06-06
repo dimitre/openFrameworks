@@ -252,17 +252,10 @@ private:
 
 	int 			nFramesSinceWindowResized;
 	bool			bWindowNeedsShowing;
-<<<<<<< HEAD
 	
 	#ifdef TARGET_RASPBERRY_PI 
 	bool			needsResizeCheck = false; /// Just for RPI at this point
 	#endif	
-=======
-
-	#ifdef TARGET_RPI
-	bool			needsResizeCheck = false; /// Just for RPI at this point
-	#endif
->>>>>>> 39fadc2aa25b52d256f06b69091f52f88a04936e
 
 	GLFWwindow* 	windowP;
 	
