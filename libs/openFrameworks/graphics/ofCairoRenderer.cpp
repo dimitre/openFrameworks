@@ -1,4 +1,3 @@
-
 #include "ofCairoRenderer.h"
 #include "ofMesh.h"
 #include "ofImage.h"
@@ -1393,4 +1392,3 @@ const of3dGraphics & ofCairoRenderer::get3dGraphics() const{
 of3dGraphics & ofCairoRenderer::get3dGraphics(){
 	return graphics3d;
 }
-
