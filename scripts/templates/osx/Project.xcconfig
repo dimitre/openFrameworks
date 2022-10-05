@@ -9,6 +9,26 @@ OF_PATH = ../../..
 CLANG_CXX_LANGUAGE_STANDARD = c++17
 MACOSX_DEPLOYMENT_TARGET = 10.15
 
+// App Settings
+PRODUCT_NAME = $(TARGET_NAME)
+PRODUCT_NAME[config=Debug] = $(TARGET_NAME)Debug
+PRODUCT_BUNDLE_IDENTIFIER = cc.openFrameworks.$(TARGET_NAME)
+//PRODUCT_BUNDLE_IDENTIFIER[config=Debug] = cc.openFrameworks.$(TARGET_NAME)Debug
+VERSION = 1.0
+DEVELOPMENT_LANGUAGE = English
+CODE_SIGN_IDENTITY = -
+INFOPLIST_FILE = openFrameworks-Info.plist
+
+//ICONS - NEW IN 0072 
+//ICON_NAME = icon.icns
+//ICON_NAME[config=Debug] = icon-debug.icns
+ICON_NAME = of.icns
+ICON_NAME[config=Debug] = of_debug.icns
+ICON_FILE = $(OF_PATH)/libs/openFrameworksCompiled/project/osx/$(ICON_NAME)
+//IF YOU WANT AN APP TO HAVE A CUSTOM ICON - PUT THEM IN YOUR DATA FOLDER AND CHANGE ICON_FILE_PATH to:
+//ICON_FILE_PATH = bin/data/
+
+
 // BOOST - UNCOMMENT BELOW TO ENABLE BOOST
 //HEADER_BOOST = "$(OF_PATH)/libs/boost/include"
 //LIB_BOOST_SYSTEM = "$(OF_PATH)/libs/boost/lib/osx/boost_system.a"
@@ -16,17 +36,13 @@ MACOSX_DEPLOYMENT_TARGET = 10.15
 //OF_CORE_LIBS = $(inherited) $(LIB_BOOST_FS) $(LIB_BOOST_SYSTEM)
 //OF_CORE_HEADERS = $(inherited) $(HEADER_BOOST)
 
-//ICONS - NEW IN 0072 
-ICON_NAME = icon.icns
-ICON_NAME[config=Debug] = icon-debug.icns
-ICON_FILE = $(OF_PATH)/libs/openFrameworksCompiled/project/osx/$(ICON_NAME)
-
-//IF YOU WANT AN APP TO HAVE A CUSTOM ICON - PUT THEM IN YOUR DATA FOLDER AND CHANGE ICON_FILE_PATH to:
-//ICON_FILE_PATH = bin/data/
+// Optional include to keep any permanent settings as CODE_SIGN_IDENTITY. 
+#include? "App.xcconfig"
 
 OTHER_CFLAGS = $(OF_CORE_CFLAGS)
 OTHER_LDFLAGS = $(OF_CORE_LIBS) $(OF_CORE_FRAMEWORKS)
 HEADER_SEARCH_PATHS = $(OF_CORE_HEADERS)
+<<<<<<< HEAD
 
 //configuration: Release
 //COMPILER SETTINGS WHICH CAN BE OVERRIDDEN BY XCODE BUILD SETTINGS
@@ -77,3 +93,5 @@ COMBINE_HIDPI_IMAGES = YES
 INFOPLIST_FILE = openFrameworks-Info.plist
 INSTALL_PATH = /Applications
 SDKROOT = macosx
+=======
+>>>>>>> 912ffaea6da96046ef0476355ea7a102f625e11f
