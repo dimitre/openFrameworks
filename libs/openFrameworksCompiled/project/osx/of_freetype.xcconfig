@@ -3,5 +3,5 @@ HEADER_FREETYPE = "$(OF_PATH)/libs/freetype/include"
 HEADER_FREETYPE2 = "$(OF_PATH)/libs/freetype/include/freetype2"
 LIB_FREETYPE = "$(OF_PATH)/libs/freetype/lib/osx/freetype.a"
 
-OF_CORE_LIBS = $(inherited) $(LIB_FREETYPE)
-OF_CORE_HEADERS = $(inherited) $(HEADER_FREETYPE) $(HEADER_FREETYPE2)
+//OF_CORE_LIBS = $(inherited) $(LIB_FREETYPE)
+//OF_CORE_HEADERS = $(inherited) $(HEADER_FREETYPE) $(HEADER_FREETYPE2)

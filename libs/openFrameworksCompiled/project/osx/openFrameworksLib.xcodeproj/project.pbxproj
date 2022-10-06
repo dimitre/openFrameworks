@@ -153,6 +153,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		191145E828EE5D0900601F5B /* of_glew.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = of_glew.xcconfig; sourceTree = "<group>"; };
+		191145E928EE5D0A00601F5B /* of_tess2.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = of_tess2.xcconfig; sourceTree = "<group>"; };
+		191145EA28EE5D0A00601F5B /* of_boost.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = of_boost.xcconfig; sourceTree = "<group>"; };
+		191145EB28EE5D0A00601F5B /* of_audio.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = of_audio.xcconfig; sourceTree = "<group>"; };
+		191145EC28EE5D0A00601F5B /* of_cairo.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = of_cairo.xcconfig; sourceTree = "<group>"; };
+		191145ED28EE5D0A00601F5B /* of_freetype.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = of_freetype.xcconfig; sourceTree = "<group>"; };
 		19A23BC028EDFAA4008A59C8 /* Core.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Core.xcconfig; sourceTree = "<group>"; };
 		22246D91176C9987008A8AF4 /* ofGLProgrammableRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofGLProgrammableRenderer.cpp; path = gl/ofGLProgrammableRenderer.cpp; sourceTree = "<group>"; };
 		22246D92176C9987008A8AF4 /* ofGLProgrammableRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofGLProgrammableRenderer.h; path = gl/ofGLProgrammableRenderer.h; sourceTree = "<group>"; };
@@ -442,6 +448,12 @@
 			children = (
 				19A23BC028EDFAA4008A59C8 /* Core.xcconfig */,
 				E4EB6916138AFC8500A09F29 /* CoreOF.xcconfig */,
+				191145EB28EE5D0A00601F5B /* of_audio.xcconfig */,
+				191145EA28EE5D0A00601F5B /* of_boost.xcconfig */,
+				191145EC28EE5D0A00601F5B /* of_cairo.xcconfig */,
+				191145ED28EE5D0A00601F5B /* of_freetype.xcconfig */,
+				191145E828EE5D0900601F5B /* of_glew.xcconfig */,
+				191145E928EE5D0A00601F5B /* of_tess2.xcconfig */,
 				E4B27AAA10CBE92A00536013 /* openFrameworks */,
 				E4B27C1510CBEB8E00536013 /* openFrameworksDebug.a */,
 			);
@@ -877,7 +889,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 19A23BC028EDFAA4008A59C8 /* Core.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = "$(ARCHS)";
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
@@ -920,7 +932,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 19A23BC028EDFAA4008A59C8 /* Core.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = "$(ARCHS)";
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;

@@ -4,6 +4,6 @@ HEADER_RTAUDIO = "$(OF_PATH)/libs/rtAudio/include"
 LIB_FMOD = "$(OF_PATH)/libs/fmod/lib/osx/libfmod.dylib"
 LIB_RTAUDIO = "$(OF_PATH)/libs/rtAudio/lib/osx/rtaudio.a"
 
-OF_CORE_LIBS = $(inherited) $(LIB_FMOD) $(LIB_RTAUDIO)
-OF_CORE_HEADERS = $(inherited) $(HEADER_FMOD)  $(HEADER_RTAUDIO)
-OF_CORE_FRAMEWORKS = $(inherited)
+//OF_CORE_LIBS = $(inherited) $(LIB_FMOD) $(LIB_RTAUDIO)
+//OF_CORE_HEADERS = $(inherited) $(HEADER_FMOD)  $(HEADER_RTAUDIO)
+//OF_CORE_FRAMEWORKS = $(inherited)

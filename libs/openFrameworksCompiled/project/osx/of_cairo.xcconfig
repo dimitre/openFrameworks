@@ -4,5 +4,5 @@ LIB_CAIRO1 = "$(OF_PATH)/libs/cairo/lib/osx/cairo-script-interpreter.a"
 LIB_CAIRO2 = "$(OF_PATH)/libs/cairo/lib/osx/cairo.a"
 LIB_CAIRO3 = "$(OF_PATH)/libs/cairo/lib/osx/pixman-1.a"
 
-OF_CORE_LIBS = $(inherited) $(LIB_CAIRO1) $(LIB_CAIRO2) $(LIB_CAIRO3)
-OF_CORE_HEADERS = $(inherited) $(HEADER_CAIRO)
+//OF_CORE_LIBS = $(inherited) $(LIB_CAIRO1) $(LIB_CAIRO2) $(LIB_CAIRO3)
+//OF_CORE_HEADERS = $(inherited) $(HEADER_CAIRO)

@@ -26,7 +26,8 @@ void ofSetCurrentRenderer(shared_ptr<ofBaseRenderer> renderer,bool setDefaults){
 	ofGetCurrentRenderer() = renderer;
 }
 
-#if !defined(TARGET_OF_IOS) && !defined(TARGET_ANDROID) && !defined(TARGET_EMSCRIPTEN)
+//#if !defined(TARGET_OF_IOS) && !defined(TARGET_ANDROID) && !defined(TARGET_EMSCRIPTEN)
+#ifdef OF_USECAIRO
 static shared_ptr<ofCairoRenderer> cairoScreenshot;
 static shared_ptr<ofBaseRenderer> storedRenderer;
 static shared_ptr<ofRendererCollection> rendererCollection;

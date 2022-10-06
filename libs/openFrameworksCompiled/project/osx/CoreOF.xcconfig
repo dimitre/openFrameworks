@@ -10,8 +10,8 @@ CLANG_ENABLE_OBJC_ARC = YES
 HEADER_OF = "$(OF_PATH)/libs/openFrameworks/**"
 
 
-GCC_PREPROCESSOR_DEFINITIONS = $(inherited) OF_USEBOOST=1
-#include "of_boost.xcconfig"
+//GCC_PREPROCESSOR_DEFINITIONS = $(inherited) OF_USEBOOST=1
+//#include "of_boost.xcconfig"
 
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) OF_USECAIRO=1
 #include "of_cairo.xcconfig"
@@ -22,7 +22,7 @@ GCC_PREPROCESSOR_DEFINITIONS = $(inherited) OF_USEFREETYPE=1
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) OF_USETESS2=1
 #include "of_tess2.xcconfig"
 
-HEADER_FMOD = "$(OF_PATH)/libs/fmod/include"
+
 HEADER_GLEW = "$(OF_PATH)/libs/glew/include"
 HEADER_FREEIMAGE = "$(OF_PATH)/libs/FreeImage/include"
 HEADER_RTAUDIO = "$(OF_PATH)/libs/rtAudio/include"
@@ -34,7 +34,6 @@ HEADER_CURL = "$(OF_PATH)/libs/curl/include"
 HEADER_URIPARSER = "$(OF_PATH)/libs/uriparser/include"
 HEADER_PUGIXML = "$(OF_PATH)/libs/pugixml/include"
 
-LIB_FMOD = "$(OF_PATH)/libs/fmod/lib/osx/libfmod.dylib"
 LIB_GLFW = "$(OF_PATH)/libs/glfw/lib/osx/glfw3.a"
 LIB_FREEIMAGE = "$(OF_PATH)/libs/FreeImage/lib/osx/freeimage.a"
 LIB_GLEW = "$(OF_PATH)/libs/glew/lib/osx/glew.a"
@@ -47,13 +46,23 @@ LIB_OF = "$(OF_PATH)/libs/openFrameworksCompiled/lib/osx/openFrameworks.a"
 LIB_OF_DEBUG = "$(OF_PATH)/libs/openFrameworksCompiled/lib/osx/openFrameworksDebug.a"
 
 
-OF_CORE_LIBS = $(inherited) $(LIB_GLEW) $(LIB_FMOD) $(LIB_RTAUDIO) $(LIB_GLFW) $(LIB_FREEIMAGE) $(LIB_CURL) $(LIB_URIPARSER) $(LIB_PUGIXML)
+OF_CORE_LIBS = $(LIB_TESS2) $(LIB_GLEW) $(LIB_CAIRO1) $(LIB_CAIRO2) $(LIB_CAIRO3) $(LIB_FMOD) $(LIB_RTAUDIO) $(LIB_GLFW) $(LIB_FREEIMAGE) $(LIB_FREETYPE) $(LIB_BOOST_FS) $(LIB_BOOST_SYSTEM) $(LIB_CURL) $(LIB_URIPARSER) $(LIB_PUGIXML)
 
 
-OF_CORE_HEADERS = $(inherited) $(HEADER_OF) $(HEADER_FMOD) $(HEADER_GLEW) $(HEADER_FREEIMAGE) $(HEADER_RTAUDIO) $(HEADER_GLFW) $(HEADER_UTF8) $(HEADER_JSON) $(HEADER_GLM) $(HEADER_CURL) $(HEADER_URIPARSER) $(HEADER_PUGIXML)
+OF_CORE_HEADERS = $(HEADER_OF) $(HEADER_FREETYPE) $(HEADER_FREETYPE2) $(HEADER_FMOD) $(HEADER_GLEW) $(HEADER_FREEIMAGE) $(HEADER_TESS2) $(HEADER_CAIRO) $(HEADER_RTAUDIO) $(HEADER_GLFW) $(HEADER_BOOST) $(HEADER_UTF8) $(HEADER_JSON) $(HEADER_GLM) $(HEADER_CURL) $(HEADER_URIPARSER) $(HEADER_PUGIXML)
 
 
-OF_CORE_FRAMEWORKS = $(inherited) -framework Accelerate -framework AGL -framework AppKit -framework ApplicationServices -framework AudioToolbox -framework AVFoundation -framework Cocoa -framework CoreAudio -framework CoreFoundation -framework CoreMedia -framework CoreServices -framework CoreVideo -framework IOKit -framework OpenGL -framework QuartzCore -framework Security
+OF_CORE_FRAMEWORKS = -framework Accelerate -framework AGL -framework AppKit -framework ApplicationServices -framework AudioToolbox -framework AVFoundation -framework Cocoa -framework CoreAudio -framework CoreFoundation -framework CoreMedia -framework CoreServices -framework CoreVideo -framework IOKit -framework OpenGL -framework QuartzCore -framework Security
+
+
+
+//OF_CORE_LIBS = $(inherited) $(LIB_GLEW) $(LIB_FMOD) $(LIB_RTAUDIO) $(LIB_GLFW) $(LIB_FREEIMAGE) $(LIB_CURL) $(LIB_URIPARSER) $(LIB_PUGIXML)
+//
+//
+//OF_CORE_HEADERS = $(inherited) $(HEADER_OF) $(HEADER_FMOD) $(HEADER_GLEW) $(HEADER_FREEIMAGE) $(HEADER_RTAUDIO) $(HEADER_GLFW) $(HEADER_UTF8) $(HEADER_JSON) $(HEADER_GLM) $(HEADER_CURL) $(HEADER_URIPARSER) $(HEADER_PUGIXML)
+//
+//
+//OF_CORE_FRAMEWORKS = $(inherited) -framework Accelerate -framework AGL -framework AppKit -framework ApplicationServices -framework AudioToolbox -framework AVFoundation -framework Cocoa -framework CoreAudio -framework CoreFoundation -framework CoreMedia -framework CoreServices -framework CoreVideo -framework IOKit -framework OpenGL -framework QuartzCore -framework Security
 
 
 ALWAYS_SEARCH_USER_PATHS = NO
@@ -109,10 +118,6 @@ SDKROOT = macosx
 WRAPPER_EXTENSION = app
 CONFIGURATION_BUILD_DIR = $(SRCROOT)/bin/
 
-OTHER_CFLAGS = $(OF_CORE_CFLAGS)
-OTHER_LDFLAGS = $(OF_CORE_LIBS)
-HEADER_SEARCH_PATHS = $(OF_CORE_HEADERS)
-
 // Configuration exclusive to debug or release
 COPY_PHASE_STRIP[config=Debug] = NO
 COPY_PHASE_STRIP[config=Release] = YES
@@ -126,3 +131,8 @@ ZERO_LINK[config=Release] = NO
 // FIXME: Remove
 GCC_MODEL_TUNING = G5
 //ONLY_ACTIVE_ARCH = YES
+
+
+OTHER_CFLAGS = $(inherited) $(OF_CORE_CFLAGS)
+OTHER_LDFLAGS = $(inherited) $(OF_CORE_LIBS)
+HEADER_SEARCH_PATHS = $(inherited) $(OF_CORE_HEADERS)
