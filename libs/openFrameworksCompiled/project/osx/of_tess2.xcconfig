@@ -1,0 +1,6 @@
+//TESS2
+
+HEADER_TESS2 = "$(OF_PATH)/libs/tess2/include"
+LIB_TESS2 = "$(OF_PATH)/libs/tess2/lib/osx/tess2.a"
+OF_CORE_LIBS = $(inherited) $(LIB_TESS2)
+OF_CORE_HEADERS = $(inherited) $(HEADER_TESS2)
