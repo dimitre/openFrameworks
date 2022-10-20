@@ -47,11 +47,11 @@ OTHER_CFLAGS = $(OF_CORE_CFLAGS)
 OTHER_LDFLAGS = $(OF_CORE_LIBS) $(OF_CORE_FRAMEWORKS)
 HEADER_SEARCH_PATHS = $(OF_CORE_HEADERS)
 
-OF_LIB_USE_CAIRO = 0
+OF_LIB_USE_CAIRO = 1
 GCC_PREPROCESSOR_DEFINITIONS=$(inherited) OF_LIB_USECAIRO=$OF_LIB_USE_CAIRO
-//HEADER_CAIRO = "$(OF_PATH)/libs/cairo/include/cairo"
-//LIB_CAIRO1 = "$(OF_PATH)/libs/cairo/lib/osx/cairo-script-interpreter.a"
-//LIB_CAIRO2 = "$(OF_PATH)/libs/cairo/lib/osx/cairo.a"
-//LIB_CAIRO3 = "$(OF_PATH)/libs/cairo/lib/osx/pixman-1.a"
+HEADER_CAIRO = "$(OF_PATH)/libs/cairo/include/cairo"
+LIB_CAIRO1 = "$(OF_PATH)/libs/cairo/lib/osx/cairo-script-interpreter.a"
+LIB_CAIRO2 = "$(OF_PATH)/libs/cairo/lib/osx/cairo.a"
+LIB_CAIRO3 = "$(OF_PATH)/libs/cairo/lib/osx/pixman-1.a"
 
-OF_CORE_BUILD_COMMAND = xcodebuild -arch $ARCH -project $OF_PATH/libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj -target openFrameworks -configuration ${CONFIGURATION} CLANG_CXX_LANGUAGE_STANDARD=$CLANG_CXX_LANGUAGE_STANDARD MACOSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET OF_LIB_USE_CAIRO=$OF_LIB_USE_CAIRO
+OF_CORE_BUILD_COMMAND = xcodebuild -arch $ARCHS -project $OF_PATH/libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj -target openFrameworks -configuration ${CONFIGURATION} CLANG_CXX_LANGUAGE_STANDARD=$CLANG_CXX_LANGUAGE_STANDARD MACOSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET OF_LIB_USE_CAIRO=$OF_LIB_USE_CAIRO

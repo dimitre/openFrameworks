@@ -1,3 +1,5 @@
+#ifdef OF_LIB_USE_CAIRO
+
 #include "ofGraphicsCairo.h"
 #include "ofRendererCollection.h"
 #include "ofCairoRenderer.h"
@@ -62,3 +64,5 @@ void ofBeginSaveScreenAsSVG(std::string filename, bool bMultipage, bool b3D, ofR
 void ofEndSaveScreenAsSVG(){
 	ofEndSaveScreen();
 }
+
+#endif

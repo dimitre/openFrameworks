@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef OF_LIB_USE_CAIRO
+
 #include "ofRectangle.h"
 
 /// \}
@@ -37,3 +39,4 @@ void ofBeginSaveScreenAsSVG(std::string filename, bool bMultipage = false, bool 
 void ofEndSaveScreenAsSVG();
 
 /// \}
+#endif
