@@ -26,6 +26,7 @@ ofxAndroid/ofAndroidLib/gen
 !ofxUnitTests
 !ofxProjectGenerator
 !ofxPoco
+!ofxBoost
 
 #ignore binary libraries
 ofxOpenCv/libs
@@ -33,6 +34,7 @@ ofxAssimpModelLoader/libs
 ofxSvg/libs
 ofxPoco/libs
 ofxKinect/libs
+ofxBoost/libs
 
 # don't ignore the .gitignore file
 !.gitignore
