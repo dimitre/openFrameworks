@@ -4,7 +4,6 @@
 #include <iostream>
 #include <typeinfo>
 #include <limits>
-#include "glm/common.hpp"
 
 /// \class ofColor_
 ///
