@@ -26,9 +26,9 @@ PLATFORM_VARIANT ?= default
 ifeq ($(findstring emcc, $(CC)),emcc)
 	PLATFORM_OS=emscripten
 endif
-PLATFORM_OS ?= $(shell uname -s)
+PLATFORM_OS ?= $(exec uname -s)
 
-HOST_OS=$(shell uname -s)
+HOST_OS=$(exec uname -s)
 
 ifdef MAKEFILE_DEBUG
     $(info HOST_OS=${HOST_OS})
@@ -42,7 +42,7 @@ endif
 
 #check for Raspbian as armv7l needs to use armv6l architecture
 ifeq ($(wildcard $(RPI_ROOT)/etc/*-release), /etc/os-release)
-	ifeq ($(shell grep ID=raspbian $(RPI_ROOT)/etc/*-release),ID=raspbian)
+	ifeq ($(exec grep ID=raspbian $(RPI_ROOT)/etc/*-release),ID=raspbian)
 		IS_RASPBIAN=1
 	endif
 endif
@@ -54,10 +54,10 @@ ifdef IS_RASPBIAN
 		CROSS_COMPILING=1
 	endif
 else
-	HOST_ARCH=$(shell uname -m)
+	HOST_ARCH=$(exec uname -m)
 	ifndef PLATFORM_ARCH
 		# determine from the uname
-		PLATFORM_ARCH=$(shell uname -m)
+		PLATFORM_ARCH=$(exec uname -m)
 	endif
 	ifndef CROSS_COMPILING
 		ifneq ($(HOST_ARCH),$(PLATFORM_ARCH))
@@ -218,7 +218,7 @@ $(error This package doesn't support your platform, $(OF_LIBS_OF_COMPILED_PROJEC
 endif
 
 # generate a list of valid core platform variants from the files in the platform makefiles directory
-AVAILABLE_PLATFORM_VARIANTS=$(shell $(FIND) $(OF_PLATFORM_MAKEFILES)/config.*.mk -maxdepth 1 -type f | sed -E 's/.*\.([^\.]*)\.mk/\1/' )
+AVAILABLE_PLATFORM_VARIANTS=$(exec $(FIND) $(OF_PLATFORM_MAKEFILES)/config.*.mk -maxdepth 1 -type f | sed -E 's/.*\.([^\.]*)\.mk/\1/' )
 AVAILABLE_PLATFORM_VARIANTS+=default
 
 # check to see if we have a file for the desired variant.  if not, quit and list the variants.
@@ -262,7 +262,7 @@ CORE_EXCLUSIONS = $(strip $(PLATFORM_CORE_EXCLUSIONS))
 
 # find all of the source directories
 # grep -v "/\.[^\.]" will exclude all .hidden folders and files
-ALL_OF_CORE_SOURCE_PATHS=$(shell $(FIND) $(OF_LIBS_OPENFRAMEWORKS_PATH) -maxdepth 1 -mindepth 1 -type d | grep -v "/\.[^\.]" )
+ALL_OF_CORE_SOURCE_PATHS=$(exec $(FIND) $(OF_LIBS_OPENFRAMEWORKS_PATH) -maxdepth 1 -mindepth 1 -type d | grep -v "/\.[^\.]" )
 
 # create a list of core source PATHS, filtering out any  items that have a match in the CORE_EXCLUSIONS list
 OF_CORE_SOURCE_PATHS=$(filter-out $(CORE_EXCLUSIONS),$(ALL_OF_CORE_SOURCE_PATHS))
@@ -274,7 +274,7 @@ OF_CORE_HEADER_PATHS = $(OF_LIBS_OPENFRAMEWORKS_PATH) $(OF_CORE_SOURCE_PATHS)
 
 # add folders or single files to exclude fromt he compiled lib
 # grep -v "/\.[^\.]" will exclude all .hidden folders and files
-ALL_OF_CORE_THIRDPARTY_HEADER_PATHS = $(shell $(FIND) $(OF_LIBS_PATH)/*/include -type d | grep -v "/\.[^\.]")
+ALL_OF_CORE_THIRDPARTY_HEADER_PATHS = $(exec $(FIND) $(OF_LIBS_PATH)/*/include -type d | grep -v "/\.[^\.]")
 
 # filter out all excluded files / folders that were defined above
 OF_CORE_THIRDPARTY_HEADER_PATHS = $(filter-out $(CORE_EXCLUSIONS),$(ALL_OF_CORE_THIRDPARTY_HEADER_PATHS))
@@ -293,21 +293,21 @@ ifdef MAKEFILE_DEBUG
     $(info checking pkg-config libraries: $(CORE_PKG_CONFIG_LIBRARIES))
     $(info with PKG_CONFIG_LIBDIR=$(PKG_CONFIG_LIBDIR))
 endif
-FAILED_PKG=$(shell export PKG_CONFIG_LIBDIR=$(PKG_CONFIG_LIBDIR); for pkg in $(CORE_PKG_CONFIG_LIBRARIES); do $(PLATFORM_PKG_CONFIG) $$pkg --cflags > /dev/null; if [ $$? -ne 0 ]; then echo $$pkg; return; fi; done; echo 0)
+FAILED_PKG=$(exec export PKG_CONFIG_LIBDIR=$(PKG_CONFIG_LIBDIR); for pkg in $(CORE_PKG_CONFIG_LIBRARIES); do $(PLATFORM_PKG_CONFIG) $$pkg --cflags > /dev/null; if [ $$? -ne 0 ]; then echo $$pkg; return; fi; done; echo 0)
 else
 ifdef MAKEFILE_DEBUG
     $(info checking pkg-config libraries: $(CORE_PKG_CONFIG_LIBRARIES))
     $(info with PKG_CONFIG_LIBDIR=$(PKG_CONFIG_LIBDIR))
 endif
-FAILED_PKG=$(shell for pkg in $(CORE_PKG_CONFIG_LIBRARIES); do $(PLATFORM_PKG_CONFIG) $$pkg --cflags > /dev/null; if [ $$? -ne 0 ]; then echo $$pkg; return; fi; done; echo 0)
+FAILED_PKG=$(exec for pkg in $(CORE_PKG_CONFIG_LIBRARIES); do $(PLATFORM_PKG_CONFIG) $$pkg --cflags > /dev/null; if [ $$? -ne 0 ]; then echo $$pkg; return; fi; done; echo 0)
 endif
 	ifneq ($(FAILED_PKG),0)
 $(error couldn't find $(FAILED_PKG) pkg-config package or it's dependencies, did you run the latest install_dependencies.sh?)
 	endif
 	ifeq ($(CROSS_COMPILING),1)
-		OF_CORE_INCLUDES_CFLAGS += $(patsubst -I$(SYSROOT)$(SYSROOT)%,-I$(SYSROOT)% ,$(patsubst -I%,-I$(SYSROOT)% ,$(shell export PKG_CONFIG_LIBDIR=$(PKG_CONFIG_LIBDIR);$(PLATFORM_PKG_CONFIG) "$(CORE_PKG_CONFIG_LIBRARIES)" --cflags)))
+		OF_CORE_INCLUDES_CFLAGS += $(patsubst -I$(SYSROOT)$(SYSROOT)%,-I$(SYSROOT)% ,$(patsubst -I%,-I$(SYSROOT)% ,$(exec export PKG_CONFIG_LIBDIR=$(PKG_CONFIG_LIBDIR);$(PLATFORM_PKG_CONFIG) "$(CORE_PKG_CONFIG_LIBRARIES)" --cflags)))
 	else
-		OF_CORE_INCLUDES_CFLAGS += $(shell $(PLATFORM_PKG_CONFIG) "$(CORE_PKG_CONFIG_LIBRARIES)" --cflags)
+		OF_CORE_INCLUDES_CFLAGS += $(exec $(PLATFORM_PKG_CONFIG) "$(CORE_PKG_CONFIG_LIBRARIES)" --cflags)
 	endif
 endif
 
@@ -339,8 +339,8 @@ OF_CORE_BASE_CXXFLAGS=$(PLATFORM_CXXFLAGS)
 # search the directories in the source folders for all .cpp files
 # filter out all excluded files / folders that were defined above
 # grep -v "/\.[^\.]" will exclude all .hidden folders and files
-OF_CORE_SOURCE_FILES=$(filter-out $(CORE_EXCLUSIONS),$(shell $(FIND) $(OF_CORE_SOURCE_PATHS) -name "*.cpp" -or -name "*.mm" -or -name "*.m" | grep -v "/\.[^\.]"))
-OF_CORE_HEADER_FILES=$(filter-out $(CORE_EXCLUSIONS),$(shell $(FIND) $(OF_CORE_SOURCE_PATHS) -name "*.h" | grep -v "/\.[^\.]"))
+OF_CORE_SOURCE_FILES=$(filter-out $(CORE_EXCLUSIONS),$(exec $(FIND) $(OF_CORE_SOURCE_PATHS) -name "*.cpp" -or -name "*.mm" -or -name "*.m" | grep -v "/\.[^\.]"))
+OF_CORE_HEADER_FILES=$(filter-out $(CORE_EXCLUSIONS),$(exec $(FIND) $(OF_CORE_SOURCE_PATHS) -name "*.h" | grep -v "/\.[^\.]"))
 
 
 
