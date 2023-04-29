@@ -1,8 +1,8 @@
 #pragma once
 
-//#include "ofConstants.h"
+#include "ofConstants.h"
 
-//#ifdef OF_SOUND_PLAYER_OPENAL
+#ifdef OF_SOUND_PLAYER_OPENAL
 #include "ofSoundBaseTypes.h"
 #include "ofThread.h"
 
@@ -148,4 +148,4 @@ class ofOpenALSoundPlayer : public ofBaseSoundPlayer, public ofThread {
 		bool stream_end;
 };
 
-//#endif
+#endif
