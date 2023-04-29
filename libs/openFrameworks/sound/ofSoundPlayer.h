@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofSoundBaseTypes.h"
+#include "ofConstants.h"
 
 /// \brief Stops all active sound players on FMOD-based systems (windows, osx).
 void ofSoundStopAll();
