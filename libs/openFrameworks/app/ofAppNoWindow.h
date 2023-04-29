@@ -4,6 +4,7 @@
 
 class ofBaseApp;
 class ofBaseRenderer;
+class ofCoreEvents;
 
 class ofAppNoWindow : public ofAppBaseWindow {
 

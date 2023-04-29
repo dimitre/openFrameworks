@@ -1,13 +1,8 @@
 #pragma once
 
 #include "ofAppBaseWindow.h"
-#include "ofRectangle.h"
 #include "ofConstants.h"
-
-#if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI_LEGACY)
-typedef struct _XIM * XIM;
-typedef struct _XIC * XIC;
-#endif
+#include "ofRectangle.h"
 
 class ofBaseApp;
 struct GLFWwindow;
@@ -15,6 +10,12 @@ class ofCoreEvents;
 template<typename T>
 class ofPixels_;
 typedef ofPixels_<unsigned char> ofPixels;
+
+#if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI_LEGACY)
+typedef struct _XIM * XIM;
+typedef struct _XIC * XIC;
+#endif
+
 
 #ifdef TARGET_OPENGLES
 class ofGLFWWindowSettings: public ofGLESWindowSettings{
