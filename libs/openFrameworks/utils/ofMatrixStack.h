@@ -10,7 +10,7 @@
 
 #include "ofRectangle.h"
 #include "ofGraphicsConstants.h"
-#include "ofConstants.h"
+//#include "ofConstants.h"
 #include "glm/mat4x4.hpp"
 #include <stack>
 
