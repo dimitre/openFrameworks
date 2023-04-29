@@ -1,7 +1,10 @@
 #pragma once
 
 #include "ofWindowSettings.h"
-#include <memory>
+
+// should not be removed  because of the specific platforms
+#include "ofConstants.h"
+//#include <memory>
 
 class ofBaseApp;
 class ofBaseRenderer;
