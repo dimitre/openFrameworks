@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofWindowSettings.h"
+#include <memory>
 
 class ofBaseApp;
 class ofBaseRenderer;
