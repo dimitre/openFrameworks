@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ofWindowSettings.h"
-#include "ofConstants.h"
 #include "ofMainLoop.h"
 
 class ofRectangle;

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "ofConstants.h"
+// FIXME: platforms only
+//#include "ofConstants.h"
 
 template<typename T>
 class ofPixels_;

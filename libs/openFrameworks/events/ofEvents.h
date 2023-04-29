@@ -3,7 +3,6 @@
 #include "ofEventUtils.h"
 #include "ofTimer.h"
 #include "ofFpsCounter.h"
-#include "ofConstants.h"
 #include "glm/vec2.hpp"
 #include <set>
 

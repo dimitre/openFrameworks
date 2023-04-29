@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ofUtils.h"
-#include "ofConstants.h"
 #include <queue>
 
 class ofFpsCounter {

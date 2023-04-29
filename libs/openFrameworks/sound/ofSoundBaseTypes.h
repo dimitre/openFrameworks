@@ -1,7 +1,10 @@
 #pragma once
 
-#include "ofConstants.h"
 #include <functional>
+#include <vector>
+#include <string>
+// FIXME: fs only
+#include "ofConstants.h"
 
 class ofSoundBuffer;
 
