@@ -4,8 +4,7 @@
 
 #pragma once
 
-//#include "ofConstants.h"
-#include "ofBaseTypes.h"
+#include "ofConstants.h"
 
 #ifdef OF_VIDEO_CAPTURE_AVF
 
@@ -16,9 +15,8 @@
 // FIXME: template
 #include "ofPixels.h"
 #include <mutex>
-#include "ofConstants.h"
 
-//#ifdef __OBJC__
+#ifdef __OBJC__
 
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
@@ -122,4 +120,4 @@ class ofAVFoundationGrabber : virtual public ofBaseVideoGrabber{
 
 };
 
-//#endif
+#endif
