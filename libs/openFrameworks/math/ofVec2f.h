@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ofMath.h"
 #include "ofMathConstants.h"
 #include "ofConstants.h"
 #include "glm/vec2.hpp"

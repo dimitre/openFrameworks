@@ -6,6 +6,7 @@
 #include "ofGLUtils.h"
 // FIXME: replace by template
 #include "ofPixels.h"
+#include "ofConstants.h"
 
 class ofFile;
 class ofBuffer;

@@ -3,6 +3,7 @@
 #include "ofWindowSettings.h"
 #include "ofConstants.h"
 #include "ofMainLoop.h"
+#include "ofConstants.h"
 
 class ofRectangle;
 class ofAppBaseWindow;

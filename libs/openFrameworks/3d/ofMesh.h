@@ -4,6 +4,7 @@
 #define OF_MESH_H
 
 #include "ofGLUtils.h"
+#include "ofConstants.h"
 
 template<class V, class N, class C, class T>
 class ofMeshFace_;

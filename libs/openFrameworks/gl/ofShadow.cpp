@@ -11,6 +11,7 @@
 #include "ofGLUtils.h"
 #include "ofLight.h"
 #include "ofGLProgrammableRenderer.h"
+#include "ofConstants.h"
 
 #define GLM_FORCE_CTOR_INIT
 #include "glm/gtx/transform.hpp"

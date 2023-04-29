@@ -12,6 +12,7 @@
 #include "ofGLUtils.h"
 #include "ofGLProgrammableRenderer.h"
 #include "ofCubeMapShaders.h"
+#include "ofConstants.h"
 
 #define GLM_FORCE_CTOR_INIT
 #include "glm/gtx/transform.hpp"

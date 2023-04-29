@@ -4,6 +4,7 @@
 #include "ofVideoBaseTypes.h"
 // FIXME: template
 #include "ofPixels.h"
+#include "ofConstants.h"
 
 
 class ofVideoGrabber : public ofBaseVideoGrabber,public ofBaseVideoDraws{
