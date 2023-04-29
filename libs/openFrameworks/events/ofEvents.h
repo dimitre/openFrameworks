@@ -4,6 +4,7 @@
 #include "ofTimer.h"
 #include "ofFpsCounter.h"
 #include "ofConstants.h"
+#define GLM_FORCE_CTOR_INIT
 #include "glm/vec2.hpp"
 #include <set>
 
