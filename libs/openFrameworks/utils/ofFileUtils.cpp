@@ -657,7 +657,6 @@ std::string ofFile::path() const {
 //------------------------------------------------------------------------------------------------------------
 string ofFile::getExtension() const {
 	auto dotext = myFile.extension().string();
-	// FIXME: probably not needed;
 	if(!dotext.empty() && dotext.front()=='.'){
 		return std::string(dotext.begin()+1,dotext.end());
 	}else{

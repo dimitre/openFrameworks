@@ -1,11 +1,7 @@
 #pragma once
 
-#include "ofShader.h"
-// #include "ofColor.h"
-// FIXME: deprecated only and ctor
-// #include "ofConstants.h"
-// #include "glm/fwd.hpp"
-// #include "glm/vec2.hpp"
+//#include "ofShader.h"
+class ofShader;
 
 // enum ofMaterialTextureType: short{
 // 	OF_MATERIAL_TEXTURE_NONE=0,

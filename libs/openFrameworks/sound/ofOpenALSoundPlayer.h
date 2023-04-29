@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofConstants.h"
+//#include "ofConstants.h"
 
 #ifdef OF_SOUND_PLAYER_OPENAL
 #include "ofSoundBaseTypes.h"

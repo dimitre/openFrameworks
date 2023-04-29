@@ -5,7 +5,7 @@
 #include "ofRectangle.h"
 #include "ofColor.h"
 #include "ofLog.h"
-#include "ofConstants.h"
+//#include "ofConstants.h"
 #include <map>
 
 template<typename ParameterType>
