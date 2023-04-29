@@ -1,4 +1,5 @@
 #include "ofVideoGrabber.h"
+#include "ofPixels.h"
 #include "ofVideoBaseTypes.h"
 #include "ofGLUtils.h"
 #include "ofAppRunner.h"

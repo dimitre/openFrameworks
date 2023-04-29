@@ -2,8 +2,11 @@
 
 #include "ofTexture.h"
 #include "ofVideoBaseTypes.h"
-// FIXME: template
-#include "ofPixels.h"
+
+typedef ofPixels_<unsigned char> ofPixels;
+typedef ofPixels_<float> ofFloatPixels;
+typedef ofPixels_<unsigned short> ofShortPixels;
+typedef ofPixels & ofPixelsRef;
 
 
 class ofVideoGrabber : public ofBaseVideoGrabber,public ofBaseVideoDraws{
