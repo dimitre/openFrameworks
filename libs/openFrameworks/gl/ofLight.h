@@ -10,7 +10,7 @@
 #pragma once
 
 #include "ofNode.h"
-#include "ofColor.h"
+//#include "ofColor.h"
 #include "ofShadow.h"
 
 class ofBaseGLRenderer;

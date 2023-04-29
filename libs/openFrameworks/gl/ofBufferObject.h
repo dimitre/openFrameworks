@@ -1,6 +1,6 @@
 #pragma once
 
-// FIXME: platforms only
+// FIXME: platforms plus GL/ headers
 #include "ofConstants.h"
 
 template<typename T>
