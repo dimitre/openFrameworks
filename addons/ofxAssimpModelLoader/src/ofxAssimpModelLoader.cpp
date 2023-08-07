@@ -392,16 +392,15 @@ void ofxAssimpModelLoader::loadGLResources(){
 				bool bHasEmbeddedTexture = false;
 
 				
-				std::cout << "file.path() " << file.path() << std::endl;
 				auto modelFolder = ofFilePath::getEnclosingDirectory( file.path() );
-				std::cout << "modelFolder " << modelFolder << std::endl;
-				std::cout << "texPathStr " << texPathStr << std::endl;
 
 				auto relTexPath = ofFilePath::getEnclosingDirectory(texPathStr,false);
-				std::cout << "relTexPath " << relTexPath << std::endl;
-
 				auto realPath = modelFolder / of::filesystem::path{ texPathStr };
-				std::cout << "realPath " << realPath << std::endl;
+//				std::cout << "file.path() " << file.path() << std::endl;
+//				std::cout << "modelFolder " << modelFolder << std::endl;
+//				std::cout << "texPathStr " << texPathStr << std::endl;
+//				std::cout << "relTexPath " << relTexPath << std::endl;
+//				std::cout << "realPath " << realPath << std::endl;
 
 				
 
