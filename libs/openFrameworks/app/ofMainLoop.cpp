@@ -122,10 +122,12 @@ void ofMainLoop::run(std::shared_ptr<ofBaseApp> && app){
 int ofMainLoop::loop(){
 	if(!windowLoop){
 		while(!bShouldClose && !windowsApps.empty()){
+//			std::cout << "eternal Loop" << std::endl;
 			loopOnce();
 			pollEvents();
 		}
 	}else{
+//		std::cout << "windowLoop" << std::endl;
 		windowLoop();
 	}
 	return status;
@@ -139,6 +141,8 @@ void ofMainLoop::loopOnce(){
 			window->close();
 			windowsApps.erase(i++); ///< i now points at the window after the one which was just erased
 		}else{
+//			std::cout << "current " << i->first << std::endl;
+
 			currentWindow = i->first;
 			i->first->makeCurrent();
 			i->first->update();

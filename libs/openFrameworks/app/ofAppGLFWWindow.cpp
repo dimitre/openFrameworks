@@ -68,7 +68,7 @@ ofAppGLFWWindow::~ofAppGLFWWindow(){
 void ofAppGLFWWindow::close(){
 	if(windowP){
 
-
+		
 		glfwSetMouseButtonCallback( windowP, nullptr );
 		glfwSetCursorPosCallback( windowP, nullptr );
 		glfwSetCursorEnterCallback( windowP, nullptr );
@@ -86,6 +86,8 @@ void ofAppGLFWWindow::close(){
 		// as `glfwDestroyWindow` at least on Windows has the effect of unloading OpenGL, making all
 		// calls to OpenGL illegal.
 		currentRenderer.reset();
+
+		std::cout << "ofAppGLFWWindow close & destroy" << std::endl;
 
 		glfwDestroyWindow(windowP);
 		windowP = nullptr;
@@ -1104,6 +1106,7 @@ static void rotateMouseXY(ofOrientation orientation, int w, int h, double &x, do
 ofAppGLFWWindow * ofAppGLFWWindow::setCurrent(GLFWwindow* windowP){
 	ofAppGLFWWindow * instance = static_cast<ofAppGLFWWindow *>(glfwGetWindowUserPointer(windowP));
 	shared_ptr<ofMainLoop> mainLoop = ofGetMainLoop();
+//	std::cout << "mainLoop count " << mainLoop.use_count() << std::endl;
 	if(mainLoop){
 		mainLoop->setCurrentWindow(instance);
 	}

@@ -107,8 +107,9 @@ class ofxAssimpModelLoader{
 		ofTexture getTextureForMesh(unsigned int num);
 
 
-		void drawWireframe();
+		void drawSpecificFace(int n);
 		void drawFaces();
+		void drawWireframe();
 		void drawVertices();
 
 		void enableTextures();

@@ -372,6 +372,8 @@ void ofxAssimpModelLoader::loadGLResources(){
 
 				bool bWrap = (texMapMode[0]==aiTextureMapMode_Wrap);
 
+				std::cout << "texPath !!! " << texPath.C_Str() << std::endl;
+				
 				std::string texPathStr = texPath.C_Str();
 
 				//deal with Blender putting "//" in front of local file paths
@@ -389,9 +391,18 @@ void ofxAssimpModelLoader::loadGLResources(){
 				auto ogPath = texPathStr;
 				bool bHasEmbeddedTexture = false;
 
+				
+				std::cout << "file.path() " << file.path() << std::endl;
 				auto modelFolder = ofFilePath::getEnclosingDirectory( file.path() );
+				std::cout << "modelFolder " << modelFolder << std::endl;
+				std::cout << "texPathStr " << texPathStr << std::endl;
+
 				auto relTexPath = ofFilePath::getEnclosingDirectory(texPathStr,false);
+				std::cout << "relTexPath " << relTexPath << std::endl;
+
 				auto realPath = modelFolder / of::filesystem::path{ texPathStr };
+				std::cout << "realPath " << realPath << std::endl;
+
 				
 
 #ifndef TARGET_LINUX_ARM
@@ -414,7 +425,7 @@ void ofxAssimpModelLoader::loadGLResources(){
 
 				if(bTextureAlreadyExists) {
 					ofxAssimpTexture assimpTexture;
-
+					
 					assimpTexture.setup(*textures[realPath].get(), realPath, bWrap);
 					assimpTexture.setTextureType((aiTextureType)d);
 					meshHelper.addTexture(assimpTexture);
@@ -914,6 +925,88 @@ void ofxAssimpModelLoader::enableCulling(int glCullType){
 void ofxAssimpModelLoader::disableCulling(){
 	mCullType = -1;
 }
+
+
+//-------------------------------------------
+void ofxAssimpModelLoader::drawSpecificFace(int faceNumber) {
+	if(scene == NULL) {
+		return;
+	}
+
+	ofPushStyle();
+
+	ofPushMatrix();
+	ofMultMatrix(modelMatrix);
+
+#ifndef TARGET_OPENGLES
+	glPolygonMode(GL_FRONT_AND_BACK, ofGetGLPolyMode(OF_MESH_FILL));
+#endif
+
+	size_t i = faceNumber;
+//	for(size_t i = 0; i < 1; i++)
+	{
+		ofxAssimpMeshHelper & mesh = modelMeshes[i];
+
+		ofPushMatrix();
+		ofMultMatrix(mesh.matrix);
+
+		if(bUsingTextures){
+			if(mesh.hasTexture(aiTextureType_DIFFUSE)) {
+				mesh.getTextureRef(aiTextureType_DIFFUSE).bind();
+			}
+		}
+
+
+
+		//		this was broken / backwards
+		if(!mesh.twoSided && mCullType >= 0) {
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_BACK);
+			glFrontFace(mCullType);
+		}
+		else {
+			glDisable(GL_CULL_FACE);
+		}
+
+
+
+		ofEnableBlendMode(mesh.blendMode);
+
+#ifndef TARGET_OPENGLES
+		mesh.vbo.drawElements(GL_TRIANGLES,mesh.indices.size());
+#else
+		switch(renderType){
+			case OF_MESH_FILL:
+				mesh.vbo.drawElements(GL_TRIANGLES,mesh.indices.size());
+				break;
+			case OF_MESH_WIREFRAME:
+				//note this won't look the same as on non ES renderers.
+				//there is no easy way to convert GL_TRIANGLES to outlines for each triangle
+				mesh.vbo.drawElements(GL_LINES,mesh.indices.size());
+				break;
+			case OF_MESH_POINTS:
+				mesh.vbo.drawElements(GL_POINTS,mesh.indices.size());
+				break;
+		}
+#endif
+
+
+
+		if(!mesh.twoSided) {
+			glDisable(GL_CULL_FACE);
+		}
+
+		if(bUsingMaterials){
+			mesh.material.end();
+		}
+
+		ofPopMatrix();
+	}
+
+	ofPopMatrix();
+	ofPopStyle();
+}
+
 
 //-------------------------------------------
 void ofxAssimpModelLoader::draw(ofPolyRenderMode renderType) {

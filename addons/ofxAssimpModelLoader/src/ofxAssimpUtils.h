@@ -59,6 +59,11 @@ inline void aiMeshToOfMesh(const aiMesh* aim, ofMesh& ofm, ofxAssimpMeshHelper *
 			if(helper && helper->hasTexture()){
 				ofTexture & tex = helper->getTextureRef();
 				glm::vec2 texCoord = tex.getCoordFromPercent(aim->mTextureCoords[0][i].x, aim->mTextureCoords[0][i].y);
+//				std::cout << glm::vec2 { aim->mTextureCoords[0][i].x, aim->mTextureCoords[0][i].y } << std::endl;
+//				std::cout << texCoord << std::endl;
+//				std::cout << "---- texCoord ye" << std::endl;
+				
+//				texCoord = { aim->mTextureCoords[0][i].x, aim->mTextureCoords[0][i].y };
 				ofm.addTexCoord(texCoord);
 			}else{
 				glm::vec2 texCoord(aim->mTextureCoords[0][i].x, aim->mTextureCoords[0][i].y);
