@@ -478,7 +478,10 @@ void ofAppGLFWWindow::pollEvents(){
 //--------------------------------------------
 void ofAppGLFWWindow::draw(){
 	currentRenderer->startRender();
-	if( bEnableSetupScreen ) currentRenderer->setupScreen();
+	if( bEnableSetupScreen ) {
+//		std::cout << "ofAppGLFWWindow::draw setupScreen !!!" << std::endl;
+		currentRenderer->setupScreen();
+	}
 
 	events().notifyDraw();
 

@@ -372,8 +372,7 @@ void ofxAssimpModelLoader::loadGLResources(){
 
 				bool bWrap = (texMapMode[0]==aiTextureMapMode_Wrap);
 
-				std::cout << "texPath !!! " << texPath.C_Str() << std::endl;
-				
+//				std::cout << "texPath !!! " << texPath.C_Str() << std::endl;
 				std::string texPathStr = texPath.C_Str();
 
 				//deal with Blender putting "//" in front of local file paths
