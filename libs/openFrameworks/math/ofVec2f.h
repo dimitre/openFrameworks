@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ofMath.h"
 #include "ofMathConstants.h"
 
 #define GLM_FORCE_CTOR_INIT
