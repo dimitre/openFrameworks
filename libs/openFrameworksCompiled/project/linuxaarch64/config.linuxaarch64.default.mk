@@ -39,7 +39,12 @@ include $(OF_SHARED_MAKEFILES_PATH)/config.linux.common.mk
 ################################################################################
 
 PLATFORM_LDFLAGS += -lstdc++fs
+<<<<<<< HEAD
 
+=======
+PLATFORM_LDFLAGS += -no-pie
+# PLATFORM_LDFLAGS += -nostartfiles
+>>>>>>> master
 
 PLATFORM_CFLAGS += -march=armv8-a
 PLATFORM_CFLAGS += -mcpu=cortex-a72
@@ -94,7 +99,13 @@ PLATFORM_PKG_CONFIG_LIBRARIES += egl
 PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/sound/ofFmodSoundPlayer.cpp
 
 ifeq ($(CROSS_COMPILING),1)
+<<<<<<< HEAD
 
+=======
+ifdef MAKEFILE_DEBUG
+    $(info detected cross compiling $(CROSS_COMPILING))
+endif
+>>>>>>> master
 	ifdef TOOLCHAIN_ROOT
 		#You have specified TOOLCHAIN_ROOT with an environment variable
 	else
@@ -104,7 +115,11 @@ ifeq ($(CROSS_COMPILING),1)
 	ifdef GCC_PREFIX
 		#You have specified GCC_PREFIX with an environment variable
 	else
+<<<<<<< HEAD
 		GCC_PREFIX = arm-linux-gnueabihf
+=======
+		GCC_PREFIX = aarch64-linux-gnu
+>>>>>>> master
 	endif
 
 	PLATFORM_CXX = $(TOOLCHAIN_ROOT)/bin/$(GCC_PREFIX)-g++
@@ -114,6 +129,7 @@ ifeq ($(CROSS_COMPILING),1)
 
 	SYSROOT=$(RPI_ROOT)
 
+<<<<<<< HEAD
 	#c++ 17 support - comment out two lines below to use c++11
 	PLATFORM_CFLAGS += -std=c++17
 
@@ -126,5 +142,23 @@ ifeq ($(CROSS_COMPILING),1)
 	PLATFORM_LDFLAGS += -Wl,-rpath=$(SYSROOT)/lib/$(GCC_PREFIX)
 
 	PKG_CONFIG_LIBDIR=$(SYSROOT)/usr/lib/pkgconfig:$(SYSROOT)/usr/lib/arm-linux-gnueabihf/pkgconfig:$(SYSROOT)/usr/share/pkgconfig
+=======
+	PLATFORM_CFLAGS += --sysroot=$(SYSROOT)
+
+	PLATFORM_HEADER_SEARCH_PATHS += $(SYSROOT)/usr/include/c++
+	PLATFORM_HEADER_SEARCH_PATHS += $(TOOLCHAIN_ROOT)/lib/gcc/$(GCC_PREFIX)/$(GCC_VERSION)/include
+
+	PLATFORM_LIBRARY_SEARCH_PATHS += $(SYSROOT)/usr/lib/$(GCC_PREFIX)
+	PLATFORM_LIBRARY_SEARCH_PATHS += $(SYSROOT)/lib/$(GCC_PREFIX)
+	PLATFORM_LIBRARY_SEARCH_PATHS += $(TOOLCHAIN_ROOT)/lib/gcc/$(GCC_PREFIX)/$(GCC_VERSION)
+
+	PLATFORM_LDFLAGS += --sysroot=$(SYSROOT)
+	PLATFORM_LDFLAGS += -Xlinker -rpath-link=$(SYSROOT)/usr/lib/$(GCC_PREFIX)
+	PLATFORM_LDFLAGS += -Xlinker -rpath-link=$(SYSROOT)/lib/$(GCC_PREFIX)
+	PLATFORM_LDFLAGS += -Xlinker -rpath-link=$(SYSROOT)/opt/vc/lib
+	PLATFORM_LDFLAGS += -Xlinker -rpath-link=$(SYSROOT)/usr/lib/arm-linux-gnueabihf/pulseaudio
+
+	PKG_CONFIG_LIBDIR=$(SYSROOT)/usr/lib/pkgconfig:$(SYSROOT)/usr/lib/$(GCC_PREFIX)/pkgconfig:$(SYSROOT)/usr/share/pkgconfig
+>>>>>>> master
 
 endif
