@@ -4,6 +4,9 @@
 #include <string>
 #include <iostream>
 
+using std::string;
+using std::vector;
+
 // this increases the accuracy of ofToString() when saving floating point values
 // but in the process of setting it also causes very small values to be ignored.
 const float floatPrecision = 9;
@@ -72,8 +75,8 @@ void ofxXmlSettings::clear(){
 
 //---------------------------------------------------------
 bool ofxXmlSettings::load(const string& xmlFile){
-	string fullXmlFile = ofToDataPath(xmlFile);
-	bool loadOkay = doc.LoadFile(fullXmlFile);
+	auto fullXmlFile = ofToDataPath(xmlFile);
+	bool loadOkay = doc.LoadFile(fullXmlFile.c_str());
 
 	//theo removed bool check as it would
 	//return false if the file exists but was
@@ -88,8 +91,8 @@ bool ofxXmlSettings::load(const string& xmlFile){
 
 //---------------------------------------------------------
 bool ofxXmlSettings::save(const string& xmlFile){
-	string fullXmlFile = ofToDataPath(xmlFile);
-	return doc.SaveFile(fullXmlFile);
+	auto fullXmlFile = ofToDataPath(xmlFile);
+	return doc.SaveFile(fullXmlFile.c_str());
 }
 
 //---------------------------------------------------------

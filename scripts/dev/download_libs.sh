@@ -5,6 +5,7 @@ PLATFORM=""
 ARCH=""
 OVERWRITE=1
 SILENT_ARGS=""
+BLEEDING_EDGE=0
 
 printHelp(){
 cat << EOF
@@ -34,8 +35,13 @@ if [[ ! -d "$SCRIPT_DIR" ]]; then SCRIPT_DIR="$PWD"; fi
 download(){
     echo "Downloading $1"
     # downloader ci.openframeworks.cc/libs/$1 $SILENT_ARGS
-    echo downloader https://github.com/openframeworks/apothecary/releases/download/nightly/$1 $SILENT_ARGS
-    downloader https://github.com/openframeworks/apothecary/releases/download/nightly/$1 $SILENT_ARGS
+    if [[ $BLEEDING_EDGE = 1 ]] ; then
+        echo downloader https://github.com/openframeworks/apothecary/releases/download/bleeding/$1 $SILENT_ARGS
+        downloader https://github.com/openframeworks/apothecary/releases/download/bleeding/$1 $SILENT_ARGS
+    else
+        echo downloader https://github.com/openframeworks/apothecary/releases/download/nightly/$1 $SILENT_ARGS
+        downloader https://github.com/openframeworks/apothecary/releases/download/nightly/$1 $SILENT_ARGS
+    fi
 }
 
 # trap any script errors and exit
@@ -79,6 +85,9 @@ while [[ $# -gt 0 ]]; do
         -n|--no-overwrite)
         OVERWRITE=0
         ;;
+        -b|--bleeding-edge)
+        BLEEDING_EDGE=1
+        ;;
         -s|--silent)
         SILENT_ARGS=-nv
         ;;
@@ -115,9 +124,9 @@ if [ "$ARCH" == "" ]; then
         if [ "$ARCH" == "x86_64" ]; then
             GCC_VERSION=$(gcc -dumpversion | cut -f1 -d.)
             if [ $GCC_VERSION -eq 4 ]; then
-                ARCH=64gcc4
+                ARCH=64gcc6
             elif [ $GCC_VERSION -eq 5 ]; then
-                ARCH=64gcc5
+                ARCH=64gcc6
             else
                 ARCH=64gcc6
             fi
@@ -135,18 +144,15 @@ EOF
             exit 1
         fi
     elif [ "$PLATFORM" == "msys2" ]; then
-        if [ "$MSYSTEM" == "MINGW64" ]; then 
-            ARCH=64
-        elif [ "$MSYSTEM" == "MINGW32" ]; then 
-            ARCH=32
-        else
-            cat << EOF
-This MSYS2 variant ($MSYSTEM) is not recognized.
-Check if you are running a MINGW32 or MINGW64 shell.
-Assuming 32bits version for now...
-EOF
-            ARCH=32
-        fi 
+        if [ "$MSYSTEM" == "MINGW64" ]; then
+            ARCH=mingw64
+        elif [ "$MSYSTEM" == "MINGW32" ]; then
+            ARCH=mingw32
+        elif [ "$MSYSTEM" == "UCRT64" ]; then
+            ARCH=ucrt64
+        elif [ "$MSYSTEM" == "CLANG64" ]; then
+            ARCH=clang64
+        fi
     fi
 fi
 
@@ -157,8 +163,12 @@ fi
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$SCRIPT_DIR"
 
+if [[ $BLEEDING_EDGE = 1 ]] ; then
+VER=bleeding
+fi
+
 if [ "$PLATFORM" == "msys2" ]; then
-    PKGS="openFrameworksLibs_${VER}_${PLATFORM}_mingw${ARCH}.zip"
+    PKGS="openFrameworksLibs_${VER}_${PLATFORM}_${ARCH}.zip"
 elif [ "$ARCH" == "" ] && [ "$PLATFORM" == "vs" ]; then
     PKGS="openFrameworksLibs_${VER}_${PLATFORM}_64_1.zip \
           openFrameworksLibs_${VER}_${PLATFORM}_64_2.zip \
@@ -170,16 +180,34 @@ elif [ "$PLATFORM" == "vs" ]; then
           openFrameworksLibs_${VER}_${PLATFORM}_${ARCH}_3.zip \
           openFrameworksLibs_${VER}_${PLATFORM}_${ARCH}_4.zip"
 elif [ "$ARCH" == "" ] && [[ "$PLATFORM" == "osx" || "$PLATFORM" == "ios" || "$PLATFORM" == "tvos" ]]; then
-    PKGS="openFrameworksLibs_${VER}_${PLATFORM}1.tar.bz2 \
-          openFrameworksLibs_${VER}_${PLATFORM}2.tar.bz2 \
-          openFrameworksLibs_${VER}_${PLATFORM}3.tar.bz2 \
-          openFrameworksLibs_${VER}_${PLATFORM}4.tar.bz2"
+    if [[ $BLEEDING_EDGE = 1 ]] ; then
+        PKGS="openFrameworksLibs_${VER}_${PLATFORM}_1.tar.bz2 \
+              openFrameworksLibs_${VER}_${PLATFORM}_2.tar.bz2 \
+              openFrameworksLibs_${VER}_${PLATFORM}_3.tar.bz2 \
+              openFrameworksLibs_${VER}_${PLATFORM}_4.tar.bz2"
+    else    
+        PKGS="openFrameworksLibs_${VER}_${PLATFORM}1.tar.bz2 \
+              openFrameworksLibs_${VER}_${PLATFORM}2.tar.bz2 \
+              openFrameworksLibs_${VER}_${PLATFORM}3.tar.bz2 \
+              openFrameworksLibs_${VER}_${PLATFORM}4.tar.bz2" 
+    fi 
 elif [ "$ARCH" == "" ] && [ "$PLATFORM" == "android" ]; then
-    PKGS="openFrameworksLibs_${VER}_${PLATFORM}armv7.tar.bz2 \
+    if [[ $BLEEDING_EDGE = 1 ]] ; then
+        PKGS="openFrameworksLibs_${VER}_${PLATFORM}_armv7.tar.bz2 \
+          openFrameworksLibs_${VER}_${PLATFORM}_arm64.tar.bz2 \
+           openFrameworksLibs_${VER}_${PLATFORM}_x86_64.tar.bz2
+          openFrameworksLibs_${VER}_${PLATFORM}_x86.tar.bz2"
+    else
+        PKGS="openFrameworksLibs_${VER}_${PLATFORM}armv7.tar.bz2 \
           openFrameworksLibs_${VER}_${PLATFORM}arm64.tar.bz2 \
           openFrameworksLibs_${VER}_${PLATFORM}x86.tar.bz2"
+    fi
 else # Linux
-    PKGS="openFrameworksLibs_${VER}_${PLATFORM}${ARCH}.tar.bz2"
+    if [[ $BLEEDING_EDGE = 1 ]] ; then
+        PKGS="openFrameworksLibs_${VER}_${PLATFORM}_${ARCH}.tar.bz2"
+    else
+        PKGS="openFrameworksLibs_${VER}_${PLATFORM}${ARCH}.tar.bz2"
+    fi
 fi
 
 for PKG in $PKGS; do

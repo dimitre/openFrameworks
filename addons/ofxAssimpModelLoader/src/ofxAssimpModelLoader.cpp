@@ -2,8 +2,10 @@
 #include "ofxAssimpUtils.h"
 #include "ofLight.h"
 #include "ofImage.h"
+#include "ofPixels.h"
 #include "ofGraphics.h"
 #include "ofConstants.h"
+#include "ofMatrix4x4.h"
 
 #include <assimp/cimport.h>
 #include <assimp/scene.h>
@@ -215,9 +217,9 @@ void ofxAssimpModelLoader::calculateDimensions(){
 
 	// optional normalized scaling
 	normalizedScale = scene_max.x-scene_min.x;
-	normalizedScale = MAX(scene_max.y - scene_min.y,normalizedScale);
-	normalizedScale = MAX(scene_max.z - scene_min.z,normalizedScale);
-	if (abs(normalizedScale) < std::numeric_limits<float>::epsilon()){
+	normalizedScale = std::max(double(scene_max.y - scene_min.y), normalizedScale);
+	normalizedScale = std::max(double(scene_max.z - scene_min.z), normalizedScale);
+	if (fabs(normalizedScale) < std::numeric_limits<float>::epsilon()){
 		ofLogWarning("ofxAssimpModelLoader") << "Error calculating normalized scale of scene" << std::endl;
 		normalizedScale = 1.0;
 	} else {
@@ -320,7 +322,7 @@ void ofxAssimpModelLoader::loadGLResources(){
 
 		if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_AMBIENT, &tcolor)){
 			auto col = aiColorToOfColor(tcolor);
-			meshHelper.material.setAmbientColor(aiColorToOfColor(tcolor));
+			meshHelper.material.setAmbientColor(col);
 		}
 
 		if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_EMISSIVE, &tcolor)){
@@ -388,20 +390,20 @@ void ofxAssimpModelLoader::loadGLResources(){
 				auto ogPath = texPathStr;
 				bool bHasEmbeddedTexture = false;
 
-				string modelFolder = ofFilePath::getEnclosingDirectory( file.path() );
-				string relTexPath = ofFilePath::getEnclosingDirectory(texPathStr,false);
-				string texFile = ofFilePath::getFileName(texPathStr);
-				string realPath = ofFilePath::join(ofFilePath::join(modelFolder, relTexPath), texFile);
+				auto modelFolder = ofFilePath::getEnclosingDirectory( file.path() );
+				auto relTexPath = ofFilePath::getEnclosingDirectory(texPathStr,false);
+				auto realPath = modelFolder / of::filesystem::path{ texPathStr };
+				
 
 #ifndef TARGET_LINUX_ARM
 				if(bTryEmbed || ofFile::doesFileExist(realPath) == false) {
 					auto embeddedTexture = scene->GetEmbeddedTexture(ogPath.c_str());
 					if( embeddedTexture ){
 						bHasEmbeddedTexture = true;
-						ofLogVerbose("ofxAssimpModelLoader") << "loadGLResource() texture " << texFile << " is embedded ";
+						ofLogVerbose("ofxAssimpModelLoader") << "loadGLResource() texture " << realPath.filename() << " is embedded ";
 					}else{
 						ofLogError("ofxAssimpModelLoader") << "loadGLResource(): texture doesn't exist: \""
-						<< file.getFileName() + "\" in \"" << realPath << "\"";
+						<< file.getFileName() + "\" in \"" << realPath.string() << "\"";
 					}
 				}
 #endif
@@ -419,7 +421,7 @@ void ofxAssimpModelLoader::loadGLResources(){
 					meshHelper.addTexture(assimpTexture);
 
 					ofLogVerbose("ofxAssimpModelLoader") << "loadGLResource(): texture already loaded: \""
-					<< file.getFileName() + "\" from \"" << realPath << "\"" << " adding texture as " << assimpTexture.getTextureTypeAsString() ;
+					<< file.getFileName() + "\" from \"" << realPath.string() << "\"" << " adding texture as " << assimpTexture.getTextureTypeAsString() ;
 				} else {
 
 					shared_ptr<ofTexture> texture = std::make_shared<ofTexture>();
@@ -463,7 +465,7 @@ void ofxAssimpModelLoader::loadGLResources(){
 						ofLogVerbose("ofxAssimpModelLoader") << "loadGLResource(): texture " << tmpTex.getTextureTypeAsString() << " loaded, dimensions: " << texture->getWidth() << "x" << texture->getHeight();
 					}else{
 						ofLogError("ofxAssimpModelLoader") << "loadGLResource(): couldn't load texture: \""
-						<< file.getFileName() + "\" from \"" << realPath << "\"";
+						<< file.getFileName() + "\" from \"" << realPath.string() << "\"";
 					}
 				}
 			}
@@ -823,25 +825,25 @@ void ofxAssimpModelLoader::getBoundingBoxForNode(const ofxAssimpMeshHelper & mes
 			auto vertex = mesh.mesh->mVertices[i];
 			auto tmp = mesh.matrix * glm::vec4(vertex.x,vertex.y,vertex.z,1.0f);
 
-			min->x = MIN(min->x,tmp.x);
-			min->y = MIN(min->y,tmp.y);
-			min->z = MIN(min->z,tmp.z);
+			min->x = std::min(min->x,tmp.x);
+			min->y = std::min(min->y,tmp.y);
+			min->z = std::min(min->z,tmp.z);
 
-			max->x = MAX(max->x,tmp.x);
-			max->y = MAX(max->y,tmp.y);
-			max->z = MAX(max->z,tmp.z);
+			max->x = std::max(max->x,tmp.x);
+			max->y = std::max(max->y,tmp.y);
+			max->z = std::max(max->z,tmp.z);
 		}
 	} else {
 		for (auto & animPos: mesh.animatedPos){
 			auto tmp = mesh.matrix * glm::vec4(animPos.x,animPos.y,animPos.z,1.0f);
 
-			min->x = MIN(min->x,tmp.x);
-			min->y = MIN(min->y,tmp.y);
-			min->z = MIN(min->z,tmp.z);
+			min->x = std::min(min->x,tmp.x);
+			min->y = std::min(min->y,tmp.y);
+			min->z = std::min(min->z,tmp.z);
 
-			max->x = MAX(max->x,tmp.x);
-			max->y = MAX(max->y,tmp.y);
-			max->z = MAX(max->z,tmp.z);
+			max->x = std::max(max->x,tmp.x);
+			max->y = std::max(max->y,tmp.y);
+			max->z = std::max(max->z,tmp.z);
 		}
 	}
 }

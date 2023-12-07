@@ -19,7 +19,7 @@ ofxiOSSoundPlayer::~ofxiOSSoundPlayer() {
     unload();
 }
 
-bool ofxiOSSoundPlayer::load(const std::filesystem::path& fileName, bool stream) {
+bool ofxiOSSoundPlayer::load(const of::filesystem::path& fileName, bool stream) {
     if(soundPlayer != NULL) {
         unload();
     }
@@ -164,6 +164,19 @@ float ofxiOSSoundPlayer::getVolume()  const{
         return false;
     }
     return [(__bridge AVSoundPlayer *)soundPlayer volume];
+}
+
+float ofxiOSSoundPlayer::getDuration() const {
+	if(soundPlayer == NULL) {
+		return 0.f;
+	}
+	return [(__bridge AVSoundPlayer *)soundPlayer duration];
+}
+unsigned int ofxiOSSoundPlayer::getDurationMS() const {
+	if(soundPlayer == NULL) {
+		return 0;
+	}
+	return [(__bridge AVSoundPlayer *)soundPlayer duration] * 1000.0;
 }
 
 void * ofxiOSSoundPlayer::getAVSoundPlayer() {
