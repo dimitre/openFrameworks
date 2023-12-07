@@ -1,17 +1,14 @@
 #pragma once
 
+// MARK: ofMatrix4x4 already contains some of commented out includes here.
 //#include "ofVec2f.h"
 #include "ofVec3f.h"
 //#include "ofVec4f.h"
 class ofMatrix3x3;
 //#include "ofMatrix3x3.h"
-// MARK: ofMatrix4x4 already contains some of commented out includes here.
 #include "ofMatrix4x4.h"
 #include "ofQuaternion.h"
-
 #include "ofMathConstants.h"
-//#include "ofConstants.h"
-#define GLM_FORCE_CTOR_INIT
 
 #define GLM_FORCE_CTOR_INIT
 #include "glm/vec2.hpp"
