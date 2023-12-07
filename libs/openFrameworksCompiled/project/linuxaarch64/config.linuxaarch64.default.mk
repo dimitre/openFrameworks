@@ -39,12 +39,8 @@ include $(OF_SHARED_MAKEFILES_PATH)/config.linux.common.mk
 ################################################################################
 
 PLATFORM_LDFLAGS += -lstdc++fs
-<<<<<<< HEAD
-
-=======
 PLATFORM_LDFLAGS += -no-pie
 # PLATFORM_LDFLAGS += -nostartfiles
->>>>>>> master
 
 PLATFORM_CFLAGS += -march=armv8-a
 PLATFORM_CFLAGS += -mcpu=cortex-a72
@@ -99,13 +95,9 @@ PLATFORM_PKG_CONFIG_LIBRARIES += egl
 PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/sound/ofFmodSoundPlayer.cpp
 
 ifeq ($(CROSS_COMPILING),1)
-<<<<<<< HEAD
-
-=======
 ifdef MAKEFILE_DEBUG
     $(info detected cross compiling $(CROSS_COMPILING))
 endif
->>>>>>> master
 	ifdef TOOLCHAIN_ROOT
 		#You have specified TOOLCHAIN_ROOT with an environment variable
 	else
@@ -115,11 +107,7 @@ endif
 	ifdef GCC_PREFIX
 		#You have specified GCC_PREFIX with an environment variable
 	else
-<<<<<<< HEAD
-		GCC_PREFIX = arm-linux-gnueabihf
-=======
 		GCC_PREFIX = aarch64-linux-gnu
->>>>>>> master
 	endif
 
 	PLATFORM_CXX = $(TOOLCHAIN_ROOT)/bin/$(GCC_PREFIX)-g++
