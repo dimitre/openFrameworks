@@ -3,6 +3,7 @@
 #include "ofVideoBaseTypes.h"
 #include "ofGLUtils.h"
 #include "ofAppRunner.h"
+#include "ofPixels.h"
 #include "ofConstants.h"
 
 #ifdef OF_VIDEO_CAPTURE_IOS

@@ -1,7 +1,10 @@
 #pragma once
 
 #include "ofParameter.h"
+<<<<<<< HEAD
 //#include "ofConstants.h"
+=======
+>>>>>>> master
 #include "pugixml.hpp"
 
 template<typename It>

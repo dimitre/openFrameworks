@@ -12,6 +12,10 @@
 #include "ofVideoBaseTypes.h"
 #include "ofTexture.h"
 #include "ofThread.h"
+<<<<<<< HEAD
+=======
+// MARK: Template, if 
+>>>>>>> master
 #include "ofPixels.h"
 #include <mutex>
 

@@ -1,6 +1,10 @@
 #pragma once
 
+<<<<<<< HEAD
 // FIXME: platforms plus GL/ headers
+=======
+// MARK: Targets plus GL/ headers
+>>>>>>> master
 #include "ofConstants.h"
 
 template<typename T>

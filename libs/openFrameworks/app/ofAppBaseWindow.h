@@ -1,8 +1,12 @@
 #pragma once
 
 #include "ofWindowSettings.h"
+<<<<<<< HEAD
 
 // should not be removed  because of the specific platforms
+=======
+// MARK: Target
+>>>>>>> master
 #include "ofConstants.h"
 //#include <memory>
 
