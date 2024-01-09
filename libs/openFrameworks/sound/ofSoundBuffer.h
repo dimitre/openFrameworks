@@ -11,11 +11,6 @@
 #include <cstddef>
 #include <vector>
 #include <string>
-<<<<<<< HEAD
-
-//#include "ofConstants.h"
-=======
->>>>>>> master
 
 
 /*! 

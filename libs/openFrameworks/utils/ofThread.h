@@ -1,10 +1,5 @@
 #pragma once
 
-<<<<<<< HEAD
-// FIXME: DEPRECATED
-#include "ofConstants.h"
-=======
->>>>>>> master
 #ifndef TARGET_NO_THREADS
 
 #include <atomic>

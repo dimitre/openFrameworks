@@ -1,13 +1,6 @@
 #pragma once
 
-<<<<<<< HEAD
-// FIXME: deprecated only
-#include "ofConstants.h"
 #define GLM_FORCE_CTOR_INIT
-#include <glm/vec3.hpp>
-=======
-#define GLM_FORCE_CTOR_INIT
->>>>>>> master
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 

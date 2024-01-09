@@ -3,11 +3,6 @@
 #define GLM_FORCE_CTOR_INIT
 #include "glm/common.hpp"
 
-<<<<<<< HEAD
-#include "ofConstants.h"
-
-=======
->>>>>>> master
 
 #ifdef OF_SOUND_PLAYER_AV_ENGINE
 #include "ofAVEngineSoundPlayer.h"
@@ -49,10 +44,6 @@
 #define OF_SOUND_PLAYER_TYPE ofxAndroidSoundPlayer
 #endif
 
-<<<<<<< HEAD
-=======
-
->>>>>>> master
 // these are global functions, that affect every sound / channel:
 // ------------------------------------------------------------
 

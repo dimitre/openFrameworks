@@ -1,10 +1,6 @@
 #pragma once
 
-<<<<<<< HEAD
-// fixme: deprecated / targets
-=======
 // MARK: ofConstants targets
->>>>>>> master
 #include "ofConstants.h"
 
 class ofBuffer;

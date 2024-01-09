@@ -1,9 +1,5 @@
 #pragma once
 
-<<<<<<< HEAD
-//#include "ofConstants.h"
-=======
->>>>>>> master
 
 //----------------------------------------------------------
 // ofMutex

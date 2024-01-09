@@ -1,12 +1,6 @@
 #pragma once
 
-<<<<<<< HEAD
-#include "ofEventUtils.h"
-#include "ofTimer.h"
-#include "ofFpsCounter.h"
-=======
 #define GLM_FORCE_CTOR_INIT
->>>>>>> master
 #include "glm/vec2.hpp"
 #include "ofEventUtils.h"
 #include "ofFpsCounter.h"

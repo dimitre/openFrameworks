@@ -2,17 +2,9 @@
 
 #include "ofTexture.h"
 #include "ofVideoBaseTypes.h"
-<<<<<<< HEAD
 
-typedef ofPixels_<unsigned char> ofPixels;
-typedef ofPixels_<float> ofFloatPixels;
-typedef ofPixels_<unsigned short> ofShortPixels;
-typedef ofPixels & ofPixelsRef;
-=======
->>>>>>> master
-
-template<typename T>
-class ofPixels_;
+// template<typename T>
+// class ofPixels_;
 typedef ofPixels_<unsigned char> ofPixels;
 typedef ofPixels_<float> ofFloatPixels;
 typedef ofPixels_<unsigned short> ofShortPixels;

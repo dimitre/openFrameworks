@@ -4,11 +4,6 @@
 #include "ofPixels.h" //MARK: unique_ptr
 #include "ofTexture.h"
 #include "ofGraphics.h"
-<<<<<<< HEAD
-//#include "ofConstants.h"
-=======
-
->>>>>>> master
 
 /*
  

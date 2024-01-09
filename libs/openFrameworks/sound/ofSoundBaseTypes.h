@@ -1,15 +1,10 @@
 #pragma once
 
-<<<<<<< HEAD
-=======
-// MARK: ofConstants FS
+// FIXME: fs only
 #include "ofConstants.h"
->>>>>>> master
 #include <functional>
 #include <vector>
 #include <string>
-// FIXME: fs only
-#include "ofConstants.h"
 
 class ofSoundBuffer;
 

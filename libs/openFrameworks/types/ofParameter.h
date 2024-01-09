@@ -1,14 +1,5 @@
 #pragma once
 
-<<<<<<< HEAD
-#include "ofEvents.h"
-#include "ofPoint.h"
-#include "ofRectangle.h"
-#include "ofColor.h"
-#include "ofLog.h"
-//#include "ofConstants.h"
-=======
->>>>>>> master
 #include <map>
 
 #include "ofEvents.h"

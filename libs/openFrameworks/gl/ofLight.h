@@ -10,10 +10,6 @@
 #pragma once
 
 #include "ofNode.h"
-<<<<<<< HEAD
-//#include "ofColor.h"
-=======
->>>>>>> master
 #include "ofShadow.h"
 
 class ofBaseGLRenderer;

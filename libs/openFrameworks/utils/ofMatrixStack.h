@@ -10,11 +10,7 @@
 // ofRectangle currentViewport only
 #include "ofRectangle.h"
 #include "ofGraphicsConstants.h"
-<<<<<<< HEAD
-//#include "ofConstants.h"
-=======
 #define GLM_FORCE_CTOR_INIT
->>>>>>> master
 #include "glm/mat4x4.hpp"
 #include <stack>
 

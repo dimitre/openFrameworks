@@ -8,11 +8,6 @@
 #pragma once
 
 #include "ofMath.h"
-<<<<<<< HEAD
-//#include <glm/gtc/constants.hpp>
-//#include "glm/common.hpp"
-=======
->>>>>>> master
 
 inline void ofStereoVolumes(float volume, float pan, float & left, float & right){
 	pan = ofClamp(pan, -1, 1);

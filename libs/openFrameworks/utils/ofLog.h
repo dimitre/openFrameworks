@@ -2,12 +2,7 @@
 
 // Only private ofFile file;
 #include "ofFileUtils.h"
-<<<<<<< HEAD
-#include "ofUtils.h"
-//#include "ofConstants.h"
-=======
 #include "ofUtils.h" // ofVAArgsToString
->>>>>>> master
 #include <sstream>
 
 /// \file
