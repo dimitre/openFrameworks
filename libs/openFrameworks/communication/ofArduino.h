@@ -26,10 +26,6 @@
 
 #include "ofEvents.h"
 #include "ofSerial.h"
-<<<<<<< HEAD
-//#include "ofConstants.h"
-=======
->>>>>>> master
 #include <list>
 #include <map>
 

@@ -2,13 +2,8 @@
 #pragma once
 
 #include "ofParameter.h"
-<<<<<<< HEAD
-// FIXME: deprecated
-#include "ofConstants.h"
-=======
 
 #define GLM_FORCE_CTOR_INIT
->>>>>>> master
 #include "glm/mat4x4.hpp"
 #include <glm/gtc/quaternion.hpp>
 #include <array>

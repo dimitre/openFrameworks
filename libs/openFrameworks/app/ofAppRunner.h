@@ -1,9 +1,5 @@
 #pragma once
 
-<<<<<<< HEAD
-#include "ofWindowSettings.h"
-=======
->>>>>>> master
 #include "ofMainLoop.h"
 #include "ofWindowSettings.h"
 

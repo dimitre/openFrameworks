@@ -1,12 +1,9 @@
 #pragma once
 
 #include "ofAppBaseWindow.h"
-<<<<<<< HEAD
-=======
 // MARK: Optimize to Pointer
 #include "ofRectangle.h"
 // MARK: Target
->>>>>>> master
 #include "ofConstants.h"
 #include "ofRectangle.h"
 
