@@ -3,7 +3,6 @@
 #include "ofWindowSettings.h"
 // MARK: Target
 #include "ofConstants.h"
-//#include <memory>
 
 class ofBaseApp;
 class ofBaseRenderer;

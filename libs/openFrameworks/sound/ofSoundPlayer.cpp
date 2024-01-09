@@ -44,6 +44,7 @@
 #define OF_SOUND_PLAYER_TYPE ofxAndroidSoundPlayer
 #endif
 
+
 // these are global functions, that affect every sound / channel:
 // ------------------------------------------------------------
 
