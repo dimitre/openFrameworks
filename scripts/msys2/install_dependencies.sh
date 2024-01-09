@@ -34,10 +34,13 @@ done
 msyspackages="make rsync zip unzip wget"
 
 # List of MINGW packages to be installed (without prefix)
-mingwPackages="assimp boost cairo curl freeglut FreeImage gcc gdb glew glfw \
-			  harfbuzz libsndfile libusb libxml2 mpg123 ntldd-git openal opencv \
-			  pkg-config poco tools zlib"
-
+mingwPackages="assimp cairo curl freeglut FreeImage \
+			  gcc gdb glew glfw glm \
+			  harfbuzz libsndfile libusb libxml2 mpg123 \
+			  nlohmann-json ntldd-git openal opencv \
+			  pkgconf pugixml rtaudio \
+			  uriparser utf8cpp zlib"
+# boost poco tools
 # Build the full list of packages adding prefix to MINGW packages
 packages=${msyspackages}
 for pkg in ${mingwPackages}; do
@@ -46,9 +49,10 @@ done
 
 # Install packages
 if [[ "${confirm}" == "yes" ]]; then
-	for pkg in ${packages}; do
-		pacman -Su --confirm --needed ${pkg}
-	done
+	pacman -Su --confirm --needed ${packages}
+	# for pkg in ${packages}; do
+		# pacman -Su --confirm --needed ${pkg}
+	# done
 else
 	pacman -Su --noconfirm --needed ${packages}
 fi
