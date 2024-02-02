@@ -1307,7 +1307,7 @@ static GstVideoInfo getVideoInfo(GstSample * sample){
     if(caps){
 		gst_video_info_from_caps (&vinfo, caps);
     }else{
-    	ofLogError() << "couldn't get sample caps";
+    	ofLogError("ofGstVideoUtils") << "couldn't get sample caps";
     }
     return vinfo;
 }
