@@ -1,4 +1,6 @@
 #include "ofGstUtils.h"
+#include "ofLog.h"
+
 #ifndef TARGET_ANDROID
 #include <gst/app/gstappsink.h>
 #include <gst/video/video.h>

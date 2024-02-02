@@ -37,8 +37,8 @@ endif
 
 ifdef ${ccache}
 $(info 💿 Using CCACHE - compile.core.mk )
-	CXX := ${ccache} $(CXX)
-	CC := ${ccache} $(CXX)
+	CXX := time ${ccache} $(CXX)
+	CC := time ${ccache} $(CXX)
 endif	
 
 ################################################################################

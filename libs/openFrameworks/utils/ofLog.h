@@ -4,6 +4,7 @@
 #include "ofFileUtils.h"
 #include "ofUtils.h" // ofVAArgsToString
 #include <sstream>
+//#include <string>
 
 /// \file
 /// ofLog provides an interface for writing text output from your app.
