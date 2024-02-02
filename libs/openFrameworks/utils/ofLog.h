@@ -468,7 +468,7 @@ class ofLog{
 		/// \brief Destroy the ofLog.
 		///
 		/// This destructor does the actual printing via std::ostream.
-		virtual ~ofLog() {};
+		~ofLog();
 		
 		/// \brief Define flexible stream operator.
 		///
