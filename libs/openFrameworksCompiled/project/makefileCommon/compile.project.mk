@@ -123,10 +123,10 @@ endif
 Release:
 	@echo Compiling OF library for Release
 	@echo $(PLATFORM_ARCH)
-	USE_CORES = -j
+	USE_CORES = "-j"
 
 	ifeq ($(LINUX_ARM),1)
-		USE_CORES = -j2
+		USE_CORES = "-j2"
 	endif		
 
 	@$(MAKE) $(USE_CORES) -C $(OF_ROOT)/libs/openFrameworksCompiled/project/ Release PLATFORM_OS=$(PLATFORM_OS) ABIS_TO_COMPILE_RELEASE="$(ABIS_TO_COMPILE_RELEASE)"
