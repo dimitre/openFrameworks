@@ -154,14 +154,7 @@ void ofAppGLFWWindow::setup(const ofGLFWWindowSettings & _settings) {
 		return;
 	}
 	settings = _settings;
-
-	if (!glfwInit()) {
-		ofLogError("ofAppGLFWWindow") << "couldn't init GLFW";
-		return;
-	}
-
-	//	ofLogNotice("ofAppGLFWWindow") << "WINDOW MODE IS " << screenMode;
-
+	
 	glfwDefaultWindowHints();
 	// TODO CHANGE RPI
 #ifdef TARGET_LINUX
@@ -190,6 +183,17 @@ void ofAppGLFWWindow::setup(const ofGLFWWindowSettings & _settings) {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, settings.glesVersion);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+	
+	
+
+	if (!glfwInit()) {
+		ofLogError("ofAppGLFWWindow") << "couldn't init GLFW";
+		return;
+	}
+
+	//	ofLogNotice("ofAppGLFWWindow") << "WINDOW MODE IS " << screenMode;
+
+
 	if (settings.glesVersion >= 2) {
 		currentRenderer = std::make_shared<ofGLProgrammableRenderer>(this);
 	} else {
