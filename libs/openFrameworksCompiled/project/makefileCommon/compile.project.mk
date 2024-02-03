@@ -122,21 +122,16 @@ endif
 USE_CORES=-j 
 
 ifeq ($(PLATFORM_ARCH),armv6l)
-	LINUX_ARM=1
+	USE_CORES=-j2
 endif
 
 ifeq ($(PLATFORM_ARCH),armv7l)
-	LINUX_ARM=1
+	USE_CORES=-j2
 endif
 
 ifeq ($(PLATFORM_ARCH),aarch64)
-	LINUX_ARM=1
-endif
-
-ifeq ($(LINUX_ARM),1)
 	USE_CORES=-j3
-endif	
-
+endif
 
 Release:
 	@echo Compiling OF library for Release
