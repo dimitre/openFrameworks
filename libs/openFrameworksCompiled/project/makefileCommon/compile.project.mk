@@ -134,7 +134,7 @@ ifeq ($(PLATFORM_ARCH),aarch64)
 endif
 
 ifeq ($(LINUX_ARM),1)
-	USE_CORES=-j2
+	USE_CORES=-j3
 endif	
 
 
