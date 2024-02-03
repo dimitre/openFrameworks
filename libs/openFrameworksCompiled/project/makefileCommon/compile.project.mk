@@ -119,7 +119,7 @@ endif
 
 .PHONY: all Debug Release after clean CleanDebug CleanRelease help force
 
-USE_CORES="-j"
+USE_CORES=-j 
 
 ifeq ($(PLATFORM_ARCH),armv6l)
 	LINUX_ARM=1
@@ -134,7 +134,7 @@ ifeq ($(PLATFORM_ARCH),aarch64)
 endif
 
 ifeq ($(LINUX_ARM),1)
-	USE_CORES="-j2"
+	USE_CORES=-j2
 endif	
 
 
