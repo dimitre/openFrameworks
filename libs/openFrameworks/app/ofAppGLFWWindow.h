@@ -6,10 +6,10 @@
 // MARK: Target
 #include "ofConstants.h"
 
-#if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI_LEGACY)
-typedef struct _XIM * XIM;
-typedef struct _XIC * XIC;
-#endif
+//#if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI_LEGACY)
+//typedef struct _XIM * XIM;
+//typedef struct _XIC * XIC;
+//#endif
 
 class ofBaseApp;
 struct GLFWwindow;
@@ -207,10 +207,10 @@ private:
 
 	void close();
 
-#if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI_LEGACY)
-	XIM xim;
-	XIC xic;
-#endif
+//#if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI_LEGACY)
+//	XIM xim;
+//	XIC xic;
+//#endif
 
 	std::unique_ptr<ofCoreEvents> coreEvents;
 	std::shared_ptr<ofBaseRenderer> currentRenderer;

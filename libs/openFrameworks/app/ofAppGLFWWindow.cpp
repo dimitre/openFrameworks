@@ -16,11 +16,11 @@
 		#define GLFW_EXPOSE_NATIVE_EGL
 	#endif
 	#include <GLFW/glfw3native.h>
-	#include <X11/XKBlib.h>
-	#include <X11/Xatom.h>
-	#include <X11/extensions/Xrandr.h>
-	#include <xcb/xcb.h>
-	#include <xcb/xcbext.h>
+//	#include <X11/XKBlib.h>
+//	#include <X11/Xatom.h>
+//	#include <X11/extensions/Xrandr.h>
+//	#include <xcb/xcb.h>
+//	#include <xcb/xcbext.h>
 #elif defined(TARGET_OSX)
 	#include <Cocoa/Cocoa.h>
 	#define GLFW_EXPOSE_NATIVE_COCOA
@@ -163,6 +163,11 @@ void ofAppGLFWWindow::setup(const ofGLFWWindowSettings & _settings) {
 	//	ofLogNotice("ofAppGLFWWindow") << "WINDOW MODE IS " << screenMode;
 
 	glfwDefaultWindowHints();
+	// TODO CHANGE RPI
+#ifdef TARGET_LINUX
+	glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+
+#endif
 	glfwWindowHint(GLFW_RED_BITS, settings.redBits);
 	glfwWindowHint(GLFW_GREEN_BITS, settings.greenBits);
 	glfwWindowHint(GLFW_BLUE_BITS, settings.blueBits);
