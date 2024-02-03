@@ -155,6 +155,12 @@ void ofAppGLFWWindow::setup(const ofGLFWWindowSettings & _settings) {
 	}
 	settings = _settings;
 	
+
+	if (!glfwInit()) {
+		ofLogError("ofAppGLFWWindow") << "couldn't init GLFW";
+		return;
+	}
+	
 	glfwDefaultWindowHints();
 	// TODO CHANGE RPI
 #ifdef TARGET_LINUX
@@ -183,13 +189,6 @@ void ofAppGLFWWindow::setup(const ofGLFWWindowSettings & _settings) {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, settings.glesVersion);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-	
-	
-
-	if (!glfwInit()) {
-		ofLogError("ofAppGLFWWindow") << "couldn't init GLFW";
-		return;
-	}
 
 	//	ofLogNotice("ofAppGLFWWindow") << "WINDOW MODE IS " << screenMode;
 
