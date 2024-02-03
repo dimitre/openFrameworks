@@ -161,16 +161,16 @@ public:
 	void setMultiDisplayFullscreen(bool bMultiFullscreen); //note this just enables the mode, you have to toggle fullscreen to activate it.
 
 #if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI_LEGACY)
-	Display * getX11Display();
-	Window getX11Window();
-	XIC getX11XIC();
-
-	void setWindowIcon(const std::string & path);
-	void setWindowIcon(const ofPixels & iconPixels);
+//	Display * getX11Display();
+//	Window getX11Window();
+//	XIC getX11XIC();
+//
+//	void setWindowIcon(const std::string & path);
+//	void setWindowIcon(const ofPixels & iconPixels);
 #endif
 
 #if defined(TARGET_LINUX) && !defined(TARGET_OPENGLES)
-	GLXContext getGLXContext();
+//	GLXContext getGLXContext();
 #endif
 
 #if defined(TARGET_LINUX) && defined(TARGET_OPENGLES)
