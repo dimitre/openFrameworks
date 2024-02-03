@@ -27,9 +27,6 @@
 
 include $(OF_SHARED_MAKEFILES_PATH)/config.linux.common.mk
 
-ifndef ABIS_TO_COMPILE_RELEASE
-	ABIS_TO_COMPILE_RELEASE = armv7 neon
-endif
 
 ################################################################################
 # PLATFORM CFLAGS
