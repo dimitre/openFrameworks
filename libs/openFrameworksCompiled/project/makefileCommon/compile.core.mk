@@ -145,7 +145,7 @@ ifeq ($(findstring Release,$(TARGET_NAME)),Release)
 endif
 
 ifeq ($(findstring Debug,$(TARGET_NAME)),Debug)
-	ifdef ABIS_TO_COMPILE_DEBUG
+	ifdef _DEBUG
 		ifeq ($(findstring Release,$(TARGET_NAME)),Release)
 			ifdef ABIS_TO_COMPILE_RELEASE
 				ABIS_TO_COMPILE = $(filter-out $(ABIS_TO_COMPILE_DEBUG),$(ABIS_TO_COMPILE_RELEASE))
