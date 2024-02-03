@@ -148,10 +148,9 @@ Release:
 	@echo
 	@echo Compiling $(APPNAME) for Release
 ifndef ABIS_TO_COMPILE_RELEASE
-	# @$(MAKE) -j ReleaseABI
-	@$(MAKE) ReleaseABI
+	@$(MAKE) $(USE_CORES) ReleaseABI
 else
-	@$(foreach abi,$(ABIS_TO_COMPILE_RELEASE),$(MAKE) -j ReleaseABI ABI=$(abi) &&) echo
+	@$(foreach abi,$(ABIS_TO_COMPILE_RELEASE),$(MAKE) $(USE_CORES) ReleaseABI ABI=$(abi) &&) echo
 endif
 
 
