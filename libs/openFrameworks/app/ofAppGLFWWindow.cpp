@@ -305,17 +305,17 @@ void ofAppGLFWWindow::setup(const ofGLFWWindowSettings & _settings) {
 			glfwGetWindowSize(windowP, &currentW, &currentH);
 		}
 #ifdef TARGET_LINUX
-		if (!iconSet) {
-			ofPixels iconPixels;
-	#ifdef DEBUG
-			iconPixels.allocate(ofIconDebug.width, ofIconDebug.height, ofIconDebug.bytes_per_pixel);
-			GIMP_IMAGE_RUN_LENGTH_DECODE(iconPixels.getData(), ofIconDebug.rle_pixel_data, iconPixels.getWidth() * iconPixels.getHeight(), ofIconDebug.bytes_per_pixel);
-	#else
-			iconPixels.allocate(ofIcon.width, ofIcon.height, ofIcon.bytes_per_pixel);
-			GIMP_IMAGE_RUN_LENGTH_DECODE(iconPixels.getData(), ofIcon.rle_pixel_data, iconPixels.getWidth() * iconPixels.getHeight(), ofIcon.bytes_per_pixel);
-	#endif
-			setWindowIcon(iconPixels);
-		}
+//		if (!iconSet) {
+//			ofPixels iconPixels;
+//	#ifdef DEBUG
+//			iconPixels.allocate(ofIconDebug.width, ofIconDebug.height, ofIconDebug.bytes_per_pixel);
+//			GIMP_IMAGE_RUN_LENGTH_DECODE(iconPixels.getData(), ofIconDebug.rle_pixel_data, iconPixels.getWidth() * iconPixels.getHeight(), ofIconDebug.bytes_per_pixel);
+//	#else
+//			iconPixels.allocate(ofIcon.width, ofIcon.height, ofIcon.bytes_per_pixel);
+//			GIMP_IMAGE_RUN_LENGTH_DECODE(iconPixels.getData(), ofIcon.rle_pixel_data, iconPixels.getWidth() * iconPixels.getHeight(), ofIcon.bytes_per_pixel);
+//	#endif
+////			setWindowIcon(iconPixels);
+//		}
 #endif
 		if (settings.iconified) {
 			iconify(true);
@@ -413,30 +413,30 @@ void ofAppGLFWWindow::setup(const ofGLFWWindowSettings & _settings) {
 
 #ifdef TARGET_LINUX
 //------------------------------------------------------------
-void ofAppGLFWWindow::setWindowIcon(const std::string & path) {
-	ofPixels iconPixels;
-	ofLoadImage(iconPixels, path);
-	setWindowIcon(iconPixels);
-}
-
-//------------------------------------------------------------
-void ofAppGLFWWindow::setWindowIcon(const ofPixels & iconPixels) {
-	iconSet = true;
-	int length = 2 + iconPixels.getWidth() * iconPixels.getHeight();
-	vector<unsigned long> buffer(length);
-	buffer[0] = iconPixels.getWidth();
-	buffer[1] = iconPixels.getHeight();
-	for (size_t i = 0; i < iconPixels.getWidth() * iconPixels.getHeight(); i++) {
-		buffer[i + 2] = iconPixels[i * 4 + 3] << 24;
-		buffer[i + 2] += iconPixels[i * 4 + 0] << 16;
-		buffer[i + 2] += iconPixels[i * 4 + 1] << 8;
-		buffer[i + 2] += iconPixels[i * 4 + 2];
-	}
-
-	XChangeProperty(getX11Display(), getX11Window(), XInternAtom(getX11Display(), "_NET_WM_ICON", False), XA_CARDINAL, 32,
-		PropModeReplace, (const unsigned char *)buffer.data(), length);
-	XFlush(getX11Display());
-}
+//void ofAppGLFWWindow::setWindowIcon(const std::string & path) {
+//	ofPixels iconPixels;
+//	ofLoadImage(iconPixels, path);
+//	setWindowIcon(iconPixels);
+//}
+//
+////------------------------------------------------------------
+//void ofAppGLFWWindow::setWindowIcon(const ofPixels & iconPixels) {
+//	iconSet = true;
+//	int length = 2 + iconPixels.getWidth() * iconPixels.getHeight();
+//	vector<unsigned long> buffer(length);
+//	buffer[0] = iconPixels.getWidth();
+//	buffer[1] = iconPixels.getHeight();
+//	for (size_t i = 0; i < iconPixels.getWidth() * iconPixels.getHeight(); i++) {
+//		buffer[i + 2] = iconPixels[i * 4 + 3] << 24;
+//		buffer[i + 2] += iconPixels[i * 4 + 0] << 16;
+//		buffer[i + 2] += iconPixels[i * 4 + 1] << 8;
+//		buffer[i + 2] += iconPixels[i * 4 + 2];
+//	}
+//
+//	XChangeProperty(getX11Display(), getX11Window(), XInternAtom(getX11Display(), "_NET_WM_ICON", False), XA_CARDINAL, 32,
+//		PropModeReplace, (const unsigned char *)buffer.data(), length);
+//	XFlush(getX11Display());
+//}
 #endif
 
 //--------------------------------------------
