@@ -122,6 +122,7 @@ endif
 
 Release:
 	@echo Compiling OF library for Release
+	@echo $(PLATFORM_ARCH)
 	# @$(MAKE) -j -C $(OF_ROOT)/libs/openFrameworksCompiled/project/ Release PLATFORM_OS=$(PLATFORM_OS) ABIS_TO_COMPILE_RELEASE="$(ABIS_TO_COMPILE_RELEASE)"
 	@$(MAKE) -C $(OF_ROOT)/libs/openFrameworksCompiled/project/ Release PLATFORM_OS=$(PLATFORM_OS) ABIS_TO_COMPILE_RELEASE="$(ABIS_TO_COMPILE_RELEASE)"
 	@echo
