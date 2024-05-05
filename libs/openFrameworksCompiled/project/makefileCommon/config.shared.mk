@@ -17,6 +17,7 @@
 ################################################################################
 #
 
+$(info 🟢 Config Shared begin)
 
 SHELL ?= /bin/sh
 OF_ROOT ?=  $(realpath ../../..)
@@ -293,7 +294,7 @@ CORE_PKG_CONFIG_LIBRARIES =
 CORE_PKG_CONFIG_LIBRARIES += $(PLATFORM_PKG_CONFIG_LIBRARIES)
 CORE_PKG_CONFIG_LIBRARIES += $(PROJECT_PKG_CONFIG_LIBRARIES)
 
-$(info $(CORE_PKG_CONFIG_LIBRARIES))
+# $(info $(CORE_PKG_CONFIG_LIBRARIES))
 
 ifneq ($(strip $(CORE_PKG_CONFIG_LIBRARIES)),)
 ifneq ($(strip $(PKG_CONFIG_LIBDIR)),)
@@ -376,3 +377,5 @@ ifdef MAKEFILE_DEBUG
     $(info ---PLATFORM_CORE_EXCLUSIONS---)
     $(foreach v, $(PLATFORM_CORE_EXCLUSIONS),$(info $(v)))
 endif
+
+$(info 🟢 Config Shared end)

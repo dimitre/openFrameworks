@@ -130,25 +130,21 @@ endif
 # Optimization options (http://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html)
 #PLATFORM_CFLAGS += -finline-functions
 #PLATFORM_CFLAGS += -funroll-all-loops
-#PLATFORM_CFLAGS += -Os
 
-#PLATFORM_CFLAGS += -arch i386
-
-# other osx
-PLATFORM_CFLAGS += -fpascal-strings
 
 ifdef MAC_OS_SDK_ROOT
 	PLATFORM_CFLAGS += -isysroot $(MAC_OS_SDK_ROOT)
 	PLATFORM_CFLAGS += -F$(MAC_OS_SDK_ROOT)/System/Library/Frameworks
 endif
 
+# other osx
+# PLATFORM_CFLAGS += -fpascal-strings
+# Enable ARC
+PLATFORM_CFLAGS += -fobjc-arc
 PLATFORM_CFLAGS += -mmacosx-version-min=$(MAC_OS_MIN_VERSION)
 
 PLATFORM_CXXFLAGS += -x objective-c++
 PLATFORM_CXXFLAGS += $(MAC_OS_CPP_VER)
-
-# Enable ARC
-PLATFORM_CFLAGS += -fobjc-arc
 
 
 ifeq ($(USE_GST),1)
@@ -166,7 +162,6 @@ endif
 
 PLATFORM_LDFLAGS = -stdlib=$(MAC_OS_STD_LIB)
 
-#PLATFORM_LDFLAGS += -arch i386
 PLATFORM_LDFLAGS += -lcurl
 
 PLATFORM_LDFLAGS += -mmacosx-version-min=$(MAC_OS_MIN_VERSION) -v
@@ -216,17 +211,15 @@ PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/video/ofDirectShowGra
 PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/video/ofDirectShowPlayer.cpp
 PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/video/ofMediaFoundationPlayer.cpp
 PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/sound/ofMediaFoundationSoundPlayer.cpp
+PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/app/ofAppEGLWindow.cpp
+# third party
+PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/boost/%
 
 ifneq ($(USE_GST),1)
 	PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/video/ofGstUtils.cpp
 	PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/video/ofGstVideoGrabber.cpp
 	PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/video/ofGstVideoPlayer.cpp
 endif
-PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/app/ofAppEGLWindow.cpp
-
-
-# third party
-PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/boost/%
 
 
 ifeq ($(USE_FMOD),0)

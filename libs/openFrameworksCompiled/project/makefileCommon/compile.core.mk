@@ -1,5 +1,7 @@
 .DEFAULT_GOAL=all
 
+$(info 🟢 compile.core begin)
+
 ################################################################################
 ifdef MAKEFILE_DEBUG
 $(info ===================compile.core.make================================)
@@ -40,16 +42,6 @@ $(info 💿 Using CCACHE - compile.core.mk )
 	CXX := ${ccache} $(CXX)
 	CC := ${ccache} $(CXX)
 endif
-
-# IWYU = include-what-you-use
-# ifdef ${IWYU}
-# $(info  OWWWW )
-# 	CXX := ${IWYU}
-# 	CC := ${IWYU}
-# endif
-
-# CXX := include-what-you-use
-# CC := include-what-you-use
 
 $(info 💾 CXX = $(CXX))
 $(info 💾 CC = $(CC))
@@ -368,3 +360,4 @@ help:
 	@echo "make Release MAKEFILE_DEBUG=true"
 	@echo
 	@echo
+$(info 🟢 compile.core end)

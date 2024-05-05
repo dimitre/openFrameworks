@@ -1,5 +1,12 @@
 .DEFAULT_GOAL=Release
 
+JOBS = -j2
+# JOBS := $(patsubst -j%,%,$(filter -j%,$(MAKEFLAGS)))
+# JOBS = -j $$(nproc)
+$(info JOBS XXX = ${JOBS})
+$(info MAKEFLAGS XXX = ${MAKEFLAGS})
+$(info =-=-=-=-=-=-=-=-= COMPILE.PROJECT.MK =-=-=-=-=-=-=-=-= )
+
 # define the OF_SHARED_MAKEFILES location
 OF_SHARED_MAKEFILES_PATH=$(OF_ROOT)/libs/openFrameworksCompiled/project/makefileCommon
 
@@ -119,11 +126,9 @@ endif
 
 .PHONY: all Debug Release after clean CleanDebug CleanRelease help force
 
-# $(info MAKEFLAGS XXX = ${MAKEFLAGS})
-JOBS = -j2
-
 Release:
-	@echo Compiling OF library for Release
+	@echo 🟢 Compiling OF library for Release
+
 	@$(MAKE) $(JOBS) -C $(OF_ROOT)/libs/openFrameworksCompiled/project/ Release PLATFORM_OS=$(PLATFORM_OS) ABIS_TO_COMPILE_RELEASE="$(ABIS_TO_COMPILE_RELEASE)"
 	@echo
 	@echo
@@ -151,7 +156,7 @@ endif
 ReleaseNoOF:
 	@echo Compiling $(APPNAME) for Release
 ifndef ABIS_TO_COMPILE_RELEASE
-	@$(MAKE) $(JOBS) ReleaseABI
+	@$(MAKE) ReleaseABI
 else
 	@$(foreach abi,$(ABIS_TO_COMPILE_RELEASE),$(MAKE) ReleaseABI ABI=$(abi) &&) echo
 endif
@@ -159,23 +164,23 @@ endif
 DebugNoOF:
 	@echo Compiling $(APPNAME) for Debug
 ifndef ABIS_TO_COMPILE_DEBUG
-	@$(MAKE) $(JOBS) DebugABI
+	@$(MAKE) DebugABI
 else
 	@$(foreach abi,$(ABIS_TO_COMPILE_DEBUG),$(MAKE) DebugABI ABI=$(abi) &&) echo
 endif
 
 ReleaseABI: $(TARGET)
 ifneq ($(strip $(PROJECT_ADDONS_DATA)),)
-	@$(MAKE) $(JOBS) copyaddonsdata PROJECT_ADDONS_DATA="$(PROJECT_ADDONS_DATA)"
+	@$(MAKE) copyaddonsdata PROJECT_ADDONS_DATA="$(PROJECT_ADDONS_DATA)"
 endif
-	@$(MAKE) $(JOBS) afterplatform BIN_NAME=$(BIN_NAME) ABIS_TO_COMPILE="$(ABIS_TO_COMPILE_RELEASE)" RUN_TARGET=$(RUN_TARGET) TARGET=$(TARGET)
+	@$(MAKE) afterplatform BIN_NAME=$(BIN_NAME) ABIS_TO_COMPILE="$(ABIS_TO_COMPILE_RELEASE)" RUN_TARGET=$(RUN_TARGET) TARGET=$(TARGET)
 	@$(PROJECT_AFTER)
 
 DebugABI: $(TARGET)
 ifneq ($(strip $(PROJECT_ADDONS_DATA)),)
-	@$(MAKE) $(JOBS) copyaddonsdata PROJECT_ADDONS_DATA="$(PROJECT_ADDONS_DATA)"
+	@$(MAKE) copyaddonsdata PROJECT_ADDONS_DATA="$(PROJECT_ADDONS_DATA)"
 endif
-	@$(MAKE) $(JOBS) afterplatform BIN_NAME=$(BIN_NAME) ABIS_TO_COMPILE="$(ABIS_TO_COMPILE_DEBUG)" RUN_TARGET=$(RUN_TARGET) TARGET=$(TARGET)
+	@$(MAKE) afterplatform BIN_NAME=$(BIN_NAME) ABIS_TO_COMPILE="$(ABIS_TO_COMPILE_DEBUG)" RUN_TARGET=$(RUN_TARGET) TARGET=$(TARGET)
 	@$(PROJECT_AFTER)
 
 all:
