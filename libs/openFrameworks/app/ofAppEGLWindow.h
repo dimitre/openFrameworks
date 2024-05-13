@@ -91,9 +91,9 @@ public:
 	virtual void setWindowPosition(int x, int y);
 	virtual void setWindowShape(int w, int h);
 
-	virtual glm::vec2 getWindowPosition();
-	virtual glm::vec2 getWindowSize();
-	virtual glm::vec2 getScreenSize();
+	virtual glm::ivec2 getWindowPosition();
+	virtual glm::ivec2 getWindowSize();
+	virtual glm::ivec2 getScreenSize();
 
 	virtual void setOrientation(ofOrientation orientation);
 	virtual ofOrientation getOrientation();

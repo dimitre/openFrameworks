@@ -1088,17 +1088,17 @@ void ofAppEGLWindow::setWindowTitle(string title) {
 }
 
 //------------------------------------------------------------
-glm::vec2 ofAppEGLWindow::getWindowSize(){
-	return {currentWindowRect.width, currentWindowRect.height};
+glm::ivec2 ofAppEGLWindow::getWindowSize(){
+	return { currentWindowRect.width, currentWindowRect.height };
 }
 
 //------------------------------------------------------------
-glm::vec2 ofAppEGLWindow::getWindowPosition(){
-	return glm::vec2(currentWindowRect.getPosition());
+glm::ivec2 ofAppEGLWindow::getWindowPosition(){
+	return { currentWindowRect.getPosition() };
 }
 
 //------------------------------------------------------------
-glm::vec2 ofAppEGLWindow::getScreenSize(){
+glm::ivec2 ofAppEGLWindow::getScreenSize(){
 	unsigned int screenWidth = 0;
 	unsigned int screenHeight = 0;
 

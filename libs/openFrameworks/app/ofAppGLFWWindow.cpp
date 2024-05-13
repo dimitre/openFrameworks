@@ -255,7 +255,7 @@ void ofAppGLFWWindow::setup(const ofGLFWWindowSettings & _settings) {
 				if (count > 0) {
 					int x = 0, y = 0;
 					glfwGetMonitorPos(monitors[settings.monitor], &x, &y);
-					settings.setPosition(glm::vec2(x, y));
+					settings.setPosition({ x, y });
 					setWindowPosition(settings.getPosition().x, settings.getPosition().y);
 					auto mode = glfwGetVideoMode(monitors[settings.monitor]);
 #ifdef TARGET_OSX
@@ -561,7 +561,7 @@ int ofAppGLFWWindow::getPixelScreenCoordScale() {
 }
 
 //------------------------------------------------------------
-glm::vec2 ofAppGLFWWindow::getWindowSize() {
+glm::ivec2 ofAppGLFWWindow::getWindowSize() {
 	if (settings.windowMode == OF_GAME_MODE) {
 		const GLFWvidmode * desktopMode = glfwGetVideoMode(glfwGetWindowMonitor(windowP));
 		if (desktopMode) {
@@ -575,7 +575,7 @@ glm::vec2 ofAppGLFWWindow::getWindowSize() {
 }
 
 //------------------------------------------------------------
-glm::vec2 ofAppGLFWWindow::getWindowPosition() {
+glm::ivec2 ofAppGLFWWindow::getWindowPosition() {
 	int x, y;
 	glfwGetWindowPos(windowP, &x, &y);
 
@@ -583,12 +583,21 @@ glm::vec2 ofAppGLFWWindow::getWindowPosition() {
 	y *= pixelScreenCoordScale;
 
 	if (orientation == OF_ORIENTATION_DEFAULT || orientation == OF_ORIENTATION_180) {
-		return glm::vec2 { x, y };
+		return { x, y };
 	} else {
-		return glm::vec2(x, y); //NOTE: shouldn't this be (y,x) ??????
+		return { x, y }; //NOTE: shouldn't this be (y,x) ??????
 	}
 }
 
+//------------------------------------------------------------
+glm::ivec2 ofAppGLFWWindow::getFramebufferSize() {
+	// FIXME: cache size and handle in framebuffer_size_cb
+	glm::ivec2 size;
+	glfwGetFramebufferSize(windowP, &size.x, &size.y);
+//	cout << "getFramebufferSize " << settings.windowName << " : " << size << " : " << ofGetFrameNum() << endl;
+	return size;
+}
+	
 //------------------------------------------------------------
 int ofAppGLFWWindow::getCurrentMonitor() {
 	int numberOfMonitors;
@@ -615,7 +624,7 @@ int ofAppGLFWWindow::getCurrentMonitor() {
 }
 
 //------------------------------------------------------------
-glm::vec2 ofAppGLFWWindow::getScreenSize() {
+glm::ivec2 ofAppGLFWWindow::getScreenSize() {
 	int count;
 	GLFWmonitor ** monitors = glfwGetMonitors(&count);
 	if (count > 0) {
@@ -629,7 +638,7 @@ glm::vec2 ofAppGLFWWindow::getScreenSize() {
 			}
 		}
 	}
-	return glm::vec2();
+	return {};
 }
 
 //------------------------------------------------------------
