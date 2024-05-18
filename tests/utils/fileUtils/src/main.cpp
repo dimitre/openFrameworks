@@ -183,8 +183,8 @@ class ofApp: public ofxUnitTestsApp{
 		ofxTestEq(ofFilePath::join("d1","d2"),"d1/d2","ofFilePath::join",ofFilePath::join("d1","d2"));
 #endif
 
-		ofxTest(std::filesystem::exists(ofFile("test.txt")), "ofFile cast to filesystem::path");
-		ofxTest(std::filesystem::exists(ofDirectory("d1")), "ofDirectory cast to filesystem::path");
+		ofxTest(of::filesystem::exists(ofFile("test.txt")), "ofFile cast to filesystem::path");
+		ofxTest(of::filesystem::exists(ofDirectory("d1")), "ofDirectory cast to filesystem::path");
 
 
 
@@ -202,7 +202,7 @@ class ofApp: public ofxUnitTestsApp{
         //========================================================================
         ofLogNotice() << "";
         ofLogNotice() << "tests #4299";
-        ofxTestEq(std::filesystem::path(ofFilePath::getCurrentWorkingDirectory()), initial_cwd, "ofFilePath::getCurrentWorkingDirectory()");
+        ofxTestEq(of::filesystem::path(ofFilePath::getCurrentWorkingDirectory()), initial_cwd, "ofFilePath::getCurrentWorkingDirectory()");
 		if(ofGetTargetPlatform()==OF_TARGET_OSX){
 			ofxTestEq(ofToDataPath("",false),"../../../data/","ofToDataPath relative");
 		}else if(ofGetTargetPlatform()==OF_TARGET_WINVS || ofGetTargetPlatform()==OF_TARGET_MINGW){
@@ -283,7 +283,7 @@ class ofApp: public ofxUnitTestsApp{
 #include "ofAppRunner.h"
 //========================================================================
 int main( ){
-    initial_cwd = std::filesystem::current_path();
+    initial_cwd = of::filesystem::current_path();
 	ofInit();
 	auto window = std::make_shared<ofAppNoWindow>();
 	auto app = std::make_shared<ofApp>();
