@@ -2,9 +2,7 @@
 #include "ofUtils.h"
 #include "ofxUnitTests.h"
 
-using namespace std;
-
-std::filesystem::path initial_cwd;
+of::filesystem::path initial_cwd;
 
 class ofApp: public ofxUnitTestsApp{
 	void run(){
@@ -235,7 +233,7 @@ class ofApp: public ofxUnitTestsApp{
         //========================================================================
         ofLogNotice() << "";
         ofLogNotice() << "tests #4598";
-		ofxTestEq(ofToDataPath("").back(), std::filesystem::path::preferred_separator, "ofToDataPath with empty string shouldn't crash");
+		ofxTestEq(ofToDataPath("").back(), of::filesystem::path::preferred_separator, "ofToDataPath with empty string shouldn't crash");
 
         //========================================================================
         ofLogNotice() << "";
