@@ -20,7 +20,7 @@
 $(info 🟢 Config Shared begin)
 
 SHELL ?= /bin/sh
-OF_ROOT ?=  $(realpath ../../..)
+OF_ROOT ?= ../../..
 PLATFORM_VARIANT ?= default
 
 # ifeq ($(CC),$(EMSCRIPTEN)/emcc)
