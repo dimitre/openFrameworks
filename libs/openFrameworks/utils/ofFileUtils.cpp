@@ -26,48 +26,27 @@ namespace{
 	bool enableDataPath = true;
 
 	//--------------------------------------------------
-<<<<<<< HEAD
-	of::filesystem::path defaultDataPath(){
-	#if defined TARGET_OSX
-		try{
-			return of::filesystem::canonical(ofFilePath::getCurrentExeDirFS() / of::filesystem::path("../../../data/"));
-		}catch(...){
-			return (ofFilePath::getCurrentExeDirFS() / of::filesystem::path("../../../data/"));
-=======
 	fs::path defaultDataPath(){
 	#if defined TARGET_OSX
 		try {
 			return fs::canonical(ofFilePath::getCurrentExeDirFS() / "../../../data/");
 		} catch(...) {
 			return ofFilePath::getCurrentExeDirFS() / "../../../data/";
->>>>>>> master
 		}
 	#elif defined TARGET_ANDROID
 		return string("sdcard/");
 	#else
-<<<<<<< HEAD
-		try{
-            return of::filesystem::canonical(ofFilePath::join(ofFilePath::getCurrentExeDirFS(),  "data/")).make_preferred();
-        }catch(...){
-			return (ofFilePath::getCurrentExeDirFS() / of::filesystem::path("data/"));
-=======
 		try {
             return fs::canonical(ofFilePath::getCurrentExeDirFS() / "data/").make_preferred();
         } catch(...) {
 			return (ofFilePath::getCurrentExeDirFS() / "data/");
->>>>>>> master
 		}
 	#endif
 	}
 
 	//--------------------------------------------------
-<<<<<<< HEAD
-	of::filesystem::path & defaultWorkingDirectory(){
-		static auto * defaultWorkingDirectory = new of::filesystem::path(ofFilePath::getCurrentExeDirFS());
-=======
 	fs::path & defaultWorkingDirectory() {
 		static auto * defaultWorkingDirectory = new fs::path(ofFilePath::getCurrentExeDirFS());
->>>>>>> master
 		return * defaultWorkingDirectory;
 	}
 
@@ -1417,13 +1396,8 @@ std::size_t ofDirectory::listDir(){
 		return 0;
 	}
 
-<<<<<<< HEAD
-	if ( of::filesystem::exists(myDir) && of::filesystem::is_directory(myDir)){
-		for (const auto & f : of::filesystem::directory_iterator{ myDir }) {
-=======
 	if ( fs::exists(myDir) && fs::is_directory(myDir)){
 		for (const auto & f : fs::directory_iterator{ myDir }) {
->>>>>>> master
 			files.emplace_back(f.path(), ofFile::Reference);
 		}
 	}else{
@@ -1745,17 +1719,10 @@ vector<ofFile>::const_reverse_iterator ofDirectory::rend() const{
 
 
 //------------------------------------------------------------------------------------------------------------
-<<<<<<< HEAD
-//	FIXME: - deprecate / phase out / remove from core
-string ofFilePath::addLeadingSlash(const of::filesystem::path& _path){
-	auto path = _path.string();
-	auto sep = of::filesystem::path("/").make_preferred();
-=======
 // FIXME: - re-avail
 string ofFilePath::addLeadingSlash(const fs::path & _path){
 	auto path = ofPathToString(_path);
 	auto sep = fs::path("/").make_preferred();
->>>>>>> master
 	if(!path.empty()){
 		if(ofToString(path[0]) != sep.string()) {
 			return ofPathToString(sep / path);
@@ -1765,13 +1732,6 @@ string ofFilePath::addLeadingSlash(const fs::path & _path){
 }
 
 //------------------------------------------------------------------------------------------------------------
-<<<<<<< HEAD
-//	FIXME: - deprecate / phase out / remove from core
-std::string ofFilePath::addTrailingSlash(const of::filesystem::path & _path){
-#if OF_USING_STD_FS && !OF_USE_EXPERIMENTAL_FS
-	if(_path.string().empty()) return "";
-	return (of::filesystem::path(_path).make_preferred() / "").string();
-=======
 // FIXME: - re-avail - this function have to be completely rewritten, so I'll keep string conversions as it is
 std::string ofFilePath::addTrailingSlash(const fs::path & _path){
 #if OF_USING_STD_FS && !OF_USE_EXPERIMENTAL_FS
@@ -1779,7 +1739,6 @@ std::string ofFilePath::addTrailingSlash(const fs::path & _path){
 		return {};
 	}
 	return ofPathToString(fs::path(_path).make_preferred() / "");
->>>>>>> master
 #else
 	auto path = fs::path(_path).make_preferred();
 	auto sep = fs::path("/").make_preferred();
@@ -1788,40 +1747,24 @@ std::string ofFilePath::addTrailingSlash(const fs::path & _path){
 			path = path / sep;
 		}
 	}
-<<<<<<< HEAD
-	return path.string();
-=======
 	return ofPathToString(path);
->>>>>>> master
 #endif
 }
 
 
 //------------------------------------------------------------------------------------------------------------
-<<<<<<< HEAD
-// FIXME: - deprecate and suggest using of::filesystem::path.extension() instead
-string ofFilePath::getFileExt(const of::filesystem::path& filename){
-=======
 // FIXME: - start using fs::path.extension() 
 string ofFilePath::getFileExt(const fs::path & filename){
->>>>>>> master
 	return ofFile(filename,ofFile::Reference).getExtension();
 	// doesn't work because it returns extension starting with a dot.
 	//	return filename.extension().string();
 }
 
 //------------------------------------------------------------------------------------------------------------
-<<<<<<< HEAD
-// FIXME: deprecate and suggest replace_extension instead
-std::string ofFilePath::removeExt(const of::filesystem::path& _filename){
-	auto filename = _filename;
-	return filename.replace_extension().string();
-=======
 // FIXME: - Deprecate and suggest replace_extension instead
 std::string ofFilePath::removeExt(const fs::path & _filename){
 	auto filename = _filename;
 	return ofPathToString(filename.replace_extension());
->>>>>>> master
 }
 
 //------------------------------------------------------------------------------------------------------------
@@ -1872,15 +1815,9 @@ string ofFilePath::getFileName(const fs::path & filePath){
 }
 
 //------------------------------------------------------------------------------------------------------------
-<<<<<<< HEAD
-// FIXME: deprecate - indicate using stem() instead
-string ofFilePath::getBaseName(const of::filesystem::path& filePath){
-	return filePath.stem().string();
-=======
 // FIXME: - suggest using stem() instead
 string ofFilePath::getBaseName(const fs::path & filePath){
 	return ofPathToString(filePath.stem());
->>>>>>> master
 }
 
 //------------------------------------------------------------------------------------------------------------
@@ -1936,11 +1873,7 @@ std::string ofFilePath::join(const fs::path& path1, const fs::path& path2){
 }
 
 //------------------------------------------------------------------------------------------------------------
-<<<<<<< HEAD
-of::filesystem::path ofFilePath::getCurrentExePathFS(){
-=======
 fs::path ofFilePath::getCurrentExePathFS(){
->>>>>>> master
 	#if defined(TARGET_LINUX) || defined(TARGET_ANDROID)
 		char buff[FILENAME_MAX];
 		ssize_t size = readlink("/proc/self/exe", buff, sizeof(buff) - 1);
@@ -1972,32 +1905,17 @@ fs::path ofFilePath::getCurrentExePathFS(){
 
 //------------------------------------------------------------------------------------------------------------
 std::string ofFilePath::getCurrentExePath(){
-<<<<<<< HEAD
-	return getCurrentExePathFS().string();
-}
-
-//------------------------------------------------------------------------------------------------------------
-of::filesystem::path ofFilePath::getCurrentExeDirFS(){
-	return ofFilePath::getCurrentExePathFS().parent_path();
-=======
 	return ofPathToString(getCurrentExePathFS());
 }
 
 //------------------------------------------------------------------------------------------------------------
 fs::path ofFilePath::getCurrentExeDirFS(){
 	return ofFilePath::getCurrentExePathFS().parent_path() / "";
->>>>>>> master
 }
 
 //------------------------------------------------------------------------------------------------------------
 std::string ofFilePath::getCurrentExeDir(){
-<<<<<<< HEAD
-
-	// std::string sep = of::filesystem::path::preferred_separator;
-	return getCurrentExeDirFS().string() + of::filesystem::path("/").make_preferred().string();
-=======
 	return ofPathToString(getCurrentExeDirFS());
->>>>>>> master
 }
 
 //------------------------------------------------------------------------------------------------------------
