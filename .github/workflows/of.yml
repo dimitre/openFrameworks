@@ -263,9 +263,11 @@ jobs:
         key: ${{ matrix.cfg.target }}
     - name: Download libs
       run: ./scripts/${{ matrix.cfg.target }}/download_libs.sh;
-    - name: Build
+    - name: Build XCode
       run:
-        scripts/ci/${{ matrix.cfg.target }}/build.sh xcode
+        scripts/ci/${{ matrix.cfg.target }}/build.sh xcode;
+    - name: Run Tests - Make
+      run:
         scripts/ci/${{ matrix.cfg.target }}/run_tests.sh;
       env:
         DEVELOPER_DIR: "/Applications/Xcode_15.4.app/Contents/Developer"
