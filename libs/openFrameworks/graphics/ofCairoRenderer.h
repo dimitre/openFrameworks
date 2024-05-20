@@ -3,8 +3,16 @@
 #include <cairo.h>
 #include "ofGraphicsBaseTypes.h"
 // MARK: Optimization opportunity in ofPath, ofPixels pointer.
-#include "ofPath.h"
-#include "ofPixels.h" // MARK: ofPixels imageBuffer;
+//#include "ofPath.h"
+class ofPath;
+//#include "ofPixels.h" // MARK: ofPixels imageBuffer;
+template <typename T>
+class ofPixels_;
+typedef ofPixels_<unsigned char> ofPixels;
+typedef ofPixels_<float> ofFloatPixels;
+typedef ofPixels_<unsigned short> ofShortPixels;
+typedef ofPixels & ofPixelsRef;
+
 #include "of3dGraphics.h"
 
 #include <deque>
@@ -202,9 +210,7 @@ private:
 
 	of::filesystem::path filename;
 	ofBuffer streamBuffer;
-	ofPixels imageBuffer;
 
 	ofStyle currentStyle;
 	std::deque <ofStyle> styleHistory;
-	ofPath path;
 };

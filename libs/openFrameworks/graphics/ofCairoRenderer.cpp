@@ -11,6 +11,9 @@
 using std::string;
 using std::vector;
 
+static ofPath path;
+static ofPixels imageBuffer;
+
 const string ofCairoRenderer::TYPE = "cairo";
 
 _cairo_status ofCairoRenderer::stream_function(void * closure, const unsigned char * data, unsigned int length) {
