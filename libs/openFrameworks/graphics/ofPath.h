@@ -6,11 +6,11 @@
 // MARK: ofConstants targets
 #include "ofConstants.h"
 
-template<typename T>
-class ofColor_;
-typedef ofColor_<unsigned char> ofColor;
-typedef ofColor_<float> ofFloatColor;
-typedef ofColor_<unsigned short> ofShortColor;
+//template<typename T>
+//class ofColor_;
+//typedef ofColor_<unsigned char> ofColor;
+//typedef ofColor_<float> ofFloatColor;
+//typedef ofColor_<unsigned short> ofShortColor;
 
 /// \class
 
@@ -438,7 +438,7 @@ private:
 #elif HAS_TLS
 	static thread_local ofTessellator tessellator;
 #else
-	ofTessellator tessellator;
+	static ofTessellator tessellator;
 #endif
 	bool				bHasChanged;
 	int					prevCurveRes;

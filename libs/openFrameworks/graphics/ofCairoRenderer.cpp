@@ -8,6 +8,10 @@
 #include "ofTrueTypeFont.h"
 #include "ofVideoBaseTypes.h"
 
+#include "ofPath.h"
+#include "ofPixels.h"
+
+
 using std::string;
 using std::vector;
 

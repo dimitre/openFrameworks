@@ -2,16 +2,15 @@
 
 #include <cairo.h>
 #include "ofGraphicsBaseTypes.h"
-// MARK: Optimization opportunity in ofPath, ofPixels pointer.
-//#include "ofPath.h"
-class ofPath;
-//#include "ofPixels.h" // MARK: ofPixels imageBuffer;
+
+// MARK: Optimization opportunity in ofPath static
+#include "ofPath.h" //ofPath::Command, if not it can be optimized
+//class ofPath;
+
 template <typename T>
 class ofPixels_;
 typedef ofPixels_<unsigned char> ofPixels;
-typedef ofPixels_<float> ofFloatPixels;
-typedef ofPixels_<unsigned short> ofShortPixels;
-typedef ofPixels & ofPixelsRef;
+
 
 #include "of3dGraphics.h"
 
