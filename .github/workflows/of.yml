@@ -245,6 +245,8 @@ jobs:
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
+
+
   build-macos:
     runs-on: macos-14
     strategy:
@@ -259,16 +261,11 @@ jobs:
       uses: hendrikmuhs/ccache-action@v1.2.13
       with:
         key: ${{ matrix.cfg.target }}
-
-
     - name: Download libs
-      run: ./scripts/${{ matrix.cfg.target }}/download_libs.sh
-
+      run: ./scripts/${{ matrix.cfg.target }}/download_libs.sh;
     - name: Build
       run:
-      # xcode
         scripts/ci/${{ matrix.cfg.target }}/build.sh xcode
-      # make        
         scripts/ci/${{ matrix.cfg.target }}/run_tests.sh;
       env:
         DEVELOPER_DIR: "/Applications/Xcode_15.4.app/Contents/Developer"
