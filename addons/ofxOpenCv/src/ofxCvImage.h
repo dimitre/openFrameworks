@@ -79,12 +79,12 @@ public:
 
 	// Get Pixel Data
 	//
-	virtual ofPixels&		getPixels();
-	virtual ofPixels&		getRoiPixels();
-	virtual IplImage*  getCvImage() { return cvImage; };
-	virtual const ofPixels&		getPixels() const;
-	virtual const ofPixels&		getRoiPixels() const;
-	virtual const IplImage*  getCvImage() const { return cvImage; };
+	virtual ofPixels & getPixels();
+	virtual ofPixels & getRoiPixels();
+	virtual IplImage * getCvImage() { return cvImage; };
+	virtual const ofPixels & getPixels() const;
+	virtual const ofPixels & getRoiPixels() const;
+	virtual const IplImage * getCvImage() const { return cvImage; };
 
 	// Access the IplImage as the more modern cv::Mat
 	// Might need to call ofxCvImage::flagImageChanged() if you want extenral changes to show up in the ofxCvImage texture or pixels
@@ -169,7 +169,9 @@ public:
 							  // to cvImage after an image operation
 	virtual IplImage*  getCv8BitsImage() { return cvImage; }
 	virtual IplImage*  getCv8BitsRoiImage() { return cvImage; }
-						  
+					
+	cv::Mat matImage;
+	cv::Mat matImageTemp;
 	IplImage*  cvImage;
 	IplImage*  cvImageTemp;   // this is typically swapped back into cvImage
 							  // after an image operation with swapImage()

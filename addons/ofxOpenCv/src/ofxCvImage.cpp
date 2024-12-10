@@ -42,6 +42,9 @@ void ofxCvImage::allocate( int w, int h ) {
 		return;
 	}
 
+	
+	cv::Mat M(w, h, CV_MAKETYPE(ipldepth, iplchannels), cv::Scalar(0,0,0));
+
 	cvImage = cvCreateImage( cvSize(w,h), ipldepth, iplchannels );
 	cvImageTemp	= cvCreateImage( cvSize(w,h), ipldepth, iplchannels );
 
@@ -61,8 +64,11 @@ void ofxCvImage::clear() {
 
 	if (bAllocated == true){
 		if (width > 0 && height > 0){
-			cvReleaseImage( &cvImage );
-			cvReleaseImage( &cvImageTemp );
+			matImage.release();
+			matImageTemp.release();
+			
+//			cvReleaseImage( &cvImage );
+//			cvReleaseImage( &cvImageTemp );
 		}
         pixels.clear();
         bPixelsDirty = true;
@@ -166,6 +172,8 @@ void ofxCvImage::resetROI() {
 
 //--------------------------------------------------------------------------------
 ofRectangle ofxCvImage::getIntersectionROI( const ofRectangle& r1, const ofRectangle& r2 ) {
+	
+	return r1.getIntersection(r2);
     // Calculates the intersection rectangle of two overlapping rectangles.
     // The following pattern can be used to do image operation
     // on the intersection (overlapping part) of two ROIs
@@ -184,36 +192,36 @@ ofRectangle ofxCvImage::getIntersectionROI( const ofRectangle& r1, const ofRecta
     // }
     //
 
-    int r1x1 = (int)r1.x;
-    int r1y1 = (int)r1.y;
-    int r1x2 = (int)(r1.x+r1.width);
-    int r1y2 = (int)(r1.y+r1.height);
-
-    int r2x1 = (int)r2.x;
-    int r2y1 = (int)r2.y;
-    int r2x2 = (int)(r2.x+r2.width);
-    int r2y2 = (int)(r2.y+r2.height);
-
-    int r3x1 = 0;
-    int r3y1 = 0;
-    int r3x2 = 0;
-    int r3y2 = 0;
-
-    bool bIntersect =  ( ( ofInRange(r2x1, r1x1,r1x2) || ofInRange(r1x1, r2x1,r2x2) ) &&
-                         ( ofInRange(r2y1, r1y1,r1y2) || ofInRange(r1y1, r2y1,r2y2) ) );
-
-    if( bIntersect ){
-        r3x1 = MAX( r1x1, r2x1 );
-        r3y1 = MAX( r1y1, r2y1 );
-
-        r3x2 = MIN( r1x2, r2x2 );
-        r3y2 = MIN( r1y2, r2y2 );
-
-        return ofRectangle( r3x1,r3y1, r3x2-r3x1,r3y2-r3y1 );
-
-    } else {
-        return ofRectangle( 0,0, 0,0 );
-    }
+//    int r1x1 = (int)r1.x;
+//    int r1y1 = (int)r1.y;
+//    int r1x2 = (int)(r1.x+r1.width);
+//    int r1y2 = (int)(r1.y+r1.height);
+//
+//    int r2x1 = (int)r2.x;
+//    int r2y1 = (int)r2.y;
+//    int r2x2 = (int)(r2.x+r2.width);
+//    int r2y2 = (int)(r2.y+r2.height);
+//
+//    int r3x1 = 0;
+//    int r3y1 = 0;
+//    int r3x2 = 0;
+//    int r3y2 = 0;
+//
+//    bool bIntersect =  ( ( ofInRange(r2x1, r1x1,r1x2) || ofInRange(r1x1, r2x1,r2x2) ) &&
+//                         ( ofInRange(r2y1, r1y1,r1y2) || ofInRange(r1y1, r2y1,r2y2) ) );
+//
+//    if( bIntersect ){
+//        r3x1 = MAX( r1x1, r2x1 );
+//        r3y1 = MAX( r1y1, r2y1 );
+//
+//        r3x2 = MIN( r1x2, r2x2 );
+//        r3y2 = MIN( r1y2, r2y2 );
+//
+//        return ofRectangle( r3x1,r3y1, r3x2-r3x1,r3y2-r3y1 );
+//
+//    } else {
+//        return ofRectangle( 0,0, 0,0 );
+//    }
 }
 
 
