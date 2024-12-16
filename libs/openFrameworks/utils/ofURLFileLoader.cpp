@@ -342,7 +342,6 @@ ofHttpResponse ofURLFileLoaderImpl::handleRequest(const ofHttpRequest & request)
 	}
 	else if (request.method == ofHttpRequest::PUT) {
 		curl_easy_setopt(curl.get(), CURLOPT_UPLOAD, 1);
-		curl_easy_setopt(curl.get(), CURLOPT_UPLOAD, 1);
 		curl_easy_setopt(curl.get(), CURLOPT_POST, 0);
 		curl_easy_setopt(curl.get(), CURLOPT_HTTPGET, 0);
 	}
