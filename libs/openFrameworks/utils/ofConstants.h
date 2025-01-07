@@ -1,5 +1,7 @@
 #pragma once
 
+#define OF_TUNINGFORK
+
 // version: ------------------------
 #define OF_VERSION_MAJOR 0
 #define OF_VERSION_MINOR 12
