@@ -33,6 +33,9 @@ EXCLUDE_PATHS_GREP =  grep -v "/tvos-arm64" | \
 
 # construct the full paths of the core's platform specific static libs
 ALL_OF_CORE_LIBS_PLATFORM_LIB_PATHS = $(OF_LIBS_PATH)/*/lib/$(ABI_LIB_SUBPATH)
+ALL_OF_CORE_LIBS_PLATFORM_LIB_PATHS += $(OF_LIBS_PATH)/*/lib/$(ABI_LIB_SUBPATH2)
+$(info $(ALL_OF_CORE_LIBS_PLATFORM_LIB_PATHS))
+# $(error OW OW OW)
 
 # create a list of all core platform libraries
 # grep -v "/\.[^\.]" will exclude all .hidden folders and files
@@ -410,11 +413,11 @@ ifdef PLATFORM_CC
 	CC ?= $(PLATFORM_CC)
 endif
 
-ifdef ${ccache} 
+ifdef ${ccache}
 $(info 💿 Using CCACHE -- config.project.mk )
 	CXX := ${ccache} $(CXX)
 	CC := ${ccache} $(CXX)
-endif	
+endif
 
 ifdef PROJECT_RESOURCE_COMPILER
     RESOURCE_COMPILER ?= $(PROJECT_RESOURCE_COMPILER)

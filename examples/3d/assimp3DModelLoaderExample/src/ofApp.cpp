@@ -18,7 +18,7 @@ void ofApp::setup(){
 
     bHelpText = true;
 	bUseCamera = true;
-	
+
 	#if defined(TARGET_EMSCRIPTEN)
 	bEnableAutoSwitch = true;
 	#endif
@@ -27,27 +27,27 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::loadModel(int aindex){
-	
+
 	vector<string> modelPaths = {
 		"Fox/Fox_05.fbx",
 		"FlightHelmet/FlightHelmet.gltf",
 		"Druid/druid.gltf",
 		"Astroboy/astroBoy_walk.dae"
 	};
-	
+
 	#if !defined(TARGET_OPENGLES)
 	// model looks strange in emscripten
 	modelPaths.push_back("Payphone/korean_public_payphone_01_1k.gltf");
 	#endif
-	
+
 	modelIndex = ofClamp(aindex, 0, (int)modelPaths.size()-1 );
 	loadModel( modelPaths[modelIndex] );
-	
+
 }
 
 //--------------------------------------------------------------
 void ofApp::loadModel(string filename){
-    
+
     if( model.load(filename, ofxAssimpModelLoader::OPTIMIZE_DEFAULT) ){
         if( model.hasAnimations() ){
             animationIndex = 0;
@@ -62,7 +62,7 @@ void ofApp::loadModel(string filename){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    
+
     float sceneHeight = fabs((model.getSceneMaxModelSpace()-model.getSceneMinModelSpace()).y);
 
     if(bUseCamera){
@@ -76,7 +76,7 @@ void ofApp::update(){
         model.setPosition(ofGetWidth()/2, ofGetHeight()/2 + sceneHeight * 0.5, 0);
         light.setPosition(model.getPosition() + glm::vec3(-300, -300, 1200));
     }
-        
+
     model.update();
 
     if( model.hasAnimations() ){
@@ -85,7 +85,7 @@ void ofApp::update(){
         }
         mesh = model.getCurrentAnimatedMesh(0);
     }
-	
+
 	if( bEnableAutoSwitch ) {
 		float ctime = ofGetElapsedTimef();
 		if( ctime - mTimeModelLoaded > 10.0f ) {
@@ -103,15 +103,15 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 	ofSetColor(255);
-	
+
 	ofEnableDepthTest();
-	
+
 	if(bUseCamera)cam.begin();
-	
+
 	ofEnableLighting();
 	light.enable();
 	ofEnableSeparateSpecularLight();
-	
+
 	ofPushMatrix();
 	if( !bUseCamera ) {
 		ofTranslate(model.getPosition().x, model.getPosition().y, 0);
@@ -120,22 +120,22 @@ void ofApp::draw(){
 	}
 	model.drawFaces();
 	ofPopMatrix();
-	
+
 	light.disable();
 	ofDisableLighting();
 	ofDisableSeparateSpecularLight();
-	
+
 	if( bUseCamera ){
 		ofDrawSphere(light.getPosition(), 10);
 	}
-	
+
 	if(bUseCamera)cam.end();
 	ofDisableDepthTest();
-	
+
 	if(bHelpText){
 		ofSetColor(255, 255, 255 );
 		string str;
-		str += "FPS: " + ofToString(ofGetFrameRate(),0) + "\n\n";
+		str += "FPS: " + ofToString(ofGetFrameRate()) + "\n\n";
 		str +="(keys 1-5): load models\n";
 		str += "num of animations in this model: " + ofToString(model.getAnimationCount()) + " <- -> to change\n";
 		str +="(Spacebar): toggle animation\n";
@@ -146,7 +146,7 @@ void ofApp::draw(){
 		str += "(f): toggle fullscreen: " + ofToString(ofGetWidth(),0)+" x "+ofToString(ofGetHeight(),0)+"\n";
 		ofDrawBitmapString(str, 20, 20);
 	}
-	
+
 }
 
 //--------------------------------------------------------------
@@ -210,7 +210,7 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-	
+
 }
 
 //--------------------------------------------------------------
@@ -265,4 +265,3 @@ void ofApp::gotMessage(ofMessage msg){
 void ofApp::dragEvent(ofDragInfo dragInfo){
     loadModel(dragInfo.files[0]);
 }
-

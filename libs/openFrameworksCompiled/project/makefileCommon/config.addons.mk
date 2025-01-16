@@ -2,11 +2,6 @@
 # PROCESS VALID ADDONS IF AVAILABLE
 ########################################################################
 
-ifeq ($(PLATFORM_OS),Darwin)
-    PLATFORM_ALTERNATIVE := osx
-else
-	PLATFORM_ALTERNATIVE := void
-endif
 
 # Variable containing all grep commands to exclude unwanted paths
 EXCLUDE_PATHS_GREP = grep -v "/tvos-arm64" | \
@@ -53,7 +48,7 @@ endef
 # parses addons libraries, in PARSED_ADDON_LIBS receives full PATHS to addons and libs_exclude
 define parse_addons_libraries
 	$(eval PARSED_ADDONS_LIBS_PLATFORM_LIB_PATHS = $(filter-out $(ADDON_LIBS_EXCLUDE),$(addsuffix /libs/*/lib/$(ABI_LIB_SUBPATH), $1))) \
-	$(eval PARSED_ADDONS_LIBS_PLATFORM_LIB_PATHS += $(filter-out $(ADDON_LIBS_EXCLUDE),$(addsuffix /libs/*/lib/$(PLATFORM_ALTERNATIVE), $1))) \
+	$(eval PARSED_ADDONS_LIBS_PLATFORM_LIB_PATHS += $(filter-out $(ADDON_LIBS_EXCLUDE),$(addsuffix /libs/*/lib/$(ABI_LIB_SUBPATH2), $1))) \
 	$(eval PARSED_ALL_PLATFORM_LIBS = $(shell $(FIND) $(PARSED_ADDONS_LIBS_PLATFORM_LIB_PATHS) -type d 2> /dev/null | $(EXCLUDE_PATHS_GREP))) \
 	$(if $(PARSED_ALL_PLATFORM_LIBS), \
 		$(eval ADDONS_SHARED_LIBS_SO += $(shell $(FIND) $(PARSED_ALL_PLATFORM_LIBS) -name *.so 2> /dev/null | $(EXCLUDE_PATHS_GREP))) \
@@ -124,7 +119,7 @@ define parse_addon
 			$(if $(filter %:,$(unscaped_var_line)), \
 				$(if $(filter common:,$(unscaped_var_line)), \
 					$(eval PROCESS_NEXT=1), \
-					$(if $(or $(filter $(ABI_LIB_SUBPATH):,$(unscaped_var_line)), $(filter $(PLATFORM_ALTERNATIVE):,$(unscaped_var_line))), \
+					$(if $(or $(filter $(ABI_LIB_SUBPATH):,$(unscaped_var_line)), $(filter $(ABI_LIB_SUBPATH2):,$(unscaped_var_line))), \
 						$(eval PROCESS_NEXT=1), \
 						$(eval PROCESS_NEXT=0) \
 					) \

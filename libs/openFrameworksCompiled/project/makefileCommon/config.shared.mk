@@ -238,6 +238,7 @@ else
 	#hack to get makefiles working again
 	ifeq ($(PLATFORM_LIB_SUBPATH),osx)
 		ABI_LIB_SUBPATH=macos
+		ABI_LIB_SUBPATH2=osx
 	else
 	ABI_LIB_SUBPATH=$(PLATFORM_LIB_SUBPATH)
 	endif
