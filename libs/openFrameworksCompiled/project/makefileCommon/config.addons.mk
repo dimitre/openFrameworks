@@ -262,7 +262,7 @@ OF_PROJECT_ADDONS_DEPS = $(patsubst %.o,%.d,$(PROJECT_ADDONS_OBJ_FILES))
 #  DEBUGGING
 ########################################################################
 # print debug information if so instructed
-MAKEFILE_DEBUG=1
+# MAKEFILE_DEBUG=1
 ifdef MAKEFILE_DEBUG
     $(info ---PROJECT_ADDONS_PATHS---)
     $(foreach v, $(PROJECT_ADDONS_PATHS),$(info $(v)))

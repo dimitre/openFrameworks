@@ -286,7 +286,8 @@ OF_CORE_HEADER_PATHS = $(OF_LIBS_OPENFRAMEWORKS_PATH) $(OF_CORE_SOURCE_PATHS)
 
 # add folders or single files to exclude fromt he compiled lib
 # grep -v "/\.[^\.]" will exclude all .hidden folders and files
-ALL_OF_CORE_THIRDPARTY_HEADER_PATHS = $(shell $(FIND) $(OF_LIBS_PATH)/*/include -type d | grep -v "/\.[^\.]")
+# ALL_OF_CORE_THIRDPARTY_HEADER_PATHS = $(shell $(FIND) $(OF_LIBS_PATH)/*/include -type d | grep -v "/\.[^\.]")
+ALL_OF_CORE_THIRDPARTY_HEADER_PATHS = $(OF_LIBS_PATH)/macos/include
 
 # filter out all excluded files / folders that were defined above
 OF_CORE_THIRDPARTY_HEADER_PATHS = $(filter-out $(CORE_EXCLUSIONS),$(ALL_OF_CORE_THIRDPARTY_HEADER_PATHS))
@@ -294,6 +295,11 @@ OF_CORE_THIRDPARTY_HEADER_PATHS = $(filter-out $(CORE_EXCLUSIONS),$(ALL_OF_CORE_
 # generate the list of core includes
 # 1. Add the header search paths defined by the platform config files.
 OF_CORE_INCLUDES_CFLAGS = $(addprefix -I,$(PLATFORM_HEADER_SEARCH_PATHS))
+
+ifdef MAKEFILE_DEBUG
+$(info 💾 OF_CORE_INCLUDES_CFLAGS = $(OF_CORE_INCLUDES_CFLAGS))
+endif
+
 # 2. Add all of the system library search paths defined by the platform config files.
 CORE_PKG_CONFIG_LIBRARIES =
 CORE_PKG_CONFIG_LIBRARIES += $(PLATFORM_PKG_CONFIG_LIBRARIES)
@@ -328,6 +334,12 @@ OF_CORE_INCLUDES_CFLAGS += $(addprefix -I,$(OF_CORE_THIRDPARTY_HEADER_PATHS))
 # 4. Add all of the core OF headers(these have already been filtered above according to the platform config files)
 OF_CORE_INCLUDES_CFLAGS += $(addprefix -I,$(OF_CORE_HEADER_PATHS))
 
+ifdef MAKEFILE_DEBUG
+$(info 💾 OF_CORE_THIRDPARTY_HEADER_PATHS = $(OF_CORE_THIRDPARTY_HEADER_PATHS))
+$(info 💾 OF_CORE_HEADER_PATHS = $(OF_CORE_HEADER_PATHS))
+$(info 💾 OF_CORE_INCLUDES_CFLAGS = $(OF_CORE_INCLUDES_CFLAGS))
+endif
+# $(error OW OW OW)
 
 ################################################################################
 # OF CORE DEFINES

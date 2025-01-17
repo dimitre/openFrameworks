@@ -1,5 +1,5 @@
 #include "ofTessellator.h"
-#include <tesselator.h>
+#include <tess/tesselator.h>
 #include "ofPolyline.h"
 #include "ofMesh.h"
 
@@ -105,7 +105,7 @@ void ofTessellator::tessellateToMesh( const ofPolyline& src,  ofPolyWindingMode 
 	performTessellation( polyWindingMode, dstmesh, bIs2D );
 }
 
-	
+
 //----------------------------------------------------------
 void ofTessellator::tessellateToMesh( const vector<ofPolyline>& src, ofPolyWindingMode polyWindingMode, ofMesh & dstmesh, bool bIs2D ) {
 
@@ -148,7 +148,7 @@ void ofTessellator::tessellateToPolylines( const vector<ofPolyline>& src, ofPoly
 	performTessellation( polyWindingMode, dstpoly, bIs2D );
 }
 
-	
+
 //----------------------------------------------------------
 void ofTessellator::performTessellation(ofPolyWindingMode polyWindingMode, ofMesh& dstmesh, bool bIs2D ) {
 
