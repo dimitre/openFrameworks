@@ -94,23 +94,23 @@ msys2:
 
 android/armeabi-v7a:
 	ADDON_LIBS=
-	ADDON_LIBS+=../ofxAssimpModelLoader/libs/assimp/lib/android/armeabi-v7a/libassimp.a
-	ADDON_LIBS+=../ofxAssimpModelLoader/libs/assimp/lib/android/armeabi-v7a/libIrrXML.a
+	# ADDON_LIBS+=../ofxAssimpModelLoader/libs/assimp/lib/android/armeabi-v7a/libassimp.a
+	# ADDON_LIBS+=../ofxAssimpModelLoader/libs/assimp/lib/android/armeabi-v7a/libIrrXML.a
 
 android/x86:
 	ADDON_LIBS=
-	ADDON_LIBS+=../ofxAssimpModelLoader/libs/assimp/lib/android/x86/libassimp.a
-	ADDON_LIBS+=../ofxAssimpModelLoader/libs/assimp/lib/android/x86/libIrrXML.a
+	# ADDON_LIBS+=../ofxAssimpModelLoader/libs/assimp/lib/android/x86/libassimp.a
+	# ADDON_LIBS+=../ofxAssimpModelLoader/libs/assimp/lib/android/x86/libIrrXML.a
 
 ios:
 	ADDON_LIBS=
-	ADDON_LIBS=../ofxAssimpModelLoader/libs/assimp/lib/macos/assimp.xcframework/ios-arm64/assimp.a
-	ADDON_LIBS=../ofxAssimpModelLoader/libs/assimp/lib/macos/assimp.xcframework/ios-arm64_x86_64-simulator/assimp.a
-	
+	# ADDON_LIBS=../ofxAssimpModelLoader/libs/assimp/lib/macos/assimp.xcframework/ios-arm64/assimp.a
+	# ADDON_LIBS=../ofxAssimpModelLoader/libs/assimp/lib/macos/assimp.xcframework/ios-arm64_x86_64-simulator/assimp.a
+
 osx:
 	ADDON_LIBS=
-	ADDON_LIBS=../ofxAssimpModelLoader/libs/assimp/lib/macos/assimp.xcframework/macos-arm64_x86_64/assimp.a
-	
+	# ADDON_LIBS=../ofxAssimpModelLoader/libs/assimp/lib/macos/assimp.xcframework/macos-arm64_x86_64/assimp.a
+
 emscripten:
 	ADDON_LIBS=
 	ADDON_LIBS=../ofxAssimpModelLoader/libs/assimp/lib/emscripten/libassimp.a

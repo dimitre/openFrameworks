@@ -33,19 +33,19 @@ EXCLUDE_PATHS_GREP =  grep -v "/tvos-arm64" | \
 
 # construct the full paths of the core's platform specific static libs
 ALL_OF_CORE_LIBS_PLATFORM_LIB_PATHS = $(OF_LIBS_PATH)/$(ABI_LIB_SUBPATH)/lib/
-$(info $(ALL_OF_CORE_LIBS_PLATFORM_LIB_PATHS))
+# $(info 💾 ALL_OF_CORE_LIBS_PLATFORM_LIB_PATHS $(ALL_OF_CORE_LIBS_PLATFORM_LIB_PATHS))
 
 # create a list of all core platform libraries
 # grep -v "/\.[^\.]" will exclude all .hidden folders and files
 ALL_OF_CORE_LIBS_PATHS = $(shell $(FIND) $(ALL_OF_CORE_LIBS_PLATFORM_LIB_PATHS) -type d -not -path "*/openFrameworksCompiled/*" 2> /dev/null | $(EXCLUDE_PATHS_GREP))
 # somente aqui retirando o openfraemworkscompiled do path
-$(info $(ALL_OF_CORE_LIBS_PLATFORM_LIB_PATHS))
+# $(info 💾 ALL_OF_CORE_LIBS_PLATFORM_LIB_PATHS $(ALL_OF_CORE_LIBS_PLATFORM_LIB_PATHS))
 
 
-# ifdef MAKEFILE_DEBUG
+ifdef MAKEFILE_DEBUG
 $(info ---ALL_OF_CORE_LIBS_PATHS---)
 $(foreach v, $(ALL_OF_CORE_LIBS_PATHS),$(info $(v)))
-# endif
+endif
 
 # create a list of all core lib directories that have libsorder.make
 # grep -v "/\.[^\.]" will exclude all .hidden folders and files
@@ -58,7 +58,7 @@ OF_CORE_LIBS_THAT_NEED_ORDER = $(subst /lib/$(ABI_LIB_SUBPATH)/libsorder.make,,$
 # by removing those that do from the list of all platform libraries
 OF_CORE_LIBS_THAT_DONT_NEED_ORDER = $(filter-out $(OF_CORE_LIBS_THAT_NEED_ORDER),$(subst /lib/$(ABI_LIB_SUBPATH),,$(ALL_OF_CORE_LIBS_PATHS)))
 
-$(info $(OF_CORE_LIBS_THAT_DONT_NEED_ORDER))
+# $(info 💾 OF_CORE_LIBS_THAT_DONT_NEED_ORDER $(OF_CORE_LIBS_THAT_DONT_NEED_ORDER))
 
 
 # create a list of all static libs in the core lib dir, using only
@@ -67,7 +67,7 @@ $(info $(OF_CORE_LIBS_THAT_DONT_NEED_ORDER))
 # grep -v "/\.[^\.]" will exclude all .hidden folders and files
 # TODO: create a varaible for core specific static lib suffix
 OF_CORE_LIBS_PLATFORM_LIBS_STATICS = $(shell $(FIND) $(addsuffix /lib/$(ABI_LIB_SUBPATH),$(OF_CORE_LIBS_THAT_DONT_NEED_ORDER)) -name *.a -o -name *.bc 2> /dev/null  | $(EXCLUDE_PATHS_GREP))
-$(info $(OF_CORE_LIBS_PLATFORM_LIBS_STATICS))
+# $(info $(OF_CORE_LIBS_PLATFORM_LIBS_STATICS))
 
 
 # create a list of all static lib files for the libs that need order
@@ -88,7 +88,7 @@ OF_CORE_LIBS_PLATFORM_LIBS_STATICS += $(foreach v,$(ALL_OF_CORE_LIBSORDER_MAKE_F
 
 
 
-MAKEFILE_DEBUG=1
+# MAKEFILE_DEBUG=1
 
 ifdef MAKEFILE_DEBUG
 	# $(info ---OF_CORE_LIBS_PLATFORM_LIBS_STATICS---)
@@ -108,9 +108,10 @@ endif
 OF_CORE_THIRDPARTY_STATIC_LIBS := $(filter-out $(CORE_EXCLUSIONS),$(OF_CORE_LIBS_PLATFORM_LIBS_STATICS))
 OF_CORE_THIRDPARTY_STATIC_LIBS += $(PLATFORM_STATIC_LIBRARIES)
 
+ifdef MAKEFILE_DEBUG
 $(info ---OF_CORE_THIRDPARTY_STATIC_LIBS---)
 $(foreach v, $(OF_CORE_THIRDPARTY_STATIC_LIBS),$(info $(v)))
-
+endif
 
 
 #TODO what to do with shared libs?
