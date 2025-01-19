@@ -9,7 +9,6 @@ HEADER_OF = $(OF_PATH)/libs/openFrameworks/**
 HEADER_OF_LIBS = $(OF_PATH)/libs/macos/include
 //OF_CORE_LIBS = $(OF_PATH)/libs/macos/lib/**.a
 //OF_CORE_LIBS = $(OF_PATH)/libs/macos/lib/**
-OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/curl.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libFreeImage.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libbrotlicommon.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libbrotlidec.a
@@ -24,7 +23,13 @@ OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libpugixml.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libtess2.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/liburiparser.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libz.a
-OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/openssl.a
+
+//OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/openssl.a
+//OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/curl.a
+OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libssl.a
+OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libcurl.a
+OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libcrypto.a
+
 
 LIBS_SEARCH_PATHS = "$(OF_PATH)/libs/macos/lib"
 
