@@ -4,7 +4,7 @@
 #include "ofGraphics.h"
 #include "ofxLabel.h"
 #include "ofxInputField.h"
-#include "ofPoint.h"
+// #include "ofPoint.h"
 
 using std::string;
 using std::vector;

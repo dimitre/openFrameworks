@@ -171,22 +171,18 @@ linuxaarch64:
 	# when parsing the file system looking for include paths exclude this for all or
 	# a specific platform
 	ADDON_INCLUDES_EXCLUDE = libs/libfreenect/platform/%
-	ADDON_INCLUDES_EXCLUDE += libs/libusb-1.0/%	
+	ADDON_INCLUDES_EXCLUDE += libs/libusb-1.0/%
 
 android/armeabi:
 
 android/armeabi-v7a:
 
 osx:
-	# when parsing the file system looking for sources exclude this for all or
-	# a specific platform
 	ADDON_SOURCES_EXCLUDE = libs/libfreenect/platform/%
+	ADDON_INCLUDES_EXCLUDE = libs/libfreenect/platform/%
 
-
-	# when parsing the file system looking for include paths exclude this for all or
-	# a specific platform
+macos:
+	ADDON_SOURCES_EXCLUDE = libs/libfreenect/platform/%
 	ADDON_INCLUDES_EXCLUDE = libs/libfreenect/platform/%
 
 ios:
-
-
