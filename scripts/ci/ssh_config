@@ -1,7 +1,0 @@
-Host ci.openframeworks.cc
-	StrictHostKeyChecking 	no
-	PasswordAuthentication	no
-	CheckHostIP			      	no
-	BatchMode			        	yes
-
-
