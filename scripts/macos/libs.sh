@@ -105,10 +105,10 @@ unzipAddons() {
 
 sectionOK OpenFrameworks install ofLibs
 
-# checkWget2
-# executa mkdir -p _download
-# getlink
-# unzipCore
+checkWget2
+executa mkdir -p _download
+getlink
+unzipCore
 unzipAddons
 
 # unzipall() {
