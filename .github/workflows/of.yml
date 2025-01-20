@@ -32,7 +32,8 @@ jobs:
           key: ${{ matrix.cfg.target }}-${{ matrix.cfg.opt }}
 
       - name: Libs
-        run: ./scripts/macos/libs.sh
+        # run: ./scripts/macos/libs.sh
+        run: ./libs.sh
 
       - name: Tests
         run: ./scripts/macos/tests.sh
