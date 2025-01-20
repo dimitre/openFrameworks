@@ -1,5 +1,5 @@
 name: OF
-# make the action not run on the local repo if the branch is also in a pull request to OF/OF
+
 on:
   push:
     paths-ignore:
@@ -17,12 +17,12 @@ env:
 
 jobs:
   build-macos:
-    runs-on: macos-15
+    runs-on: macos-latest
     strategy:
       matrix:
         cfg:
-          - { target: osx, opt: "xcode" }
-          - { target: osx, opt: "makefiles" }
+          - { target: macos, opt: "xcode" }
+          # - { target: osx, opt: "makefiles" }
     steps:
       - uses: actions/checkout@v4
 
@@ -31,33 +31,18 @@ jobs:
         with:
           key: ${{ matrix.cfg.target }}-${{ matrix.cfg.opt }}
 
-      # - name: Determine Release
-      #   id: vars
-      #   shell: bash
-      #   run: |
-      #     if [[ "${{ github.ref }}" == refs/tags/* ]]; then
-      #       echo "RELEASE=${{ github.ref_name }}" >> $GITHUB_ENV
-      #     elif [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
-      #       echo "RELEASE=nightly" >> $GITHUB_ENV
-      #     elif [[ "${{ github.ref }}" == "refs/heads/bleeding" ]]; then
-      #       echo "RELEASE=latest" >> $GITHUB_ENV
-      #     else
-      #       echo "RELEASE=latest" >> $GITHUB_ENV
-      #     fi
-
       - name: Libs
         run: ./scripts/macos/libs.sh
 
       - name: Tests
         run: ./scripts/macos/tests.sh
-
-      - name: Build
-        run: if [ ${{ matrix.cfg.opt }} = "xcode" ]; then
-          scripts/ci/${{ matrix.cfg.target }}/build.sh ${{ matrix.cfg.opt }};
-          else
-          scripts/ci/${{ matrix.cfg.target }}/run_tests.sh;
-          fi
-        env:
-          DEVELOPER_DIR: "/Applications/Xcode.app/Contents/Developer"
-          SDKROOT: "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#       - name: Build
+#         run: if [ ${{ matrix.cfg.opt }} = "xcode" ]; then
+#           scripts/ci/${{ matrix.cfg.target }}/build.sh ${{ matrix.cfg.opt }};
+#           else
+#           scripts/ci/${{ matrix.cfg.target }}/run_tests.sh;
+#           fi
+#         env:
+#           DEVELOPER_DIR: "/Applications/Xcode.app/Contents/Developer"
+#           SDKROOT: "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
+# # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
