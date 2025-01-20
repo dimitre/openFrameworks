@@ -112,7 +112,7 @@ ifndef PLATFORM_LIB_SUBPATH
 		PLATFORM_LIB_SUBPATH=android
 		SHARED_LIB_EXTENSION=so
 	else ifeq ($(PLATFORM_OS),Darwin)
-		PLATFORM_LIB_SUBPATH=osx
+		PLATFORM_LIB_SUBPATH=macos
 		SHARED_LIB_EXTENSION=dylib
 	else ifeq ($(PLATFORM_OS),emscripten)
 		PLATFORM_LIB_SUBPATH=emscripten
@@ -215,7 +215,8 @@ ifdef MAKEFILE_DEBUG
     $(info OF_CORE_LIB_PATH=$(OF_CORE_LIB_PATH))
 endif
 
-
+$(info OF_LIBS_OF_COMPILED_PROJECT_PATH $(OF_LIBS_OF_COMPILED_PROJECT_PATH))
+$(info PLATFORM_LIB_SUBPATH $(PLATFORM_LIB_SUBPATH))
 ifeq ($(wildcard $(OF_LIBS_OF_COMPILED_PROJECT_PATH)/$(PLATFORM_LIB_SUBPATH)),)
 $(error This package doesn't support your platform, $(OF_LIBS_OF_COMPILED_PROJECT_PATH) probably you downloaded the wrong package?)
 endif
