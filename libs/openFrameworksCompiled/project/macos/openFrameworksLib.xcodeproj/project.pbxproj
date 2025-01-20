@@ -116,17 +116,6 @@
 		E4F3BA9112F4C4C9002D19BB /* ofSoundStream.h in Headers */ = {isa = PBXBuildFile; fileRef = E4F3BA8512F4C4C9002D19BB /* ofSoundStream.h */; };
 		E4F3BAC112F4C72F002D19BB /* ofMath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4F3BAB312F4C72E002D19BB /* ofMath.cpp */; };
 		E4F3BAC212F4C72F002D19BB /* ofMath.h in Headers */ = {isa = PBXBuildFile; fileRef = E4F3BAB412F4C72E002D19BB /* ofMath.h */; };
-		E4F3BAC312F4C72F002D19BB /* ofMatrix3x3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4F3BAB512F4C72E002D19BB /* ofMatrix3x3.cpp */; };
-		E4F3BAC412F4C72F002D19BB /* ofMatrix3x3.h in Headers */ = {isa = PBXBuildFile; fileRef = E4F3BAB612F4C72E002D19BB /* ofMatrix3x3.h */; };
-		E4F3BAC512F4C72F002D19BB /* ofMatrix4x4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4F3BAB712F4C72E002D19BB /* ofMatrix4x4.cpp */; };
-		E4F3BAC612F4C72F002D19BB /* ofMatrix4x4.h in Headers */ = {isa = PBXBuildFile; fileRef = E4F3BAB812F4C72E002D19BB /* ofMatrix4x4.h */; };
-		E4F3BAC712F4C72F002D19BB /* ofQuaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4F3BAB912F4C72F002D19BB /* ofQuaternion.cpp */; };
-		E4F3BAC812F4C72F002D19BB /* ofQuaternion.h in Headers */ = {isa = PBXBuildFile; fileRef = E4F3BABA12F4C72F002D19BB /* ofQuaternion.h */; };
-		E4F3BAC912F4C72F002D19BB /* ofVec2f.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4F3BABB12F4C72F002D19BB /* ofVec2f.cpp */; };
-		E4F3BACA12F4C72F002D19BB /* ofVec2f.h in Headers */ = {isa = PBXBuildFile; fileRef = E4F3BABC12F4C72F002D19BB /* ofVec2f.h */; };
-		E4F3BACB12F4C72F002D19BB /* ofVec3f.h in Headers */ = {isa = PBXBuildFile; fileRef = E4F3BABD12F4C72F002D19BB /* ofVec3f.h */; };
-		E4F3BACC12F4C72F002D19BB /* ofVec4f.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4F3BABE12F4C72F002D19BB /* ofVec4f.cpp */; };
-		E4F3BACD12F4C72F002D19BB /* ofVec4f.h in Headers */ = {isa = PBXBuildFile; fileRef = E4F3BABF12F4C72F002D19BB /* ofVec4f.h */; };
 		E4F3BACE12F4C72F002D19BB /* ofVectorMath.h in Headers */ = {isa = PBXBuildFile; fileRef = E4F3BAC012F4C72F002D19BB /* ofVectorMath.h */; };
 		E4F3BAD912F4C73C002D19BB /* ofBaseTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4F3BAD012F4C73C002D19BB /* ofBaseTypes.cpp */; };
 		E4F3BADB12F4C73C002D19BB /* ofColor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4F3BAD212F4C73C002D19BB /* ofColor.cpp */; };
@@ -290,17 +279,6 @@
 		E4F3BA8512F4C4C9002D19BB /* ofSoundStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofSoundStream.h; path = ../../../openFrameworks/sound/ofSoundStream.h; sourceTree = SOURCE_ROOT; };
 		E4F3BAB312F4C72E002D19BB /* ofMath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofMath.cpp; path = ../../../openFrameworks/math/ofMath.cpp; sourceTree = SOURCE_ROOT; };
 		E4F3BAB412F4C72E002D19BB /* ofMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofMath.h; path = ../../../openFrameworks/math/ofMath.h; sourceTree = SOURCE_ROOT; };
-		E4F3BAB512F4C72E002D19BB /* ofMatrix3x3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofMatrix3x3.cpp; path = ../../../openFrameworks/math/ofMatrix3x3.cpp; sourceTree = SOURCE_ROOT; };
-		E4F3BAB612F4C72E002D19BB /* ofMatrix3x3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofMatrix3x3.h; path = ../../../openFrameworks/math/ofMatrix3x3.h; sourceTree = SOURCE_ROOT; };
-		E4F3BAB712F4C72E002D19BB /* ofMatrix4x4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofMatrix4x4.cpp; path = ../../../openFrameworks/math/ofMatrix4x4.cpp; sourceTree = SOURCE_ROOT; };
-		E4F3BAB812F4C72E002D19BB /* ofMatrix4x4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofMatrix4x4.h; path = ../../../openFrameworks/math/ofMatrix4x4.h; sourceTree = SOURCE_ROOT; };
-		E4F3BAB912F4C72F002D19BB /* ofQuaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofQuaternion.cpp; path = ../../../openFrameworks/math/ofQuaternion.cpp; sourceTree = SOURCE_ROOT; };
-		E4F3BABA12F4C72F002D19BB /* ofQuaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofQuaternion.h; path = ../../../openFrameworks/math/ofQuaternion.h; sourceTree = SOURCE_ROOT; };
-		E4F3BABB12F4C72F002D19BB /* ofVec2f.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofVec2f.cpp; path = ../../../openFrameworks/math/ofVec2f.cpp; sourceTree = SOURCE_ROOT; };
-		E4F3BABC12F4C72F002D19BB /* ofVec2f.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofVec2f.h; path = ../../../openFrameworks/math/ofVec2f.h; sourceTree = SOURCE_ROOT; };
-		E4F3BABD12F4C72F002D19BB /* ofVec3f.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofVec3f.h; path = ../../../openFrameworks/math/ofVec3f.h; sourceTree = SOURCE_ROOT; };
-		E4F3BABE12F4C72F002D19BB /* ofVec4f.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofVec4f.cpp; path = ../../../openFrameworks/math/ofVec4f.cpp; sourceTree = SOURCE_ROOT; };
-		E4F3BABF12F4C72F002D19BB /* ofVec4f.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofVec4f.h; path = ../../../openFrameworks/math/ofVec4f.h; sourceTree = SOURCE_ROOT; };
 		E4F3BAC012F4C72F002D19BB /* ofVectorMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofVectorMath.h; path = ../../../openFrameworks/math/ofVectorMath.h; sourceTree = SOURCE_ROOT; };
 		E4F3BAD012F4C73C002D19BB /* ofBaseTypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofBaseTypes.cpp; path = ../../../openFrameworks/types/ofBaseTypes.cpp; sourceTree = SOURCE_ROOT; };
 		E4F3BAD212F4C73C002D19BB /* ofColor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofColor.cpp; path = ../../../openFrameworks/types/ofColor.cpp; sourceTree = SOURCE_ROOT; };
@@ -532,17 +510,6 @@
 				30CC5384207A36FD008234AF /* ofMathConstants.h */,
 				E4F3BAB312F4C72E002D19BB /* ofMath.cpp */,
 				E4F3BAB412F4C72E002D19BB /* ofMath.h */,
-				E4F3BAB512F4C72E002D19BB /* ofMatrix3x3.cpp */,
-				E4F3BAB612F4C72E002D19BB /* ofMatrix3x3.h */,
-				E4F3BAB712F4C72E002D19BB /* ofMatrix4x4.cpp */,
-				E4F3BAB812F4C72E002D19BB /* ofMatrix4x4.h */,
-				E4F3BAB912F4C72F002D19BB /* ofQuaternion.cpp */,
-				E4F3BABA12F4C72F002D19BB /* ofQuaternion.h */,
-				E4F3BABB12F4C72F002D19BB /* ofVec2f.cpp */,
-				E4F3BABC12F4C72F002D19BB /* ofVec2f.h */,
-				E4F3BABD12F4C72F002D19BB /* ofVec3f.h */,
-				E4F3BABE12F4C72F002D19BB /* ofVec4f.cpp */,
-				E4F3BABF12F4C72F002D19BB /* ofVec4f.h */,
 				E4F3BAC012F4C72F002D19BB /* ofVectorMath.h */,
 			);
 			name = math;
@@ -653,15 +620,9 @@
 				E4F3BA8F12F4C4C9002D19BB /* ofSoundPlayer.h in Headers */,
 				E4F3BA9112F4C4C9002D19BB /* ofSoundStream.h in Headers */,
 				E4F3BAC212F4C72F002D19BB /* ofMath.h in Headers */,
-				E4F3BAC412F4C72F002D19BB /* ofMatrix3x3.h in Headers */,
 				676672A41A749D1900400051 /* ofAVFoundationPlayer.h in Headers */,
 				6678E97019FEAFA900C00581 /* ofSoundBuffer.h in Headers */,
 				9979E8241A1CCC44007E55D1 /* ofMainLoop.h in Headers */,
-				E4F3BAC612F4C72F002D19BB /* ofMatrix4x4.h in Headers */,
-				E4F3BAC812F4C72F002D19BB /* ofQuaternion.h in Headers */,
-				E4F3BACA12F4C72F002D19BB /* ofVec2f.h in Headers */,
-				E4F3BACB12F4C72F002D19BB /* ofVec3f.h in Headers */,
-				E4F3BACD12F4C72F002D19BB /* ofVec4f.h in Headers */,
 				692C298C19DC5C5500C27C5D /* ofFpsCounter.h in Headers */,
 				E4F3BACE12F4C72F002D19BB /* ofVectorMath.h in Headers */,
 				6678E97F19FEB5A600C00581 /* ofSoundUtils.h in Headers */,
@@ -843,12 +804,7 @@
 				E4F3BA9012F4C4C9002D19BB /* ofSoundStream.cpp in Sources */,
 				E43EEAC329E66B78001C7596 /* ofAVEngineSoundPlayer.mm in Sources */,
 				E4F3BAC112F4C72F002D19BB /* ofMath.cpp in Sources */,
-				E4F3BAC312F4C72F002D19BB /* ofMatrix3x3.cpp in Sources */,
 				6944251A1FE4547400770088 /* ofGraphicsBaseTypes.cpp in Sources */,
-				E4F3BAC512F4C72F002D19BB /* ofMatrix4x4.cpp in Sources */,
-				E4F3BAC712F4C72F002D19BB /* ofQuaternion.cpp in Sources */,
-				E4F3BAC912F4C72F002D19BB /* ofVec2f.cpp in Sources */,
-				E4F3BACC12F4C72F002D19BB /* ofVec4f.cpp in Sources */,
 				E4F3BAD912F4C73C002D19BB /* ofBaseTypes.cpp in Sources */,
 				676672A31A749D1900400051 /* ofAVFoundationVideoPlayer.m in Sources */,
 				E4F3BADB12F4C73C002D19BB /* ofColor.cpp in Sources */,
