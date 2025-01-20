@@ -1,8 +1,7 @@
 #!/bin/bash
 cd "$(dirname "$0")"
 
-
-OF_FOLDER=../..
+OF_FOLDER=.
 PLATFORM=macos
 LIBS_FOLDER=${OF_FOLDER}/libs/${PLATFORM}
 
