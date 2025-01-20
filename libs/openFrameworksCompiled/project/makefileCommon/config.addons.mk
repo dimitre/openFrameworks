@@ -424,22 +424,24 @@ VPATH += $(call uniq, $(ADDON_PATHS))
 
 
 # DIMITRAO
-FOLDERS=$(addsuffix /src, $(TEST_PROJECT_ADDONS_PATHS))
+FOLDERS=$(addsuffix /src/, $(TEST_PROJECT_ADDONS_PATHS))
 FOLDERS+= $(addsuffix /src/*/, $(TEST_PROJECT_ADDONS_PATHS))
 FOLDERS+=$(addsuffix /libs/*/include/, $(TEST_PROJECT_ADDONS_PATHS))
+FOLDERS+=$(addsuffix /libs/*/include/*/., $(TEST_PROJECT_ADDONS_PATHS))
 FOLDERS+=$(addsuffix /libs/*/, $(TEST_PROJECT_ADDONS_PATHS))
 FOLDERSOK = $(call uniq, $(dir $(wildcard $(FOLDERS))))
 
+$(info --------)
+# $(info FOLDERS = $(FOLDERS))
+# $(info --------)
+$(info FOLDERSOK = $(FOLDERSOK))
+$(info --------)
 
-PROJECT_ADDONS_INCLUDES=$(FOLDERSOK)
+# PROJECT_ADDONS_INCLUDES=$(FOLDERSOK)
 
-# $(info --------)
-# $(info FOLDERSOK = $(FOLDERSOK))
-# $(info --------)
-
-# $(info --------)
-# $(info PROJECT_ADDONS_INCLUDES = $(PROJECT_ADDONS_INCLUDES))
-# $(info --------)
+$(info --------)
+$(info PROJECT_ADDONS_INCLUDES = $(PROJECT_ADDONS_INCLUDES))
+$(info --------)
 
 # $(error OW OW OW)
 
