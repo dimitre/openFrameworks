@@ -1,2 +1,0 @@
-ofxAssimp
-ofxGui
