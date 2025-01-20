@@ -261,8 +261,8 @@ OF_CORE_LIBS := $(OF_CORE_THIRDPARTY_STATIC_LIBS)
 # Dimitre inventando aqui
 # OF_CORE_LIBS = -L$(OF_LIBS_PATH)/$(ABI_LIB_SUBPATH)/lib/
 
-$(info ---OF_CORE_LIBS---)
-$(foreach v, $(OF_CORE_LIBS),$(info $(v)))
+# $(info ---OF_CORE_LIBS---)
+# $(foreach v, $(OF_CORE_LIBS),$(info $(v)))
 
 # 2. Add all of the third party shared libs defined by the platform config files.
 ifneq ($(PLATFORM_OS),Linux)
@@ -286,8 +286,8 @@ endif
 # 4. Add the libraries defined in the platform config files.
 OF_CORE_LIBS += $(addprefix -l,$(PLATFORM_LIBRARIES))
 
-$(info ---OF_CORE_LIBS---)
-$(foreach v, $(OF_CORE_LIBS),$(info $(v)))
+# $(info ---OF_CORE_LIBS---)
+# $(foreach v, $(OF_CORE_LIBS),$(info $(v)))
 
 # add the list of addon includes
 ifneq ($(strip $(PROJECT_ADDONS_PKG_CONFIG_LIBRARIES)),)
@@ -356,12 +356,20 @@ OF_PROJECT_SOURCE_FILES = $(shell $(FIND) $(OF_PROJECT_SOURCE_PATHS) -maxdepth 1
 ################################################################################
 
 OF_PROJECT_INCLUDES_CFLAGS := $(addprefix -I,$(filter-out $(PROJECT_INCLUDE_EXCLUSIONS),$(OF_PROJECT_SOURCE_PATHS)))
-OF_ADDON_INCLUDES_CFLAGS += $(addprefix -I,$(filter-out $(PROJECT_INCLUDE_EXCLUSIONS),$(PROJECT_ADDONS_INCLUDES)))
 
-# ifdef MAKEFILE_DEBUG
+$(info 👀 ------)
+$(info PROJECT_ADDONS_INCLUDES $(PROJECT_ADDONS_INCLUDES))
+$(info 👀 ------)
+
+
+OF_ADDON_INCLUDES_CFLAGS += $(addprefix -I,$(filter-out $(PROJECT_INCLUDE_EXCLUSIONS),$(PROJECT_ADDONS_INCLUDES)))
+$(info 👀 ------)
+$(info OF_ADDON_INCLUDES_CFLAGS $(OF_ADDON_INCLUDES_CFLAGS))
+$(info 👀 ------)
+ifdef MAKEFILE_DEBUG
     $(info ---OF_PROJECT_INCLUDES_CFLAGS---)
     $(foreach v, $(OF_PROJECT_INCLUDES_CFLAGS),$(info $(v)))
-# endif
+endif
 
 ################################################################################
 # PROJECT LIBRARIES (-l ...) (not used during core compilation, but vars are
@@ -478,8 +486,8 @@ CFLAGS += $(strip $(ALL_CFLAGS))
 # clean up all extra whitespaces in the CFLAGS
 CXXFLAGS += $(strip $(ALL_CXXFLAGS))
 
-$(info ---OF_CORE_INCLUDES_CFLAGS---)
-$(foreach v, $(OF_CORE_INCLUDES_CFLAGS),$(info $(v)))
+# $(info ---OF_CORE_INCLUDES_CFLAGS---)
+# $(foreach v, $(OF_CORE_INCLUDES_CFLAGS),$(info $(v)))
 
 # $(info ---OF_PROJECT_INCLUDES_CFLAGS---)
 # $(foreach v, $(OF_PROJECT_INCLUDES_CFLAGS),$(info $(v)))

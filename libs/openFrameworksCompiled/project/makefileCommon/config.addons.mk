@@ -6,7 +6,8 @@ define parse_addon2
 	$(eval addon=$1) \
 	$(eval ADDON_PATHS+= $(addon)) \
 	$(eval addon_obj_path=$(OF_ADDONS_PATH)) \
-	$(eval obj_prefix=$(addon)../) \
+	$(eval obj_prefix=$(OF_PROJECT_OBJ_OUTPUT_PATH)) \
+	\
 	$(eval ADDON_DEPENDENCIES= ) \
 	$(eval ADDON_DATA= ) \
 	$(eval ADDON_CFLAGS= ) \
@@ -156,7 +157,6 @@ EXCLUDE_PATHS_GREP = grep -v "/tvos-arm64" | \
 
 # parses addons includes, in PARSED_ADDON_INCLUDES receives full PATHS to addons
 define parse_addons_includes
-	$(info >>>>>>>> parse_addons_includes = $(1)) \
 	$(eval ADDONS_INCLUDES_FILTER = $(addprefix $1/, $(ADDON_INCLUDES_EXCLUDE))) \
 	$(eval PARSED_ADDONS_SOURCE_PATHS = $(addsuffix /src, $1)) \
 	$(eval PARSED_ADDONS_SOURCE_INCLUDES = $(shell $(FIND) $(PARSED_ADDONS_SOURCE_PATHS) -type d 2> /dev/null | $(EXCLUDE_PATHS_GREP))) \
@@ -366,15 +366,13 @@ endef
 
 
 
-
+# DIMITRAO
 	# this will add all addons path as they were local
 TEST_PROJECT_ADDONS_ALLPATHS=$(join $(addprefix ./, $(PROJECT_ADDONS)), )
 # and add all addons path as they were in /addons/ folder
 TEST_PROJECT_ADDONS_ALLPATHS+=$(join $(addprefix $(OF_ADDONS_PATH)/, $(PROJECT_ADDONS)), )
 # and then clean all non-existant files
 TEST_PROJECT_ADDONS_PATHS = $(wildcard $(TEST_PROJECT_ADDONS_ALLPATHS))
-
-
 $(foreach a, $(TEST_PROJECT_ADDONS_PATHS), \
 	$(info $(a)) \
 	$(call parse_addon2,$(a)) \
@@ -384,11 +382,13 @@ $(foreach a, $(TEST_PROJECT_ADDONS_PATHS), \
 # 	$(call parse_addon,$(addon_to_parse)) \
 # )
 
-$(foreach a, $(PROJECT_ADDONS_PATHS), $(call parse_addon2,$(a)))
 
+# $(foreach a, $(PROJECT_ADDONS_PATHS), $(call parse_addon2,$(a)))
+$(info --------)
+$(info PARSED_ADDONS_INCLUDES = $(PARSED_ADDONS_INCLUDES))
+$(info --------)
 
 $(info PARSED_ADDONS_SOURCE_PATHS = $(PARSED_ADDONS_SOURCE_PATHS))
-$(info PARSED_ADDONS_SOURCE_INCLUDES = $(PARSED_ADDONS_SOURCE_INCLUDES))
 $(info PARSED_ADDONS_SOURCE_INCLUDES = $(PARSED_ADDONS_SOURCE_INCLUDES))
 $(info PARSED_ADDONS_FILTERED_INCLUDE_PATHS = $(PARSED_ADDONS_FILTERED_INCLUDE_PATHS))
 $(info PARSED_ADDONS_LIBS_SOURCE_PATHS += $(PARSED_ADDONS_LIBS_SOURCE_PATHS))
@@ -422,6 +422,26 @@ PROJECT_ADDONS_DATA = $(call uniq,$(TMP_PROJECT_ADDONS_DATA))
 PROJECT_ADDONS_DEFINES = $(call uniq,$(TMP_PROJECT_ADDONS_DEFINES))
 VPATH += $(call uniq, $(ADDON_PATHS))
 
+
+# DIMITRAO
+FOLDERS=$(addsuffix /src, $(TEST_PROJECT_ADDONS_PATHS))
+FOLDERS+= $(addsuffix /src/*/, $(TEST_PROJECT_ADDONS_PATHS))
+FOLDERS+=$(addsuffix /libs/*/include/, $(TEST_PROJECT_ADDONS_PATHS))
+FOLDERS+=$(addsuffix /libs/*/, $(TEST_PROJECT_ADDONS_PATHS))
+FOLDERSOK = $(call uniq, $(dir $(wildcard $(FOLDERS))))
+
+
+PROJECT_ADDONS_INCLUDES=$(FOLDERSOK)
+
+# $(info --------)
+# $(info FOLDERSOK = $(FOLDERSOK))
+# $(info --------)
+
+# $(info --------)
+# $(info PROJECT_ADDONS_INCLUDES = $(PROJECT_ADDONS_INCLUDES))
+# $(info --------)
+
+# $(error OW OW OW)
 
 OF_PROJECT_ADDONS_OBJS = $(PROJECT_ADDONS_OBJ_FILES)
 OF_PROJECT_ADDONS_DEPS = $(patsubst %.o,%.d,$(PROJECT_ADDONS_OBJ_FILES))
