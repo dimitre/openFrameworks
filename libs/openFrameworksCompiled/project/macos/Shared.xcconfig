@@ -5,6 +5,8 @@ OF_PATH = ../../../..
 // All headers and libs for OF Core
 #include "CoreOF.xcconfig"
 
+ENABLE_USER_SCRIPT_SANDBOXING=YES
+
 OTHER_CFLAGS = $(OF_CORE_CFLAGS)
 OTHER_LDFLAGS = $(OF_CORE_LIBS)
 HEADER_SEARCH_PATHS = $(OF_CORE_HEADERS)
@@ -15,7 +17,7 @@ COPY_PHASE_STRIP[config=Release] = YES
 GCC_OPTIMIZATION_LEVEL[config=Debug] = 0
 GCC_OPTIMIZATION_LEVEL[config=Release] = 3
 
-OTHER_CPLUSPLUSFLAGS[config=Debug] = $(inherited) 
+OTHER_CPLUSPLUSFLAGS[config=Debug] = $(inherited) -D__MACOSX_CORE__
 OTHER_CPLUSPLUSFLAGS[config=Release] = $(inherited) -DNDEBUG
 
 GCC_UNROLL_LOOPS[config=Release] = YES

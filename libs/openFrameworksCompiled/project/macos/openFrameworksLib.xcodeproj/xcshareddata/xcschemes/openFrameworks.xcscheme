@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1530"
+   LastUpgradeVersion = "1610"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -15,8 +15,8 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "BF6276B92BADCF7C008864C1"
-               BuildableName = "openFrameworks.framework"
+               BlueprintIdentifier = "E4B27C1410CBEB8E00536013"
+               BuildableName = "openFrameworks.a"
                BlueprintName = "openFrameworks"
                ReferencedContainer = "container:openFrameworksLib.xcodeproj">
             </BuildableReference>
@@ -50,8 +50,8 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "BF6276B92BADCF7C008864C1"
-            BuildableName = "openFrameworks.framework"
+            BlueprintIdentifier = "E4B27C1410CBEB8E00536013"
+            BuildableName = "openFrameworks.a"
             BlueprintName = "openFrameworks"
             ReferencedContainer = "container:openFrameworksLib.xcodeproj">
          </BuildableReference>
