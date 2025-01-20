@@ -17,7 +17,8 @@ env:
 
 jobs:
   build-macos:
-    runs-on: macos-latest
+    # runs-on: macos-latest
+    runs-on: macos-15
     strategy:
       matrix:
         cfg:
@@ -39,7 +40,7 @@ jobs:
         # run: ./scripts/macos/libs.sh
         run: |
           cd libs/openFrameworksCompiled/project/macos
-          xcodebuild
+          xcodebuild -arch arm64
 
       - name: Tests
         run: ./scripts/macos/tests.sh
