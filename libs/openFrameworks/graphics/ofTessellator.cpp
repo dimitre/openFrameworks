@@ -1,5 +1,5 @@
 #include "ofTessellator.h"
-#include <tess/tesselator.h>
+#include <tesselator.h>
 #include "ofPolyline.h"
 #include "ofMesh.h"
 

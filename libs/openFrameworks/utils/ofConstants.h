@@ -298,7 +298,7 @@ enum ofTargetPlatform{
 	#define TARGET_LITTLE_ENDIAN
 #endif
 
-#include <tess/tesselator.h>
+#include <tesselator.h>
 typedef TESSindex ofIndexType;
 
 
