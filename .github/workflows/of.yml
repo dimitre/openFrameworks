@@ -35,6 +35,12 @@ jobs:
         # run: ./scripts/macos/libs.sh
         run: ./libs.sh
 
+      - name: XCodebuild
+        # run: ./scripts/macos/libs.sh
+        run: |
+          cd libs/openFrameworksCompiled/project/macos
+          xcodebuild
+
       - name: Tests
         run: ./scripts/macos/tests.sh
 #       - name: Build

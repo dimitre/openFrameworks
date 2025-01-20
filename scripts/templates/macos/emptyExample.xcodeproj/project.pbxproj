@@ -21,31 +21,18 @@
 			"fileEncoding": "4"
 		},
 		"BF26640B2C634C16004360E2": {
-		    "isa": "PBXShellScriptBuildPhase",
-		    "alwaysOutOfDate": "1",
-		    "buildActionMask": "2147483647",
-		    "files": [],
-		    "inputFileListPaths": [],
-		    "inputPaths": [],
-		    "outputFileListPaths": [],
-		    "outputPaths": [],
-		    "runOnlyForDeploymentPostprocessing": "0",
-		    "shellPath": "/usr/bin/env bash",
+			"buildActionMask": "2147483647",
+			"runOnlyForDeploymentPostprocessing": "0",
+			"outputPaths": [],
+			"shellPath": "/usr/bin/env bash",
+			"inputFileListPaths": [],
 			"showEnvVarsInLog": "0",
-		    "shellScript": ""
-		},
-		"E42962A92163ECCD00A6A9E2": {
+			"isa": "PBXShellScriptBuildPhase",
+			"shellScript": "",
+			"files": [],
 			"alwaysOutOfDate": "1",
 			"inputPaths": [],
-			"buildActionMask": "2147483647",
-			"shellPath": "/bin/sh",
-			"showEnvVarsInLog": "0",
-			"outputPaths": [],
-			"isa": "PBXShellScriptBuildPhase",
-			"runOnlyForDeploymentPostprocessing": "0",
-			"shellScript": "$OF_CORE_BUILD_COMMAND\n",
-			"name": "Run Script — Compile OF",
-			"files": []
+			"outputFileListPaths": []
 		},
 		"E4C2427710CC5ABF004149E2": {
 			"isa": "PBXCopyFilesBuildPhase",
@@ -120,14 +107,27 @@
 			"runOnlyForDeploymentPostprocessing": "0",
 			"outputPaths": [],
 			"shellPath": "/bin/sh",
-			"showEnvVarsInLog": "0",
 			"inputFileListPaths": [],
+			"showEnvVarsInLog": "0",
 			"isa": "PBXShellScriptBuildPhase",
 			"shellScript": "\"$OF_PATH/scripts/macos/xcode_project.sh\"\n",
 			"files": [],
 			"alwaysOutOfDate": "1",
 			"inputPaths": [],
 			"outputFileListPaths": []
+		},
+		"E42962A92163ECCD00A6A9E2": {
+			"alwaysOutOfDate": "1",
+			"inputPaths": [],
+			"buildActionMask": "2147483647",
+			"shellPath": "/bin/sh",
+			"showEnvVarsInLog": "0",
+			"outputPaths": [],
+			"isa": "PBXShellScriptBuildPhase",
+			"runOnlyForDeploymentPostprocessing": "0",
+			"shellScript": "$OF_CORE_BUILD_COMMAND\n",
+			"name": "Run Script — Compile OF",
+			"files": []
 		},
 		"E4B69B4F0A3A1720003C02F2": {
 			"baseConfigurationReference": "E4EB6923138AFD0F00A09F29",
@@ -142,27 +142,6 @@
 				"GCC_OPTIMIZATION_LEVEL": "3",
 				"OTHER_CPLUSPLUSFLAGS": "-D__MACOSX_CORE__",
 				"COPY_PHASE_STRIP": "YES"
-			},
-			"name": "Release"
-		},
-		"E4B69B610A3A1757003C02F2": {
-			"baseConfigurationReference": "E4EB6923138AFD0F00A09F29",
-			"isa": "XCBuildConfiguration",
-			"buildSettings": {
-				"HEADER_SEARCH_PATHS": [
-					"$(OF_CORE_HEADERS)",
-					"src"
-				],
-				"FRAMEWORK_SEARCH_PATHS": "$(inherited)",
-				"COPY_PHASE_STRIP": "YES",
-				"ARCHS": "$(ARCHS_STANDARD)",
-				"OTHER_LDFLAGS": [
-					"$(OF_CORE_LIBS)",
-					"$(OF_CORE_FRAMEWORKS)",
-					"$(LIB_OF)"
-				],
-				"baseConfigurationReference": "E4EB6923138AFD0F00A09F29",
-				"LIBRARY_SEARCH_PATHS": "$(inherited)"
 			},
 			"name": "Release"
 		},
@@ -216,20 +195,26 @@
 			"baseConfigurationReference": "E4EB6923138AFD0F00A09F29",
 			"isa": "XCBuildConfiguration",
 			"buildSettings": {
+				"COPY_PHASE_STRIP": "NO",
+				"LIBRARY_SEARCH_PATHS": "$(inherited)",
+				"MACOSX_DEPLOYMENT_TARGET": "11.5",
+				"GCC_DYNAMIC_NO_PIC": "NO",
+				"TVOS_DEPLOYMENT_TARGET": "",
+				"XROS_DEPLOYMENT_TARGET": "",
+				"ARCHS": "$(ARCHS_STANDARD)",
 				"HEADER_SEARCH_PATHS": [
 					"$(OF_CORE_HEADERS)",
 					"src"
 				],
-				"GCC_DYNAMIC_NO_PIC": "NO",
-				"FRAMEWORK_SEARCH_PATHS": "$(inherited)",
-				"COPY_PHASE_STRIP": "NO",
-				"ARCHS": "$(ARCHS_STANDARD)",
 				"OTHER_LDFLAGS": [
 					"$(OF_CORE_LIBS)",
 					"$(OF_CORE_FRAMEWORKS)",
 					"$(LIB_OF_DEBUG)"
 				],
-				"LIBRARY_SEARCH_PATHS": "$(inherited)"
+				"FRAMEWORK_SEARCH_PATHS": "$(inherited)",
+				"WATCHOS_DEPLOYMENT_TARGET": "",
+				"IPHONEOS_DEPLOYMENT_TARGET": "",
+				"DRIVERKIT_DEPLOYMENT_TARGET": ""
 			},
 			"name": "Debug"
 		},
@@ -238,6 +223,33 @@
 			"buildActionMask": "2147483647",
 			"files": [],
 			"runOnlyForDeploymentPostprocessing": "0"
+		},
+		"E4B69B610A3A1757003C02F2": {
+			"baseConfigurationReference": "E4EB6923138AFD0F00A09F29",
+			"isa": "XCBuildConfiguration",
+			"buildSettings": {
+				"IPHONEOS_DEPLOYMENT_TARGET": "",
+				"COPY_PHASE_STRIP": "YES",
+				"LIBRARY_SEARCH_PATHS": "$(inherited)",
+				"MACOSX_DEPLOYMENT_TARGET": "11.5",
+				"TVOS_DEPLOYMENT_TARGET": "",
+				"XROS_DEPLOYMENT_TARGET": "",
+				"ARCHS": "$(ARCHS_STANDARD)",
+				"HEADER_SEARCH_PATHS": [
+					"$(OF_CORE_HEADERS)",
+					"src"
+				],
+				"OTHER_LDFLAGS": [
+					"$(OF_CORE_LIBS)",
+					"$(OF_CORE_FRAMEWORKS)",
+					"$(LIB_OF)"
+				],
+				"FRAMEWORK_SEARCH_PATHS": "$(inherited)",
+				"WATCHOS_DEPLOYMENT_TARGET": "",
+				"baseConfigurationReference": "E4EB6923138AFD0F00A09F29",
+				"DRIVERKIT_DEPLOYMENT_TARGET": ""
+			},
+			"name": "Release"
 		},
 		"E4B69B4D0A3A1720003C02F2": {
 			"isa": "XCConfigurationList",

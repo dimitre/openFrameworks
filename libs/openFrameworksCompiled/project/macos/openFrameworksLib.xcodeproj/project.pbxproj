@@ -881,7 +881,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				OBJROOT = "$(SRCROOT)/../../lib/macos/build/debug/";
 				PRODUCT_NAME = openFrameworksDebug;
-				SDKROOT = "";
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -907,7 +907,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				OBJROOT = "$(SRCROOT)/../../lib/macos/build/release/";
 				PRODUCT_NAME = openFrameworks;
-				SDKROOT = "";
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
