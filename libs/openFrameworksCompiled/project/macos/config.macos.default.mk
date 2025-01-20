@@ -70,7 +70,7 @@ PLATFORM_REQUIRED_ADDONS =
 ##########################################################################################
 
 ifndef MAC_OS_MIN_VERSION
-	MAC_OS_MIN_VERSION = 10.15
+	MAC_OS_MIN_VERSION = 11.5
 endif
 
 ifndef MAC_OS_STD_LIB
@@ -176,7 +176,7 @@ endif
 #PLATFORM_CFLAGS += -arch i386
 
 # other osx
-PLATFORM_CFLAGS += -fpascal-strings
+# PLATFORM_CFLAGS += -fpascal-strings
 
 ifdef MAC_OS_SDK_ROOT
 	PLATFORM_CFLAGS += -isysroot $(MAC_OS_SDK_ROOT)
