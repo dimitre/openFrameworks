@@ -98,7 +98,7 @@ unzipAddons() {
 		addon=${libaddon#*:}
 	    # printf "%s goes to %s.\n" "$lib" "$addon"
 		OUTFOLDER=${OF_FOLDER}/addons/${addon}/libs/${lib}
-		executa unzip -qq -o _download/oflib_${lib}_${PLATFORM}.zip -d ${OUTFOLDER}
+		executa unzip -qq -o -d ${OUTFOLDER} _download/oflib_${lib}_${PLATFORM}.zip
 	done
 }
 
