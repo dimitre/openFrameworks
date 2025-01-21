@@ -17,16 +17,13 @@ using std::vector;
 #include <fmt/format.h>
 #include <fmt/ranges.h>
 #include <yaml-cpp/yaml.h>
-// const fs::path templatesFolder = "scripts/templates";
+
+// namespace fs = std::filesystem;
+namespace fs = std::__fs::filesystem;
+
+const fs::path templatesFolder = "scripts/templates";
 
 int main(const int argc, const char* argv[]) {
-    cout << "ok" << endl;
+    cout << "ok 213 " << templatesFolder << endl;
     return 0;
 }
-/*
-we now have platforms (operational systems?) (windows, linux)
-we have targets (ios, macos, android etc.)
-we have IDEs tied to platforms (xcode, visual studio)
-and IDEs attending multiple platforms/targets (VSCode, ZED)
-and build systems (Make) attending multiple platforms/targets
- */
