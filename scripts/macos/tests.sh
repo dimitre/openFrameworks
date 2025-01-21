@@ -1,38 +1,35 @@
 #!/bin/bash
-#set -ev
+set -e
+
 cd "$(dirname "$0")"
-
-OF_FOLDER=../..
-PLATFORM=macos
-LIBS_FOLDER=${OF_FOLDER}/libs/${PLATFORM}
-
-COLOR='\033[0;32m'
-COLOR2='\033[0;34m'
-NC='\033[0m' # No Color
 
 section() {
     printf "⚡️ ${COLOR} ${@} ${NC}\n\r"
 }
 
+OF_FOLDER=../..
+PLATFORM=macos
+LIBS_FOLDER=${OF_FOLDER}/libs/${PLATFORM}
 section OK tests
 cd $OF_FOLDER
 
-echo "##[group]Building emptyExample"
-cp scripts/templates/macos/Makefile examples/templates/emptyExample/
-cp scripts/templates/macos/config.make examples/templates/emptyExample/
-cd examples/templates/emptyExample/
-make -j
-cd ../../..
-echo "##[endgroup]"
+pwd
 
-echo "##[group]Building allAddonsExample"
-cd $ROOT
-cp scripts/templates/macos/Makefile examples/templates/allAddonsExample/
-cp scripts/templates/macos/config.make examples/templates/allAddonsExample/
-cd examples/templates/allAddonsExample/
-cd ../../..
-make -j
-echo "##[endgroup]"
+COLOR='\033[0;32m'
+COLOR2='\033[0;34m'
+NC='\033[0m' # No Color
+
+
+function buildExample() {
+    echo "##[group]Building $1"
+    cp scripts/templates/macos/{Makefile,config.make} examples/templates/$1/
+    # cp scripts/templates/macos/config.make examples/templates/$1/
+    make -j -C examples/templates/$1/
+    echo "##[endgroup]"
+}
+
+buildExample emptyExample
+# buildExample allAddonsExample
 
 echo "##[group]Running unit tests"
 cd tests

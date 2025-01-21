@@ -419,7 +419,7 @@ afterplatform: $(TARGET_NAME)
 	@if [ -f of.icns ]; then cp of.icns bin/$(BIN_NAME).app/Contents/Resources/; else cp $(OF_LIBS_PATH)/openFrameworksCompiled/project/macos/of.icns bin/$(BIN_NAME).app/Contents/Resources/; fi
 	@sed -i '' 's/\$${ICON_NAME}/of.icns/g' bin/$(BIN_NAME).app/Contents/Info.plist
  else
-	@if [ -f of_debug.icns ]; then cp of_debug.icns bin/$(BIN_NAME).app/Contents/Resources/; else cp $(OF_LIBS_PATH)/openFrameworksCompiled/project/osx/of_debug.icns bin/$(BIN_NAME).app/Contents/Resources/; fi
+	@if [ -f of_debug.icns ]; then cp of_debug.icns bin/$(BIN_NAME).app/Contents/Resources/; else cp $(OF_LIBS_PATH)/openFrameworksCompiled/project/macos/of_debug.icns bin/$(BIN_NAME).app/Contents/Resources/; fi
 	@sed -i '' 's/\$${ICON_NAME}/of_debug.icns/g' bin/$(BIN_NAME).app/Contents/Info.plist
  endif
 
