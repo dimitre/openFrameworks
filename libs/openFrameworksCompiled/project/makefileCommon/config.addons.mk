@@ -424,24 +424,26 @@ VPATH += $(call uniq, $(ADDON_PATHS))
 
 
 # DIMITRAO
-FOLDERS=$(addsuffix /src/, $(TEST_PROJECT_ADDONS_PATHS))
-FOLDERS+= $(addsuffix /src/*/, $(TEST_PROJECT_ADDONS_PATHS))
-FOLDERS+=$(addsuffix /libs/*/include/, $(TEST_PROJECT_ADDONS_PATHS))
-FOLDERS+=$(addsuffix /libs/*/include/*/., $(TEST_PROJECT_ADDONS_PATHS))
-FOLDERS+=$(addsuffix /libs/*/, $(TEST_PROJECT_ADDONS_PATHS))
-FOLDERSOK = $(call uniq, $(dir $(wildcard $(FOLDERS))))
-
-$(info --------)
-# $(info FOLDERS = $(FOLDERS))
+# FOLDERS=$(addsuffix /src/, $(TEST_PROJECT_ADDONS_PATHS))
+# FOLDERS+= $(addsuffix /src/*/, $(TEST_PROJECT_ADDONS_PATHS))
+# FOLDERS+=$(addsuffix /libs/*/include/, $(TEST_PROJECT_ADDONS_PATHS))
+# FOLDERS+=$(addsuffix /libs/*/include/*/., $(TEST_PROJECT_ADDONS_PATHS))
+# FOLDERS+=$(addsuffix /libs/*/, $(TEST_PROJECT_ADDONS_PATHS))
+# FOLDERSOK = $(call uniq, $(dir $(wildcard $(FOLDERS))))
 # $(info --------)
-$(info FOLDERSOK = $(FOLDERSOK))
-$(info --------)
+# $(info FOLDERSOK = $(FOLDERSOK))
+# # FIXME: optiomization possible. to apply only this filter to src/* line
+# FOLDERSOK2 = $(filter-out $(addprefix $(addon)/,$(ADDON_SOURCES_EXCLUDE)),$(FOLDERSOK))
+# FOLDERSOK3 = $(filter-out $(addprefix $(addon)/,$(ADDON_INCLUDES_EXCLUDE)),$(FOLDERSOK2))
+# $(info --------)
+# $(info FOLDERSOK = $(FOLDERSOK3))
+# $(info --------)
 
-# PROJECT_ADDONS_INCLUDES=$(FOLDERSOK)
+# PROJECT_ADDONS_INCLUDES=$(FOLDERSOK2)
 
-$(info --------)
-$(info PROJECT_ADDONS_INCLUDES = $(PROJECT_ADDONS_INCLUDES))
-$(info --------)
+# $(info --------)
+# $(info PROJECT_ADDONS_INCLUDES = $(PROJECT_ADDONS_INCLUDES))
+# $(info --------)
 
 # $(error OW OW OW)
 

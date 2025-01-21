@@ -86,7 +86,7 @@ ifndef MAC_OS_CPP_VER
 endif
 
 # Link against libstdc++ to silence tr1/memory errors on latest versions of osx
-PLATFORM_CFLAGS = -stdlib=$(MAC_OS_STD_LIB)
+# PLATFORM_CFLAGS = -stdlib=$(MAC_OS_STD_LIB)
 
 # Warning Flags (http://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html)
 PLATFORM_CFLAGS += -Wall -Werror=return-type
@@ -207,10 +207,12 @@ endif
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
 
-PLATFORM_LDFLAGS = -stdlib=$(MAC_OS_STD_LIB)
+# PLATFORM_LDFLAGS = -stdlib=$(MAC_OS_STD_LIB)
 #PLATFORM_LDFLAGS += -arch i386
 # PLATFORM_LDFLAGS += -lcurl
-PLATFORM_LDFLAGS += -mmacosx-version-min=$(MAC_OS_MIN_VERSION) -v
+# PLATFORM_LDFLAGS += -mmacosx-version-min=$(MAC_OS_MIN_VERSION) -v
+# FIXME: Dimitre test. remove
+# PLATFORM_LDFLAGS += -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/
 
 ##########################################################################################
 # PLATFORM OPTIMIZATION CFLAGS
@@ -265,10 +267,8 @@ ifneq ($(USE_GST),1)
 endif
 PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/app/ofAppEGLWindow.cpp
 
-
 # third party
-PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/boost/%
-
+# PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/boost/%
 
 # ifeq ($(USE_FMOD),0)
 PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/fmod/%

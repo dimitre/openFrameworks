@@ -433,27 +433,33 @@ ifdef MAKEFILE_DEBUG
     $(info ===================compile.project.make=============================)
 endif
 
-ifdef PROJECT_CXX
-	CXX = $(PROJECT_CXX)
-endif
-
 ifdef PLATFORM_CXX
 	CXX ?= $(PLATFORM_CXX)
-endif
-
-ifdef PROJECT_CC
-	CC = $(PROJECT_CC)
 endif
 
 ifdef PLATFORM_CC
 	CC ?= $(PLATFORM_CC)
 endif
 
-ifdef ${ccache}
+ifdef PROJECT_CXX
+	CXX = $(PROJECT_CXX)
+endif
+
+ifdef PROJECT_CC
+	CC = $(PROJECT_CC)
+endif
+
+# Dimitre test, 21 jan 2025
+ifdef PROJECT_LD
+	LD = $(PROJECT_LD)
+endif
+
+
+# ifdef ${ccache}
 $(info 💿 Using CCACHE -- config.project.mk )
 	CXX := ${ccache} $(CXX)
 	CC := ${ccache} $(CXX)
-endif
+# endif
 
 ifdef PROJECT_RESOURCE_COMPILER
     RESOURCE_COMPILER ?= $(PROJECT_RESOURCE_COMPILER)

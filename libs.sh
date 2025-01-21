@@ -1,6 +1,7 @@
 #!/bin/bash
 cd "$(dirname "$0")"
 
+VERSION=v0.12.1
 OF_FOLDER=.
 PLATFORM=macos
 LIBS_FOLDER=${OF_FOLDER}/libs/${PLATFORM}
@@ -12,22 +13,16 @@ NC='\033[0m' # No Color
 section() {
     printf "⚡️ ${COLOR} ${@} ${NC}\n\r"
 }
-
 sectionOK() {
     printf "💾 ${COLOR} ${@} ${NC}\n\r"
 }
-
-# this one echoes and invokes a command. it is useful if we want to dry run script.
-executa() {
+executa2() {
+    printf "✅ ${COLOR2} ${@} ${NC}\n\r"
+}
+executa() { #echoes and execute. dry run is "executa2"
     printf "✅ ${COLOR2} ${@} ${NC}\n\r"
     $@
 }
-
-executa2() {
-    printf "✅ ${COLOR2} ${@} ${NC}\n\r"
-    # $@
-}
-
 
 checkWget2() {
 section Check Wget2
@@ -40,34 +35,29 @@ else
 fi
 }
 
-
-
 CORELIBS=( brotli cairo FreeImage freetype glew glfw glm json libpng pugixml tess2 uriparser utfcpp zlib openssl curl )
-
 # FIXME: TODO: add svgtiny to ofLibs and here
-ADDONLIBS=( assimp libusb libxml2 opencv svgtiny )
+ADDONLIBS=( assimp libusb libxml2 opencv )
+#svgtiny
 ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
 
+DOWNLOAD="${OF_FOLDER}/_download_${VERSION}"
+echo ${DOWNLOAD}
 
-
-# echo ${CORELIBS[@]}
-# echo ${ADDONLIBS[@]}
-# echo ${ALLLIBS[@]}
-# LIBS=( assimp brotli cairo FreeImage freetype glew glfw glm json libpng libusb libxml2 opencv pugixml svgtiny tess2 uriparser utfcpp zlib openssl curl )
+# exit 1
 
 getlink() {
     for LIBNAME in ${ALLLIBS[@]}
     do
-        DOWNLOAD=oflib_${LIBNAME}_${PLATFORM}.zip
-        PARAMS+=" "https://github.com/dimitre/ofLibs/releases/download/v0.12.1/${DOWNLOAD}
+        PARAMS+=" "https://github.com/dimitre/ofLibs/releases/download/${VERSION}/oflib_${LIBNAME}_${PLATFORM}.zip
     done
-    executa wget2 --clobber=off ${PARAMS} -P _download
+    executa wget2 --clobber=off ${PARAMS} -P ${DOWNLOAD}
 }
 
 unzipCore() {
 	for LIBNAME in ${CORELIBS[@]}
 	do
-	    filename=_download/oflib_${LIBNAME}_${PLATFORM}.zip
+	    filename="${DOWNLOAD}/oflib_${LIBNAME}_${PLATFORM}.zip"
 		# executa unzip -o ${filename} -d ${LIBS_FOLDER}
 		# -q = quiet -qq = quieter
 		executa unzip -qq -o ${filename} -d ${LIBS_FOLDER}
@@ -76,11 +66,9 @@ unzipCore() {
 	executa rm -rf ${LIBS_FOLDER}/*.{txt,md,MIT}
 	executa rm -rf ${LIBS_FOLDER}/{LICENSE,COPYING}
 	executa rm -rf ${LIBS_FOLDER}/LICENSES
-
 	executa mv ${LIBS_FOLDER}/lib/${PLATFORM}/* ${LIBS_FOLDER}/lib/
 	executa rm -rf ${LIBS_FOLDER}/lib/${PLATFORM}
 }
-
 
 LIBADDONS=(
 	"assimp:ofxAssimpModelLoader"
@@ -95,60 +83,17 @@ unzipAddons() {
 	for libaddon in "${LIBADDONS[@]}" ; do
 		lib=${libaddon%%:*}
 		addon=${libaddon#*:}
-	    # printf "%s goes to %s.\n" "$lib" "$addon"
 		OUTFOLDER=${OF_FOLDER}/addons/${addon}/libs/${lib}
-		mkdir -p ${OUTFOLDER}
-		executa unzip -qq -o -d ${OUTFOLDER} _download/oflib_${lib}_${PLATFORM}.zip
+		executa mkdir -p ${OUTFOLDER}
+		executa unzip -qq -o -d ${OUTFOLDER} ${DOWNLOAD}/oflib_${lib}_${PLATFORM}.zip
 	done
 }
 
 
 sectionOK OpenFrameworks install ofLibs
-
 checkWget2
-executa mkdir -p _download
+executa mkdir -p ${DOWNLOAD}
 getlink
 unzipCore
 unzipAddons
-
-# unzipall() {
-#     for filename in _download/*.zip; do
-#         echo ${filename}
-#         executa unzip -o ${filename} -d _download/macos
-#     done
-# }
-
-# getlink
-# unzipall
-# executa mv _download/macos/lib/macos/*.a _download/macos/lib/
-
-
-# getlink assimp brotli cairo curl FreeImage freetype glew glfw glm json libpng libusb libxml2 opencv pugixml svgtiny tess2 uriparser utfcpp zlib
-
-
-instala() {
-    LIBNAME=$@
-    section Installing ${LIBNAME}
-    DOWNLOAD=oflib_${LIBNAME}_${PLATFORM}.zip
-    # executa ${W} https://github.com/dimitre/ofLibs/releases/download/v0.12.1/${DOWNLOAD} -O ${DOWNLOAD}
-    executa ${W} https://github.com/dimitre/ofLibs/releases/download/v0.12.1/${DOWNLOAD} &&
-    OUTFOLDER=${LIBS_FOLDER}/${LIBNAME}
-    # OUTFOLDER=${LIBS_FOLDER}/macos
-
-    for libaddon in "${LIBADDONS[@]}" ; do
-        LIB=${libaddon%%:*}
-        ADDON=${libaddon#*:}
-        if [[ ${LIBNAME} == ${LIB} ]]
-        then
-            printf "%s likes to %s.\n" "$LIB" "$ADDON"
-            OUTFOLDER=${OF_FOLDER}/addons/${ADDON}/libs/${LIB}
-        fi
-    done
-
-    rm -rf ${OUTFOLDER}
-    executa unzip -o ${DOWNLOAD} -d ${OUTFOLDER}
-}
-
-
-
 sectionOK Install ofLibs done

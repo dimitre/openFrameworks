@@ -340,7 +340,6 @@ $(info 💾 OF_CORE_THIRDPARTY_HEADER_PATHS = $(OF_CORE_THIRDPARTY_HEADER_PATHS)
 $(info 💾 OF_CORE_HEADER_PATHS = $(OF_CORE_HEADER_PATHS))
 $(info 💾 OF_CORE_INCLUDES_CFLAGS = $(OF_CORE_INCLUDES_CFLAGS))
 endif
-# $(error OW OW OW)
 
 ################################################################################
 # OF CORE DEFINES
