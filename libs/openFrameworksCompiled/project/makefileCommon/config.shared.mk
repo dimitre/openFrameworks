@@ -201,6 +201,7 @@ endif
 
 ################################################################################
 # print debug information if needed
+# MAKEFILE_DEBUG=1
 ifdef MAKEFILE_DEBUG
     $(info =================== config.mk paths =============================)
     $(info OF_ADDONS_PATH=$(OF_ADDONS_PATH))
@@ -237,7 +238,7 @@ ifdef ABI_PATH
 	ABI_LIB_SUBPATH=$(PLATFORM_LIB_SUBPATH)/$(strip $(ABI_PATH))
 else
 	#hack to get makefiles working again
-	ifeq ($(PLATFORM_LIB_SUBPATH),osx)
+	ifeq ($(PLATFORM_LIB_SUBPATH),macos)
 		ABI_LIB_SUBPATH=macos
 		ABI_LIB_SUBPATH2=osx
 	else

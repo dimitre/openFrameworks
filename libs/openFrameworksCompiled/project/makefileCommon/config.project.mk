@@ -357,15 +357,16 @@ OF_PROJECT_SOURCE_FILES = $(shell $(FIND) $(OF_PROJECT_SOURCE_PATHS) -maxdepth 1
 
 OF_PROJECT_INCLUDES_CFLAGS := $(addprefix -I,$(filter-out $(PROJECT_INCLUDE_EXCLUSIONS),$(OF_PROJECT_SOURCE_PATHS)))
 
-$(info 👀 ------)
-$(info PROJECT_ADDONS_INCLUDES $(PROJECT_ADDONS_INCLUDES))
-$(info 👀 ------)
+# $(info 👀 ------)
+# $(info PROJECT_ADDONS_INCLUDES $(PROJECT_ADDONS_INCLUDES))
+# $(info 👀 ------)
 
 
 OF_ADDON_INCLUDES_CFLAGS += $(addprefix -I,$(filter-out $(PROJECT_INCLUDE_EXCLUSIONS),$(PROJECT_ADDONS_INCLUDES)))
-$(info 👀 ------)
-$(info OF_ADDON_INCLUDES_CFLAGS $(OF_ADDON_INCLUDES_CFLAGS))
-$(info 👀 ------)
+# $(info 👀 ------)
+# $(info OF_ADDON_INCLUDES_CFLAGS $(OF_ADDON_INCLUDES_CFLAGS))
+# $(info 👀 ------)
+
 ifdef MAKEFILE_DEBUG
     $(info ---OF_PROJECT_INCLUDES_CFLAGS---)
     $(foreach v, $(OF_PROJECT_INCLUDES_CFLAGS),$(info $(v)))
@@ -381,6 +382,8 @@ endif
 # TODO - + frameworks?
 OF_PROJECT_LIBS :=
 OF_PROJECT_LIBS += $(PROJECT_ADDONS_LIBS)
+
+# $(info ZZZ $(OF_PROJECT_LIBS))
 #OF_PROJECT_LIBS_LDFLAGS = $(addprefix -l,$(OF_PROJECT_LIBS))
 
 ################################################################################
@@ -451,8 +454,10 @@ endif
 
 # Dimitre test, 21 jan 2025
 ifdef PROJECT_LD
-	LD = $(PROJECT_LD)
+	LINKER = $(PROJECT_LD)
 endif
+
+LINKER ?= $(CXX) -fuse-ld=ld
 
 
 # ifdef ${ccache}

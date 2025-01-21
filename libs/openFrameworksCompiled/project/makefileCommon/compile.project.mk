@@ -10,6 +10,7 @@ endif
 
 include $(OF_SHARED_MAKEFILES_PATH)/config.shared.mk
 
+
 # Name TARGET
 ifeq ($(findstring Debug,$(MAKECMDGOALS)),Debug)
 	TARGET_NAME = Debug
@@ -120,7 +121,7 @@ endif
 .PHONY: all Debug Release after clean CleanDebug CleanRelease help force
 
 # $(info MAKEFLAGS XXX = ${MAKEFLAGS})
-JOBS = -j2
+JOBS = -j
 
 Release:
 	@echo Compiling OF library for Release
@@ -128,11 +129,13 @@ Release:
 	@echo
 	@echo
 	@echo Compiling $(APPNAME) for Release
+
 ifndef ABIS_TO_COMPILE_RELEASE
 	@$(MAKE) $(JOBS) ReleaseABI
 else
 	@$(foreach abi,$(ABIS_TO_COMPILE_RELEASE),$(MAKE) $(JOBS) ReleaseABI ABI=$(abi) &&) echo
 endif
+
 
 
 
@@ -163,6 +166,7 @@ ifndef ABIS_TO_COMPILE_DEBUG
 else
 	@$(foreach abi,$(ABIS_TO_COMPILE_DEBUG),$(MAKE) DebugABI ABI=$(abi) &&) echo
 endif
+
 
 ReleaseABI: $(TARGET)
 ifneq ($(strip $(PROJECT_ADDONS_DATA)),)
@@ -207,6 +211,7 @@ endif
 $(OF_PROJECT_OBJ_OUTPUT_PATH).compiler_flags: force
 	@mkdir -p $(OF_PROJECT_OBJ_OUTPUT_PATH)
 	@if [ "$(strip $(OPTIMIZATION_CFLAGS) $(CFLAGS) $(CXXFLAGS) $(PROJECT_INCLUDE_CFLAGS) $(OPTIMIZATION_LDFLAGS) $(LDFLAGS))" != "$(strip $$(cat $@ 2>/dev/null))" ]; then echo $(strip $(OPTIMIZATION_CFLAGS) $(CFLAGS) $(CXXFLAGS) $(PROJECT_INCLUDE_CFLAGS) $(OPTIMIZATION_LDFLAGS) $(LDFLAGS)) > $@; fi
+
 
 $(OF_ADDONS_PATH)/$(OF_PROJECT_OBJ_OUTPUT_PATH).compiler_flags: force
 	@mkdir -p $(OF_PROJECT_OBJ_OUTPUT_PATH)
@@ -262,7 +267,6 @@ $(OF_PROJECT_OBJ_OUTPUT_PATH)%.res: $(ICON)
 
 
 
-
 # Rules to compile the project external sources
 $(OF_PROJECT_OBJ_OUTPUT_PATH)%.o: $(PROJECT_EXTERNAL_SOURCE_PATHS)/%.cpp $(OF_PROJECT_OBJ_OUTPUT_PATH).compiler_flags
 	@echo "Compiling" $<
@@ -298,6 +302,7 @@ $(OF_PROJECT_OBJ_OUTPUT_PATH)%.o: $(PROJECT_EXTERNAL_SOURCE_PATHS)/%.S $(OF_PROJ
 	@echo "Compiling" $<
 	@mkdir -p $(@D)
 	$(CC) -c $(OPTIMIZATION_CFLAGS) $(CFLAGS) $(PROJECT_INCLUDE_CFLAGS) -MMD -MP -MF $(OF_PROJECT_OBJ_OUTPUT_PATH)$*.d -MT $(OF_PROJECT_OBJ_OUTPUT_PATH)$*.o -o $@ -c $<
+
 
 
 
@@ -410,7 +415,7 @@ $(TARGET): $(OF_PROJECT_OBJS) $(OF_PROJECT_RESOURCES) $(OF_PROJECT_ADDONS_OBJS) 
 	@mkdir -p $(@D)
 # $(info $(LD))
 # $(LD)
-	$(LD) -o $@ $(OPTIMIZATION_LDFLAGS) $(OF_PROJECT_OBJS) $(OF_PROJECT_RESOURCES) $(OF_PROJECT_ADDONS_OBJS) $(TARGET_LIBS) $(OF_PROJECT_LIBS) $(LDFLAGS) $(OF_CORE_LIBS) $(OF_LIBS_PATH)/macos/lib/*.a
+	$(LINKER) -o $@ $(OPTIMIZATION_LDFLAGS) $(OF_PROJECT_OBJS) $(OF_PROJECT_RESOURCES) $(OF_PROJECT_ADDONS_OBJS) $(TARGET_LIBS) $(OF_PROJECT_LIBS) $(LDFLAGS) $(OF_CORE_LIBS) $(OF_LIBS_PATH)/macos/lib/*.a
 
 
 
@@ -437,6 +442,7 @@ else
 endif
 endif
 	@rm -rf bin/libs
+
 
 after: $(TARGET_NAME)
 	-cp ${OF_LIBS_PATH}/*/lib/${PLATFORM_LIB_SUBPATH}/*.${SHARED_LIB_EXTENSION} bin/ ; true
@@ -518,3 +524,5 @@ AndroidDebug:
 
 CleanAndroid:
 	$(MAKE) clean PLATFORM_OS=Android
+
+# $(error ARWIL)

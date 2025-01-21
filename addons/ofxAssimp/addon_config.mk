@@ -20,13 +20,3 @@ meta:
 	ADDON_AUTHOR = OF Team
 	ADDON_TAGS = "3D" "assimp"
 	ADDON_URL = http://github.com/openframeworks/openFrameworks
-
-
-# ios:
-# 	ADDON_LIBS=
-	# ADDON_LIBS=../ofxAssimpModelLoader/libs/assimp/lib/macos/assimp.xcframework/ios-arm64/assimp.a
-	# ADDON_LIBS=../ofxAssimpModelLoader/libs/assimp/lib/macos/assimp.xcframework/ios-arm64_x86_64-simulator/assimp.a
-
-# osx:
-	# ADDON_LIBS=
-	# ADDON_LIBS=../ofxAssimpModelLoader/libs/assimp/lib/macos/assimp.xcframework/macos-arm64_x86_64/assimp.a

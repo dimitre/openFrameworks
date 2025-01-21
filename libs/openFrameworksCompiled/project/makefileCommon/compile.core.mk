@@ -51,6 +51,7 @@ $(info 💿 Using CCACHE - compile.core.mk )
 	CC := ${ccache} $(CXX)
 endif
 
+$(info ------)
 $(info 💾 CXX = $(CXX))
 $(info 💾 CC = $(CC))
 $(info 💾 LD = $(LD))

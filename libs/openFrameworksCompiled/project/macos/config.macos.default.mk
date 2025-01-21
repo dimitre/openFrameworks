@@ -271,9 +271,9 @@ PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/app/ofAppEGLWindow.cp
 # PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/boost/%
 
 # ifeq ($(USE_FMOD),0)
-PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/fmod/%
-PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/sound/ofFmodSoundPlayer.cpp
-PLATFORM_CFLAGS += -DUSE_FMOD=0
+# PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/fmod/%
+# PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/sound/ofFmodSoundPlayer.cpp
+# PLATFORM_CFLAGS += -DUSE_FMOD=0
 # endif
 
 ##########################################################################################
@@ -402,6 +402,7 @@ PLATFORM_FRAMEWORKS_SEARCH_PATHS = /System/Library/Frameworks
 ################################################################################
 #PLATFORM_CC=
 
+
 afterplatform: $(TARGET_NAME)
 	@rm -rf bin/$(BIN_NAME).app
 	@mkdir -p bin/$(BIN_NAME).app
@@ -435,6 +436,7 @@ afterplatform: $(TARGET_NAME)
 # 	@mkdir -p bin/$(BIN_NAME).app/Contents/Frameworks
 # 	@cp $(OF_LIBS_PATH)/*/lib/$(PLATFORM_LIB_SUBPATH)/*.$(SHARED_LIB_EXTENSION) bin/$(BIN_NAME).app/Contents/Frameworks/;
 # endif
+
 
 	@echo
 	@echo "     compiling done"

@@ -42,8 +42,8 @@ for group in *; do
         for test in $group/*; do
             if [ -d $test ]; then
                 cd $test
-                cp ../../../scripts/templates/osx/Makefile .
-                cp ../../../scripts/templates/osx/config.make .
+                cp ../../../scripts/templates/macos/Makefile .
+                cp ../../../scripts/templates/macos/config.make .
                 make -j2 Debug
                 make RunDebug
 				errorcode=$?
