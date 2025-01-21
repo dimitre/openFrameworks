@@ -1,89 +1,14 @@
-
-##########################################################################################
-# CONFIGURE CORE PLATFORM  MAKEFILE
-#   This file is where we make platform and architecture specific configurations.
-#   This file can be specified for a generic architecture or can be defined as variants.
-#    For instance, normally this file will be located in a platform specific subpath such
-#   as $(OF_ROOT)/libs/openFrameworksComplied/linux64.
-#
-#   This file will then be a generic platform file like:
-#
-#        configure.core.linux64.default.make
-#
-#   Or it can specify a specific platform variant like:
-#
-#        configure.core.armv6l.raspberrypi.make
-#
-##########################################################################################
-
-##########################################################################################
-# PLATFORM SPECIFIC CHECKS
-#   This is a platform defined section to create internal flags to enable or disable
-#   the addition of various features within this makefile.  For instance, on Linux,
-#   we check to see if there GTK+-2.0 is defined, allowing us to include that library
-#   and generate DEFINES that are interpreted as ifdefs within the openFrameworks
-#   core source code.
-##########################################################################################
-
 PLATFORM_PROJECT_DEBUG_BIN_NAME=$(APPNAME)_debug
 PLATFORM_PROJECT_RELEASE_BIN_NAME=$(APPNAME)
 PLATFORM_RUN_COMMAND = cd bin/$(BIN_NAME).app/Contents/MacOS/;./$(BIN_NAME)
 
-##########################################################################################
-# PLATFORM DEFINES
-#   Create a list of DEFINES for this platform.  The list will be converted into
-#   CFLAGS with the "-D" flag later in the makefile.  An example of fully qualified flag
-#   might look something like this: -DTARGET_OPENGLES2
-#
-#   DEFINES are used throughout the openFrameworks code, especially when making
-#   #ifdef decisions for cross-platform compatibility.  For instance, when chosing a
-#   video playback framework, the openFrameworks base classes look at the DEFINES
-#   to determine what source files to include or what default player to use.
-#
-# Note: Be sure to leave a leading space when using a += operator to add items to the list
-##########################################################################################
-
 PLATFORM_DEFINES = __MACOSX_CORE__
-
-##########################################################################################
-# PLATFORM REQUIRED ADDON
-#   This is a list of addons required for this platform.  This list is used to EXCLUDE
-#   addon source files when compiling projects, while INCLUDING their header files.
-#   During core library compilation, this is used to include required addon header files
-#   as needed within the core.
-#
-#   For instance, if you are compiling for Android, you would add ofxAndroid here.
-#   If you are compiling for Raspberry Pi, you would add ofxRaspberryPi here.
-#
-# Note: Be sure to leave a leading space when using a += operator to add items to the list
-##########################################################################################
-
 PLATFORM_REQUIRED_ADDONS =
 
-##########################################################################################
-# PLATFORM CFLAGS
-#   This is a list of fully qualified CFLAGS required when compiling for this platform.
-#   These flags will always be added when compiling a project or the core library.  These
-#   Flags are presented to the compiler AFTER the PLATFORM_OPTIMIZATION_CFLAGS below.
-#
-# Note: Be sure to leave a leading space when using a += operator to add items to the list
-##########################################################################################
-
-ifndef MAC_OS_MIN_VERSION
-	MAC_OS_MIN_VERSION = 11.5
-endif
-
-ifndef MAC_OS_STD_LIB
-	MAC_OS_STD_LIB = libc++
-endif
-
-ifndef MAC_OS_C_VER
-    MAC_OS_C_VER = -std=c17
-endif
-
-ifndef MAC_OS_CPP_VER
-    MAC_OS_CPP_VER = -std=c++2b
-endif
+MAC_OS_MIN_VERSION ?= 11.5
+MAC_OS_STD_LIB ?= libc++
+MAC_OS_C_VER ?= -std=c17
+MAC_OS_CPP_VER ?= -std=c++2b
 
 # Link against libstdc++ to silence tr1/memory errors on latest versions of osx
 # PLATFORM_CFLAGS = -stdlib=$(MAC_OS_STD_LIB)
@@ -193,39 +118,10 @@ PLATFORM_CXXFLAGS += $(MAC_OS_CPP_VER)
 # Enable ARC
 PLATFORM_CFLAGS += -fobjc-arc
 
-
 ifeq ($(USE_GST),1)
 	PLATFORM_CFLAGS += -I/Library/Frameworks/Gstreamer.framework/Headers
 endif
 
-
-################################################################################
-# PLATFORM LDFLAGS
-#   This is a list of fully qualified LDFLAGS required when linking for this
-#   platform. These flags will always be added when linking a project.
-#
-#   Note: Leave a leading space when adding list items with the += operator
-################################################################################
-
-# PLATFORM_LDFLAGS = -stdlib=$(MAC_OS_STD_LIB)
-#PLATFORM_LDFLAGS += -arch i386
-# PLATFORM_LDFLAGS += -lcurl
-# PLATFORM_LDFLAGS += -mmacosx-version-min=$(MAC_OS_MIN_VERSION) -v
-# FIXME: Dimitre test. remove
-# PLATFORM_LDFLAGS += -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/
-
-##########################################################################################
-# PLATFORM OPTIMIZATION CFLAGS
-#   These are lists of CFLAGS that are target-specific.  While any flags could be
-#   conditionally added, they are usually limited to optimization flags.  These flags are
-#   added BEFORE the PLATFORM_CFLAGS.
-#
-#    PLATFORM_OPTIMIZATION_CFLAGS_RELEASE flags are only applied to RELEASE targets.
-#
-#    PLATFORM_OPTIMIZATION_CFLAGS_DEBUG flags are only applied to DEBUG targets.
-#
-# Note: Be sure to leave a leading space when using a += operator to add items to the list
-##########################################################################################
 
 # RELEASE Debugging options (http://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html)
 PLATFORM_OPTIMIZATION_CFLAGS_RELEASE = -O3
@@ -329,14 +225,6 @@ PLATFORM_SHARED_LIBRARIES =
 
 PLATFORM_LIBRARY_SEARCH_PATHS =
 
-##########################################################################################
-# PLATFORM FRAMEWORKS
-#   These are a list of platform frameworks.
-#   These are used exclusively with Darwin/OSX.
-#
-# Note: Be sure to leave a leading space when using a += operator to add items to the list
-##########################################################################################
-
 PLATFORM_FRAMEWORKS =
 PLATFORM_FRAMEWORKS += Accelerate
 PLATFORM_FRAMEWORKS += AGL
@@ -363,13 +251,6 @@ ifeq ($(USE_GST),1)
 	PLATFORM_FRAMEWORKS += GStreamer
 endif
 
-##########################################################################################
-# PLATFORM FRAMEWORK SEARCH PATHS
-#   These are a list of platform framework search paths.
-#   These are used exclusively with Darwin/OSX.
-#
-# Note: Be sure to leave a leading space when using a += operator to add items to the list
-##########################################################################################
 
 PLATFORM_FRAMEWORKS_SEARCH_PATHS = /System/Library/Frameworks
 
@@ -411,7 +292,7 @@ afterplatform: $(TARGET_NAME)
 	@mkdir -p bin/$(BIN_NAME).app/Contents/Resources
 
 # Use the openFrameworks-Info.plist as the default. Feel free to edit it in your project folder to override and values.
-	@if [ ! -f openFrameworks-Info.plist ]; then cp $(OF_ROOT)/scripts/templates/osx/openFrameworks-Info.plist openFrameworks-Info.plist; fi
+	@if [ ! -f openFrameworks-Info.plist ]; then cp $(OF_ROOT)/scripts/templates/macos/openFrameworks-Info.plist openFrameworks-Info.plist; fi
 	@cp openFrameworks-Info.plist bin/$(BIN_NAME).app/Contents/Info.plist;
 
 # App icons
