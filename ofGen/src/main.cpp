@@ -1,29 +1,42 @@
-
+#include "functions.h"
 #define VERSION "Build System for OpenFrameworks v0.1.0"
-
-#include <iostream>
-#if __has_include(<filesystem>)
-	#include <filesystem>
-#else
-	#include <experimental/filesystem>
-#endif
-#include <vector>
-
-using std::cout;
-using std::endl;
-using std::string;
-using std::vector;
-
-#include <fmt/format.h>
-#include <fmt/ranges.h>
-#include <yaml-cpp/yaml.h>
 
 // namespace fs = std::filesystem;
 namespace fs = std::__fs::filesystem;
-
 const fs::path templatesFolder = "scripts/templates";
 
+/*
+Color: 5 = blink white
+Color 7 : invert background
+30 : preto 31, 36 - cores
+41, 47 cores de fundo
+91/96 : cores vivas
+100/107 : cores vivas fundo
+
+*/
+
+int colors[] = {
+    // 5, 7, 30, 31, 32, 33, 34, 35, 36,
+    91, 92, 93, 94, 95, 96,
+    // 41, 42, 43, 44, 45, 46, 47,
+    // 100, 101, 102, 103, 104, 105, 106, 107,
+};
+
 int main(const int argc, const char* argv[]) {
-    cout << "ok 213 " << templatesFolder << endl;
+    cout << "ok 23 " << templatesFolder << endl;
+
+    for (auto & a : colors ){
+        cout << colorText ("████ " + std::to_string(a), a) ;
+    }
+    cout << endl;
+
+    cout << sign << endl;
+
+
+   	if (argc == 1) {
+        alert ("ofGen with no parameters. will create project on this folder and consider of path = ../../..");
+		// build.load();
+		alert ("platform not passed as a parameter, will generate as " + getPlatformString() , 33);
+	}
     return 0;
 }

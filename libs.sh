@@ -24,16 +24,31 @@ executa() { #echoes and execute. dry run is "executa2"
     $@
 }
 
-checkWget2() {
-section Check Wget2
-if ! command -v wget2 2>&1 >/dev/null
-then
-    echo "<wget2> not found, installing via brew"
-    executa brew install wget2
-else
-	echo "ok"
-fi
+checkLib() {
+	for lib in "$@"
+	do
+		section Check $lib
+		if ! command -v $lib 2>&1 >/dev/null
+		then
+		    echo "<$lib> not found, installing via brew"
+		    executa brew install $lib
+	    else
+			echo "$lib ok"
+		fi
+	done
 }
+
+
+# checkWget2() {
+# section Check Wget2
+# if ! command -v wget2 2>&1 >/dev/null
+# then
+#     echo "<wget2> not found, installing via brew"
+#     executa brew install wget2
+# else
+# 	echo "ok"
+# fi
+# }
 
 CORELIBS=( brotli cairo FreeImage freetype glew glfw glm json libpng pugixml tess2 uriparser utfcpp zlib openssl curl )
 # FIXME: TODO: add svgtiny to ofLibs and here
@@ -91,7 +106,9 @@ unzipAddons() {
 
 
 sectionOK OpenFrameworks install ofLibs
-checkWget2
+checkLib wget2
+#  fmt yaml-cpp
+# checkWget2
 executa mkdir -p ${DOWNLOAD}
 getlink
 unzipCore
