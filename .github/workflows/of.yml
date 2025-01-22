@@ -60,7 +60,8 @@ jobs:
       - name: ofGen
         run: |
           ./ofGen/compile.sh
-          ./ofGen/ofGen
+          cd ofGen
+          ./ofGen
 
 #       - name: Build
 #         run: if [ ${{ matrix.cfg.opt }} = "xcode" ]; then
