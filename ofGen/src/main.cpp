@@ -1,9 +1,8 @@
 #include "functions.h"
 #define VERSION "Build System for OpenFrameworks v0.1.0"
 
-// namespace fs = std::filesystem;
-namespace fs = std::__fs::filesystem;
 const fs::path templatesFolder = "scripts/templates";
+
 
 /*
 Color: 5 = blink white
@@ -25,13 +24,22 @@ int colors[] = {
 int main(const int argc, const char* argv[]) {
     cout << "ok 23 " << templatesFolder << endl;
 
+
+
     for (auto & a : colors ){
         cout << colorText ("████ " + std::to_string(a), a) ;
     }
     cout << endl;
 
     cout << sign << endl;
+    parseConfig();
 
+    if (fs::exists(conf.ofPath / ".ofroot")) {
+        alert("valid ofPath, great stuff", 93);
+    } else {
+        alert("invalid ofPath, I'm out", 94);
+        std::exit(0);
+    }
 
    	if (argc == 1) {
         alert ("ofGen with no parameters. will create project on this folder and consider of path = ../../..");
