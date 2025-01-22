@@ -23,7 +23,7 @@ ifdef PLATFORM_CC
 endif
 
 ifdef PROJECT_LD
-	LD ?= $(PROJECT_LD)
+	LD = $(PROJECT_LD)
 endif
 
 ifdef PLATFORM_LD
@@ -31,11 +31,11 @@ ifdef PLATFORM_LD
 endif
 
 ifdef PROJECT_AR
-	AR ?= $(PROJECT_AR)
+	AR = $(PROJECT_AR)
 endif
 
 ifdef PLATFORM_AR
-	AR ?= $(PLATFORM_AR)
+	AR = $(PLATFORM_AR)
 endif
 
 

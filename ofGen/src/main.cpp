@@ -24,8 +24,11 @@ int colors[] = {
 int main(const int argc, const char* argv[]) {
     cout << "ok 23 " << templatesFolder << endl;
 
-
-
+    // string s = "lara x lara";
+    // alert(s, 31);
+    // ofStringReplace(s, "lara", "cucuio");
+    // alert(s, 32);
+    // std::exit(1);
     for (auto & a : colors ){
         cout << colorText ("████ " + std::to_string(a), a) ;
     }
