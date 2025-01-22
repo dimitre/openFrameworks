@@ -21,197 +21,36 @@ using std::endl;
 using std::string;
 using std::vector;
 
+#include "utils.h"
 
-std::string getPlatformString() {
-#ifdef __linux__
-	string arch = execute_popen("uname -m");
-	if (
-		arch == "armv6l" ||
-		arch == "armv7l" ||
-		arch == "aarch64"
-		) {
-			return "linux" + arch;
-		}
-	else {
-		return "linux64";
-	}
-#elif defined(__WIN32__)
-	#if defined(__MINGW32__) || defined(__MINGW64__)
-		return "msys2";
-	#else
-		return "vs";
-	#endif
-#elif defined(__APPLE_CC__)
-//	return "osx";
-	return "macos";
-#else
-	return {};
-#endif
-}
-
-
-string colorText(const string & s, int color) {
-	string c = std::to_string(color);
-	return "\033[1;"+c+"m" + s + "\033[0m";
-}
-
-void alert(string msg, int color=33) {
-	std::cout << colorText(msg, color) << std::endl;
-}
-
-// DIAM FONT
-std::string sign = colorText( R"(
- ▗▄▖ ▗▄▄▄▖ ▗▄▄▖▗▄▄▄▖▗▖  ▗▖
-▐▌ ▐▌▐▌   ▐▌   ▐▌   ▐▛▚▖▐▌
-▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
-▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
-                Prototype 0.01⚡️
-)", 91)
-
-+ colorText( R"(                Report issues on
-                https://github.com/dimitre/ofLibs/
-)", 92)
-+
-R"(
-Now it is only possible to create projects inside
-OF installation, three folders up. ex: of/apps/myApps/transcendence
-to create a project there, first create the folder,
-cd to the folder and invoke ofGen
-
-)"
-;
-
-
-std::vector<std::string> fileToStrings (const fs::path & file) {
-	vector<std::string> out;
-	if (fs::exists(file)) {
-		std::ifstream thisFile(file);
-		string line;
-		while(getline(thisFile, line)){
-			out.emplace_back(line);
-		}
-	}
-	return out;
-}
-
-#include <regex>
-std::string stringReplace(const string & strIn, const string & from, const string & to) {
-    return std::regex_replace(strIn, std::regex(from), to);
-}
-
-void ofStringReplace(string & strIn, const string & from, const string & to) {
-    strIn = std::regex_replace(strIn, std::regex(from), to);
-}
-
-// trim from start (in place)
-inline void ltrim(std::string &s) {
-    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
-        return !std::isspace(ch);
-    }));
-}
-
-// trim from end (in place)
-inline void rtrim(std::string &s) {
-    s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
-        return !std::isspace(ch);
-    }).base(), s.end());
-}
-
-std::string ofTrim(string line) {
-    rtrim(line);
-    ltrim(line);
-    // line.erase(std::remove_if( line.begin(), line.end(), ::isspace), line.end());
-    return line;
-}
-
-
-
-// const vector<string> AddonMetaVariables {
-// 	"ADDON_NAME",
-// 	"ADDON_DESCRIPTION",
-// 	"ADDON_AUTHOR",
-// 	"ADDON_TAGS",
-// 	"ADDON_URL",
-// };
-
-const vector<string> AddonProjectVariables = {
-	"ADDON_DEPENDENCIES",
-
-	"ADDON_INCLUDES",
-	"ADDON_CFLAGS",
-	"ADDON_CPPFLAGS",
-	"ADDON_LDFLAGS",
-	"ADDON_LIBS",
-	"ADDON_DEFINES",
-
-	"ADDON_SOURCES",
-	"ADDON_HEADER_SOURCES",
-	"ADDON_C_SOURCES",
-	"ADDON_CPP_SOURCES",
-	"ADDON_OBJC_SOURCES",
-
-	"ADDON_LIBS_EXCLUDE",
-	"ADDON_LIBS_DIR",
-	"ADDON_SOURCES_EXCLUDE",
-	"ADDON_INCLUDES_EXCLUDE",
-	"ADDON_FRAMEWORKS_EXCLUDE",
-
-	"ADDON_DATA",
-
-	"ADDON_PKG_CONFIG_LIBRARIES",
-	"ADDON_FRAMEWORKS",
-	"ADDON_DLLS_TO_COPY",
-	"ADDON_ADDITIONAL_LIBS",
-};
-
-const vector<string> parseStates {
-	"common",
-	"linux",
-	"linux64",
-	"msys2",
-	"macos",
-	"ios",
-};
 
 string currentParseState { "" };
 
-struct genConfig {
-    fs::path ofPath = "../../..";
-    string platform = getPlatformString();
+static struct genConfig {
+    fs::path ofPath { "../../.." };
+    // fs::path projectPath { fs::current_path() };
+    fs::path projectPath { "../apps/werkApps/Pulsar" };
+    string platform { getPlatformString() };
+    // void setOFPath -  to set both ofPath and templatesPath ?
 } conf;
 
 
-bool checkCorrectPlatform(const string & state) {
-	if (state == "meta" || state == "common") {
-		return true;
-	}
-	if (std::find(parseStates.begin(), parseStates.end(), state) != parseStates.end()) {
-		if (conf.platform == state) {
-			return true;
-		}
-	}
-	return false;
+static void divider() {
+    // cout << colorText(colorText("-----------------------------------------------------------", 5), 92) << endl;
+     cout << colorText("-----------------------------------------------------------", 92) << endl;
 }
 
-bool checkCorrectVariable(const string & variable, const string & state){
-	// if (state == "meta") {
-	// 	return std::find(AddonMetaVariables.begin(),
-	// 					 AddonMetaVariables.end(),
-	// 					 variable) != AddonMetaVariables.end();
-	// }
-	if ( state == "macos" || state == "common" ) {
-		return std::find(AddonProjectVariables.begin(),
-						 AddonProjectVariables.end(),
-						 variable) != AddonProjectVariables.end();
-	} else {
-		return checkCorrectPlatform(state);
+static void replaceAll(std::string& str, const std::string& from, const std::string& to) {
+	if(from.empty())
+		return;
+	size_t start_pos = 0;
+	while((start_pos = str.find(from, start_pos)) != std::string::npos) {
+		str.replace(start_pos, from.length(), to);
+		start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
 	}
 }
 
-
-
-
-
+// maybe not needed. replace by a normal split string.
 vector<string> splitStringOnceByLeft(const string &source, const string &delimiter) {
 	size_t pos = source.find(delimiter);
 	vector<string> res;
@@ -230,11 +69,152 @@ vector<string> splitStringOnceByLeft(const string &source, const string &delimit
 //
 
 
-void divider() {
-    // cout << colorText(colorText("-----------------------------------------------------------", 5), 92) << endl;
-     cout << colorText("-----------------------------------------------------------", 92) << endl;
+
+struct copyTemplateFile {
+public:
+	fs::path from;
+	fs::path to;
+	std::vector <std::pair <string, string>> findReplaces;
+	std::vector <std::string> appends;
+	bool run() {
+
+	if (fs::exists(from)) {
+		// ofLogVerbose() << "copyTemplateFile from: " << from << " to: " << to;
+		alert("base::copyTemplateFile from: " + from.string() + " to: " + to.string(), 33);
+
+		if (findReplaces.size() || appends.size()) {
+			// Load file, replace contents, write to destination.
+			std::ifstream fileFrom(from);
+			std::string contents((std::istreambuf_iterator<char>(fileFrom)), std::istreambuf_iterator<char>());
+			fileFrom.close();
+
+			for (auto & f : findReplaces) {
+				// Avoid processing empty pairs
+				if (empty(f.first) && empty(f.second)) {
+					continue;
+				}
+				replaceAll(contents, f.first, f.second);
+				// ofLogVerbose() << "└─ Replacing " << f.first << " : " << f.second;
+				cout << "└─ Replacing " << f.first << " : " << f.second << endl;
+			}
+
+			for (auto & a : appends) {
+			     // alert(a, 35);
+			    contents += "\n" + a;
+			}
+
+			std::ofstream fileTo(to);
+			try{
+				fileTo << contents;
+			}catch(std::exception & e){
+				std::cerr << "Error saving to " << to << endl;
+				std::cerr << e.what() << endl;
+				return false;
+			}catch(...){
+				std::cerr << "Error saving to " << to << endl;
+
+				return false;
+			}
+
+
+		} else {
+			// straight copy
+			try {
+				fs::copy(from, to, fs::copy_options::update_existing);
+			}
+			catch(fs::filesystem_error & e) {
+				std::cerr << "error copying template file " << from << " : " << to << endl;
+				std::cerr << e.what() << endl;
+				return false;
+			}
+		}
+	} else {
+		return false;
+	}
+	return true;
+	}
+};
+
+
+struct ofAddon {
+public:
+    string name;
+    fs::path path;
+    std::map<string, vector<string> > addonProperties;
+};
+
+struct ofTemplate {
+    public:
+    string name { "" };
+    fs::path path;
+    ofTemplate() { }
+    vector <copyTemplateFile> copyTemplateFiles;
+    virtual void load() {}
+    virtual void build() {
+        for (auto & c : copyTemplateFiles) {
+            c.run();
+        }
+    }
+
+    // load to memory
+};
+
+struct ofTemplateMacos : public ofTemplate {
+    public:
+    ofTemplateMacos() {
+        name = "macos";
+        path = conf.ofPath / "scripts" / "templates" / name;
+    }
+    void load() override {};
+    void build() override {};
+};
+
+struct ofTemplateZed : public ofTemplate {
+    public:
+    ofTemplateZed() {
+        name = "zed";
+        path = conf.ofPath / "scripts" / "templates" / name;
+    }
+    void load() override {};
+    void build() override {};
+};
+
+vector <ofAddon> ofAddons;
+vector <ofTemplate*> ofTemplates;
+
+struct ofProject {
+public:
+    vector <ofAddon*> addonsPointer;
+    vector <ofTemplate*> templates;
+};
+
+void createTemplates() {
+    vector <string> templateNames { "zed", "macos" };
+    for (const auto & t : templateNames) {
+        if (t == "zed") {
+            ofTemplates.emplace_back(new ofTemplateZed());
+        }
+        else if (t == "macos") {
+            ofTemplates.emplace_back(new ofTemplateMacos());
+        }
+        // etc.
+    }
+    alert ("createTemplates", 92);
+    for (auto & t : ofTemplates) {
+        cout << t->name << endl;
+        cout << t->path << endl;
+    }
+    cout << ofTemplates.size() << endl;
 }
 
+
+void createMacosProject() {
+    alert ("createMacosProject", 92);
+    ofTemplates.emplace_back(new ofTemplateMacos());
+    ofProject project;
+    project.templates.emplace_back(ofTemplates.back());
+
+}
 
 void parseAddon( const fs::path & addonPath ) {
     divider();
@@ -333,7 +313,7 @@ void parseAddon( const fs::path & addonPath ) {
 		}
 
 		// if (std::find(parseStates.begin(), parseStates.end(), currentParseState) == parseStates.end()) {
-		// 	// ofLogError() << "Error parsing " << name << " addon_config.mk" << "\n\t\t"
+		// 	// std::cerr << "Error parsing " << name << " addon_config.mk" << "\n\t\t"
 		// 					// << "line " << lineNum << ": " << originalLine << "\n\t\t"
 		// 					// << "sectionName " << currentParseState << " not recognized";
 		// }
@@ -365,32 +345,6 @@ void parseAddon( const fs::path & addonPath ) {
 			}
 
 
-			// FIXME: This seems to be meaningless
-			if(!checkCorrectPlatform(currentParseState)){
-				continue;
-			}
-
-			if(!checkCorrectVariable(variable, currentParseState)){
-				// ofLogError() << "Error parsing " << name << " addon_config.mk" << "\n\t\t"
-								// << "line " << lineNum << ": " << originalLine << "\n\t\t"
-								// << "variable " << variable << " not recognized for section " << currentParseState;
-				continue;
-			}
-
-
-			// alert ("currentParseState " + currentParseState, 94);
-			// alert ("line: " + line, 95);
-			// alert ("" + varValue[0], 93);
-			// alert ("" + varValue[1], 93);
-
-			// parseVariableValue(variable, value, addToValue, originalLine, lineNum);
-			// cout << variable << endl;
-			// cout << value << endl;
-			// cout << addToValue << endl;
-			// cout << originalLine << endl;
-			// cout << lineNum << endl;
-
-			// cout << "------" << endl;
 		}
     }
 
