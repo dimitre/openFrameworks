@@ -28,6 +28,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Brew
+        uses: tecolicom/actions-use-homebrew-tools@v1
+        with:
+          tools: wget2 fmt yaml-cpp
+
       - name: ccache
         uses: hendrikmuhs/ccache-action@v1.2.14
         with:
@@ -51,6 +56,12 @@ jobs:
 
       - name: Tests
         run: ./scripts/macos/tests.sh
+
+      - name: ofGen
+        run: |
+          ./ofGen/compile.sh
+          ./ofGen/ofGen
+
 #       - name: Build
 #         run: if [ ${{ matrix.cfg.opt }} = "xcode" ]; then
 #           scripts/ci/${{ matrix.cfg.target }}/build.sh ${{ matrix.cfg.opt }};

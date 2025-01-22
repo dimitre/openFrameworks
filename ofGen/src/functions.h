@@ -229,46 +229,63 @@ vector<string> splitStringOnceByLeft(const string &source, const string &delimit
 //
 //
 
-std::map<string, vector<string> > addonProperties;
+
+void divider() {
+    // cout << colorText(colorText("-----------------------------------------------------------", 5), 92) << endl;
+     cout << colorText("-----------------------------------------------------------", 92) << endl;
+}
 
 
+void parseAddon( const fs::path & addonPath ) {
+    divider();
+    // moved to inside the function so it resets for each addon. desirable?
+    //
 
+    std::map<string, vector<string> > addonProperties;
 
-void parseConfig() {
     // fs::path fileName { "/Volumes/tool/ofw/addons/ofxOpenCv/addon_config.mk" };
-    fs::path fileName { "../addons/ofxOpenCv/addon_config.mk" };
+    fs::path fileName { addonPath / "addon_config.mk" };
+    // fs::path fileName { addonPath / "../addons/ofxOpenCv/addon_config.mk" };
 
     // get addon libs, it can be none, one or multiple
-    for (auto const & d : fs::directory_iterator { fileName.parent_path() / "libs" })  {
+    fs::path libsPath { fileName.parent_path() / "libs" };
+    if (fs::exists(libsPath))
+    for (auto const & d : fs::directory_iterator {  })  {
         if (fs::is_directory(d.path())) {
             alert("Lib inside: " + d.path().string(), 33);
 
 
             fs::path staticLibsFolder { d.path() / "lib" / "macos" };
+            if (fs::exists(staticLibsFolder))
+
             for (auto const & d : fs::directory_iterator { staticLibsFolder })  {
                 alert(d.path().string(), 34);
             }
 
             fs::path includesFolder { d.path() / "include" };
-            fs::recursive_directory_iterator it { includesFolder };
-           	fs::recursive_directory_iterator last {  };
+            if (fs::exists(includesFolder)) {
 
-           	for(; it != last; ++it) {
-          		if (fs::is_directory(it->path())) {
-                    alert (it->path().string(), 35);
-         			// folderListMap[path].emplace_back(it->path());
-          		}
-           	}
+                fs::recursive_directory_iterator it { includesFolder };
+               	fs::recursive_directory_iterator last {  };
+
+               	for(; it != last; ++it) {
+              		if (fs::is_directory(it->path())) {
+                        alert (it->path().string(), 35);
+             			// folderListMap[path].emplace_back(it->path());
+              		}
+               	}
+            }
         }
     }
 
 
+    // alert ("-------------", 5);
 
     // check all src folders
     //
 
 
-    alert ("zed " + fileName.string(), 95);
+    alert ("zed " + fileName.string(), 91);
     if (!fs::exists(fileName)) {
         return;
     }
@@ -307,10 +324,10 @@ void parseConfig() {
 		}
 
 		if (
-		  currentParseState != "common" &&
-            currentParseState != "macos" &&
-            currentParseState != "osx" &&
-            currentParseState != "emscripten"
+		  currentParseState != "common"
+            && currentParseState != "macos"
+            && currentParseState != "osx"
+            // && currentParseState != "emscripten"
 		) {
 		continue;
 		}
@@ -324,20 +341,22 @@ void parseConfig() {
 
 		if(line.find("=")!=string::npos){
 			bool addToValue = false;
-			string variable, value;
 			vector<string> varValue;
 			bool limpa = false;
-			if(line.find("+=")!=string::npos){
+			if (line.find("+=")!=string::npos) {
 				addToValue = true;
+				// FIXME: maybe not needed. a simple split is ok.
 				varValue = splitStringOnceByLeft(line,"+=");
-			}else{
+			} else {
 			    limpa = true;
 				addToValue = false;
 				varValue = splitStringOnceByLeft(line,"=");
 			}
 
-			variable = ofTrim(varValue[0]);
-			value = ofTrim(varValue[1]);
+			// variable = ofTrim(varValue[0]);
+			// value = ofTrim(varValue[1]);
+			string variable = varValue[0];
+			string value = varValue[1];
 			if (limpa) {
 			 addonProperties[variable].clear();
 			}
@@ -359,31 +378,40 @@ void parseConfig() {
 			}
 
 
-			alert ("currentParseState " + currentParseState, 94);
-			alert ("line: " + line, 95);
-			alert ("" + varValue[0], 93);
-			alert ("" + varValue[1], 93);
+			// alert ("currentParseState " + currentParseState, 94);
+			// alert ("line: " + line, 95);
+			// alert ("" + varValue[0], 93);
+			// alert ("" + varValue[1], 93);
 
 			// parseVariableValue(variable, value, addToValue, originalLine, lineNum);
-			cout << variable << endl;
-			cout << value << endl;
-			cout << addToValue << endl;
-			cout << originalLine << endl;
-			cout << lineNum << endl;
+			// cout << variable << endl;
+			// cout << value << endl;
+			// cout << addToValue << endl;
+			// cout << originalLine << endl;
+			// cout << lineNum << endl;
 
-			cout << "------" << endl;
+			// cout << "------" << endl;
 		}
     }
 
-    //std::map<string, vector<string> > addonProperties;
-
     for (auto & a : addonProperties) {
-        alert (a.first, 94);
+        alert ("    "+a.first, 94);
         for (auto & p : a.second) {
-            alert ("    " + p, 95);
+            alert ("       " + p, 95);
         }
     }
+    //std::map<string, vector<string> > addonProperties;
 
+}
+
+void parseConfig() {
+    // parseAddon("../addons/ofxOpenCv");
+    alert ("parseConfig begin");
+    for (auto const & d : fs::directory_iterator { "../addons" })  {
+        if (fs::is_directory(d.path())) {
+            parseAddon(d.path());
+        }
+    }
     alert ("parseConfig end");
 
 }
