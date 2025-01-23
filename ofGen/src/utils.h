@@ -1,7 +1,82 @@
+// void ofStringReplace(string & strIn, const string & from, const string & to) {
+//     strIn = std::regex_replace(strIn, std::regex(from), to);
+// }
+
+#pragma once
+
+
+std::string stringReplace(const std::string & strIn, const std::string & from, const std::string & to);
+
+std::vector<std::string> textToVector (const fs::path & file);
+
+inline std::string colorText(const std::string & s, int color) {
+	std::string c { std::to_string(color) };
+	return "\033[1;"+c+"m" + s + "\033[0m";
+}
+
+inline void alert(std::string msg, int color=33) {
+	std::cout << colorText(msg, color) << std::endl;
+}
+
+// DIAM FONT
+const std::string sign = colorText( R"(
+ ▗▄▖ ▗▄▄▄▖ ▗▄▄▖▗▄▄▄▖▗▖  ▗▖
+▐▌ ▐▌▐▌   ▐▌   ▐▌   ▐▛▚▖▐▌
+▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
+▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
+                Prototype 0.01⚡️
+)", 91)
+
++ colorText( R"(                Report issues on
+                https://github.com/dimitre/ofLibs/
+)", 92)
++
+R"(
+Now it is only possible to create projects inside
+OF installation, three folders up. ex: of/apps/myApps/transcendence
+to create a project there, first create the folder,
+cd to the folder and invoke ofGen
+
+)"
+;
 
 
 
-std::string getPlatformString() {
+static void divider() {
+    // cout << colorText(colorText("-----------------------------------------------------------", 5), 92) << endl;
+    std::cout << colorText("-----------------------------------------------------------", 92) << std::endl;
+}
+
+static void replaceAll(std::string& str, const std::string& from, const std::string& to) {
+	if(from.empty())
+		return;
+	size_t start_pos = 0;
+	while((start_pos = str.find(from, start_pos)) != std::string::npos) {
+		str.replace(start_pos, from.length(), to);
+		start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
+	}
+}
+
+// maybe not needed. replace by a normal split string.
+inline std::vector<std::string> splitStringOnceByLeft(const std::string &source, const std::string &delimiter) {
+	size_t pos = source.find(delimiter);
+	std::vector<std::string> res;
+	if(pos == std::string::npos) {
+		res.emplace_back(source);
+		return res;
+	}
+
+	res.emplace_back(source.substr(0, pos));
+	res.emplace_back(source.substr(pos + delimiter.length()));
+	return res;
+}
+
+
+// {
+//     return std::regex_replace(strIn, std::regex(from), to);
+// }
+
+inline std::string getPlatformString() {
 #ifdef __linux__
 	string arch = execute_popen("uname -m");
 	if (
@@ -29,58 +104,12 @@ std::string getPlatformString() {
 }
 
 
-string colorText(const string & s, int color) {
-	string c = std::to_string(color);
-	return "\033[1;"+c+"m" + s + "\033[0m";
-}
-
-void alert(string msg, int color=33) {
-	std::cout << colorText(msg, color) << std::endl;
-}
-
-// DIAM FONT
-std::string sign = colorText( R"(
- ▗▄▖ ▗▄▄▄▖ ▗▄▄▖▗▄▄▄▖▗▖  ▗▖
-▐▌ ▐▌▐▌   ▐▌   ▐▌   ▐▛▚▖▐▌
-▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
-▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
-                Prototype 0.01⚡️
-)", 91)
-
-+ colorText( R"(                Report issues on
-                https://github.com/dimitre/ofLibs/
-)", 92)
-+
-R"(
-Now it is only possible to create projects inside
-OF installation, three folders up. ex: of/apps/myApps/transcendence
-to create a project there, first create the folder,
-cd to the folder and invoke ofGen
-
-)"
-;
 
 
-std::vector<std::string> textToVector (const fs::path & file) {
-	vector<std::string> out;
-	if (fs::exists(file)) {
-		std::ifstream thisFile(file);
-		string line;
-		while(getline(thisFile, line)){
-			out.emplace_back(line);
-		}
-	}
-	return out;
-}
 
-#include <regex>
-std::string stringReplace(const string & strIn, const string & from, const string & to) {
-    return std::regex_replace(strIn, std::regex(from), to);
-}
 
-void ofStringReplace(string & strIn, const string & from, const string & to) {
-    strIn = std::regex_replace(strIn, std::regex(from), to);
-}
+
+
 
 // trim from start (in place)
 inline void ltrim(std::string &s) {
@@ -96,9 +125,20 @@ inline void rtrim(std::string &s) {
     }).base(), s.end());
 }
 
-std::string ofTrim(string line) {
+inline std::string ofTrim(std::string line) {
     rtrim(line);
     ltrim(line);
     // line.erase(std::remove_if( line.begin(), line.end(), ::isspace), line.end());
     return line;
 }
+
+
+
+struct copyTemplateFile {
+public:
+	fs::path from;
+	fs::path to;
+	std::vector <std::pair <std::string, std::string>> findReplaces;
+	std::vector <std::string> appends;
+	bool run();
+};
