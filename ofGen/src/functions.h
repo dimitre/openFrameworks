@@ -27,7 +27,8 @@ using std::vector;
 string currentParseState { "" };
 
 static struct genConfig {
-    fs::path ofPath { "../../.." };
+    // fs::path ofPath { "../../.." };
+    fs::path ofPath { "../" };
     // fs::path projectPath { fs::current_path() };
     fs::path projectPath { "../apps/werkApps/Pulsar" };
     string platform { getPlatformString() };
@@ -208,18 +209,25 @@ void createTemplates() {
 }
 
 
-void createMacosProject() {
-    alert ("createMacosProject", 92);
-    ofTemplates.emplace_back(new ofTemplateMacos());
-    ofProject project;
-    project.templates.emplace_back(ofTemplates.back());
 
-}
 
-void parseAddon( const fs::path & addonPath ) {
-    divider();
+// void parseAddon( const fs::path & addonPath ) {
+void parseAddon( const string & name ) {
     // moved to inside the function so it resets for each addon. desirable?
     //
+
+    // Test if it is local
+    fs::path addonPath { conf.projectPath / name };
+    if (fs::exists(addonPath)) {
+        // ok
+    } else {
+        addonPath = conf.ofPath / "addons" / name;
+        if (!fs::exists(addonPath)) {
+            cout << "no addon path found " << name << endl;
+            return;
+        }
+    }
+    cout << "addon found, addon path: " << addonPath << endl;
 
     std::map<string, vector<string> > addonProperties;
 
@@ -258,20 +266,13 @@ void parseAddon( const fs::path & addonPath ) {
         }
     }
 
-
-    // alert ("-------------", 5);
-
-    // check all src folders
-    //
-
-
     alert ("zed " + fileName.string(), 91);
     if (!fs::exists(fileName)) {
         return;
     }
 
     int lineNum=0;
-   	for (auto & originalLine : fileToStrings(fileName)) {
+   	for (auto & originalLine : textToVector(fileName)) {
         lineNum++;
         string line = originalLine;
         // not sure if it will work. I'm replacing with spaces. I need to remove them
@@ -355,6 +356,25 @@ void parseAddon( const fs::path & addonPath ) {
         }
     }
     //std::map<string, vector<string> > addonProperties;
+
+}
+
+void createMacosProject() {
+    alert ("createMacosProject", 92);
+    ofTemplates.emplace_back(new ofTemplateMacos());
+    ofProject project;
+    project.templates.emplace_back(ofTemplates.back());
+
+    // now parse project addons, or yml
+    fs::path addonsFile { conf.projectPath / "addons.make" };
+    if (fs::exists(addonsFile)) {
+        for (auto & l : textToVector(addonsFile)) {
+            divider();
+
+            cout << l << endl;
+            parseAddon(l);
+        }
+    }
 
 }
 

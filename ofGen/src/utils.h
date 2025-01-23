@@ -61,7 +61,7 @@ cd to the folder and invoke ofGen
 ;
 
 
-std::vector<std::string> fileToStrings (const fs::path & file) {
+std::vector<std::string> textToVector (const fs::path & file) {
 	vector<std::string> out;
 	if (fs::exists(file)) {
 		std::ifstream thisFile(file);
