@@ -6,3 +6,4 @@
 -lyaml-cpp
 -std=c++20
 -lstdc++fs
+src/*.cpp

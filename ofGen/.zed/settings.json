@@ -5,7 +5,7 @@
 //
 
 {
-  "languages": {
+  "language_overrides": {
     "c++": {
       "hard_tabs": true,
       "tab_size": 4,

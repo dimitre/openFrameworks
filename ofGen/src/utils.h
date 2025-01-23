@@ -4,64 +4,62 @@
 
 #pragma once
 
-
 std::string stringReplace(const std::string & strIn, const std::string & from, const std::string & to);
 
-std::vector<std::string> textToVector (const fs::path & file);
+std::vector<std::string> textToVector(const fs::path & file);
 
 inline std::string colorText(const std::string & s, int color) {
 	std::string c { std::to_string(color) };
-	return "\033[1;"+c+"m" + s + "\033[0m";
+	return "\033[1;" + c + "m" + s + "\033[0m";
 }
 
-inline void alert(std::string msg, int color=33) {
+inline void alert(std::string msg, int color = 33) {
 	std::cout << colorText(msg, color) << std::endl;
 }
 
 // DIAM FONT
-const std::string sign = colorText( R"(
+const std::string sign = colorText(R"(
  ▗▄▖ ▗▄▄▄▖ ▗▄▄▖▗▄▄▄▖▗▖  ▗▖
 ▐▌ ▐▌▐▌   ▐▌   ▐▌   ▐▛▚▖▐▌
 ▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
 ▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
                 Prototype 0.01⚡️
-)", 91)
+)",
+							 91)
 
-+ colorText( R"(                Report issues on
+	+ colorText(R"(                Report issues on
                 https://github.com/dimitre/ofLibs/
-)", 92)
-+
-R"(
+)",
+		92)
+	+
+	R"(
 Now it is only possible to create projects inside
 OF installation, three folders up. ex: of/apps/myApps/transcendence
 to create a project there, first create the folder,
 cd to the folder and invoke ofGen
 
-)"
-;
-
-
+)";
 
 static void divider() {
-    // cout << colorText(colorText("-----------------------------------------------------------", 5), 92) << endl;
-    std::cout << colorText("-----------------------------------------------------------", 92) << std::endl;
+	// cout << colorText(colorText("-----------------------------------------------------------", 5), 92) << endl;
+	std::cout << colorText("-----------------------------------------------------------", 92) << std::endl;
 }
 
-static void replaceAll(std::string& str, const std::string& from, const std::string& to) {
-	if(from.empty())
+static void replaceAll(std::string & str, const std::string & from, const std::string & to) {
+	if (from.empty())
 		return;
 	size_t start_pos = 0;
-	while((start_pos = str.find(from, start_pos)) != std::string::npos) {
+	while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
 		str.replace(start_pos, from.length(), to);
 		start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
 	}
 }
 
 // maybe not needed. replace by a normal split string.
-inline std::vector<std::string> splitStringOnceByLeft(const std::string &source, const std::string &delimiter) {
+inline std::vector<std::string> splitStringOnceByLeft(const std::string & source, const std::string & delimiter) {
 	size_t pos = source.find(delimiter);
 	std::vector<std::string> res;
-	if(pos == std::string::npos) {
+	if (pos == std::string::npos) {
 		res.emplace_back(source);
 		return res;
 	}
@@ -71,7 +69,6 @@ inline std::vector<std::string> splitStringOnceByLeft(const std::string &source,
 	return res;
 }
 
-
 // {
 //     return std::regex_replace(strIn, std::regex(from), to);
 // }
@@ -80,65 +77,52 @@ inline std::string getPlatformString() {
 #ifdef __linux__
 	string arch = execute_popen("uname -m");
 	if (
-		arch == "armv6l" ||
-		arch == "armv7l" ||
-		arch == "aarch64"
-		) {
-			return "linux" + arch;
-		}
-	else {
+		arch == "armv6l" || arch == "armv7l" || arch == "aarch64") {
+		return "linux" + arch;
+	} else {
 		return "linux64";
 	}
 #elif defined(__WIN32__)
 	#if defined(__MINGW32__) || defined(__MINGW64__)
-		return "msys2";
+	return "msys2";
 	#else
-		return "vs";
+	return "vs";
 	#endif
 #elif defined(__APPLE_CC__)
-//	return "osx";
+	//	return "osx";
 	return "macos";
 #else
 	return {};
 #endif
 }
 
-
-
-
-
-
-
-
-
 // trim from start (in place)
-inline void ltrim(std::string &s) {
-    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
-        return !std::isspace(ch);
-    }));
+inline void ltrim(std::string & s) {
+	s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
+		return !std::isspace(ch);
+	}));
 }
 
 // trim from end (in place)
-inline void rtrim(std::string &s) {
-    s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
-        return !std::isspace(ch);
-    }).base(), s.end());
+inline void rtrim(std::string & s) {
+	s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
+		return !std::isspace(ch);
+	}).base(),
+		s.end());
 }
 
 inline std::string ofTrim(std::string line) {
-    rtrim(line);
-    ltrim(line);
-    // line.erase(std::remove_if( line.begin(), line.end(), ::isspace), line.end());
-    return line;
+	rtrim(line);
+	ltrim(line);
+	// line.erase(std::remove_if( line.begin(), line.end(), ::isspace), line.end());
+	return line;
 }
-
-
 
 struct copyTemplateFile {
 public:
 	fs::path from;
 	fs::path to;
-	std::vector <std::pair <std::string, std::string>> findReplaces;
-	std::vector <std::string> appends;
+	std::vector<std::pair<std::string, std::string>> findReplaces;
+	std::vector<std::string> appends;
 	bool run();
 };
