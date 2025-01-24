@@ -126,3 +126,44 @@ public:
 	std::vector<std::string> appends;
 	bool run();
 };
+
+static struct genConfig {
+	fs::path ofPath { "../" };
+	// it will be cwd unless project path is passed by variable.
+	fs::path projectPath { "../apps/werkApps/Pulsar" };
+	std::string platform { getPlatformString() };
+	// void setOFPath -  to set both ofPath and templatesPath ?
+	//
+	// void getFoldersRecursively(const fs::path & path, std::string platform);
+
+	struct filesList {
+	public:
+		std::vector<fs::path> sources;
+		std::vector<fs::path> includes;
+		std::vector<fs::path> libs;
+		std::vector<fs::path> frameworks;
+
+	} allFiles;
+
+	void showFiles() {
+		alert("sources:", 31);
+		for (auto & s : allFiles.sources) {
+			std::cout << s << std::endl;
+		}
+		alert("includes:", 31);
+		for (auto & s : allFiles.includes) {
+			std::cout << s << std::endl;
+		}
+		alert("libs:", 31);
+		for (auto & s : allFiles.libs) {
+			std::cout << s << std::endl;
+		}
+		alert("frameworks:", 31);
+		for (auto & s : allFiles.frameworks) {
+			std::cout << s << std::endl;
+		}
+	}
+
+	void scanFolder(const fs::path & path);
+
+} conf;

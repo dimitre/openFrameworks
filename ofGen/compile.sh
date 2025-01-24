@@ -16,7 +16,7 @@ time ccache /opt/homebrew/opt/llvm/bin/clang++ -c src/*.cpp -Wfatal-errors -std=
 # time ccache c++ -c -Wfatal-errors -std=c++20 src/utils.cpp
 # time ccache c++ -c -Wfatal-errors -std=c++20 src/main.cpp
 
-time ccache /opt/homebrew/opt/llvm/bin/clang++ -fuse-ld=lld *.o -o ofGen && ./ofGen
+time ccache /opt/homebrew/opt/llvm/bin/clang++ -fuse-ld=lld *.o -o ofGen && time ./ofGen
 # include-what-you-use g++ -Wfatal-errors -std=c++20 src/main.cpp src/utils.cpp -o ofGen -O3
 # ./ofGen
 #path+=$PWD

@@ -25,13 +25,7 @@ using std::vector;
 
 #include "utils.h"
 
-static struct genConfig {
-	fs::path ofPath { "../" };
-	// it will be cwd unless project path is passed by variable.
-	fs::path projectPath { "../apps/werkApps/Pulsar" };
-	string platform { getPlatformString() };
-	// void setOFPath -  to set both ofPath and templatesPath ?
-} conf;
+
 
 #include "structs.h"
 
@@ -56,6 +50,10 @@ void createTemplates() {
 // void parseAddon( const fs::path & addonPath ) {
 
 void createMacosProject() {
+
+    conf.scanFolder(conf.projectPath / "src");
+
+
 	alert("createMacosProject", 92);
 	ofTemplates.emplace_back(new ofTemplateMacos());
 	ofProject project;
@@ -80,6 +78,8 @@ void createMacosProject() {
 			if (std::empty(addon.path)) {
 				continue;
 			}
+
+			conf.scanFolder(addon.path);
 
 			addon.load();
 			// cout << l << endl;
