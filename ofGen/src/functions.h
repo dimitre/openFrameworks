@@ -50,11 +50,10 @@ void createTemplates() {
 // void parseAddon( const fs::path & addonPath ) {
 
 void createMacosProject() {
-
+    alert("createMacosProject", 92);
+    // Add project files. TODO: additional source folders
     conf.scanFolder(conf.projectPath / "src");
 
-
-	alert("createMacosProject", 92);
 	ofTemplates.emplace_back(new ofTemplateMacos());
 	ofProject project;
 	project.templates.emplace_back(ofTemplates.back());
@@ -63,10 +62,11 @@ void createMacosProject() {
 	fs::path addonsListFile { conf.projectPath / "addons.make" };
 	if (fs::exists(addonsListFile)) {
 		for (auto & l : textToVector(addonsListFile)) {
-			// divider();
+		divider();
 
 			ofAddon addon;
 			addon.name = l;
+			// check if local addon exists, if not check in of addons folder.
 			if (fs::exists(conf.projectPath / l)) {
 				addon.path = conf.projectPath / l;
 			} else {
@@ -79,7 +79,8 @@ void createMacosProject() {
 				continue;
 			}
 
-			conf.scanFolder(addon.path);
+			conf.scanFolder(addon.path / "src");
+			// conf.scanFolder(addon.path / "libs");
 
 			addon.load();
 			// cout << l << endl;

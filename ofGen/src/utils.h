@@ -127,6 +127,7 @@ public:
 	bool run();
 };
 
+#include <map>
 static struct genConfig {
 	fs::path ofPath { "../" };
 	// it will be cwd unless project path is passed by variable.
@@ -135,32 +136,15 @@ static struct genConfig {
 	// void setOFPath -  to set both ofPath and templatesPath ?
 	//
 	// void getFoldersRecursively(const fs::path & path, std::string platform);
+	std::map<std::string, std::vector<fs::path>> filesMap;
 
-	struct filesList {
-	public:
-		std::vector<fs::path> sources;
-		std::vector<fs::path> includes;
-		std::vector<fs::path> libs;
-		std::vector<fs::path> frameworks;
-
-	} allFiles;
 
 	void showFiles() {
-		alert("sources:", 31);
-		for (auto & s : allFiles.sources) {
-			std::cout << s << std::endl;
-		}
-		alert("includes:", 31);
-		for (auto & s : allFiles.includes) {
-			std::cout << s << std::endl;
-		}
-		alert("libs:", 31);
-		for (auto & s : allFiles.libs) {
-			std::cout << s << std::endl;
-		}
-		alert("frameworks:", 31);
-		for (auto & s : allFiles.frameworks) {
-			std::cout << s << std::endl;
+		for (auto & f : filesMap) {
+			alert(f.first + ":", 31);
+			for (auto & s : f.second) {
+				std::cout << s << std::endl;
+			}
 		}
 	}
 

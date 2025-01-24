@@ -94,79 +94,47 @@ void genConfig::scanFolder(const fs::path & path) {
 	if (!fs::exists(path)) return;
 	if (!fs::is_directory(path)) return;
 
-	// TODO: This can be converted to recursive_directory, but we have to review if the function isFolderNotCurrentPlatform works correctly in this case.
+	filesMap["includes"].emplace_back(path);
 
 	fs::recursive_directory_iterator it { path };
 	fs::recursive_directory_iterator last {};
 
 	for (; it != last; ++it) {
 		auto f = it->path();
-
 		// avoid hidden folders like .git etc.
 		if (f.filename().c_str()[0] == '.') {
 			it.disable_recursion_pending();
 			continue;
 		}
-
 		auto ext = f.extension().string();
-
 		if (fs::is_directory(f)) {
-			if (ext == ".xcodeproj") {
-				it.disable_recursion_pending();
-				continue;
-			}
+			// if (ext == ".xcodeproj") {
+			// 	it.disable_recursion_pending();
+			// 	continue;
+			// }
 
-			// on osx, framework is a directory, let's not parse it....
 			if (ext == ".framework" || ext == ".xcframework") {
-				// ADD To Frameworks List
-				allFiles.frameworks.emplace_back(f);
+				// ADD To Frameworks List, and stop searching inside this directory
+				filesMap["frameworks"].emplace_back(f);
 				it.disable_recursion_pending();
 				continue;
 			} else {
-				allFiles.includes.emplace_back(f);
 				// ADD To includes list
+				filesMap["includes"].emplace_back(f);
 			}
 
 		} else {
-			// bool platformFound = false;
-
-			// if (!platform.empty() && f.string().find(platform) != std::string::npos) {
-			// 	platformFound = true;
-			// }
-
-			if (ext == ".a" || ext == ".lib" || ext == ".dylib" || ext == ".so" || (ext == ".dll" && platform != "vs")) {
-				allFiles.libs.emplace_back(f);
-				// if (platformFound) {
-
-				// LibraryBinary lib(f);
-				// if(lib.isValidFor(arch, target)){
-				// libLibs.push_back(lib);
-				// }
-				// }
-				// FIXME: todo REGEX /\.(pdf|jpg)$/. // Split in headers and sources?
-
-			} else if (ext == ".h" || ext == ".hpp" || ext == ".c" || ext == ".cpp" || ext == ".cc" || ext == ".cxx" || ext == ".m" || ext == ".mm") {
-				allFiles.sources.emplace_back(f);
-				// libFiles.emplace_back(f);
+			if (ext == ".a" || ext == ".lib") {
+				filesMap["libs"].emplace_back(f);
+			}
+			// allFiles.libs.emplace_back(f);
+			else if (ext == ".dylib" || ext == ".so" || ext == ".dll") {
+				filesMap["sharedLibs"].emplace_back(f);
+			} else if (ext == ".h" || ext == ".hpp" || ext == ".m") {
+				filesMap["headers"].emplace_back(f);
+			} else if (ext == ".c" || ext == ".cpp" || ext == ".cc" || ext == ".cxx" || ext == ".mm") {
+				filesMap["sources"].emplace_back(f);
 			}
 		}
 	}
-
-	// 	// TODO: disable recursion pending... it is not recursive yet.
-	// 	if ((path.extension() != ".framework") || (path.extension() != ".xcframework")) {
-	// 		for (const auto & entry : fs::directory_iterator(path)) {
-	// 			auto f = entry.path();
-	// 			if (f.filename().c_str()[0] == '.') continue; // avoid hidden files .DS_Store .vscode .git etc
-	//             bool shouldCheckPlatform = true;
-	//             if (fs::is_directory(f) && countSubdirectories(f) > 2 && f.string().find("src") != std::string::npos) {
-	//                 shouldCheckPlatform = false;
-	// //                cout << "getFoldersRecursively shouldCheckPlatform = false : " << f.filename().string() << endl;
-	//             }
-
-	//             if (fs::is_directory(f) && (!shouldCheckPlatform || !isFolderNotCurrentPlatform(f.filename().string(), platform))) {
-	//                 getFoldersRecursively(f, folderNames, platform);
-	//             }
-	// 		}
-	// 		folderNames.emplace_back(path.string());
-	// 	}
 }
