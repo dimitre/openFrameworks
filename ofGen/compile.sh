@@ -2,7 +2,7 @@
 cd "$(dirname "$0")"
 
 pwd
-
+ # -lstdc++fs
 if [[ ${PWD} == "/Volumes/tool/ofw/ofGen" ]] then
 time ccache /opt/homebrew/opt/llvm/bin/clang++ -c src/*.cpp -Wfatal-errors -std=c++17
 time ccache /opt/homebrew/opt/llvm/bin/clang++ -fuse-ld=lld *.o -o ofGen && time ./ofGen

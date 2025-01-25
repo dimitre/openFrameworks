@@ -4,6 +4,25 @@
 
 #pragma once
 
+#include <iostream> // cout
+#include <map>
+#include <vector>
+
+using std::cout;
+using std::endl;
+using std::string;
+using std::vector;
+
+#if __has_include(<filesystem>)
+	#include <filesystem>
+#else
+	#include <experimental/filesystem>
+#endif
+// namespace fs = std::filesystem;
+namespace fs = std::__fs::filesystem;
+
+// #include "functions.h"
+
 std::string stringReplace(const std::string & strIn, const std::string & from, const std::string & to);
 
 std::vector<std::string> textToVector(const fs::path & file);
@@ -73,28 +92,7 @@ inline std::vector<std::string> splitStringOnceByLeft(const std::string & source
 //     return std::regex_replace(strIn, std::regex(from), to);
 // }
 
-inline std::string getPlatformString() {
-#ifdef __linux__
-	string arch = execute_popen("uname -m");
-	if (
-		arch == "armv6l" || arch == "armv7l" || arch == "aarch64") {
-		return "linux" + arch;
-	} else {
-		return "linux64";
-	}
-#elif defined(__WIN32__)
-	#if defined(__MINGW32__) || defined(__MINGW64__)
-	return "msys2";
-	#else
-	return "vs";
-	#endif
-#elif defined(__APPLE_CC__)
-	//	return "osx";
-	return "macos";
-#else
-	return {};
-#endif
-}
+
 
 // trim from start (in place)
 inline void ltrim(std::string & s) {
@@ -117,37 +115,3 @@ inline std::string ofTrim(std::string line) {
 	// line.erase(std::remove_if( line.begin(), line.end(), ::isspace), line.end());
 	return line;
 }
-
-struct copyTemplateFile {
-public:
-	fs::path from;
-	fs::path to;
-	std::vector<std::pair<std::string, std::string>> findReplaces;
-	std::vector<std::string> appends;
-	bool run();
-};
-
-#include <map>
-static struct genConfig {
-	fs::path ofPath { "../" };
-	// it will be cwd unless project path is passed by variable.
-	fs::path projectPath { "../apps/werkApps/Pulsar" };
-	std::string platform { getPlatformString() };
-	// void setOFPath -  to set both ofPath and templatesPath ?
-	//
-	// void getFoldersRecursively(const fs::path & path, std::string platform);
-	std::map<std::string, std::vector<fs::path>> filesMap;
-
-
-	void showFiles() {
-		for (auto & f : filesMap) {
-			alert(f.first + ":", 31);
-			for (auto & s : f.second) {
-				std::cout << s << std::endl;
-			}
-		}
-	}
-
-	void scanFolder(const fs::path & path);
-
-} conf;
