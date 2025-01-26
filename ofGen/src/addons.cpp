@@ -1,13 +1,69 @@
 #include "addons.h"
-#include <iostream>
 #include <fstream>
+#include <iostream>
 
 using std::string;
 using std::vector;
 #include "utils.h"
+#include <glob.h>
+
+bool ofAddon::ofIsPathInPath(const fs::path & path, const fs::path & base) {
+	auto rel = fs::relative(path, base);
+	return !rel.empty() && rel.native()[0] != '.';
+}
 
 void ofAddon::load() {
-	alert("ADDON " + name, 91);
+	loadAddonConfig();
+	loadFiles();
+	relative();
+	refine();
+	showFiles();
+}
+
+void ofAddon::relative() {
+	alert("relative :: addon " + name, 91);
+	for (auto & f : filesMap) {
+		alert(f.first + ":", 31);
+		for (auto & s : f.second) {
+			s = fs::relative(s, path);
+			// std::cout << s << std::endl;
+		}
+	}
+}
+
+void ofAddon::refine() {
+	alert("refine :: addon " + name, 91);
+
+	// if (addonProperties.contains("ADDON_SOURCES_EXCLUDE")) {
+	// 	alert("ADDON_SOURCES_EXCLUDE not empty :: ");
+	// 	for (auto & a : addonProperties["ADDON_SOURCES_EXCLUDE"]) {
+	// 		string value = stringReplace(a, "/%", "");
+	// 		alert(value, 92);
+	// 		exclusionsMap["sources"].emplace_back(value);
+	// 	}
+	// 	for (auto & e : addonProperties["ADDON_SOURCES_EXCLUDE"]) {
+	// 		alert(e);
+	// 	}
+
+	// } else {
+	// 	alert("ADDON_SOURCES_EXCLUDE empty");
+	// }
+}
+
+void ofAddon::showFiles() {
+	alert("showFiles :: addon " + name, 91);
+	for (auto & f : filesMap) {
+		alert(f.first + ":", 31);
+		for (auto & s : f.second) {
+			std::cout << s << std::endl;
+		}
+	}
+}
+
+void ofAddon::loadFiles() {
+	alert("loadFiles :: addon " + name, 91);
+
+	scanFolder(path / "src", filesMap, true);
 
 	// get addon libs, it can be none, one or multiple
 	fs::path folderLibs { path / "libs" };
@@ -26,7 +82,7 @@ void ofAddon::load() {
 			alert(f.string(), 95);
 			auto includeFolder { f / "include" };
 			if (fs::exists(includeFolder)) {
-				conf.scanFolder(includeFolder, true);
+				scanFolder(includeFolder, filesMap, true);
 			}
 
 			if (fs::exists(f / "lib")) {
@@ -38,6 +94,7 @@ void ofAddon::load() {
 						continue;
 					} else {
 						hasPlatformFolder = true;
+						scanFolder(folder, filesMap, true);
 						alert("folder yes exist " + folder.string(), 94);
 					}
 				}
@@ -46,49 +103,13 @@ void ofAddon::load() {
 
 		if (!hasPlatformFolder) {
 			alert("don't have platform folder, will scan everything " + folderLibs.string(), 92);
-			conf.scanFolder(folderLibs, true);
+			scanFolder(folderLibs, filesMap, true);
 		}
 	}
+}
 
-	// if (fs::exists(libsPath)) {
-	// 	for (auto const & d : fs::directory_iterator { libsPath }) {
-	// 		if (fs::is_directory(d.path())) {
-
-	// 			alert("		Lib inside: " + d.path().string(), 33);
-
-	// 			// TODO: specify platform or platforms before.
-	// 			fs::path staticLibsFolder { d.path() / "lib" / "macos" };
-	// 			if (fs::exists(staticLibsFolder)) {
-	// 				for (auto const & d : fs::directory_iterator { staticLibsFolder }) {
-	// 					alert("		" + d.path().string(), 34);
-	// 				}
-	// 			}
-
-	// 			staticLibsFolder = { d.path() / "lib" / "osx" };
-	// 			if (fs::exists(staticLibsFolder)) {
-	// 				for (auto const & d : fs::directory_iterator { staticLibsFolder }) {
-	// 					alert("		" + d.path().string(), 34);
-	// 				}
-	// 			}
-
-	// 			fs::path includesFolder { d.path() / "include" };
-	// 			if (fs::exists(includesFolder)) {
-
-	// 				fs::recursive_directory_iterator it { includesFolder };
-	// 				fs::recursive_directory_iterator last {};
-
-	// 				for (; it != last; ++it) {
-	// 					if (fs::is_directory(it->path())) {
-	// 						alert("		" + it->path().string(), 35);
-	// 						// folderListMap[path].emplace_back(it->path());
-	// 					}
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// } else {
-	// 	// alert(" libsPath not found ", 31);
-	// }
+void ofAddon::loadAddonConfig() {
+	alert("loadAddonConfig :: addon " + name, 91);
 
 	fs::path addonConfig { path / "addon_config.mk" };
 	// alert ("zed " + fileName.string(), 91);
@@ -103,10 +124,6 @@ void ofAddon::load() {
 	for (auto & originalLine : textToVector(addonConfig)) {
 		lineNum++;
 		string line = originalLine;
-		// not sure if it will work. I'm replacing with spaces. I need to remove them
-		// std::replace( line.begin(), line.end(), '\r', ' ');
-		// std::replace( line.begin(), line.end(), '\n', ' ');
-		// stringReplace(line,"\n","");
 
 		line = ofTrim(line);
 
@@ -114,15 +131,13 @@ void ofAddon::load() {
 		if (line[0] == '#' || line == "") {
 			continue;
 		}
-		// alert (line, 31);
-		stringReplace(line, " \\= ", "=");
-		stringReplace(line, "\\= ", "=");
-		stringReplace(line, " \\=", "=");
-		stringReplace(line, " \\+\\= ", "+=");
-		stringReplace(line, " \\+\\=", "+=");
-		stringReplace(line, "\\+\\= ", "+=");
-		// stringReplace(line,"ADDON_LIBS","SEXOANAL");
-		// alert (line, 32);
+
+		line = stringReplace(line, " \\= ", "=");
+		line = stringReplace(line, "\\= ", "=");
+		line = stringReplace(line, " \\=", "=");
+		line = stringReplace(line, " \\+\\= ", "+=");
+		line = stringReplace(line, " \\+\\=", "+=");
+		line = stringReplace(line, "\\+\\= ", "+=");
 
 		// Trim., removing whitespace
 		// line.erase(std::remove_if( line.begin(), line.end(), ::isspace), line.end());
@@ -174,13 +189,28 @@ void ofAddon::load() {
 			alert("     	  " + p, 95);
 		}
 	}
+
+	const static std::map<std::string, std::string> exclusionsType {
+		{ "ADDON_SOURCES_EXCLUDE", "sources" },
+		{ "ADDON_INCLUDES_EXCLUDE", "includes" },
+		{ "ADDON_LIBS_EXCLUDE", "libs" },
+	};
+
+	for (auto & e : exclusionsType) {
+		if (addonProperties.contains(e.first)) {
+			alert(e.first + " not empty");
+
+			for (auto & a : addonProperties[e.first]) {
+				string value = stringReplace(a, "/%", "");
+				alert(value, 92);
+				exclusionsMap[e.second].emplace_back(value);
+			}
+		} else {
+			alert(e.first + " empty");
+		}
+	}
 	//std::map<string, vector<string> > addonProperties;
 }
-
-
-
-
-
 
 bool copyTemplateFile::run() {
 
@@ -238,21 +268,14 @@ bool copyTemplateFile::run() {
 	return true;
 }
 
-
-
-
-
-void genConfig::scanFolder(const fs::path & path, bool recursive) {
-	alert("scanFolder " + path.string(), 97);
+void scanFolder(const fs::path & path, std::map<std::string, std::vector<fs::path>> & filesMap, bool recursive) {
 	// it should exist and be a folder.
 	if (!fs::exists(path)) return;
 	if (!fs::is_directory(path)) return;
 
-	filesMap["includes"].emplace_back(path);
+	alert("scanFolder " + path.string(), 97);
 
-	// fs::recursive_directory_iterator it { path };
-	// fs::recursive_directory_iterator last {};
-	// for (; it != last; ++it) {
+	filesMap["includes"].emplace_back(path);
 
 	for (auto it = fs::recursive_directory_iterator(path);
 		 it != fs::recursive_directory_iterator();
@@ -271,15 +294,10 @@ void genConfig::scanFolder(const fs::path & path, bool recursive) {
 			continue;
 		}
 
-		alert(f);
+		// alert(f);
 
 		auto ext = f.extension().string();
 		if (fs::is_directory(f)) {
-			// if (ext == ".xcodeproj") {
-			// 	it.disable_recursion_pending();
-			// 	continue;
-			// }
-
 			if (ext == ".framework" || ext == ".xcframework") {
 				// ADD To Frameworks List, and stop searching inside this directory
 				filesMap["frameworks"].emplace_back(f);
@@ -288,33 +306,28 @@ void genConfig::scanFolder(const fs::path & path, bool recursive) {
 			} else {
 				// ADD To includes list
 				filesMap["includes"].emplace_back(f);
+				// std::cout << conf.filesMap["includes"].size() << std::endl;
 			}
 
 		} else {
 			if (ext == ".a" || ext == ".lib") {
 				filesMap["libs"].emplace_back(f);
-			}
-			// allFiles.libs.emplace_back(f);
-			else if (ext == ".dylib" || ext == ".so" || ext == ".dll") {
+			} else if (ext == ".dylib" || ext == ".so" || ext == ".dll") {
 				filesMap["sharedLibs"].emplace_back(f);
-			} else if (ext == ".h" || ext == ".hpp" || ext == ".m" || ext == ".tcc" || ext == ".inl") { //is tcc correct here?
+			} else if (ext == ".h" || ext == ".hpp" || ext == ".m" || ext == ".tcc" || ext == ".inl" || ext == ".in") {
 				filesMap["headers"].emplace_back(f);
 			} else if (ext == ".c" || ext == ".cpp" || ext == ".cc" || ext == ".cxx" || ext == ".mm") {
 				filesMap["sources"].emplace_back(f);
 			} else {
-				alert("no desired extension " + f.string());
+				alert("no desired extension " + f.string(), 94);
 			}
 		}
 	}
 }
 
-
-
-
 void gatherProjectInfo() {
 	alert("gatherProjectInfo", 92);
 	// Add project files. TODO: additional source folders
-	// std::cout << &conf << std::endl;
 
 	conf.ofTemplates.emplace_back(new ofTemplateMacos());
 	ofProject project;
@@ -323,9 +336,11 @@ void gatherProjectInfo() {
 	// now parse project addons, or yml
 	fs::path addonsListFile { conf.projectPath / "addons.make" };
 	if (fs::exists(addonsListFile)) {
-	// for (auto & l : { "ofxMidi" }) {
 
-	   for (auto & l : textToVector(addonsListFile)) {
+		// vector <std::string> addonsList { textToVector(addonsListFile) };
+		vector<std::string> addonsList = { "ofxOpenCv" }; //ofxMidi
+
+		for (auto & l : addonsList) {
 			divider();
 
 			ofAddon addon;
@@ -343,27 +358,11 @@ void gatherProjectInfo() {
 				continue;
 			}
 
-			// conf.scanFolder(addon.path / "src", true);
-
-			// scan, but not recursive, so add paths to paths, sources to sources.
-			// conf.scanFolder(addon.path / "libs", false);
-
-
-			// std::cout << dir_entry.path() << '\n';
-
 			addon.load();
-			// cout << l << endl;
-			// parseAddon(l);
-
 			conf.ofAddons.emplace_back(addon);
 		}
 	}
-
-	// conf.scanFolder(conf.projectPath / "src", true);
-
 }
-
-
 
 void parseConfigAllAddons() {
 	alert("parseConfig begin");

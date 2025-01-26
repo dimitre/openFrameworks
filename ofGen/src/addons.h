@@ -1,19 +1,10 @@
 #pragma once
 
-
 #include "utils.h"
 
-#if __has_include(<filesystem>)
-	#include <filesystem>
-#else
-	#include <experimental/filesystem>
-#endif
-namespace fs = std::__fs::filesystem;
-
-
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
 
 inline std::string getPlatformString() {
 #ifdef __linux__
@@ -38,9 +29,6 @@ inline std::string getPlatformString() {
 #endif
 }
 
-
-
-
 struct copyTemplateFile {
 public:
 	fs::path from;
@@ -50,16 +38,27 @@ public:
 	bool run();
 };
 
-
 struct ofAddon {
 public:
-    std::string currentParseState { "" };
-    std::string name { "" };
-    fs::path path;
-    std::map<std::string, std::vector<std::string> > addonProperties;
-    void load();
-};
+	std::string currentParseState { "" };
+	std::string name { "" };
+	fs::path path;
 
+	// Testing it here now.
+	std::map<std::string, std::vector<fs::path>> filesMap;
+	std::map<std::string, std::vector<fs::path>> exclusionsMap;
+
+	std::map<std::string, std::vector<std::string>> addonProperties;
+
+	bool ofIsPathInPath(const fs::path & path, const fs::path & base);
+
+	void load();
+	void loadFiles();
+	void relative();
+	void loadAddonConfig();
+	void refine();
+	void showFiles();
+};
 
 struct ofTemplate {
 public:
@@ -77,42 +76,27 @@ public:
 	// load to memory
 };
 
-
-
 #include <map>
-static struct genConfig {
+struct genConfig {
 	fs::path ofPath { "../" };
 	// it will be cwd unless project path is passed by variable.
 	fs::path projectPath { "../apps/werkApps/Pulsar" };
 	// std::string platform { getPlatformString() };
 	// void setOFPath -  to set both ofPath and templatesPath ?
-	//
-	// void getFoldersRecursively(const fs::path & path, std::string platform);
-	std::map<std::string, std::vector<fs::path>> filesMap;
+	// std::map<std::string, std::vector<fs::path>> filesMap;
 
 	std::vector<std::string> projects { "zed", "vscode" };
 	std::vector<std::string> platforms { getPlatformString(), "osx" };
 
-	void showFiles() {
-	   alert(":::::..... showFiles", 93);
-		for (auto & f : filesMap) {
-			alert(f.first + ":", 31);
-			for (auto & s : f.second) {
-				std::cout << s << std::endl;
-			}
-		}
-	}
-
-	void scanFolder(const fs::path & path, bool recursive = false);
+	// void scanFolder(const fs::path & path, bool recursive = false);
 
 	std::vector<ofAddon> ofAddons;
 	std::vector<ofTemplate *> ofTemplates;
 	// void scanFolderRecursive(const fs::path & path);
-} conf;
+};
 
-
-
-
+void scanFolder(const fs::path & path, std::map<std::string, std::vector<fs::path>> & filesMap, bool recursive = false);
+static genConfig conf;
 
 struct ofTemplateMacos : public ofTemplate {
 public:
@@ -134,8 +118,6 @@ public:
 	void build() override {};
 };
 
-
-
 struct ofProject {
 public:
 	vector<ofAddon *> addonsPointer;
@@ -146,7 +128,6 @@ public:
 		std::cout << "templates.size " << templates.size() << std::endl;
 	}
 };
-
 
 // void parseAddon( const fs::path & addonPath ) {
 //
