@@ -29,14 +29,6 @@ inline std::string getPlatformString() {
 #endif
 }
 
-struct copyTemplateFile {
-public:
-	fs::path from;
-	fs::path to;
-	std::vector<std::pair<std::string, std::string>> findReplaces;
-	std::vector<std::string> appends;
-	bool run();
-};
 
 struct ofAddon {
 public:
@@ -47,10 +39,10 @@ public:
 	// Testing it here now.
 	std::map<std::string, std::vector<fs::path>> filesMap;
 	std::map<std::string, std::vector<fs::path>> exclusionsMap;
+	std::map<std::string, std::vector<fs::path>> filteredMap;
 
 	std::map<std::string, std::vector<std::string>> addonProperties;
 
-	bool ofIsPathInPath(const fs::path & path, const fs::path & base);
 
 	void load();
 	void loadFiles();
@@ -60,11 +52,21 @@ public:
 	void showFiles();
 };
 
+struct copyTemplateFile {
+public:
+	fs::path from;
+	fs::path to;
+	std::vector<std::pair<std::string, std::string>> findReplaces;
+	std::vector<std::string> appends;
+	bool isFolder = false;
+	bool run();
+};
+
 struct ofTemplate {
 public:
 	std::string name { "" };
 	fs::path path;
-	ofTemplate() { }
+	ofTemplate() {}
 	std::vector<copyTemplateFile> copyTemplateFiles;
 	virtual void load() { }
 	virtual void build() {
@@ -72,34 +74,12 @@ public:
 			c.run();
 		}
 	}
-
-	// load to memory
 };
 
-#include <map>
-struct genConfig {
-	fs::path ofPath { "../" };
-	// it will be cwd unless project path is passed by variable.
-	fs::path projectPath { "../apps/werkApps/Pulsar" };
-	// std::string platform { getPlatformString() };
-	// void setOFPath -  to set both ofPath and templatesPath ?
-	// std::map<std::string, std::vector<fs::path>> filesMap;
-
-	std::vector<std::string> projects { "zed", "vscode" };
-	std::vector<std::string> platforms { getPlatformString(), "osx" };
-
-	// void scanFolder(const fs::path & path, bool recursive = false);
-
-	std::vector<ofAddon> ofAddons;
-	std::vector<ofTemplate *> ofTemplates;
-	// void scanFolderRecursive(const fs::path & path);
-};
-
-void scanFolder(const fs::path & path, std::map<std::string, std::vector<fs::path>> & filesMap, bool recursive = false);
-static genConfig conf;
 
 struct ofTemplateMacos : public ofTemplate {
 public:
+    std::string target == "macos";
 	ofTemplateMacos() {
 		name = "macos";
 		path = conf.ofPath / "scripts" / "templates" / name;
@@ -117,6 +97,33 @@ public:
 	void load() override {};
 	void build() override {};
 };
+
+#include <map>
+struct genConfig {
+	fs::path ofPath { "../" };
+	// it will be cwd unless project path is passed by variable.
+	fs::path projectPath { "../apps/werkApps/Pulsar" };
+
+	std::vector<std::string> projects { "zed", "vscode" };
+	std::vector<std::string> platforms { getPlatformString(), "osx" };
+
+	std::vector<ofAddon> ofAddons;
+	std::vector<ofTemplate *> ofTemplates;
+	// void scanFolderRecursive(const fs::path & path);
+};
+
+static genConfig conf;
+
+
+bool ofIsPathInPath(const fs::path & path, const fs::path & base);
+
+void scanFolder(const fs::path & path,
+    std::map<std::string, std::vector<fs::path>> & filesMap,
+    // std::map<std::string, std::vector<fs::path>> & exclusionsMap,
+    bool recursive = false);
+
+
+
 
 struct ofProject {
 public:

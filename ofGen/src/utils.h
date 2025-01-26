@@ -61,6 +61,7 @@ cd to the folder and invoke ofGen
 
 static void divider() {
 	// cout << colorText(colorText("-----------------------------------------------------------", 5), 92) << endl;
+	std::cout << std::endl;
 	std::cout << colorText("-----------------------------------------------------------", 92) << std::endl;
 }
 

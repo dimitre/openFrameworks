@@ -2,12 +2,14 @@
 #include <fstream>
 #include <iostream>
 
+using std::cout;
+using std::endl;
 using std::string;
 using std::vector;
 #include "utils.h"
 #include <glob.h>
 
-bool ofAddon::ofIsPathInPath(const fs::path & path, const fs::path & base) {
+bool ofIsPathInPath(const fs::path & path, const fs::path & base) {
 	auto rel = fs::relative(path, base);
 	return !rel.empty() && rel.native()[0] != '.';
 }
@@ -17,22 +19,37 @@ void ofAddon::load() {
 	loadFiles();
 	relative();
 	refine();
-	showFiles();
+	// showFiles();
 }
 
 void ofAddon::relative() {
 	alert("relative :: addon " + name, 91);
 	for (auto & f : filesMap) {
-		alert(f.first + ":", 31);
 		for (auto & s : f.second) {
 			s = fs::relative(s, path);
-			// std::cout << s << std::endl;
 		}
 	}
 }
 
 void ofAddon::refine() {
 	alert("refine :: addon " + name, 91);
+
+	for (const auto & f : filesMap) {
+		for (const auto & s : f.second) {
+			for (const auto & e : exclusionsMap[f.first]) {
+				if (!ofIsPathInPath(s, e)) {
+					filteredMap[f.first].emplace_back(s);
+					// std::cout << s << std::endl;
+					// alert("added " + s.string(), 92);
+				} else {
+
+					alert("	excluded " + s.string(), 93);
+					alert("	exclusion=" + e.string() + ", section=" + f.first, 33);
+					// alert (, 93);
+				}
+			}
+		}
+	}
 
 	// if (addonProperties.contains("ADDON_SOURCES_EXCLUDE")) {
 	// 	alert("ADDON_SOURCES_EXCLUDE not empty :: ");
@@ -79,7 +96,7 @@ void ofAddon::loadFiles() {
 				continue;
 			}
 			//
-			alert(f.string(), 95);
+			alert("		" + f.string(), 95);
 			auto includeFolder { f / "include" };
 			if (fs::exists(includeFolder)) {
 				scanFolder(includeFolder, filesMap, true);
@@ -90,19 +107,19 @@ void ofAddon::loadFiles() {
 
 					fs::path folder { f / "lib" / p };
 					if (!fs::exists(folder)) {
-						alert("folder don't exist " + folder.string(), 96);
+						alert("		folder don't exist " + folder.string(), 96);
 						continue;
 					} else {
 						hasPlatformFolder = true;
 						scanFolder(folder, filesMap, true);
-						alert("folder yes exist " + folder.string(), 94);
+						alert("		folder yes exist " + folder.string(), 94);
 					}
 				}
 			}
 		}
 
 		if (!hasPlatformFolder) {
-			alert("don't have platform folder, will scan everything " + folderLibs.string(), 92);
+			alert("		don't have platform folder, will scan everything " + folderLibs.string(), 92);
 			scanFolder(folderLibs, filesMap, true);
 		}
 	}
@@ -183,12 +200,12 @@ void ofAddon::loadAddonConfig() {
 		}
 	}
 
-	for (auto & a : addonProperties) {
-		alert("    	" + a.first, 94);
-		for (auto & p : a.second) {
-			alert("     	  " + p, 95);
-		}
-	}
+	// for (auto & a : addonProperties) {
+	// 	alert("    	" + a.first, 94);
+	// 	for (auto & p : a.second) {
+	// 		alert("     	  " + p, 95);
+	// 	}
+	// }
 
 	const static std::map<std::string, std::string> exclusionsType {
 		{ "ADDON_SOURCES_EXCLUDE", "sources" },
@@ -198,15 +215,15 @@ void ofAddon::loadAddonConfig() {
 
 	for (auto & e : exclusionsType) {
 		if (addonProperties.contains(e.first)) {
-			alert(e.first + " not empty");
+			// alert(e.first + " not empty");
 
 			for (auto & a : addonProperties[e.first]) {
 				string value = stringReplace(a, "/%", "");
-				alert(value, 92);
+				// alert(value, 92);
 				exclusionsMap[e.second].emplace_back(value);
 			}
 		} else {
-			alert(e.first + " empty");
+			// alert(e.first + " empty");
 		}
 	}
 	//std::map<string, vector<string> > addonProperties;
@@ -253,13 +270,24 @@ bool copyTemplateFile::run() {
 			}
 
 		} else {
-			// straight copy
-			try {
-				fs::copy(from, to, fs::copy_options::update_existing);
-			} catch (fs::filesystem_error & e) {
-				std::cerr << "error copying template file " << from << " : " << to << std::endl;
-				std::cerr << e.what() << std::endl;
-				return false;
+			// no replacements, straight copy
+			if (isFolder) {
+				try {
+					if (!fs::exists(to)) {
+						fs::copy(from, to, fs::copy_options::recursive | fs::copy_options::update_existing);
+					}
+				} catch (const std::exception & e) {
+					std::cerr << "Error copying template files: " << e.what() << std::endl;
+					return false;
+				}
+			} else {
+				try {
+					fs::copy(from, to, fs::copy_options::update_existing);
+				} catch (fs::filesystem_error & e) {
+					std::cerr << "error copying template file " << from << " : " << to << std::endl;
+					std::cerr << e.what() << std::endl;
+					return false;
+				}
 			}
 		}
 	} else {
@@ -268,12 +296,17 @@ bool copyTemplateFile::run() {
 	return true;
 }
 
-void scanFolder(const fs::path & path, std::map<std::string, std::vector<fs::path>> & filesMap, bool recursive) {
+// void scanFolder(const fs::path & path, std::map<std::string, std::vector<fs::path>> & filesMap, bool recursive) {
+
+void scanFolder(const fs::path & path,
+	std::map<std::string, std::vector<fs::path>> & filesMap,
+	// std::map<std::string, std::vector<fs::path>> & exclusionsMap,
+	bool recursive) {
 	// it should exist and be a folder.
 	if (!fs::exists(path)) return;
 	if (!fs::is_directory(path)) return;
 
-	alert("scanFolder " + path.string(), 97);
+	alert("    scanFolder " + path.string(), 97);
 
 	filesMap["includes"].emplace_back(path);
 
@@ -319,7 +352,7 @@ void scanFolder(const fs::path & path, std::map<std::string, std::vector<fs::pat
 			} else if (ext == ".c" || ext == ".cpp" || ext == ".cc" || ext == ".cxx" || ext == ".mm") {
 				filesMap["sources"].emplace_back(f);
 			} else {
-				alert("no desired extension " + f.string(), 94);
+				alert("		no desired extension " + f.string(), 94);
 			}
 		}
 	}
@@ -337,8 +370,8 @@ void gatherProjectInfo() {
 	fs::path addonsListFile { conf.projectPath / "addons.make" };
 	if (fs::exists(addonsListFile)) {
 
-		// vector <std::string> addonsList { textToVector(addonsListFile) };
-		vector<std::string> addonsList = { "ofxOpenCv" }; //ofxMidi
+		vector<std::string> addonsList { textToVector(addonsListFile) };
+		// vector<std::string> addonsList = { "ofxMidi" }; //ofxMidi ofxOpenCv
 
 		for (auto & l : addonsList) {
 			divider();
@@ -369,6 +402,13 @@ void parseConfigAllAddons() {
 	for (auto const & d : fs::directory_iterator { conf.ofPath / "addons" }) {
 		if (fs::is_directory(d.path())) {
 			// parseAddon(d.path());
+			//
+			ofAddon addon;
+			addon.name = d.path().filename();
+			// check if local addon exists, if not check in of addons folder.
+			addon.path = d.path();
+			addon.load();
+			conf.ofAddons.emplace_back(addon);
 		}
 	}
 	alert("parseConfig end");
@@ -390,4 +430,80 @@ void createTemplates() {
 		cout << t->path << endl;
 	}
 	cout << conf.ofTemplates.size() << endl;
+}
+
+void ofTemplateMacos::load() {
+	auto projectName = conf.projectPath.filename().string();
+	fs::path xcodeProject { conf.projectPath / (projectName + ".xcodeproj") };
+	cout << xcodeProject << endl;
+
+	try {
+		fs::create_directories(xcodeProject);
+	} catch (const std::exception & e) {
+		std::cerr << "Error creating directories: " << e.what() << std::endl;
+		return false;
+	}
+
+	std::pair<string, string> rootReplacements;
+
+	// Just replace ofPath if it is not default relative to project
+	if (!fs::equivalent(conf.ofPath, "../../..")) {
+		rootReplacements = { "../../..", conf.ofPath.string() };
+	}
+
+	copyTemplateFiles.push_back(
+		{ path / "emptyExample.xcodeproj" / "project.pbxproj", xcodeProject / "project.pbxproj",
+			{ { "emptyExample", projectName },
+				rootReplacements } });
+
+	copyTemplateFiles.push_back({ path / "Project.xcconfig",
+		conf.projectPath / "Project.xcconfig",
+		{ rootReplacements } });
+
+	// try to copy all files from macos / ios - if they exist in the template
+	for (auto & f : {
+			 "openFrameworks-Info.plist",
+			 "of.entitlements",
+			 "ofxiOS-Info.plist",
+			 "ofxiOS_Prefix.pch" }) {
+
+		if (fs::exists(path / f)) {
+			copyTemplateFiles.push_back({ path / f, conf.projectPath / f });
+		}
+	}
+
+	copyTemplateFiles.push_back({ path / "mediaAssets", conf.projectPath / "mediaAssets" });
+	copyTemplateFiles.back().isFolder = true;
+
+	// Equivalent to SaveScheme in projectGenerator
+	//
+	auto schemeFolder = conf.projectPath / ( projectName + ".xcodeproj" ) / "xcshareddata/xcschemes";
+
+	if (fs::exists(schemeFolder)) {
+		fs::remove_all(schemeFolder);
+	}
+	fs::create_directories(schemeFolder);
+
+	if ( target == "osx" || target == "macos" ) {
+		for (auto & f : { "Release", "Debug" }) {
+			copyTemplateFiles.push_back({
+				path / ("emptyExample.xcodeproj/xcshareddata/xcschemes/emptyExample " + string(f) + ".xcscheme"),
+				schemeFolder / (projectName + " " +f+ ".xcscheme"),
+				{{ "emptyExample", projectName }}
+			});
+		}
+
+		copyTemplateFiles.push_back({
+			conf.projectPath / (projectName + ".xcodeproj/project.xcworkspace"),
+			path / "emptyExample.xcodeproj/project.xcworkspace"
+		});
+	} else {
+
+		// MARK:- IOS sector;
+		copyTemplateFiles.push_back({
+			path / "emptyExample.xcodeproj/xcshareddata/xcschemes/emptyExample.xcscheme",
+			schemeFolder / (projectName + ".xcscheme"),
+			{{ "emptyExample", projectName }}
+		});
+	}
 }
