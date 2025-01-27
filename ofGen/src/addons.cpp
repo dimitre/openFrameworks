@@ -8,7 +8,6 @@ using std::string;
 using std::vector;
 #include "utils.h"
 
-
 void scanFolder(const fs::path & path,
 	std::map<std::string, std::vector<fs::path>> & filesMap,
 	bool recursive) {
@@ -19,6 +18,7 @@ void scanFolder(const fs::path & path,
 
 	// do we want to add all root paths to includes or not?
 	filesMap["includes"].emplace_back(path);
+	alert("add includes, " + path.string(), 31);
 
 	for (auto it = fs::recursive_directory_iterator(path);
 		 it != fs::recursive_directory_iterator();
@@ -90,17 +90,20 @@ void ofAddon::refine() {
 
 	for (const auto & f : filesMap) {
 		for (const auto & s : f.second) {
+			bool add = true;
 			for (const auto & e : exclusionsMap[f.first]) {
-				if (!ofIsPathInPath(s, e)) {
-					filteredMap[f.first].emplace_back(s);
+				if (ofIsPathInPath(s, e)) {
+					add = false;
 					// std::cout << s << std::endl;
 					// alert("added " + s.string(), 92);
-				} else {
-
-					alert("	excluded " + s.string(), 93);
-					alert("	exclusion=" + e.string() + ", section=" + f.first, 33);
+					alert("	└─excluded " + s.string(), 93);
+					alert("	   exclusion=" + e.string() + ", section=" + f.first, 33);
 					// alert (, 93);
+					continue;
 				}
+			}
+			if (add) {
+				filteredMap[f.first].emplace_back(s);
 			}
 		}
 	}
@@ -312,11 +315,11 @@ bool copyTemplateFile::run() {
 				}
 				replaceAll(contents, f.first, f.second);
 				// ofLogVerbose() << "└─ Replacing " << f.first << " : " << f.second;
-				std::cout << "└─ Replacing " << f.first << " : " << f.second << std::endl;
+				std::cout << "	└─ Replacing " << f.first << " : " << f.second << std::endl;
 			}
 
 			for (auto & a : appends) {
-				// alert(a, 35);
+				alert("APPEND ::: " + a, 96);
 				contents += "\n" + a;
 			}
 
@@ -361,7 +364,6 @@ bool copyTemplateFile::run() {
 	}
 	return true;
 }
-
 
 void gatherProjectInfo() {
 	alert("gatherProjectInfo", 92);
@@ -454,6 +456,8 @@ void createTemplates() {
 }
 
 void ofTemplateMake::load() {
+	alert("ofTemplateMake::load()", 92);
+
 	copyTemplateFiles.push_back({ path / "Makefile",
 		conf.projectPath / "Makefile" });
 
@@ -462,6 +466,8 @@ void ofTemplateMake::load() {
 }
 
 void ofTemplateZed::load() {
+	alert("ofTemplateZed::load()", 92);
+
 	// bool ok = ofTemplateMake::load();
 
 	copyTemplateFiles.push_back({ path / "compile_flags.txt",
@@ -473,14 +479,24 @@ void ofTemplateZed::load() {
 	copyTemplateFiles.back().isFolder = true;
 
 	for (auto & a : conf.ofAddons) {
+		alert("parsing addon " + a.name, 97);
+		for (auto & f : a.filteredMap) {
+			alert(">>>" + f.first);
+			for (auto & s : f.second) {
+				alert("   " + s.string(), 92);
+			}
+		}
+
 		for (auto & f : a.filteredMap["includes"]) {
-			std::string inc { "-I" + f.string() };
+			std::string inc { "-I" + fs::path(a.path / f).string() };
 			copyTemplateFiles[0].appends.emplace_back(inc);
 		}
 	}
 }
 
 void ofTemplateMacos::load() {
+	alert("ofTemplateMacos::load()", 92);
+
 	auto projectName = conf.projectPath.filename().string();
 	fs::path xcodeProject { conf.projectPath / (projectName + ".xcodeproj") };
 	cout << xcodeProject << endl;

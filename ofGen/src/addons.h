@@ -54,7 +54,7 @@ struct ofTemplate;
 
 #include <map>
 struct genConfig {
-	fs::path ofPath { "../" };
+	fs::path ofPath { "../../.." };
 	// it will be cwd unless project path is passed by variable.
 	fs::path projectPath { "../apps/werkApps/Pulsar" };
 

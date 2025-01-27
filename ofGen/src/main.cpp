@@ -4,7 +4,8 @@
 
 int main(const int argc, const char * argv[]) {
 	cout << sign << endl; // HEADER
-	// gatherProjectInfo();
+	fs::current_path(conf.projectPath);
+	gatherProjectInfo();
 	// parseConfigAllAddons();
 	createTemplates();
 	infoTemplates();
