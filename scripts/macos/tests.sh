@@ -22,7 +22,7 @@ NC='\033[0m' # No Color
 
 function buildExample() {
     echo "##[group]Building $1"
-    cp scripts/templates/macos/{Makefile,config.make} examples/templates/$1/
+    cp scripts/templates/make/{Makefile,config.make} examples/templates/$1/
     # cp scripts/templates/macos/config.make examples/templates/$1/
     make -j -C examples/templates/$1/
     echo "##[endgroup]"
@@ -39,8 +39,7 @@ for group in *; do
         for test in $group/*; do
             if [ -d $test ]; then
                 cd $test
-                cp ../../../scripts/templates/macos/Makefile .
-                cp ../../../scripts/templates/macos/config.make .
+                cp ../../../scripts/templates/make/{Makefile,config.make} .
                 make -j2 Debug
                 make RunDebug
 				errorcode=$?
