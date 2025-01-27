@@ -5,7 +5,9 @@
 int main(const int argc, const char * argv[]) {
 	cout << sign << endl; // HEADER
 	// gatherProjectInfo();
-	parseConfigAllAddons();
+	// parseConfigAllAddons();
+	createTemplates();
+	infoTemplates();
 
 	return 0;
 }

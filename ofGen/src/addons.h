@@ -29,7 +29,6 @@ inline std::string getPlatformString() {
 #endif
 }
 
-
 struct ofAddon {
 public:
 	std::string currentParseState { "" };
@@ -43,7 +42,6 @@ public:
 
 	std::map<std::string, std::vector<std::string>> addonProperties;
 
-
 	void load();
 	void loadFiles();
 	void relative();
@@ -52,51 +50,7 @@ public:
 	void showFiles();
 };
 
-struct copyTemplateFile {
-public:
-	fs::path from;
-	fs::path to;
-	std::vector<std::pair<std::string, std::string>> findReplaces;
-	std::vector<std::string> appends;
-	bool isFolder = false;
-	bool run();
-};
-
-struct ofTemplate {
-public:
-	std::string name { "" };
-	fs::path path;
-	ofTemplate() {}
-	std::vector<copyTemplateFile> copyTemplateFiles;
-	virtual void load() { }
-	virtual void build() {
-		for (auto & c : copyTemplateFiles) {
-			c.run();
-		}
-	}
-};
-
-
-struct ofTemplateMacos : public ofTemplate {
-public:
-    std::string target == "macos";
-	ofTemplateMacos() {
-		name = "macos";
-		path = conf.ofPath / "scripts" / "templates" / name;
-	}
-	void load() override {};
-	void build() override {};
-};
-
-struct ofTemplateZed : public ofTemplate {
-public:
-	ofTemplateZed() {
-		name = "zed";
-		path = conf.ofPath / "scripts" / "templates" / name;
-	}
-	void load() override {};
-	void build() override {};
-};
+struct ofTemplate;
 
 #include <map>
 struct genConfig {
@@ -114,16 +68,80 @@ struct genConfig {
 
 static genConfig conf;
 
+struct copyTemplateFile {
+public:
+	fs::path from;
+	fs::path to;
+	std::vector<std::pair<std::string, std::string>> findReplaces;
+	std::vector<std::string> appends;
+	bool isFolder = false;
+	bool run();
+	void info();
+};
+
+struct ofTemplate {
+public:
+	std::string name { "" };
+	fs::path path;
+	ofTemplate() { }
+	std::vector<copyTemplateFile> copyTemplateFiles;
+
+	void info() {
+		alert("ofTemplate::info " + name + ", path=" + path.string());
+		for (auto & c : copyTemplateFiles) {
+			c.info();
+		}
+	}
+	virtual void load() {
+	   std::cout << "ofTemplate::load() called on primitive member" << std::endl;
+	}
+	virtual void build() {
+	   alert("ofTemplate::build " + name + ", path=" + path.string());
+		for (auto & c : copyTemplateFiles) {
+			c.run();
+			// c.info();
+		}
+	}
+};
+
+struct ofTemplateMacos : public ofTemplate {
+public:
+    // FIXME: Provisory variable, to be handled by platform macos / ios in near future
+	std::string target = "macos";
+	ofTemplateMacos() {
+		name = "macos";
+		path = conf.ofPath / "scripts" / "templates" / name;
+	}
+	void load() override;
+	// void build() override {};
+};
+
+struct ofTemplateMake : public ofTemplate {
+public:
+	ofTemplateMake() {
+		name = "make";
+		path = conf.ofPath / "scripts" / "templates" / name;
+	}
+	void load() override;
+	// void build() override {};
+};
+
+struct ofTemplateZed : public ofTemplate {
+public:
+	ofTemplateZed() {
+		name = "zed";
+		path = conf.ofPath / "scripts" / "templates" / name;
+	}
+	void load() override;
+	// void build() override {};
+};
 
 bool ofIsPathInPath(const fs::path & path, const fs::path & base);
 
 void scanFolder(const fs::path & path,
-    std::map<std::string, std::vector<fs::path>> & filesMap,
-    // std::map<std::string, std::vector<fs::path>> & exclusionsMap,
-    bool recursive = false);
-
-
-
+	std::map<std::string, std::vector<fs::path>> & filesMap,
+	// std::map<std::string, std::vector<fs::path>> & exclusionsMap,
+	bool recursive = false);
 
 struct ofProject {
 public:
@@ -141,3 +159,4 @@ public:
 void gatherProjectInfo();
 void parseConfigAllAddons();
 void createTemplates();
+void infoTemplates();

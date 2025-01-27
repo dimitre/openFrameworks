@@ -229,6 +229,16 @@ void ofAddon::loadAddonConfig() {
 	//std::map<string, vector<string> > addonProperties;
 }
 
+void copyTemplateFile::info() {
+	alert("	copyTemplateFile info -------------", 92);
+	alert("	from " + from.string(), 93);
+	alert("	to " + to.string(), 93);
+	for (auto & f : findReplaces) {
+		std::cout << "	└─ Replacing " << f.first << " : " << f.second << std::endl;
+	}
+	std::cout << std::endl;
+}
+
 bool copyTemplateFile::run() {
 
 	if (fs::exists(from)) {
@@ -273,10 +283,13 @@ bool copyTemplateFile::run() {
 			// no replacements, straight copy
 			if (isFolder) {
 				try {
+				    // Remove exists? Remove destination folder?
 					if (!fs::exists(to)) {
 						fs::copy(from, to, fs::copy_options::recursive | fs::copy_options::update_existing);
 					}
-				} catch (const std::exception & e) {
+				}
+				catch (fs::filesystem_error & e) {
+				// catch (const std::exception & e) {
 					std::cerr << "Error copying template files: " << e.what() << std::endl;
 					return false;
 				}
@@ -414,6 +427,13 @@ void parseConfigAllAddons() {
 	alert("parseConfig end");
 }
 
+void infoTemplates() {
+	alert("infoTemplates()", 95);
+	for (auto & t : conf.ofTemplates) {
+		t->info();
+	}
+}
+
 void createTemplates() {
 	std::vector<std::string> templateNames { "zed", "macos" };
 	for (const auto & t : templateNames) {
@@ -426,10 +446,31 @@ void createTemplates() {
 	}
 	alert("createTemplates", 92);
 	for (auto & t : conf.ofTemplates) {
-		cout << t->name << endl;
-		cout << t->path << endl;
+		cout << t->name << " : " << t->path << endl;
+		t->load();
+		// t->info();
 	}
-	cout << conf.ofTemplates.size() << endl;
+	// cout << conf.ofTemplates.size() << endl;
+}
+
+void ofTemplateMake::load() {
+	copyTemplateFiles.push_back({ path / "Makefile",
+		conf.projectPath / "Makefile" });
+
+	copyTemplateFiles.push_back({ path / "config.make",
+		conf.projectPath / "config.make" });
+}
+
+void ofTemplateZed::load() {
+	// bool ok = ofTemplateMake::load();
+
+	copyTemplateFiles.push_back({ path / "compile_flags.txt",
+		conf.projectPath / "compile_flags.txt" });
+
+	copyTemplateFiles.push_back({ path / ".zed",
+		conf.projectPath / ".zed" });
+
+	copyTemplateFiles.back().isFolder = true;
 }
 
 void ofTemplateMacos::load() {
@@ -441,7 +482,6 @@ void ofTemplateMacos::load() {
 		fs::create_directories(xcodeProject);
 	} catch (const std::exception & e) {
 		std::cerr << "Error creating directories: " << e.what() << std::endl;
-		return false;
 	}
 
 	std::pair<string, string> rootReplacements;
@@ -477,33 +517,26 @@ void ofTemplateMacos::load() {
 
 	// Equivalent to SaveScheme in projectGenerator
 	//
-	auto schemeFolder = conf.projectPath / ( projectName + ".xcodeproj" ) / "xcshareddata/xcschemes";
+	auto schemeFolder = conf.projectPath / (projectName + ".xcodeproj") / "xcshareddata/xcschemes";
 
 	if (fs::exists(schemeFolder)) {
 		fs::remove_all(schemeFolder);
 	}
 	fs::create_directories(schemeFolder);
-
-	if ( target == "osx" || target == "macos" ) {
+	if (target == "osx" || target == "macos") {
 		for (auto & f : { "Release", "Debug" }) {
-			copyTemplateFiles.push_back({
-				path / ("emptyExample.xcodeproj/xcshareddata/xcschemes/emptyExample " + string(f) + ".xcscheme"),
-				schemeFolder / (projectName + " " +f+ ".xcscheme"),
-				{{ "emptyExample", projectName }}
-			});
+			copyTemplateFiles.push_back({ path / ("emptyExample.xcodeproj/xcshareddata/xcschemes/emptyExample " + string(f) + ".xcscheme"),
+				schemeFolder / (projectName + " " + f + ".xcscheme"),
+				{ { "emptyExample", projectName } } });
 		}
 
-		copyTemplateFiles.push_back({
-			conf.projectPath / (projectName + ".xcodeproj/project.xcworkspace"),
-			path / "emptyExample.xcodeproj/project.xcworkspace"
-		});
+		copyTemplateFiles.push_back({ conf.projectPath / (projectName + ".xcodeproj/project.xcworkspace"),
+			path / "emptyExample.xcodeproj/project.xcworkspace" });
 	} else {
 
 		// MARK:- IOS sector;
-		copyTemplateFiles.push_back({
-			path / "emptyExample.xcodeproj/xcshareddata/xcschemes/emptyExample.xcscheme",
+		copyTemplateFiles.push_back({ path / "emptyExample.xcodeproj/xcshareddata/xcschemes/emptyExample.xcscheme",
 			schemeFolder / (projectName + ".xcscheme"),
-			{{ "emptyExample", projectName }}
-		});
+			{ { "emptyExample", projectName } } });
 	}
 }
