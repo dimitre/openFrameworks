@@ -283,13 +283,12 @@ bool copyTemplateFile::run() {
 			// no replacements, straight copy
 			if (isFolder) {
 				try {
-				    // Remove exists? Remove destination folder?
+					// Remove exists? Remove destination folder?
 					if (!fs::exists(to)) {
 						fs::copy(from, to, fs::copy_options::recursive | fs::copy_options::update_existing);
 					}
-				}
-				catch (fs::filesystem_error & e) {
-				// catch (const std::exception & e) {
+				} catch (fs::filesystem_error & e) {
+					// catch (const std::exception & e) {
 					std::cerr << "Error copying template files: " << e.what() << std::endl;
 					return false;
 				}
@@ -434,8 +433,16 @@ void infoTemplates() {
 	}
 }
 
+void buildTemplates() {
+	alert("buildTemplates()", 95);
+	for (auto & t : conf.ofTemplates) {
+		t->build();
+	}
+}
+
 void createTemplates() {
-	std::vector<std::string> templateNames { "zed", "macos" };
+	// std::vector<std::string> templateNames { "zed", "macos" };
+	std::vector<std::string> templateNames { "zed", "make" };
 	for (const auto & t : templateNames) {
 		if (t == "zed") {
 			conf.ofTemplates.emplace_back(new ofTemplateZed());
@@ -471,6 +478,13 @@ void ofTemplateZed::load() {
 		conf.projectPath / ".zed" });
 
 	copyTemplateFiles.back().isFolder = true;
+
+	for (auto & a : conf.ofAddons) {
+		for (auto & f : a.filteredMap["includes"]) {
+			std::string inc { "-I" + f.string() };
+			copyTemplateFiles[0].appends.emplace_back(inc);
+		}
+	}
 }
 
 void ofTemplateMacos::load() {

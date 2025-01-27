@@ -160,3 +160,4 @@ void gatherProjectInfo();
 void parseConfigAllAddons();
 void createTemplates();
 void infoTemplates();
+void buildTemplates();
