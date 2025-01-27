@@ -7,7 +7,61 @@ using std::endl;
 using std::string;
 using std::vector;
 #include "utils.h"
-#include <glob.h>
+
+
+void scanFolder(const fs::path & path,
+	std::map<std::string, std::vector<fs::path>> & filesMap,
+	bool recursive) {
+	// it should exist and be a folder.
+	if (!fs::exists(path)) return;
+	if (!fs::is_directory(path)) return;
+	alert("    scanFolder " + path.string(), 97);
+
+	// do we want to add all root paths to includes or not?
+	filesMap["includes"].emplace_back(path);
+
+	for (auto it = fs::recursive_directory_iterator(path);
+		 it != fs::recursive_directory_iterator();
+		 ++it) {
+		auto f = it->path();
+
+		// avoid hidden folders like .git etc.
+		if (f.filename().c_str()[0] == '.') {
+			it.disable_recursion_pending();
+			continue;
+		}
+
+		if (!recursive && it.depth() > 0) {
+			it.disable_recursion_pending();
+			continue;
+		}
+		auto ext = f.extension().string();
+
+		if (fs::is_directory(f)) {
+			if (ext == ".framework" || ext == ".xcframework") {
+				// ADD To Frameworks List, and stop searching inside this directory
+				filesMap["frameworks"].emplace_back(f);
+				it.disable_recursion_pending();
+				continue;
+			} else {
+				// ADD To includes list, keep iterating
+				filesMap["includes"].emplace_back(f);
+			}
+		} else {
+			if (ext == ".a" || ext == ".lib") {
+				filesMap["libs"].emplace_back(f);
+			} else if (ext == ".dylib" || ext == ".so" || ext == ".dll") {
+				filesMap["sharedLibs"].emplace_back(f);
+			} else if (ext == ".h" || ext == ".hpp" || ext == ".m" || ext == ".tcc" || ext == ".inl" || ext == ".in") {
+				filesMap["headers"].emplace_back(f);
+			} else if (ext == ".c" || ext == ".cpp" || ext == ".cc" || ext == ".cxx" || ext == ".mm") {
+				filesMap["sources"].emplace_back(f);
+			} else {
+				alert("		no desired extension " + f.string(), 94);
+			}
+		}
+	}
+}
 
 bool ofIsPathInPath(const fs::path & path, const fs::path & base) {
 	auto rel = fs::relative(path, base);
@@ -308,67 +362,6 @@ bool copyTemplateFile::run() {
 	return true;
 }
 
-// void scanFolder(const fs::path & path, std::map<std::string, std::vector<fs::path>> & filesMap, bool recursive) {
-
-void scanFolder(const fs::path & path,
-	std::map<std::string, std::vector<fs::path>> & filesMap,
-	// std::map<std::string, std::vector<fs::path>> & exclusionsMap,
-	bool recursive) {
-	// it should exist and be a folder.
-	if (!fs::exists(path)) return;
-	if (!fs::is_directory(path)) return;
-
-	alert("    scanFolder " + path.string(), 97);
-
-	filesMap["includes"].emplace_back(path);
-
-	for (auto it = fs::recursive_directory_iterator(path);
-		 it != fs::recursive_directory_iterator();
-		 ++it) {
-
-		auto f = it->path();
-
-		// avoid hidden folders like .git etc.
-		if (f.filename().c_str()[0] == '.') {
-			it.disable_recursion_pending();
-			continue;
-		}
-
-		if (!recursive && it.depth() > 0) {
-			it.disable_recursion_pending();
-			continue;
-		}
-
-		// alert(f);
-
-		auto ext = f.extension().string();
-		if (fs::is_directory(f)) {
-			if (ext == ".framework" || ext == ".xcframework") {
-				// ADD To Frameworks List, and stop searching inside this directory
-				filesMap["frameworks"].emplace_back(f);
-				it.disable_recursion_pending();
-				continue;
-			} else {
-				// ADD To includes list
-				filesMap["includes"].emplace_back(f);
-				// std::cout << conf.filesMap["includes"].size() << std::endl;
-			}
-
-		} else {
-			if (ext == ".a" || ext == ".lib") {
-				filesMap["libs"].emplace_back(f);
-			} else if (ext == ".dylib" || ext == ".so" || ext == ".dll") {
-				filesMap["sharedLibs"].emplace_back(f);
-			} else if (ext == ".h" || ext == ".hpp" || ext == ".m" || ext == ".tcc" || ext == ".inl" || ext == ".in") {
-				filesMap["headers"].emplace_back(f);
-			} else if (ext == ".c" || ext == ".cpp" || ext == ".cc" || ext == ".cxx" || ext == ".mm") {
-				filesMap["sources"].emplace_back(f);
-			} else {
-				alert("		no desired extension " + f.string(), 94);
-			}
-		}
-	}
-}
 
 void gatherProjectInfo() {
 	alert("gatherProjectInfo", 92);
