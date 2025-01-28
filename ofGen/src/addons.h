@@ -1,10 +1,21 @@
 #pragma once
 
+#include "uuidxx.h"
+
 #include "utils.h"
 
 #include <map>
 #include <string>
 #include <vector>
+
+static inline std::string ofPathToString(const fs::path & path) {
+	try {
+		return path.string();
+	} catch (fs::filesystem_error & e) {
+		std::cerr << "ofPathToString: error converting fs::path to string " << e.what();
+	}
+	return {};
+}
 
 inline std::string getPlatformString() {
 #ifdef __linux__
@@ -93,10 +104,10 @@ public:
 		}
 	}
 	virtual void load() {
-	   std::cout << "ofTemplate::load() called on primitive member" << std::endl;
+		std::cout << "ofTemplate::load() called on primitive member" << std::endl;
 	}
 	virtual void build() {
-	   alert("ofTemplate::build " + name + ", path=" + path.string());
+		alert("ofTemplate::build " + name + ", path=" + path.string());
 		for (auto & c : copyTemplateFiles) {
 			c.run();
 			// c.info();
@@ -106,8 +117,94 @@ public:
 
 struct ofTemplateMacos : public ofTemplate {
 public:
-    // FIXME: Provisory variable, to be handled by platform macos / ios in near future
+	// FIXME: Provisory variable, to be handled by platform macos / ios in near future
 	std::string target = "macos";
+
+	std::string getFolderUUID(const fs::path & folder, fs::path base);
+
+	std::vector<string> commands;
+	bool debugCommands = false;
+
+	void addCommand(const string & command) {
+		if (debugCommands) {
+			alert(command, 31);
+		}
+		commands.emplace_back(command);
+	}
+
+	fs::path getPathTo(fs::path path, string limit) {
+		fs::path p;
+		vector<fs::path> folders = std::vector(path.begin(), path.end());
+		for (auto & f : folders) {
+			p /= f;
+			if (f.string() == limit) {
+				//            alert("getPathTo "+  p.string(), 33);
+				return p;
+			}
+		}
+		return p;
+	}
+
+	const std::map<fs::path, string> extensionToFileType {
+		{ ".framework", "wrapper.framework" },
+		{ ".xcframework", "wrapper.xcframework" },
+		{ ".dylib", "compiled.mach-o.dylib" },
+
+		{ ".cpp", "sourcecode.cpp.cpp" },
+		{ ".c", "sourcecode.cpp.c" },
+		{ ".h", "sourcecode.cpp.h" },
+		{ ".hpp", "sourcecode.cpp.h" },
+		{ ".mm", "sourcecode.cpp.objcpp" },
+		{ ".m", "sourcecode.cpp.objcpp" },
+
+		{ ".xib", "file.xib" },
+		{ ".metal", "file.metal" },
+		{ ".xcconfig", "text.xcconfig" },
+
+		{ ".entitlements", "text.plist.entitlements" },
+		{ ".plist", "text.plist.xml" },
+	};
+
+	string buildConfigurations[4] = {
+		"E4B69B600A3A1757003C02F2", //macOS Debug
+		"E4B69B610A3A1757003C02F2", //macOS Release
+
+		"E4B69B4E0A3A1720003C02F2", //macOS Debug SDKROOT macosx
+		"E4B69B4F0A3A1720003C02F2", //macOS Release SDKROOT macosx
+	};
+
+	string buildConfigs[2] = {
+		"E4B69B610A3A1757003C02F2", //Release
+		"E4B69B600A3A1757003C02F2", //Debug
+	};
+
+	std::map<fs::path, string> folderUUID;
+	// Temporary
+	std::map<string, fs::path> folderFromUUID;
+
+	string generateUUID(const string & input) {
+		return uuidxx::uuid::Generate().ToString(false);
+	}
+
+	string generateUUID(const fs::path & path) {
+		return generateUUID(path.string());
+	}
+
+	struct fileProperties {
+		bool absolute = false;
+		bool reference = true;
+		bool addToBuildPhase = false;
+		bool codeSignOnCopy = false;
+		bool copyFilesBuildPhase = false;
+		bool linkBinaryWithLibraries = false;
+		bool addToBuildResource = false;
+		bool addToResources = false;
+		bool frameworksBuildPhase = false;
+		bool isSrc = false;
+		bool isGroupWithoutFolder = false;
+		bool isRelativeToSDK = false;
+	};
+
 	ofTemplateMacos() {
 		name = "macos";
 		path = conf.ofPath / "scripts" / "templates" / name;

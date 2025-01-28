@@ -497,6 +497,7 @@ void ofTemplateZed::load() {
 void ofTemplateMacos::load() {
 	alert("ofTemplateMacos::load()", 92);
 
+	// ALL ABOUT FILES HERE
 	auto projectName = conf.projectPath.filename().string();
 	fs::path xcodeProject { conf.projectPath / (projectName + ".xcodeproj") };
 	cout << xcodeProject << endl;
@@ -561,5 +562,185 @@ void ofTemplateMacos::load() {
 		copyTemplateFiles.push_back({ path / "emptyExample.xcodeproj/xcshareddata/xcschemes/emptyExample.xcscheme",
 			schemeFolder / (projectName + ".xcscheme"),
 			{ { "emptyExample", projectName } } });
+	}
+
+	// END ALL ABOUT FILES
+	//
+	// addCommand("# ---- PG VERSION " + getPGVersion());
+	// addCommand("Add :_OFProjectGeneratorVersion string " + getPGVersion());
+
+	// RENAME projectName inside templates
+	// FIXME: review BUILT_PRODUCTS_DIR
+	//
+
+	// macos section
+	std::map<std::string, std::string> uuid {
+		{ "buildConfigurationList", "E4B69B5A0A3A1756003C02F2" },
+		{ "buildActionMask", "E4B69B580A3A1756003C02F2" },
+		// { "projRoot", "E4B69B4A0A3A1720003C02F2" },
+		{ "frameworks", "E7E077E715D3B6510020DFD4" },
+		{ "afterPhase", "928F60851B6710B200E2D791" },
+		{ "buildPhases", "E4C2427710CC5ABF004149E2" },
+		{ "", "" },
+	};
+
+	folderUUID = {
+		{ "src", "E4B69E1C0A3A1BDC003C02F2" },
+		{ "addons", "BB4B014C10F69532006C3DED" },
+		{ "openFrameworks", "191EF70929D778A400F35F26" },
+		{ "", "E4B69B4A0A3A1720003C02F2" }
+		// { "localAddons",	"6948EE371B920CB800B5AC1A" },
+	};
+
+	if (target == "ios") {
+		folderUUID = {
+			{ "src", "E4D8936A11527B74007E1F53" },
+			{ "addons", "BB16F26B0F2B646B00518274" },
+			{ "", "29B97314FDCFA39411CA2CEA" },
+			{ "Frameworks", "901808C02053638E004A7774" }
+			// { "localAddons", 	"6948EE371B920CB800B5AC1A" },
+		};
+
+		uuid["buildConfigurationList"] = "1D6058900D05DD3D006BFB54";
+		uuid["buildActionMask"] = "1D60588E0D05DD3D006BFB54";
+		// uuid["projRoot"] = "29B97314FDCFA39411CA2CEA";
+		uuid["frameworks"] = "1DF5F4E00D08C38300B7A737";
+		uuid["afterPhase"] = "928F60851B6710B200E2D791";
+		uuid["buildPhases"] = "9255DD331112741900D6945E";
+
+		// things specific for ios
+		uuid["resources"] = "BB24DD8F10DA77E000E9C588";
+		uuid["buildPhaseResources"] = "1D60588D0D05DD3D006BFB54";
+
+		buildConfigurations[0] = "1D6058940D05DD3E006BFB54"; // iOS Debug
+		buildConfigurations[1] = "1D6058950D05DD3E006BFB54"; // iOS Release
+		buildConfigurations[2] = "C01FCF4F08A954540054247B"; // iOS Debug
+		buildConfigurations[3] = "C01FCF5008A954540054247B"; // iOS Release
+
+		buildConfigs[0] = "1D6058940D05DD3E006BFB54"; // iOS Debug
+		buildConfigs[1] = "1D6058950D05DD3E006BFB54"; // iOS Release
+	}
+
+	addCommand("Set :objects:" + uuid["buildConfigurationList"] + ":name " + projectName);
+
+	// Just OSX here, debug app naming.
+	if (target == "osx" || target == "macos") {
+		// TODO: Hardcode to variable
+		// FIXME: Debug needed in name?
+		addCommand("Set :objects:E4B69B5B0A3A1756003C02F2:path " + projectName + "Debug.app");
+	}
+}
+
+string ofTemplateMacos::getFolderUUID(const fs::path & folder, fs::path base) {
+	//    alert ("xcodeProject::getFolderUUID " + folder.string() + " base:" + base.string());//+" : isfolder="+ofToString(isFolder)+" : base="+ base.string());
+	auto fullPathFolder = folder;
+
+	// If folder UUID exists just return it.
+	if (folderUUID.find(fullPathFolder) != folderUUID.end()) { // NOT FOUND
+		return folderUUID[fullPathFolder];
+	} else {
+		// in this case it is not found, so it creates UUID for the entire path
+
+		vector<fs::path> folders = std::vector(folder.begin(), folder.end());
+		string lastFolderUUID = folderUUID[""]; // root folder uuid
+		string lastFolder = "";
+
+		if (folders.size()) {
+			// Iterating every folder from full path
+			for (std::size_t a = 0; a < folders.size(); a++) {
+				fs::path fullPath { "" };
+
+				std::vector<fs::path> joinFolders;
+				joinFolders.reserve(a + 1); // Reserve / avoid reallocations
+
+				for (std::size_t i = 0; i <= a; ++i) {
+					joinFolders.push_back(folders[i]);
+				}
+
+				for (const auto & j : joinFolders) {
+					fullPath /= j;
+				}
+
+				//                alert("xcodeProject::getFolderUUID fullpath: " + fullPath.string(),33);
+
+				// Query if partial path is already stored. if not execute this following block
+				if (folderUUID.find(fullPath) != folderUUID.end()) {
+					lastFolderUUID = folderUUID[fullPath];
+					lastFolder = folderFromUUID[lastFolderUUID].string();
+				}
+
+				else {
+
+					string thisUUID = generateUUID(fullPath);
+					folderUUID[fullPath] = thisUUID;
+					folderFromUUID[thisUUID] = fullPath;
+
+					addCommand("");
+					string folderName = ofPathToString(folders[a]);
+					addCommand("Add :objects:" + thisUUID + ":name string " + folderName);
+
+					addCommand("Add :objects:" + thisUUID + ":isa string PBXGroup");
+
+					bool bFolderPathSet = false;
+
+					if (folderName == "external_sources" || folderName == "local_addons") {
+
+						//						addCommand("Add :objects:"+thisUUID+":sourceTree string SOURCE_ROOT");
+						//						addCommand("Add :objects:"+thisUUID+":path string ");
+						addCommand("Add :objects:" + thisUUID + ":sourceTree string <group>");
+
+						bFolderPathSet = true;
+					} else {
+						if (lastFolderUUID == folderUUID[""]) { //} ||
+							//                            lastFolder == "external_sources" || lastFolder == "local_addons") { //
+
+							// Base folders can be in a different depth,
+							// so we cut folders to point to the right path
+							// ROY: THIS hardly makes sense to me. I can see the purpose of it. base2 is never set to anything.
+							fs::path base2 { "" };
+							size_t diff = folders.size() - (a + 1);
+							for (size_t x = 0; x < diff; x++) {
+								base2 = base2.parent_path();
+							}
+							//                            alert ("external_sources base = " + ofPathToString(base2) + " UUID: " + thisUUID, 33);
+							addCommand("Add :objects:" + thisUUID + ":sourceTree string SOURCE_ROOT");
+							addCommand("Add :objects:" + thisUUID + ":path string " + ofPathToString(base2));
+							bFolderPathSet = true;
+						} else if (lastFolder == "external_sources" || lastFolder == "local_addons") { //
+							addCommand("Add :objects:" + thisUUID + ":sourceTree string SOURCE_ROOT");
+							//                            alert ("xxxx " + lastFolder + "  " + ofPathToString(base) + " UUID: " + thisUUID, 33);
+							addCommand("Add :objects:" + thisUUID + ":path string " + ofPathToString(getPathTo(base, folderName)));
+							bFolderPathSet = true;
+						} else {
+							addCommand("Add :objects:" + thisUUID + ":sourceTree string <group>");
+							//							fs::path addonFolder { fs::path(fullPath).filename() };
+							addCommand("Add :objects:" + thisUUID + ":path string " + ofPathToString(fullPath.filename()));
+							bFolderPathSet = true;
+						}
+					}
+
+					addCommand("Add :objects:" + thisUUID + ":children array");
+
+					if (!bFolderPathSet) {
+						if (folder.begin()->string() == "addons" || folder.begin()->string() == "src") { //} || folder.begin()->string() == "local_addons") {
+							addCommand("Add :objects:" + thisUUID + ":sourceTree string <group>");
+							//						fs::path addonFolder { fs::path(fullPath).filename() };
+							addCommand("Add :objects:" + thisUUID + ":path string " + ofPathToString(fullPath.filename()));
+							// alert ("group " + folder.string() + " : " + base.string() + " : " + addonFolder.string(), 32);
+						} else {
+							addCommand("Add :objects:" + thisUUID + ":sourceTree string SOURCE_ROOT");
+						}
+					}
+
+					// Add this new folder to its parent, folderUUID[""] if root
+					addCommand("Add :objects:" + lastFolderUUID + ":children: string " + thisUUID);
+
+					// keep this UUID as parent for the next folder.
+					lastFolderUUID = thisUUID;
+					lastFolder = folderName;
+				}
+			}
+		}
+		return lastFolderUUID;
 	}
 }
