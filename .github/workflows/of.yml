@@ -3,7 +3,7 @@ name: OF
 on:
   push:
     paths-ignore:
-      - "ofGen/*"
+      # - "ofGen/*"
       - "**/*.md"
       - "**/*.txt"
       - "examples/**"
