@@ -22,6 +22,8 @@ using std::vector;
 namespace fs = std::__fs::filesystem;
 
 // #include "functions.h"
+bool ofIsPathInPath(const fs::path & path, const fs::path & base);
+
 
 std::string stringReplace(const std::string & strIn, const std::string & from, const std::string & to);
 
@@ -116,3 +118,48 @@ inline std::string ofTrim(std::string line) {
 	// line.erase(std::remove_if( line.begin(), line.end(), ::isspace), line.end());
 	return line;
 }
+
+
+
+inline static std::string getPlatformString() {
+#ifdef __linux__
+	string arch = execute_popen("uname -m");
+	if (
+		arch == "armv6l" || arch == "armv7l" || arch == "aarch64") {
+		return "linux" + arch;
+	} else {
+		return "linux64";
+	}
+#elif defined(__WIN32__)
+	#if defined(__MINGW32__) || defined(__MINGW64__)
+	return "msys2";
+	#else
+	return "vs";
+	#endif
+#elif defined(__APPLE_CC__)
+	//	return "osx";
+	return "macos";
+#else
+	return {};
+#endif
+}
+
+struct ofTemplate;
+struct ofAddon;
+
+struct genConfig {
+	fs::path ofPath { "../../.." };
+	// it will be cwd unless project path is passed by variable.
+	fs::path projectPath { "../apps/werkApps/Pulsar" };
+	// vector <fs::path> projectPaths {
+	// 	{ "../apps/werkApps/Pulsar" }
+	// };
+	std::vector<std::string> templateNames { "zed", "make", "macos" }; //"vscode",
+	std::vector<std::string> platforms { getPlatformString(), "osx" };
+
+	std::vector<ofTemplate *> templates;
+	std::vector<ofAddon *> addons;
+	// void scanFolderRecursive(const fs::path & path);
+};
+
+static genConfig conf;

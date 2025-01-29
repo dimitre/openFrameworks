@@ -12,16 +12,18 @@ namespace fs = std::filesystem;
 #include <regex>
 #include <vector>
 
-
-
-
 #include "utils.h"
+#include "addons.h"
 
 
 std::string stringReplace(const std::string & strIn, const std::string & from, const std::string & to) {
 	return std::regex_replace(strIn, std::regex(from), to);
 }
 
+bool ofIsPathInPath(const fs::path & path, const fs::path & base) {
+	auto rel = fs::relative(path, base);
+	return !rel.empty() && rel.native()[0] != '.';
+}
 // std::string stringReplace(const std::string & strIn, const std::string & from, const std::string & to) {
 // 	return std::regex_replace(strIn, std::regex(from), to);
 // }
