@@ -4,11 +4,11 @@
 
 int main(const int argc, const char * argv[]) {
 	cout << sign << endl; // HEADER
-	// fs::current_path(conf.projectPath);
+	fs::current_path("../apps/werkApps/Pulsar");
 	gatherProjectInfo();
 	// parseConfigAllAddons();
 	// createTemplates();
 	// infoTemplates();
-	buildTemplates();
+	// buildProject();
 	return 0;
 }

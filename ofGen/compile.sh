@@ -11,7 +11,8 @@ if [[ ${PWD} == "/Volumes/tool/ofw/ofGen" ]] then
 # CXX=/opt/homebrew/opt/llvm/bin/clang++
 LINKEROPTIONS=-fuse-ld=lld
 fi
-time ccache $CXX -c src/*.cpp src/uuidxx/src/*.cpp -Isrc/uuidxx/src -Wfatal-errors -std=c++20 && \
+time ccache $CXX -c src/utils.cpp src/templates.cpp src/addons.cpp src/main.cpp src/uuidxx/src/*.cpp -Isrc/uuidxx/src -Wfatal-errors -std=c++20 && \
+# time ccache $CXX -c src/*.cpp src/uuidxx/src/*.cpp -Isrc/uuidxx/src -Wfatal-errors -std=c++20 && \
 time ccache $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src -o ofGen && \
 time ./ofGen
 

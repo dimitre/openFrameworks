@@ -284,7 +284,6 @@ void ofAddon::loadAddonConfig() {
 	//std::map<string, vector<string> > addonProperties;
 }
 
-
 void gatherProjectInfo() {
 	alert("gatherProjectInfo", 92);
 	// Add project files. TODO: additional source folders
@@ -298,8 +297,7 @@ void gatherProjectInfo() {
 		} else if (t == "zed") {
 			conf.templates.emplace_back(new ofTemplateZed());
 			project.templates.emplace_back(conf.templates.back());
-		}
-		else if (t == "make") {
+		} else if (t == "make") {
 			conf.templates.emplace_back(new ofTemplateMake());
 			project.templates.emplace_back(conf.templates.back());
 		}
@@ -373,46 +371,46 @@ void parseConfigAllAddons() {
 	alert("parseConfig end");
 }
 
-// void infoTemplates() {
-// 	alert("infoTemplates()", 95);
-// 	for (auto & t : conf.ofTemplates) {
-// 		t->info();
+
+// void buildTemplates() {
+// 	alert("buildTemplates()", 95);
+// 	for (auto & t : conf.templates) {
+// 		// 		t->info();
+// 		t->build();
 // 	}
 // }
 
-void buildTemplates() {
-	alert("buildTemplates()", 95);
-	for (auto & t : conf.templates) {
-		t->build();
-	}
-}
-
-void createTemplates() {
-	// std::vector<std::string> templateNames { "zed", "macos" };
-	std::vector<std::string> templateNames { "zed", "make" };
-	for (const auto & t : templateNames) {
-		if (t == "zed") {
-			conf.templates.emplace_back(new ofTemplateZed());
-		} else if (t == "macos") {
-			conf.templates.emplace_back(new ofTemplateMacos());
-		}
-		// etc.
-	}
-	alert("createTemplates", 92);
-	for (auto & t : conf.templates) {
-		cout << t->name << " : " << t->path << endl;
-		t->load();
-		// t->info();
-	}
-	// cout << conf.ofTemplates.size() << endl;
-}
-
+// void createTemplates() {
+// 	// std::vector<std::string> templateNames { "zed", "macos" };
+// 	std::vector<std::string> templateNames { "zed", "make" };
+// 	for (const auto & t : templateNames) {
+// 		if (t == "zed") {
+// 			conf.templates.emplace_back(new ofTemplateZed());
+// 		} else if (t == "macos") {
+// 			conf.templates.emplace_back(new ofTemplateMacos());
+// 		}
+// 		// etc.
+// 	}
+// 	alert("createTemplates", 92);
+// 	for (auto & t : conf.templates) {
+// 		cout << t->name << " : " << t->path << endl;
+// 		t->load();
+// 		// t->info();
+// 	}
+// 	// cout << conf.ofTemplates.size() << endl;
+// }
 
 void ofProject::build() {
 	std::cout << "addons.size " << addons.size() << std::endl;
 	std::cout << "templates.size " << templates.size() << std::endl;
 
+	// each template for specific project
 	for (auto & t : templates) {
+		// each addon for specific project
+		for (auto & a : addons) {
+			t->addAddon(a);
+		}
+		t->build();
 		// Pass addons list of filtered files to template
 		// Pass addons key:value of properties to template
 		// t->

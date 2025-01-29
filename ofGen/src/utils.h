@@ -8,26 +8,73 @@
 #include <map>
 #include <vector>
 
+// #if __has_include(<filesystem>)
+// 	#include <filesystem>
+// #else
+// 	#include <experimental/filesystem>
+// #endif
+// // namespace fs = std::filesystem;
+// namespace fs = std::__fs::filesystem;
+//
+
+#include <filesystem>
+namespace fs = std::filesystem;
+
 using std::cout;
 using std::endl;
 using std::string;
 using std::vector;
 
-#if __has_include(<filesystem>)
-	#include <filesystem>
-#else
-	#include <experimental/filesystem>
-#endif
-// namespace fs = std::filesystem;
-namespace fs = std::__fs::filesystem;
-
-// #include "functions.h"
 bool ofIsPathInPath(const fs::path & path, const fs::path & base);
-
-
 std::string stringReplace(const std::string & strIn, const std::string & from, const std::string & to);
-
 std::vector<std::string> textToVector(const fs::path & file);
+void replaceAll(std::string & str, const std::string & from, const std::string & to);
+
+void ltrim(std::string & s);
+void rtrim(std::string & s);
+std::string ofTrim(std::string line);
+// static std::string getPlatformString();
+
+
+inline static std::string getPlatformString() {
+#ifdef __linux__
+	string arch = execute_popen("uname -m");
+	if (
+		arch == "armv6l" || arch == "armv7l" || arch == "aarch64") {
+		return "linux" + arch;
+	} else {
+		return "linux64";
+	}
+#elif defined(__WIN32__)
+	#if defined(__MINGW32__) || defined(__MINGW64__)
+	return "msys2";
+	#else
+	return "vs";
+	#endif
+#elif defined(__APPLE_CC__)
+	//	return "osx";
+	return "macos";
+#else
+	return {};
+#endif
+}
+
+
+
+// maybe not needed. replace by a normal split string.
+inline std::vector<std::string> splitStringOnceByLeft(const std::string & source, const std::string & delimiter) {
+	size_t pos = source.find(delimiter);
+	std::vector<std::string> res;
+	if (pos == std::string::npos) {
+		res.emplace_back(source);
+		return res;
+	}
+
+	res.emplace_back(source.substr(0, pos));
+	res.emplace_back(source.substr(pos + delimiter.length()));
+	return res;
+}
+
 
 inline std::string colorText(const std::string & s, int color) {
 	std::string c { std::to_string(color) };
@@ -67,82 +114,6 @@ static void divider() {
 	std::cout << colorText("-----------------------------------------------------------", 92) << std::endl;
 }
 
-static void replaceAll(std::string & str, const std::string & from, const std::string & to) {
-	if (from.empty())
-		return;
-	size_t start_pos = 0;
-	while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
-		str.replace(start_pos, from.length(), to);
-		start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
-	}
-}
-
-// maybe not needed. replace by a normal split string.
-inline std::vector<std::string> splitStringOnceByLeft(const std::string & source, const std::string & delimiter) {
-	size_t pos = source.find(delimiter);
-	std::vector<std::string> res;
-	if (pos == std::string::npos) {
-		res.emplace_back(source);
-		return res;
-	}
-
-	res.emplace_back(source.substr(0, pos));
-	res.emplace_back(source.substr(pos + delimiter.length()));
-	return res;
-}
-
-// {
-//     return std::regex_replace(strIn, std::regex(from), to);
-// }
-
-
-
-// trim from start (in place)
-inline void ltrim(std::string & s) {
-	s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
-		return !std::isspace(ch);
-	}));
-}
-
-// trim from end (in place)
-inline void rtrim(std::string & s) {
-	s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
-		return !std::isspace(ch);
-	}).base(),
-		s.end());
-}
-
-inline std::string ofTrim(std::string line) {
-	rtrim(line);
-	ltrim(line);
-	// line.erase(std::remove_if( line.begin(), line.end(), ::isspace), line.end());
-	return line;
-}
-
-
-
-inline static std::string getPlatformString() {
-#ifdef __linux__
-	string arch = execute_popen("uname -m");
-	if (
-		arch == "armv6l" || arch == "armv7l" || arch == "aarch64") {
-		return "linux" + arch;
-	} else {
-		return "linux64";
-	}
-#elif defined(__WIN32__)
-	#if defined(__MINGW32__) || defined(__MINGW64__)
-	return "msys2";
-	#else
-	return "vs";
-	#endif
-#elif defined(__APPLE_CC__)
-	//	return "osx";
-	return "macos";
-#else
-	return {};
-#endif
-}
 
 struct ofTemplate;
 struct ofAddon;
@@ -150,11 +121,13 @@ struct ofAddon;
 struct genConfig {
 	fs::path ofPath { "../../.." };
 	// it will be cwd unless project path is passed by variable.
-	fs::path projectPath { "../apps/werkApps/Pulsar" };
+	// fs::path projectPath { "../apps/werkApps/Pulsar" };
+	fs::path projectPath { "." };
 	// vector <fs::path> projectPaths {
 	// 	{ "../apps/werkApps/Pulsar" }
 	// };
-	std::vector<std::string> templateNames { "zed", "make", "macos" }; //"vscode",
+	// std::vector<std::string> templateNames { "zed", "make", "macos" }; //"vscode",
+	std::vector<std::string> templateNames { "macos" }; //"vscode",
 	std::vector<std::string> platforms { getPlatformString(), "osx" };
 
 	std::vector<ofTemplate *> templates;
