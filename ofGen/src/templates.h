@@ -12,7 +12,6 @@ struct ofAddon;
 
 std::string generateUUID(const string & input);
 
-
 struct copyTemplateFile {
 public:
 	fs::path from;
@@ -32,12 +31,16 @@ public:
 
 	std::vector<copyTemplateFile> copyTemplateFiles;
 
+	virtual void addSrc(const fs::path & srcFile, const fs::path & folder) {
+		std::cout << "ofTemplate::addSrc() called on primitive member" << std::endl;
+	};
+
 	virtual void addAddon(ofAddon * a) {
-	    std::cout << "ofTemplate::addAddon() called on primitive member" << std::endl;
+		std::cout << "ofTemplate::addAddon() called on primitive member" << std::endl;
 	};
 
 	void info() {
-		alert("ofTemplate::info " + name + ", path=" + path.string());
+		alert("	ofTemplate::info " + name + ", path=" + path.string(), 34);
 		for (auto & c : copyTemplateFiles) {
 			c.info();
 		}
@@ -47,10 +50,14 @@ public:
 		std::cout << "ofTemplate::load() called on primitive member" << std::endl;
 	}
 
+	virtual void save() {
+		std::cout << "ofTemplate::save() called on primitive member" << std::endl;
+	}
+
 	// FIXME: uma funcao pra zerar o commands list quando sai de um projeto entra no proximo.
 
 	virtual void build() {
-		alert("ofTemplate::build " + name + ", path=" + path.string());
+		alert("	ofTemplate::build " + name + ", path=" + path.string(), 34);
 		for (auto & c : copyTemplateFiles) {
 			c.run();
 			// c.info();
@@ -60,15 +67,43 @@ public:
 
 struct ofTemplateMacos : public ofTemplate {
 public:
-    void addAddon(ofAddon * a) override;
+	struct fileProperties {
+		bool absolute = false;
+		bool reference = true;
+		bool addToBuildPhase = false;
+		bool codeSignOnCopy = false;
+		bool copyFilesBuildPhase = false;
+		bool linkBinaryWithLibraries = false;
+		bool addToBuildResource = false;
+		bool addToResources = false;
+		bool frameworksBuildPhase = false;
+		bool isSrc = false;
+		bool isGroupWithoutFolder = false;
+		bool isRelativeToSDK = false;
+	};
+
+	// macos section
+	std::map<std::string, std::string> uuid {
+		{ "buildConfigurationList", "E4B69B5A0A3A1756003C02F2" },
+		{ "buildActionMask", "E4B69B580A3A1756003C02F2" },
+		// { "projRoot", "E4B69B4A0A3A1720003C02F2" },
+		{ "frameworks", "E7E077E715D3B6510020DFD4" },
+		{ "afterPhase", "928F60851B6710B200E2D791" },
+		{ "buildPhases", "E4C2427710CC5ABF004149E2" },
+		{ "", "" },
+	};
+
+	void addAddon(ofAddon * a) override;
+	void addSrc(const fs::path & srcFile, const fs::path & folder) override;
+	string addFile(const fs::path & path, const fs::path & folder, const fileProperties & fp);
 
 	ofTemplateMacos() {
 		name = "macos";
 		path = conf.ofPath / "scripts" / "templates" / name;
 	}
 	void load() override;
+	void save() override;
 	// void build() override {};
-
 
 	// FIXME: Provisory variable, to be handled by platform macos / ios in near future
 	std::string target = "macos";
@@ -98,7 +133,7 @@ public:
 		return p;
 	}
 
-	const std::map<fs::path, string> extensionToFileType {
+	std::map<fs::path, std::string> extensionToFileType {
 		{ ".framework", "wrapper.framework" },
 		{ ".xcframework", "wrapper.xcframework" },
 		{ ".dylib", "compiled.mach-o.dylib" },
@@ -134,22 +169,6 @@ public:
 	std::map<fs::path, string> folderUUID;
 	// Temporary
 	std::map<string, fs::path> folderFromUUID;
-
-
-	struct fileProperties {
-		bool absolute = false;
-		bool reference = true;
-		bool addToBuildPhase = false;
-		bool codeSignOnCopy = false;
-		bool copyFilesBuildPhase = false;
-		bool linkBinaryWithLibraries = false;
-		bool addToBuildResource = false;
-		bool addToResources = false;
-		bool frameworksBuildPhase = false;
-		bool isSrc = false;
-		bool isGroupWithoutFolder = false;
-		bool isRelativeToSDK = false;
-	};
 
 
 };

@@ -3,6 +3,8 @@
 #include "addons.h"
 
 int main(const int argc, const char * argv[]) {
+
+    testColors();
 	cout << sign << endl; // HEADER
 	fs::current_path("../apps/werkApps/Pulsar");
 	gatherProjectInfo();

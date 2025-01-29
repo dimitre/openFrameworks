@@ -33,6 +33,9 @@ void replaceAll(std::string & str, const std::string & from, const std::string &
 void ltrim(std::string & s);
 void rtrim(std::string & s);
 std::string ofTrim(std::string line);
+
+std::vector<std::string> ofSplitString(const std::string& s, const std::string& delimiter);
+
 // static std::string getPlatformString();
 
 
@@ -78,10 +81,11 @@ inline std::vector<std::string> splitStringOnceByLeft(const std::string & source
 
 inline std::string colorText(const std::string & s, int color) {
 	std::string c { std::to_string(color) };
-	return "\033[1;" + c + "m" + s + "\033[0m";
+	// return "\033[1;" + c + "m" + s + "\033[0m";
+	return "\033[" + c + "m" + s + "\033[0m";
 }
 
-inline void alert(std::string msg, int color = 33) {
+inline void alert(std::string msg, int color = 2) {
 	std::cout << colorText(msg, color) << std::endl;
 }
 
@@ -111,7 +115,7 @@ cd to the folder and invoke ofGen
 static void divider() {
 	// cout << colorText(colorText("-----------------------------------------------------------", 5), 92) << endl;
 	std::cout << std::endl;
-	std::cout << colorText("-----------------------------------------------------------", 92) << std::endl;
+	std::cout << colorText("-----------------------------------------------------------", 90) << std::endl;
 }
 
 

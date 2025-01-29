@@ -17,11 +17,11 @@ void scanFolder(const fs::path & path,
 	// it should exist and be a folder.
 	if (!fs::exists(path)) return;
 	if (!fs::is_directory(path)) return;
-	alert("    scanFolder " + path.string(), 97);
+	alert("	scanFolder " + path.string(), 92);
 
 	// do we want to add all root paths to includes or not?
 	filesMap["includes"].emplace_back(path);
-	alert("add includes, " + path.string(), 31);
+	alert("	add includes: " + path.string(), 34);
 
 	for (auto it = fs::recursive_directory_iterator(path);
 		 it != fs::recursive_directory_iterator();
@@ -67,6 +67,8 @@ void scanFolder(const fs::path & path,
 }
 
 void ofAddon::load() {
+    divider();
+    alert("ofAddon :: " + name, 92);
 	loadAddonConfig();
 	loadFiles();
 	relative();
@@ -75,7 +77,7 @@ void ofAddon::load() {
 }
 
 void ofAddon::relative() {
-	alert("relative :: addon " + name, 91);
+	alert("	relative", 34);
 	for (auto & f : filesMap) {
 		for (auto & s : f.second) {
 			s = fs::relative(s, path);
@@ -84,7 +86,7 @@ void ofAddon::relative() {
 }
 
 void ofAddon::refine() {
-	alert("refine :: addon " + name, 91);
+	alert("	refine", 34);
 
 	for (const auto & f : filesMap) {
 		for (const auto & s : f.second) {
@@ -94,11 +96,13 @@ void ofAddon::refine() {
 					add = false;
 					// std::cout << s << std::endl;
 					// alert("added " + s.string(), 92);
-					alert("	└─excluded " + s.string(), 93);
-					alert("	   exclusion=" + e.string() + ", section=" + f.first, 33);
+					alert("	└─excluded " + s.string(), 0);
+					alert("	   exclusion=" + e.string() + ", section=" + f.first, 90);
 					// alert (, 93);
 					continue;
 				}
+				// alert("	└─not excluded " + s.string(), 93);
+				// alert("	   exclusion=" + e.string() + ", section=" + f.first, 33);
 			}
 			if (add) {
 				filteredMap[f.first].emplace_back(s);
@@ -123,7 +127,7 @@ void ofAddon::refine() {
 }
 
 void ofAddon::showFiles() {
-	alert("showFiles :: addon " + name, 91);
+	alert("	showFiles", 34);
 	for (auto & f : filesMap) {
 		alert(f.first + ":", 31);
 		for (auto & s : f.second) {
@@ -133,7 +137,7 @@ void ofAddon::showFiles() {
 }
 
 void ofAddon::loadFiles() {
-	alert("loadFiles :: addon " + name, 91);
+	alert("	loadFiles", 34);
 
 	scanFolder(path / "src", filesMap, true);
 
@@ -181,7 +185,7 @@ void ofAddon::loadFiles() {
 }
 
 void ofAddon::loadAddonConfig() {
-	alert("loadAddonConfig :: addon " + name, 91);
+	// alert("	loadAddonConfig :: addon " + name, 92);
 
 	fs::path addonConfig { path / "addon_config.mk" };
 	// alert ("zed " + fileName.string(), 91);
@@ -189,7 +193,7 @@ void ofAddon::loadAddonConfig() {
 		// alert(" addonConfig not found " + addonConfig.string(), 31);
 		return;
 	} else {
-		alert("	addonConfig found " + addonConfig.string(), 32);
+		alert("	loadAddonConfig found " + addonConfig.string(), 90);
 	}
 
 	int lineNum = 0;
@@ -215,44 +219,47 @@ void ofAddon::loadAddonConfig() {
 		// line.erase(std::remove_if( line.begin(), line.end(), ::isspace), line.end());
 
 		if (line[line.size() - 1] == ':') {
-			stringReplace(line, ":", "");
+			// stringReplace(line, ":", "");
 			currentParseState = line;
 		}
 
-		// if (
-		//   currentParseState != "common"
+		// alert (">> currentParseState " + currentParseState, 93);
+		bool consider = currentParseState == "common:" || currentParseState == "macos:" || currentParseState == "osx:";
+
+		// if (  currentParseState != "common"
 		//           && currentParseState != "macos"
 		//           && currentParseState != "osx"
-		//           // && currentParseState != "emscripten"
+		// //           // && currentParseState != "emscripten"
 		// ) {
-		// continue;
+		// break;
 		// }
 
-		if (line.find("=") != string::npos) {
-			bool addToValue = false;
-			vector<string> varValue;
-			bool limpa = false;
-			if (line.find("+=") != string::npos) {
-				addToValue = true;
-				// FIXME: maybe not needed. a simple split is ok.
-				varValue = splitStringOnceByLeft(line, "+=");
-			} else {
-				limpa = true;
-				addToValue = false;
-				varValue = splitStringOnceByLeft(line, "=");
-			}
+		if (consider)
+			if (line.find("=") != string::npos) {
+				bool addToValue = false;
+				vector<string> varValue;
+				bool limpa = false;
+				if (line.find("+=") != string::npos) {
+					addToValue = true;
+					// FIXME: maybe not needed. a simple split is ok.
+					varValue = splitStringOnceByLeft(line, "+=");
+				} else {
+					limpa = true;
+					addToValue = false;
+					varValue = splitStringOnceByLeft(line, "=");
+				}
 
-			// variable = ofTrim(varValue[0]);
-			// value = ofTrim(varValue[1]);
-			string variable = varValue[0];
-			string value = varValue[1];
-			if (limpa) {
-				addonProperties[variable].clear();
+				// variable = ofTrim(varValue[0]);
+				// value = ofTrim(varValue[1]);
+				string variable = varValue[0];
+				string value = varValue[1];
+				if (limpa) {
+					addonProperties[variable].clear();
+				}
+				if (value != "") {
+					addonProperties[variable].emplace_back(value);
+				}
 			}
-			if (value != "") {
-				addonProperties[variable].emplace_back(value);
-			}
-		}
 	}
 
 	// for (auto & a : addonProperties) {
@@ -309,7 +316,7 @@ void gatherProjectInfo() {
 
 	// load templates, show info of each template
 	for (auto & t : conf.templates) {
-		cout << t->name << " : " << t->path << endl;
+		// cout << t->name << " : " << t->path << endl;
 		t->load();
 		t->info();
 	}
@@ -321,7 +328,6 @@ void gatherProjectInfo() {
 		// vector<std::string> addonsList = { "ofxMidi" }; //ofxMidi ofxOpenCv
 
 		for (auto & l : addonsList) {
-			divider();
 
 			conf.addons.push_back(new ofAddon());
 			ofAddon * addon = conf.addons.back();
@@ -371,7 +377,6 @@ void parseConfigAllAddons() {
 	alert("parseConfig end");
 }
 
-
 // void buildTemplates() {
 // 	alert("buildTemplates()", 95);
 // 	for (auto & t : conf.templates) {
@@ -401,16 +406,20 @@ void parseConfigAllAddons() {
 // }
 
 void ofProject::build() {
-	std::cout << "addons.size " << addons.size() << std::endl;
-	std::cout << "templates.size " << templates.size() << std::endl;
+    divider();
+    alert("ofProject::build", 92);
+	// std::cout << "addons.size " << addons.size() << std::endl;
+	// std::cout << "templates.size " << templates.size() << std::endl;
 
 	// each template for specific project
 	for (auto & t : templates) {
 		// each addon for specific project
 		for (auto & a : addons) {
+			alert("	ofProject::addAddon " + a->name, 34);
 			t->addAddon(a);
 		}
 		t->build();
+		t->save();
 		// Pass addons list of filtered files to template
 		// Pass addons key:value of properties to template
 		// t->

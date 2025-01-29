@@ -1,6 +1,220 @@
 #include "templates.h"
 #include "addons.h"
 #include "uuidxx.h"
+#include <nlohmann/json.hpp>
+
+string ofTemplateMacos::addFile(const fs::path & path, const fs::path & folder, const fileProperties & fp) {
+	string UUID { "" };
+
+	//	alert("xc::addFile " + path.string() + " :folder:" + folder.string(), 31);
+	//	cout << "will check if exists " << (conf.projectPath / path) << endl;
+	//	if (fs::exists( conf.projectPath / path ))
+	{
+		//		cout << "OK exists" << endl;
+		//		bool isFolder = false;
+		string fileType { "file" };
+		fileType = extensionToFileType[path.extension()];
+
+		if (fileType == "") {
+			if (fs::is_directory(path) || fp.isGroupWithoutFolder) {
+				fileType = "folder";
+				//				isFolder = true;
+			} else {
+				// Break here if fileType is not set. and it is not a folder
+				return {};
+			}
+		}
+
+		UUID = generateUUID(path);
+
+		addCommand("");
+		addCommand("# -- addFile " + ofPathToString(path));
+
+		// encoding may be messing up for frameworks... so I switched to a pbx file ref without encoding fields
+
+		//		if (fp.reference) {
+		//		} else {
+		//			addCommand("Add :objects:"+UUID+":isa string PBXGroup");
+		//		}
+
+		// This is adding a file. any file.
+		addCommand("Add :objects:" + UUID + ":fileEncoding string 4");
+		if (fp.isGroupWithoutFolder) {
+			addCommand("Add :objects:" + UUID + ":isa string PBXGroup");
+		} else {
+			addCommand("Add :objects:" + UUID + ":isa string PBXFileReference");
+		}
+		addCommand("Add :objects:" + UUID + ":lastKnownFileType string " + fileType);
+		addCommand("Add :objects:" + UUID + ":name string " + ofPathToString(path.filename()));
+		//		addCommand("Add :objects:"+UUID+":path string " + ofPathToString(path.filename()));
+
+		if (fp.absolute) {
+			addCommand("Add :objects:" + UUID + ":sourceTree string SOURCE_ROOT");
+			// FIXME: REVIEW
+			if (fs::exists(conf.projectPath / path)) {
+				addCommand("Add :objects:" + UUID + ":path string " + ofPathToString(path));
+			}
+		} else {
+
+			if (folder.begin()->string() == "local_addons" || folder.begin()->string() == "external_sources") {
+				if (path.is_absolute()) {
+					addCommand("Add :objects:" + UUID + ":path string " + ofPathToString(path));
+					addCommand("Add :objects:" + UUID + ":sourceTree string SOURCE_ROOT");
+				} else {
+					addCommand("Add :objects:" + UUID + ":path string " + ofPathToString(path.filename()));
+					addCommand("Add :objects:" + UUID + ":sourceTree string <group>");
+				}
+				//                }else{
+				//                    if (fs::exists( conf.projectPath / path )) {
+				//                        addCommand("Add :objects:"+UUID+":path string " + ofPathToString(conf.projectPath /path));
+				//                    }
+				//                }
+			} else {
+				if (fp.isRelativeToSDK) {
+					addCommand("Add :objects:" + UUID + ":path string " + ofPathToString(path));
+					addCommand("Add :objects:" + UUID + ":sourceTree string SDKROOT");
+				} else {
+					addCommand("Add :objects:" + UUID + ":sourceTree string <group>");
+				}
+			}
+		}
+
+		//		string folderUUID;
+		//		auto rootDir = folder.root_directory();
+		//		if (rootDir != "addons" && rootDir != "src") {
+		////			alert("addFile path:" + ofPathToString(path) + " folder:" + ofPathToString(folder) , 31);
+		//			auto base = path.parent_path();
+		//			folderUUID = getFolderUUID(folder, isFolder, base);
+		//
+		//		} else {
+		//			folderUUID = getFolderUUID(folder, isFolder);
+		//		}
+
+		// Eventually remove isFolder and base parameter
+		std::string folderUUID { getFolderUUID(folder, path) };
+		//, isFolder) };
+
+		addCommand("# ---- addFileToFolder UUID : " + ofPathToString(folder));
+		addCommand("Add :objects:" + folderUUID + ":children: string " + UUID);
+
+		string buildUUID { generateUUID(ofPathToString(path) + "-build") };
+		// If any other option is true, add buildUUID entries.
+		if (
+			fp.addToBuildPhase || fp.codeSignOnCopy || fp.copyFilesBuildPhase || fp.addToBuildResource || fp.addToResources
+			//|| fp.frameworksBuildPhase ~ I've just removed this one, favoring -InFrameworks
+		) {
+			addCommand("# ---- addToBuildPhase " + buildUUID);
+			addCommand("Add :objects:" + buildUUID + ":isa string PBXBuildFile");
+			addCommand("Add :objects:" + buildUUID + ":fileRef string " + UUID);
+		}
+
+		if (fp.addToBuildPhase) { // Compile Sources
+			// Not sure if it applies to everything, applies to srcFile.
+			addCommand("# ---- addToBuildPhase");
+			// addCommand("Add :objects:" + buildActionMaskUUID + ":files: string " + buildUUID);
+			addCommand("Add :objects:" + uuid["buildActionMask"] + ":files: string " + buildUUID);
+		}
+
+		if (fp.copyFilesBuildPhase) {
+			// If we are going to add xcframeworks to copy files -> destination frameworks, we should include here
+			//			if (path.extension() == ".framework" || path.extension() == ".xcframework") {
+			// This now includes both .framework and .xcframework
+			if (fileType == "wrapper.framework" || fileType == ".xcframework") {
+				// copy to frameworks
+				addCommand("# ---- copyPhase Frameworks " + buildUUID);
+				addCommand("Add :objects:E4C2427710CC5ABF004149E2:files: string " + buildUUID);
+			} else {
+				// copy to executables
+				addCommand("# ---- copyPhase Executables " + buildUUID);
+				addCommand("Add :objects:E4A5B60F29BAAAE400C2D356:files: string " + buildUUID);
+			}
+		}
+
+		if (fp.codeSignOnCopy) {
+			addCommand("# ---- codeSignOnCopy " + buildUUID);
+			addCommand("Add :objects:" + buildUUID + ":settings:ATTRIBUTES array");
+			addCommand("Add :objects:" + buildUUID + ":settings:ATTRIBUTES: string CodeSignOnCopy");
+		}
+
+		if (fp.addToBuildResource) {
+			string mediaAssetsUUID { "9936F60E1BFA4DEE00891288" };
+			addCommand("# ---- addToBuildResource");
+			addCommand("Add :objects:" + mediaAssetsUUID + ":files: string " + UUID);
+		}
+
+		if (fp.addToResources) {
+			// FIXME: test if it is working on iOS
+			if (uuid["resources"] != "") {
+				addCommand("# ---- addToResources (IOS only) ?" + buildUUID);
+				addCommand("Add :objects:" + uuid["resources"] + ": string " + buildUUID);
+			}
+		}
+
+		if (fp.frameworksBuildPhase) { // Link Binary With Libraries
+			auto tempUUID = generateUUID(ofPathToString(path) + "-InFrameworks");
+			addCommand("Add :objects:" + tempUUID + ":fileRef string " + UUID);
+			addCommand("Add :objects:" + tempUUID + ":isa string PBXBuildFile");
+
+			addCommand("# --- PBXFrameworksBuildPhase");
+			addCommand("Add :objects:E4B69B590A3A1756003C02F2:files: string " + tempUUID);
+		}
+
+		if (path.extension() == ".framework") {
+			addCommand("# ---- Frameworks Folder " + UUID);
+			addCommand("Add :objects:901808C02053638E004A7774:children: string " + UUID);
+
+			addCommand("# ---- PBXFrameworksBuildPhase " + buildUUID);
+			addCommand("Add :objects:1D60588F0D05DD3D006BFB54:files: string " + buildUUID);
+		}
+	}
+	return UUID;
+}
+
+void ofTemplateMacos::addSrc(const fs::path & srcFile, const fs::path & folder) {
+	//	alert ("xcodeProject::addSrc " + ofPathToString(srcFile) + " : " + ofPathToString(folder), 31);
+
+	string ext = ofPathToString(srcFile.extension());
+
+	//		.reference = true,
+	//		.addToBuildPhase = true,
+	//		.codeSignOnCopy = false,
+	//		.copyFilesBuildPhase = false,
+	//		.linkBinaryWithLibraries = false,
+	//		.addToBuildResource = false,
+	//		.addToResources = false,
+
+	fileProperties fp;
+	fp.addToBuildPhase = true;
+	fp.isSrc = true;
+
+	if (ext == ".h" || ext == ".hpp") {
+		fp.addToBuildPhase = false;
+	} else if (ext == ".xib") {
+		fp.addToBuildPhase = false;
+		fp.addToBuildResource = true;
+		fp.addToResources = true;
+	} else if (ext == ".metal") {
+		fp.addToBuildResource = true;
+		fp.addToResources = true;
+	} else if (ext == ".entitlements") {
+		fp.addToBuildResource = true;
+		fp.addToResources = true;
+	} else if (ext == ".info") {
+		fp.addToBuildResource = true;
+		fp.addToResources = true;
+	} else if (target == "ios") {
+		fp.addToBuildPhase = true;
+		fp.addToResources = true;
+	}
+
+	string UUID {
+		addFile(srcFile, folder, fp)
+	};
+
+	// if (ext == ".mm" || ext == ".m") {
+	// 	addCompileFlagsForMMFile(srcFile);
+	// }
+}
 
 void ofTemplateMacos::addAddon(ofAddon * a) {
 	// Here we add all lists of files to project
@@ -11,49 +225,310 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 	// std::sort(fileNames.begin(), fileNames.end(), [](const fs::path & a, const fs::path & b) {
 	// 		return a.string() < b.string();
 	// 	});
+	//
+	// includes, libs, sharedLibs, headers, sources
 
 	for (auto & f : a->filteredMap["sources"]) {
-	   cout << f << endl;
+		fs::path name = f.filename();
+		fs::path p = (a->path / f).parent_path();
+		fs::path p2 = relative(p, conf.ofPath);
+
+		// cout << f << endl;
+		// cout << name << endl;
+		// cout << p << endl;
+		// cout << p2 << endl;
+		// cout << "----" << endl;
 		// addSrc(e, addon.filesToFolders.at(e));
+		addSrc(name, p2);
+	}
+
+	for (auto & f : a->filteredMap["headers"]) {
+		fs::path name = f.filename();
+		fs::path p = (a->path / f).parent_path();
+		fs::path p2 = relative(p, conf.ofPath);
+
+		addSrc(name, p2);
 	}
 
 	// ADD Include
+
 	for (auto & f : a->filteredMap["includes"]) {
 		for (auto & c : buildConfigs) {
-			addCommand("Add :objects:" + c + ":buildSettings:HEADER_SEARCH_PATHS: string " + ofPathToString(f));
+			fs::path p = a->path / f;
+			addCommand("Add :objects:" + c + ":buildSettings:HEADER_SEARCH_PATHS: string " + ofPathToString(p));
 		}
 	}
 
 	// addLibrary function
 	for (auto & f : a->filteredMap["libs"]) {
 		for (auto & c : buildConfigs) {
-			// FIXME: needed relative?
-			addCommand("Add :objects:" + c + ":buildSettings:OTHER_LDFLAGS: string " + ofPathToString(fs::relative(f)));
+			fs::path p = a->path / f;
+			addCommand("Add :objects:" + c + ":buildSettings:OTHER_LDFLAGS: string " + ofPathToString(p));
 		}
 	}
 
-	// addLDFLAG
-	// 	for (auto & c : buildConfigs) {
-	// addCommand("Add :objects:"+c+":buildSettings:OTHER_LDFLAGS: string " + ldflag);
-	// }
+	// ADDON_CFLAGS ADDON_CPPFLAGS ADDON_LDFLAGS ADDON_PKG_CONFIG_LIBRARIES ADDON_FRAMEWORKS ADDON_DEFINES
+	// ADDON_CFLAGS e ADDON_LDFLAGS estão no ofxSyphon addon.
+	// ofxHapPlayer tem varias coisas legais tambem
+	// 	ADDON_LDFLAGS = -rpath @loader_path/../../../../../../../addons/ofxHapPlayer/libs
+	// ADDON_INCLUDES_EXCLUDE = libs/ffmpeg/include/libavformat
+	// ADDON_INCLUDES_EXCLUDE += libs/ffmpeg/include/libavutil
+	// ADDON_INCLUDES_EXCLUDE += libs/ffmpeg/include/libavcodec
+	// ADDON_INCLUDES_EXCLUDE += libs/ffmpeg/include/libswresample
+
 	//
-	// addCFLAG
-	// 	for (auto & c : buildConfigs) {
-	// FIXME: add array here if it doesnt exist
-	// addCommand("Add :objects:"+c+":buildSettings:OTHER_CFLAGS: string " + cflag);
-	// }
-	// addDefine
-	// 	for (auto & c : buildConfigs) {
-	// FIXME: add array here if it doesnt exist
-	// 	addCommand("Add :objects:"+c+":buildSettings:GCC_PREPROCESSOR_DEFINITIONS: string " + define);
-	// }
 	//
-	// void xcodeProject::addCPPFLAG(const string& cppflag, LibType libType){
-	// for (auto & c : buildConfigs) {
-	// 	// FIXME: add array here if it doesnt exist
-	// 	addCommand("Add :objects:"+c+":buildSettings:OTHER_CPLUSPLUSFLAGS: string " + cppflag);
+	// ADDON_INCLUDES ADDON_LIBS ADDON_SOURCES
+	//
+	//
+	// for (auto & p : a->addonProperties) {
+	// 	cout << p.first << endl;
+	// 	for (auto & e : p.second) {
+	// 		cout << " " << e << endl;
+	// 	}
+	// 	cout << "-----" << endl;
 	// }
 
+	// TODO: Modularizar isso tudo aqui.
+	const std::map<std::string, std::string> addonToXCode {
+		{ "ADDON_CFLAGS", "OTHER_CFLAGS" },
+		{ "ADDON_CPPFLAGS", "OTHER_CPLUSPLUSFLAGS" },
+		{ "ADDON_LDFLAGS", "OTHER_LDFLAGS" },
+		// addDefine
+		// { "", "GCC_PREPROCESSOR_DEFINITIONS" },
+	};
+
+	for (auto & param : addonToXCode) {
+		if (a->addonProperties.count(param.first)) {
+			for (const auto & c : buildConfigs) {
+				// FIXME: add array here if it doesnt exist. Test with multiple lines
+				for (const auto & flag : a->addonProperties[param.first]) {
+					addCommand("Add :objects:" + c + ":buildSettings:" + param.second + ": string " + flag);
+				}
+			}
+		}
+	}
+
+	if (a->addonProperties.count("ADDON_FRAMEWORKS")) {
+		for (const auto & path : a->addonProperties["ADDON_FRAMEWORKS"]) {
+
+		// TODO: Convert this in a function to parse both ADDON_FRAMEWORKS definition in .mk and filesystem frameworks found.
+		// void addFramework (const std::string & path);
+			bool isRelativeToSDK = false;
+			size_t found = path.find('/');
+			if (found == string::npos) {
+				isRelativeToSDK = true;
+			}
+
+			fileProperties fp;
+			fp.absolute = false;
+			fp.codeSignOnCopy = !isRelativeToSDK;
+			fp.copyFilesBuildPhase = !isRelativeToSDK;
+			fp.isRelativeToSDK = isRelativeToSDK;
+			// fp.frameworksBuildPhase = (target != "ios" && !folder.empty());
+			fp.frameworksBuildPhase = target != "ios";
+
+			string UUID;
+			if (isRelativeToSDK) {
+				fs::path frameworkPath { "System/Library/Frameworks/" + path + ".framework" };
+				UUID = addFile(frameworkPath, "Frameworks", fp);
+			} else {
+				std::string folder { "Frameworks" };
+				UUID = addFile(path, folder, fp);
+			}
+
+			if (!isRelativeToSDK) {
+			 fs::path pathFS { path };
+				addCommand("# ----- FRAMEWORK_SEARCH_PATHS");
+				string parent { pathFS.parent_path().string() };
+				string ext { pathFS.extension().string() };
+
+				for (auto & c : buildConfigs) {
+					if (ext == ".framework") {
+						addCommand("Add :objects:" + c + ":buildSettings:FRAMEWORK_SEARCH_PATHS: string " + parent);
+					}
+					if (ext == ".xcframework") {
+						addCommand("Add :objects:" + c + ":buildSettings:XCFRAMEWORK_SEARCH_PATHS: string " + parent);
+					}
+				}
+			}
+		}
+	}
+
+	// if (a->addonProperties.count("ADDON_CFLAGS")) {
+	// 	for (const auto & c : buildConfigs) {
+	// 		// FIXME: add array here if it doesnt exist. Test with multiple lines
+	// 		for (const auto & cflag : a->addonProperties["ADDON_CFLAGS"]) {
+	// 			addCommand("Add :objects:" + c + ":buildSettings:OTHER_CFLAGS: string " + cflag);
+	// 		}
+	// 	}
+	// }
+}
+
+void ofTemplateMacos::save() {
+	alert("ofTemplateMacos::save()", 92);
+
+	fileProperties fp;
+	//	fp.isGroupWithoutFolder = true;
+	//	addFile("additionalSources", "", fp);
+	//	fp.isGroupWithoutFolder = false;
+	//	addFile("openFrameworks-Info.plist", "", fp);
+	//	addFile("of.entitlements", "", fp);
+	//	addFile("Project.xcconfig", "", fp);
+	if (fs::exists(conf.projectPath / "App.xcconfig")) {
+		addFile("App.xcconfig", "", fp);
+	}
+	fp.absolute = true;
+	//	addFile("../../../libs/openframeworks", "", fp);
+	addFile(fs::path { "bin" } / "data", "", fp);
+
+	//	debugCommands = false;
+
+	fs::path fileName { conf.projectPath / (name + ".xcodeproj/project.pbxproj") };
+	bool usePlistBuddy = false;
+
+	if (usePlistBuddy) {
+		//	PLISTBUDDY - Mac only
+		string command = "/usr/libexec/PlistBuddy " + ofPathToString(fileName);
+		string allCommands = "";
+		for (auto & c : commands) {
+			command += " -c \"" + c + "\"";
+			allCommands += c + "\n";
+		}
+		system(command.c_str());
+		// cout << system(command) << endl;
+	} else {
+		// JSON Block - Multiplatform
+
+		std::ifstream contents(fileName);
+		//		std::cout << contents.rdbuf() << std::endl;
+		using nlohmann::json;
+		json j;
+		try {
+			j = json::parse(contents);
+
+			// Ugly hack to make nlohmann json work with v 3.11.3
+			//			auto dump = j.dump(1, '	');
+			//			if (dump[0] == '[') {
+			//				j = j[0];
+			//			}
+
+		} catch (json::parse_error & ex) {
+			std::cerr << "JSON parse error at byte " << ex.byte << std::endl;
+			std::cerr << "fileName " << fileName << std::endl;
+			std::cerr << contents.rdbuf() << std::endl;
+		}
+
+		contents.close();
+
+		for (auto & c : commands) {
+			//			alert (c, 31);
+			// readable comments enabled now.
+			if (c != "" && c[0] != '#') {
+				vector<string> cols { ofSplitString(c, " ") };
+				string thispath { cols[1] };
+				// cout << thispath << endl;
+				// stringReplace(thispath, "\:", "\/");
+
+				std::replace(thispath.begin(), thispath.end(), ':', '/');
+
+				// cout << thispath << endl;
+				// cout << "----" << endl;
+				// ofStringReplace(thispath, ":", "/");
+
+				if (thispath.substr(thispath.length() - 1) != "/") {
+					//if (cols[0] == "Set") {
+					try {
+						json::json_pointer p { json::json_pointer(thispath) };
+
+						if (cols[2] == "string") {
+							// find position after find word
+							auto stringStart { c.find("string ") + 7 };
+							try {
+								j[p] = c.substr(stringStart);
+							} catch (std::exception & e) {
+
+								std::cerr << "substr " << c.substr(stringStart) << "\n"
+										  << "pointer " << p << "\n"
+										  << e.what()
+										  << std::endl;
+								std::exit(1);
+							}
+							// j[p] = cols[3];
+						} else if (cols[2] == "array") {
+							try {
+								//								j[p] = {};
+								j[p] = json::array({});
+							} catch (std::exception & e) {
+								std::cerr << "array " << e.what() << std::endl;
+								std::exit(1);
+							}
+						}
+					} catch (std::exception & e) {
+						std::cerr << "json error " << std::endl;
+						std::cout << "pointer " << thispath << std::endl;
+						std::cerr << e.what() << std::endl;
+						std::cerr << "--------------------------------------------------" << std::endl;
+						std::exit(1);
+					}
+
+				} else {
+					thispath = thispath.substr(0, thispath.length() - 1);
+					//					cout << thispath << endl;
+					json::json_pointer p = json::json_pointer(thispath);
+					try {
+						// Fixing XCode one item array issue
+						if (!j[p].is_array()) {
+							//							cout << endl;
+							//							alert (c, 31);
+							//							cout << "this is not array, creating" << endl;
+							//							cout << thispath << endl;
+							auto v { j[p] };
+							j[p] = json::array();
+							if (!v.is_null()) {
+								//								cout << "thispath " << thispath << endl;
+								j[p].emplace_back(v);
+							}
+						}
+						//						alert (c, 31);
+						//						alert ("emplace back " + cols[3] , 32);
+						j[p].emplace_back(cols[3]);
+
+					} catch (std::exception & e) {
+						std::cerr << "json error " << std::endl;
+						std::cerr << e.what() << std::endl;
+						std::cerr << thispath << std::endl;
+						std::cerr << "-------------------------" << std::endl;
+					}
+				}
+				//				alert("-----", 32);
+			}
+		}
+
+		std::ofstream jsonFile(fileName);
+
+		// This is not pretty but address some differences in nlohmann json 3.11.2 to 3.11.3
+		auto dump = j.dump(1, '	');
+		if (dump[0] == '[') {
+			dump = j[0].dump(1, '	');
+		}
+
+		try {
+			jsonFile << dump;
+		} catch (std::exception & e) {
+			std::cerr << "Error saving json to " << fileName << ": " << e.what() << std::endl;
+			;
+			// return false;
+		} catch (...) {
+			std::cerr << "Error saving json to " << fileName << std::endl;
+			;
+			// return false;
+		}
+		jsonFile.close();
+	}
+
+	//	for (auto & c : commands) cout << c << endl;
+	// return true;
 }
 
 std::string generateUUID(const string & input) {
@@ -61,9 +536,9 @@ std::string generateUUID(const string & input) {
 }
 
 void copyTemplateFile::info() {
-	alert("	copyTemplateFile info -------------", 92);
-	alert("	from " + from.string(), 93);
-	alert("	to " + to.string(), 93);
+	alert("	copyTemplateFile ::", 92);
+	alert("	from " + from.string(), 2);
+	alert("	to " + to.string(), 90);
 	for (auto & f : findReplaces) {
 		std::cout << "	└─ Replacing " << f.first << " : " << f.second << std::endl;
 	}
@@ -74,7 +549,8 @@ bool copyTemplateFile::run() {
 
 	if (fs::exists(from)) {
 		// ofLogVerbose() << "copyTemplateFile from: " << from << " to: " << to;
-		alert("base::copyTemplateFile from: " + from.string() + " to: " + to.string(), 33);
+		alert("	copyTemplateFile from: " + from.string(), 2);
+		alert("	to: " + to.string(), 90);
 
 		if (findReplaces.size() || appends.size()) {
 			// Load file, replace contents, write to destination.
@@ -89,7 +565,8 @@ bool copyTemplateFile::run() {
 				}
 				replaceAll(contents, f.first, f.second);
 				// ofLogVerbose() << "└─ Replacing " << f.first << " : " << f.second;
-				std::cout << "	└─ Replacing " << f.first << " : " << f.second << std::endl;
+				alert ("	└─ Replacing " + f.first + " : " + f.second, 0);
+				// std::cout << "	└─ Replacing " << f.first << " : " << f.second << std::endl;
 			}
 
 			for (auto & a : appends) {
@@ -179,13 +656,14 @@ void ofTemplateZed::load() {
 }
 
 void ofTemplateMacos::load() {
-	alert("ofTemplateMacos::load()", 92);
+	alert("ofTemplateMacos::load()", 34);
+	alert("here all load save and replace operations are loaded to memory, but not yet executed.");
 
 	// ALL ABOUT FILES HERE
-	auto projectName = fs::current_path().filename().string();
+	name = fs::current_path().filename().string();
 	// auto projectName = conf.projectPath.filename().string();
-	fs::path xcodeProject { conf.projectPath / (projectName + ".xcodeproj") };
-	cout << xcodeProject << endl;
+	fs::path xcodeProject { conf.projectPath / (name + ".xcodeproj") };
+	// cout << xcodeProject << endl;
 
 	try {
 		fs::create_directories(xcodeProject);
@@ -202,7 +680,7 @@ void ofTemplateMacos::load() {
 
 	copyTemplateFiles.push_back(
 		{ path / "emptyExample.xcodeproj" / "project.pbxproj", xcodeProject / "project.pbxproj",
-			{ { "emptyExample", projectName },
+			{ { "emptyExample", name },
 				rootReplacements } });
 
 	copyTemplateFiles.push_back({ path / "Project.xcconfig",
@@ -226,7 +704,7 @@ void ofTemplateMacos::load() {
 
 	// Equivalent to SaveScheme in projectGenerator
 	//
-	auto schemeFolder = conf.projectPath / (projectName + ".xcodeproj") / "xcshareddata/xcschemes";
+	auto schemeFolder = conf.projectPath / (name + ".xcodeproj") / "xcshareddata/xcschemes";
 
 	if (fs::exists(schemeFolder)) {
 		fs::remove_all(schemeFolder);
@@ -235,18 +713,18 @@ void ofTemplateMacos::load() {
 	if (target == "osx" || target == "macos") {
 		for (auto & f : { "Release", "Debug" }) {
 			copyTemplateFiles.push_back({ path / ("emptyExample.xcodeproj/xcshareddata/xcschemes/emptyExample " + string(f) + ".xcscheme"),
-				schemeFolder / (projectName + " " + f + ".xcscheme"),
-				{ { "emptyExample", projectName } } });
+				schemeFolder / (name + " " + f + ".xcscheme"),
+				{ { "emptyExample", name } } });
 		}
 
-		copyTemplateFiles.push_back({ conf.projectPath / (projectName + ".xcodeproj/project.xcworkspace"),
+		copyTemplateFiles.push_back({ conf.projectPath / (name + ".xcodeproj/project.xcworkspace"),
 			path / "emptyExample.xcodeproj/project.xcworkspace" });
 	} else {
 
 		// MARK:- IOS sector;
 		copyTemplateFiles.push_back({ path / "emptyExample.xcodeproj/xcshareddata/xcschemes/emptyExample.xcscheme",
-			schemeFolder / (projectName + ".xcscheme"),
-			{ { "emptyExample", projectName } } });
+			schemeFolder / (name + ".xcscheme"),
+			{ { "emptyExample", name } } });
 	}
 
 	// END ALL ABOUT FILES
@@ -256,17 +734,6 @@ void ofTemplateMacos::load() {
 	// RENAME projectName inside templates
 	// FIXME: review BUILT_PRODUCTS_DIR
 	//
-
-	// macos section
-	std::map<std::string, std::string> uuid {
-		{ "buildConfigurationList", "E4B69B5A0A3A1756003C02F2" },
-		{ "buildActionMask", "E4B69B580A3A1756003C02F2" },
-		// { "projRoot", "E4B69B4A0A3A1720003C02F2" },
-		{ "frameworks", "E7E077E715D3B6510020DFD4" },
-		{ "afterPhase", "928F60851B6710B200E2D791" },
-		{ "buildPhases", "E4C2427710CC5ABF004149E2" },
-		{ "", "" },
-	};
 
 	folderUUID = {
 		{ "src", "E4B69E1C0A3A1BDC003C02F2" },
@@ -305,13 +772,13 @@ void ofTemplateMacos::load() {
 		buildConfigs[1] = "1D6058950D05DD3E006BFB54"; // iOS Release
 	}
 
-	addCommand("Set :objects:" + uuid["buildConfigurationList"] + ":name " + projectName);
+	addCommand("Set :objects:" + uuid["buildConfigurationList"] + ":name " + name);
 
 	// Just OSX here, debug app naming.
 	if (target == "osx" || target == "macos") {
 		// TODO: Hardcode to variable
 		// FIXME: Debug needed in name?
-		addCommand("Set :objects:E4B69B5B0A3A1756003C02F2:path " + projectName + "Debug.app");
+		addCommand("Set :objects:E4B69B5B0A3A1756003C02F2:path " + name + "Debug.app");
 	}
 
 	// add sources
