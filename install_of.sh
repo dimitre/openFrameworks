@@ -2,7 +2,7 @@
 cd "$(dirname "$0")"
 echo "parameter"
 echo $@
-read -p "Installing OFVision to ${PWD} Are you sure? " -n 1 -r
+read -p "Installing OFVision to ${PWD} Proceed? " -n 1 -r
 
 set -e
 
@@ -12,10 +12,11 @@ then
 	echo "YES"
 	time git clone --branch tuningfork https://github.com/dimitre/openframeworks --depth 1 ofvision
 	cd ofvision
-	cd ofGen
-	time ./compile.sh
-	cd ..
 	time ./libs.sh
+	cd ofGen
+	./compile.sh
+	./install.sh
+	cd ..
 else
 	echo "ok!"
     # do dangerous stuff
