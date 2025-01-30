@@ -33,6 +33,10 @@ jobs:
         with:
           key: ${{ matrix.cfg.target }}-${{ matrix.cfg.opt }}
 
+      - name: Libs
+        # run: ./scripts/macos/libs.sh
+        run: ./libs.sh
+
       - name: ofGen
         run: |
           ./ofGen/compile.sh
@@ -43,10 +47,6 @@ jobs:
         uses: tecolicom/actions-use-homebrew-tools@v1
         with:
           tools: wget2 fmt yaml-cpp
-
-      - name: Libs
-        # run: ./scripts/macos/libs.sh
-        run: ./libs.sh
 
       - name: XCodebuild
         # run: ./scripts/macos/libs.sh
