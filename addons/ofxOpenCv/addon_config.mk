@@ -185,9 +185,9 @@ emscripten:
 	ADDON_LIBS += libs/opencv/lib/emscripten/%/libopencv_xobjdetect.a
 	ADDON_LIBS += libs/opencv/lib/emscripten/%/libzlib.a
 
-osx:
-	ADDON_FRAMEWORKS = ARWIL
+
 
 ios:
 	# osx/iOS only, any framework that should be included in the project
 	ADDON_FRAMEWORKS = AssetsLibrary
+

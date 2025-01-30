@@ -45,9 +45,12 @@ jobs:
 
       - name: ofGen
         run: |
-          ./ofGen/compile.sh
           cd ofGen
-          ./ofGen platforms=zed,macos ofroot=../../.. path=../examples/templates/allAddonsExample
+          ./compile.sh
+          ./install.sh
+          cd ../examples/templates/allAddonsExample
+          ofGen
+          xcodebuild -arch arm64
 
       - name: XCodebuild
         # run: ./scripts/macos/libs.sh

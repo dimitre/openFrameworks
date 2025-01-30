@@ -89,7 +89,6 @@ inline void testColors() {
 
 inline void parseParameters(const int argc, const char * argv[]) {
 	alert("parseParameters", 92);
-	std::map<std::string, std::string> parametersMap;
 	/*
 addons : ofxMicroUI,ofxTools
 ofroot : ../../..
@@ -101,28 +100,11 @@ templates : zed,macos
 			string param = argv[a];
 			std::vector<std::string> parameters = ofSplitString(param, "=");
 			if (parameters.size() == 2) {
-				parametersMap[parameters[0]] = parameters[1];
+				conf.parametersMap[parameters[0]] = parameters[1];
 			}
 		}
+		conf.updateFromParameters();
 
-		if (parametersMap.count("ofroot")) {
-			conf.ofPath = parametersMap["ofroot"];
-		}
-		if (parametersMap.count("templates")) {
-			conf.templateNames = ofSplitString(parametersMap["templates"], ",");
-		}
-		if (parametersMap.count("platforms")) {
-			conf.platforms = ofSplitString(parametersMap["platforms"], ",");
-		}
-
-		// TODO: ignore addons.make if addons are set via parameter
-		// Write addons.make from this parameter if needed. or always
-		if (parametersMap.count("addons")) {
-			conf.addonsNames = ofSplitString(parametersMap["addons"], ",");
-		}
-		if (parametersMap.count("path")) {
-			fs::current_path(parametersMap["path"]);
-		}
 
 		// if (parametersMap[])
 		// alert("parametersMap ", 35);

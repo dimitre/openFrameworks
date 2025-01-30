@@ -312,8 +312,8 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 	if (a->addonProperties.count("ADDON_FRAMEWORKS")) {
 		for (const auto & path : a->addonProperties["ADDON_FRAMEWORKS"]) {
 
-		// TODO: Convert this in a function to parse both ADDON_FRAMEWORKS definition in .mk and filesystem frameworks found.
-		// void addFramework (const std::string & path);
+			// TODO: Convert this in a function to parse both ADDON_FRAMEWORKS definition in .mk and filesystem frameworks found.
+			// void addFramework (const std::string & path);
 			bool isRelativeToSDK = false;
 			size_t found = path.find('/');
 			if (found == string::npos) {
@@ -338,7 +338,7 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 			}
 
 			if (!isRelativeToSDK) {
-			 fs::path pathFS { path };
+				fs::path pathFS { path };
 				addCommand("# ----- FRAMEWORK_SEARCH_PATHS");
 				string parent { pathFS.parent_path().string() };
 				string ext { pathFS.extension().string() };
@@ -540,7 +540,9 @@ void copyTemplateFile::info() {
 	alert("	from " + from.string(), 2);
 	alert("	to " + to.string(), 90);
 	for (auto & f : findReplaces) {
-		std::cout << "	└─ Replacing " << f.first << " : " << f.second << std::endl;
+		if (!empty(f.first)) {
+			std::cout << "	└─ Replacing " << f.first << " : " << f.second << std::endl;
+		}
 	}
 	std::cout << std::endl;
 }
@@ -565,7 +567,7 @@ bool copyTemplateFile::run() {
 				}
 				replaceAll(contents, f.first, f.second);
 				// ofLogVerbose() << "└─ Replacing " << f.first << " : " << f.second;
-				alert ("	└─ Replacing " + f.first + " : " + f.second, 0);
+				alert("	└─ Replacing " + f.first + " : " + f.second, 0);
 				// std::cout << "	└─ Replacing " << f.first << " : " << f.second << std::endl;
 			}
 
@@ -678,10 +680,10 @@ void ofTemplateMacos::load() {
 		rootReplacements = { "../../..", conf.ofPath.string() };
 	}
 
-	copyTemplateFiles.push_back(
-		{ path / "emptyExample.xcodeproj" / "project.pbxproj", xcodeProject / "project.pbxproj",
-			{ { "emptyExample", name },
-				rootReplacements } });
+	copyTemplateFiles.push_back({ path / "emptyExample.xcodeproj" / "project.pbxproj",
+		xcodeProject / "project.pbxproj",
+		{ { "emptyExample", name },
+			rootReplacements } });
 
 	copyTemplateFiles.push_back({ path / "Project.xcconfig",
 		conf.projectPath / "Project.xcconfig",

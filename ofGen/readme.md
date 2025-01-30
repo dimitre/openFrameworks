@@ -1,9 +1,14 @@
 # ofGen
 
 Now using this log to have some tasks:
-- [ ] Parse options.
+- [x] Parse options.
+- [ ] Support for loading of.yml files.
+- [ ] Make template write addons.make
 
-ofgen -templates=zed,macos,vscode -platform=macos -ofpath=../../..
+ofgen called with no parameters, it will consider project path as current path, ofpath=../../..
+will auto detect platform
+
+ofgen templates=zed,macos,vscode platform=macos ofpath=../../..
 
 
 

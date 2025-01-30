@@ -67,8 +67,8 @@ void scanFolder(const fs::path & path,
 }
 
 void ofAddon::load() {
-    divider();
-    alert("ofAddon :: " + name, 92);
+	divider();
+	alert("ofAddon :: " + name, 92);
 	loadAddonConfig();
 	loadFiles();
 	relative();
@@ -156,9 +156,18 @@ void ofAddon::loadFiles() {
 			}
 			//
 			alert("		" + f.string(), 95);
-			auto includeFolder { f / "include" };
-			if (fs::exists(includeFolder)) {
-				scanFolder(includeFolder, filesMap, true);
+			{
+				auto folder { f / "include" };
+				if (fs::exists(folder)) {
+					scanFolder(folder, filesMap, true);
+				}
+			}
+			// special thing for ofxKinect
+			{
+				auto folder { f / "src" };
+				if (fs::exists(folder)) {
+					scanFolder(folder, filesMap, true);
+				}
 			}
 
 			if (fs::exists(f / "lib")) {
@@ -406,8 +415,8 @@ void parseConfigAllAddons() {
 // }
 
 void ofProject::build() {
-    divider();
-    alert("ofProject::build", 92);
+	divider();
+	alert("ofProject::build", 92);
 	// std::cout << "addons.size " << addons.size() << std::endl;
 	// std::cout << "templates.size " << templates.size() << std::endl;
 

@@ -8,7 +8,7 @@
 #include "ofxThreadedImageLoader.h"
 #include "ofxKinect.h"
 #include "ofxGui.h"
-// #include "ofxSvg.h"
+//#include "ofxSvg.h"
 #include "ofMain.h"
 
 class ofApp : public ofBaseApp{
@@ -44,5 +44,5 @@ class ofApp : public ofBaseApp{
 		ofxThreadedImageLoader threadedLoader;
 		ofxKinect kinect;
 		ofxPanel gui;
-		// ofxSvg svg;
+//		ofxSvg svg;
 };

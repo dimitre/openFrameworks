@@ -4,17 +4,13 @@
 
 int main(const int argc, const char * argv[]) {
 
-	testColors();
+	// testColors();
 	cout << sign << endl; // HEADER
-	// fs::current_path("../apps/werkApps/Pulsar");
-
-	// we have parameters here.
-	// ./ofGen platforms=zed,macos addons=ofxMicroUI,ofxTools ofroot=../../.. path=.
-
 	parseParameters(argc, argv);
 
 	if (!isValidOfPath()) {
 		alert("invalid of path");
+		conf.help();
 		std::exit(1);
 	} else {
 		alert("of path OK, proceeding");

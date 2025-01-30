@@ -18,12 +18,15 @@ time ccache $CXX -c src/*.cpp src/uuidxx/src/*.cpp -Isrc/uuidxx/src -I../libs/ma
 time ccache $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src -o ofGen && \
 # time ./ofGen
 if [[ ${PWD} == "/Volumes/tool/ofw/ofGen" ]] then
-time ./ofGen platforms=zed,macos addons=ofxMicroUI,ofxTools ofroot=../../.. path=/Volumes/tool/ofw/apps/Werkapps/Pulsar
+# time ./ofGen platforms=zed,macos addons=ofxMicroUI,ofxTools ofroot=../../.. path=/Volumes/tool/ofw/apps/Werkapps/Pulsar
+time ./ofGen platforms=zed,macos path=../examples/templates/allAddonsExample
 fi
+
+# path+=$PWD/.
+# export PATH
 
 # include-what-you-use g++ -Wfatal-errors -std=c++20 src/main.cpp src/utils.cpp -o ofGen -O3
 # ./ofGen
 #path+=$PWD
-#export PATH
 #echo $path
 #echo $PATH
