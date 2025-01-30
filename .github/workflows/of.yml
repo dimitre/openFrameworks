@@ -41,7 +41,7 @@ jobs:
         run: |
           ./ofGen/compile.sh
           cd ofGen
-          ./ofGen
+          ./ofGen platforms=zed,macos ofroot=../../.. path=../examples/templates/allAddonsExample
 
       - name: Brew
         uses: tecolicom/actions-use-homebrew-tools@v1
