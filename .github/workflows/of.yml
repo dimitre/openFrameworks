@@ -28,6 +28,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@v1.2.14
+        with:
+          key: ${{ matrix.cfg.target }}-${{ matrix.cfg.opt }}
+
       - name: ofGen
         run: |
           ./ofGen/compile.sh
@@ -38,11 +43,6 @@ jobs:
         uses: tecolicom/actions-use-homebrew-tools@v1
         with:
           tools: wget2 fmt yaml-cpp
-
-      - name: ccache
-        uses: hendrikmuhs/ccache-action@v1.2.14
-        with:
-          key: ${{ matrix.cfg.target }}-${{ matrix.cfg.opt }}
 
       - name: Libs
         # run: ./scripts/macos/libs.sh
