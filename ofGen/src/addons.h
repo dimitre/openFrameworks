@@ -19,7 +19,6 @@ static inline std::string ofPathToString(const fs::path & path) {
 	return {};
 }
 
-
 struct ofAddon {
 public:
 	std::string currentParseState { "" };
@@ -41,15 +40,10 @@ public:
 	void showFiles();
 };
 
-
-
-
-
 void scanFolder(const fs::path & path,
 	std::map<std::string, std::vector<fs::path>> & filesMap,
 	// std::map<std::string, std::vector<fs::path>> & exclusionsMap,
 	bool recursive = false);
-
 
 /*
 ofProject is a determinate OF project, it can have multiple addons, and multiple templates.
@@ -60,7 +54,6 @@ public:
 	vector<ofAddon *> addons;
 	vector<ofTemplate *> templates;
 	void build();
-
 };
 
 // void parseAddon( const fs::path & addonPath ) {
@@ -70,10 +63,8 @@ void parseConfigAllAddons();
 void createTemplates();
 void buildProject();
 
-
-
 inline void testColors() {
-    /*
+	/*
     Color: 5 = blink white
     Color 7 : invert background
     30 : preto 31, 36 - cores
@@ -82,15 +73,65 @@ inline void testColors() {
     100/107 : cores vivas fundo
 
     */
-    int colors[] = {
-        5, 7, 30, 31, 32, 33, 34, 35, 36,
-        90, 91, 92, 93, 94, 95, 96,
-        // 41, 42, 43, 44, 45, 46, 47,
-        // 100, 101, 102, 103, 104, 105, 106, 107,
-    };
+	int colors[] = {
+	   // 5, //blinking
+		0, 2, 7, 30, 31, 32, 33, 34, 35, 36,
+		90, 91, 92, 93, 94, 95, 96,
+		// 41, 42, 43, 44, 45, 46, 47,
+		// 100, 101, 102, 103, 104, 105, 106, 107,
+	};
 
-    for (auto & a : colors ){
-        cout << colorText (std::to_string(a) + "███  " , a) ;
-    }
-    cout << endl;
+	for (auto & a : colors) {
+		cout << colorText(std::to_string(a) + "██  ", a);
+	}
+	cout << endl;
+}
+
+inline void parseParameters(const int argc, const char * argv[]) {
+	alert("parseParameters", 92);
+	std::map<std::string, std::string> parametersMap;
+	/*
+addons : ofxMicroUI,ofxTools
+ofroot : ../../..
+path : .
+templates : zed,macos
+*/
+	if (argc > 1) {
+		for (int a = 1; a < argc; a++) {
+			string param = argv[a];
+			std::vector<std::string> parameters = ofSplitString(param, "=");
+			if (parameters.size() == 2) {
+				parametersMap[parameters[0]] = parameters[1];
+			}
+		}
+
+		if (parametersMap.count("ofroot")) {
+			conf.ofPath = parametersMap["ofroot"];
+		}
+		if (parametersMap.count("templates")) {
+			conf.templateNames = ofSplitString(parametersMap["templates"], ",");
+		}
+		if (parametersMap.count("platforms")) {
+			conf.platforms = ofSplitString(parametersMap["platforms"], ",");
+		}
+
+		// TODO: ignore addons.make if addons are set via parameter
+		// Write addons.make from this parameter if needed. or always
+		if (parametersMap.count("addons")) {
+			conf.addonsNames = ofSplitString(parametersMap["addons"], ",");
+		}
+		if (parametersMap.count("path")) {
+			fs::current_path(parametersMap["path"]);
+		}
+
+		// if (parametersMap[])
+		// alert("parametersMap ", 35);
+		// for (auto & p : parametersMap) {
+		// 	alert(p.first + " : " + p.second, 34);
+		// }
+	}
+}
+
+inline bool isValidOfPath() {
+    return fs::exists(conf.ofPath / ".ofroot");
 }

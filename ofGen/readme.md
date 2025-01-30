@@ -1,5 +1,13 @@
 # ofGen
 
+Now using this log to have some tasks:
+- [ ] Parse options.
+
+ofgen -templates=zed,macos,vscode -platform=macos -ofpath=../../..
+
+
+
+
 # generate templates
 ofbuild gen
 # configure

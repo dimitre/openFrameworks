@@ -95,7 +95,7 @@ const std::string sign = colorText(R"(
 ▐▌ ▐▌▐▌   ▐▌   ▐▌   ▐▛▚▖▐▌
 ▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
 ▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
-                Prototype 0.01⚡️
+                Prototype 0.02⚡️
 )",
 							 91)
 
@@ -132,7 +132,11 @@ struct genConfig {
 	// };
 	// std::vector<std::string> templateNames { "zed", "make", "macos" }; //"vscode",
 	std::vector<std::string> templateNames { "macos" }; //"vscode",
+
+	// FIXME: implement platforms in addons from here.
 	std::vector<std::string> platforms { getPlatformString(), "osx" };
+
+	std::vector<std::string> addonsNames;
 
 	std::vector<ofTemplate *> templates;
 	std::vector<ofAddon *> addons;

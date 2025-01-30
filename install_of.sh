@@ -12,6 +12,9 @@ then
 	echo "YES"
 	time git clone --branch tuningfork https://github.com/dimitre/openframeworks --depth 1 ofvision
 	cd ofvision
+	cd ofGen
+	time ./compile.sh
+	cd ..
 	time ./libs.sh
 else
 	echo "ok!"
