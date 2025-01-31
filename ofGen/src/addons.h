@@ -79,36 +79,14 @@ inline void testColors() {
 		// 100, 101, 102, 103, 104, 105, 106, 107,
 	};
 
+	cout << endl;
 	for (auto & a : colors) {
-		cout << colorText(std::to_string(a) + "██  ", a);
+		cout << colorText(std::to_string(a) + "███  ", a);
 	}
+	cout << endl;
 	cout << endl;
 }
 
-inline void parseParameters(const int argc, const char * argv[]) {
-	alert("parseParameters", 92);
-	/*
-addons : ofxMicroUI,ofxTools
-ofroot : ../../..
-path : .
-templates : zed,macos
-*/
-	if (argc > 1) {
-		for (int a = 1; a < argc; a++) {
-			string param = argv[a];
-			std::vector<std::string> parameters = ofSplitString(param, "=");
-			if (parameters.size() == 2) {
-				conf.parametersMap[parameters[0]] = parameters[1];
-			}
-		}
-		conf.updateFromParameters();
-
-		// alert("parametersMap ", 35);
-		for (auto & p : conf.parametersMap) {
-			alert(p.first + " : " + p.second, 34);
-		}
-	}
-}
 
 inline bool isValidOfPath() {
     return fs::exists(conf.ofPath / ".ofroot");

@@ -1,9 +1,9 @@
 #pragma once
 
+#include <filesystem>
 #include <iostream> // cout
 #include <map>
 #include <vector>
-#include <filesystem>
 namespace fs = std::filesystem;
 
 // static constexpr std::string_view VERSION = "ofGen v0.4";
@@ -13,7 +13,7 @@ using std::string;
 using std::vector;
 
 static inline std::string getPGVersion() {
-	return "ofGen v0.4";
+	return "ofGen v0.5";
 }
 
 inline std::string colorText(const std::string & s, int color) {
@@ -32,8 +32,9 @@ const std::string sign = colorText(R"(
 ▐▌ ▐▌▐▌   ▐▌   ▐▌   ▐▛▚▖▐▌
 ▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
 ▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
-                Prototype v0.4⚡️
-)", 91)
+                Prototype v0.5⚡️
+)",
+							 91)
 
 	+ colorText(R"(                Report issues on
                 https://github.com/dimitre/ofLibs/
@@ -97,7 +98,6 @@ inline std::vector<std::string> splitStringOnceByLeft(const std::string & source
 	return res;
 }
 
-
 static void divider() {
 	// cout << colorText(colorText("-----------------------------------------------------------", 5), 92) << endl;
 	std::cout << std::endl;
@@ -108,6 +108,8 @@ struct ofTemplate;
 struct ofAddon;
 
 struct genConfig {
+
+	// std::string projectName { "" };
 	fs::path ofPath { "../../.." };
 	// it will be cwd unless project path is passed by variable.
 	// fs::path projectPath { "../apps/werkApps/Pulsar" };
@@ -128,28 +130,57 @@ struct genConfig {
 	std::vector<ofAddon *> addons;
 
 	std::map<std::string, std::string> parametersMap;
+	// vector<std::string> singleParameters;
+	std::string singleParameter;
 
-	void updateFromParameters() {
-		alert("genConfig::updateFromParameters()", 92);
-		if (parametersMap.count("ofroot")) {
-			ofPath = parametersMap["ofroot"];
-		}
-		if (parametersMap.count("templates")) {
-			templateNames = ofSplitString(parametersMap["templates"], ",");
-		}
-		if (parametersMap.count("platforms")) {
-			platforms = ofSplitString(parametersMap["platforms"], ",");
-		}
+	void parseParameters(const int argc, const char * argv[]) {
+		// alert("parseParameters", 92);
+		/*
+addons : ofxMicroUI,ofxTools
+ofroot : ../../..
+path : .
+templates : zed,macos
+*/
+		if (argc > 1) {
+			for (int a = 1; a < argc; a++) {
+				string param = argv[a];
+				std::vector<std::string> parameters = ofSplitString(param, "=");
+				if (parameters.size() == 2) {
+					parametersMap[parameters[0]] = parameters[1];
+				} else if (parameters.size() == 1)  {
+				    // singleParameters.emplace_back(param);
+					singleParameter = param;
+					// cout << "parameters size " << parameters.size() << endl;
+				}
+			}
 
-		// TODO: ignore addons.make if addons are set via parameter
-		// Write addons.make from this parameter if needed. or always
-		if (parametersMap.count("addons")) {
-			addonsNames = ofSplitString(parametersMap["addons"], ",");
-		}
-		if (parametersMap.count("path")) {
-			fs::current_path(parametersMap["path"]);
+			if (parametersMap.count("ofroot")) {
+				ofPath = parametersMap["ofroot"];
+			}
+			if (parametersMap.count("templates")) {
+				templateNames = ofSplitString(parametersMap["templates"], ",");
+			}
+			if (parametersMap.count("platforms")) {
+				platforms = ofSplitString(parametersMap["platforms"], ",");
+			}
+
+			// TODO: ignore addons.make if addons are set via parameter
+			// Write addons.make from this parameter if needed. or always
+			if (parametersMap.count("addons")) {
+				addonsNames = ofSplitString(parametersMap["addons"], ",");
+			}
+			if (parametersMap.count("path")) {
+				fs::current_path(parametersMap["path"]);
+			}
+
+
+			// alert("parametersMap ", 35);
+			for (auto & p : parametersMap) {
+				alert(p.first + " : " + p.second, 34);
+			}
 		}
 	}
+
 
 	void help() {
 		cout << R"(
@@ -160,6 +191,13 @@ you can supply all project path, OF path, addons list, templates,
 platforms as parameters like:
 ./ofGen templates=zed,macos,make platform=macos addons=ofxMidi,ofxOpencv ofpath=../../.. path=/Volumes/tool/Transcend
 )" << endl;
+	}
+
+	void open() {
+		std::string projectName = fs::current_path().filename().string();
+		std::string command = "open " + projectName + ".xcodeproj";
+		cout << command << endl;
+		system(command.c_str());
 	}
 
 	// void scanFolderRecursive(const fs::path & path);

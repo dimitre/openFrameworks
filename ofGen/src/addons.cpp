@@ -108,7 +108,7 @@ void ofAddon::refine() {
 				// alert("	   exclusion=" + e.string() + ", section=" + f.first, 33);
 			}
 			if (add) {
-			    // cout << "adding " << s << endl;
+				// cout << "adding " << s << endl;
 				filteredMap[f.first].emplace_back(s);
 			}
 		}
@@ -198,22 +198,20 @@ void ofAddon::loadFiles() {
 
 			// Avoid scanning duplicate if we are going to scan all libsFolder recursively later
 			if (hasPlatformFolder) {
-    			{
-    				auto folder { f / "include" };
-    				if (fs::exists(folder)) {
-    					scanFolder(folder, filesMap, true);
-    				}
-    			}
-    			// special thing for ofxKinect
-    			{
-    				auto folder { f / "src" };
-    				if (fs::exists(folder)) {
-    					scanFolder(folder, filesMap, true);
-    				}
-    			}
+				{
+					auto folder { f / "include" };
+					if (fs::exists(folder)) {
+						scanFolder(folder, filesMap, true);
+					}
+				}
+				// special thing for ofxKinect
+				{
+					auto folder { f / "src" };
+					if (fs::exists(folder)) {
+						scanFolder(folder, filesMap, true);
+					}
+				}
 			}
-
-
 		}
 
 		if (!hasPlatformFolder) {
@@ -281,11 +279,13 @@ void ofAddon::loadAddonConfig() {
 				if (line.find("+=") != string::npos) {
 					addToValue = true;
 					// FIXME: maybe not needed. a simple split is ok.
-					varValue = splitStringOnceByLeft(line, "+=");
+					// varValue = splitStringOnceByLeft(line, "+=");
+					varValue = ofSplitString(line, "+=");
 				} else {
 					limpa = true;
 					addToValue = false;
-					varValue = splitStringOnceByLeft(line, "=");
+					// varValue = splitStringOnceByLeft(line, "=");
+					varValue = ofSplitString(line, "=");
 				}
 
 				// variable = ofTrim(varValue[0]);

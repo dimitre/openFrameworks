@@ -4,34 +4,39 @@
 
 #include <chrono>
 
-
 int main(const int argc, const char * argv[]) {
-    auto t1 = std::chrono::high_resolution_clock::now();
+	auto t1 = std::chrono::high_resolution_clock::now();
 
-	// testColors();
 	cout << sign << endl; // HEADER
-	parseParameters(argc, argv);
+	conf.parseParameters(argc, argv);
 
-	if (!isValidOfPath()) {
-		alert("invalid of path");
-		conf.help();
-		std::exit(1);
-	} else {
-		alert("of path OK, proceeding");
+	bool build = true;
+
+	if (conf.singleParameter == "colors") {
+		testColors();
+		build = false;
 	}
-	// if (argc > 1) {
-	// 	string param = argv[1];
-	// }
 
-	gatherProjectInfo();
-	// parseConfigAllAddons();
-	// createTemplates();
-	// infoTemplates();
-	// buildProject();
-	auto t2 = std::chrono::high_resolution_clock::now();
-	std::chrono::duration<double> ms_double = t2 - t1;
+	if (build) {
+		if (!isValidOfPath()) {
+			alert("OF not found in default path " + conf.ofPath.string());
+			conf.help();
+		} else {
+			alert("of path OK, proceeding");
+			gatherProjectInfo();
+		}
+
+		if (conf.singleParameter == "open") {
+			conf.open();
+		}
+	}
 
 	std::cout << std::endl;
-	std::cout << ms_double.count() << " seconds" << std::endl;
+	alert(getPGVersion(), 92);
+
+	auto t2 = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> ms_double = t2 - t1;
+	std::cout << "" << ms_double.count() << " seconds" << std::endl;
+	std::cout << std::endl;
 	return 0;
 }
