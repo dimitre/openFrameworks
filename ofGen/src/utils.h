@@ -250,7 +250,7 @@ and look for OF installation three folders up, like
 cd of/apps/myApps/Transcend; ./ofGen
 you can supply all project path, OF path, addons list, templates,
 platforms as parameters like:
-./ofGen templates=zed,macos,make platform=macos addons=ofxMidi,ofxOpencv ofpath=../../.. path=/Volumes/tool/Transcend
+./ofGen templates=zed,macos,make addons=ofxMidi,ofxOpencv ofpath=../../.. path=/Volumes/tool/Transcend
 )" << endl;
 	}
 
