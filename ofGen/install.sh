@@ -13,4 +13,11 @@ section "OpenFrameworks ofGen (tool to generate projects)"
 echo this will install a symlink in /usr/local/bin/ so ofGen can be called from any directory.
 echo if you need to uninstall in the future you can use the $ofw/ofGen/uninstall.sh script
 echo -------
-sudo ln -s "$PWD/ofGen" /usr/local/bin/ofGen
+# if [[ -f /usr/local/bin/ofGen ]]; then
+# read -p "ofGen is already linked, overwrite? " -n 1 -r
+#     if [[ $REPLY =~ ^[Yy]$ ]]; then
+#     sudo rm /usr/local/bin/ofGen
+#     fi
+# fi
+# -sf parameters will overwrite old symlink if it is already installed
+sudo ln -sf "$PWD/ofGen" /usr/local/bin/ofGen
