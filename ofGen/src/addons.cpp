@@ -88,6 +88,9 @@ void ofAddon::relative() {
 void ofAddon::refine() {
 	alert("	refine", 34);
 
+	// With this we copy rules from ADDON_SOURCES_EXCLUDE to header files.
+	exclusionsMap["headers"] = exclusionsMap["sources"];
+
 	for (const auto & f : filesMap) {
 		for (const auto & s : f.second) {
 			bool add = true;
@@ -105,10 +108,32 @@ void ofAddon::refine() {
 				// alert("	   exclusion=" + e.string() + ", section=" + f.first, 33);
 			}
 			if (add) {
+			    // cout << "adding " << s << endl;
 				filteredMap[f.first].emplace_back(s);
 			}
 		}
+
+		// Sort alphabetically everything.
+		std::sort(filteredMap[f.first].begin(), filteredMap[f.first].end(), [](const fs::path & a, const fs::path & b) {
+			return a.string() < b.string();
+		});
 	}
+
+	// for (auto & e : exclusionsMap) {
+	// 	alert(">> addon exclusion filter : " + e.first, 92);
+	// 	cout << e.second.size() << endl;
+	// 	for (auto & s : e.second) {
+	// 		alert(s, 90);
+	// 	}
+	// }
+
+	// for (auto & e : filteredMap) {
+	// 	alert(">> filtered list : " + e.first, 92);
+	// 	cout << e.second.size() << endl;
+	// 	for (auto & s : e.second) {
+	// 		alert(s, 90);
+	// 	}
+	// }
 
 	// if (addonProperties.contains("ADDON_SOURCES_EXCLUDE")) {
 	// 	alert("ADDON_SOURCES_EXCLUDE not empty :: ");
@@ -155,24 +180,10 @@ void ofAddon::loadFiles() {
 				continue;
 			}
 			//
-			alert("		" + f.string(), 95);
-			{
-				auto folder { f / "include" };
-				if (fs::exists(folder)) {
-					scanFolder(folder, filesMap, true);
-				}
-			}
-			// special thing for ofxKinect
-			{
-				auto folder { f / "src" };
-				if (fs::exists(folder)) {
-					scanFolder(folder, filesMap, true);
-				}
-			}
+			alert("		" + f.string(), 35);
 
 			if (fs::exists(f / "lib")) {
 				for (const std::string p : conf.platforms) {
-
 					fs::path folder { f / "lib" / p };
 					if (!fs::exists(folder)) {
 						alert("		folder don't exist " + folder.string(), 96);
@@ -184,10 +195,29 @@ void ofAddon::loadFiles() {
 					}
 				}
 			}
+
+			// Avoid scanning duplicate if we are going to scan all libsFolder recursively later
+			if (hasPlatformFolder) {
+    			{
+    				auto folder { f / "include" };
+    				if (fs::exists(folder)) {
+    					scanFolder(folder, filesMap, true);
+    				}
+    			}
+    			// special thing for ofxKinect
+    			{
+    				auto folder { f / "src" };
+    				if (fs::exists(folder)) {
+    					scanFolder(folder, filesMap, true);
+    				}
+    			}
+			}
+
+
 		}
 
 		if (!hasPlatformFolder) {
-			alert("		don't have platform folder, will scan everything " + folderLibs.string(), 92);
+			alert("		don't have platform folder, will scan everything " + folderLibs.string(), 35);
 			scanFolder(folderLibs, filesMap, true);
 		}
 	}
@@ -289,7 +319,7 @@ void ofAddon::loadAddonConfig() {
 			// alert(e.first + " not empty");
 
 			for (auto & a : addonProperties[e.first]) {
-				string value = stringReplace(a, "/%", "");
+				string value = stringReplace(a, "%", "");
 				// alert(value, 92);
 				exclusionsMap[e.second].emplace_back(value);
 			}

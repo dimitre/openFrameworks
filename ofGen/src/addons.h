@@ -6,9 +6,7 @@
 #include <string>
 #include <vector>
 
-static inline std::string getPGVersion() {
-	return "ofGen v0.1";
-}
+
 
 static inline std::string ofPathToString(const fs::path & path) {
 	try {
@@ -105,12 +103,10 @@ templates : zed,macos
 		}
 		conf.updateFromParameters();
 
-
-		// if (parametersMap[])
 		// alert("parametersMap ", 35);
-		// for (auto & p : parametersMap) {
-		// 	alert(p.first + " : " + p.second, 34);
-		// }
+		for (auto & p : conf.parametersMap) {
+			alert(p.first + " : " + p.second, 34);
+		}
 	}
 }
 

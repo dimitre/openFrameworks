@@ -21,6 +21,7 @@ std::string stringReplace(const std::string & strIn, const std::string & from, c
 
 bool ofIsPathInPath(const fs::path & path, const fs::path & base) {
 	auto rel = fs::relative(path, base);
+	// cout << "ofIsPathInPath " << rel << endl;
 	return !rel.empty() && rel.native()[0] != '.';
 }
 // std::string stringReplace(const std::string & strIn, const std::string & from, const std::string & to) {

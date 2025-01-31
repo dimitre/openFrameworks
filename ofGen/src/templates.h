@@ -40,10 +40,10 @@ public:
 	};
 
 	void info() {
-		alert("	ofTemplate::info " + name + ", path=" + path.string(), 34);
-		for (auto & c : copyTemplateFiles) {
-			c.info();
-		}
+		alert("	ofTemplate::info projectName=" + name + ", path=" + path.string(), 34);
+		// for (auto & c : copyTemplateFiles) {
+		// 	c.info();
+		// }
 	}
 
 	virtual void load() {

@@ -18,7 +18,7 @@ then
 	./install.sh
 	cd ..
 else
-	echo "ok!"
+	echo "ok, exit without installing."
     # do dangerous stuff
 fi
 

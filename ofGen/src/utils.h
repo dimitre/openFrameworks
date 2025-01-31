@@ -6,11 +6,15 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
+// static constexpr std::string_view VERSION = "ofGen v0.4";
 using std::cout;
 using std::endl;
 using std::string;
 using std::vector;
 
+static inline std::string getPGVersion() {
+	return "ofGen v0.4";
+}
 
 inline std::string colorText(const std::string & s, int color) {
 	std::string c { std::to_string(color) };
@@ -28,17 +32,15 @@ const std::string sign = colorText(R"(
 ▐▌ ▐▌▐▌   ▐▌   ▐▌   ▐▛▚▖▐▌
 ▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
 ▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
-                Prototype v0.3⚡️
-)",
-							 91)
+                Prototype v0.4⚡️
+)", 91)
 
 	+ colorText(R"(                Report issues on
                 https://github.com/dimitre/ofLibs/
 )",
-		92)
-	+
-	R"(
-)";
+		92);
+
+// )";
 
 // Now it is only possible to create projects inside
 // OF installation, three folders up. ex: of/apps/myApps/transcendence

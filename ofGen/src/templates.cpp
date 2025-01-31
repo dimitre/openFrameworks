@@ -536,12 +536,13 @@ std::string generateUUID(const string & input) {
 }
 
 void copyTemplateFile::info() {
-	alert("	copyTemplateFile ::", 92);
+	alert("	copyTemplateFile", 92);
 	alert("	from " + from.string(), 2);
 	alert("	to " + to.string(), 90);
 	for (auto & f : findReplaces) {
 		if (!empty(f.first)) {
-			std::cout << "	└─ Replacing " << f.first << " : " << f.second << std::endl;
+			alert("	└─ Replacing " + f.first + " : " + f.second, 0);
+			// std::cout << "	└─ Replacing " << f.first << " : " << f.second << std::endl;
 		}
 	}
 	std::cout << std::endl;
@@ -550,9 +551,11 @@ void copyTemplateFile::info() {
 bool copyTemplateFile::run() {
 
 	if (fs::exists(from)) {
+		info();
 		// ofLogVerbose() << "copyTemplateFile from: " << from << " to: " << to;
-		alert("	copyTemplateFile from: " + from.string(), 2);
-		alert("	to: " + to.string(), 90);
+		// alert("	copyTemplateFile", 92);
+		// alert("	from: " + from.string(), 2);
+		// alert("	to: " + to.string(), 90);
 
 		if (findReplaces.size() || appends.size()) {
 			// Load file, replace contents, write to destination.
@@ -567,7 +570,7 @@ bool copyTemplateFile::run() {
 				}
 				replaceAll(contents, f.first, f.second);
 				// ofLogVerbose() << "└─ Replacing " << f.first << " : " << f.second;
-				alert("	└─ Replacing " + f.first + " : " + f.second, 0);
+				// alert("	└─ Replacing " + f.first + " : " + f.second, 0);
 				// std::cout << "	└─ Replacing " << f.first << " : " << f.second << std::endl;
 			}
 
