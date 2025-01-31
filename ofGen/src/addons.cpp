@@ -1,15 +1,15 @@
-#include "addons.h"
 
+
+#include "addons.h"
 #include "templates.h"
 
 #include <fstream>
 #include <iostream>
 
-using std::cout;
-using std::endl;
-using std::string;
-using std::vector;
-#include "utils.h"
+// using std::cout;
+// using std::endl;
+// using std::string;
+// using std::vector;
 
 void scanFolder(const fs::path & path,
 	std::map<std::string, std::vector<fs::path>> & filesMap,
@@ -335,8 +335,17 @@ void gatherProjectInfo() {
 	// Add project files. TODO: additional source folders
 	ofProject project;
 
+
+	cout << " gatherProjectInfo " << &conf << endl;
+	for (auto & t : conf.templateNames) {
+		alert(t, 95);
+	}
+
+	exit(1);
+
 	// create templates, add to project
 	for (auto & t : conf.templateNames) {
+	   alert (t , 95);
 		if (t == "macos") {
 			conf.templates.emplace_back(new ofTemplateMacos());
 			project.templates.emplace_back(conf.templates.back());
@@ -346,11 +355,10 @@ void gatherProjectInfo() {
 		} else if (t == "make") {
 			conf.templates.emplace_back(new ofTemplateMake());
 			project.templates.emplace_back(conf.templates.back());
+		} else if (t == "vscode") {
+			conf.templates.emplace_back(new ofTemplateVSCode());
+			project.templates.emplace_back(conf.templates.back());
 		}
-		// else if (t == "vscode") {
-		// 	conf.ofTemplates.emplace_back(new ofTemplateVSCode());
-		// 	project.templates.emplace_back(conf.ofTemplates.back());
-		// }
 	}
 
 	// load templates, show info of each template

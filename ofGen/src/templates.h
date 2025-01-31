@@ -1,13 +1,15 @@
 #pragma once
 
-#include <fstream>
-#include <iostream>
+#include "utils.h"
+// extern genConfig conf;
 
-using std::cout;
-using std::endl;
+#include <fstream>
+// #include <iostream> #in utils
+
+// using std::cout;
+// using std::endl;
 // using std::string;
 // using std::vector;
-#include "utils.h"
 struct ofAddon;
 
 std::string generateUUID(const string & input);
@@ -25,6 +27,7 @@ public:
 
 struct ofTemplate {
 public:
+
 	std::string name { "" };
 	fs::path path;
 	ofTemplate() { }
@@ -67,6 +70,14 @@ public:
 
 struct ofTemplateMacos : public ofTemplate {
 public:
+	ofTemplateMacos() {
+		name = "macos";
+		path = conf.ofPath / "scripts" / "templates" / name;
+	}
+	void load() override;
+	void save() override;
+	void addAddon(ofAddon * a) override;
+
 	struct fileProperties {
 		bool absolute = false;
 		bool reference = true;
@@ -93,16 +104,9 @@ public:
 		{ "", "" },
 	};
 
-	void addAddon(ofAddon * a) override;
 	void addSrc(const fs::path & srcFile, const fs::path & folder) override;
 	string addFile(const fs::path & path, const fs::path & folder, const fileProperties & fp);
 
-	ofTemplateMacos() {
-		name = "macos";
-		path = conf.ofPath / "scripts" / "templates" / name;
-	}
-	void load() override;
-	void save() override;
 	// void build() override {};
 
 	// FIXME: Provisory variable, to be handled by platform macos / ios in near future
@@ -169,8 +173,6 @@ public:
 	std::map<fs::path, string> folderUUID;
 	// Temporary
 	std::map<string, fs::path> folderFromUUID;
-
-
 };
 
 struct ofTemplateMake : public ofTemplate {
@@ -180,7 +182,6 @@ public:
 		path = conf.ofPath / "scripts" / "templates" / name;
 	}
 	void load() override;
-	// void build() override {};
 };
 
 struct ofTemplateZed : public ofTemplate {
@@ -190,16 +191,16 @@ public:
 		path = conf.ofPath / "scripts" / "templates" / name;
 	}
 	void load() override;
-	// void build() override {};
 };
-
 
 struct ofTemplateVSCode : public ofTemplate {
 public:
-	ofTemplateZed() {
-		name = "zed";
+	ofTemplateVSCode() {
+		name = "vscode";
 		path = conf.ofPath / "scripts" / "templates" / name;
 	}
 	void load() override;
-	// void build() override {};
+	void save() override;
+	// void addAddon(ofAddon * a) override;
+
 };

@@ -1,9 +1,10 @@
 #pragma once
 
-#include <filesystem>
 #include <iostream> // cout
 #include <map>
 #include <vector>
+
+#include <filesystem>
 namespace fs = std::filesystem;
 
 // static constexpr std::string_view VERSION = "ofGen v0.4";
@@ -13,7 +14,7 @@ using std::string;
 using std::vector;
 
 static inline std::string getPGVersion() {
-	return "ofGen v0.5";
+	return "ofGen v0.6";
 }
 
 inline std::string colorText(const std::string & s, int color) {
@@ -32,7 +33,7 @@ const std::string sign = colorText(R"(
 ▐▌ ▐▌▐▌   ▐▌   ▐▌   ▐▛▚▖▐▌
 ▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
 ▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
-                Prototype v0.5⚡️
+                Prototype v0.6⚡️
 )",
 							 91)
 
@@ -42,6 +43,32 @@ const std::string sign = colorText(R"(
 		92);
 
 // )";
+
+inline void testColors() {
+	/*
+    Color: 5 = blink white
+    Color 7 : invert background
+    30 : preto 31, 36 - cores
+    41, 47 cores de fundo
+    91/96 : cores vivas
+    100/107 : cores vivas fundo
+
+    */
+	int colors[] = {
+		// 5, //blinking
+		0, 2, 7, 30, 31, 32, 33, 34, 35, 36,
+		90, 91, 92, 93, 94, 95, 96,
+		// 41, 42, 43, 44, 45, 46, 47,
+		// 100, 101, 102, 103, 104, 105, 106, 107,
+	};
+
+	cout << endl;
+	for (auto & a : colors) {
+		cout << colorText(std::to_string(a) + "███  ", a);
+	}
+	cout << endl;
+	cout << endl;
+}
 
 // Now it is only possible to create projects inside
 // OF installation, three folders up. ex: of/apps/myApps/transcendence
@@ -84,19 +111,21 @@ inline static std::string getPlatformString() {
 #endif
 }
 
-// maybe not needed. replace by a normal split string.
-inline std::vector<std::string> splitStringOnceByLeft(const std::string & source, const std::string & delimiter) {
-	size_t pos = source.find(delimiter);
-	std::vector<std::string> res;
-	if (pos == std::string::npos) {
-		res.emplace_back(source);
-		return res;
-	}
+std::string ofPathToString(const fs::path & path);
 
-	res.emplace_back(source.substr(0, pos));
-	res.emplace_back(source.substr(pos + delimiter.length()));
-	return res;
-}
+// maybe not needed. replace by a normal split string.
+// inline std::vector<std::string> splitStringOnceByLeft(const std::string & source, const std::string & delimiter) {
+// 	size_t pos = source.find(delimiter);
+// 	std::vector<std::string> res;
+// 	if (pos == std::string::npos) {
+// 		res.emplace_back(source);
+// 		return res;
+// 	}
+
+// 	res.emplace_back(source.substr(0, pos));
+// 	res.emplace_back(source.substr(pos + delimiter.length()));
+// 	return res;
+// }
 
 static void divider() {
 	// cout << colorText(colorText("-----------------------------------------------------------", 5), 92) << endl;
@@ -104,12 +133,20 @@ static void divider() {
 	std::cout << colorText("-----------------------------------------------------------", 90) << std::endl;
 }
 
+// extern genConfig conf;
+
+
+
+
+
+
+
 struct ofTemplate;
 struct ofAddon;
 
 struct genConfig {
 
-	// std::string projectName { "" };
+	std::string projectName { "" };
 	fs::path ofPath { "../../.." };
 	// it will be cwd unless project path is passed by variable.
 	// fs::path projectPath { "../apps/werkApps/Pulsar" };
@@ -117,8 +154,8 @@ struct genConfig {
 	// vector <fs::path> projectPaths {
 	// 	{ "../apps/werkApps/Pulsar" }
 	// };
-	// std::vector<std::string> templateNames { "zed", "make", "macos" }; //"vscode",
-	std::vector<std::string> templateNames { "macos" }; //"vscode",
+	// std::vector<std::string> templateNames { "macos", "zed", "make" }; //"vscode",
+	std::vector<std::string> templateNames; //"vscode",
 
 	// FIXME: implement platforms in addons from here.
 	std::vector<std::string> platforms { getPlatformString(), "osx" };
@@ -132,6 +169,10 @@ struct genConfig {
 	std::map<std::string, std::string> parametersMap;
 	// vector<std::string> singleParameters;
 	std::string singleParameter;
+
+	bool doesTemplateExist(std::string val) {
+		return std::find(templateNames.begin(), templateNames.end(), val) != templateNames.end();
+	}
 
 	void parseParameters(const int argc, const char * argv[]) {
 		// alert("parseParameters", 92);
@@ -147,8 +188,8 @@ templates : zed,macos
 				std::vector<std::string> parameters = ofSplitString(param, "=");
 				if (parameters.size() == 2) {
 					parametersMap[parameters[0]] = parameters[1];
-				} else if (parameters.size() == 1)  {
-				    // singleParameters.emplace_back(param);
+				} else if (parameters.size() == 1) {
+					// singleParameters.emplace_back(param);
 					singleParameter = param;
 					// cout << "parameters size " << parameters.size() << endl;
 				}
@@ -158,11 +199,20 @@ templates : zed,macos
 				ofPath = parametersMap["ofroot"];
 			}
 			if (parametersMap.count("templates")) {
+				alert("WOW templates clear", 95);
+				cout << "inside conf, parseParameters() " << endl;
+				cout << this << endl;
+
+				templateNames.clear();
 				templateNames = ofSplitString(parametersMap["templates"], ",");
+
+				for (auto & t : templateNames) {
+					alert(t, 95);
+				}
 			}
-			if (parametersMap.count("platforms")) {
-				platforms = ofSplitString(parametersMap["platforms"], ",");
-			}
+			// if (parametersMap.count("platforms")) {
+			// 	platforms = ofSplitString(parametersMap["platforms"], ",");
+			// }
 
 			// TODO: ignore addons.make if addons are set via parameter
 			// Write addons.make from this parameter if needed. or always
@@ -173,14 +223,25 @@ templates : zed,macos
 				fs::current_path(parametersMap["path"]);
 			}
 
-
 			// alert("parametersMap ", 35);
 			for (auto & p : parametersMap) {
 				alert(p.first + " : " + p.second, 34);
 			}
 		}
+
+		// Give projectName to general config
+		projectName = fs::current_path().filename().string();
+
+		if (doesTemplateExist("zed") || doesTemplateExist("vscode")) {
+			if (!doesTemplateExist("make")) {
+				templateNames.push_back("make");
+			}
+		}
 	}
 
+	bool isValidOfPath() {
+		return fs::exists(ofPath / ".ofroot");
+	}
 
 	void help() {
 		cout << R"(
@@ -202,5 +263,7 @@ platforms as parameters like:
 
 	// void scanFolderRecursive(const fs::path & path);
 };
+// conf
+// static genConfig conf;
 
-static genConfig conf;
+extern genConfig conf;

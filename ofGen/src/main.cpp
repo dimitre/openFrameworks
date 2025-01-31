@@ -1,14 +1,24 @@
 // #include "functions.h"
-// #include "utils.h"
+#include "utils.h"
+// extern genConfig conf;
+
 #include "addons.h"
 
 #include <chrono>
 
+
 int main(const int argc, const char * argv[]) {
 	auto t1 = std::chrono::high_resolution_clock::now();
 
-	cout << sign << endl; // HEADER
+
+	std::cout << sign << std::endl; // HEADER
 	conf.parseParameters(argc, argv);
+
+	std::cout << "main.cpp &conf" << std::endl;
+	std::cout << &conf << std::endl;
+	for (auto & t : conf.templateNames) {
+		alert(t, 95);
+	}
 
 	bool build = true;
 
@@ -18,7 +28,7 @@ int main(const int argc, const char * argv[]) {
 	}
 
 	if (build) {
-		if (!isValidOfPath()) {
+		if (!conf.isValidOfPath()) {
 			alert("OF not found in default path " + conf.ofPath.string());
 			conf.help();
 		} else {

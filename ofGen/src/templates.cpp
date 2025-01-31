@@ -3,6 +3,8 @@
 #include "uuidxx.h"
 #include <nlohmann/json.hpp>
 
+using nlohmann::json;
+
 string ofTemplateMacos::addFile(const fs::path & path, const fs::path & folder, const fileProperties & fp) {
 	string UUID { "" };
 
@@ -229,25 +231,17 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 	// includes, libs, sharedLibs, headers, sources
 
 	for (auto & f : a->filteredMap["sources"]) {
-		fs::path name = f.filename();
 		fs::path p = (a->path / f).parent_path();
 		fs::path p2 = relative(p, conf.ofPath);
 
-		// cout << f << endl;
-		// cout << name << endl;
-		// cout << p << endl;
-		// cout << p2 << endl;
-		// cout << "----" << endl;
-		// addSrc(e, addon.filesToFolders.at(e));
-		addSrc(name, p2);
+		addSrc(f.filename(), p2);
 	}
 
 	for (auto & f : a->filteredMap["headers"]) {
-		fs::path name = f.filename();
 		fs::path p = (a->path / f).parent_path();
 		fs::path p2 = relative(p, conf.ofPath);
 
-		addSrc(name, p2);
+		addSrc(f.filename(), p2);
 	}
 
 	// ADD Include
@@ -384,7 +378,7 @@ void ofTemplateMacos::save() {
 
 	//	debugCommands = false;
 
-	fs::path fileName { conf.projectPath / (name + ".xcodeproj/project.pbxproj") };
+	fs::path fileName { conf.projectPath / (conf.projectName + ".xcodeproj/project.pbxproj") };
 	bool usePlistBuddy = false;
 
 	if (usePlistBuddy) {
@@ -660,44 +654,13 @@ void ofTemplateZed::load() {
 	}
 }
 
-void ofTemplateVSCode::load() {
-	alert("ofTemplateVSCode::load()", 92);
-
-	// bool ok = ofTemplateMake::load();
-
-	copyTemplateFiles.push_back({ path / ".vscode",
-		conf.projectPath / ".vscode" });
-	copyTemplateFiles.back().isFolder = true;
-
-
-	copyTemplateFiles.push_back({ path / "compile_flags.txt",
-		conf.projectPath / "compile_flags.txt" });
-
-
-	for (auto & a : conf.addons) {
-		alert("parsing addon " + a->name, 97);
-		for (auto & f : a->filteredMap) {
-			alert(">>>" + f.first);
-			for (auto & s : f.second) {
-				alert("   " + s.string(), 92);
-			}
-		}
-
-		for (auto & f : a->filteredMap["includes"]) {
-			std::string inc { "-I" + fs::path(a->path / f).string() };
-			copyTemplateFiles[0].appends.emplace_back(inc);
-		}
-	}
-}
-
 void ofTemplateMacos::load() {
 	alert("ofTemplateMacos::load()", 34);
 	alert("here all load save and replace operations are loaded to memory, but not yet executed.");
 
 	// ALL ABOUT FILES HERE
-	name = fs::current_path().filename().string();
 	// auto projectName = conf.projectPath.filename().string();
-	fs::path xcodeProject { conf.projectPath / (name + ".xcodeproj") };
+	fs::path xcodeProject { conf.projectPath / (conf.projectName + ".xcodeproj") };
 	// cout << xcodeProject << endl;
 
 	try {
@@ -715,7 +678,7 @@ void ofTemplateMacos::load() {
 
 	copyTemplateFiles.push_back({ path / "emptyExample.xcodeproj" / "project.pbxproj",
 		xcodeProject / "project.pbxproj",
-		{ { "emptyExample", name },
+		{ { "emptyExample", conf.projectName },
 			rootReplacements } });
 
 	copyTemplateFiles.push_back({ path / "Project.xcconfig",
@@ -739,27 +702,28 @@ void ofTemplateMacos::load() {
 
 	// Equivalent to SaveScheme in projectGenerator
 	//
-	auto schemeFolder = conf.projectPath / (name + ".xcodeproj") / "xcshareddata/xcschemes";
+	auto schemeFolder = conf.projectPath / (conf.projectName + ".xcodeproj") / "xcshareddata/xcschemes";
 
 	if (fs::exists(schemeFolder)) {
 		fs::remove_all(schemeFolder);
 	}
 	fs::create_directories(schemeFolder);
+
 	if (target == "osx" || target == "macos") {
 		for (auto & f : { "Release", "Debug" }) {
 			copyTemplateFiles.push_back({ path / ("emptyExample.xcodeproj/xcshareddata/xcschemes/emptyExample " + string(f) + ".xcscheme"),
-				schemeFolder / (name + " " + f + ".xcscheme"),
-				{ { "emptyExample", name } } });
+				schemeFolder / (conf.projectName + " " + f + ".xcscheme"),
+				{ { "emptyExample", conf.projectName } } });
 		}
 
-		copyTemplateFiles.push_back({ conf.projectPath / (name + ".xcodeproj/project.xcworkspace"),
+		copyTemplateFiles.push_back({ conf.projectPath / (conf.projectName + ".xcodeproj/project.xcworkspace"),
 			path / "emptyExample.xcodeproj/project.xcworkspace" });
 	} else {
 
 		// MARK:- IOS sector;
 		copyTemplateFiles.push_back({ path / "emptyExample.xcodeproj/xcshareddata/xcschemes/emptyExample.xcscheme",
-			schemeFolder / (name + ".xcscheme"),
-			{ { "emptyExample", name } } });
+			schemeFolder / (conf.projectName + ".xcscheme"),
+			{ { "emptyExample", conf.projectName } } });
 	}
 
 	// END ALL ABOUT FILES
@@ -807,13 +771,13 @@ void ofTemplateMacos::load() {
 		buildConfigs[1] = "1D6058950D05DD3E006BFB54"; // iOS Release
 	}
 
-	addCommand("Set :objects:" + uuid["buildConfigurationList"] + ":name " + name);
+	addCommand("Set :objects:" + uuid["buildConfigurationList"] + ":name " + conf.projectName);
 
 	// Just OSX here, debug app naming.
 	if (target == "osx" || target == "macos") {
 		// TODO: Hardcode to variable
 		// FIXME: Debug needed in name?
-		addCommand("Set :objects:E4B69B5B0A3A1756003C02F2:path " + name + "Debug.app");
+		addCommand("Set :objects:E4B69B5B0A3A1756003C02F2:path " + conf.projectName + "Debug.app");
 	}
 
 	// add sources
@@ -934,4 +898,110 @@ string ofTemplateMacos::getFolderUUID(const fs::path & folder, fs::path base) {
 		}
 		return lastFolderUUID;
 	}
+}
+
+
+
+
+
+
+
+struct fileJson {
+	fs::path fileName;
+	json data;
+
+	// only works for workspace
+	void addPath(fs::path folder) {
+		std::string path = folder.is_absolute() ? folder.string() : "${workspaceRoot}/../" + folder.string();
+		json object;
+		object["path"] = path;
+		json::json_pointer p = json::json_pointer("/folders");
+		data[p].emplace_back(object);
+	}
+
+	void addToArray(string pointer, fs::path value) {
+		json::json_pointer p = json::json_pointer(pointer);
+		if (!data[p].is_array()) {
+			data[p] = json::array();
+		}
+
+		std::string path = fs::path(value).is_absolute() ? value.string() : "${workspaceRoot}/" + value.string();
+		data[p].emplace_back(path);
+	}
+
+	void load() {
+		if (!fs::exists(fileName)) {
+			std::cerr << "JSON file not found " << fileName.string() << std::endl;
+			return;
+		}
+
+		std::ifstream ifs(fileName);
+		try {
+			data = json::parse(ifs);
+		} catch (json::parse_error & ex) {
+			std::cerr << "JSON parse error at byte" << ex.byte << std::endl;
+			std::cerr << "fileName" << fileName.string() << std::endl;
+		}
+	}
+
+	void save() {
+		//		alert ("saving now " + fileName.string(), 33);
+		//		std::cout << data.dump(1, '\t') << std::endl;
+		std::ofstream jsonFile(fileName);
+		try {
+			jsonFile << data.dump(1, '\t');
+		} catch (std::exception & e) {
+			std::cerr << "Error saving json to " << fileName.string() << ": " << e.what() << std::endl;
+		}
+	}
+};
+
+fileJson workspace;
+fileJson cppProperties;
+
+void ofTemplateVSCode::load() {
+	alert("ofTemplateVSCode::load()", 92);
+
+	// bool ok = ofTemplateMake::load();
+
+	copyTemplateFiles.push_back({ path / ".vscode",
+		conf.projectPath / ".vscode" });
+	copyTemplateFiles.back().isFolder = true;
+
+	workspace.fileName = conf.projectPath / (conf.projectName + ".code-workspace");
+	cppProperties.fileName = conf.projectPath / ".vscode/c_cpp_properties.json";
+
+	copyTemplateFiles.push_back({ path / "emptyExample.code-workspace",
+		conf.projectPath / workspace.fileName });
+
+	// copyTemplateFiles.push_back({ path / "compile_flags.txt",
+	// conf.projectPath / "compile_flags.txt" });
+
+	workspace.load();
+	cppProperties.load();
+
+	for (auto & a : conf.addons) {
+		alert("parsing addon " + a->name, 97);
+		for (auto & f : a->filteredMap) {
+			alert(">>>" + f.first);
+			for (auto & s : f.second) {
+				alert("   " + s.string(), 92);
+			}
+		}
+
+		for (auto & f : a->filteredMap["includes"]) {
+			workspace.addPath(a->path);
+		}
+
+		// std::string inc { "-I" + fs::path(a->path / f).string() };
+		// copyTemplateFiles[0].appends.emplace_back(inc);
+		// }
+	}
+}
+
+void ofTemplateVSCode::save() {
+	alert("ofTemplateVSCode::save()", 92);
+    workspace.data["openFrameworksProjectGeneratorVersion"] = getPGVersion();
+	workspace.save();
+	cppProperties.save();
 }

@@ -12,8 +12,17 @@
 #include <regex>
 #include <vector>
 
-#include "addons.h"
+// #include "addons.h"
 #include "utils.h"
+
+std::string ofPathToString(const fs::path & path) {
+	try {
+		return path.string();
+	} catch (fs::filesystem_error & e) {
+		std::cerr << "ofPathToString: error converting fs::path to string " << e.what();
+	}
+	return {};
+}
 
 std::string stringReplace(const std::string & strIn, const std::string & from, const std::string & to) {
 	return std::regex_replace(strIn, std::regex(from), to);

@@ -1,9 +1,6 @@
--I/opt/homebrew/Cellar/fmt/11.1.2/include
--L/opt/homebrew/Cellar/fmt/11.1.2/lib
--I/opt/homebrew/Cellar/yaml-cpp/0.8.0/include
--L/opt/homebrew/Cellar/yaml-cpp/0.8.0/lib
--lfmt
--lyaml-cpp
+src/*.cpp
+src/uuidxx/src/*.cpp
+-I./src/uuidxx/src
+-I../libs/macos/include/
 -std=c++20
 -lstdc++fs
-src/*.cpp
