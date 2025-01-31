@@ -2,6 +2,8 @@
 
 Now using this log to have some tasks:
 - [x] Parse options.
+- [ ] VSCode template
+- [ ] if VSCode or Zed are chosen, add make
 - [ ] Support for loading of.yml files.
 - [ ] Make template write addons.make
 

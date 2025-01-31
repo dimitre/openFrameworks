@@ -1,8 +1,18 @@
 #!/bin/bash
 cd "$(dirname "$0")"
-echo "parameter"
+
+COLOR='\033[0;32m'
+COLOR2='\033[0;34m'
+NC='\033[0m' # No Color
+
+section() {
+    printf "💿${COLOR} ${@} ${NC}\n\r"
+}
+
+# echo "parameter"
 echo $@
-read -p "Installing OFVision to ${PWD} Proceed? " -n 1 -r
+section "OF Vision (OpenFrameworks Fork)"
+read -p "Installing to ${PWD} Proceed? (y/n) " -n 1 -r
 
 set -e
 

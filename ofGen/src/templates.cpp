@@ -660,6 +660,36 @@ void ofTemplateZed::load() {
 	}
 }
 
+void ofTemplateVSCode::load() {
+	alert("ofTemplateVSCode::load()", 92);
+
+	// bool ok = ofTemplateMake::load();
+
+	copyTemplateFiles.push_back({ path / ".vscode",
+		conf.projectPath / ".vscode" });
+	copyTemplateFiles.back().isFolder = true;
+
+
+	copyTemplateFiles.push_back({ path / "compile_flags.txt",
+		conf.projectPath / "compile_flags.txt" });
+
+
+	for (auto & a : conf.addons) {
+		alert("parsing addon " + a->name, 97);
+		for (auto & f : a->filteredMap) {
+			alert(">>>" + f.first);
+			for (auto & s : f.second) {
+				alert("   " + s.string(), 92);
+			}
+		}
+
+		for (auto & f : a->filteredMap["includes"]) {
+			std::string inc { "-I" + fs::path(a->path / f).string() };
+			copyTemplateFiles[0].appends.emplace_back(inc);
+		}
+	}
+}
+
 void ofTemplateMacos::load() {
 	alert("ofTemplateMacos::load()", 34);
 	alert("here all load save and replace operations are loaded to memory, but not yet executed.");

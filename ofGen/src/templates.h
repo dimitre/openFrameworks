@@ -192,3 +192,14 @@ public:
 	void load() override;
 	// void build() override {};
 };
+
+
+struct ofTemplateVSCode : public ofTemplate {
+public:
+	ofTemplateZed() {
+		name = "zed";
+		path = conf.ofPath / "scripts" / "templates" / name;
+	}
+	void load() override;
+	// void build() override {};
+};
