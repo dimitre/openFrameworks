@@ -12,7 +12,7 @@ section() {
 # echo "parameter"
 echo $@
 section "OF Vision (OpenFrameworks Fork)"
-read -p "Installing to ${PWD} Proceed? (y/n) " -n 1 -r
+read -p "Installing to ${PWD}/ofvision Proceed? (y/n) " -n 1 -r
 
 set -e
 
