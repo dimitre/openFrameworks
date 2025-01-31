@@ -655,7 +655,7 @@ void ofTemplateZed::load() {
 }
 
 void ofTemplateMacos::load() {
-	alert("ofTemplateMacos::load()", 34);
+	alert("ofTemplateMacos::load()", 92);
 	alert("here all load save and replace operations are loaded to memory, but not yet executed.");
 
 	// ALL ABOUT FILES HERE

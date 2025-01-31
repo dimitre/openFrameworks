@@ -4,7 +4,7 @@
 // extern genConfig conf;
 
 #include <fstream>
-// #include <iostream> #in utils
+// #include <iostream> //in utils
 
 // using std::cout;
 // using std::endl;
@@ -34,14 +34,6 @@ public:
 
 	std::vector<copyTemplateFile> copyTemplateFiles;
 
-	virtual void addSrc(const fs::path & srcFile, const fs::path & folder) {
-		std::cout << "ofTemplate::addSrc() called on primitive member" << std::endl;
-	};
-
-	virtual void addAddon(ofAddon * a) {
-		std::cout << "ofTemplate::addAddon() called on primitive member" << std::endl;
-	};
-
 	void info() {
 		alert("	ofTemplate::info projectName=" + name + ", path=" + path.string(), 34);
 		// for (auto & c : copyTemplateFiles) {
@@ -49,12 +41,20 @@ public:
 		// }
 	}
 
+	virtual void addSrc(const fs::path & srcFile, const fs::path & folder) {
+		std::cout << "	ofTemplate::addSrc() called on primitive member " << name << std::endl;
+	};
+
+	virtual void addAddon(ofAddon * a) {
+		std::cout << "	ofTemplate::addAddon() called on primitive member " << name << std::endl;
+	};
+
 	virtual void load() {
-		std::cout << "ofTemplate::load() called on primitive member" << std::endl;
+		std::cout << "	ofTemplate::load() called on primitive member " << name << std::endl;
 	}
 
 	virtual void save() {
-		std::cout << "ofTemplate::save() called on primitive member" << std::endl;
+		std::cout << "	ofTemplate::save() called on primitive member " << name << std::endl;
 	}
 
 	// FIXME: uma funcao pra zerar o commands list quando sai de um projeto entra no proximo.

@@ -14,8 +14,8 @@ int main(const int argc, const char * argv[]) {
 	std::cout << sign << std::endl; // HEADER
 	conf.parseParameters(argc, argv);
 
-	std::cout << "main.cpp &conf" << std::endl;
-	std::cout << &conf << std::endl;
+	// std::cout << "main.cpp &conf" << std::endl;
+	// std::cout << &conf << std::endl;
 	for (auto & t : conf.templateNames) {
 		alert(t, 95);
 	}

@@ -15,6 +15,8 @@
 // #include "addons.h"
 #include "utils.h"
 
+genConfig conf;
+
 std::string ofPathToString(const fs::path & path) {
 	try {
 		return path.string();

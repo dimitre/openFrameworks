@@ -336,16 +336,13 @@ void gatherProjectInfo() {
 	ofProject project;
 
 
-	cout << " gatherProjectInfo " << &conf << endl;
-	for (auto & t : conf.templateNames) {
-		alert(t, 95);
-	}
-
-	exit(1);
+	// cout << conf.templateNames.size() << endl;
+	// for (auto & t : conf.templateNames) {
+	// 	alert(t, 95);
+	// }
 
 	// create templates, add to project
 	for (auto & t : conf.templateNames) {
-	   alert (t , 95);
 		if (t == "macos") {
 			conf.templates.emplace_back(new ofTemplateMacos());
 			project.templates.emplace_back(conf.templates.back());
@@ -369,6 +366,7 @@ void gatherProjectInfo() {
 	}
 
 	// now parse project addons, or yml
+
 	fs::path addonsListFile { conf.projectPath / "addons.make" };
 	if (fs::exists(addonsListFile)) {
 		vector<std::string> addonsList { textToVector(addonsListFile) };
