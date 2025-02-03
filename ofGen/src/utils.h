@@ -14,7 +14,7 @@ using std::string;
 using std::vector;
 
 static inline std::string getPGVersion() {
-	return "ofGen v0.6";
+	return "ofGen v0.0.7";
 }
 
 inline std::string colorText(const std::string & s, int color) {
@@ -33,7 +33,7 @@ const std::string sign = colorText(R"(
 ▐▌ ▐▌▐▌   ▐▌   ▐▌   ▐▛▚▖▐▌
 ▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
 ▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
-                Prototype v0.6⚡️
+                Prototype v0.0.7⚡️
 )",
 							 91)
 

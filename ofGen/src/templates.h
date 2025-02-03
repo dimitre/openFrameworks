@@ -77,6 +77,7 @@ public:
 	void load() override;
 	void save() override;
 	void addAddon(ofAddon * a) override;
+	void addFramework(const fs::path & path);
 
 	struct fileProperties {
 		bool absolute = false;

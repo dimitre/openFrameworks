@@ -43,6 +43,8 @@ void scanFolder(const fs::path & path,
 		if (fs::is_directory(f)) {
 			if (ext == ".framework" || ext == ".xcframework") {
 				// ADD To Frameworks List, and stop searching inside this directory
+
+				alert("		Adding Framework " + f.string(), 95);
 				filesMap["frameworks"].emplace_back(f);
 				it.disable_recursion_pending();
 				continue;
@@ -87,7 +89,6 @@ void ofAddon::relative() {
 
 void ofAddon::refine() {
 	alert("	refine", 34);
-
 	// With this we copy rules from ADDON_SOURCES_EXCLUDE to header files.
 	exclusionsMap["headers"] = exclusionsMap["sources"];
 
@@ -97,18 +98,12 @@ void ofAddon::refine() {
 			for (const auto & e : exclusionsMap[f.first]) {
 				if (ofIsPathInPath(s, e)) {
 					add = false;
-					// std::cout << s << std::endl;
-					// alert("added " + s.string(), 92);
 					alert("	└─excluded " + s.string(), 0);
 					alert("	   exclusion=" + e.string() + ", section=" + f.first, 90);
-					// alert (, 93);
 					continue;
 				}
-				// alert("	└─not excluded " + s.string(), 93);
-				// alert("	   exclusion=" + e.string() + ", section=" + f.first, 33);
 			}
 			if (add) {
-				// cout << "adding " << s << endl;
 				filteredMap[f.first].emplace_back(s);
 			}
 		}
@@ -118,37 +113,6 @@ void ofAddon::refine() {
 			return a.string() < b.string();
 		});
 	}
-
-	// for (auto & e : exclusionsMap) {
-	// 	alert(">> addon exclusion filter : " + e.first, 92);
-	// 	cout << e.second.size() << endl;
-	// 	for (auto & s : e.second) {
-	// 		alert(s, 90);
-	// 	}
-	// }
-
-	// for (auto & e : filteredMap) {
-	// 	alert(">> filtered list : " + e.first, 92);
-	// 	cout << e.second.size() << endl;
-	// 	for (auto & s : e.second) {
-	// 		alert(s, 90);
-	// 	}
-	// }
-
-	// if (addonProperties.contains("ADDON_SOURCES_EXCLUDE")) {
-	// 	alert("ADDON_SOURCES_EXCLUDE not empty :: ");
-	// 	for (auto & a : addonProperties["ADDON_SOURCES_EXCLUDE"]) {
-	// 		string value = stringReplace(a, "/%", "");
-	// 		alert(value, 92);
-	// 		exclusionsMap["sources"].emplace_back(value);
-	// 	}
-	// 	for (auto & e : addonProperties["ADDON_SOURCES_EXCLUDE"]) {
-	// 		alert(e);
-	// 	}
-
-	// } else {
-	// 	alert("ADDON_SOURCES_EXCLUDE empty");
-	// }
 }
 
 void ofAddon::showFiles() {
@@ -261,15 +225,8 @@ void ofAddon::loadAddonConfig() {
 		}
 
 		// alert (">> currentParseState " + currentParseState, 93);
+		// FIXME: consider other Platforms soon.
 		bool consider = currentParseState == "common:" || currentParseState == "macos:" || currentParseState == "osx:";
-
-		// if (  currentParseState != "common"
-		//           && currentParseState != "macos"
-		//           && currentParseState != "osx"
-		// //           // && currentParseState != "emscripten"
-		// ) {
-		// break;
-		// }
 
 		if (consider)
 			if (line.find("=") != string::npos) {
@@ -301,13 +258,6 @@ void ofAddon::loadAddonConfig() {
 			}
 	}
 
-	// for (auto & a : addonProperties) {
-	// 	alert("    	" + a.first, 94);
-	// 	for (auto & p : a.second) {
-	// 		alert("     	  " + p, 95);
-	// 	}
-	// }
-
 	const static std::map<std::string, std::string> exclusionsType {
 		{ "ADDON_SOURCES_EXCLUDE", "sources" },
 		{ "ADDON_INCLUDES_EXCLUDE", "includes" },
@@ -317,7 +267,6 @@ void ofAddon::loadAddonConfig() {
 	for (auto & e : exclusionsType) {
 		if (addonProperties.contains(e.first)) {
 			// alert(e.first + " not empty");
-
 			for (auto & a : addonProperties[e.first]) {
 				string value = stringReplace(a, "%", "");
 				// alert(value, 92);
@@ -327,19 +276,12 @@ void ofAddon::loadAddonConfig() {
 			// alert(e.first + " empty");
 		}
 	}
-	//std::map<string, vector<string> > addonProperties;
 }
 
 void gatherProjectInfo() {
 	alert("gatherProjectInfo", 92);
 	// Add project files. TODO: additional source folders
 	ofProject project;
-
-
-	// cout << conf.templateNames.size() << endl;
-	// for (auto & t : conf.templateNames) {
-	// 	alert(t, 95);
-	// }
 
 	// create templates, add to project
 	for (auto & t : conf.templateNames) {
@@ -422,34 +364,6 @@ void parseConfigAllAddons() {
 	alert("parseConfig end");
 }
 
-// void buildTemplates() {
-// 	alert("buildTemplates()", 95);
-// 	for (auto & t : conf.templates) {
-// 		// 		t->info();
-// 		t->build();
-// 	}
-// }
-
-// void createTemplates() {
-// 	// std::vector<std::string> templateNames { "zed", "macos" };
-// 	std::vector<std::string> templateNames { "zed", "make" };
-// 	for (const auto & t : templateNames) {
-// 		if (t == "zed") {
-// 			conf.templates.emplace_back(new ofTemplateZed());
-// 		} else if (t == "macos") {
-// 			conf.templates.emplace_back(new ofTemplateMacos());
-// 		}
-// 		// etc.
-// 	}
-// 	alert("createTemplates", 92);
-// 	for (auto & t : conf.templates) {
-// 		cout << t->name << " : " << t->path << endl;
-// 		t->load();
-// 		// t->info();
-// 	}
-// 	// cout << conf.ofTemplates.size() << endl;
-// }
-
 void ofProject::build() {
 	divider();
 	alert("ofProject::build", 92);
@@ -465,8 +379,5 @@ void ofProject::build() {
 		}
 		t->build();
 		t->save();
-		// Pass addons list of filtered files to template
-		// Pass addons key:value of properties to template
-		// t->
 	}
 }

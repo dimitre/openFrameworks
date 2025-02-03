@@ -873,7 +873,7 @@ size_t ofPixels_<PixelType>::getNumPlanes() const{
 
 template<typename PixelType>
 ofPixels_<PixelType> ofPixels_<PixelType>::getPlane(size_t planeIdx){
-	planeIdx = glm::clamp(planeIdx, size_t(0), getNumPlanes());
+	planeIdx = std::clamp(planeIdx, size_t(0), getNumPlanes());
 	ofPixels_<PixelType> plane;
 	switch(pixelFormat){
 		case OF_PIXELS_RGB:
@@ -1003,7 +1003,7 @@ ofPixels_<PixelType> ofPixels_<PixelType>::getChannel(size_t channel) const{
 	if(channels==0) return channelPixels;
 
 	channelPixels.allocate(width,height,1);
-	channel = glm::clamp(channel, size_t(0), channels-1);
+	channel = std::clamp(channel, size_t(0), channels-1);
 	iterator channelPixel = channelPixels.begin();
 	for(auto p: getConstPixelsIter()){
 		*channelPixel++ = p[channel];
@@ -1016,7 +1016,7 @@ void ofPixels_<PixelType>::setChannel(size_t channel, const ofPixels_<PixelType>
 	size_t channels = channelsFromPixelFormat(pixelFormat);
 	if(channels==0) return;
 
-	channel = glm::clamp(channel, size_t(0), channels-1);
+	channel = std::clamp(channel, size_t(0), channels-1);
 	const_iterator channelPixel = channelPixels.begin();
 	for(auto p: getPixelsIter()){
 		p[channel] = *channelPixel++;
@@ -1045,8 +1045,8 @@ void ofPixels_<PixelType>::cropTo(ofPixels_<PixelType> &toPix, size_t x, size_t 
 			return;
 		}
 
-		_width = glm::clamp(_width, size_t(1), getWidth());
-		_height = glm::clamp(_height, size_t(1), getHeight());
+		_width = std::clamp(_width, size_t(1), getWidth());
+		_height = std::clamp(_height, size_t(1), getHeight());
 
 		if ((toPix.width != _width) || (toPix.height != _height) || (toPix.pixelFormat != pixelFormat)){
 			toPix.allocate(_width, _height, pixelFormat);
@@ -1463,7 +1463,7 @@ bool ofPixels_<PixelType>::pasteInto(ofPixels_<PixelType> &dst, size_t xTo, size
 
 template<typename A, typename B>
 inline A clampedAdd(const A& a, const B& b) {
-	return glm::clamp((float) a + (float) b, 0.f, ofColor_<A>::limit());
+	return std::clamp((float) a + (float) b, 0.f, ofColor_<A>::limit());
 }
 
 

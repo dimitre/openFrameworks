@@ -51,7 +51,10 @@ string ofTemplateMacos::addFile(const fs::path & path, const fs::path & folder, 
 		//		addCommand("Add :objects:"+UUID+":path string " + ofPathToString(path.filename()));
 
 		if (fp.absolute) {
+		// FIXME: Still some confusion here about relative to source or absolute.
 			addCommand("Add :objects:" + UUID + ":sourceTree string SOURCE_ROOT");
+			// addCommand("Add :objects:" + UUID + ":sourceTree string <absolute>");
+
 			// FIXME: REVIEW
 			if (fs::exists(conf.projectPath / path)) {
 				addCommand("Add :objects:" + UUID + ":path string " + ofPathToString(path));
@@ -229,37 +232,7 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 	// 	});
 	//
 	// includes, libs, sharedLibs, headers, sources
-
-	for (auto & f : a->filteredMap["sources"]) {
-		fs::path p = (a->path / f).parent_path();
-		fs::path p2 = relative(p, conf.ofPath);
-
-		addSrc(f.filename(), p2);
-	}
-
-	for (auto & f : a->filteredMap["headers"]) {
-		fs::path p = (a->path / f).parent_path();
-		fs::path p2 = relative(p, conf.ofPath);
-
-		addSrc(f.filename(), p2);
-	}
-
-	// ADD Include
-
-	for (auto & f : a->filteredMap["includes"]) {
-		for (auto & c : buildConfigs) {
-			fs::path p = a->path / f;
-			addCommand("Add :objects:" + c + ":buildSettings:HEADER_SEARCH_PATHS: string " + ofPathToString(p));
-		}
-	}
-
-	// addLibrary function
-	for (auto & f : a->filteredMap["libs"]) {
-		for (auto & c : buildConfigs) {
-			fs::path p = a->path / f;
-			addCommand("Add :objects:" + c + ":buildSettings:OTHER_LDFLAGS: string " + ofPathToString(p));
-		}
-	}
+	//
 
 	// ADDON_CFLAGS ADDON_CPPFLAGS ADDON_LDFLAGS ADDON_PKG_CONFIG_LIBRARIES ADDON_FRAMEWORKS ADDON_DEFINES
 	// ADDON_CFLAGS e ADDON_LDFLAGS estão no ofxSyphon addon.
@@ -283,7 +256,44 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 	// 	cout << "-----" << endl;
 	// }
 
-	// TODO: Modularizar isso tudo aqui.
+	for (auto & f : a->filteredMap["sources"]) {
+		fs::path p = (a->path / f).parent_path();
+		fs::path p2 = relative(p, conf.ofPath);
+		addSrc(f.filename(), p2);
+	}
+
+	for (auto & f : a->filteredMap["headers"]) {
+		fs::path p = (a->path / f).parent_path();
+		fs::path p2 = relative(p, conf.ofPath);
+		addSrc(f.filename(), p2);
+	}
+
+	// ADD Include
+	for (auto & f : a->filteredMap["includes"]) {
+		for (auto & c : buildConfigs) {
+			fs::path p = a->path / f;
+			addCommand("Add :objects:" + c + ":buildSettings:HEADER_SEARCH_PATHS: string " + ofPathToString(p));
+		}
+	}
+
+	// addLibrary function
+	for (auto & f : a->filteredMap["libs"]) {
+		for (auto & c : buildConfigs) {
+			fs::path p = a->path / f;
+			addCommand("Add :objects:" + c + ":buildSettings:OTHER_LDFLAGS: string " + ofPathToString(p));
+		}
+	}
+
+	for (const fs::path & f : a->filteredMap["frameworks"]) {
+		addFramework(a->path / f);
+	}
+
+	if (a->addonProperties.count("ADDON_FRAMEWORKS")) {
+		for (const auto & f : a->addonProperties["ADDON_FRAMEWORKS"]) {
+			addFramework(a->path / f);
+		}
+	}
+
 	const std::map<std::string, std::string> addonToXCode {
 		{ "ADDON_CFLAGS", "OTHER_CFLAGS" },
 		{ "ADDON_CPPFLAGS", "OTHER_CPLUSPLUSFLAGS" },
@@ -302,61 +312,64 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 			}
 		}
 	}
+}
 
-	if (a->addonProperties.count("ADDON_FRAMEWORKS")) {
-		for (const auto & path : a->addonProperties["ADDON_FRAMEWORKS"]) {
+void ofTemplateMacos::addFramework(const fs::path & path) {
+	// TODO: Convert this in a function to parse both ADDON_FRAMEWORKS definition in .mk and filesystem frameworks found.
+	// void addFramework (const std::string & path);
 
-			// TODO: Convert this in a function to parse both ADDON_FRAMEWORKS definition in .mk and filesystem frameworks found.
-			// void addFramework (const std::string & path);
-			bool isRelativeToSDK = false;
-			size_t found = path.find('/');
-			if (found == string::npos) {
-				isRelativeToSDK = true;
+	std::string pathString = path.string();
+
+	bool isRelativeToSDK = false;
+	size_t found = pathString.find('/');
+	if (found == string::npos) {
+		isRelativeToSDK = true;
+	}
+
+	fileProperties fp;
+	// I had to change this so all frameworks goes to a unique folder called framework. I can change this if it is important
+	// fp.absolute = true;
+	fp.absolute = false;
+	fp.codeSignOnCopy = !isRelativeToSDK;
+	fp.copyFilesBuildPhase = !isRelativeToSDK;
+	fp.isRelativeToSDK = isRelativeToSDK;
+	// fp.frameworksBuildPhase = (target != "ios" && !folder.empty());
+	fp.frameworksBuildPhase = target != "ios";
+
+	string UUID;
+	if (isRelativeToSDK) {
+		fs::path frameworkPath { "System/Library/Frameworks/" + pathString + ".framework" };
+		UUID = addFile(frameworkPath, "Frameworks", fp);
+	} else {
+		// std::string folder { "Frameworks" };
+		fs::path folder { path.parent_path() };
+
+		fs::path p = path.parent_path();
+		fs::path p2 = relative(p, conf.ofPath);
+
+		alert ("-----------");
+		alert (path.string(), 96);
+		alert (p2.string(), 95);
+		alert ("-----------");
+
+		UUID = addFile(path, p2, fp);
+	}
+
+	if (!isRelativeToSDK) {
+		fs::path pathFS { path };
+		addCommand("# ----- FRAMEWORK_SEARCH_PATHS");
+		string parent { pathFS.parent_path().string() };
+		string ext { pathFS.extension().string() };
+
+		for (auto & c : buildConfigs) {
+			if (ext == ".framework") {
+				addCommand("Add :objects:" + c + ":buildSettings:FRAMEWORK_SEARCH_PATHS: string " + parent);
 			}
-
-			fileProperties fp;
-			fp.absolute = false;
-			fp.codeSignOnCopy = !isRelativeToSDK;
-			fp.copyFilesBuildPhase = !isRelativeToSDK;
-			fp.isRelativeToSDK = isRelativeToSDK;
-			// fp.frameworksBuildPhase = (target != "ios" && !folder.empty());
-			fp.frameworksBuildPhase = target != "ios";
-
-			string UUID;
-			if (isRelativeToSDK) {
-				fs::path frameworkPath { "System/Library/Frameworks/" + path + ".framework" };
-				UUID = addFile(frameworkPath, "Frameworks", fp);
-			} else {
-				std::string folder { "Frameworks" };
-				UUID = addFile(path, folder, fp);
-			}
-
-			if (!isRelativeToSDK) {
-				fs::path pathFS { path };
-				addCommand("# ----- FRAMEWORK_SEARCH_PATHS");
-				string parent { pathFS.parent_path().string() };
-				string ext { pathFS.extension().string() };
-
-				for (auto & c : buildConfigs) {
-					if (ext == ".framework") {
-						addCommand("Add :objects:" + c + ":buildSettings:FRAMEWORK_SEARCH_PATHS: string " + parent);
-					}
-					if (ext == ".xcframework") {
-						addCommand("Add :objects:" + c + ":buildSettings:XCFRAMEWORK_SEARCH_PATHS: string " + parent);
-					}
-				}
+			if (ext == ".xcframework") {
+				addCommand("Add :objects:" + c + ":buildSettings:XCFRAMEWORK_SEARCH_PATHS: string " + parent);
 			}
 		}
 	}
-
-	// if (a->addonProperties.count("ADDON_CFLAGS")) {
-	// 	for (const auto & c : buildConfigs) {
-	// 		// FIXME: add array here if it doesnt exist. Test with multiple lines
-	// 		for (const auto & cflag : a->addonProperties["ADDON_CFLAGS"]) {
-	// 			addCommand("Add :objects:" + c + ":buildSettings:OTHER_CFLAGS: string " + cflag);
-	// 		}
-	// 	}
-	// }
 }
 
 void ofTemplateMacos::save() {
@@ -900,12 +913,6 @@ string ofTemplateMacos::getFolderUUID(const fs::path & folder, fs::path base) {
 	}
 }
 
-
-
-
-
-
-
 struct fileJson {
 	fs::path fileName;
 	json data;
@@ -1001,7 +1008,7 @@ void ofTemplateVSCode::load() {
 
 void ofTemplateVSCode::save() {
 	alert("ofTemplateVSCode::save()", 92);
-    workspace.data["openFrameworksProjectGeneratorVersion"] = getPGVersion();
+	workspace.data["openFrameworksProjectGeneratorVersion"] = getPGVersion();
 	workspace.save();
 	cppProperties.save();
 }

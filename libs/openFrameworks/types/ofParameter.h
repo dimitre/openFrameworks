@@ -6,6 +6,7 @@
 #include "ofMathConstants.h"
 #include "ofRectangle.h"
 #include "ofUtils.h" // ofToString
+#include <glm/vec4.hpp>
 
 #ifdef OF_USE_LEGACY_MATH
 #include "ofPoint.h" // ofToString

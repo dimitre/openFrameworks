@@ -154,19 +154,19 @@ template<typename PixelType> const ofColor_<PixelType> ofColor_<PixelType>::yell
 
 template<typename A, typename B>
 A clampedSubtract(const A& a, const B& b) {
-	return glm::clamp((float) a - (float) b, 0.f, ofColor_<A>::limit());
+	return std::clamp((float) a - (float) b, 0.f, ofColor_<A>::limit());
 }
 template<typename A, typename B>
 A clampedAdd(const A& a, const B& b) {
-	return glm::clamp((float) a + (float) b, 0.f, ofColor_<A>::limit());
+	return std::clamp((float) a + (float) b, 0.f, ofColor_<A>::limit());
 }
 template<typename A, typename B>
 A clampedDivide(const A& a, const B& b) {
-	return glm::clamp((float) a / (float) b, 0.f, ofColor_<A>::limit());
+	return std::clamp((float) a / (float) b, 0.f, ofColor_<A>::limit());
 }
 template<typename A, typename B>
 A clampedMultiply(const A& a, const B& b) {
-	return glm::clamp((float) a * (float) b, 0.f, ofColor_<A>::limit());
+	return std::clamp((float) a * (float) b, 0.f, ofColor_<A>::limit());
 }
 
 template<typename PixelType>
@@ -240,10 +240,10 @@ void ofColor_<PixelType>::set(const ofColor_<PixelType>& color){
 
 template<typename PixelType>
 ofColor_<PixelType>& ofColor_<PixelType>::clamp(){
-	r = glm::clamp(float(r), 0.0f, limit());
-	g = glm::clamp(float(g), 0.0f, limit());
-	b = glm::clamp(float(b), 0.0f, limit());
-	a = glm::clamp(float(a), 0.0f, limit());
+	r = std::clamp(float(r), 0.0f, limit());
+	g = std::clamp(float(g), 0.0f, limit());
+	b = std::clamp(float(b), 0.0f, limit());
+	a = std::clamp(float(a), 0.0f, limit());
 	return *this;
 }
 
@@ -419,8 +419,8 @@ void ofColor_<PixelType>::setBrightness(float brightness) {
 
 template<typename PixelType>
 void ofColor_<PixelType>::setHsb(float hue, float saturation, float brightness, float alpha) {
-	saturation = glm::clamp(saturation, 0.f, limit());
-	brightness = glm::clamp(brightness, 0.f, limit());
+	saturation = std::clamp(saturation, 0.f, limit());
+	brightness = std::clamp(brightness, 0.f, limit());
 	if(brightness == 0) { // black
 		set(0);
 	} else if(saturation == 0) { // grays
