@@ -12,6 +12,8 @@ msg() {
 
 # MARK: COPY RESOURCES ----------------------------------------------------
 copy_resources() {
+
+    # print $ICON_FILE
 	msg "Copying Resources - Icon"
 
 	# echo mkdir -p "$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Resources/"
@@ -28,7 +30,7 @@ copy_resources() {
 		echo rsync -aved --delete --ignore-existing "$OF_PATH/libs/fmod/lib/macos/libfmod.dylib" "$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Frameworks/";
 		rsync -aved --delete --ignore-existing "$OF_PATH/libs/fmod/lib/macos/libfmod.dylib" "$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Frameworks/";
 	fi
-	# Not needed as we now call install_name_tool -id @loader_path/../Frameworks/libfmod.dylib libfmod.dylib on the dylib directly which prevents the need for calling every post build - keeping here for reference and possible legacy usage 
+	# Not needed as we now call install_name_tool -id @loader_path/../Frameworks/libfmod.dylib libfmod.dylib on the dylib directly which prevents the need for calling every post build - keeping here for reference and possible legacy usage
 	# install_name_tool -change @rpath/libfmod.dylib @executable_path/../Frameworks/libfmod.dylib "$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/$PRODUCT_NAME";
 }
 
@@ -120,7 +122,7 @@ code_sign() {
 		do
 			if lipo -archs "${ITEM}" | grep -q 'i386'; then
 				echo "Stripping invalid archs '${ITEM}'"
-				lipo -remove i386 "${ITEM}" -o "${ITEM}" 
+				lipo -remove i386 "${ITEM}" -o "${ITEM}"
 			else
 				echo "No need to strip invalid archs '{$ITEM}'"
 			fi
@@ -152,7 +154,7 @@ code_sign() {
 # activate via flag in Project.xcconfig
 #
 # note: dylib subdependencies (dylibs that load dylibs) will be found
-#		recursively and bundled within the .app but might need doctoring 
+#		recursively and bundled within the .app but might need doctoring
 #		to work in both bundled or freestanding states.
 #
 bundle_dylibs() {
@@ -172,10 +174,10 @@ bundle_dylibs() {
 				paths[$d]=$d
 			fi
 		done
-			
+
 		# construct a list of -s args for dylibbuilder to find the dylibs
 		for key val in "${(@kv)paths}"; do
-			sargs+=-s\ $key\ 
+			sargs+=-s\ $key\
 		done
 
 		# do the thing
@@ -186,7 +188,7 @@ bundle_dylibs() {
 
 echo ''
 divider
-echo "Running $OF_PATH/scripts/osx/xcode_project.sh"
+echo "Running $0"
 
 copy_resources
 bundle_data_folder

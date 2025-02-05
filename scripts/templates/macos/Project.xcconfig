@@ -26,6 +26,8 @@ ICON_NAME = of.icns
 ICON_NAME[config=Debug] = of_debug.icns
 ICON_FILE = $(OF_PATH)/libs/openFrameworksCompiled/project/macos/$(ICON_NAME)
 
+#include? "App.xcconfig"
+
 OTHER_CFLAGS = $(OF_CORE_CFLAGS)
 OTHER_LDFLAGS = $(OF_CORE_LIBS) $(OF_CORE_FRAMEWORKS)
 HEADER_SEARCH_PATHS = $(OF_CORE_HEADERS)

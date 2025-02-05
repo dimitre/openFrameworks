@@ -694,7 +694,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E4B27C3210CBEBB200536013 /* Build configuration list for PBXNativeTarget "openFrameworks" */;
 			buildPhases = (
-				BFEF3FA72C50AEC7009B3CD8 /* Run Script */,
 				E4B27C1110CBEB8E00536013 /* Headers */,
 				E4B27C1210CBEB8E00536013 /* Sources */,
 				E4B27C1310CBEB8E00536013 /* Frameworks */,
@@ -716,17 +715,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1530;
+				LastUpgradeCheck = 1620;
 			};
 			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "openFrameworksLib" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
-				Japanese,
-				French,
-				German,
+				Base,
+				en,
 			);
 			mainGroup = E4B69B4A0A3A1720003C02F2;
 			productRefGroup = E4B69B4A0A3A1720003C02F2;
@@ -739,27 +736,6 @@
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		BFEF3FA72C50AEC7009B3CD8 /* Run Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Run Script";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = "/usr/bin/env bash";
-			shellScript = "
-";
-			showEnvVarsInLog = 0;
-		};
 		BFF80A5D2C50B2C300784E74 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -921,6 +897,7 @@
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/../../lib/macos/";
 				CONFIGURATION_TEMP_DIR = "$(SRCROOT)/../../lib/macos/build/debug/";
+				ENABLE_TESTABILITY = YES;
 				OBJROOT = "$(SRCROOT)/../../lib/macos/build/debug/";
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = "";
