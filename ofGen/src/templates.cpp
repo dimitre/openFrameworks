@@ -51,7 +51,7 @@ string ofTemplateMacos::addFile(const fs::path & path, const fs::path & folder, 
 		//		addCommand("Add :objects:"+UUID+":path string " + ofPathToString(path.filename()));
 
 		if (fp.absolute) {
-		// FIXME: Still some confusion here about relative to source or absolute.
+			// FIXME: Still some confusion here about relative to source or absolute.
 			addCommand("Add :objects:" + UUID + ":sourceTree string SOURCE_ROOT");
 			// addCommand("Add :objects:" + UUID + ":sourceTree string <absolute>");
 
@@ -225,15 +225,6 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 	// Here we add all lists of files to project
 	// and we add all flags to project.
 
-	// std::map<std::string, std::vector<fs::path>> filteredMap;
-	//
-	// std::sort(fileNames.begin(), fileNames.end(), [](const fs::path & a, const fs::path & b) {
-	// 		return a.string() < b.string();
-	// 	});
-	//
-	// includes, libs, sharedLibs, headers, sources
-	//
-
 	// ADDON_CFLAGS ADDON_CPPFLAGS ADDON_LDFLAGS ADDON_PKG_CONFIG_LIBRARIES ADDON_FRAMEWORKS ADDON_DEFINES
 	// ADDON_CFLAGS e ADDON_LDFLAGS estão no ofxSyphon addon.
 	// ofxHapPlayer tem varias coisas legais tambem
@@ -243,10 +234,7 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 	// ADDON_INCLUDES_EXCLUDE += libs/ffmpeg/include/libavcodec
 	// ADDON_INCLUDES_EXCLUDE += libs/ffmpeg/include/libswresample
 
-	//
-	//
 	// ADDON_INCLUDES ADDON_LIBS ADDON_SOURCES
-	//
 	//
 	// for (auto & p : a->addonProperties) {
 	// 	cout << p.first << endl;
@@ -259,12 +247,28 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 	for (auto & f : a->filteredMap["sources"]) {
 		fs::path p = (a->path / f).parent_path();
 		fs::path p2 = relative(p, conf.ofPath);
+		if (a->isProject) {
+			p2 = relative(p, conf.projectPath);
+			p2 = f.parent_path();
+			alert (f.string(), 95);
+			alert (f.filename().string(), 95);
+			alert (p2.string(), 96);
+
+		}
+
 		addSrc(f.filename(), p2);
 	}
 
 	for (auto & f : a->filteredMap["headers"]) {
 		fs::path p = (a->path / f).parent_path();
 		fs::path p2 = relative(p, conf.ofPath);
+
+		if (a->isProject) {
+			p2 = relative(p, conf.projectPath);
+			p2 = f.parent_path();
+
+		}
+
 		addSrc(f.filename(), p2);
 	}
 
@@ -290,7 +294,7 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 
 	if (a->addonProperties.count("ADDON_FRAMEWORKS")) {
 		for (const auto & f : a->addonProperties["ADDON_FRAMEWORKS"]) {
-			addFramework(a->path / f);
+			addFramework(f);
 		}
 	}
 
@@ -317,6 +321,7 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 void ofTemplateMacos::addFramework(const fs::path & path) {
 	// TODO: Convert this in a function to parse both ADDON_FRAMEWORKS definition in .mk and filesystem frameworks found.
 	// void addFramework (const std::string & path);
+	alert ("addFramework " + path.string(), 95);
 
 	std::string pathString = path.string();
 
@@ -339,7 +344,7 @@ void ofTemplateMacos::addFramework(const fs::path & path) {
 	string UUID;
 	if (isRelativeToSDK) {
 		fs::path frameworkPath { "System/Library/Frameworks/" + pathString + ".framework" };
-		UUID = addFile(frameworkPath, "Frameworks", fp);
+		UUID = addFile(frameworkPath, "", fp);
 	} else {
 		// std::string folder { "Frameworks" };
 		fs::path folder { path.parent_path() };
@@ -347,10 +352,10 @@ void ofTemplateMacos::addFramework(const fs::path & path) {
 		fs::path p = path.parent_path();
 		fs::path p2 = relative(p, conf.ofPath);
 
-		alert ("-----------");
-		alert (path.string(), 96);
-		alert (p2.string(), 95);
-		alert ("-----------");
+		alert("-----------");
+		alert(path.string(), 96);
+		alert(p2.string(), 95);
+		alert("-----------");
 
 		UUID = addFile(path, p2, fp);
 	}
@@ -748,7 +753,7 @@ void ofTemplateMacos::load() {
 	//
 
 	folderUUID = {
-		{ "src", "E4B69E1C0A3A1BDC003C02F2" },
+		// { "src", "E4B69E1C0A3A1BDC003C02F2" },
 		{ "addons", "BB4B014C10F69532006C3DED" },
 		{ "openFrameworks", "191EF70929D778A400F35F26" },
 		{ "", "E4B69B4A0A3A1720003C02F2" }
@@ -757,10 +762,10 @@ void ofTemplateMacos::load() {
 
 	if (target == "ios") {
 		folderUUID = {
-			{ "src", "E4D8936A11527B74007E1F53" },
+			// { "src", "E4D8936A11527B74007E1F53" },
 			{ "addons", "BB16F26B0F2B646B00518274" },
 			{ "", "29B97314FDCFA39411CA2CEA" },
-			{ "Frameworks", "901808C02053638E004A7774" }
+			// { "Frameworks", "901808C02053638E004A7774" }
 			// { "localAddons", 	"6948EE371B920CB800B5AC1A" },
 		};
 
@@ -838,6 +843,7 @@ string ofTemplateMacos::getFolderUUID(const fs::path & folder, fs::path base) {
 				}
 
 				else {
+				    // CREATING A NEW FOLDER
 
 					string thisUUID = generateUUID(fullPath);
 					folderUUID[fullPath] = thisUUID;
@@ -862,17 +868,22 @@ string ofTemplateMacos::getFolderUUID(const fs::path & folder, fs::path base) {
 						if (lastFolderUUID == folderUUID[""]) { //} ||
 							//                            lastFolder == "external_sources" || lastFolder == "local_addons") { //
 
-							// Base folders can be in a different depth,
-							// so we cut folders to point to the right path
-							// ROY: THIS hardly makes sense to me. I can see the purpose of it. base2 is never set to anything.
-							fs::path base2 { "" };
-							size_t diff = folders.size() - (a + 1);
-							for (size_t x = 0; x < diff; x++) {
-								base2 = base2.parent_path();
-							}
+							// fs::path base2 { "" };
+							// size_t diff = folders.size() - (a + 1);
+							// for (size_t x = 0; x < diff; x++) {
+							// 	base2 = base2.parent_path();
+							// }
+
 							//                            alert ("external_sources base = " + ofPathToString(base2) + " UUID: " + thisUUID, 33);
 							addCommand("Add :objects:" + thisUUID + ":sourceTree string SOURCE_ROOT");
-							addCommand("Add :objects:" + thisUUID + ":path string " + ofPathToString(base2));
+							addCommand("Add :objects:" + thisUUID + ":path string " + folderName);
+							// alert (commands.back(), 95);
+							// addCommand("Add :objects:" + thisUUID + ":path string " + ofPathToString(base2));
+							// alert ("xxxx: " + ofPathToString(base2), 33);
+							// alert (commands.back(), 95);
+
+
+
 							bFolderPathSet = true;
 						} else if (lastFolder == "external_sources" || lastFolder == "local_addons") { //
 							addCommand("Add :objects:" + thisUUID + ":sourceTree string SOURCE_ROOT");
@@ -889,16 +900,16 @@ string ofTemplateMacos::getFolderUUID(const fs::path & folder, fs::path base) {
 
 					addCommand("Add :objects:" + thisUUID + ":children array");
 
-					if (!bFolderPathSet) {
-						if (folder.begin()->string() == "addons" || folder.begin()->string() == "src") { //} || folder.begin()->string() == "local_addons") {
-							addCommand("Add :objects:" + thisUUID + ":sourceTree string <group>");
-							//						fs::path addonFolder { fs::path(fullPath).filename() };
-							addCommand("Add :objects:" + thisUUID + ":path string " + ofPathToString(fullPath.filename()));
-							// alert ("group " + folder.string() + " : " + base.string() + " : " + addonFolder.string(), 32);
-						} else {
-							addCommand("Add :objects:" + thisUUID + ":sourceTree string SOURCE_ROOT");
-						}
-					}
+					// if (!bFolderPathSet) {
+					// 	if (folder.begin()->string() == "addons" || folder.begin()->string() == "src") { //} || folder.begin()->string() == "local_addons") {
+					// 		addCommand("Add :objects:" + thisUUID + ":sourceTree string <group>");
+					// 		//						fs::path addonFolder { fs::path(fullPath).filename() };
+					// 		addCommand("Add :objects:" + thisUUID + ":path string " + ofPathToString(fullPath.filename()));
+					// 		// alert ("group " + folder.string() + " : " + base.string() + " : " + addonFolder.string(), 32);
+					// 	} else {
+					// 		addCommand("Add :objects:" + thisUUID + ":sourceTree string SOURCE_ROOT");
+					// 	}
+					// }
 
 					// Add this new folder to its parent, folderUUID[""] if root
 					addCommand("Add :objects:" + lastFolderUUID + ":children: string " + thisUUID);

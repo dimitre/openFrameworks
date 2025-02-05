@@ -80,10 +80,12 @@ void ofAddon::load() {
 
 void ofAddon::relative() {
 	alert("	relative", 34);
-	for (auto & f : filesMap) {
-		for (auto & s : f.second) {
-			s = fs::relative(s, path);
-		}
+	if (!isProject) {
+    	for (auto & f : filesMap) {
+    		for (auto & s : f.second) {
+    			s = fs::relative(s, path);
+    		}
+    	}
 	}
 }
 
@@ -183,6 +185,13 @@ void ofAddon::loadFiles() {
 			scanFolder(folderLibs, filesMap, true);
 		}
 	}
+
+	// for (auto & f : filesMap) {
+	// 	cout << f.first << endl;
+	// 	for (auto & a : f.second) {
+	// 		cout << a << endl;
+	// 	}
+	// }
 }
 
 void ofAddon::loadAddonConfig() {
@@ -283,6 +292,23 @@ void gatherProjectInfo() {
 	// Add project files. TODO: additional source folders
 	ofProject project;
 
+	// DELICATE. treating projects as an addon.
+
+	if (fs::exists("./src")) {
+		conf.addons.push_back(new ofAddon());
+		ofAddon * addon = conf.addons.back();
+		addon->isProject = true;
+		addon->name = "ProjectSourceFiles_" + conf.projectName;
+
+		addon->path = "";
+		addon->load();
+		// conf.addons.emplace_back(addon);
+		project.addons.emplace_back(conf.addons.back());
+	} else {
+	   alert ("NO SRC FILE FOUND IN PROJECT", 95);
+	}
+
+	// scanFolder()
 	// create templates, add to project
 	for (auto & t : conf.templateNames) {
 		if (t == "macos") {
@@ -372,6 +398,7 @@ void ofProject::build() {
 
 	// each template for specific project
 	for (auto & t : templates) {
+
 		// each addon for specific project
 		for (auto & a : addons) {
 			alert("	ofProject::addAddon " + a->name, 34);

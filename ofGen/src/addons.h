@@ -1,8 +1,8 @@
 #pragma once
 
 // #include "utils.h"
-#include <filesystem>
-namespace fs = std::filesystem;
+// #include <filesystem>
+// namespace fs = std::filesystem;
 
 #include <string>
 
@@ -26,6 +26,8 @@ public:
 	std::map<std::string, std::vector<fs::path>> filteredMap;
 
 	std::map<std::string, std::vector<std::string>> addonProperties;
+
+	bool isProject = false;
 
 	void load();
 	void loadFiles();
