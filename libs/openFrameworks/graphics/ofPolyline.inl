@@ -12,7 +12,7 @@
 //----------------------------------------------------------
 template<class T>
 ofPolyline_<T>::ofPolyline_(){
-    setRightVector();
+//    setRightVector();
 	clear();
 }
 
