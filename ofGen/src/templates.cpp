@@ -7,37 +7,21 @@ using nlohmann::json;
 
 string ofTemplateMacos::addFile(const fs::path & path, const fs::path & folder, const fileProperties & fp) {
 	string UUID { "" };
-
 	//	alert("xc::addFile " + path.string() + " :folder:" + folder.string(), 31);
-	//	cout << "will check if exists " << (conf.projectPath / path) << endl;
-	//	if (fs::exists( conf.projectPath / path ))
 	{
-		//		cout << "OK exists" << endl;
-		//		bool isFolder = false;
 		string fileType { "file" };
 		fileType = extensionToFileType[path.extension()];
 
 		if (fileType == "") {
 			if (fs::is_directory(path) || fp.isGroupWithoutFolder) {
 				fileType = "folder";
-				//				isFolder = true;
 			} else {
 				// Break here if fileType is not set. and it is not a folder
 				return {};
 			}
 		}
-
 		UUID = generateUUID(path);
 
-		addCommand("");
-		addCommand("# -- addFile " + ofPathToString(path));
-
-		// encoding may be messing up for frameworks... so I switched to a pbx file ref without encoding fields
-
-		//		if (fp.reference) {
-		//		} else {
-		//			addCommand("Add :objects:"+UUID+":isa string PBXGroup");
-		//		}
 
 		// This is adding a file. any file.
 		addCommand("Add :objects:" + UUID + ":fileEncoding string 4");
@@ -48,7 +32,7 @@ string ofTemplateMacos::addFile(const fs::path & path, const fs::path & folder, 
 		}
 		addCommand("Add :objects:" + UUID + ":lastKnownFileType string " + fileType);
 		addCommand("Add :objects:" + UUID + ":name string " + ofPathToString(path.filename()));
-		//		addCommand("Add :objects:"+UUID+":path string " + ofPathToString(path.filename()));
+		addCommand("Add :objects:" + UUID + ":path string " + ofPathToString(path.filename()));
 
 		if (fp.absolute) {
 			// FIXME: Still some confusion here about relative to source or absolute.
@@ -84,22 +68,11 @@ string ofTemplateMacos::addFile(const fs::path & path, const fs::path & folder, 
 			}
 		}
 
-		//		string folderUUID;
-		//		auto rootDir = folder.root_directory();
-		//		if (rootDir != "addons" && rootDir != "src") {
-		////			alert("addFile path:" + ofPathToString(path) + " folder:" + ofPathToString(folder) , 31);
-		//			auto base = path.parent_path();
-		//			folderUUID = getFolderUUID(folder, isFolder, base);
-		//
-		//		} else {
-		//			folderUUID = getFolderUUID(folder, isFolder);
-		//		}
 
 		// Eventually remove isFolder and base parameter
 		std::string folderUUID { getFolderUUID(folder, path) };
-		//, isFolder) };
 
-		addCommand("# ---- addFileToFolder UUID : " + ofPathToString(folder));
+		// addCommand("# ---- addFileToFolder UUID : " + ofPathToString(folder));
 		addCommand("Add :objects:" + folderUUID + ":children: string " + UUID);
 
 		string buildUUID { generateUUID(ofPathToString(path) + "-build") };
@@ -136,7 +109,7 @@ string ofTemplateMacos::addFile(const fs::path & path, const fs::path & folder, 
 		}
 
 		if (fp.codeSignOnCopy) {
-			addCommand("# ---- codeSignOnCopy " + buildUUID);
+			// addCommand("# ---- codeSignOnCopy " + buildUUID);
 			addCommand("Add :objects:" + buildUUID + ":settings:ATTRIBUTES array");
 			addCommand("Add :objects:" + buildUUID + ":settings:ATTRIBUTES: string CodeSignOnCopy");
 		}

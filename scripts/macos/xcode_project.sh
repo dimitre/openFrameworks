@@ -12,7 +12,6 @@ msg() {
 
 # MARK: COPY RESOURCES ----------------------------------------------------
 copy_resources() {
-
     # print $ICON_FILE
 	msg "Copying Resources - Icon"
 
