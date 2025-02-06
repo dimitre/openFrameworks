@@ -292,21 +292,6 @@ void gatherProjectInfo() {
 	// Add project files. TODO: additional source folders
 	ofProject project;
 
-	// DELICATE. treating projects as an addon.
-
-	if (fs::exists("./src")) {
-		conf.addons.push_back(new ofAddon());
-		ofAddon * addon = conf.addons.back();
-		addon->isProject = true;
-		addon->name = "ProjectSourceFiles_" + conf.projectName;
-
-		addon->path = "";
-		addon->load();
-		// conf.addons.emplace_back(addon);
-		project.addons.emplace_back(conf.addons.back());
-	} else {
-	   alert ("NO SRC FILE FOUND IN PROJECT", 95);
-	}
 
 	// scanFolder()
 	// create templates, add to project
@@ -365,6 +350,22 @@ void gatherProjectInfo() {
 			project.addons.emplace_back(conf.addons.back());
 		}
 	}
+
+	// DELICATE. treating projects as an addon.
+	if (fs::exists("./src")) {
+		conf.addons.push_back(new ofAddon());
+		ofAddon * addon = conf.addons.back();
+		addon->isProject = true;
+		addon->name = "ProjectSourceFiles_" + conf.projectName;
+
+		addon->path = "";
+		addon->load();
+		// conf.addons.emplace_back(addon);
+		project.addons.emplace_back(conf.addons.back());
+	} else {
+	   alert ("NO SRC FILE FOUND IN PROJECT", 95);
+	}
+
 
 	// pass files to projects.
 	project.build();
