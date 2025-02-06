@@ -13,10 +13,10 @@ ofTimerFps::ofTimerFps() {
 };
 
 void ofTimerFps::setFps(int fps) {
-//	interval = std::ratio<1s, fps>;
 	if (fps <= 0) {
 		fps = 60; // fallback
 	}
+//	interval = std::ratio<1s, fps>;
 	currentFPS = fps;
 
 	interval = duration_cast<microseconds>(1s) / currentFPS;
@@ -24,7 +24,8 @@ void ofTimerFps::setFps(int fps) {
 
 void ofTimerFps::waitNext() {
    // Lazy wakeup
-   std::this_thread::sleep_until(wakeTime - 36ms); //4ms
+//   std::this_thread::sleep_until(wakeTime - 36ms); //4ms
+	std::this_thread::sleep_until(wakeTime - 36ms); //4ms
 
    // Processor Coffee
    while(steady_clock::now() < (wakeTime)) { // 0.05ms 0.5us // - 0.5us  - 1ns

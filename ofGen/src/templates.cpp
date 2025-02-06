@@ -335,19 +335,7 @@ void ofTemplateMacos::addFramework(const fs::path & path) {
 void ofTemplateMacos::save() {
 	alert("ofTemplateMacos::save()", 92);
 
-	fileProperties fp;
-	//	fp.isGroupWithoutFolder = true;
-	//	addFile("additionalSources", "", fp);
-	//	fp.isGroupWithoutFolder = false;
-	//	addFile("openFrameworks-Info.plist", "", fp);
-	//	addFile("of.entitlements", "", fp);
-	//	addFile("Project.xcconfig", "", fp);
-	if (fs::exists(conf.projectPath / "App.xcconfig")) {
-		addFile("App.xcconfig", "", fp);
-	}
-	fp.absolute = true;
-	//	addFile("../../../libs/openframeworks", "", fp);
-	addFile(fs::path { "bin" } / "data", "", fp);
+
 
 	//	debugCommands = false;
 
@@ -754,6 +742,22 @@ void ofTemplateMacos::load() {
 		addCommand("Set :objects:E4B69B5B0A3A1756003C02F2:path " + conf.projectName + "Debug.app");
 	}
 
+
+
+	fileProperties fp;
+	//	fp.isGroupWithoutFolder = true;
+	//	addFile("additionalSources", "", fp);
+	//	fp.isGroupWithoutFolder = false;
+	//	addFile("openFrameworks-Info.plist", "", fp);
+	//	addFile("of.entitlements", "", fp);
+	//	addFile("Project.xcconfig", "", fp);
+	if (fs::exists(conf.projectPath / "App.xcconfig")) {
+		addFile("App.xcconfig", "", fp);
+	}
+	fp.absolute = true;
+	//	addFile("../../../libs/openframeworks", "", fp);
+	addFile(fs::path { "bin" } / "data", "", fp);
+	addFile(conf.ofPath / "libs" / "macos" / "include", "", fp);
 	// add sources
 
 	// for (auto & f :)
