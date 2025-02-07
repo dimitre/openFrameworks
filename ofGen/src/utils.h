@@ -151,7 +151,8 @@ struct genConfig {
 	// vector <fs::path> projectPaths {
 	// 	{ "../apps/werkApps/Pulsar" }
 	// };
-	std::vector<std::string> templateNames { "macos", "zed", "make" }; //"vscode",
+	// std::vector<std::string> templateNames { "macos", "zed", "make" }; //"vscode",
+	std::vector<std::string> templateNames { "macos" }; //"vscode",
 	// std::vector<std::string> templateNames; //"vscode",
 
 	// FIXME: implement platforms in addons from here.

@@ -132,7 +132,7 @@ string ofTemplateMacos::addFile(const fs::path & path, const fs::path & folder, 
 }
 
 void ofTemplateMacos::addSrc(const fs::path & srcFile, const fs::path & folder) {
-	//	alert ("xcodeProject::addSrc " + ofPathToString(srcFile) + " : " + ofPathToString(folder), 31);
+	alert ("xcodeProject::addSrc " + ofPathToString(srcFile) + " : " + ofPathToString(folder), 31);
 
 	string ext = ofPathToString(srcFile.extension());
 
@@ -205,9 +205,10 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 		fs::path p2 = relative(p, conf.ofPath);
 		if (a->isProject) {
 			p2 = f.parent_path();
-			// alert(f.string(), 95);
-			// alert(f.filename().string(), 95);
-			// alert(p2.string(), 96);
+			alert ("ADDON IS PROJECT", 95);
+			alert(f.string(), 95);
+			alert(f.filename().string(), 95);
+			alert(p2.string(), 96);
 		}
 
 		addSrc(f.filename(), p2);
@@ -759,7 +760,7 @@ void ofTemplateMacos::load() {
 	fp.absolute = true;
 	//	addFile("../../../libs/openframeworks", "", fp);
 	addFile(fs::path { "bin" } / "data", "", fp);
-	addFile(conf.ofPath / "libs" / "macos" / "include", "", fp);
+	// addFile(conf.ofPath / "libs" / "macos" / "include", "", fp);
 	// add sources
 
 	// for (auto & f :)

@@ -35,20 +35,20 @@ int main(const int argc, const char * argv[]) {
 		build = false;
 	}
 
-	fs::path configFile = "of.yml";
-	bool hasConfig = false;
-	if (!fs::exists(configFile)) {
-	   alert("missing of.yml file ", 31);
-	} else {
-    	hasConfig = true;
-    	YAML::Node config;
-    	config = YAML::LoadFile(configFile);
-    	if (config["ofpath"]) {  // use ofpath only if the key exists.
-    		auto ofPathYML = config["ofpath"];
-    		conf.ofPath = ofPathYML.as<string>();
-    	}
+	// fs::path configFile = "of.yml";
+	// bool hasConfig = false;
+	// if (!fs::exists(configFile)) {
+	//    alert("missing of.yml file ", 31);
+	// } else {
+ //    	hasConfig = true;
+ //    	YAML::Node config;
+ //    	config = YAML::LoadFile(configFile);
+ //    	if (config["ofpath"]) {  // use ofpath only if the key exists.
+ //    		auto ofPathYML = config["ofpath"];
+ //    		conf.ofPath = ofPathYML.as<string>();
+ //    	}
 
-	}
+	// }
 
 
 	if (build) {

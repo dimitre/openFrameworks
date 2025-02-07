@@ -75,17 +75,17 @@ void ofAddon::load() {
 	loadFiles();
 	relative();
 	refine();
-	// showFiles();
+	showFiles();
 }
 
 void ofAddon::relative() {
 	alert("	relative", 34);
 	if (!isProject) {
-    	for (auto & f : filesMap) {
-    		for (auto & s : f.second) {
-    			s = fs::relative(s, path);
-    		}
-    	}
+		for (auto & f : filesMap) {
+			for (auto & s : f.second) {
+				s = fs::relative(s, path);
+			}
+		}
 	}
 }
 
@@ -206,7 +206,6 @@ void ofAddon::loadAddonConfig() {
 		alert("	loadAddonConfig found " + addonConfig.string(), 90);
 	}
 
-
 	// FIXME: transformar para textToString, fazer os replaces todos de uma vez só.
 	int lineNum = 0;
 
@@ -296,7 +295,6 @@ void gatherProjectInfo() {
 	// Add project files. TODO: additional source folders
 	ofProject project;
 
-
 	// scanFolder()
 	// create templates, add to project
 	for (auto & t : conf.templateNames) {
@@ -324,37 +322,6 @@ void gatherProjectInfo() {
 
 	// now parse project addons, or yml
 
-	fs::path addonsListFile { conf.projectPath / "addons.make" };
-	if (fs::exists(addonsListFile)) {
-		vector<std::string> addonsList { textToVector(addonsListFile) };
-		// vector<std::string> addonsList = { "ofxMidi" }; //ofxMidi ofxOpenCv
-
-		for (auto & l : addonsList) {
-
-			conf.addons.push_back(new ofAddon());
-			ofAddon * addon = conf.addons.back();
-
-			// ofAddon addon;
-			addon->name = l;
-			// check if local addon exists, if not check in of addons folder.
-			if (fs::exists(conf.projectPath / l)) {
-				addon->path = conf.projectPath / l;
-			} else {
-				if (fs::exists(conf.ofPath / "addons" / l)) {
-					addon->path = conf.ofPath / "addons" / l;
-				}
-			}
-
-			if (std::empty(addon->path)) {
-				continue;
-			}
-
-			addon->load();
-			// conf.addons.emplace_back(addon);
-			project.addons.emplace_back(conf.addons.back());
-		}
-	}
-
 	// DELICATE. treating projects as an addon.
 	if (fs::exists("./src")) {
 		conf.addons.push_back(new ofAddon());
@@ -362,14 +329,48 @@ void gatherProjectInfo() {
 		addon->isProject = true;
 		addon->name = "ProjectSourceFiles_" + conf.projectName;
 
+		// addon->showFiles();
 		addon->path = "";
 		addon->load();
+
+		// addon->info();
 		// conf.addons.emplace_back(addon);
 		project.addons.emplace_back(conf.addons.back());
 	} else {
-	   alert ("NO SRC FILE FOUND IN PROJECT", 95);
+		alert("NO SRC FILE FOUND IN PROJECT", 95);
 	}
 
+	fs::path addonsListFile { conf.projectPath / "addons.make" };
+	if (fs::exists(addonsListFile)) {
+		vector<std::string> addonsList { textToVector(addonsListFile) };
+		// vector<std::string> addonsList = { "ofxMidi" }; //ofxMidi ofxOpenCv
+
+		for (auto & l : addonsList) {
+			if (l != "") {
+				conf.addons.push_back(new ofAddon());
+				ofAddon * addon = conf.addons.back();
+
+				// ofAddon addon;
+				addon->name = l;
+				// check if local addon exists, if not check in of addons folder.
+				if (fs::exists(conf.projectPath / l)) {
+					addon->path = conf.projectPath / l;
+				} else {
+					if (fs::exists(conf.ofPath / "addons" / l)) {
+						addon->path = conf.ofPath / "addons" / l;
+					}
+				}
+
+				if (std::empty(addon->path)) {
+					continue;
+				}
+
+				addon->load();
+				// conf.addons.emplace_back(addon);
+				project.addons.emplace_back(conf.addons.back());
+			}
+		}
+	}
 
 	// pass files to projects.
 	project.build();
