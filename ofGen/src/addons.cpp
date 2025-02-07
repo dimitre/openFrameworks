@@ -206,7 +206,10 @@ void ofAddon::loadAddonConfig() {
 		alert("	loadAddonConfig found " + addonConfig.string(), 90);
 	}
 
+
+	// FIXME: transformar para textToString, fazer os replaces todos de uma vez só.
 	int lineNum = 0;
+
 	for (auto & originalLine : textToVector(addonConfig)) {
 		lineNum++;
 		string line = originalLine;
@@ -224,6 +227,7 @@ void ofAddon::loadAddonConfig() {
 		line = stringReplace(line, " \\+\\= ", "+=");
 		line = stringReplace(line, " \\+\\=", "+=");
 		line = stringReplace(line, "\\+\\= ", "+=");
+		line = stringReplace(line, "\\$(OF_ROOT)", conf.ofPath.string());
 
 		// Trim., removing whitespace
 		// line.erase(std::remove_if( line.begin(), line.end(), ::isspace), line.end());

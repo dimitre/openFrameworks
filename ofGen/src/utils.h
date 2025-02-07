@@ -14,7 +14,7 @@ using std::string;
 using std::vector;
 
 static inline std::string getPGVersion() {
-	return "ofGen v0.0.8";
+	return "ofGen v0.0.9";
 }
 
 inline std::string colorText(const std::string & s, int color) {
@@ -33,7 +33,7 @@ const std::string sign = colorText(R"(
 ▐▌ ▐▌▐▌   ▐▌   ▐▌   ▐▛▚▖▐▌
 ▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
 ▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
-                Prototype v0.0.8⚡️
+                Prototype v0.0.9⚡️
 )",
 							 91)
 
@@ -75,6 +75,7 @@ inline void testColors() {
 // to create a project there, first create the folder,
 // cd to the folder and invoke ofGen
 
+std::string textToString(const fs::path & file);
 bool ofIsPathInPath(const fs::path & path, const fs::path & base);
 std::string stringReplace(const std::string & strIn, const std::string & from, const std::string & to);
 std::vector<std::string> textToVector(const fs::path & file);
@@ -134,12 +135,6 @@ static void divider() {
 }
 
 // extern genConfig conf;
-
-
-
-
-
-
 
 struct ofTemplate;
 struct ofAddon;

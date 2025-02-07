@@ -38,6 +38,14 @@ bool ofIsPathInPath(const fs::path & path, const fs::path & base) {
 // std::string stringReplace(const std::string & strIn, const std::string & from, const std::string & to) {
 // 	return std::regex_replace(strIn, std::regex(from), to);
 // }
+//
+
+std::string textToString(const fs::path & file) {
+	std::ifstream fileFrom(file);
+	std::string contents((std::istreambuf_iterator<char>(fileFrom)), std::istreambuf_iterator<char>());
+	fileFrom.close();
+	return contents;
+}
 
 std::vector<std::string> textToVector(const fs::path & file) {
 	std::vector<std::string> out;

@@ -204,11 +204,10 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 		fs::path p = (a->path / f).parent_path();
 		fs::path p2 = relative(p, conf.ofPath);
 		if (a->isProject) {
-			p2 = relative(p, conf.projectPath);
 			p2 = f.parent_path();
-			alert(f.string(), 95);
-			alert(f.filename().string(), 95);
-			alert(p2.string(), 96);
+			// alert(f.string(), 95);
+			// alert(f.filename().string(), 95);
+			// alert(p2.string(), 96);
 		}
 
 		addSrc(f.filename(), p2);
@@ -230,6 +229,7 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 	for (auto & f : a->filteredMap["includes"]) {
 		for (auto & c : buildConfigs) {
 			fs::path p = a->path / f;
+			// alert ("->" + p.string(), 95);
 			addCommand("Add :objects:" + c + ":buildSettings:HEADER_SEARCH_PATHS: string " + ofPathToString(p));
 		}
 	}
@@ -238,6 +238,8 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 	for (auto & f : a->filteredMap["libs"]) {
 		for (auto & c : buildConfigs) {
 			fs::path p = a->path / f;
+			// alert ("-> libs " + p.string(), 96);
+
 			addCommand("Add :objects:" + c + ":buildSettings:OTHER_LDFLAGS: string " + ofPathToString(p));
 		}
 	}
@@ -307,10 +309,10 @@ void ofTemplateMacos::addFramework(const fs::path & path) {
 		fs::path p = path.parent_path();
 		fs::path p2 = relative(p, conf.ofPath);
 
-		alert("-----------");
-		alert(path.string(), 96);
-		alert(p2.string(), 95);
-		alert("-----------");
+		// alert("-----------");
+		// alert(path.string(), 96);
+		// alert(p2.string(), 95);
+		// alert("-----------");
 
 		UUID = addFile(path, p2, fp);
 	}
