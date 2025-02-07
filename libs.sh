@@ -106,7 +106,8 @@ unzipAddons() {
 
 
 sectionOK OpenFrameworks install ofLibs
-checkLib wget2
+# ccache
+checkLib wget2 yaml-cpp
 #  fmt yaml-cpp
 # checkWget2
 executa mkdir -p ${DOWNLOAD}
