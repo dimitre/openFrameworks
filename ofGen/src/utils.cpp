@@ -90,17 +90,59 @@ std::string ofTrim(std::string line) {
 	return line;
 }
 
-std::vector<std::string> ofSplitString(const std::string& s, const std::string& delimiter) {
-    size_t pos_start = 0, pos_end, delim_len = delimiter.length();
-    std::string token;
-    std::vector<std::string> res;
+std::vector<std::string> ofSplitString(const std::string & s, const std::string & delimiter) {
+	size_t pos_start = 0, pos_end, delim_len = delimiter.length();
+	std::string token;
+	std::vector<std::string> res;
 
-    while ((pos_end = s.find(delimiter, pos_start)) != std::string::npos) {
-        token = s.substr (pos_start, pos_end - pos_start);
-        pos_start = pos_end + delim_len;
-        res.push_back (token);
-    }
+	while ((pos_end = s.find(delimiter, pos_start)) != std::string::npos) {
+		token = s.substr(pos_start, pos_end - pos_start);
+		pos_start = pos_end + delim_len;
+		res.push_back(token);
+	}
 
-    res.push_back (s.substr (pos_start));
-    return res;
+	res.push_back(s.substr(pos_start));
+	return res;
+}
+
+void genConfig::import() {
+	if (fs::exists("of.yml")) {
+		alert("of.yml already present", 32);
+	} else {
+		std::ifstream file("addons.make");
+		YAML::Node node;
+		node["ofpath"] = "../../..";
+		if (file.is_open()) {
+			std::string line;
+			while (std::getline(file, line)) {
+				// msg(line, 33);
+				node["addons"].push_back(line);
+			}
+		}
+		file.close();
+		// std::string saida = node.as<std::string>();
+
+		// for (auto & t : templateNames) {
+		// 	node["templates"].push_back(t);
+		// }
+		// node["templates"].SetMapStyle(YAML::Flow);
+
+		// YAML::Emitter out;
+		// out << YAML::Flow;
+		// out << YAML::BeginSeq;
+		// for (auto & t : templateNames) {
+		// 	out << t;
+		// }
+		// out << YAML::EndSeq;
+		// out << YAML::Flow;
+// out << YAML::BeginSeq << 2 << 3 << 5 << 7 << 11 << YAML::EndSeq;
+
+
+		std::ofstream ofYml("of.yml");
+		cout << node << endl;
+		ofYml << node;
+		ofYml.close();
+		cout << endl;
+		alert("ok, of.yml created from addons.make", 32);
+	}
 }

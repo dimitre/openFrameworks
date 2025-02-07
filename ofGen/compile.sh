@@ -14,8 +14,8 @@ LINKEROPTIONS=-fuse-ld=lld
 fi
 # time ccache $CXX -c src/utils.cpp src/templates.cpp src/addons.cpp src/main.cpp src/uuidxx/src/*.cpp -Isrc/uuidxx/src -Wfatal-errors -std=c++20 && \
 # time ccache $CXX -c src/*.cpp src/uuidxx/src/*.cpp -Isrc/uuidxx/src -I/opt/homebrew/Cellar/nlohmann-json/3.11.3/include -Wfatal-errors -std=c++20 && \
-time ccache $CXX -c src/*.cpp src/uuidxx/src/*.cpp -Isrc/uuidxx/src -I../libs/macos/include/ -Wfatal-errors -std=c++20 && \
-time ccache $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src -o ofGen && \
+time $CXX -c src/*.cpp src/uuidxx/src/*.cpp `pkg-config --cflags yaml-cpp` -Isrc/uuidxx/src -I../libs/macos/include/ -Wfatal-errors -std=c++20 && \
+time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src `pkg-config --libs yaml-cpp` -o ofGen && \
 # time ./ofGen
 if [[ ${PWD} == "/Volumes/tool/ofw/ofGen" ]] then
 # time ./ofGen platforms=zed,macos addons=ofxMicroUI,ofxTools ofroot=../../.. path=/Volumes/tool/ofw/apps/Werkapps/Pulsar

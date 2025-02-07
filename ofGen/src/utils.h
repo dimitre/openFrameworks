@@ -7,6 +7,8 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
+#include <yaml-cpp/yaml.h>
+
 // static constexpr std::string_view VERSION = "ofGen v0.4";
 using std::cout;
 using std::endl;
@@ -190,8 +192,11 @@ templates : zed,macos
 				}
 			}
 
-			if (parametersMap.count("ofroot")) {
-				ofPath = parametersMap["ofroot"];
+			if (parametersMap.count("ofpath")) {
+				ofPath = parametersMap["ofpath"];
+			}
+			if (parametersMap.count("sources")) {
+				// TODO: Additional sources here.
 			}
 			if (parametersMap.count("templates")) {
 				alert("WOW templates clear", 95);
@@ -201,9 +206,9 @@ templates : zed,macos
 				templateNames.clear();
 				templateNames = ofSplitString(parametersMap["templates"], ",");
 
-				for (auto & t : templateNames) {
-					alert(t, 95);
-				}
+				// for (auto & t : templateNames) {
+				// 	alert(t, 95);
+				// }
 			}
 			// if (parametersMap.count("platforms")) {
 			// 	platforms = ofSplitString(parametersMap["platforms"], ",");
@@ -222,6 +227,9 @@ templates : zed,macos
 			for (auto & p : parametersMap) {
 				alert(p.first + " : " + p.second, 34);
 			}
+		} else {
+			// Try to parse of.yml
+			// if not, try to parse addons.make.
 		}
 
 		// Give projectName to general config
@@ -255,6 +263,14 @@ ofGen templates=zed,macos,make addons=ofxMidi,ofxOpencv ofpath=../../.. path=/Vo
 		cout << command << endl;
 		system(command.c_str());
 	}
+
+	void build() {
+		// std::string command = "open " + projectName + ".xcodeproj";
+		// cout << command << endl;
+		system("xcodebuild");
+	}
+
+	void import();
 
 	// void scanFolderRecursive(const fs::path & path);
 };
