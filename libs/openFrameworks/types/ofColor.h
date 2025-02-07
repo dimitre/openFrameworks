@@ -309,7 +309,7 @@ public:
     /// \param brightness A reference to the brightness to fill. Will be in the
     ///     range of 0 - limit().
     void getHsb(float& hue, float& saturation, float& brightness) const;
-	
+
 	/// \brief Extract the hue, saturation and brightness (HSB) from this color.
 	///
 	/// \returns the 3 color-native values in a glm::vec3

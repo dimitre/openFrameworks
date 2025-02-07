@@ -8,26 +8,6 @@
 #define OF_VERSION_PATCH 0
 #define OF_VERSION_PRE_RELEASE "master"
 
-// core: ---------------------------
-//#include <stdint.h>
-//#include <cstdio>
-//#include <cstdlib>
-//#include <string>
-//#include <cstring>
-//#include <iostream>
-//#include <vector>
-//#include <memory>
-//#include <functional>
-
-// Set to 1 for compatibility with old projects using ofVec instead of glm
-#ifndef OF_USE_LEGACY_VECTOR_MATH
-	#define OF_USE_LEGACY_VECTOR_MATH 0
-#endif
-
-//#if defined(__aarch64__)
-//	#define GLM_FORCE_NEON
-//#endif
-
 // This enables glm's old behavior of initializing with non garbage values
 #define GLM_FORCE_CTOR_INIT
 

@@ -61,7 +61,7 @@ template<class T>
 class ofPolyline_ {
 public:
     using VertexType = T;
-    
+
 	/// \name Constructors
 	/// \{
 
@@ -525,8 +525,8 @@ public:
 	int getWrappedIndex(int index) const;
 
 	// used for calculating the normals
-//	void setRightVector(T v = T(0, 0, -1));
-	void setRightVector(T v);
+	void setRightVector(T v = T(0, 0, -1));
+	// void setRightVector(T v);
 	T getRightVector() const;
 
 	/// \}
