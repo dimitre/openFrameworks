@@ -1,6 +1,17 @@
 #!/bin/zsh
 cd "$(dirname "$0")"
 
+COLOR='\033[0;32m'
+COLOR2='\033[0;34m'
+NC='\033[0m' # No Color
+
+section() {
+    printf "💻${COLOR} ${@} ${NC}\n\r"
+}
+
+
+section "OF Vision, compiling ofGen"
+
 # pwd
 if brew ls --versions yaml-cpp > /dev/null; then
 	echo yaml-cpp already installed
