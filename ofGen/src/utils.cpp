@@ -31,8 +31,13 @@ std::string stringReplace(const std::string & strIn, const std::string & from, c
 }
 
 bool ofIsPathInPath(const fs::path & path, const fs::path & base) {
+    if (path == base) {
+        return true;
+    }
 	auto rel = fs::relative(path, base);
-	// cout << "ofIsPathInPath " << rel << endl;
+	// bool isP = !rel.empty() && rel.native()[0] != '.';
+	// cout << "ofIsPathInPath " << path << " : " << base << " : " << isP << endl;
+
 	return !rel.empty() && rel.native()[0] != '.';
 }
 // std::string stringReplace(const std::string & strIn, const std::string & from, const std::string & to) {

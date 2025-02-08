@@ -75,7 +75,7 @@ void ofAddon::load() {
 	loadFiles();
 	relative();
 	refine();
-	showFiles();
+	// showFiles();
 }
 
 void ofAddon::relative() {
@@ -119,12 +119,20 @@ void ofAddon::refine() {
 
 void ofAddon::showFiles() {
 	alert("	showFiles", 34);
-	for (auto & f : filesMap) {
-		alert(f.first + ":", 31);
-		for (auto & s : f.second) {
-			std::cout << s << std::endl;
-		}
+
+	for (auto & s : exclusionsMap["includes"]) {
+		alert("		exclusion: " + s.string(), 95);
 	}
+
+	for (auto & s : filteredMap["includes"]) {
+		alert("		include: " + s.string(), 96);
+	}
+	// for (auto & f : filteredMap) {
+	// 	alert(f.first + ":", 32);
+	// 	for (auto & s : f.second) {
+	// 		std::cout << "       " << s << std::endl;
+	// 	}
+	// }
 }
 
 void ofAddon::loadFiles() {
@@ -281,7 +289,7 @@ void ofAddon::loadAddonConfig() {
 			// alert(e.first + " not empty");
 			for (auto & a : addonProperties[e.first]) {
 				string value = stringReplace(a, "%", "");
-				// alert(value, 92);
+				alert("exclusions " + e.first + " : " + value, 95);
 				exclusionsMap[e.second].emplace_back(value);
 			}
 		} else {
