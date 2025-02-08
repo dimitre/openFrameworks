@@ -21,3 +21,4 @@ echo -------
 # fi
 # -sf parameters will overwrite old symlink if it is already installed
 sudo ln -sf "$PWD/ofGen" /usr/local/bin/ofGen
+echo All good!

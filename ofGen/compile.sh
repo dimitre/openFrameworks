@@ -1,7 +1,16 @@
 #!/bin/zsh
 cd "$(dirname "$0")"
 
-pwd
+# pwd
+if brew ls --versions yaml-cpp > /dev/null; then
+	echo yaml-cpp already installed
+else
+	echo installing yaml-cpp
+	brew install yaml-cpp
+  # The package is not installed
+fi
+#
+#
  # -lstdc++fs
  # # time include-what-you-use -c src/*.cpp -Wfatal-errors -std=c++17
  # time include-what-you-use -fuse-ld=lld *.o -o ofGen && time ./ofGen
