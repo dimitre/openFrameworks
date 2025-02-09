@@ -36,7 +36,7 @@ jobs:
       - name: Brew
         uses: tecolicom/actions-use-homebrew-tools@v1
         with:
-          tools: wget2
+          tools: wget2 yaml-cpp fmt
           # fmt yaml-cpp
 
       - name: Libs
