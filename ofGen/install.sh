@@ -15,6 +15,12 @@ echo If you need to uninstall in the future you can use the $ofw/ofGen/uninstall
 echo It is recommended to install ofGen, skip if you already have it installed.
 echo You will be asked for user password
 # echo -------
+#
+if [ -n $GITHUB_REPOSITORY ]; then
+    sudo ln -sf "$PWD/ofGen" /usr/local/bin/ofGen
+	echo All good!
+else
+
 read -p "Proceed? (y/n) " -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
@@ -24,4 +30,6 @@ then
 	echo All good!
 else
 	echo OK, ofGen not installed
+fi
+
 fi
