@@ -289,7 +289,7 @@ void ofAddon::loadAddonConfig() {
 			// alert(e.first + " not empty");
 			for (auto & a : addonProperties[e.first]) {
 				string value = stringReplace(a, "%", "");
-				alert("exclusions " + e.first + " : " + value, 95);
+				//alert("exclusions " + e.first + " : " + value, 95);
 				exclusionsMap[e.second].emplace_back(value);
 			}
 		} else {
@@ -298,11 +298,69 @@ void ofAddon::loadAddonConfig() {
 	}
 }
 
+void parseConfigAllAddons() {
+	alert("parseConfig begin");
+	for (auto const & d : fs::directory_iterator { conf.ofPath / "addons" }) {
+		if (fs::is_directory(d.path())) {
+			// parseAddon(d.path());
+			//
+			conf.addons.push_back(new ofAddon());
+			ofAddon * addon = conf.addons.back();
+
+			// ofAddon addon;
+			addon->name = d.path().filename();
+			// check if local addon exists, if not check in of addons folder.
+			addon->path = d.path();
+			addon->load();
+			conf.addons.emplace_back(addon);
+		}
+	}
+	alert("parseConfig end");
+}
+
+void ofProject::build() {
+	divider();
+	alert("ofProject::build", 92);
+	// std::cout << "addons.size " << addons.size() << std::endl;
+	// std::cout << "templates.size " << templates.size() << std::endl;
+
+	// each template for specific project
+	for (auto & t : templates) {
+		alert("	Building template " + t->name, 95);
+		// each addon for specific project
+		for (auto & a : addons) {
+			// alert("	ofProject::addAddon " + t->name + " : " + a->name, 34);
+			t->addAddon(a);
+		}
+		t->build();
+		t->save();
+	}
+}
+
 void gatherProjectInfo() {
 	alert("gatherProjectInfo", 92);
 	// Add project files. TODO: additional source folders
 	ofProject project;
 
+	bool hasYml = conf.loadYML();
+	if (hasYml) {
+		alert("of.yml found, building from there", 95);
+	} else {
+		alert("of.yml not found, building from addons.make", 95);
+
+		fs::path addonsListFile { conf.projectPath / "addons.make" };
+		if (fs::exists(addonsListFile)) {
+			conf.addonsNames = textToVector(addonsListFile);
+		}
+	}
+
+	if (!conf.isValidOfPath()) {
+		alert("OF not found in default path " + conf.ofPath.string());
+		conf.help();
+		return;
+	} else {
+		alert("of path OK, proceeding");
+	}
 	// scanFolder()
 	// create templates, add to project
 	for (auto & t : conf.templateNames) {
@@ -348,77 +406,40 @@ void gatherProjectInfo() {
 		alert("NO SRC FILE FOUND IN PROJECT", 95);
 	}
 
-	fs::path addonsListFile { conf.projectPath / "addons.make" };
-	if (fs::exists(addonsListFile)) {
-		vector<std::string> addonsList { textToVector(addonsListFile) };
-		// vector<std::string> addonsList = { "ofxMidi" }; //ofxMidi ofxOpenCv
 
-		for (auto & l : addonsList) {
-			if (l != "") {
-				conf.addons.push_back(new ofAddon());
-				ofAddon * addon = conf.addons.back();
 
-				// ofAddon addon;
-				addon->name = l;
-				// check if local addon exists, if not check in of addons folder.
-				if (fs::exists(conf.projectPath / l)) {
-					addon->path = conf.projectPath / l;
-				} else {
-					if (fs::exists(conf.ofPath / "addons" / l)) {
-						addon->path = conf.ofPath / "addons" / l;
-					}
-				}
+	// fs::path addonsListFile { conf.projectPath / "addons.make" };
+	// if (fs::exists(addonsListFile)) {
+	// vector<std::string> addonsList { textToVector(addonsListFile) };
+	// vector<std::string> addonsList = { "ofxMidi" }; //ofxMidi ofxOpenCv
 
-				if (std::empty(addon->path)) {
-					continue;
-				}
-
-				addon->load();
-				// conf.addons.emplace_back(addon);
-				project.addons.emplace_back(conf.addons.back());
-			}
-		}
-	}
-
-	// pass files to projects.
-	project.build();
-}
-
-void parseConfigAllAddons() {
-	alert("parseConfig begin");
-	for (auto const & d : fs::directory_iterator { conf.ofPath / "addons" }) {
-		if (fs::is_directory(d.path())) {
-			// parseAddon(d.path());
-			//
+	for (auto & l : conf.addonsNames) {
+		if (l != "") {
 			conf.addons.push_back(new ofAddon());
 			ofAddon * addon = conf.addons.back();
 
 			// ofAddon addon;
-			addon->name = d.path().filename();
+			addon->name = l;
 			// check if local addon exists, if not check in of addons folder.
-			addon->path = d.path();
+			if (fs::exists(conf.projectPath / l)) {
+				addon->path = conf.projectPath / l;
+			} else {
+				if (fs::exists(conf.ofPath / "addons" / l)) {
+					addon->path = conf.ofPath / "addons" / l;
+				}
+			}
+
+			if (std::empty(addon->path)) {
+				continue;
+			}
+
 			addon->load();
-			conf.addons.emplace_back(addon);
+			// conf.addons.emplace_back(addon);
+			project.addons.emplace_back(conf.addons.back());
 		}
 	}
-	alert("parseConfig end");
-}
+	// }
 
-void ofProject::build() {
-	divider();
-	alert("ofProject::build", 92);
-	// std::cout << "addons.size " << addons.size() << std::endl;
-	// std::cout << "templates.size " << templates.size() << std::endl;
-
-	// each template for specific project
-	for (auto & t : templates) {
-
-		// each addon for specific project
-		for (auto & a : addons) {
-			alert("	ofProject::addAddon " + a->name, 34);
-			t->addAddon(a);
-		}
-		t->build();
-		t->save();
-	}
+	// pass files to projects.
+	project.build();
 }

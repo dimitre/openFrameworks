@@ -16,7 +16,7 @@ using std::string;
 using std::vector;
 
 static inline std::string getPGVersion() {
-	return "ofGen v0.1.0";
+	return "ofGen v0.1.1";
 }
 
 inline std::string colorText(const std::string & s, int color) {
@@ -35,7 +35,8 @@ const std::string sign = colorText(R"(
 ▐▌ ▐▌▐▌   ▐▌   ▐▌   ▐▛▚▖▐▌
 ▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
 ▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
-                Prototype v0.1.0⚡️
+Project Generator for OpenFrameworks (OFVISION)
+                Prototype v0.1.1⚡️
 )",
 							 91)
 
@@ -58,7 +59,7 @@ inline void testColors() {
     */
 	int colors[] = {
 		// 5, //blinking
-		0, 2, 7, 30, 31, 32, 33, 34, 35, 36,
+		0, 2, 5, 7, 30, 31, 32, 33, 34, 35, 36,
 		90, 91, 92, 93, 94, 95, 96,
 		// 41, 42, 43, 44, 45, 46, 47,
 		// 100, 101, 102, 103, 104, 105, 106, 107,
@@ -148,6 +149,9 @@ struct genConfig {
 	// it will be cwd unless project path is passed by variable.
 	// fs::path projectPath { "../apps/werkApps/Pulsar" };
 	fs::path projectPath { "." };
+
+	// TESTING
+	std::vector<fs::path> additionalSources;
 	// vector <fs::path> projectPaths {
 	// 	{ "../apps/werkApps/Pulsar" }
 	// };
@@ -271,8 +275,10 @@ ofGen templates=zed,macos,make addons=ofxMidi,ofxOpencv ofpath=../../.. path=/Vo
 		system("xcodebuild");
 	}
 
+	YAML::Node config;
 	void import();
-
+	bool loadYML();
+    vector<string> nodeToStrings(const string & index);
 	// void scanFolderRecursive(const fs::path & path);
 };
 // conf

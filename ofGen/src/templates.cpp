@@ -278,7 +278,7 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 void ofTemplateMacos::addFramework(const fs::path & path) {
 	// TODO: Convert this in a function to parse both ADDON_FRAMEWORKS definition in .mk and filesystem frameworks found.
 	// void addFramework (const std::string & path);
-	alert("addFramework " + path.string(), 95);
+	alert("		addFramework " + path.string(), 95);
 
 	std::string pathString = path.string();
 
@@ -337,8 +337,6 @@ void ofTemplateMacos::addFramework(const fs::path & path) {
 
 void ofTemplateMacos::save() {
 	alert("ofTemplateMacos::save()", 92);
-
-
 
 	//	debugCommands = false;
 
@@ -494,7 +492,7 @@ std::string generateUUID(const string & input) {
 }
 
 void copyTemplateFile::info() {
-	alert("	copyTemplateFile", 92);
+	alert("	copyTemplateFile", 96);
 	alert("	from " + from.string(), 2);
 	alert("	to " + to.string(), 90);
 	for (auto & f : findReplaces) {
@@ -745,8 +743,6 @@ void ofTemplateMacos::load() {
 		addCommand("Set :objects:E4B69B5B0A3A1756003C02F2:path " + conf.projectName + "Debug.app");
 	}
 
-
-
 	fileProperties fp;
 	//	fp.isGroupWithoutFolder = true;
 	//	addFile("additionalSources", "", fp);
@@ -816,7 +812,7 @@ string ofTemplateMacos::getFolderUUID(const fs::path & folder, fs::path base) {
 					bool folderSet = false;
 
 					if (lastFolderUUID == folderUUID[""]) {
-					   if (folderName == "Frameworks") {
+						if (folderName == "Frameworks") {
 							addCommand("Add :objects:" + thisUUID + ":path string System/Library/Frameworks");
 							addCommand("Add :objects:" + thisUUID + ":sourceTree string SDKROOT");
 							folderSet = true;
@@ -1005,4 +1001,16 @@ void ofTemplateVSCode::save() {
 	workspace.data["openFrameworksProjectGeneratorVersion"] = getPGVersion();
 	workspace.save();
 	cppProperties.save();
+}
+
+void ofTemplateMake::save() {
+	alert("ofTemplateMake::save()", 92);
+	fs::path fileName { conf.projectPath / "addons.make" };
+	std::ofstream addonsMake(fileName);
+	for (auto & a : conf.addons) {
+		if (!a->isProject) {
+			addonsMake << a->name << std::endl;
+		}
+	}
+	addonsMake.close();
 }

@@ -12,12 +12,6 @@ int main(const int argc, const char * argv[]) {
 	std::cout << sign << std::endl; // HEADER
 	conf.parseParameters(argc, argv);
 
-	// std::cout << "main.cpp &conf" << std::endl;
-	// std::cout << &conf << std::endl;
-	// for (auto & t : conf.templateNames) {
-	// 	alert(t, 95);
-	// }
-
 	bool build = true;
 
 	if (conf.singleParameter == "colors") {
@@ -35,30 +29,17 @@ int main(const int argc, const char * argv[]) {
 		build = false;
 	}
 
-	// fs::path configFile = "of.yml";
-	// bool hasConfig = false;
-	// if (!fs::exists(configFile)) {
-	//    alert("missing of.yml file ", 31);
-	// } else {
- //    	hasConfig = true;
- //    	YAML::Node config;
- //    	config = YAML::LoadFile(configFile);
- //    	if (config["ofpath"]) {  // use ofpath only if the key exists.
- //    		auto ofPathYML = config["ofpath"];
- //    		conf.ofPath = ofPathYML.as<string>();
- //    	}
-
-	// }
-
 
 	if (build) {
-		if (!conf.isValidOfPath()) {
-			alert("OF not found in default path " + conf.ofPath.string());
-			conf.help();
-		} else {
-			alert("of path OK, proceeding");
-			gatherProjectInfo();
-		}
+		gatherProjectInfo();
+
+		// if (!conf.isValidOfPath()) {
+		// 	alert("OF not found in default path " + conf.ofPath.string());
+		// 	conf.help();
+		// } else {
+		// 	alert("of path OK, proceeding");
+		// 	gatherProjectInfo();
+		// }
 
 		if (conf.singleParameter == "open") {
 			conf.open();

@@ -31,9 +31,9 @@ std::string stringReplace(const std::string & strIn, const std::string & from, c
 }
 
 bool ofIsPathInPath(const fs::path & path, const fs::path & base) {
-    if (path == base) {
-        return true;
-    }
+	if (path == base) {
+		return true;
+	}
 	auto rel = fs::relative(path, base);
 	// bool isP = !rel.empty() && rel.native()[0] != '.';
 	// cout << "ofIsPathInPath " << path << " : " << base << " : " << isP << endl;
@@ -140,8 +140,7 @@ void genConfig::import() {
 		// }
 		// out << YAML::EndSeq;
 		// out << YAML::Flow;
-// out << YAML::BeginSeq << 2 << 3 << 5 << 7 << 11 << YAML::EndSeq;
-
+		// out << YAML::BeginSeq << 2 << 3 << 5 << 7 << 11 << YAML::EndSeq;
 
 		std::ofstream ofYml("of.yml");
 		cout << node << endl;
@@ -150,4 +149,69 @@ void genConfig::import() {
 		cout << endl;
 		alert("ok, of.yml created from addons.make", 32);
 	}
+}
+
+bool genConfig::loadYML() {
+	fs::path configFile { "of.yml" };
+	if (!fs::exists(configFile)) {
+		alert("no of.yml present. use `ofgen import` to create one from addons.make", 32);
+		return false;
+		// alert("missing of.yml file ", 31);
+	} else {
+		config = YAML::LoadFile(configFile);
+		if (config["ofpath"]) { // use ofpath only if the key exists.
+			auto ofPathYML = config["ofpath"];
+			ofPath = ofPathYML.as<string>();
+		}
+
+		conf.addonsNames = nodeToStrings("addons");
+		conf.templateNames = nodeToStrings("templates");
+
+		// FIXME: Remove TEMPORARY
+		if (!conf.templateNames.size()) {
+			conf.templateNames = nodeToStrings("platforms");
+		}
+		// for (auto & a : nodeToStrings("addons")) {
+		// 	if (a != "") {
+		// 		addonsNames.emplace_back(a);
+		// 	}
+		// }
+
+		// cout << endl;
+		// title("Platforms ");
+		// for (auto & s : nodeToStrings("platforms")) {
+		// 	cout << s << endl;
+		// }
+		cout << endl;
+		alert("Templates ");
+		for (auto & s : nodeToStrings("templates")) {
+			cout << s << endl;
+		}
+
+		alert("Additional Source Directories ");
+		for (auto & a : nodeToStrings("sources")) {
+			if (a != "") {
+				additionalSources.emplace_back(a);
+				// cout << a << endl;
+			}
+		}
+		cout << endl;
+		// ALREADY SET
+		// else {
+		// 	conf.ofPath = "../../..";
+		// }
+	}
+
+	return true;
+}
+
+std::vector<string> genConfig::nodeToStrings(const string & index) {
+	std::vector<string> out;
+	if (config[index]) {
+		auto items = config[index];
+		for (std::size_t i = 0; i < items.size(); i++) {
+			out.emplace_back(items[i].as<string>());
+		}
+	}
+	return out;
 }
