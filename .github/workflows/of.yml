@@ -34,8 +34,8 @@ jobs:
           tools: wget2 yaml-cpp fmt ccache # fmt
 
       - name: ccache
-        # uses: hendrikmuhs/ccache-action@v1.2.17
-        uses: hendrikmuhs/ccache-action@latest
+        uses: hendrikmuhs/ccache-action@v1.2.17
+        # uses: hendrikmuhs/ccache-action@latest
         with:
           key: ${{ matrix.cfg.target }}-${{ matrix.cfg.opt }}
 
