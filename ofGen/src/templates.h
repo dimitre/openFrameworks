@@ -194,6 +194,7 @@ public:
 		path = conf.ofPath / "scripts" / "templates" / name;
 	}
 	void load() override;
+	void save() override;
 };
 
 struct ofTemplateVSCode : public ofTemplate {

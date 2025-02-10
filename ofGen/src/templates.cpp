@@ -531,7 +531,7 @@ bool copyTemplateFile::run() {
 			}
 
 			for (auto & a : appends) {
-				alert("APPEND ::: " + a, 96);
+				alert("		└─append " + a, 2);
 				contents += "\n" + a;
 			}
 
@@ -599,15 +599,18 @@ void ofTemplateZed::load() {
 		conf.projectPath / ".zed" });
 
 	copyTemplateFiles.back().isFolder = true;
+}
 
+void ofTemplateZed::save() {
+	alert("ofTemplateZed::save()", 92);
 	for (auto & a : conf.addons) {
-		alert("parsing addon " + a->name, 97);
-		for (auto & f : a->filteredMap) {
-			alert(">>>" + f.first);
-			for (auto & s : f.second) {
-				alert("   " + s.string(), 92);
-			}
-		}
+		alert("addon " + a->name, 97);
+		// for (auto & f : a->filteredMap) {
+		// 	alert(">>>" + f.first);
+		// 	for (auto & s : f.second) {
+		// 		alert("   " + s.string(), 92);
+		// 	}
+		// }
 
 		for (auto & f : a->filteredMap["includes"]) {
 			std::string inc { "-I" + fs::path(a->path / f).string() };
@@ -1005,12 +1008,15 @@ void ofTemplateVSCode::save() {
 
 void ofTemplateMake::save() {
 	alert("ofTemplateMake::save()", 92);
-	fs::path fileName { conf.projectPath / "addons.make" };
-	std::ofstream addonsMake(fileName);
-	for (auto & a : conf.addons) {
-		if (!a->isProject) {
-			addonsMake << a->name << std::endl;
+	if (conf.addons.size()) {
+		alert("    saving addons.make", 2);
+		fs::path fileName { conf.projectPath / "addons.make" };
+		std::ofstream addonsMake(fileName);
+		for (auto & a : conf.addons) {
+			if (!a->isProject) {
+				addonsMake << a->name << std::endl;
+			}
 		}
+		addonsMake.close();
 	}
-	addonsMake.close();
 }

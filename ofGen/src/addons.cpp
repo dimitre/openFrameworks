@@ -332,8 +332,8 @@ void ofProject::build() {
 			// alert("	ofProject::addAddon " + t->name + " : " + a->name, 34);
 			t->addAddon(a);
 		}
-		t->build();
 		t->save();
+		t->build();
 	}
 }
 
