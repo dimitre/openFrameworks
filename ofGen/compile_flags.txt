@@ -4,3 +4,4 @@ src/uuidxx/src/*.cpp
 -I../libs/macos/include/
 -std=c++20
 -lstdc++fs
+-I/opt/homebrew/Cellar/yaml-cpp/0.8.0/include
