@@ -165,11 +165,16 @@ bool genConfig::loadYML() {
 		}
 
 		conf.addonsNames = nodeToStrings("addons");
-		conf.templateNames = nodeToStrings("templates");
 
-		// FIXME: Remove TEMPORARY
-		if (!conf.templateNames.size()) {
-			conf.templateNames = nodeToStrings("platforms");
+		auto templateNames = nodeToStrings("templates");
+		if (templateNames.size() > 0) {
+			conf.templateNames = templateNames;
+		} else {
+			// FIXME: Remove TEMPORARY
+			auto p = nodeToStrings("platforms");
+			if (p.size() > 0) {
+				conf.templateNames = p;
+			}
 		}
 		// for (auto & a : nodeToStrings("addons")) {
 		// 	if (a != "") {
