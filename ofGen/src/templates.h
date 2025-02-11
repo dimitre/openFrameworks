@@ -20,13 +20,19 @@ public:
 	std::vector<std::pair<std::string, std::string>> findReplaces;
 	std::vector<std::string> appends;
 	bool isFolder = false;
+	// void (ofTemplate::*transform)(std::string &) = nullptr;
+
+	std::string contents;
+	bool isLoaded = false;
+
+	void load();
+	// std::function<void(std::string &)> transform = nullptr;
 	bool run();
 	void info();
 };
 
 struct ofTemplate {
 public:
-
 	std::string name { "" };
 	fs::path path;
 	ofTemplate() { }
@@ -56,8 +62,11 @@ public:
 		std::cout << "ofTemplate::save() called on primitive member " << name << std::endl;
 	}
 
-	// FIXME: uma funcao pra zerar o commands list quando sai de um projeto entra no proximo.
+	virtual void edit(std::string & str) {
+    	std::cout << "ofTemplate::edit() called on primitive member " << name << std::endl;
+	};
 
+	// FIXME: uma funcao pra zerar o commands list quando sai de um projeto entra no proximo.
 	virtual void build() {
 		alert("	ofTemplate::build " + name + ", path=" + path.string(), 34);
 		for (auto & c : copyTemplateFiles) {
@@ -66,6 +75,10 @@ public:
 		}
 	}
 };
+
+// inline void transf(string & s) {
+// 	s = "ARWIL";
+// }
 
 struct ofTemplateMacos : public ofTemplate {
 public:
@@ -77,6 +90,11 @@ public:
 	void save() override;
 	void addAddon(ofAddon * a) override;
 	void addFramework(const fs::path & path);
+	void edit(std::string & str) override;
+
+	// static inline void transOK(std::string & s) {
+	// 	s = "ARWIL";
+	// }
 
 	struct fileProperties {
 		bool absolute = false;
@@ -205,5 +223,4 @@ public:
 	void load() override;
 	void save() override;
 	// void addAddon(ofAddon * a) override;
-
 };

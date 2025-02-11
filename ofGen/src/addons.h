@@ -13,6 +13,17 @@
 // extern genConfig conf;
 
 struct ofTemplate;
+struct ofAddon;
+/*
+ofProject is a determinate OF project, it can have multiple addons, and multiple templates.
+*/
+struct ofProject {
+public:
+	fs::path path;
+	std::vector<ofAddon *> addons;
+	std::vector<ofTemplate *> templates;
+	void build();
+};
 
 struct ofAddon {
 public:
@@ -42,16 +53,7 @@ void scanFolder(const fs::path & path,
 	// std::map<std::string, std::vector<fs::path>> & exclusionsMap,
 	bool recursive = false);
 
-/*
-ofProject is a determinate OF project, it can have multiple addons, and multiple templates.
-*/
-struct ofProject {
-public:
-	fs::path path;
-	std::vector<ofAddon *> addons;
-	std::vector<ofTemplate *> templates;
-	void build();
-};
+
 
 // void parseAddon( const fs::path & addonPath ) {
 //

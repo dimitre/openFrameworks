@@ -337,153 +337,223 @@ void ofTemplateMacos::addFramework(const fs::path & path) {
 	}
 }
 
+void ofTemplateMacos::edit(std::string & str) {
+	using nlohmann::json;
+	json j;
+	try {
+		j = json::parse(str);
+	} catch (json::parse_error & e) {
+		std::cerr << "JSON parse error at byte " << e.byte << std::endl;
+		// std::cerr << contents.rdbuf() << std::endl;
+	}
+
+	for (auto & c : commands) {
+		// alert (c, 31);
+		// readable comments enabled now.
+		if (c != "" && c[0] != '#') {
+			vector<string> cols { ofSplitString(c, " ") };
+			string thispath { cols[1] };
+			// cout << thispath << endl;
+			// stringReplace(thispath, "\:", "\/");
+
+			std::replace(thispath.begin(), thispath.end(), ':', '/');
+
+			// cout << thispath << endl;
+			// cout << "----" << endl;
+			// ofStringReplace(thispath, ":", "/");
+
+			if (thispath.substr(thispath.length() - 1) != "/") {
+				//if (cols[0] == "Set") {
+				try {
+					json::json_pointer p { json::json_pointer(thispath) };
+
+					if (cols[2] == "string") {
+						// find position after find word
+						auto stringStart { c.find("string ") + 7 };
+						try {
+							j[p] = c.substr(stringStart);
+						} catch (std::exception & e) {
+
+							std::cerr << "substr " << c.substr(stringStart) << "\n"
+									  << "pointer " << p << "\n"
+									  << e.what()
+									  << std::endl;
+							std::exit(1);
+						}
+						// j[p] = cols[3];
+					} else if (cols[2] == "array") {
+						try {
+							//								j[p] = {};
+							j[p] = json::array({});
+						} catch (std::exception & e) {
+							std::cerr << "array " << e.what() << std::endl;
+							std::exit(1);
+						}
+					}
+				} catch (std::exception & e) {
+					std::cerr << "json error " << std::endl;
+					std::cout << "pointer " << thispath << std::endl;
+					std::cerr << e.what() << std::endl;
+					std::cerr << "--------------------------------------------------" << std::endl;
+					std::exit(1);
+				}
+
+			} else {
+				thispath = thispath.substr(0, thispath.length() - 1);
+				//					cout << thispath << endl;
+				json::json_pointer p = json::json_pointer(thispath);
+				try {
+					// Fixing XCode one item array issue
+					if (!j[p].is_array()) {
+						auto v { j[p] };
+						j[p] = json::array();
+						if (!v.is_null()) {
+							j[p].emplace_back(v);
+						}
+					}
+					j[p].emplace_back(cols[3]);
+
+				} catch (std::exception & e) {
+					std::cerr << "json error " << std::endl;
+					std::cerr << e.what() << std::endl;
+					std::cerr << thispath << std::endl;
+					std::cerr << "-------------------------" << std::endl;
+				}
+			}
+		}
+	}
+
+	// This is not pretty but address some differences in nlohmann json 3.11.2 to 3.11.3
+	auto dump = j.dump(1, '	');
+	if (dump[0] == '[') {
+		dump = j[0].dump(1, '	');
+	}
+
+	str = dump;
+	// cout << dump << endl;
+}
+
 void ofTemplateMacos::save() {
 	alert("ofTemplateMacos::save()", 92);
 
-	//	debugCommands = false;
+	edit(copyTemplateFiles[0].contents);
+	// alert ("CONTENTS AFTER EDIT", 95);
+	// cout <<  copyTemplateFiles[0].contents << endl;
 
+	return;
+
+	// WONT EXECUTE.
 	fs::path fileName { conf.projectPath / (conf.projectName + ".xcodeproj/project.pbxproj") };
-	bool usePlistBuddy = false;
 
-	if (usePlistBuddy) {
-		//	PLISTBUDDY - Mac only
-		string command = "/usr/libexec/PlistBuddy " + ofPathToString(fileName);
-		string allCommands = "";
-		for (auto & c : commands) {
-			command += " -c \"" + c + "\"";
-			allCommands += c + "\n";
-		}
-		system(command.c_str());
-		// cout << system(command) << endl;
-	} else {
-		// JSON Block - Multiplatform
+	std::ifstream contents(fileName);
+	using nlohmann::json;
+	json j;
+	try {
+		j = json::parse(contents);
+	} catch (json::parse_error & ex) {
+		std::cerr << "JSON parse error at byte " << ex.byte << std::endl;
+		std::cerr << "fileName " << fileName << std::endl;
+		std::cerr << contents.rdbuf() << std::endl;
+	}
 
-		std::ifstream contents(fileName);
-		//		std::cout << contents.rdbuf() << std::endl;
-		using nlohmann::json;
-		json j;
-		try {
-			j = json::parse(contents);
+	contents.close();
 
-			// Ugly hack to make nlohmann json work with v 3.11.3
-			//			auto dump = j.dump(1, '	');
-			//			if (dump[0] == '[') {
-			//				j = j[0];
-			//			}
+	for (auto & c : commands) {
+		//			alert (c, 31);
+		// readable comments enabled now.
+		if (c != "" && c[0] != '#') {
+			vector<string> cols { ofSplitString(c, " ") };
+			string thispath { cols[1] };
+			// cout << thispath << endl;
+			// stringReplace(thispath, "\:", "\/");
 
-		} catch (json::parse_error & ex) {
-			std::cerr << "JSON parse error at byte " << ex.byte << std::endl;
-			std::cerr << "fileName " << fileName << std::endl;
-			std::cerr << contents.rdbuf() << std::endl;
-		}
+			std::replace(thispath.begin(), thispath.end(), ':', '/');
 
-		contents.close();
+			// cout << thispath << endl;
+			// cout << "----" << endl;
+			// ofStringReplace(thispath, ":", "/");
 
-		for (auto & c : commands) {
-			//			alert (c, 31);
-			// readable comments enabled now.
-			if (c != "" && c[0] != '#') {
-				vector<string> cols { ofSplitString(c, " ") };
-				string thispath { cols[1] };
-				// cout << thispath << endl;
-				// stringReplace(thispath, "\:", "\/");
+			if (thispath.substr(thispath.length() - 1) != "/") {
+				//if (cols[0] == "Set") {
+				try {
+					json::json_pointer p { json::json_pointer(thispath) };
 
-				std::replace(thispath.begin(), thispath.end(), ':', '/');
+					if (cols[2] == "string") {
+						// find position after find word
+						auto stringStart { c.find("string ") + 7 };
+						try {
+							j[p] = c.substr(stringStart);
+						} catch (std::exception & e) {
 
-				// cout << thispath << endl;
-				// cout << "----" << endl;
-				// ofStringReplace(thispath, ":", "/");
-
-				if (thispath.substr(thispath.length() - 1) != "/") {
-					//if (cols[0] == "Set") {
-					try {
-						json::json_pointer p { json::json_pointer(thispath) };
-
-						if (cols[2] == "string") {
-							// find position after find word
-							auto stringStart { c.find("string ") + 7 };
-							try {
-								j[p] = c.substr(stringStart);
-							} catch (std::exception & e) {
-
-								std::cerr << "substr " << c.substr(stringStart) << "\n"
-										  << "pointer " << p << "\n"
-										  << e.what()
-										  << std::endl;
-								std::exit(1);
-							}
-							// j[p] = cols[3];
-						} else if (cols[2] == "array") {
-							try {
-								//								j[p] = {};
-								j[p] = json::array({});
-							} catch (std::exception & e) {
-								std::cerr << "array " << e.what() << std::endl;
-								std::exit(1);
-							}
+							std::cerr << "substr " << c.substr(stringStart) << "\n"
+									  << "pointer " << p << "\n"
+									  << e.what()
+									  << std::endl;
+							std::exit(1);
 						}
-					} catch (std::exception & e) {
-						std::cerr << "json error " << std::endl;
-						std::cout << "pointer " << thispath << std::endl;
-						std::cerr << e.what() << std::endl;
-						std::cerr << "--------------------------------------------------" << std::endl;
-						std::exit(1);
-					}
-
-				} else {
-					thispath = thispath.substr(0, thispath.length() - 1);
-					//					cout << thispath << endl;
-					json::json_pointer p = json::json_pointer(thispath);
-					try {
-						// Fixing XCode one item array issue
-						if (!j[p].is_array()) {
-							//							cout << endl;
-							//							alert (c, 31);
-							//							cout << "this is not array, creating" << endl;
-							//							cout << thispath << endl;
-							auto v { j[p] };
-							j[p] = json::array();
-							if (!v.is_null()) {
-								//								cout << "thispath " << thispath << endl;
-								j[p].emplace_back(v);
-							}
+						// j[p] = cols[3];
+					} else if (cols[2] == "array") {
+						try {
+							//								j[p] = {};
+							j[p] = json::array({});
+						} catch (std::exception & e) {
+							std::cerr << "array " << e.what() << std::endl;
+							std::exit(1);
 						}
-						//						alert (c, 31);
-						//						alert ("emplace back " + cols[3] , 32);
-						j[p].emplace_back(cols[3]);
-
-					} catch (std::exception & e) {
-						std::cerr << "json error " << std::endl;
-						std::cerr << e.what() << std::endl;
-						std::cerr << thispath << std::endl;
-						std::cerr << "-------------------------" << std::endl;
 					}
+				} catch (std::exception & e) {
+					std::cerr << "json error " << std::endl;
+					std::cout << "pointer " << thispath << std::endl;
+					std::cerr << e.what() << std::endl;
+					std::cerr << "--------------------------------------------------" << std::endl;
+					std::exit(1);
 				}
-				//				alert("-----", 32);
+
+			} else {
+				thispath = thispath.substr(0, thispath.length() - 1);
+				//					cout << thispath << endl;
+				json::json_pointer p = json::json_pointer(thispath);
+				try {
+					// Fixing XCode one item array issue
+					if (!j[p].is_array()) {
+						auto v { j[p] };
+						j[p] = json::array();
+						if (!v.is_null()) {
+							j[p].emplace_back(v);
+						}
+					}
+					j[p].emplace_back(cols[3]);
+
+				} catch (std::exception & e) {
+					std::cerr << "json error " << std::endl;
+					std::cerr << e.what() << std::endl;
+					std::cerr << thispath << std::endl;
+					std::cerr << "-------------------------" << std::endl;
+				}
 			}
 		}
-
-		std::ofstream jsonFile(fileName);
-
-		// This is not pretty but address some differences in nlohmann json 3.11.2 to 3.11.3
-		auto dump = j.dump(1, '	');
-		if (dump[0] == '[') {
-			dump = j[0].dump(1, '	');
-		}
-
-		try {
-			jsonFile << dump;
-		} catch (std::exception & e) {
-			std::cerr << "Error saving json to " << fileName << ": " << e.what() << std::endl;
-			;
-			// return false;
-		} catch (...) {
-			std::cerr << "Error saving json to " << fileName << std::endl;
-			;
-			// return false;
-		}
-		jsonFile.close();
 	}
+
+	std::ofstream jsonFile(fileName);
+
+	// This is not pretty but address some differences in nlohmann json 3.11.2 to 3.11.3
+	auto dump = j.dump(1, '	');
+	if (dump[0] == '[') {
+		dump = j[0].dump(1, '	');
+	}
+
+	try {
+		jsonFile << dump;
+	} catch (std::exception & e) {
+		std::cerr << "Error saving json to " << fileName << ": " << e.what() << std::endl;
+		;
+		// return false;
+	} catch (...) {
+		std::cerr << "Error saving json to " << fileName << std::endl;
+		;
+		// return false;
+	}
+	jsonFile.close();
 
 	//	for (auto & c : commands) cout << c << endl;
 	// return true;
@@ -506,20 +576,36 @@ void copyTemplateFile::info() {
 	std::cout << std::endl;
 }
 
-bool copyTemplateFile::run() {
-
+void copyTemplateFile::load() {
 	if (fs::exists(from)) {
-		info();
-		// ofLogVerbose() << "copyTemplateFile from: " << from << " to: " << to;
-		// alert("	copyTemplateFile", 92);
-		// alert("	from: " + from.string(), 2);
-		// alert("	to: " + to.string(), 90);
+		isLoaded = true;
+		std::ifstream fileFrom(from);
+		// std::string contents((std::istreambuf_iterator<char>(fileFrom)), std::istreambuf_iterator<char>());
+		contents = std::string((std::istreambuf_iterator<char>(fileFrom)), std::istreambuf_iterator<char>());
+		fileFrom.close();
+	}
+}
 
-		if (findReplaces.size() || appends.size()) {
-			// Load file, replace contents, write to destination.
-			std::ifstream fileFrom(from);
-			std::string contents((std::istreambuf_iterator<char>(fileFrom)), std::istreambuf_iterator<char>());
-			fileFrom.close();
+bool copyTemplateFile::run() {
+	info();
+	if (fs::exists(from)) {
+
+		if (findReplaces.size() || appends.size()) { // || transform != nullptr
+			// Load file, replace contents, append data to content, make transformation and then write to destination.
+
+			if (!isLoaded) {
+    			load();
+			}
+			// std::ifstream fileFrom(from);
+			// // std::string contents((std::istreambuf_iterator<char>(fileFrom)), std::istreambuf_iterator<char>());
+			// contents = std::string((std::istreambuf_iterator<char>(fileFrom)), std::istreambuf_iterator<char>());
+			// fileFrom.close();
+
+			// if (transform != nullptr) {
+			// 	(*transform)(contents);
+			// }
+			// alert("AFTER TRANSFORM", 95);
+			// cout << contents << endl;
 
 			for (auto & f : findReplaces) {
 				// Avoid processing empty pairs
@@ -527,9 +613,6 @@ bool copyTemplateFile::run() {
 					continue;
 				}
 				replaceAll(contents, f.first, f.second);
-				// ofLogVerbose() << "└─ Replacing " << f.first << " : " << f.second;
-				// alert("	└─ Replacing " + f.first + " : " + f.second, 0);
-				// std::cout << "	└─ Replacing " << f.first << " : " << f.second << std::endl;
 			}
 
 			for (auto & a : appends) {
@@ -573,7 +656,10 @@ bool copyTemplateFile::run() {
 				}
 			}
 		}
-	} else {
+	}
+
+	else {
+		alert("input file not found " + from.string(), 95);
 		return false;
 	}
 	return true;
@@ -647,6 +733,12 @@ void ofTemplateMacos::load() {
 		xcodeProject / "project.pbxproj",
 		{ { "emptyExample", conf.projectName },
 			rootReplacements } });
+
+	// copyTemplateFiles.back().transform = ofTemplateMacos::edit;
+	// copyTemplateFiles.back().transform = ofTemplateMacos::edit;
+	copyTemplateFiles.back().load();
+
+	// copyTemplateFiles.back().transform = trans;
 
 	copyTemplateFiles.push_back({ path / "Project.xcconfig",
 		conf.projectPath / "Project.xcconfig",
@@ -835,65 +927,7 @@ string ofTemplateMacos::getFolderUUID(const fs::path & folder, fs::path base) {
 						addCommand("Add :objects:" + thisUUID + ":path string " + folderName);
 					}
 
-					// TODO: REMOVE
-					// fs::path checkPath { folderFromUUID[lastFolderUUID] / folderFromUUID[thisUUID] };
-					// if (fs::exists(checkPath)) {
-					// 	alert("yes " + checkPath.string(), 95);
-					// } else {
-					// 	alert("no " + checkPath.string(), 97);
-					// }
-
-					// if (folderName == "external_sources" || folderName == "local_addons") {
-
-					// 	//						addCommand("Add :objects:"+thisUUID+":sourceTree string SOURCE_ROOT");
-					// 	//						addCommand("Add :objects:"+thisUUID+":path string ");
-					// 	addCommand("Add :objects:" + thisUUID + ":sourceTree string <group>");
-
-					// 	folderSet = true;
-					// } else {
-					// 	if (lastFolderUUID == folderUUID[""]) { //} ||
-					// 		//                            lastFolder == "external_sources" || lastFolder == "local_addons") { //
-
-					// 		// fs::path base2 { "" };
-					// 		// size_t diff = folders.size() - (a + 1);
-					// 		// for (size_t x = 0; x < diff; x++) {
-					// 		// 	base2 = base2.parent_path();
-					// 		// }
-
-					// 		//                            alert ("external_sources base = " + ofPathToString(base2) + " UUID: " + thisUUID, 33);
-					// 		addCommand("Add :objects:" + thisUUID + ":sourceTree string SOURCE_ROOT");
-					// 		addCommand("Add :objects:" + thisUUID + ":path string " + folderName);
-					// 		// alert (commands.back(), 95);
-					// 		// addCommand("Add :objects:" + thisUUID + ":path string " + ofPathToString(base2));
-					// 		// alert ("xxxx: " + ofPathToString(base2), 33);
-					// 		// alert (commands.back(), 95);
-
-					// 		folderSet = true;
-					// 	} else if (lastFolder == "external_sources" || lastFolder == "local_addons") { //
-					// 		addCommand("Add :objects:" + thisUUID + ":sourceTree string SOURCE_ROOT");
-					// 		//                            alert ("xxxx " + lastFolder + "  " + ofPathToString(base) + " UUID: " + thisUUID, 33);
-					// 		addCommand("Add :objects:" + thisUUID + ":path string " + ofPathToString(getPathTo(base, folderName)));
-					// 		folderSet = true;
-					// 	} else {
-					// 		addCommand("Add :objects:" + thisUUID + ":sourceTree string <group>");
-					// 		//							fs::path addonFolder { fs::path(fullPath).filename() };
-					// 		addCommand("Add :objects:" + thisUUID + ":path string " + ofPathToString(fullPath.filename()));
-					// 		folderSet = true;
-					// 	}
-					// }
-
 					addCommand("Add :objects:" + thisUUID + ":children array");
-
-					// if (!bFolderPathSet) {
-					// 	if (folder.begin()->string() == "addons" || folder.begin()->string() == "src") { //} || folder.begin()->string() == "local_addons") {
-					// 		addCommand("Add :objects:" + thisUUID + ":sourceTree string <group>");
-					// 		//						fs::path addonFolder { fs::path(fullPath).filename() };
-					// 		addCommand("Add :objects:" + thisUUID + ":path string " + ofPathToString(fullPath.filename()));
-					// 		// alert ("group " + folder.string() + " : " + base.string() + " : " + addonFolder.string(), 32);
-					// 	} else {
-					// 		addCommand("Add :objects:" + thisUUID + ":sourceTree string SOURCE_ROOT");
-					// 	}
-					// }
 
 					// Add this new folder to its parent, folderUUID[""] if root
 					addCommand("Add :objects:" + lastFolderUUID + ":children: string " + thisUUID);

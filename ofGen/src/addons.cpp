@@ -326,6 +326,9 @@ void ofProject::build() {
 
 	// each template for specific project
 	for (auto & t : templates) {
+		t->load();
+		t->info();
+
 		alert("	Building template " + t->name, 95);
 		// each addon for specific project
 		for (auto & a : addons) {
@@ -380,11 +383,11 @@ void gatherProjectInfo() {
 	}
 
 	// load templates, show info of each template
-	for (auto & t : conf.templates) {
-		// cout << t->name << " : " << t->path << endl;
-		t->load();
-		t->info();
-	}
+	// for (auto & t : conf.templates) {
+	// 	// cout << t->name << " : " << t->path << endl;
+	// 	t->load();
+	// 	t->info();
+	// }
 
 	// now parse project addons, or yml
 
@@ -405,8 +408,6 @@ void gatherProjectInfo() {
 	} else {
 		alert("NO SRC FILE FOUND IN PROJECT", 95);
 	}
-
-
 
 	// fs::path addonsListFile { conf.projectPath / "addons.make" };
 	// if (fs::exists(addonsListFile)) {
