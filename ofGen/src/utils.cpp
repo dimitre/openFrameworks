@@ -176,35 +176,34 @@ bool genConfig::loadYML() {
 				conf.templateNames = p;
 			}
 		}
-		// for (auto & a : nodeToStrings("addons")) {
-		// 	if (a != "") {
-		// 		addonsNames.emplace_back(a);
-		// 	}
-		// }
 
-		// cout << endl;
-		// title("Platforms ");
-		// for (auto & s : nodeToStrings("platforms")) {
-		// 	cout << s << endl;
-		// }
 		cout << endl;
-		alert("Templates ");
-		for (auto & s : nodeToStrings("templates")) {
-			cout << s << endl;
+
+		if (!conf.templateNames.size()) {
+			alert("No templates selected, exiting", 95);
+			exit(0);
 		}
 
-		alert("Additional Source Directories ");
-		for (auto & a : nodeToStrings("sources")) {
-			if (a != "") {
-				additionalSources.emplace_back(a);
-				// cout << a << endl;
+		alert("Templates ");
+		for (auto & t : conf.templateNames) {
+			cout << t << endl;
+		}
+
+		conf.additionalSources = nodeToPaths("sources");
+		if (conf.additionalSources.size()) {
+			alert("Additional Source Directories ");
+			for (auto & a : conf.additionalSources) {
+				cout << a << endl;
+			}
+		}
+
+		if (conf.addonsNames.size()) {
+			alert("Addons");
+			for (auto & a : conf.addonsNames) {
+				cout << a << endl;
 			}
 		}
 		cout << endl;
-		// ALREADY SET
-		// else {
-		// 	conf.ofPath = "../../..";
-		// }
 	}
 
 	return true;
@@ -212,6 +211,17 @@ bool genConfig::loadYML() {
 
 std::vector<string> genConfig::nodeToStrings(const string & index) {
 	std::vector<string> out;
+	if (config[index]) {
+		auto items = config[index];
+		for (std::size_t i = 0; i < items.size(); i++) {
+			out.emplace_back(items[i].as<string>());
+		}
+	}
+	return out;
+}
+
+std::vector<fs::path> genConfig::nodeToPaths(const string & index) {
+	std::vector<fs::path> out;
 	if (config[index]) {
 		auto items = config[index];
 		for (std::size_t i = 0; i < items.size(); i++) {

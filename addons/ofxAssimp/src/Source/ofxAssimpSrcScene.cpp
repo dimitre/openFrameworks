@@ -698,6 +698,11 @@ void SrcScene::loadGLResources(std::shared_ptr<ofx::assimp::SrcMesh> aSrcMesh, a
 							assimpTexture->setup( realPath, bWrap );
 							assimpTexture->setAiTextureType((aiTextureType)d);
 							mAssimpTextures[realPath] = assimpTexture;
+							
+							// OK HERE
+//							std::cout << ">>>EXISTS " <<
+//							of::filesystem::exists(assimpTexture->getTexturePath()) << std::endl;
+							
 							ofLogNotice( "ofx::assimp::SrcScene") << " assimpTexture type: " << assimpTexture->getAiTextureTypeAsString() << " path: " << assimpTexture->getTexturePath();
 //							tmpTex.setTextureType((aiTextureType)d);
 							aSrcMesh->addTexture( assimpTexture );

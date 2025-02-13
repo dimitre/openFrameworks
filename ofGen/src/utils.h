@@ -16,7 +16,7 @@ using std::string;
 using std::vector;
 
 static inline std::string getPGVersion() {
-	return "ofGen v0.1.4";
+	return "ofGen v0.1.5";
 }
 
 inline std::string colorText(const std::string & s, int color) {
@@ -36,7 +36,7 @@ const std::string sign = colorText(R"(
 ▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
 ▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
 Project Generator for OpenFrameworks (OFVISION)
-                Prototype v0.1.4⚡️
+                Prototype v0.1.5⚡️
 )",
 							 91)
 
@@ -279,6 +279,7 @@ ofGen templates=zed,macos,make addons=ofxMidi,ofxOpencv ofpath=../../.. path=/Vo
 	void import();
 	bool loadYML();
     vector<string> nodeToStrings(const string & index);
+    vector<fs::path> nodeToPaths(const string & index);
 	// void scanFolderRecursive(const fs::path & path);
 };
 // conf

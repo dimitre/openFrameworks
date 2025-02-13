@@ -397,9 +397,15 @@ void gatherProjectInfo() {
 		ofAddon * addon = conf.addons.back();
 		addon->isProject = true;
 		addon->name = "ProjectSourceFiles_" + conf.projectName;
+		addon->path = "";
+
+		// TODO: Add here additional sources
+		for (auto & a : conf.additionalSources) {
+			alert(">> ADDITIONAL FOLDER " + a.string(), 95);
+			scanFolder(a, addon->filesMap, true);
+		}
 
 		// addon->showFiles();
-		addon->path = "";
 		addon->load();
 
 		// addon->info();
