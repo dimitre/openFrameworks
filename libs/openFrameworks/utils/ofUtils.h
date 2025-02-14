@@ -20,9 +20,6 @@
 #include "ofRandomDistributions.h"
 #include "ofRandomEngine.h"
 
-// FIXME: Review
-//#include "ofVectorMath.h" // ostring vec2f and more?
-
 
 static const std::string OF_BROWSER_DEFAULT_TARGET { "_blank" };
 

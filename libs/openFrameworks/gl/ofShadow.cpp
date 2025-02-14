@@ -19,9 +19,6 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-// FIXME: Simplify here also
-//#include "ofVectorMath.h"
-
 using std::weak_ptr;
 using std::vector;
 using std::shared_ptr;

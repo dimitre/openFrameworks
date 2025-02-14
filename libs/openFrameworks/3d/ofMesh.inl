@@ -4,7 +4,6 @@
 
 #include "ofAppRunner.h"
 #include "ofGraphicsBaseTypes.h"
-//#include "ofVectorMath.h"
 #include "ofLog.h"
 #include "ofColor.h"
 #include "ofUtils.h" // ofTo
