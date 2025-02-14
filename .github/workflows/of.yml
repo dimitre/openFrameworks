@@ -57,7 +57,7 @@ jobs:
 
       - name: All Addons Example
         run: |
-          cd ../examples/templates/allAddonsExample
+          cd examples/templates/allAddonsExample
           ofGen
           xcodebuild -arch arm64
 
