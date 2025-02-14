@@ -10,23 +10,7 @@
 #include "ofTrueTypeFont.h"
 #include "ofVideoBaseTypes.h"
 
-
-// FIXME: CLEAN
-//#include <glm/gtc/constants.hpp>
-//#include <glm/gtc/matrix_transform.hpp>
-//#include <glm/gtc/matrix_inverse.hpp>
-//#include <glm/gtc/quaternion.hpp>
-//#include <glm/gtc/epsilon.hpp>
-//#include <glm/gtx/norm.hpp>
-//#include <glm/gtx/perpendicular.hpp>
-//#include <glm/gtx/quaternion.hpp>
-//#include <glm/gtx/rotate_vector.hpp>
-//#include <glm/gtx/spline.hpp>
-//#include <glm/gtx/transform.hpp>
-//#include <glm/gtx/vector_angle.hpp>
-//#include <glm/gtx/scalar_multiplication.hpp>
-//#include <glm/gtc/type_ptr.hpp>
-
+#include <glm/gtc/type_ptr.hpp> //make_mat4
 
 using std::string;
 using std::vector;

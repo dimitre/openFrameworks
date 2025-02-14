@@ -205,7 +205,6 @@ class ofMatrix3x3;
 #include "ofQuaternion.h"
 
 
-// FIXME: -
 //--------------------------------------------------------------
 inline const ofVec2f & toOf(const glm::vec2 & v){
 	return *reinterpret_cast<const ofVec2f*>(&v);
