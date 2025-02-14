@@ -53,7 +53,9 @@ string ofTemplateMacos::addFile(const fs::path & path, const fs::path & folder, 
 			// 	addCommand("Add :objects:" + UUID + ":path string " + ofPathToString(path));
 			// }
 		} else {
-			addCommand("Add :objects:" + UUID + ":path string " + ofPathToString(path.filename()));
+			if (!fp.isGroupWithoutFolder) {
+				addCommand("Add :objects:" + UUID + ":path string " + ofPathToString(path.filename()));
+			}
 			addCommand("Add :objects:" + UUID + ":sourceTree string <group>");
 		}
 
@@ -594,7 +596,7 @@ bool copyTemplateFile::run() {
 			// Load file, replace contents, append data to content, make transformation and then write to destination.
 
 			if (!isLoaded) {
-    			load();
+				load();
 			}
 			// std::ifstream fileFrom(from);
 			// // std::string contents((std::istreambuf_iterator<char>(fileFrom)), std::istreambuf_iterator<char>());
@@ -853,6 +855,13 @@ void ofTemplateMacos::load() {
 	fp.absolute = true;
 	//	addFile("../../../libs/openframeworks", "", fp);
 	addFile(fs::path { "bin" } / "data", "", fp);
+
+	// Just testing.
+	// fp.isSrc = false;
+	// fp.isGroupWithoutFolder = true;
+	// addFile("external_sources", "", fp);
+	//
+	//
 	// addFile(conf.ofPath / "libs" / "macos" / "include", "", fp);
 	// add sources
 

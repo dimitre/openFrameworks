@@ -399,6 +399,10 @@ void gatherProjectInfo() {
 		addon->name = "ProjectSourceFiles_" + conf.projectName;
 		addon->path = "";
 
+		for (auto & f : conf.frameworks) {
+			addon->filesMap["frameworks"].emplace_back(f);
+		}
+
 		// TODO: Add here additional sources
 		for (auto & a : conf.additionalSources) {
 			alert(">> ADDITIONAL FOLDER " + a.string(), 95);

@@ -369,16 +369,29 @@ endef
 
 
 
+
+
 # DIMITRAO
 	# this will add all addons path as they were local
 TEST_PROJECT_ADDONS_ALLPATHS=$(join $(addprefix ./, $(PROJECT_ADDONS)), )
 # and add all addons path as they were in /addons/ folder
+
 TEST_PROJECT_ADDONS_ALLPATHS+=$(join $(addprefix $(OF_ADDONS_PATH)/, $(PROJECT_ADDONS)), )
 # and then clean all non-existant files
+#
+# $(info ---===---)
+# $(info $(TEST_PROJECT_ADDONS_ALLPATHS))
 TEST_PROJECT_ADDONS_PATHS = $(wildcard $(TEST_PROJECT_ADDONS_ALLPATHS))
+
+# $(info ---===---)
+# $(info $(TEST_PROJECT_ADDONS_PATHS))
+# $(info ---===---)
+
 $(foreach a, $(TEST_PROJECT_ADDONS_PATHS), \
 	$(call parse_addon2,$(a)) \
 )
+# $(info ---===---)
+# error
 
 # $(foreach addon_to_parse, $(PROJECT_ADDONS), \
 # 	$(call parse_addon,$(addon_to_parse)) \

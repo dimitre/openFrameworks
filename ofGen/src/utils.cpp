@@ -189,6 +189,9 @@ bool genConfig::loadYML() {
 			cout << t << endl;
 		}
 
+
+		conf.frameworks = nodeToStrings("frameworks");
+
 		conf.additionalSources = nodeToPaths("sources");
 		if (conf.additionalSources.size()) {
 			alert("Additional Source Directories ");
