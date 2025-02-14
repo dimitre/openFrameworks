@@ -9,6 +9,8 @@
 #endif
 #include <regex>
 
+#include <glm/gtc/type_ptr.hpp>
+
 using std::endl;
 using std::ostringstream;
 using std::setw;

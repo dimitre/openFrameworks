@@ -4,10 +4,12 @@
 
 #include "ofRectangle.h"
 #include "ofGraphicsBaseTypes.h"
-#include "ofVectorMath.h"
+//#include "ofVectorMath.h"
 #include "ofAppRunner.h"
 #include "ofLog.h"
 #include "ofMath.h"
+
+#include <glm/gtx/vector_angle.hpp>
 
 //----------------------------------------------------------
 template<class T>

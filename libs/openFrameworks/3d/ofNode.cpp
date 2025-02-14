@@ -634,7 +634,8 @@ void ofNode::orbitDeg(float longitude, float latitude, float radius, const glm::
 	p = q * p;							   // rotate p on unit sphere based on quaternion
 	p = p * radius;						   // scale p by radius from its position on unit sphere
 	
-	setGlobalPosition(centerPoint + p);
+//	setGlobalPosition(centerPoint + p);
+	setGlobalPosition(centerPoint + glm::vec3{p.x, p.y, p.z} );
 	setOrientation(q);
 
 	onOrientationChanged();
@@ -657,7 +658,9 @@ void ofNode::orbitRad(float longitude, float latitude, float radius, const glm::
 	p = q * p;							   // rotate p on unit sphere based on quaternion
 	p = p * radius;						   // scale p by radius from its position on unit sphere
 
-	setGlobalPosition(centerPoint + p);
+//	setGlobalPosition(centerPoint + p);
+	setGlobalPosition(centerPoint + glm::vec3{p.x, p.y, p.z} );
+
 	setOrientation(q);
 
 	onOrientationChanged();

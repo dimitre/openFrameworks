@@ -19,6 +19,9 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 
+// FIXME: Simplify here also
+//#include "ofVectorMath.h"
+
 using std::weak_ptr;
 using std::vector;
 using std::shared_ptr;
@@ -734,11 +737,11 @@ void ofShadow::_drawFrustum( const glm::vec3& aup, const glm::vec3& aright, cons
 	ofPushStyle();
 
 	ofSetColor( ofColor::green );
-	ofDrawArrow( data->position, data->position+data->up * 100.0, 10.0);
+	ofDrawArrow( data->position, data->position+data->up * 100.0f, 10.0);
 	ofSetColor( ofColor::red );
-	ofDrawArrow( data->position, data->position+data->right * 100.0, 10.0);
+	ofDrawArrow( data->position, data->position+data->right * 100.0f, 10.0);
 	ofSetColor( ofColor::blue );
-	ofDrawArrow( data->position, data->position+data->direction * 100.0, 10.0);
+	ofDrawArrow( data->position, data->position+data->direction * 100.0f, 10.0);
 	
 	vector<ofFloatColor> colors;
 	
@@ -858,15 +861,15 @@ std::vector<glm::vec3> ofShadow::getFrustumCorners( const glm::vec3& aup, const 
 	
 	std::vector<glm::vec3> corners(8);
 	
-	corners[0] = fc + ( Y * Hfar/2) - ( X * Wfar/2.f); // ftl
-	corners[1] = fc + ( Y * Hfar/2) + ( X * Wfar/2); // ftr
-	corners[2] = fc - ( Y * Hfar/2) + ( X * Wfar/2); // fbl
-	corners[3] = fc - ( Y * Hfar/2) - ( X * Wfar/2); // fbr
+	corners[0] = fc + ( Y * Hfar/2.0f) - ( X * Wfar/2.0f); // ftl
+	corners[1] = fc + ( Y * Hfar/2.0f) + ( X * Wfar/2.0f); // ftr
+	corners[2] = fc - ( Y * Hfar/2.0f) + ( X * Wfar/2.0f); // fbl
+	corners[3] = fc - ( Y * Hfar/2.0f) - ( X * Wfar/2.0f); // fbr
 	
-	corners[4] = nc + ( Y * Hnear/2) - ( X * Wnear/2); // ntl
-	corners[5] = nc + ( Y * Hnear/2) + ( X * Wnear/2); // ntr
-	corners[6] = nc - ( Y * Hnear/2) + ( X * Wnear/2); // nbl
-	corners[7] = nc - ( Y * Hnear/2) - ( X * Wnear/2); // nbr
+	corners[4] = nc + ( Y * Hnear/2.0f) - ( X * Wnear/2.0f); // ntl
+	corners[5] = nc + ( Y * Hnear/2.0f) + ( X * Wnear/2.0f); // ntr
+	corners[6] = nc - ( Y * Hnear/2.0f) + ( X * Wnear/2.0f); // nbl
+	corners[7] = nc - ( Y * Hnear/2.0f) - ( X * Wnear/2.0f); // nbr
 	
 	return corners;
 }

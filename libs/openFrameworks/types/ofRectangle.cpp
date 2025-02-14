@@ -2,7 +2,7 @@
 #include "ofLog.h"
 
 
-#include "ofVectorMath.h"
+//#include "ofVectorMath.h"
 #include "ofMath.h"
 
 using std::ostream;
@@ -836,13 +836,19 @@ bool ofRectangle::isZero() const{
 
 //----------------------------------------------------------
 ostream& operator<<(ostream& os, const ofRectangle& rect){
-	os << rect.position << ", " << rect.width << ", " << rect.height;
+//	os << rect.position << ", " << rect.width << ", " << rect.height;
+	os << rect.position.x << ", " << rect.position.y << ", " << rect.width << ", " << rect.height;
 	return os;
 }
 
 //----------------------------------------------------------
 istream& operator>>(istream& is, ofRectangle& rect){
-	is >> rect.position;
+	is >> rect.position.x;
+	is.ignore(2);
+	is >> rect.position.y;
+	is.ignore(2);
+	is >> rect.position.z;
+//	is >> rect.position;
 	is.ignore(2);
 	is >> rect.width;
 	is.ignore(2);

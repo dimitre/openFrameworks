@@ -15,6 +15,8 @@
 #include "ofVboMesh.h"
 #include "ofVideoBaseTypes.h"
 
+#include <glm/gtc/type_ptr.hpp>
+
 using std::shared_ptr;
 using std::string;
 using std::vector;
