@@ -213,8 +213,8 @@ ofMesh ofxColorPicker_<ColorType>::getColorPoint(){
 	for(size_t i=0;i<circle.size();i++){
 		auto next = (i + 1) % circle.size();
 		meshColorPoint.addVertex(center);
-		meshColorPoint.addVertex(center + circle[i] * 4);
-		meshColorPoint.addVertex(center + circle[next] * 4);
+		meshColorPoint.addVertex(center + circle[i] * 4.0f);
+		meshColorPoint.addVertex(center + circle[next] * 4.0f);
 
 		meshColorPoint.addColor(ofFloatColor::black);
 		meshColorPoint.addColor(ofFloatColor::black);
@@ -223,8 +223,8 @@ ofMesh ofxColorPicker_<ColorType>::getColorPoint(){
 	for(size_t i=0;i<circle.size();i++){
 		auto next = (i + 1) % circle.size();
 		meshColorPoint.addVertex(center);
-		meshColorPoint.addVertex(center + circle[i] * 2);
-		meshColorPoint.addVertex(center + circle[next] * 2);
+		meshColorPoint.addVertex(center + circle[i] * 2.0f);
+		meshColorPoint.addVertex(center + circle[next] * 2.0f);
 
 		meshColorPoint.addColor(ofFloatColor::white);
 		meshColorPoint.addColor(ofFloatColor::white);
@@ -255,7 +255,7 @@ ofMesh ofxColorPicker_<ColorType>::getColorWheel() {
 		meshColorWheel.addColor(c0);
 		meshColorWheel.addColor(c0);
 	}
-    
+
 	return meshColorWheel;
 }
 
@@ -315,7 +315,7 @@ ofMesh ofxColorPicker_<ColorType>::getColorScaleBar() {
 	by = 1;
 	ofRectangle handleBorder(rx - bx, ry + cy - by, rw + bx * 2, ch + by * 2);
 	meshColorScaleBar.append(rectangle(handleBorder, ofFloatColor::white));
-    
+
 	return meshColorScaleBar;
 }
 
@@ -413,17 +413,17 @@ bool ofxColorPicker_<ColorType>::mouseUpdate(ofMouseEventArgs& mouse){
 				int relY = mouse.y - rectColorScaleBar.y;
 				float scale = 1.f - saturate(relY / rectColorScaleBar.height);
 				setColorScale(scale);
-				
+
 				setNeedsRedraw();
 				break;
 			}
 			case ChangingWheel:{
 				auto p = mouse - glm::vec2(rectColorWheel.position);
 				auto pc = getPolarCoordinate(p, colorWheelRadius);
-				
+
 				colorAngle	= pc.angle;
 				colorRadius	= saturate(pc.radius);
-				
+
 				bSettingColor = true;
 				color = getCircularColor<ColorType>(colorAngle, colorRadius, colorScale);
 				bSettingColor = false;

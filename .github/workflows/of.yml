@@ -48,14 +48,17 @@ jobs:
           cd ofGen
           ./compile.sh
           ./install.sh
-          cd ../examples/templates/allAddonsExample
-          ofGen
-          xcodebuild -arch arm64
 
       - name: XCodebuild
         # run: ./scripts/macos/libs.sh
         run: |
           cd libs/openFrameworksCompiled/project/macos
+          xcodebuild -arch arm64
+
+      - name: All Addons Example
+        run: |
+          cd ../examples/templates/allAddonsExample
+          ofGen
           xcodebuild -arch arm64
 
       - name: Make OF Core

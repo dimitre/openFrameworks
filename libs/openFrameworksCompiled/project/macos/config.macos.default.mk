@@ -7,7 +7,7 @@ PLATFORM_REQUIRED_ADDONS =
 
 MAC_OS_MIN_VERSION ?= 11.5
 MAC_OS_STD_LIB ?= libc++
-MAC_OS_C_VER ?= -std=c17
+# MAC_OS_C_VER ?= -std=c17
 MAC_OS_CPP_VER ?= -std=c++2b
 
 # Link against libstdc++ to silence tr1/memory errors on latest versions of osx
