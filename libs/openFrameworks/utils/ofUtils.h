@@ -21,6 +21,21 @@
 #include "ofRandomEngine.h"
 
 
+namespace glm {
+//--------------------------------------------------------------
+template <typename T, precision P>
+inline std::ostream& operator<<(std::ostream& os, const vec<3, T, P>& vec) {
+	os << vec.x << ", " << vec.y << ", " << vec.z;
+	return os;
+}
+
+template <typename T, precision P>
+inline std::ostream& operator<<(std::ostream& os, const vec<2, T, P>& vec) {
+	os << vec.x << ", " << vec.y;
+	return os;
+}
+}
+
 static const std::string OF_BROWSER_DEFAULT_TARGET { "_blank" };
 
 /// \section Elapsed Time
