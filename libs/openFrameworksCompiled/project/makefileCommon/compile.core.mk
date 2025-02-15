@@ -168,6 +168,7 @@ ifeq ($(findstring Debug,$(TARGET_NAME)),Debug)
 	endif
 endif
 
+
 ################################################################################
 # CORE OBJECT AND DEPENDENCY FILES DEFINITIONS
 #	Object file paths are generated here (as opposed to with the rest of the
@@ -183,6 +184,7 @@ ifdef ABI
 else
 	OF_CORE_OBJ_OUTPUT_PATH = $(OF_CORE_LIB_PATH)/obj/$(TARGET_NAME)/
 endif
+$(info 📡 $(OF_CORE_OBJ_OUTPUT_PATH))
 
 # create a named list of dependency files
 # 1. create a list of .d dependency files based on the current list of
@@ -227,7 +229,7 @@ ifndef ABIS_TO_COMPILE_RELEASE
 else
 	@$(foreach abi,$(ABIS_TO_COMPILE_RELEASE),$(MAKE) --no-print-directory ReleaseABI ABI=$(abi) &&) echo
 endif
-	@$(MAKE) --no-print-directory after
+	# @$(MAKE) --no-print-directory after
 
 Debug:
 ifndef ABIS_TO_COMPILE_DEBUG
@@ -235,7 +237,7 @@ ifndef ABIS_TO_COMPILE_DEBUG
 else
 	@$(foreach abi,$(ABIS_TO_COMPILE_DEBUG),$(MAKE) --no-print-directory DebugABI ABI=$(abi) &&) echo
 endif
-	@$(MAKE) --no-print-directory after
+	# @$(MAKE) --no-print-directory after
 
 # Release will pass the library name (i.e. ... libopenFrameworks.a)
 # down the the @(TARGET) target
@@ -290,7 +292,10 @@ $(TARGET) : $(OF_CORE_OBJ_FILES) $(OF_CORE_OBJ_OUTPUT_PATH).compiler_flags
 	@mkdir -p $(@D)
 	$(AR) ${ARFLAGS} "$@" $(OF_CORE_OBJ_FILES)
 endif
--include $(OF_CORE_DEPENDENCY_FILES)
+
+# $(info 🌁 WOWWW $(OF_CORE_DEPENDENCY_FILES))
+
+# -include $(OF_CORE_DEPENDENCY_FILES)
 
 #.PHONY: clean CleanDebug CleanRelease
 
@@ -371,3 +376,6 @@ help:
 	@echo "make Release MAKEFILE_DEBUG=true"
 	@echo
 	@echo
+
+
+# $(error exit)

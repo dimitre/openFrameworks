@@ -162,43 +162,12 @@ endif
 
 ################################################################################
 # create path definitions
-# ifndef OF_ADDONS_PATH
-# 	OF_ADDONS_PATH=$(OF_ROOT)/addons
-# endif
 OF_ADDONS_PATH?=$(OF_ROOT)/addons
-
-# ifndef OF_EXAMPLES_PATH
-# 	OF_EXAMPLES_PATH=$(OF_ROOT)/examples
-# endif
 OF_EXAMPLES_PATH?=$(OF_ROOT)/examples
-
-# ifndef OF_APPS_PATH
-# 	OF_APPS_PATH=$(OF_ROOT)/apps
-# endif
 OF_APPS_PATH?=$(OF_ROOT)/apps
-
-# ifndef OF_LIBS_PATH
-# 	OF_LIBS_PATH=$(OF_ROOT)/libs
-# endif
 OF_LIBS_PATH?=$(OF_ROOT)/libs
 
 ################################################################################
-# ifndef OF_LIBS_OPENFRAMEWORKS_PATH
-# 	OF_LIBS_OPENFRAMEWORKS_PATH=$(OF_LIBS_PATH)/openFrameworks
-# endif
-# ifndef OF_LIBS_OF_COMPILED_PATH
-# 	OF_LIBS_OF_COMPILED_PATH=$(OF_LIBS_OPENFRAMEWORKS_PATH)Compiled
-# endif
-# ifndef OF_LIBS_OF_COMPILED_PROJECT_PATH
-# 	OF_LIBS_OF_COMPILED_PROJECT_PATH=$(OF_LIBS_OF_COMPILED_PATH)/project
-# endif
-# ifndef OF_SHARED_MAKEFILES_PATH
-# 	OF_SHARED_MAKEFILES_PATH=$(OF_LIBS_OF_COMPILED_PROJECT_PATH)/makefileCommon
-# endif
-
-# ifndef OF_CORE_LIB_PATH
-# 	OF_CORE_LIB_PATH=$(OF_LIBS_OF_COMPILED_PATH)/lib/$(PLATFORM_LIB_SUBPATH)
-# endif
 
 
 OF_LIBS_OPENFRAMEWORKS_PATH?=$(OF_LIBS_PATH)/openFrameworks
@@ -249,6 +218,8 @@ ifeq ($(findstring $(PLATFORM_VARIANT),$(AVAILABLE_PLATFORM_VARIANTS)),)
 endif
 
 # include the platform specific user and platform configuration files
+# $(info 💻 $(OF_PLATFORM_MAKEFILES)/config.$(PLATFORM_LIB_SUBPATH).$(PLATFORM_VARIANT).mk)
+
 include $(OF_PLATFORM_MAKEFILES)/config.$(PLATFORM_LIB_SUBPATH).$(PLATFORM_VARIANT).mk
 
 ifdef ABI_PATH

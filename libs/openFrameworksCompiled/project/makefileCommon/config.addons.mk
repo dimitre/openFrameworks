@@ -2,6 +2,7 @@
 # PROCESS VALID ADDONS IF AVAILABLE
 ########################################################################
 
+
 define parse_addon2
 	$(eval addon=$1) \
 	$(eval ADDON_PATHS+= $(addon)) \

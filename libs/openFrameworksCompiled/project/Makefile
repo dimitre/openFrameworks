@@ -11,10 +11,10 @@
 #
 ################################################################################
 
-# MAKEFILE_DEBUG=1
 # define the OF_SHARED_MAKEFILES location
 OF_SHARED_MAKEFILES_PATH=./makefileCommon
 
 # include the global configuration file
 include $(OF_SHARED_MAKEFILES_PATH)/config.shared.mk
+# MAKEFILE_DEBUG=1
 include $(OF_SHARED_MAKEFILES_PATH)/compile.core.mk
