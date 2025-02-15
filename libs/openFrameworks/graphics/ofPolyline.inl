@@ -6,7 +6,7 @@
 #include "ofGraphicsBaseTypes.h"
 #include "ofAppRunner.h"
 #include "ofLog.h"
-#include "ofMath.h"
+#include "ofMath.h" // ofWrap ofMap
 
 #include <glm/gtx/vector_angle.hpp>
 
@@ -942,7 +942,8 @@ float ofPolyline_<T>::getLengthAtIndexInterpolated(float findex) const {
     int i1, i2;
     float t;
     getInterpolationParams(findex, i1, i2, t);
-    return ofLerp(getLengthAtIndex(i1), getLengthAtIndex(i2), t);
+//    return ofLerp(getLengthAtIndex(i1), getLengthAtIndex(i2), t);
+	return std::lerp(getLengthAtIndex(i1), getLengthAtIndex(i2), t);
 }
 
 
@@ -1003,7 +1004,8 @@ float ofPolyline_<T>::getDegreesAtIndexInterpolated(float findex) const {
 	int i1, i2;
 	float t;
 	getInterpolationParams(findex, i1, i2, t);
-	return glm::degrees(ofLerp(getDegreesAtIndex(i1), getDegreesAtIndex(i2), t));
+//	return glm::degrees(ofLerp(getDegreesAtIndex(i1), getDegreesAtIndex(i2), t));
+	return glm::degrees(std::lerp(getDegreesAtIndex(i1), getDegreesAtIndex(i2), t));
 }
 
 
@@ -1022,7 +1024,8 @@ float ofPolyline_<T>::getRadiansAtIndexInterpolated(float findex) const {
 	int i1, i2;
 	float t;
 	getInterpolationParams(findex, i1, i2, t);
-	return ofLerp(getRadiansAtIndex(i1), getRadiansAtIndex(i2), t);
+//	return ofLerp(getRadiansAtIndex(i1), getRadiansAtIndex(i2), t);
+	return std::lerp(getRadiansAtIndex(i1), getRadiansAtIndex(i2), t);
 }
 
 //--------------------------------------------------
