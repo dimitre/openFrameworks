@@ -1,7 +1,7 @@
 #include "ofRectangle.h"
 #include "ofLog.h"
 
-#include "ofMath.h"
+#include "ofMath.h" //ofIsFloatEqual, ofLineSegmentIntersection, ofMap
 
 using std::ostream;
 using std::istream;

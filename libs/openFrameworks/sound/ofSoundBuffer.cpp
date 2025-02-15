@@ -8,7 +8,8 @@
 #include "ofSoundBuffer.h"
 #include "ofSoundUtils.h"
 #include "ofLog.h"
-#include "ofMath.h"
+
+#include "ofMath.h" // ofInterpolateHermite ofRandom
 
 #define GLM_FORCE_CTOR_INIT
 #define GLM_ENABLE_EXPERIMENTAL
