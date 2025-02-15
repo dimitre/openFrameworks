@@ -11,6 +11,7 @@
 #
 ################################################################################
 
+# MAKEFILE_DEBUG=1
 # define the OF_SHARED_MAKEFILES location
 OF_SHARED_MAKEFILES_PATH=./makefileCommon
 

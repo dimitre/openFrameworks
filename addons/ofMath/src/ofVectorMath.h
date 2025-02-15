@@ -197,7 +197,7 @@ namespace glm {
 }
 
 
-#define OF_USE_LEGACY_MATH
+//#define OF_USE_LEGACY_MATH
 #ifdef OF_USE_LEGACY_MATH
 
 class ofMatrix3x3;

@@ -162,32 +162,51 @@ endif
 
 ################################################################################
 # create path definitions
-ifndef OF_ADDONS_PATH
-	OF_ADDONS_PATH=$(OF_ROOT)/addons
-endif
-ifndef OF_EXAMPLES_PATH
-	OF_EXAMPLES_PATH=$(OF_ROOT)/examples
-endif
-ifndef OF_APPS_PATH
-	OF_APPS_PATH=$(OF_ROOT)/apps
-endif
-ifndef OF_LIBS_PATH
-	OF_LIBS_PATH=$(OF_ROOT)/libs
-endif
+# ifndef OF_ADDONS_PATH
+# 	OF_ADDONS_PATH=$(OF_ROOT)/addons
+# endif
+OF_ADDONS_PATH?=$(OF_ROOT)/addons
+
+# ifndef OF_EXAMPLES_PATH
+# 	OF_EXAMPLES_PATH=$(OF_ROOT)/examples
+# endif
+OF_EXAMPLES_PATH?=$(OF_ROOT)/examples
+
+# ifndef OF_APPS_PATH
+# 	OF_APPS_PATH=$(OF_ROOT)/apps
+# endif
+OF_APPS_PATH?=$(OF_ROOT)/apps
+
+# ifndef OF_LIBS_PATH
+# 	OF_LIBS_PATH=$(OF_ROOT)/libs
+# endif
+OF_LIBS_PATH?=$(OF_ROOT)/libs
 
 ################################################################################
-ifndef OF_LIBS_OPENFRAMEWORKS_PATH
-	OF_LIBS_OPENFRAMEWORKS_PATH=$(OF_LIBS_PATH)/openFrameworks
-endif
-ifndef OF_LIBS_OF_COMPILED_PATH
-	OF_LIBS_OF_COMPILED_PATH=$(OF_LIBS_OPENFRAMEWORKS_PATH)Compiled
-endif
-ifndef OF_LIBS_OF_COMPILED_PROJECT_PATH
-	OF_LIBS_OF_COMPILED_PROJECT_PATH=$(OF_LIBS_OF_COMPILED_PATH)/project
-endif
-ifndef OF_SHARED_MAKEFILES_PATH
-	OF_SHARED_MAKEFILES_PATH=$(OF_LIBS_OF_COMPILED_PROJECT_PATH)/makefileCommon
-endif
+# ifndef OF_LIBS_OPENFRAMEWORKS_PATH
+# 	OF_LIBS_OPENFRAMEWORKS_PATH=$(OF_LIBS_PATH)/openFrameworks
+# endif
+# ifndef OF_LIBS_OF_COMPILED_PATH
+# 	OF_LIBS_OF_COMPILED_PATH=$(OF_LIBS_OPENFRAMEWORKS_PATH)Compiled
+# endif
+# ifndef OF_LIBS_OF_COMPILED_PROJECT_PATH
+# 	OF_LIBS_OF_COMPILED_PROJECT_PATH=$(OF_LIBS_OF_COMPILED_PATH)/project
+# endif
+# ifndef OF_SHARED_MAKEFILES_PATH
+# 	OF_SHARED_MAKEFILES_PATH=$(OF_LIBS_OF_COMPILED_PROJECT_PATH)/makefileCommon
+# endif
+
+# ifndef OF_CORE_LIB_PATH
+# 	OF_CORE_LIB_PATH=$(OF_LIBS_OF_COMPILED_PATH)/lib/$(PLATFORM_LIB_SUBPATH)
+# endif
+
+
+OF_LIBS_OPENFRAMEWORKS_PATH?=$(OF_LIBS_PATH)/openFrameworks
+OF_LIBS_OF_COMPILED_PATH?=$(OF_LIBS_OPENFRAMEWORKS_PATH)Compiled
+OF_LIBS_OF_COMPILED_PROJECT_PATH?=$(OF_LIBS_OF_COMPILED_PATH)/project
+OF_SHARED_MAKEFILES_PATH?=$(OF_LIBS_OF_COMPILED_PROJECT_PATH)/makefileCommon
+OF_CORE_LIB_PATH?=$(OF_LIBS_OF_COMPILED_PATH)/lib/$(PLATFORM_LIB_SUBPATH)
+
 
 ifdef OF_LIBS_OF_COMPILED_PROJECT_PATH
 	OF_PLATFORM_MAKEFILES=$(OF_LIBS_OF_COMPILED_PROJECT_PATH)/$(PLATFORM_LIB_SUBPATH)
@@ -195,9 +214,7 @@ else
 	$(error OF_LIBS_OF_COMPILED_PATH is not defined)
 endif
 
-ifndef OF_CORE_LIB_PATH
-	OF_CORE_LIB_PATH=$(OF_LIBS_OF_COMPILED_PATH)/lib/$(PLATFORM_LIB_SUBPATH)
-endif
+
 
 ################################################################################
 # print debug information if needed
@@ -248,7 +265,6 @@ endif
 
 PLATFORM_PKG_CONFIG ?= pkg-config
 
-
 ################################ FLAGS #########################################
 # define the location of the core path
 #TODO: make sure all of the right checks are here.
@@ -285,6 +301,7 @@ OF_CORE_SOURCE_PATHS=$(filter-out $(CORE_EXCLUSIONS),$(ALL_OF_CORE_SOURCE_PATHS)
 # these have already been filtered and processed according to rules.
 # plus the root so that we don't miss the ofMain.h.
 OF_CORE_HEADER_PATHS = $(OF_LIBS_OPENFRAMEWORKS_PATH) $(OF_CORE_SOURCE_PATHS)
+# OF_CORE_HEADER_PATHS = $(OF_LIBS_OPENFRAMEWORKS_PATH) $(OF_CORE_SOURCE_PATHS)
 
 # add folders or single files to exclude fromt he compiled lib
 # grep -v "/\.[^\.]" will exclude all .hidden folders and files
@@ -373,6 +390,7 @@ OF_CORE_HEADER_FILES=$(filter-out $(CORE_EXCLUSIONS),$(shell $(FIND) $(OF_CORE_S
 ################################################################################
 # DEBUG INFO
 ################################################################################
+# MAKEFILE_DEBUG=1
 ifdef MAKEFILE_DEBUG
     $(info ========================= config.mk flags ========================)
     $(info ---OF_CORE_DEFINES_CFLAGS---)
@@ -393,3 +411,6 @@ ifdef MAKEFILE_DEBUG
     $(info ---PLATFORM_CORE_EXCLUSIONS---)
     $(foreach v, $(PLATFORM_CORE_EXCLUSIONS),$(info $(v)))
 endif
+
+
+# $(error exit)
