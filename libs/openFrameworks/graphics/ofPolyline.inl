@@ -895,13 +895,13 @@ float ofPolyline_<T>::getIndexAtLength(float length) const {
 
     int lastPointIndex = isClosed() ? points.size() : points.size()-1;
 
-    int i1 = std::clamp(std::floor(length / totalLength * lastPointIndex), 0, lengths.size()-2);   // start approximation here
+    int i1 = std::clamp(int(std::floor(length / totalLength * lastPointIndex)), 0, (int)lengths.size()-2);   // start approximation here
     int leftLimit = 0;
     int rightLimit = lastPointIndex;
 
     float distAt1, distAt2;
     for(int iterations = 0; iterations < 32; iterations ++) {	// limit iterations
-        i1 = std::clamp(i1, 0, lengths.size()-1);
+        i1 = std::clamp(i1, 0, (int)lengths.size()-1);
         distAt1 = lengths[i1];
         if(distAt1 <= length) {         // if Length at i1 is less than desired Length (this is good)
             distAt2 = lengths[i1+1];
