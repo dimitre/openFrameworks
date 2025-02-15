@@ -1087,7 +1087,7 @@ void ofMediaFoundationPlayer::setSpeed(float speed) {
 //----------------------------------------------
 void ofMediaFoundationPlayer::setVolume(float volume) {
 	if (m_spMediaEngine) {
-		double cvolume = ofClamp(volume, 0.0f, 1.0f);
+		double cvolume = std::clamp(volume, 0.0f, 1.0f);
 		HRESULT hr = m_spMediaEngine->SetVolume(cvolume);
 		if (hr != S_OK) {
 			ofLogVerbose("ofMediaFoundationPlayer :: setVolume : Unable to set volume to ") << volume << ".";

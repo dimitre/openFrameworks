@@ -1326,7 +1326,7 @@ ofLoopType ofDirectShowPlayer::getLoopState() const{
 
 void ofDirectShowPlayer::setFrame(int frame){
     if( player && player->isLoaded() ){
-        frame = ofClamp(frame, 0, getTotalNumFrames());
+        frame = std::clamp(frame, 0, getTotalNumFrames());
         return player->setAproximateFrame(frame);
     }
 }  // frame 0 = first frame...

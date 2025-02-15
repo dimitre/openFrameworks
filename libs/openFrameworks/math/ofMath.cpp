@@ -59,7 +59,7 @@ float ofRandomuf() {
 
 //--------------------------------------------------
 float ofNormalize(float value, float min, float max) {
-	return ofClamp((value - min) / (max - min), 0, 1);
+	return std::clamp((value - min) / (max - min), 0.0f, 1.0f);
 }
 
 //check for division by zero???

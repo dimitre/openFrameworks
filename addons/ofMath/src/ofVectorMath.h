@@ -28,11 +28,11 @@
 
 namespace glm {
 	//--------------------------------------------------------------
-	template <typename T, precision P>
-	inline std::ostream& operator<<(std::ostream& os, const vec<3, T, P>& vec) {
-		os << vec.x << ", " << vec.y << ", " << vec.z;
-		return os;
-	}
+//	template <typename T, precision P>
+//	inline std::ostream& operator<<(std::ostream& os, const vec<3, T, P>& vec) {
+//		os << vec.x << ", " << vec.y << ", " << vec.z;
+//		return os;
+//	}
 
 	//--------------------------------------------------------------
 	template <typename T, precision P>
@@ -46,11 +46,11 @@ namespace glm {
 	}
 
 	//--------------------------------------------------------------
-	template <typename T, precision P>
-	inline std::ostream& operator<<(std::ostream& os, const vec<2, T, P>& vec) {
-		os << vec.x << ", " << vec.y;
-		return os;
-	}
+//	template <typename T, precision P>
+//	inline std::ostream& operator<<(std::ostream& os, const vec<2, T, P>& vec) {
+//		os << vec.x << ", " << vec.y;
+//		return os;
+//	}
 
 	//--------------------------------------------------------------
 	template <typename T, precision P>
@@ -197,7 +197,7 @@ namespace glm {
 }
 
 
-
+#define OF_USE_LEGACY_MATH
 #ifdef OF_USE_LEGACY_MATH
 
 class ofMatrix3x3;

@@ -37,7 +37,7 @@ ofShader ofCubeMap::shaderBrdfLUT;
 ofTexture ofCubeMap::sBrdfLutTex;
 
 void ofCubeMap::setExposure(float aExposure) {
-	data->exposure=ofClamp(aExposure, 0.0f, 1.0f);
+	data->exposure = std::clamp(aExposure, 0.0f, 1.0f);
 }
 
 // texture management copied from ofTexture

@@ -813,7 +813,7 @@ static NSString *kShouldEnginePauseNotification = @"kShouldEnginePauseNotificati
 				}
 
 				//all the other time stuff accounts for the speed / rate, except the remaining time delay
-				remainingTime /= ofClamp(self.variSpeed.rate, 0.01, 100.0);
+				remainingTime /= std::clamp(self.variSpeed.rate, 0.01f, 100.0f);
                 
 				if( weak_self.mShouldLoop ){
                     [NSObject cancelPreviousPerformRequestsWithTarget:weak_self selector:@selector(playloop) object: weak_self.soundPlayer];
@@ -935,7 +935,7 @@ static NSString *kShouldEnginePauseNotification = @"kShouldEnginePauseNotificati
 
 - (void)position:(float)value {
 	if( [self isLoaded] ){
-		self.mRequestedPositonSeconds = ofClamp(value, 0, 1) * [self soundDurationSeconds];
+		self.mRequestedPositonSeconds = std::clamp(value, 0.0f, 1.0f) * [self soundDurationSeconds];
 		
 		if( [self isPlaying] ){
 			[self play];
@@ -953,7 +953,7 @@ static NSString *kShouldEnginePauseNotification = @"kShouldEnginePauseNotificati
 		float duration = [self soundDurationSeconds];
 		
 		if( duration > 0 ){
-			float pct = ofClamp(time/duration, 0, 1);
+			float pct = std::clamp(time/duration, 0.0f, 1.0f);
 			//NSLog(@"time is %f out of %f pct is %f", time, duration, pct );
 			return pct;
 		}
@@ -964,7 +964,7 @@ static NSString *kShouldEnginePauseNotification = @"kShouldEnginePauseNotificati
 - (void)positionMs:(int)value {
 	if( [self isLoaded] ){
         float oldDuration = [self positionSeconds];
-		self.mRequestedPositonSeconds = ofClamp(((float)value)/1000.0, 0, [self soundDurationSeconds]);
+		self.mRequestedPositonSeconds = std::clamp((float)value/1000.0f, 0.0f, [self soundDurationSeconds]);
         
         NSLog(@"positionMS: from: %f toNewPos: %f", oldDuration, self.mRequestedPositonSeconds );
 		

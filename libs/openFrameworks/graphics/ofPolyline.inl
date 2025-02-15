@@ -469,8 +469,8 @@ ofRectangle ofPolyline_<T>::getBoundingBox() const {
 template<class T>
 ofPolyline_<T> ofPolyline_<T>::getSmoothed(int smoothingSize, float smoothingShape) const {
 	int n = size();
-	smoothingSize = ofClamp(smoothingSize, 0, n);
-	smoothingShape = ofClamp(smoothingShape, 0, 1);
+	smoothingSize = std::clamp(smoothingSize, 0, n);
+	smoothingShape = std::clamp(smoothingShape, 0.0f, 1.0f);
 
 	// precompute weights and normalization
 	std::vector<float> weights;
@@ -891,17 +891,17 @@ float ofPolyline_<T>::getIndexAtLength(float length) const {
     updateCache();
 
     float totalLength = getPerimeter();
-    length = ofClamp(length, 0, totalLength);
+    length = std::clamp(length, 0.0f, totalLength);
 
     int lastPointIndex = isClosed() ? points.size() : points.size()-1;
 
-    int i1 = ofClamp(std::floor(length / totalLength * lastPointIndex), 0, lengths.size()-2);   // start approximation here
+    int i1 = std::clamp(std::floor(length / totalLength * lastPointIndex), 0, lengths.size()-2);   // start approximation here
     int leftLimit = 0;
     int rightLimit = lastPointIndex;
 
     float distAt1, distAt2;
     for(int iterations = 0; iterations < 32; iterations ++) {	// limit iterations
-        i1 = ofClamp(i1, 0, lengths.size()-1);
+        i1 = std::clamp(i1, 0, lengths.size()-1);
         distAt1 = lengths[i1];
         if(distAt1 <= length) {         // if Length at i1 is less than desired Length (this is good)
             distAt2 = lengths[i1+1];
@@ -1107,7 +1107,7 @@ void ofPolyline_<T>::calcData(int index, T &tangent, float &angle, T &rotation, 
 		tangent  = ( glm::length2(v2 - v1) > 0 ? glm::normalize(v2 - v1) : -v1 );
 		normal   = ( glm::normalize( glm::cross(  rightVector , tangent ) ) );
 		rotation = ( glm::cross( v1, v2 ) );
-		angle    = glm::pi<float>() - acosf( ofClamp( glm::dot( v1, v2 ), -1.f, 1.f ) );
+		angle    = glm::pi<float>() - acosf( std::clamp( glm::dot( v1, v2 ), -1.f, 1.f ) );
 	} else{
 		rotation = tangent = normal = T( 0.f );
 		angle    = 0.f;

@@ -1280,7 +1280,7 @@ template<typename PixelType>
 float ofPixels_<PixelType>::bicubicInterpolate (const float *patch, float x,float y, float x2,float y2, float x3,float y3) {
 	// adapted from http://www.paulinternet.nl/?page=bicubic
 	// Note that this code can produce values outside of 0...255, due to cubic overshoot.
-	// The ofClamp() prevents this from happening.
+	// The std::clamp() prevents this from happening.
 
 	float p00 = patch[ 0];
 	float p10 = patch[ 4];

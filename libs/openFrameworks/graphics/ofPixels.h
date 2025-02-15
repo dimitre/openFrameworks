@@ -740,7 +740,8 @@ void ofPixels_<PixelType>::copyFrom(const ofPixels_<SrcType> & mom){
 		if(sizeof(SrcType) == sizeof(float)) {
 			// coming from float we need a special case to clamp the values
 			for(size_t i = 0; i < mom.size(); i++){
-				pixels[i] = ofClamp(mom[i], 0, 1) * factor;
+//				pixels[i] = ofClamp(mom[i], 0, 1) * factor;
+				pixels[i] = std::clamp(mom[i], (SrcType)0.0f, (SrcType)1.0f) * factor;
 			}
 		} else{
 			// everything else is a straight scaling
