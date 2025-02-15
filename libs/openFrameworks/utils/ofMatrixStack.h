@@ -11,8 +11,6 @@
 #include "ofRectangle.h"
 #include "ofGraphicsConstants.h"
 
-#define GLM_FORCE_CTOR_INIT
-#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/mat4x4.hpp>
 #include <stack>
 
@@ -67,7 +65,7 @@ public:
 	void rotateRad(float radians, float vecX, float vecY, float vecZ);
 	void matrixMode(ofMatrixMode mode);
 	void loadIdentityMatrix (void);
-	
+
 	void loadMatrix (const glm::mat4 & m);
 	void multMatrix (const glm::mat4 & m);
 
@@ -89,16 +87,16 @@ private:
 
 	glm::mat4 * currentMatrix;
 	bool flipRenderSurfaceMatrix;
-	glm::mat4 modelMatrix;
-	glm::mat4 viewMatrix;
-	glm::mat4 viewInverse;
-	glm::mat4 modelViewMatrix;
-	glm::mat4 projectionMatrix;
-	glm::mat4 textureMatrix;
-	glm::mat4 modelViewProjectionMatrix;
-	glm::mat4 orientedProjectionMatrix;
-	glm::mat4 orientationMatrix;
-	glm::mat4 orientationMatrixInverse;
+	glm::mat4 modelMatrix { 1.0 };
+	glm::mat4 viewMatrix { 1.0 };
+	glm::mat4 viewInverse { 1.0 };
+	glm::mat4 modelViewMatrix { 1.0 };
+	glm::mat4 projectionMatrix { 1.0 };
+	glm::mat4 textureMatrix { 1.0 };
+	glm::mat4 modelViewProjectionMatrix { 1.0 };
+	glm::mat4 orientedProjectionMatrix { 1.0 };
+	glm::mat4 orientationMatrix { 1.0 };
+	glm::mat4 orientationMatrixInverse { 1.0 };
 
 	std::stack <ofRectangle> viewportHistory;
 	std::stack <glm::mat4> viewMatrixStack;

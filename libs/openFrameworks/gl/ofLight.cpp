@@ -7,17 +7,14 @@
  *
  */
 
+#include <glm/gtc/quaternion.hpp>
 
 #include "ofLight.h"
-#include "ofColor.h"
 #include "of3dUtils.h"
 #include "ofGLBaseTypes.h"
 #include "ofGLUtils.h"
 #include "ofColor.h"
 
-#define GLM_FORCE_CTOR_INIT
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtc/quaternion.hpp>
 
 #include <map>
 
@@ -103,7 +100,7 @@ ofLight::ofLight()
     setDiffuseColor(ofFloatColor(1.f,1.f,1.f));
     setSpecularColor(ofFloatColor(1.f,1.f,1.f));
 	setPointLight();
-    
+
     // assume default attenuation factors //
     setAttenuation(1.f,0.f,0.f);
 }

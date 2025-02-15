@@ -784,7 +784,7 @@ template<class V, class N, class C, class T>
 V ofMesh_<V,N,C,T>::getCentroid() const {
 	if(vertices.size() == 0) {
 		ofLogWarning("ofMesh") << "getCentroid(): mesh has no vertices, returning glm::vec3(0, 0, 0)";
-		return glm::vec3(0, 0, 0);
+		return glm::vec3(0.0f, 0.0f, 0.0f);
 	}
 
 	V sum;
@@ -1108,7 +1108,7 @@ void ofMesh_<V,N,C,T>::load(const of::filesystem::path& path){
 	ofIndexType currentFace = 0;
 
 	bool colorTypeIsUChar = false; /// flag to distinguish between uchar (more common) and float (less common) color format in ply file
-	
+
 	enum State{
 		Header,
 		VertexDef,
@@ -1118,16 +1118,16 @@ void ofMesh_<V,N,C,T>::load(const of::filesystem::path& path){
 		Faces
 	};
 
-	
+
 	enum Attribute {
 		Position,
 		Color,
 		Normal,
 		TexCoord,
 	};
-	
+
 	std::vector<Attribute> meshDefinition;
-	
+
 	data.clear();
 	State state = Header;
 
@@ -1238,7 +1238,7 @@ void ofMesh_<V,N,C,T>::load(const of::filesystem::path& path){
 				goto clean;
 			}
 			std::stringstream sline(lineStr);
-			
+
 			// read in a line of vertex elements
 			// and split it into attributes,
 			// based attribute order specified in file header
@@ -1274,7 +1274,7 @@ void ofMesh_<V,N,C,T>::load(const of::filesystem::path& path){
 				error = "attribute data does not match definition in header";
 				goto clean;
 			}
-			
+
 			currentVertex++;
 			if(currentVertex==data.getNumVertices()){
 				if(orderVertices<orderIndices){
@@ -1785,7 +1785,7 @@ void ofMesh_<V,N,C,T>::smoothNormals( float angle ) {
 		std::vector<ofMeshFace_<V,N,C,T>> triangles = getUniqueFaces();
 		std::vector<V> verts;
 		verts.reserve( triangles.size() * 3 );
-		
+
 		for(ofIndexType i = 0; i < triangles.size(); i++) {
 			for(ofIndexType j = 0; j < 3; j++) {
 				verts.emplace_back( triangles[i].getVertex(j) );
@@ -1822,7 +1822,7 @@ void ofMesh_<V,N,C,T>::smoothNormals( float angle ) {
 				"y"+ofToString(verts[i].y==-0?0:verts[i].y) +
 				"z"+ofToString(verts[i].z==-0?0:verts[i].z)
 			};
-			
+
 			if(vertHash.find(vstring) == vertHash.end()) {
 				for(ofIndexType j = 0; j < triangles.size(); j++) {
 					for(ofIndexType k = 0; k < 3; k++) {
@@ -1856,7 +1856,7 @@ void ofMesh_<V,N,C,T>::smoothNormals( float angle ) {
 					"y"+ofToString(vert.y==-0?0:vert.y) +
 					"z"+ofToString(vert.z==-0?0:vert.z)
 				};
-				
+
 				numNormals=0;
 				normal = {0.f,0.f,0.f};
 				if(vertHash.find(vstring) != vertHash.end()) {
@@ -1886,21 +1886,21 @@ void ofMesh_<V,N,C,T>::smoothNormals( float angle ) {
 template<class V, class N, class C, class T>
 void ofMesh_<V,N,C,T>::flatNormals() {
     if( getMode() == OF_PRIMITIVE_TRIANGLES) {
-        
+
         // get copy original mesh data
         auto indices = getIndices();
         auto verts = getVertices();
         auto texCoords = getTexCoords();
         auto colors = getColors();
-        
+
         // remove all data to start from scratch
         clear();
-        
+
         // add mesh data back, duplicating vertices and recalculating normals
         N normal;
         for(ofIndexType i = 0; i < indices.size(); i++) {
             ofIndexType indexCurr = indices[i];
-    
+
             if(i % 3 == 0) {
                 ofIndexType indexNext1 = indices[i + 1];
                 ofIndexType indexNext2 = indices[i + 2];
@@ -1908,18 +1908,18 @@ void ofMesh_<V,N,C,T>::flatNormals() {
                 auto e2 = verts[indexNext2] - verts[indexNext1];
                 normal = glm::normalize(glm::cross(e1, e2));
             }
-    
+
             addIndex(i);
             addNormal(normal);
-    
+
             if(indexCurr < texCoords.size()) {
                 addTexCoord(texCoords[indexCurr]);
             }
-    
+
             if(indexCurr < verts.size()) {
                 addVertex(verts[indexCurr]);
             }
-    
+
             if(indexCurr < colors.size()) {
                 addColor(colors[indexCurr]);
             }
@@ -1949,7 +1949,7 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::plane(float width, float height, int columns,
 	// the origin of the plane is at the center //
 	float halfW = width  * 0.5f;
 	float halfH = height * 0.5f;
-	
+
 	// add the vertexes //
 	for(int iy = 0; iy != rows; iy++) {
 		for(int ix = 0; ix != columns; ix++) {
@@ -2094,21 +2094,21 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::sphere( float radius, int res, ofPrimitiveMod
 /*
  -----------------------------------------------------------------------------
  This source file is part of ogre-procedural
- 
+
  For the latest info, see http://code.google.com/p/ogre-procedural/
- 
+
  Copyright (c) 2010 Michael Broutin
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -2143,7 +2143,7 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::icosphere(float radius, std::size_t iteration
 	const float phi = (1.0f + sqrt5) * 0.5f;
 	const float invnorm = 1/std::sqrt(phi*phi+1);
 
-	
+
 	// FIXME: addvertices XAXA
     sphere.addVertex(invnorm * V(-1,  phi, 0));//0
 	sphere.addVertex(invnorm * V( 1,  phi, 0));//1
@@ -2157,7 +2157,7 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::icosphere(float radius, std::size_t iteration
 	sphere.addVertex(invnorm * V(0,   -1,  phi));//9
 	sphere.addVertex(invnorm * V(-1,  -phi,0));//10
 	sphere.addVertex(invnorm * V( 1,  -phi,0));//11
-       
+
     ofIndexType firstFaces[] = {
 		0,1,2,
 		0,3,1,
@@ -2184,7 +2184,7 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::icosphere(float radius, std::size_t iteration
     for(ofIndexType i = 0; i < 60; i+=3) {
 		sphere.addTriangle(firstFaces[i], firstFaces[i+1], firstFaces[i+2]);
 	}
-        
+
 	auto& vertices = sphere.getVertices();
 	auto& faces = sphere.getIndices();
 
@@ -2243,7 +2243,7 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::icosphere(float radius, std::size_t iteration
 		u = alpha/glm::two_pi<float>()+.5f;
 		v = atan2f(vec.y, r0)/glm::pi<float>() + .5f;
 		// reverse the u coord, so the default is texture mapped left to
-		// right on the outside of a sphere 
+		// right on the outside of a sphere
 		// reverse the v coord, so that texture origin is at top left
 		texCoords.push_back(T(1.0-u,1.f-v));
 	}
@@ -2309,7 +2309,7 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::icosphere(float radius, std::size_t iteration
 	// tig: flip face(=triangle) winding order, so that we are consistent with all other ofPrimitives.
 	// i wish there was a more elegant way to do this, but anything happening before "split vertices"
 	// makes things very, very complicated.
-	
+
 	for (ofIndexType i = 0; i < faces.size(); i+=3) {
 		std::swap(faces[i+1], faces[i+2]);
 	}

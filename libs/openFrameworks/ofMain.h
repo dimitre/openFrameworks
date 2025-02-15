@@ -20,7 +20,6 @@
 
 //--------------------------
 // types
-#include "ofColor.h"
 #include "ofGraphicsBaseTypes.h"
 #include "ofParameter.h"
 
@@ -80,7 +79,6 @@
 #include "ofAppRunner.h"
 #include "ofBaseApp.h"
 #include "ofMainLoop.h"
-#include "ofWindowSettings.h"
 #if !defined(TARGET_OF_IOS) & !defined(TARGET_ANDROID) & !defined(TARGET_EMSCRIPTEN) & !defined(TARGET_RASPBERRY_PI_LEGACY)
     #include "ofAppGLFWWindow.h"
 //    #if !defined(TARGET_LINUX_ARM)
@@ -114,26 +112,23 @@
 #include "ofNode.h"
 
 //--------------------------
-#ifdef OF_LEGACY_INCLUDE_STD
-using namespace std;
-#else
-
-// this will eventually be disabled by default
-    #define OF_USE_MINIMAL_STD
-    #ifdef OF_USE_MINIMAL_STD
-    using std::cout;
-    using std::deque;
-    using std::endl;
-    using std::make_shared;
-    using std::map;
-    using std::max;
-    using std::pair;
-    using std::shared_ptr;
-    using std::string;
-    using std::stringstream;
-    using std::swap;
-    using std::to_string;
-    using std::vector;
-    using std::weak_ptr;
-    #endif
+#define OF_USE_MINIMAL_STD
+#ifdef OF_USE_MINIMAL_STD
+using std::cout;
+using std::deque;
+using std::endl;
+using std::make_shared;
+using std::map;
+using std::max;
+using std::pair;
+using std::shared_ptr;
+using std::string;
+using std::stringstream;
+using std::swap;
+using std::to_string;
+using std::vector;
+using std::weak_ptr;
 #endif
+
+#include "ofWindowSettings.h"
+#include "ofColor.h"

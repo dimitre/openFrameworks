@@ -2,8 +2,6 @@
 #include "ofAppRunner.h"
 #include "ofGraphicsBaseTypes.h"
 
-#define GLM_FORCE_CTOR_INIT
-#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/vec3.hpp>
 
 //--------------------------------------------------------------
@@ -29,6 +27,5 @@ void ofDrawArrow(const glm::vec3& start, const glm::vec3& end, float headSize) {
 //--------------------------------------------------------------
 void ofDrawRotationAxes(float radius, float stripWidth, int circleRes){
 	ofGetCurrentRenderer()->drawRotationAxes(radius,stripWidth,circleRes);
-	
-}
 
+}

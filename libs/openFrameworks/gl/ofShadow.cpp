@@ -14,8 +14,6 @@
 // MARK: ofConstants Targets
 #include "ofConstants.h"
 
-#define GLM_FORCE_CTOR_INIT
-#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 
@@ -78,7 +76,7 @@ static void releaseFBO(int aLightType){
 
 //----------------------------------------
 int ofShadow::getNumTotalPossibleShadows( int aLightType ) {
-	
+
 	GLenum texTarget = getTextureTarget( aLightType );
 	if( texTarget == GL_TEXTURE_CUBE_MAP) {
 		return 1;
@@ -92,7 +90,7 @@ int ofShadow::getNumTotalPossibleShadows( int aLightType ) {
 
 //----------------------------------------
 GLenum ofShadow::getTextureTarget( int aLightType ) {
-	
+
 //	#if !defined(TARGET_OPENGLES)
 	if( aLightType == OF_LIGHT_POINT ) {
 		#if !defined(TARGET_OPENGLES)
@@ -105,7 +103,7 @@ GLenum ofShadow::getTextureTarget( int aLightType ) {
 		#endif
 	}
 //	#endif
-	
+
 	if( aLightType == OF_LIGHT_POINT ) {
 		#ifdef GL_TEXTURE_CUBE_MAP_ARRAY
 		#ifdef glTexImage3D
@@ -133,9 +131,9 @@ void ofShadow::setDepthMapResolution( int aLightType, int awidth, int aheight ) 
 		// rendering to a cube, so needs to be the same
 		aheight = awidth;
 	}
-	
+
 	ofLogVerbose("ofShadow :: setDepthMapResolution : incoming: " ) << awidth << " x " << aheight << " current: " << getDepthMapWidth(aLightType) << " x " << getDepthMapHeight(aLightType) << " | " << ofGetFrameNum();
-	
+
 	if( awidth != getDepthMapWidth(aLightType) || aheight != getDepthMapHeight(aLightType) ) {
 		getGLData(aLightType).width = awidth;
 		getGLData(aLightType).height = aheight;
@@ -212,7 +210,7 @@ void ofShadow::enableAllShadows() {
 		ofLogWarning("ofShadow :: enableAllShadows : only works with programmable renderer.");
 		return;
 	}
-	
+
 	for(size_t i=0;i<ofShadowsData().size();i++){
 		std::shared_ptr<ofShadow::Data> shadow = ofShadowsData()[i].lock();
 		if(!shadow || shadow->index < 0 ){
@@ -312,11 +310,11 @@ std::string ofShadow::getShaderDefinesAsString() {
 		if( ofShadowsData().size() > 0 && ofLightsData().size() > 0) {
 			definesString += "#define HAS_SHADOWS 1\n";
 		}
-		
+
 		if( ofShadow::getTextureTarget( OF_LIGHT_POINT ) != GL_TEXTURE_CUBE_MAP ) {
 			definesString += "#define SHADOWS_USE_CUBE_MAP_ARRAY 1\n";
 		}
-		
+
 		if( ofShadow::getTextureTarget( OF_LIGHT_DIRECTIONAL ) != GL_TEXTURE_2D ) {
 			definesString += "#define SHADOWS_USE_TEXTURE_ARRAY 1\n";
 		}
@@ -329,7 +327,7 @@ bool ofShadow::areShadowsSupported() {
 	#if defined(TARGET_OPENGLES) && !defined(TARGET_EMSCRIPTEN)
 	return false;
 	#endif
-	
+
 	if(!ofIsGLProgrammableRenderer() ) {
 		return false;
 	}
@@ -339,18 +337,18 @@ bool ofShadow::areShadowsSupported() {
 //--------------------------------------------------------------
 void ofShadow::_updateTexDataIds() {
 	std::map<int, int> texIdMap;
-	
+
 	for(size_t i=0;i< ofShadowsData().size();i++){
 		std::shared_ptr<ofShadow::Data> shadow = ofShadowsData()[i].lock();
 		if(!shadow || !shadow->isEnabled || shadow->index < 0 ){
 			continue;
 		}
-		
+
 		if( texIdMap.count((int)shadow->lightType) < 0 ) {
 			texIdMap[(int)shadow->lightType] = 0;
 		}
 		shadow->texIndex = texIdMap[(int)shadow->lightType];
-		
+
 		texIdMap[(int)shadow->lightType]++;
 	}
 }
@@ -373,7 +371,7 @@ ofShadow::~ofShadow() {
 
 //--------------------------------------------------------------
 void ofShadow::setLightType( int atype ) {
-	
+
 	if( (ofLightType)atype != data->lightType ) {
 		clear();
 	}
@@ -387,26 +385,26 @@ void ofShadow::setLightType( int atype ) {
 
 //--------------------------------------------------------------
 void ofShadow::update( const ofLight& alight ) {
-	
+
 	if( !data->isEnabled ) {
 		return;
 	}
-	
+
 	glm::quat rq = alight.getGlobalOrientation();
 	glm::vec3 lookAtDir(glm::normalize( rq * glm::vec4(0.f,0.f,-1.f, 1.f)));
-	
+
 	setLightType( (ofLightType)alight.getType() );
-	
+
 	data->position = alight.getGlobalPosition();
 	data->direction = glm::normalize(lookAtDir);
 	data->up = rq * glm::vec3(0.0,1.0,0.0);
 	data->right = rq * glm::vec3(1.0,0.0,0.0);
-	
+
 	unsigned int targetNumMatrices = 1;
 	if(data->lightType == OF_LIGHT_POINT) {
 		targetNumMatrices = 6;
 	}
-	
+
 	if( mLookAtMats.size() != targetNumMatrices ) {
 		mLookAtMats.clear();
 		mLookAtMats.assign(targetNumMatrices, glm::mat4(1.0) );
@@ -415,7 +413,7 @@ void ofShadow::update( const ofLight& alight ) {
 		mViewProjMats.clear();
 		mViewProjMats.assign( targetNumMatrices, glm::mat4(1.0) );
 	}
-	
+
 	if( data->lightType == OF_LIGHT_SPOT || data->lightType == OF_LIGHT_AREA ) {
 		if(data->lightType == OF_LIGHT_SPOT) {
 			mFov = alight.getSpotlightCutOff() * 2.0f;
@@ -425,23 +423,23 @@ void ofShadow::update( const ofLight& alight ) {
 			mFov = 90;
 			aspectRatio = mAreaLightWidth / mAreaLightHeight;
 		}
-		
+
 		mShadowProjection = glm::perspective(glm::radians(mFov), aspectRatio, getNearClip(), getFarClip());
 		mLookAtMats[0] = glm::lookAt( data->position, data->position + data->direction, glm::vec3(0.0, 1.0, 0.0) );
 		mViewProjMats[0] = mShadowProjection * mLookAtMats[0];
 		data->shadowMatrix = biasMatrix * mViewProjMats[0];
 	} else if( data->lightType == OF_LIGHT_DIRECTIONAL ) {
-		
+
 		mOrthoScaleX = 1.0;
 		if( mDirectionalBoundsWidth > -1 ) {
 			mOrthoScaleX = mDirectionalBoundsWidth / (float)getDepthMapWidth();
 		}
-		
+
 		mOrthoScaleY = 1.0;
 		if( mDirectionalBoundsHeight > -1 ) {
 			mOrthoScaleY = mDirectionalBoundsHeight / (float)getDepthMapHeight();
 		}
-		
+
 		float viewWidth = getGLData(data->lightType).width;
 		float viewHeight = getGLData(data->lightType).height;//
 		mShadowProjection = glm::ortho(
@@ -455,7 +453,7 @@ void ofShadow::update( const ofLight& alight ) {
 		mLookAtMats[0] = glm::lookAt( data->position, data->position + data->direction, glm::vec3(0.0, 1.0, 0.0) );
 		mViewProjMats[0] = mShadowProjection * mLookAtMats[0];
 		data->shadowMatrix = biasMatrix * mViewProjMats[0];
-		
+
 	} else if( data->lightType == OF_LIGHT_POINT ) {
 		mFov = 90.f;
 		// aspect is 1.0 since width and height should be the same
@@ -468,7 +466,7 @@ void ofShadow::update( const ofLight& alight ) {
 		mLookAtMats[3] = glm::lookAt( data->position, data->position + glm::vec3(0,-1,0), glm::vec3(0, 0, -1) );
 		mLookAtMats[4] = glm::lookAt( data->position, data->position + glm::vec3(0,0,1), glm::vec3(0, -1, 0) );
 		mLookAtMats[5] = glm::lookAt( data->position, data->position + glm::vec3(0,0,-1), glm::vec3(0, -1, 0) );
-		
+
 		for( size_t i = 0; i < 6; i++ ) {
 			mViewProjMats[i] = mShadowProjection * mLookAtMats[i];
 		}
@@ -477,36 +475,36 @@ void ofShadow::update( const ofLight& alight ) {
 
 //----------------------------------------------------
 bool ofShadow::beginDepth() {
-	
+
 	if( !areShadowsSupported() ) {
 		ofLogWarning("ofShadow :: beginDepth() : shadows only work with programmable renderer.");
 		setEnabled(false);
 	}
-	
+
 	if( !getIsEnabled() ) {
 		return false;
 	}
-	
+
 	_allocateFbo();
-	
+
 	auto glRenderer = ofGetGLRenderer();
 	if(!glRenderer){
 		return false;
 	}
-	
+
 	if( data->lightType == OF_LIGHT_POINT ) {
 		if( !isSingleOmniPass() ) {
 			ofLogWarning("ofShadow :: beginDepth : must call beginDepth(cubeFace) when using point light without single pass.");
 			return false;
 		}
 	}
-	
+
 	if( data->texIndex+1 > getNumTotalPossibleShadows(data->lightType) ) {
 		ofLogWarning( "ofShadow :: too many shadows detected for light type " ) << data->lightType<<". Total supported for light type: " << getNumTotalPossibleShadows(data->lightType);
 	}
-	
+
 //
-	
+
 	glBindFramebuffer( GL_FRAMEBUFFER, getDepthMapFboId() );
 	if( data->lightType == OF_LIGHT_POINT ) {
 		// handled in the depthCubeGeom shader
@@ -515,25 +513,25 @@ bool ofShadow::beginDepth() {
 		#ifdef glFramebufferTextureLayer
 		glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, getDepthMapTexId(), 0, data->texIndex );
 		#else
-		
+
 		auto texTarget = getTextureTarget( data->lightType );
 		if( texTarget == GL_TEXTURE_2D ) {
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, getDepthMapTexId(), 0);
 		} else {
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, data->texIndex, getDepthMapTexId(), 0);
 		}
-		
+
 		//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, data->texIndex, getDepthMapTexId(), 0);
 		#endif
 	}
-	
+
 	ofPushView();
 	ofViewport(0, 0, getDepthMapWidth(), getDepthMapHeight(), false);
-	
+
 	glClear(GL_DEPTH_BUFFER_BIT);
-	
+
 	glRenderer->bind(*this);
-	
+
 	if( isGlCullingEnabled() ) {
 		glEnable(GL_CULL_FACE); // enables face culling
 		glFrontFace(mGlFrontFaceWindingOrder);
@@ -550,12 +548,12 @@ bool ofShadow::endDepth() {
 	if( isGlCullingEnabled() ) {
 		glDisable(GL_CULL_FACE);
 	}
-	
+
 	auto glRenderer = ofGetGLRenderer();
 	if(glRenderer){
 		glRenderer->unbind(*this);
 	}
-	
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	ofPopView();
 	return true;
@@ -567,13 +565,13 @@ bool ofShadow::beginDepth(GLenum aCubeFace) {
 		ofLogWarning("ofShadow :: beginDepth(cubeFace) : shadows are only available with programmable renderer.");
 		setEnabled(false);
 	}
-	
+
 	if( !getIsEnabled() ) {
 		return false;
 	}
-	
+
 	_allocateFbo();
-	
+
 	if( data->lightType != OF_LIGHT_POINT ) {
 		ofLogWarning("ofShadow :: beginDepth(cubeFace) called from a light that does not use cube map. Use beginDepth() instead.");
 		return false;
@@ -582,20 +580,20 @@ bool ofShadow::beginDepth(GLenum aCubeFace) {
 		ofLogWarning("ofShadow :: beginDepth(cubeFace) called using single pass, should be calling beginDepth().");
 		return false;
 	}
-	
+
 	if( data->texIndex+1 > getNumTotalPossibleShadows(data->lightType) ) {
 		ofLogWarning( "ofShadow :: too many shadows detected for light type " ) << data->lightType<<". Total supported for light type: " << getNumTotalPossibleShadows(data->lightType);
 	}
-	
+
 //	if( data->lightType == OF_LIGHT_POINT ) {
 //		glEnable(GL_TEXTURE_CUBE_MAP_ARRAY);
 //	}
-	
+
 	const auto glRenderer = ofGetGLRenderer();
 	if(!glRenderer){
 		return false;
 	}
-	
+
 	glBindFramebuffer(GL_FRAMEBUFFER, getDepthMapFboId());
 	if( getTextureTarget(OF_LIGHT_POINT) != GL_TEXTURE_CUBE_MAP ){
 		#ifdef glFramebufferTextureLayer
@@ -610,9 +608,9 @@ bool ofShadow::beginDepth(GLenum aCubeFace) {
 	ofPushView();
 	ofViewport(0, 0, getDepthMapWidth(), getDepthMapHeight(), false);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	
+
 	glRenderer->bind(*this,aCubeFace);
-		
+
 	if( isGlCullingEnabled() ) {
 		glEnable(GL_CULL_FACE); // enables face culling
 		glFrontFace(mGlFrontFaceWindingOrder);
@@ -629,10 +627,10 @@ bool ofShadow::endDepth(GLenum aCubeFace) {
 //--------------------------------------------------------------
 void ofShadow::clear() {
 	_checkFbos();
-	
+
 	mLookAtMats.clear();
 	mViewProjMats.clear();
-	
+
 }
 
 //--------------------------------------------------------------
@@ -641,7 +639,7 @@ void ofShadow::setEnabled( bool ab ) {
 		ofLogWarning("ofShadow :: setEnabled : shadows only work with programmable renderer");
 		ab = false;
 	}
-	
+
 	data->isEnabled = ab;
 	if( data->isEnabled ) {
 		_allocate();
@@ -671,16 +669,16 @@ int ofShadow::getNumShadowDepthPasses() const {
 
 //--------------------------------------------------------------
 void ofShadow::setSingleOmniPass( bool ab ) {
-	
+
 	if( ofGetGLRenderer() && ofGetGLRenderer()->getGLVersionMajor() < 4 ) {
 		ab = false;
 	}
-	
+
 #ifdef TARGET_OPENGLES
 	// setting to false because the single pass uses a geometry shader
 	ab = false;
 #endif
-	
+
 	if(mBSinglePass != ab ) {
 		clear();
 	}
@@ -730,7 +728,7 @@ void ofShadow::drawFrustum() {
 //--------------------------------------------------------------
 void ofShadow::_drawFrustum( const glm::vec3& aup, const glm::vec3& aright, const glm::vec3& afwd ) {
 	auto corners = getFrustumCorners(aup, aright, afwd );
-	
+
 	ofPushStyle();
 
 	ofSetColor( ofColor::green );
@@ -739,12 +737,12 @@ void ofShadow::_drawFrustum( const glm::vec3& aup, const glm::vec3& aright, cons
 	ofDrawArrow( data->position, data->position+data->right * 100.0f, 10.0);
 	ofSetColor( ofColor::blue );
 	ofDrawArrow( data->position, data->position+data->direction * 100.0f, 10.0);
-	
+
 	vector<ofFloatColor> colors;
-	
+
 	ofMesh mesh;
 	mesh.setMode(OF_PRIMITIVE_LINES);
-	
+
 	for( int i = 0; i < 4; i++ ) {
 		mesh.addVertex( corners[i] );
 		if( i == 3 ) {
@@ -753,10 +751,10 @@ void ofShadow::_drawFrustum( const glm::vec3& aup, const glm::vec3& aright, cons
 			mesh.addVertex(corners[i+1]);
 		}
 	}
-	
+
 	colors.assign( 8, ofColor(220, 90, 190) );
 	mesh.addColors(colors);
-	
+
 	for( int i = 0; i < 4; i++ ) {
 		mesh.addVertex( corners[i+4] );
 		if( i == 3 ) {
@@ -765,11 +763,11 @@ void ofShadow::_drawFrustum( const glm::vec3& aup, const glm::vec3& aright, cons
 			mesh.addVertex(corners[i+4+1]);
 		}
 	}
-	
+
 	colors.assign( 8, ofColor(220, 220, 90) );
 	mesh.addColors(colors);
-	
-	
+
+
 	for( int i = 0; i < 4; i++ ) {
 		if( data->lightType == OF_LIGHT_SPOT || data->lightType == OF_LIGHT_AREA) {
 			mesh.addVertex(data->position);
@@ -780,7 +778,7 @@ void ofShadow::_drawFrustum( const glm::vec3& aup, const glm::vec3& aright, cons
 	}
 	colors.assign( 8, ofColor(220) );
 	mesh.addColors(colors);
-	
+
 	if( data->lightType == OF_LIGHT_DIRECTIONAL ) {
 		for( int i = 0; i < 4; i++ ) {
 			mesh.addVertex(data->position);
@@ -789,21 +787,21 @@ void ofShadow::_drawFrustum( const glm::vec3& aup, const glm::vec3& aright, cons
 		colors.assign( 8, ofColor(220) );
 		mesh.addColors(colors);
 	}
-	
-	
+
+
 	mesh.draw();
-	
+
 	ofPopStyle();
 }
 
 //--------------------------------------------------------------
 std::vector<glm::vec3> ofShadow::getFrustumCorners( const glm::vec3& aup, const glm::vec3& aright, const glm::vec3& afwd ) {
-	
+
 	if( data->lightType == OF_LIGHT_DIRECTIONAL) {
-		
+
 		glm::vec3 fc = data->position + afwd * getFarClip();
 		glm::vec3 nc = data->position + afwd * getNearClip();
-		
+
 		float viewWidth = getGLData(data->lightType).width;
 		float viewHeight = getGLData(data->lightType).height;
 		if( mDirectionalBoundsWidth > 0 ) {
@@ -812,62 +810,62 @@ std::vector<glm::vec3> ofShadow::getFrustumCorners( const glm::vec3& aup, const 
 		if( mDirectionalBoundsHeight > 0 ) {
 			viewHeight = mDirectionalBoundsHeight;
 		}
-		
+
 		float hw = 0.5f * viewWidth;
 		float hh = 0.5f * viewHeight;
-		
+
 		glm::vec3 X = glm::normalize(aright);
 		glm::vec3 Y = glm::normalize(aup);
-		
+
 		std::vector<glm::vec3> corners(8);
 		// ftl, ftr, fbl, fbr
 		corners[0] = fc + (Y*hh) - (X*hw);
 		corners[1] = fc + (Y*hh) + (X*hw);
 		corners[2] = fc + (-Y*hh) + (X*hw);
 		corners[3] = fc + (-Y*hh) - (X*hw);
-		
+
 		corners[4] = nc + (Y*hh) - (X*hw);
 		corners[5] = nc + (Y*hh) + (X*hw);
 		corners[6] = nc + (-Y*hh) + (X*hw);
 		corners[7] = nc + (-Y*hh) - (X*hw);
-		
+
 		return corners;
-		
+
 	}
-		
+
 	glm::vec3 Z = glm::normalize(afwd);
 	glm::vec3 X = glm::normalize(aright);
 	glm::vec3 Y = glm::normalize(aup);
-	
+
 	glm::vec3 p = data->position;
-	
+
 	glm::vec3 nc = p + Z * getNearClip();
 	glm::vec3 fc = p + Z * getFarClip();
-	
+
 	float ratio = (float)getDepthMapWidth() / (float)getDepthMapHeight();
-	
+
 	if( data->lightType == OF_LIGHT_AREA ) {
 		ratio = mAreaLightWidth / mAreaLightHeight;
 	}
-	
+
 	float Hnear = 2.f * std::tan( glm::radians( mFov ) / 2.f ) * getNearClip();
 	float Wnear = Hnear * ratio;
-	
+
 	float Hfar = 2.f * std::tan( glm::radians( mFov ) / 2.f ) * getFarClip();
 	float Wfar = Hfar * ratio;
-	
+
 	std::vector<glm::vec3> corners(8);
-	
+
 	corners[0] = fc + ( Y * Hfar/2.0f) - ( X * Wfar/2.0f); // ftl
 	corners[1] = fc + ( Y * Hfar/2.0f) + ( X * Wfar/2.0f); // ftr
 	corners[2] = fc - ( Y * Hfar/2.0f) + ( X * Wfar/2.0f); // fbl
 	corners[3] = fc - ( Y * Hfar/2.0f) - ( X * Wfar/2.0f); // fbr
-	
+
 	corners[4] = nc + ( Y * Hnear/2.0f) - ( X * Wnear/2.0f); // ntl
 	corners[5] = nc + ( Y * Hnear/2.0f) + ( X * Wnear/2.0f); // ntr
 	corners[6] = nc - ( Y * Hnear/2.0f) + ( X * Wnear/2.0f); // nbl
 	corners[7] = nc - ( Y * Hnear/2.0f) - ( X * Wnear/2.0f); // nbr
-	
+
 	return corners;
 }
 
@@ -903,7 +901,7 @@ void ofShadow::updateDepth(const ofShader & shader,ofGLProgrammableRenderer & re
 	shader.setUniform3f("uLightPos", data->position );
 	shader.setUniform1f("uNearPlane", data->nearClip );
 	shader.setUniform1f("uFarPlane", data->farClip );
-	
+
 	if( data->lightType == OF_LIGHT_POINT ) {
 		if( isSingleOmniPass() ) {
 			for( unsigned int i = 0; i < 6; i++ ) {
@@ -927,7 +925,7 @@ void ofShadow::updateDepth(const ofShader & shader,GLenum aCubeFace,ofGLProgramm
 	shader.setUniform3f("uLightPos", data->position );
 	shader.setUniform1f("uNearPlane", data->nearClip );
 	shader.setUniform1f("uFarPlane", data->farClip );
-		
+
 	if( aCubeFace < mViewProjMats.size() ) {
 		shader.setUniformMatrix4f("lightsViewProjectionMatrix", mViewProjMats[aCubeFace] );
 	}
@@ -968,9 +966,9 @@ void ofShadow::_allocateFbo() {
 	if(getGLData(data->lightType).bFboAllocated) {
 		return;
 	}
-	
+
 	GLenum gl_read_status = GL_FRAMEBUFFER_UNSUPPORTED;
-	
+
 	GLenum textureTarget = getTextureTarget(data->lightType);
 #if !defined(TARGET_OPENGLES)
 	int depthComponent = GL_DEPTH_COMPONENT32F;
@@ -982,23 +980,23 @@ void ofShadow::_allocateFbo() {
 	int depthComponent = GL_DEPTH_COMPONENT;
 	int glType = GL_UNSIGNED_SHORT;
 #endif
-	
+
 	glBindTexture(textureTarget, getDepthMapTexId() );
-	
+
 	if( data->lightType == OF_LIGHT_POINT ) {
 		// Create the cube map depth buffer
 		#if !defined(TARGET_OPENGLES)
 		glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 		#endif
-		
+
 		// OES_depth_texture_cube_map
-		
+
 		if( textureTarget == GL_TEXTURE_CUBE_MAP ) {
 			for (GLint i = 0 ; i < 6 ; i++) {
 				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, depthComponent, getDepthMapWidth(), getDepthMapWidth(), 0, GL_DEPTH_COMPONENT, glType, NULL);
 			}
 		}
-		
+
 		glTexParameteri(textureTarget, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(textureTarget, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(textureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -1008,7 +1006,7 @@ void ofShadow::_allocateFbo() {
 		#endif
 		#if defined( GL_TEXTURE_CUBE_MAP_ARRAY ) && defined(glTexImage3D)
 		if( textureTarget == GL_TEXTURE_CUBE_MAP_ARRAY ) {
-			
+
 			glTexImage3D(GL_TEXTURE_CUBE_MAP_ARRAY, 0, depthComponent, getDepthMapWidth(), getDepthMapWidth(), getGLData(data->lightType).totalShadows * 6, 0, GL_DEPTH_COMPONENT, glType, NULL);
 		}
 		#endif
@@ -1016,10 +1014,10 @@ void ofShadow::_allocateFbo() {
 		if( textureTarget == GL_TEXTURE_2D ) {
 			glTexImage2D(GL_TEXTURE_2D, 0, depthComponent, getDepthMapWidth(), getDepthMapHeight(), 0, GL_DEPTH_COMPONENT, glType, NULL);
 		}
-		
+
 		glTexParameteri(textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		
+
 		//-- This is to allow usage of shadow2DProj function in the shader --//
 		if( data->lightType != OF_LIGHT_AREA ) {
 			#ifdef GL_TEXTURE_COMPARE_MODE
@@ -1035,7 +1033,7 @@ void ofShadow::_allocateFbo() {
 			#endif
 		}
 		#endif
-		
+
 		#if defined(GL_CLAMP_TO_BORDER) && !defined(TARGET_EMSCRIPTEN)
 		glTexParameteri(textureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 		glTexParameteri(textureTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
@@ -1045,7 +1043,7 @@ void ofShadow::_allocateFbo() {
 		glTexParameteri(textureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(textureTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		#endif
-		
+
 		#ifdef GL_TEXTURE_2D_ARRAY
 		if( textureTarget == GL_TEXTURE_2D_ARRAY ) {
 			#ifdef glTexImage3D
@@ -1055,12 +1053,12 @@ void ofShadow::_allocateFbo() {
 		#endif
 	}
 	glBindTexture(textureTarget, 0);
-	
-	
+
+
 	// Create the fbo
 	glBindFramebuffer(GL_FRAMEBUFFER, getDepthMapFboId() );
 	#if defined(TARGET_OPENGLES)
-	
+
 	if( textureTarget == GL_TEXTURE_CUBE_MAP ) {
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, NULL, 0);
 		for(int c = 0; c < 6; c++) {
@@ -1072,27 +1070,27 @@ void ofShadow::_allocateFbo() {
 	#else
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, getDepthMapTexId(), 0);
 	#endif
-	
+
 	#ifndef TARGET_OPENGLES
 	// Disable writes to the color buffer
 	glDrawBuffer(GL_NONE);
-	
+
 	// Disable reads from the color buffer
 	glReadBuffer(GL_NONE);
 	#endif
-	
+
 	gl_read_status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-	
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	
+
 	if (gl_read_status != GL_FRAMEBUFFER_COMPLETE) {
 		releaseFBO(data->lightType);
 		ofLogError("ofShadow :: _allocateFbo : Frame buffer error, status") << gl_read_status;
 	} else {
 		getGLData(data->lightType).bFboAllocated = true;
 	}
-	
-	
+
+
 	ofLogVerbose("xxxxx ofShadow::_allocateFbo xxxxxxxxxxxxxxxxxxxxxxxxx") << std::endl;
 }
 
@@ -1105,7 +1103,7 @@ void ofShadow::_checkFbos() {
 	preNumShadows[OF_LIGHT_SPOT] = getGLData(OF_LIGHT_SPOT).totalShadows;
 	preNumShadows[OF_LIGHT_AREA] = getGLData(OF_LIGHT_AREA).totalShadows;
 	_updateNumShadows();
-	
+
 	if(getGLData(OF_LIGHT_POINT).totalShadows != preNumShadows[OF_LIGHT_POINT]) {
 		releaseFBO((int)OF_LIGHT_POINT);
 	}
@@ -1122,12 +1120,12 @@ void ofShadow::_checkFbos() {
 
 //--------------------------------------------------------------
 void ofShadow::_updateNumShadows() {
-	
+
 	getGLData(OF_LIGHT_POINT).totalShadows = 0;
 	getGLData(OF_LIGHT_DIRECTIONAL).totalShadows = 0;
 	getGLData(OF_LIGHT_SPOT).totalShadows = 0;
 	getGLData(OF_LIGHT_AREA).totalShadows = 0;
-	
+
 	for(size_t i=0; i < ofShadowsData().size(); i++){
 		if(!ofShadowsData()[i].expired()) {
 			auto shadow = ofShadowsData()[i].lock();
@@ -1148,11 +1146,11 @@ bool ofShadow::setupShadowDepthShader(ofShader& ashader, const std::string aShad
 
 bool ofShadow::setupShadowDepthShader(ofShader& ashader, int aLightType, const std::string aShaderMain, bool abSinglePass) const {
 	std::string gversion = "#version 150\n";
-	
+
 	#ifdef TARGET_OPENGLES
 	gversion = "#version 300 es\n";
 	#endif
-	
+
 	std::string nShaderMain = aShaderMain;
 	if (ofIsStringInString(nShaderMain, "#version")) {
 		size_t vpos = nShaderMain.find("#version");
@@ -1174,7 +1172,7 @@ bool ofShadow::setupShadowDepthShader(ofShader& ashader, int aLightType, const s
 	#ifdef TARGET_OPENGLES
 	gversion += "precision highp float;\n";
 	#endif
-	
+
 	std::string tdefines = "#define SINGLE_PASS\n";
 
 	bool bDepthCubeSinglePass = false;
@@ -1208,22 +1206,22 @@ bool ofShadow::setupShadowDepthShader(ofShader& ashader, int aLightType, const s
 
 void ofShadow::initShaders(ofGLProgrammableRenderer & renderer) const{
 	auto rendererShaders = shaders.find(&renderer);
-	
+
 	if(rendererShaders == shaders.end() ){
 		shaders[&renderer] = std::make_shared<ofShadow::Shaders>();
-				
+
 		std::string gversion = "#version 150\n";
 		#ifdef TARGET_OPENGLES
 		gversion = "#version 300 es\nprecision highp float;\n";
 		#endif
-		
+
 		std::string vertString = depthVertexShaderSource+depthVertexShader_Main;
-		
+
 		shaders[&renderer]->depth.setupShaderFromSource(GL_VERTEX_SHADER,gversion+"#define SINGLE_PASS\n"+vertString);
 		shaders[&renderer]->depth.setupShaderFromSource(GL_FRAGMENT_SHADER,gversion+"#define SINGLE_PASS\n"+depthFragShaderSource);
 		shaders[&renderer]->depth.bindDefaults();
 		shaders[&renderer]->depth.linkProgram();
-		
+
 		#ifndef TARGET_OPENGLES
 		shaders[&renderer]->depthCube.setupShaderFromSource(GL_VERTEX_SHADER,gversion+"#define CUBE_MAP_SINGLE_PASS\n"+vertString);
 		shaders[&renderer]->depthCube.setupShaderFromSource(GL_FRAGMENT_SHADER,gversion+"#define CUBE_MAP_SINGLE_PASS\n"+depthFragShaderSource);
@@ -1235,9 +1233,7 @@ void ofShadow::initShaders(ofGLProgrammableRenderer & renderer) const{
 		shaders[&renderer]->depthCubeMultiPass.setupShaderFromSource(GL_FRAGMENT_SHADER,gversion+"#define CUBE_MAP_MULTI_PASS\n"+depthFragShaderSource);
 		shaders[&renderer]->depthCubeMultiPass.bindDefaults();
 		shaders[&renderer]->depthCubeMultiPass.linkProgram();
-				
+
 	}
-	
+
 }
-
-

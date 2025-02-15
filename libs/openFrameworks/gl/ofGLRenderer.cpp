@@ -474,7 +474,7 @@ void ofGLRenderer::begin(const ofFbo & fbo, ofFboMode mode) {
 	if (mode & OF_FBOMODE_PERSPECTIVE) {
 		setupScreenPerspective();
 	} else {
-		glm::mat4 m = glm::mat4(1.0);
+		glm::mat4 m { 1.0f };
 		glGetFloatv(GL_PROJECTION_MATRIX, glm::value_ptr(m));
 		m = matrixStack.getOrientationMatrixInverse() * m;
 		ofMatrixMode currentMode = matrixStack.getCurrentMatrixMode();
@@ -606,7 +606,7 @@ void ofGLRenderer::bind(const ofTexture & texture, int location) {
 	if (ofGetUsingNormalizedTexCoords()) {
 		matrixMode(OF_MATRIX_TEXTURE);
 		pushMatrix();
-		glm::mat4 m = glm::mat4(1.0);
+		glm::mat4 m { 1.0f };
 
 #ifndef TARGET_OPENGLES
 		if (texture.texData.textureTarget == GL_TEXTURE_RECTANGLE_ARB)
@@ -660,7 +660,7 @@ void ofGLRenderer::unbind(const ofCamera & camera) {
 void ofGLRenderer::pushView() {
 	getCurrentViewport();
 
-	glm::mat4 m = glm::mat4(1.0);
+	glm::mat4 m { 1.0f };
 	ofMatrixMode matrixMode = matrixStack.getCurrentMatrixMode();
 	glGetFloatv(GL_PROJECTION_MATRIX, glm::value_ptr(m));
 	matrixStack.matrixMode(OF_MATRIX_PROJECTION);
@@ -757,7 +757,7 @@ bool ofGLRenderer::texturesNeedVFlip() const {
 //----------------------------------------------------------
 void ofGLRenderer::setupScreenPerspective(float width, float height, float fov, float nearDist, float farDist) {
 	float viewW, viewH;
-	if (width < 0 || height < 0) {
+	if (width < 0.0f || height < 0.0f) {
 		ofRectangle currentViewport = getCurrentViewport();
 
 		viewW = currentViewport.width;
@@ -767,29 +767,29 @@ void ofGLRenderer::setupScreenPerspective(float width, float height, float fov, 
 		viewH = height;
 	}
 
-	float eyeX = viewW / 2;
-	float eyeY = viewH / 2;
+	float eyeX = viewW * 0.5f;
+	float eyeY = viewH * 0.5f;
 	float halfFov = glm::pi<float>() * fov / 360.0f;
 	float theTan = tanf(halfFov);
 	float dist = eyeY / theTan;
 	float aspect = (float)viewW / viewH;
 
-	if (nearDist == 0) nearDist = dist / 10.0f;
-	if (farDist == 0) farDist = dist * 10.0f;
+	if (nearDist == 0.0f) nearDist = dist / 10.0f;
+	if (farDist == 0.0f) farDist = dist * 10.0f;
 
 	matrixMode(OF_MATRIX_PROJECTION);
 	glm::mat4 persp = glm::perspective(glm::radians(fov), aspect, nearDist, farDist);
 	loadMatrix(persp);
 
 	matrixMode(OF_MATRIX_MODELVIEW);
-	glm::mat4 lookAtMat = glm::lookAt(glm::vec3(eyeX, eyeY, dist), glm::vec3(eyeX, eyeY, 0), glm::vec3(0, 1, 0));
+	glm::mat4 lookAtMat = glm::lookAt(glm::vec3(eyeX, eyeY, dist), glm::vec3(eyeX, eyeY, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	loadViewMatrix(lookAtMat);
 }
 
 //----------------------------------------------------------
 void ofGLRenderer::setupScreenOrtho(float width, float height, float nearDist, float farDist) {
 	float viewW, viewH;
-	if (width < 0 || height < 0) {
+	if (width < 0.0f || height < 0.0f) {
 		ofRectangle currentViewport = getCurrentViewport();
 
 		viewW = currentViewport.width;
@@ -805,7 +805,7 @@ void ofGLRenderer::setupScreenOrtho(float width, float height, float nearDist, f
 	loadMatrix(orthoMat); // make ortho our new projection matrix.
 
 	matrixMode(OF_MATRIX_MODELVIEW);
-	loadViewMatrix(glm::mat4(1.0));
+	loadViewMatrix({ 1.0f });
 }
 
 //----------------------------------------------------------
@@ -960,7 +960,7 @@ void ofGLRenderer::loadMatrix(const float * m) {
  *	@param	matrixMode_  Which matrix mode to query
  */
 glm::mat4 ofGLRenderer::getCurrentMatrix(ofMatrixMode matrixMode_) const {
-	glm::mat4 mat = glm::mat4(1.0);
+	glm::mat4 mat { 1.0f };
 	switch (matrixMode_) {
 	case OF_MATRIX_MODELVIEW:
 		glGetFloatv(GL_MODELVIEW_MATRIX, glm::value_ptr(mat));
@@ -986,10 +986,10 @@ glm::mat4 ofGLRenderer::getCurrentOrientationMatrix() const {
 //----------------------------------------------------------
 void ofGLRenderer::multMatrix(const glm::mat4 & m) {
 	if (matrixStack.getCurrentMatrixMode() == OF_MATRIX_PROJECTION) {
-		glm::mat4 current = glm::mat4(1.0);
+		glm::mat4 current { 1.0f };
 		glGetFloatv(GL_PROJECTION_MATRIX, glm::value_ptr(current));
 		if (matrixStack.customMatrixNeedsFlip()) {
-			current = glm::scale(current, glm::vec3(1, -1, 1));
+			current = glm::scale(current, glm::vec3(1.0f, -1.0f, 1.0f));
 		}
 		matrixStack.loadMatrix(current);
 		matrixStack.multMatrix(m);
@@ -1633,14 +1633,15 @@ void ofGLRenderer::drawString(std::string textString, float x, float y, float z)
 
 		rViewport = getCurrentViewport();
 
-		glm::mat4 modelview = glm::mat4(1.0), projection = glm::mat4(1.0);
+		glm::mat4 modelview { 1.0f };
+		glm::mat4 projection { 1.0f };
 		glGetFloatv(GL_MODELVIEW_MATRIX, glm::value_ptr(modelview));
 		glGetFloatv(GL_PROJECTION_MATRIX, glm::value_ptr(projection));
 		glm::mat4 mat = matrixStack.getOrientationMatrixInverse() * projection * modelview;
-		glm::vec4 dScreen4 = mat * glm::vec4(x, y, z, 1.0);
+		glm::vec4 dScreen4 = mat * glm::vec4(x, y, z, 1.0f);
 		glm::vec3 dScreen = glm::vec3(dScreen4) / dScreen4.w;
-		dScreen += glm::vec3(1.0);
-		dScreen *= 0.5;
+		dScreen += glm::vec3(1.0f);
+		dScreen *= 0.5f;
 
 		dScreen.x *= rViewport.width;
 		dScreen.x += rViewport.x;
@@ -1648,7 +1649,7 @@ void ofGLRenderer::drawString(std::string textString, float x, float y, float z)
 		dScreen.y *= rViewport.height;
 		dScreen.y += rViewport.y;
 
-		if (dScreen.z >= 1) {
+		if (dScreen.z >= 1.0f) {
 			return;
 		}
 

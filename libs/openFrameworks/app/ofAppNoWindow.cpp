@@ -126,8 +126,8 @@ private:
 	// FIXME: this is not standard with the other window modes.
 	void setOrientation(ofOrientation, bool){}
 	bool isVFlipped() const{return true;}
-	glm::mat4 getCurrentMatrix(ofMatrixMode) const{return glm::mat4(1.0);};
-	glm::mat4 getCurrentOrientationMatrix() const{return glm::mat4(1.0);}
+	glm::mat4 getCurrentMatrix(ofMatrixMode) const{ return { 1.0f }; };
+	glm::mat4 getCurrentOrientationMatrix() const{ return { 1.0f }; }
 	void matrixMode(ofMatrixMode){}
 	void loadIdentityMatrix(){}
 	void loadMatrix(const glm::mat4&){}
@@ -136,8 +136,8 @@ private:
 	void multMatrix(const float*){}
 	void loadViewMatrix(const glm::mat4&){}
 	void multViewMatrix(const glm::mat4&){}
-	glm::mat4 getCurrentViewMatrix() const{return glm::mat4(1.0);}
-	glm::mat4 getCurrentNormalMatrix() const{return glm::mat4(1.0);}
+	glm::mat4 getCurrentViewMatrix() const{ return { 1.0f }; }
+	glm::mat4 getCurrentNormalMatrix() const{ return { 1.0f }; }
 	void enableAntiAliasing(){}
 	void disableAntiAliasing(){}
 

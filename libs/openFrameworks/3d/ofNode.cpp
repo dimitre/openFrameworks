@@ -1,8 +1,6 @@
 #include "ofNode.h"
 #include "of3dGraphics.h"
 
-#define GLM_FORCE_CTOR_INIT
-#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/mat4x4.hpp>
 
 //----------------------------------------
@@ -435,9 +433,9 @@ void ofNode::rotateAround(const glm::quat& q, const glm::vec3& point) {
 	//	glm::mat4 m = getLocalTransformMatrix();
 	//	m.setTranslation(point);
 	//	m.rotate(q);
-	
+
 	setGlobalPosition(q * (getGlobalPosition() - point) + point);
-	
+
 	onOrientationChanged();
 	onPositionChanged();
 }
@@ -479,10 +477,7 @@ void ofNode::lookAt(const glm::vec3& lookAtPosition, glm::vec3 upVector) {
 	if (glm::length(zaxis) > 0) {
 		auto xaxis = glm::normalize(glm::cross(upVector, zaxis));
 		auto yaxis = glm::cross(zaxis, xaxis);
-		glm::mat3 m;
-		m[0] = xaxis;
-		m[1] = yaxis;
-		m[2] = zaxis;
+		glm::mat3 m { xaxis, yaxis, zaxis };
 
 		setGlobalOrientation(glm::toQuat(m));
 	}
@@ -625,15 +620,15 @@ void ofNode::orbitDeg(float longitude, float latitude, float radius, ofNode& cen
 
 //----------------------------------------
 void ofNode::orbitDeg(float longitude, float latitude, float radius, const glm::vec3& centerPoint) {
-	glm::quat q = 
+	glm::quat q =
 	          glm::angleAxis(glm::radians(longitude), glm::vec3(0, 1, 0))
 	        * glm::angleAxis(glm::radians(latitude),  glm::vec3(1, 0, 0));
 
 	glm::vec4 p { 0.f, 0.f, 1.f, 0.f };	   // p is a direction, not a position, so .w == 0
-	
+
 	p = q * p;							   // rotate p on unit sphere based on quaternion
 	p = p * radius;						   // scale p by radius from its position on unit sphere
-	
+
 //	setGlobalPosition(centerPoint + p);
 	setGlobalPosition(centerPoint + glm::vec3{p.x, p.y, p.z} );
 	setOrientation(q);
@@ -649,12 +644,12 @@ void ofNode::orbitRad(float longitude, float latitude, float radius, ofNode& cen
 
 //----------------------------------------
 void ofNode::orbitRad(float longitude, float latitude, float radius, const glm::vec3& centerPoint) {
-	glm::quat q = 
-	          glm::angleAxis(longitude, glm::vec3(0, 1, 0)) 
+	glm::quat q =
+	          glm::angleAxis(longitude, glm::vec3(0, 1, 0))
 	        * glm::angleAxis(latitude,  glm::vec3(1, 0, 0));
 
 	glm::vec4 p { 0.f, 0.f, 1.f, 0.f };	   // p is a direction, not a position, so .w == 0
-	
+
 	p = q * p;							   // rotate p on unit sphere based on quaternion
 	p = p * radius;						   // scale p by radius from its position on unit sphere
 
@@ -721,5 +716,3 @@ void ofNode::createMatrix() {
 
 	updateAxis();
 }
-
-

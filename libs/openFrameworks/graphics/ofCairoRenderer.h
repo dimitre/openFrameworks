@@ -189,8 +189,8 @@ private:
 	bool b3D;
 	of3dGraphics graphics3d;
 
-	glm::mat4 projection;
-	glm::mat4 modelView;
+	glm::mat4 projection { 1.0f };
+	glm::mat4 modelView { 1.0f };
 	ofRectangle viewportRect, originalViewport;
 
 	std::stack<glm::mat4> projectionStack;

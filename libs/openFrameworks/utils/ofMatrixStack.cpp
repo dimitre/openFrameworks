@@ -10,8 +10,6 @@
 #include "ofGraphicsBaseTypes.h"
 #include "ofLog.h"
 
-#define GLM_FORCE_CTOR_INIT
-#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/mat4x4.hpp>
 #include <glm/gtx/transform.hpp>
 
@@ -145,7 +143,7 @@ glm::ivec2 ofMatrixStack::getRenderSurfaceSize() const {
 		// FIXME: FramebufferSize
 		// return currentWindow->getWindowSize();
 		return currentWindow->getFramebufferSize();
-		
+
 	} else {
 		return {};
 	}
@@ -351,7 +349,7 @@ void ofMatrixStack::clearStacks(){
 	if (tmpCounter > 0 ){
 		ofLogWarning("ofMatrixStack") << "clearStacks(): found " << tmpCounter << " extra modelview matrices on the stack, did you forget to pop somewhere?";
 	}
-	
+
 	tmpCounter = 0;
 	while (!projectionMatrixStack.empty()){
 		projectionMatrixStack.pop();

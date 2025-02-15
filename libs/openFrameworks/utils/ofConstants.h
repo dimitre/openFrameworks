@@ -8,8 +8,6 @@
 #define OF_VERSION_PATCH 0
 #define OF_VERSION_PRE_RELEASE "master"
 
-// This enables glm's old behavior of initializing with non garbage values
-#define GLM_FORCE_CTOR_INIT
 
 //-------------------------------
 

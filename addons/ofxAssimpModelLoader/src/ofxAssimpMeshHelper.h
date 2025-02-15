@@ -12,9 +12,8 @@
 #include "ofxAssimpTexture.h"
 #include "ofVbo.h"
 #include "ofMesh.h"
-#define GLM_FORCE_CTOR_INIT
-#define GLM_ENABLE_EXPERIMENTAL
-#include "glm/mat4x4.hpp"
+
+#include <glm/mat4x4.hpp>
 
 struct aiMesh;
 
@@ -50,7 +49,7 @@ public:
 	ofMesh cachedMesh;
 	bool validCache = false;
 
-	glm::mat4 matrix;
+	glm::mat4 matrix { 1.0f };
 
 protected:
 	//for normal, specular, etc - we include the diffuse too with a null deleter

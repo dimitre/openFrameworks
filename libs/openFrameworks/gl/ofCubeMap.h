@@ -8,8 +8,6 @@
 
 #include "ofShader.h"
 
-#define GLM_FORCE_CTOR_INIT
-#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/mat4x4.hpp>
 
 class ofVboMesh;
@@ -161,7 +159,7 @@ protected:
 
 	GLint mGLInternalFormat;
 
-	glm::mat4 projectionMat;
+	glm::mat4 projectionMat { 1.0f };
 
 	static ofTexture sBrdfLutTex;
 	static ofVboMesh sCubeMesh;

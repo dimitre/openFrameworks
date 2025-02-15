@@ -109,7 +109,7 @@ glm::mat4 ofRendererCollection::getCurrentMatrix(ofMatrixMode matrixMode_) const
 	   return renderers.front()->getCurrentMatrix(matrixMode_);
    } else {
 	   ofLogWarning() << "No renderer in renderer collection, but current matrix requested. Returning identity matrix.";
-	   return glm::mat4(1.0f);
+	   return { 1.0f };
    }
 }
 
@@ -119,7 +119,7 @@ glm::mat4 ofRendererCollection::getCurrentOrientationMatrix() const{
 	   return renderers.front()->getCurrentOrientationMatrix();
    } else {
 	   ofLogWarning() << "No renderer in renderer collection, but current matrix requested. Returning identity matrix.";
-	   return glm::mat4(1.0f);
+	   return { 1.0f };
    }
 }
 
@@ -129,7 +129,7 @@ glm::mat4 ofRendererCollection::getCurrentNormalMatrix() const{
 	   return renderers.front()->getCurrentNormalMatrix();
    } else {
 	   ofLogWarning() << "No renderer in renderer collection, but current matrix requested. Returning identity matrix.";
-	   return glm::mat4(1.0f);
+	   return { 1.0f };
    }
 }
 
@@ -365,7 +365,7 @@ glm::mat4 ofRendererCollection::getCurrentViewMatrix() const{
 	   return renderers.front()->getCurrentViewMatrix();
    }else{
 	   ofLogWarning() << "No renderer in renderer collection, but current view matrix requested. Returning identity matrix.";
-	   return glm::mat4(1.0);
+	   return { 1.0f };
    }
 }
 

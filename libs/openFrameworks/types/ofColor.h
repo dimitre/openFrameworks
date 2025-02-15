@@ -1,8 +1,8 @@
 #pragma once
 
-#define GLM_FORCE_CTOR_INIT
-#define GLM_ENABLE_EXPERIMENTAL
+#define GLM_FORCE_CTOR_INIT // NEEDED
 #include <glm/vec3.hpp>
+
 //#include <glm/ext/scalar_common.hpp>
 #include <iostream>
 

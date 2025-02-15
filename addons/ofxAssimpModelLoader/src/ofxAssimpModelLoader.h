@@ -20,6 +20,7 @@
 #include "ofMesh.h"
 #include "ofMath.h"
 #include "ofConstants.h"
+
 #include <assimp/Importer.hpp>
 #include <unordered_map>
 #include <map>
@@ -187,7 +188,7 @@ class ofxAssimpModelLoader{
 		std::vector<glm::vec3> rotAxis;
 		glm::vec3 scale {1.0,1.0,1.0};
 		glm::vec3 pos {0.0,0.0,0.0};
-		glm::mat4 modelMatrix; // { glm::mat4() }
+		glm::mat4 modelMatrix { 1.0f }; // { glm::mat4() }
 
 		std::vector<ofLight> lights;
 		std::map<

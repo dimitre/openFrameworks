@@ -1,7 +1,6 @@
 #include "ofSoundPlayer.h"
 #include "ofLog.h"
-#define GLM_FORCE_CTOR_INIT
-#define GLM_ENABLE_EXPERIMENTAL
+
 #include <glm/ext/scalar_common.hpp>
 
 #ifdef OF_SOUND_PLAYER_AV_ENGINE
@@ -244,7 +243,7 @@ bool ofSoundPlayer::isLoaded() const{
 	if( player ){
 		return player->isLoaded();
 	} else {
-		return false; 
+		return false;
 	}
 }
 

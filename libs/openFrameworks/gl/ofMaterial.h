@@ -3,8 +3,6 @@
 #include "ofMaterialBaseTypes.h"
 #include "ofShader.h"
 
-#define GLM_FORCE_CTOR_INIT
-#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/fwd.hpp>
 #include <glm/vec2.hpp>
 #include <glm/mat4x4.hpp>
@@ -175,7 +173,7 @@ public:
 	/// \param aMaterialTextureType the material texture type to query
 	/// \return the shader uniform name
 	static std::string getUniformName(const ofMaterialTextureType & aMaterialTextureType);
-	
+
 	static std::string getTextureTypeAsString(const ofMaterialTextureType & aMaterialTextureType);
 
 	/// \is PBR supported on this platform.
@@ -196,13 +194,13 @@ public:
 	/// \param atype GL_VERTEX_SHADER or GL_FRAGMENT_SHADER
 	/// \param skey unique key to identify the vertex and fragment sources. If loading dynamically, use same key to overwrite previous instances.
 	void setShaderMain(std::string aShaderSrc, GLenum atype, std::string skey);
-	
+
 	/// \brief override the default depth main shader functions for vertex, ie for correct shadows if
 	/// displacement is happening on the vertex shader.
 	/// \param aShaderSrc the shader source as a string
 	/// \param skey unique key to identify the vertex source. If loading dynamically, use same key to overwrite previous instances.
 	void setDepthShaderMain(std::string aShaderSrc, std::string skey);
-	
+
 	/// \brief used by shadows to determine if this material has a unique depth shader.
 	/// \return if material has a unique depth shader.
 	bool hasDepthShader() const;
@@ -389,8 +387,8 @@ public:
 	const std::string getDefinesString() const;
 
 	void setCustomShader(std::shared_ptr<ofShader> aCustomShader);
-	
-	
+
+
 	struct PbrLightData {
 		float enabled;
 		// 0 = pointlight 1 = directionlight, 2 = spotlight, 3 = area light
@@ -418,7 +416,7 @@ public:
 
 	PbrLightData lights[100];
 
-	
+
 
 protected:
 	/// \brief unbind the material, override the default so we can set current shader to nullptr
@@ -430,7 +428,7 @@ private:
 
 	const std::string getShaderStringId() const;
 	const std::string getDepthShaderStringId() const;
-	
+
 	void initDepthShaders(ofGLProgrammableRenderer& renderer) const;
 	const ofShader & getShadowDepthShader( const ofShadow& ashadow, ofGLProgrammableRenderer & renderer ) const;
 
@@ -488,7 +486,7 @@ private:
 	// unordered_map works well here on modern compilers
 	std::unordered_map<ofMaterialTextureType, std::shared_ptr<ofTexture> > mLocalTextures;
 //	std::map<ofMaterialTextureType, std::shared_ptr<ofTexture>> mLocalTextures;
-	
+
 	// custom depth shaders for lighting
 	struct DepthShaders {
 		std::unordered_map<unsigned int, std::shared_ptr<ofShader> > shaders;
@@ -497,13 +495,13 @@ private:
 	mutable std::unordered_map<ofGLProgrammableRenderer *, std::shared_ptr<DepthShaders>> mDepthShaders;
 	static std::unordered_map<ofGLProgrammableRenderer *, std::unordered_map<std::string, std::weak_ptr<DepthShaders>>> depthShadersMap;
 	mutable std::unordered_map<std::string, int> mDepthShaderIdsToRemove;
-	
+
 	std::shared_ptr<ofShader> customShader;
 	bool bHasCustomShader = false;
 	bool mBDefinesDirty = true;
 	mutable const ofShader * currentRenderShader = nullptr;
 	bool bPrintedPBRRenderWarning = false;
 	bool mBHasDepthShader = false;
-	
-	
+
+
 };

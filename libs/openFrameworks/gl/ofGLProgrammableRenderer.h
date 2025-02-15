@@ -409,12 +409,12 @@ private:
 	
 	
 	struct matricesBuffer {
-		glm::mat4 modelMatrix;
-		glm::mat4 viewMatrix;
-		glm::mat4 modelViewMatrix;
-		glm::mat4 modelViewProjectionMatrix;
-		glm::mat4 projectionMatrix;
-		glm::mat4 textureMatrix;
+		glm::mat4 modelMatrix { 1.0f };
+		glm::mat4 viewMatrix { 1.0f };
+		glm::mat4 modelViewMatrix { 1.0f };
+		glm::mat4 modelViewProjectionMatrix { 1.0f };
+		glm::mat4 projectionMatrix { 1.0f };
+		glm::mat4 textureMatrix { 1.0f };
 	} matrices;
 	ofBufferObject buffer;
 };

@@ -2,7 +2,6 @@
 #include "ofUtils.h"
 #include "ofGraphicsBaseTypes.h"
 
-#define GLM_FORCE_CTOR_INIT
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/vector_angle.hpp>
 #include <limits>

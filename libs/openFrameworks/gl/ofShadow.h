@@ -57,7 +57,7 @@ public:
 		ofShadowType shadowType = OF_SHADOW_TYPE_PCF_LOW;
 #endif
 		
-		glm::mat4 shadowMatrix;
+		glm::mat4 shadowMatrix { 1.0f };
 		float strength = 0.5;
 		
 		int texIndex = 0;
@@ -187,7 +187,7 @@ protected:
 	
 	bool mBSinglePass = true;
 	
-	glm::mat4 mShadowProjection = glm::mat4(1.0);
+	glm::mat4 mShadowProjection { 1.0f };
 	
 	std::vector<glm::mat4> mLookAtMats;
 	std::vector<glm::mat4> mViewProjMats;
@@ -205,12 +205,12 @@ protected:
 	bool mBEnableCulling = true;
 	GLenum mGlFrontFaceWindingOrder = GL_CW;
 	
-	const glm::mat4 biasMatrix = glm::mat4(
-										   0.5, 0.0, 0.0, 0.0,
-										   0.0, 0.5, 0.0, 0.0,
-										   0.0, 0.0, 0.5, 0.0,
-										   0.5, 0.5, 0.5, 1.0
-										   );
+	const glm::mat4 biasMatrix {
+		0.5, 0.0, 0.0, 0.0,
+		0.0, 0.5, 0.0, 0.0,
+		0.0, 0.0, 0.5, 0.0,
+		0.5, 0.5, 0.5, 1.0
+	};
     
 private:	
 	struct Shaders{

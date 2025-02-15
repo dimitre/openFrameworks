@@ -45,12 +45,10 @@ enum ofLoopType : short;
 enum ofOrientation : short;
 
 struct ofBoundingBox{
-	glm::vec3 min { 0, 0, 0 };
-	glm::vec3 max { 0, 0, 0 };
+	glm::vec3 min { 0.0f };
+	glm::vec3 max { 0.0f };
 };
 
-#define GLM_FORCE_CTOR_INIT
-#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/mat4x4.hpp>
 
 /// \brief Contains general information about the style of ofGraphics
@@ -202,7 +200,7 @@ public:
 	///
 	/// \return the width.
 	virtual float getWidth() const = 0;
-	
+
 	// TODO: Implement correctly for texture, videos, etc.
 	virtual glm::vec2 getSize() {
 		return { getWidth(), getHeight() };
@@ -852,7 +850,7 @@ public:
 	///
 	/// \param lineWidth The line width to request this renderer to use.
 	virtual void setLineWidth(float lineWidth) = 0;
-	
+
 	/// \brief Set the point size this renderer should use when drawing points.
 	///
 	/// \param pointSize The points size to request this renderer to use.
