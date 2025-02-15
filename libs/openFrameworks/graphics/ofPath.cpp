@@ -6,6 +6,7 @@ using std::vector;
 #if defined(TARGET_EMSCRIPTEN)
 	ofTessellator ofPath::tessellator;
 #elif HAS_TLS
+// Removed in c++23
     thread_local ofTessellator ofPath::tessellator;
 #endif
 
