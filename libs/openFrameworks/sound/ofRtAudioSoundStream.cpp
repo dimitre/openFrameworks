@@ -3,9 +3,7 @@
 #include "ofUtils.h"
 #include "ofAppRunner.h"
 #include "ofLog.h"
-#include "ofConstants.h"
 #include <RtAudio.h>
-#include <cstring>
 
 using std::vector;
 using std::shared_ptr;
@@ -305,7 +303,7 @@ int ofRtAudioSoundStream::rtAudioCallback(void *outputBuffer, void *inputBuffer,
 			rtStreamPtr->settings.inCallback(rtStreamPtr->inputBuffer);
 		}
 		// [damian] not sure what this is for? assuming it's for underruns? or for when the sound system becomes broken?
-		std::memset(fPtrIn, 0, nFramesPerBuffer * nInputChannels * sizeof(float));
+		memset(fPtrIn, 0, nFramesPerBuffer * nInputChannels * sizeof(float));
 	}
 
 	if (nOutputChannels > 0) {
