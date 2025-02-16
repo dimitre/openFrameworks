@@ -17,7 +17,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E4B27C1410CBEB8E00536013"
                BuildableName = "openFrameworks.a"
-               BlueprintName = "openFrameworks-static"
+               BlueprintName = "openFrameworks"
                ReferencedContainer = "container:openFrameworksLib.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -52,7 +52,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B27C1410CBEB8E00536013"
             BuildableName = "openFrameworks.a"
-            BlueprintName = "openFrameworks-static"
+            BlueprintName = "openFrameworks"
             ReferencedContainer = "container:openFrameworksLib.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
