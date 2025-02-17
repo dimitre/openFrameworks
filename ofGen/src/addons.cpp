@@ -379,6 +379,9 @@ void gatherProjectInfo() {
 		} else if (t == "vscode") {
 			conf.templates.emplace_back(new ofTemplateVSCode());
 			project.templates.emplace_back(conf.templates.back());
+		} else {
+			alert("invalid template name : " + t + ", exiting", 95);
+			std::exit(1);
 		}
 	}
 

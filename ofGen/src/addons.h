@@ -1,11 +1,6 @@
 #pragma once
 
-// #include "utils.h"
-// #include <filesystem>
-// namespace fs = std::filesystem;
-
 #include <string>
-
 #include <map>
 #include <vector>
 
@@ -14,9 +9,9 @@
 
 struct ofTemplate;
 struct ofAddon;
-/*
-ofProject is a determinate OF project, it can have multiple addons, and multiple templates.
-*/
+
+// ofProject is a determinate OF project, it can have multiple addons, and multiple templates.
+
 struct ofProject {
 public:
 	fs::path path;
@@ -31,9 +26,11 @@ public:
 	std::string name { "" };
 	fs::path path;
 
-	// Testing it here now.
+	// All files scanned
 	std::map<std::string, std::vector<fs::path>> filesMap;
+	// All exclusion filter paths to be tested
 	std::map<std::string, std::vector<fs::path>> exclusionsMap;
+	// Remaining files after filtering.
 	std::map<std::string, std::vector<fs::path>> filteredMap;
 
 	std::map<std::string, std::vector<std::string>> addonProperties;
