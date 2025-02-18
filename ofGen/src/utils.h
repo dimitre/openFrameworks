@@ -16,7 +16,7 @@ using std::string;
 using std::vector;
 
 static inline std::string getPGVersion() {
-	return "ofGen v0.1.6";
+	return "ofGen v0.1.7";
 }
 
 inline std::string colorText(const std::string & s, int color) {
@@ -36,7 +36,7 @@ const std::string sign = colorText(R"(
 ▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
 ▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
 Project Generator for OpenFrameworks (OFVISION)
-                Prototype v0.1.6⚡️
+                Prototype v0.1.7⚡️
 )",
 							 91)
 
@@ -153,7 +153,6 @@ struct genConfig {
 	// TESTING
 	std::vector<fs::path> additionalSources;
 
-	std::vector<std::string> frameworks;
 	// vector <fs::path> projectPaths {
 	// 	{ "../apps/werkApps/Pulsar" }
 	// };
@@ -165,6 +164,9 @@ struct genConfig {
 	std::vector<std::string> platforms { getPlatformString(), "osx" };
 
 	std::vector<std::string> addonsNames;
+
+	std::vector<std::string> frameworks;
+	std::vector<std::string> defines;
 
 	std::vector<ofTemplate *> templates;
 

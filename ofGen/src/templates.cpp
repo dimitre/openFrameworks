@@ -7,6 +7,112 @@
 
 using nlohmann::json;
 
+std::string generateUUID(const string & input) {
+	return uuidxx::uuid::Generate().ToString(false);
+}
+
+void copyTemplateFile::info() {
+	alert("	copyTemplateFile", 96);
+	alert("	from " + from.string(), 2);
+	alert("	to " + to.string(), 90);
+	for (auto & f : findReplaces) {
+		if (!empty(f.first)) {
+			alert("	└─ Replacing " + f.first + " : " + f.second, 0);
+			// std::cout << "	└─ Replacing " << f.first << " : " << f.second << std::endl;
+		}
+	}
+	std::cout << std::endl;
+}
+
+void copyTemplateFile::load() {
+	if (fs::exists(from)) {
+		isLoaded = true;
+		std::ifstream fileFrom(from);
+		// std::string contents((std::istreambuf_iterator<char>(fileFrom)), std::istreambuf_iterator<char>());
+		contents = std::string((std::istreambuf_iterator<char>(fileFrom)), std::istreambuf_iterator<char>());
+		fileFrom.close();
+	}
+}
+
+bool copyTemplateFile::run() {
+	info();
+	if (fs::exists(from)) {
+
+		if (findReplaces.size() || appends.size()) { // || transform != nullptr
+			// Load file, replace contents, append data to content, make transformation and then write to destination.
+
+			if (!isLoaded) {
+				load();
+			}
+			// std::ifstream fileFrom(from);
+			// // std::string contents((std::istreambuf_iterator<char>(fileFrom)), std::istreambuf_iterator<char>());
+			// contents = std::string((std::istreambuf_iterator<char>(fileFrom)), std::istreambuf_iterator<char>());
+			// fileFrom.close();
+
+			// if (transform != nullptr) {
+			// 	(*transform)(contents);
+			// }
+			// alert("AFTER TRANSFORM", 95);
+			// cout << contents << endl;
+
+			for (auto & f : findReplaces) {
+				// Avoid processing empty pairs
+				if (empty(f.first) && empty(f.second)) {
+					continue;
+				}
+				replaceAll(contents, f.first, f.second);
+			}
+
+			for (auto & a : appends) {
+				alert("		└─append " + a, 2);
+				contents += "\n" + a;
+			}
+
+			std::ofstream fileTo(to);
+			try {
+				fileTo << contents;
+			} catch (std::exception & e) {
+				std::cerr << "Error saving to " << to << std::endl;
+				std::cerr << e.what() << std::endl;
+				return false;
+			} catch (...) {
+				std::cerr << "Error saving to " << to << std::endl;
+
+				return false;
+			}
+
+		} else {
+			// no replacements, straight copy
+			if (isFolder) {
+				try {
+					// Remove exists? Remove destination folder?
+					if (!fs::exists(to)) {
+						fs::copy(from, to, fs::copy_options::recursive | fs::copy_options::update_existing);
+					}
+				} catch (fs::filesystem_error & e) {
+					// catch (const std::exception & e) {
+					std::cerr << "Error copying template files: " << e.what() << std::endl;
+					return false;
+				}
+			} else {
+				try {
+					fs::copy(from, to, fs::copy_options::update_existing);
+				} catch (fs::filesystem_error & e) {
+					std::cerr << "error copying template file " << from << " : " << to << std::endl;
+					std::cerr << e.what() << std::endl;
+					return false;
+				}
+			}
+		}
+	}
+
+	else {
+		alert("input file not found " + from.string(), 95);
+		return false;
+	}
+	return true;
+}
+
 string ofTemplateMacos::addFile(const fs::path & path, const fs::path & folder, const fileProperties & fp) {
 	string UUID { "" };
 	//	alert("xc::addFile " + path.string() + " :folder:" + folder.string(), 31);
@@ -438,243 +544,34 @@ void ofTemplateMacos::edit(std::string & str) {
 void ofTemplateMacos::save() {
 	alert("ofTemplateMacos::save()", 92);
 
-	edit(copyTemplateFiles[0].contents);
-	// alert ("CONTENTS AFTER EDIT", 95);
-	// cout <<  copyTemplateFiles[0].contents << endl;
+	// This will edit json file in memory. it reads from template, edits and save with the new name
+	// touching HD a lot less than before
+	//
+	// alert ("BEFORE EDIT", 95);
+	// cout << copyTemplateFiles[1].contents.size() << endl;
+	edit(copyTemplateFiles[1].contents);
+	// alert ("AFTER EDIT", 95);
+	// cout << copyTemplateFiles[1].contents.size() << endl;
 
-	return;
-
-	// WONT EXECUTE.
-	fs::path fileName { conf.projectPath / (conf.projectName + ".xcodeproj/project.pbxproj") };
-
-	std::ifstream contents(fileName);
-	using nlohmann::json;
-	json j;
-	try {
-		j = json::parse(contents);
-	} catch (json::parse_error & ex) {
-		std::cerr << "JSON parse error at byte " << ex.byte << std::endl;
-		std::cerr << "fileName " << fileName << std::endl;
-		std::cerr << contents.rdbuf() << std::endl;
-	}
-
-	contents.close();
-
-	for (auto & c : commands) {
-		//			alert (c, 31);
-		// readable comments enabled now.
-		if (c != "" && c[0] != '#') {
-			vector<string> cols { ofSplitString(c, " ") };
-			string thispath { cols[1] };
-			// cout << thispath << endl;
-			// stringReplace(thispath, "\:", "\/");
-
-			std::replace(thispath.begin(), thispath.end(), ':', '/');
-
-			// cout << thispath << endl;
-			// cout << "----" << endl;
-			// ofStringReplace(thispath, ":", "/");
-
-			if (thispath.substr(thispath.length() - 1) != "/") {
-				//if (cols[0] == "Set") {
-				try {
-					json::json_pointer p { json::json_pointer(thispath) };
-
-					if (cols[2] == "string") {
-						// find position after find word
-						auto stringStart { c.find("string ") + 7 };
-						try {
-							j[p] = c.substr(stringStart);
-						} catch (std::exception & e) {
-
-							std::cerr << "substr " << c.substr(stringStart) << "\n"
-									  << "pointer " << p << "\n"
-									  << e.what()
-									  << std::endl;
-							std::exit(1);
-						}
-						// j[p] = cols[3];
-					} else if (cols[2] == "array") {
-						try {
-							//								j[p] = {};
-							j[p] = json::array({});
-						} catch (std::exception & e) {
-							std::cerr << "array " << e.what() << std::endl;
-							std::exit(1);
-						}
-					}
-				} catch (std::exception & e) {
-					std::cerr << "json error " << std::endl;
-					std::cout << "pointer " << thispath << std::endl;
-					std::cerr << e.what() << std::endl;
-					std::cerr << "--------------------------------------------------" << std::endl;
-					std::exit(1);
-				}
-
-			} else {
-				thispath = thispath.substr(0, thispath.length() - 1);
-				//					cout << thispath << endl;
-				json::json_pointer p = json::json_pointer(thispath);
-				try {
-					// Fixing XCode one item array issue
-					if (!j[p].is_array()) {
-						auto v { j[p] };
-						j[p] = json::array();
-						if (!v.is_null()) {
-							j[p].emplace_back(v);
-						}
-					}
-					j[p].emplace_back(cols[3]);
-
-				} catch (std::exception & e) {
-					std::cerr << "json error " << std::endl;
-					std::cerr << e.what() << std::endl;
-					std::cerr << thispath << std::endl;
-					std::cerr << "-------------------------" << std::endl;
-				}
-			}
+	if (conf.defines.size()) {
+		std::string allDefines = "GCC_PREPROCESSOR_DEFINITIONS=$(inherited)";
+		for (auto & d : conf.defines) {
+			allDefines += " " + d;
 		}
+		copyTemplateFiles[0].appends.emplace_back(allDefines);
 	}
-
-	std::ofstream jsonFile(fileName);
-
-	// This is not pretty but address some differences in nlohmann json 3.11.2 to 3.11.3
-	auto dump = j.dump(1, '	');
-	if (dump[0] == '[') {
-		dump = j[0].dump(1, '	');
-	}
-
-	try {
-		jsonFile << dump;
-	} catch (std::exception & e) {
-		std::cerr << "Error saving json to " << fileName << ": " << e.what() << std::endl;
-		;
-		// return false;
-	} catch (...) {
-		std::cerr << "Error saving json to " << fileName << std::endl;
-		;
-		// return false;
-	}
-	jsonFile.close();
-
 	//	for (auto & c : commands) cout << c << endl;
 	// return true;
-}
-
-std::string generateUUID(const string & input) {
-	return uuidxx::uuid::Generate().ToString(false);
-}
-
-void copyTemplateFile::info() {
-	alert("	copyTemplateFile", 96);
-	alert("	from " + from.string(), 2);
-	alert("	to " + to.string(), 90);
-	for (auto & f : findReplaces) {
-		if (!empty(f.first)) {
-			alert("	└─ Replacing " + f.first + " : " + f.second, 0);
-			// std::cout << "	└─ Replacing " << f.first << " : " << f.second << std::endl;
-		}
-	}
-	std::cout << std::endl;
-}
-
-void copyTemplateFile::load() {
-	if (fs::exists(from)) {
-		isLoaded = true;
-		std::ifstream fileFrom(from);
-		// std::string contents((std::istreambuf_iterator<char>(fileFrom)), std::istreambuf_iterator<char>());
-		contents = std::string((std::istreambuf_iterator<char>(fileFrom)), std::istreambuf_iterator<char>());
-		fileFrom.close();
-	}
-}
-
-bool copyTemplateFile::run() {
-	info();
-	if (fs::exists(from)) {
-
-		if (findReplaces.size() || appends.size()) { // || transform != nullptr
-			// Load file, replace contents, append data to content, make transformation and then write to destination.
-
-			if (!isLoaded) {
-				load();
-			}
-			// std::ifstream fileFrom(from);
-			// // std::string contents((std::istreambuf_iterator<char>(fileFrom)), std::istreambuf_iterator<char>());
-			// contents = std::string((std::istreambuf_iterator<char>(fileFrom)), std::istreambuf_iterator<char>());
-			// fileFrom.close();
-
-			// if (transform != nullptr) {
-			// 	(*transform)(contents);
-			// }
-			// alert("AFTER TRANSFORM", 95);
-			// cout << contents << endl;
-
-			for (auto & f : findReplaces) {
-				// Avoid processing empty pairs
-				if (empty(f.first) && empty(f.second)) {
-					continue;
-				}
-				replaceAll(contents, f.first, f.second);
-			}
-
-			for (auto & a : appends) {
-				alert("		└─append " + a, 2);
-				contents += "\n" + a;
-			}
-
-			std::ofstream fileTo(to);
-			try {
-				fileTo << contents;
-			} catch (std::exception & e) {
-				std::cerr << "Error saving to " << to << std::endl;
-				std::cerr << e.what() << std::endl;
-				return false;
-			} catch (...) {
-				std::cerr << "Error saving to " << to << std::endl;
-
-				return false;
-			}
-
-		} else {
-			// no replacements, straight copy
-			if (isFolder) {
-				try {
-					// Remove exists? Remove destination folder?
-					if (!fs::exists(to)) {
-						fs::copy(from, to, fs::copy_options::recursive | fs::copy_options::update_existing);
-					}
-				} catch (fs::filesystem_error & e) {
-					// catch (const std::exception & e) {
-					std::cerr << "Error copying template files: " << e.what() << std::endl;
-					return false;
-				}
-			} else {
-				try {
-					fs::copy(from, to, fs::copy_options::update_existing);
-				} catch (fs::filesystem_error & e) {
-					std::cerr << "error copying template file " << from << " : " << to << std::endl;
-					std::cerr << e.what() << std::endl;
-					return false;
-				}
-			}
-		}
-	}
-
-	else {
-		alert("input file not found " + from.string(), 95);
-		return false;
-	}
-	return true;
 }
 
 void ofTemplateMake::load() {
 	alert("ofTemplateMake::load()", 92);
 
-	copyTemplateFiles.push_back({ path / "Makefile",
-		conf.projectPath / "Makefile" });
-
 	copyTemplateFiles.push_back({ path / "config.make",
 		conf.projectPath / "config.make" });
+
+	copyTemplateFiles.push_back({ path / "Makefile",
+		conf.projectPath / "Makefile" });
 }
 
 void ofTemplateZed::load() {
@@ -731,20 +628,18 @@ void ofTemplateMacos::load() {
 		rootReplacements = { "../../..", conf.ofPath.string() };
 	}
 
+	copyTemplateFiles.push_back({ path / "Project.xcconfig",
+		conf.projectPath / "Project.xcconfig",
+		{ rootReplacements } });
+
 	copyTemplateFiles.push_back({ path / "emptyExample.xcodeproj" / "project.pbxproj",
 		xcodeProject / "project.pbxproj",
 		{ { "emptyExample", conf.projectName },
 			rootReplacements } });
-
-	// copyTemplateFiles.back().transform = ofTemplateMacos::edit;
-	// copyTemplateFiles.back().transform = ofTemplateMacos::edit;
+	// We load this because it will edit json in memory, save later.
 	copyTemplateFiles.back().load();
 
 	// copyTemplateFiles.back().transform = trans;
-
-	copyTemplateFiles.push_back({ path / "Project.xcconfig",
-		conf.projectPath / "Project.xcconfig",
-		{ rootReplacements } });
 
 	// try to copy all files from macos / ios - if they exist in the template
 	for (auto & f : {
@@ -1001,14 +896,13 @@ struct fileJson {
 	}
 };
 
+
 fileJson workspace;
 fileJson cppProperties;
 
 void ofTemplateVSCode::load() {
 	alert("ofTemplateVSCode::load()", 92);
-
 	// bool ok = ofTemplateMake::load();
-
 	copyTemplateFiles.push_back({ path / ".vscode",
 		conf.projectPath / ".vscode" });
 	copyTemplateFiles.back().isFolder = true;
@@ -1019,16 +913,13 @@ void ofTemplateVSCode::load() {
 	copyTemplateFiles.push_back({ path / "emptyExample.code-workspace",
 		conf.projectPath / workspace.fileName });
 
-	// copyTemplateFiles.push_back({ path / "compile_flags.txt",
-	// conf.projectPath / "compile_flags.txt" });
-
 	workspace.load();
 	cppProperties.load();
 
 	for (auto & a : conf.addons) {
-		alert("parsing addon " + a->name, 97);
+		// alert("parsing addon " + a->name, 97);
 		for (auto & f : a->filteredMap) {
-			alert(">>>" + f.first);
+			// alert(">>>" + f.first);
 			for (auto & s : f.second) {
 				alert("   " + s.string(), 92);
 			}
@@ -1037,10 +928,6 @@ void ofTemplateVSCode::load() {
 		for (auto & f : a->filteredMap["includes"]) {
 			workspace.addPath(a->path);
 		}
-
-		// std::string inc { "-I" + fs::path(a->path / f).string() };
-		// copyTemplateFiles[0].appends.emplace_back(inc);
-		// }
 	}
 }
 
@@ -1063,5 +950,13 @@ void ofTemplateMake::save() {
 			}
 		}
 		addonsMake.close();
+	}
+
+	if (conf.defines.size()) {
+		std::string allDefines = "PROJECT_DEFINES =";
+		for (auto & d : conf.defines) {
+			allDefines += " " + d;
+		}
+		copyTemplateFiles[0].appends.emplace_back(allDefines);
 	}
 }

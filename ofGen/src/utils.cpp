@@ -190,7 +190,9 @@ bool genConfig::loadYML() {
 		}
 
 
+		// FIXME: no lugar disso fazer mesmo um map<string, vector<string>> pra parsear todos de uma vez.
 		conf.frameworks = nodeToStrings("frameworks");
+		conf.defines = nodeToStrings("defines");
 
 		conf.additionalSources = nodeToPaths("sources");
 		if (conf.additionalSources.size()) {

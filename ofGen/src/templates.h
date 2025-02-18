@@ -200,7 +200,6 @@ public:
 		path = conf.ofPath / "scripts" / "templates" / name;
 	}
 	void load() override;
-	// void addAddon(ofAddon * a) override;
 	void save() override;
 };
 
@@ -222,5 +221,7 @@ public:
 	}
 	void load() override;
 	void save() override;
+
+
 	// void addAddon(ofAddon * a) override;
 };
