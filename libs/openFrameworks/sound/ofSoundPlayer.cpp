@@ -1,8 +1,6 @@
 #include "ofSoundPlayer.h"
 #include "ofLog.h"
 
-#include <glm/ext/scalar_common.hpp>
-
 #ifdef OF_SOUND_PLAYER_AV_ENGINE
 #include "ofAVEngineSoundPlayer.h"
 #define OF_SOUND_PLAYER_TYPE ofAVEngineSoundPlayer
@@ -160,7 +158,7 @@ void ofSoundPlayer::setVolume(float vol){
 //--------------------------------------------------------------------
 void ofSoundPlayer::setPan(float pan){
 	if( player ){
-		player->setPan(glm::clamp(pan,-1.0f,1.0f));
+		player->setPan(std::clamp(pan,-1.0f,1.0f));
 	}
 }
 

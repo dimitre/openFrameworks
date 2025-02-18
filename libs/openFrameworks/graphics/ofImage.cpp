@@ -1205,8 +1205,8 @@ void ofImage_<PixelType>::resize(int newWidth, int newHeight){
 //------------------------------------
 template<typename PixelType>
 void ofImage_<PixelType>::crop(int x, int y, int w, int h){
-	w = glm::clamp(w,1,int(getWidth()));
-	h = glm::clamp(h,1,int(getHeight()));
+	w = std::clamp(w,1,int(getWidth()));
+	h = std::clamp(h,1,int(getHeight()));
 
 	pixels.crop(x,y,w,h);
 	update();
@@ -1215,8 +1215,8 @@ void ofImage_<PixelType>::crop(int x, int y, int w, int h){
 //------------------------------------
 template<typename PixelType>
 void ofImage_<PixelType>::cropFrom(const ofImage_<PixelType> & otherImage, int x, int y, int w, int h){
-	w = glm::clamp(w,1,int(otherImage.getWidth()));
-	h = glm::clamp(h,1,int(otherImage.getHeight()));
+	w = std::clamp(w,1,int(otherImage.getWidth()));
+	h = std::clamp(h,1,int(otherImage.getHeight()));
 
 	otherImage.pixels.cropTo(pixels, x, y, w, h);
 	update();

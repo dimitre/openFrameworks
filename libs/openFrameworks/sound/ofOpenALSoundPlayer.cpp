@@ -3,7 +3,6 @@
 #ifdef OF_SOUND_PLAYER_OPENAL
 
 #include <glm/gtc/constants.hpp>
-#include <glm/ext/scalar_common.hpp>
 
 #include "ofLog.h"
 #include "ofEvents.h"
@@ -857,7 +856,7 @@ int ofOpenALSoundPlayer::getPositionMS() const{
 //------------------------------------------------------------
 void ofOpenALSoundPlayer::setPan(float p){
 	if(sources.empty()) return;
-	p = glm::clamp(p, -1.f, 1.f);
+	p = std::clamp(p, -1.f, 1.f);
 	pan = p;
 	if(channels==1){
 		float pos[3] = {p,0,0};
