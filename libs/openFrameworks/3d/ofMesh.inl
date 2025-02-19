@@ -2358,7 +2358,7 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::cylinder( float radius, float height, int rad
 	V vert;
 	T tcoord;
 	N normal;
-	glm::vec3 up(0,1,0);
+	glm::vec3 up { 0.0f, 1.0f, 0.0f };
 
 	std::size_t vertOffset = 0;
 
@@ -2550,10 +2550,10 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::cone( float radius, float height, int radiusS
 	float halfH = height*.5f;
 
 	float newRad;
-	V vert;
-	N normal;
-	T tcoord;
-	glm::vec3 up(0,1,0);
+	V vert { 0.0f };
+	N normal { 0.0f };
+	T tcoord { 0.0f };
+	glm::vec3 up { 0.0f, 1.0f, 0.0f };
 
 	std::size_t vertOffset = 0;
 

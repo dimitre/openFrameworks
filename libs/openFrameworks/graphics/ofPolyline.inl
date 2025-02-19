@@ -8,7 +8,7 @@
 #include "ofLog.h"
 #include "ofMath.h" // ofWrap ofMap
 
-#define GLM_ENABLE_EXPERIMENTAL
+//#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/vector_angle.hpp>
 
 //----------------------------------------------------------

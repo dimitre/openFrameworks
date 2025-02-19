@@ -11,6 +11,8 @@
 #include "ofConstants.h"
 #include <vector>
 
+
+
 #include <glm/detail/qualifier.hpp>
 namespace glm {
 	typedef vec<2, float, defaultp>		vec2;

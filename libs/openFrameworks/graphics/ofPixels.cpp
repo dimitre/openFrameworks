@@ -1,6 +1,7 @@
 #include "ofGraphicsConstants.h"
 #include "ofPixels.h"
 #include "ofColor.h"
+
 #include <functional>
 #include <cstring> //memcpy
 

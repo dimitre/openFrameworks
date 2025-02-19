@@ -4,7 +4,6 @@
 #include "ofCubeMap.h"
 #include "ofImage.h"
 #include "ofGLProgrammableRenderer.h"
-
 #include <glm/vec2.hpp>
 #include <glm/gtx/transform.hpp>
 

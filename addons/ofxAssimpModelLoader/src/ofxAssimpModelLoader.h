@@ -78,7 +78,7 @@ class ofxAssimpModelLoader{
 		void setLoopStateForAllAnimations(ofLoopType state);
 		void setPositionForAllAnimations(float position);
 		void setSpeedForAllAnimations(float speed);
-	
+
 		[[deprecated("Use ofxAssimpAnimation")]]
 		void setAnimation(int animationIndex);
 		[[deprecated("Use ofxAssimpAnimation")]]
@@ -186,9 +186,9 @@ class ofxAssimpModelLoader{
 
 		std::vector<float> rotAngle;
 		std::vector<glm::vec3> rotAxis;
-		glm::vec3 scale {1.0,1.0,1.0};
-		glm::vec3 pos {0.0,0.0,0.0};
-		glm::mat4 modelMatrix { 1.0f }; // { glm::mat4() }
+		glm::vec3 scale { 1.0f };
+		glm::vec3 pos { 0.0f };
+		glm::mat4 modelMatrix { 1.0f };
 
 		std::vector<ofLight> lights;
 		std::map<

@@ -3,7 +3,6 @@
 #include "ofMaterialBaseTypes.h"
 #include "ofShader.h"
 
-#include <glm/fwd.hpp>
 #include <glm/vec2.hpp>
 #include <glm/mat4x4.hpp>
 
@@ -394,10 +393,10 @@ public:
 		// 0 = pointlight 1 = directionlight, 2 = spotlight, 3 = area light
 		float type;
 		// where are we in world space
-		glm::vec4 position;
-		glm::vec4 direction;
+		glm::vec4 position { 0.0f };
+		glm::vec4 direction { 0.0f };
 		// light color, intensity is stored in .w
-		glm::vec4 diffuse;
+		glm::vec4 diffuse { 0.0f };
 		float radius;// = 0.0;
 		// attenuation
 		float constantAttenuation;
@@ -410,8 +409,8 @@ public:
 		//	// only for area
 		float width;
 		float height;
-		glm::vec4 right;
-		glm::vec4 up;
+		glm::vec4 right { 0.0f };
+		glm::vec4 up { 0.0f };
 	};
 
 	PbrLightData lights[100];

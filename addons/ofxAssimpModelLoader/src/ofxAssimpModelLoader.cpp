@@ -60,7 +60,7 @@ bool ofxAssimpModelLoader::load(const of::filesystem::path & fileName, int assim
 		ofLogVerbose("ofxAssimpModelLoader") << "load(): model does not exist: " << fileName ;
 		return false;
 	}
-		
+
 	ofLogVerbose("ofxAssimpModelLoader") << "load(): loading " << fileName;
 
 	if(scene.get() != nullptr){
@@ -371,7 +371,7 @@ void ofxAssimpModelLoader::loadGLResources(){
 				bool bWrap = (texMapMode[0]==aiTextureMapMode_Wrap);
 
 				std::string texPathStr = texPath.C_Str();
-				
+
 
 				//deal with Blender putting "//" in front of local file paths
 				if( texPathStr.size() > 2 && texPathStr.substr(0, 2) == "//" ){
@@ -392,7 +392,7 @@ void ofxAssimpModelLoader::loadGLResources(){
 				// auto modelFolder = ofFilePath::getEnclosingDirectory( file.path() );
 				auto relTexPath = ofFilePath::getEnclosingDirectory(texPathStr,false);
 				auto realPath = modelFolder / of::filesystem::path{ texPathStr };
-				
+
 
 #ifndef TARGET_LINUX_ARM
 				if(bTryEmbed || ofFile::doesFileExist(realPath) == false) {
@@ -544,13 +544,13 @@ void ofxAssimpModelLoader::clear(){
 	// clear out everything.
 	modelMeshes.clear();
 	animations.clear();
-	pos = glm::vec3(0,0,0);
-	scale = glm::vec3(1,1,1);
+	pos = glm::vec3 { 0.0f };
+//	scale = glm::vec3 { 1.0f };
 	rotAngle.clear();
 	rotAxis.clear();
 	lights.clear();
 
-	scale = glm::vec3(1, 1, 1);
+	scale = glm::vec3 { 1.0f };
 	normalizeScale = true;
 	bUsingMaterials = true;
 	bUsingNormals = true;
@@ -568,7 +568,7 @@ void ofxAssimpModelLoader::clear(){
 void ofxAssimpModelLoader::update() {
 	if(!scene) return;
 	updateAnimations();
-	updateMeshes(scene->mRootNode, glm::mat4());
+	updateMeshes(scene->mRootNode, glm::mat4 { 1.0f });
 	if(hasAnimations() == false) {
 		return;
 	}
@@ -687,7 +687,7 @@ void ofxAssimpModelLoader::updateGLResources(){
 void ofxAssimpModelLoader::updateModelMatrix() {
 	modelMatrix = glm::identity<glm::mat4>();
 	modelMatrix = glm::translate(modelMatrix, pos);
-	modelMatrix = glm::rotate(modelMatrix, ofDegToRad(180), glm::vec3(0,0,1));
+	modelMatrix = glm::rotate(modelMatrix, ofDegToRad(180), glm::vec3(0.0f,0.0f,1.0f));
 
 	if(normalizeScale) {
 		modelMatrix = glm::scale(modelMatrix, glm::vec3(normalizedScale, normalizedScale, normalizedScale));
@@ -886,7 +886,7 @@ void ofxAssimpModelLoader::setRotation(int which, float angle, float rot_x, floa
 		int diff = 1 + (which - rotAngle.size());
 		for(int i = 0; i < diff; i++){
 			rotAngle.push_back(0);
-			rotAxis.push_back(glm::vec3(0.0,0.0,0.0));
+			rotAxis.push_back(glm::vec3 { 0.0f });
 		}
 	}
 
@@ -1229,7 +1229,7 @@ glm::vec3 ofxAssimpModelLoader::getRotationAxis(int which){
 	if((int)rotAxis.size() > which){
 		return rotAxis[which];
 	}else{
-		return glm::vec3(0.0,0.0,0.0);
+		return glm::vec3 { 0.0f };
 	}
 }
 
