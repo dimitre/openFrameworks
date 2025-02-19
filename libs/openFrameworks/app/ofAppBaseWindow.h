@@ -1,5 +1,6 @@
 #pragma once
 
+#define GLM_ENABLE_EXPERIMENTAL
 #include "ofWindowSettings.h"
 // MARK: Target
 #include "ofConstants.h"

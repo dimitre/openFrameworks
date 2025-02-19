@@ -1,3 +1,5 @@
+#define GLM_ENABLE_EXPERIMENTAL
+
 #ifndef OF_POLYLINE_H
 #include "ofPolyline.h"
 #endif
@@ -8,8 +10,9 @@
 #include "ofLog.h"
 #include "ofMath.h" // ofWrap ofMap
 
-//#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/vector_angle.hpp>
+//#include <glm/gtx/transform.hpp>
+
 
 //----------------------------------------------------------
 template<class T>
@@ -1148,7 +1151,7 @@ void ofPolyline_<T>::updateCache(bool bForceUpdate) const {
         normals.clear();
         tangents.clear();
         area = 0;
-		centroid2D = {0.f, 0.f, 0.f};
+		centroid2D = { 0.f };
         bCacheIsDirty = false;
 
         if(points.size() < 2) return;

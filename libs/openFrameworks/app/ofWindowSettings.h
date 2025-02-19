@@ -2,8 +2,6 @@
 
 class ofAppBaseWindow;
 
-// This one can be removed here but it is being used downstream like in ofNode, ofCamera.cpp, ofShadow.cpp, ofCubeMap.cpp, ofMaterial.cpp, ofGLProgrammableRenderer.cpp, ofMatrixStack.cpp
-#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/vec2.hpp>
 
 #include <string>

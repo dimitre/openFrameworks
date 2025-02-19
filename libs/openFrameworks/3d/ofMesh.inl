@@ -1,3 +1,5 @@
+#define GLM_ENABLE_EXPERIMENTAL
+
 #ifndef OF_MESH_H
 #include "ofMesh.h"
 #endif
