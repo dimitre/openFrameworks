@@ -1114,7 +1114,7 @@ void ofPolyline_<T>::calcData(int index, T &tangent, float &angle, T &rotation, 
 		tangent  = ( glm::length2(v2 - v1) > 0 ? glm::normalize(v2 - v1) : -v1 );
 		normal   = ( glm::normalize( glm::cross(  rightVector , tangent ) ) );
 		rotation = ( glm::cross( v1, v2 ) );
-		angle    = glm::pi<float>() - acosf( std::clamp( glm::dot( v1, v2 ), -1.f, 1.f ) );
+		angle    = glm::pi<float>() - std::acosf( std::clamp( glm::dot( v1, v2 ), -1.f, 1.f ) );
 	} else{
 		rotation = tangent = normal = T( 0.f );
 		angle    = 0.f;

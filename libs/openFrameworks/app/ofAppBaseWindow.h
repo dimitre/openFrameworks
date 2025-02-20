@@ -31,7 +31,7 @@ public:
 	virtual void setup(const ofWindowSettings & settings)=0;
 	virtual void update()=0;
 	virtual void draw()=0;
-	virtual std::shared_ptr<ofBaseRenderer> & renderer() = 0;
+	virtual std::shared_ptr<ofBaseRenderer> & renderer() { return currentRenderer; }
 	virtual ofCoreEvents & events() = 0;
 
 	virtual bool getWindowShouldClose(){
@@ -116,4 +116,7 @@ public:
 //private:
 	ofOrientation orientation = OF_ORIENTATION_DEFAULT;
 	ofWindowMode windowMode = OF_WINDOW;
+	
+	std::shared_ptr<ofBaseRenderer> currentRenderer;
+
 };

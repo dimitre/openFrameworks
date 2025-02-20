@@ -42,34 +42,34 @@ public:
 	// this functions are only meant to be called from inside OF don't call them from your code
 	//	using ofAppBaseWindow::setup;
 
-	void setup(const ofWindowSettings & settings);
-	void update();
-	void draw();
-	bool getWindowShouldClose();
-	void setWindowShouldClose();
+	void setup(const ofWindowSettings & settings) override;
+	void update() override;
+	void draw() override;
+	bool getWindowShouldClose() override;
+	void setWindowShouldClose() override;
 
-	void hideCursor();
-	void showCursor();
+	void hideCursor() override;
+	void showCursor() override;
 
-	int getHeight();
-	int getWidth();
+	int getHeight() override;
+	int getWidth() override;
 
-	ofCoreEvents & events();
-	std::shared_ptr<ofBaseRenderer> & renderer();
+	ofCoreEvents & events() override;
+//	std::shared_ptr<ofBaseRenderer> & renderer() override;
 
 	GLFWwindow * getGLFWWindow();
-	void * getWindowContext() { return getGLFWWindow(); }
+	void * getWindowContext() override { return getGLFWWindow(); }
 	ofWindowSettings getSettings() { return settings; }
 
-	glm::ivec2 getScreenSize();
-	glm::ivec2 getWindowSize();
-	glm::ivec2 getFramebufferSize();
-	glm::ivec2 getWindowPosition();
-	ofRectangle getWindowRect();
+	glm::ivec2 getScreenSize() override;
+	glm::ivec2 getWindowSize() override;
+	glm::ivec2 getFramebufferSize() override;
+	glm::ivec2 getWindowPosition() override;
+	ofRectangle getWindowRect() override;
 
-	void setWindowTitle(const std::string & title);
+	void setWindowTitle(const std::string & title) override;
 
-	void setWindowRect(const ofRectangle & rect);
+	void setWindowRect(const ofRectangle & rect) override;
 	void setWindowPosition(int x, int y);
 	void setWindowShape(int w, int h);
 
@@ -157,7 +157,6 @@ private:
 	#endif
 
 	std::unique_ptr<ofCoreEvents> coreEvents;
-	std::shared_ptr<ofBaseRenderer> currentRenderer;
 
 	ofWindowMode targetWindowMode;
 

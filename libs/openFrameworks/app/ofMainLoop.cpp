@@ -146,7 +146,8 @@ void ofMainLoop::loopOnce(){
 			i->get()->makeCurrent();
 			i->get()->update();
 			i->get()->draw();
-		++i;
+
+			++i;
 		}
 	}
 	

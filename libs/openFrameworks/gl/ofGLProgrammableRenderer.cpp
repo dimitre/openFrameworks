@@ -738,7 +738,7 @@ void ofGLProgrammableRenderer::setupScreenPerspective(float width, float height,
 	float eyeX = viewW / 2;
 	float eyeY = viewH / 2;
 	float halfFov = glm::pi<float>() * fov / 360.0f;
-	float theTan = tanf(halfFov);
+	float theTan = std::tanf(halfFov);
 	float dist = eyeY / theTan;
 	float aspect = (float)viewW / viewH;
 

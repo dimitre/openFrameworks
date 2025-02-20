@@ -403,9 +403,9 @@ ofCoreEvents & ofAppGLFWWindow::events() {
 }
 
 //--------------------------------------------
-shared_ptr<ofBaseRenderer> & ofAppGLFWWindow::renderer() {
-	return currentRenderer;
-}
+//shared_ptr<ofBaseRenderer> & ofAppGLFWWindow::renderer() {
+//	return currentRenderer;
+//}
 
 //--------------------------------------------
 void ofAppGLFWWindow::update() {
@@ -494,12 +494,13 @@ void ofAppGLFWWindow::swapBuffers() {
 
 //--------------------------------------------
 void ofAppGLFWWindow::startRender() {
-	renderer()->startRender();
+//	renderer()->startRender();
+	currentRenderer->startRender();
 }
 
 //--------------------------------------------
 void ofAppGLFWWindow::finishRender() {
-	renderer()->finishRender();
+	currentRenderer->finishRender();
 }
 
 //--------------------------------------------
