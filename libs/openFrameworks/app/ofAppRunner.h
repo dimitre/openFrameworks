@@ -10,6 +10,62 @@ class ofBaseApp;
 class ofBaseRenderer;
 class ofCoreEvents;
 
+
+struct ofCoreInternal {
+public:
+	ofCoreInternal() {};
+	~ofCoreInternal() {};
+
+	std::string name = "virgem";
+
+	std::vector <std::function<void()>> shutdownFunctions;
+	// ofAppRunner
+	bool initialized = false;
+	bool exiting = false;
+	ofCoreEvents noopEvents;
+//	ofMainLoop mainLoop;
+	std::shared_ptr<ofMainLoop> mainLoop { std::make_shared<ofMainLoop>() };
+
+	// ofFileUtils
+
+	void exit() {
+		if(!initialized) return;
+
+		// controlled destruction of the mainLoop before
+		// any other deinitialization
+		// mainLoop->exit();
+//		mainLoop.exit();
+
+		// all shutdown functions called
+		for (const auto & func : shutdownFunctions) {
+			func();
+		}
+
+		initialized = false;
+		exiting = true;
+	}
+
+	void init() {
+		name = "inicializado";
+		if (initialized) return;
+		initialized  = true;
+		exiting = false;
+	}
+
+	std::shared_ptr<ofAppBaseWindow> getCurrentWindow(){
+//		if (mainLoop) //mainLoop is always present. is it?
+		{
+			return mainLoop->currentWindow.lock();
+		}
+		std::cout << "getCurrentWindow ofCore nullptr name=" << name << std::endl;
+		return nullptr;
+	}
+
+};
+
+extern ofCoreInternal ofCore;
+
+
 void ofInit();
 void ofSetupOpenGL(int w, int h, ofWindowMode screenMode); // sets up the opengl context!
 std::shared_ptr<ofAppBaseWindow> ofCreateWindow(const ofWindowSettings & settings); // sets up the opengl context!
@@ -23,6 +79,7 @@ void ofSetupOpenGL(const std::shared_ptr<Window> & windowPtr, int w, int h, ofWi
 	settings.setSize(w, h);
 	settings.windowMode = screenMode;
 	ofGetMainLoop()->addWindow(windowPtr);
+	// ofCore.mainLoop.addWindow(windowPtr);
 	windowPtr->setup(settings);
 }
 

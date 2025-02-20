@@ -6,10 +6,10 @@
 #include "ofConstants.h"
 
 #if defined(TARGET_GLFW_WINDOW)
-#if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI_LEGACY)
+	#if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI_LEGACY)
 typedef struct _XIM * XIM;
 typedef struct _XIC * XIC;
-#endif
+	#endif
 
 class ofBaseApp;
 struct GLFWwindow;
@@ -20,17 +20,15 @@ template <typename T>
 class ofPixels_;
 typedef ofPixels_<unsigned char> ofPixels;
 
-[[deprecated ("In This Branch ~ use ofWindowSettings instead")]]
-typedef ofWindowSettings ofGLFWWindowSettings;
-
+[[deprecated("In This Branch ~ use ofWindowSettings instead")]] typedef ofWindowSettings ofGLFWWindowSettings;
 
 class ofAppGLFWWindow : public ofAppBaseWindow {
 public:
 	ofAppGLFWWindow();
 	~ofAppGLFWWindow();
-	
-//	ofWindowMode getWindowMode() { return settings.windowMode; }
-	
+
+	//	ofWindowMode getWindowMode() { return settings.windowMode; }
+
 	// Can't be copied, use shared_ptr
 	ofAppGLFWWindow(ofAppGLFWWindow & w) = delete;
 	ofAppGLFWWindow & operator=(ofAppGLFWWindow & w) = delete;
@@ -42,7 +40,7 @@ public:
 	static void pollEvents();
 
 	// this functions are only meant to be called from inside OF don't call them from your code
-//	using ofAppBaseWindow::setup;
+	//	using ofAppBaseWindow::setup;
 
 	void setup(const ofWindowSettings & settings);
 	void update();
@@ -77,7 +75,7 @@ public:
 
 	void setFullscreen(bool fullscreen);
 	void toggleFullscreen();
-    void setWindowMousePassThrough(bool allowPassThrough);
+	void setWindowMousePassThrough(bool allowPassThrough);
 
 	void enableSetupScreen();
 	void disableSetupScreen();
@@ -101,63 +99,62 @@ public:
 	bool isWindowResizeable();
 	void iconify(bool bIconify);
 
-#if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI_LEGACY)
+	#if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI_LEGACY)
 	typedef struct _XIM * XIM;
 	typedef struct _XIC * XIC;
-	
+
 	Display * getX11Display();
 	Window getX11Window();
 	XIC getX11XIC();
 
 	void setWindowIcon(const of::filesystem::path & path);
 	void setWindowIcon(const ofPixels & iconPixels);
-#endif
+	#endif
 
-#if defined(TARGET_LINUX) && !defined(TARGET_OPENGLES)
+	#if defined(TARGET_LINUX) && !defined(TARGET_OPENGLES)
 	GLXContext getGLXContext();
-#endif
+	#endif
 
-#if defined(TARGET_LINUX) && defined(TARGET_OPENGLES)
+	#if defined(TARGET_LINUX) && defined(TARGET_OPENGLES)
 	EGLDisplay getEGLDisplay();
 	EGLContext getEGLContext();
 	EGLSurface getEGLSurface();
-#endif
+	#endif
 
-#if defined(TARGET_OSX)
+	#if defined(TARGET_OSX)
 	void * getNSGLContext();
 	void * getCocoaWindow();
-#endif
+	#endif
 
-#if defined(TARGET_WIN32)
+	#if defined(TARGET_WIN32)
 	HGLRC getWGLContext();
 	HWND getWin32Window();
-#endif
+	#endif
 
 private:
-	static ofAppGLFWWindow * setCurrent(GLFWwindow* windowP);
-	static ofAppGLFWWindow * getWindow(GLFWwindow* windowP);
-	static void mouse_cb(GLFWwindow* windowP_, int button, int state, int mods);
-	static void motion_cb(GLFWwindow* windowP_, double x, double y);
-	static void entry_cb(GLFWwindow* windowP_, int entered);
-	static void keyboard_cb(GLFWwindow* windowP_, int key, int scancode, int action, int mods);
-	static void char_cb(GLFWwindow* windowP_, uint32_t key);
-	static void position_cb(GLFWwindow* windowP_, int x, int y);
-	static void resize_cb(GLFWwindow* windowP_, int w, int h);
-	static void framebuffer_size_cb(GLFWwindow* windowP_, int w, int h);
+	static ofAppGLFWWindow * setCurrent(GLFWwindow * windowP);
+	static ofAppGLFWWindow * getWindow(GLFWwindow * windowP);
+	static void mouse_cb(GLFWwindow * windowP_, int button, int state, int mods);
+	static void motion_cb(GLFWwindow * windowP_, double x, double y);
+	static void entry_cb(GLFWwindow * windowP_, int entered);
+	static void keyboard_cb(GLFWwindow * windowP_, int key, int scancode, int action, int mods);
+	static void char_cb(GLFWwindow * windowP_, uint32_t key);
+	static void position_cb(GLFWwindow * windowP_, int x, int y);
+	static void resize_cb(GLFWwindow * windowP_, int w, int h);
+	static void framebuffer_size_cb(GLFWwindow * windowP_, int w, int h);
 	static void exit_cb(GLFWwindow * windowP_);
 	static void scroll_cb(GLFWwindow * windowP_, double x, double y);
-	static void drop_cb(GLFWwindow* windowP_, int numFiles, const char** dropString);
+	static void drop_cb(GLFWwindow * windowP_, int numFiles, const char ** dropString);
 	static void error_cb(int errorCode, const char * errorDescription);
 	static void refresh_cb(GLFWwindow * windowP_);
 	static void monitor_cb(GLFWmonitor * monitor, int event);
-	
 
 	void close();
 
-#if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI_LEGACY)
+	#if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI_LEGACY)
 	XIM xim;
 	XIC xic;
-#endif
+	#endif
 
 	std::unique_ptr<ofCoreEvents> coreEvents;
 	std::shared_ptr<ofBaseRenderer> currentRenderer;
@@ -173,57 +170,46 @@ private:
 	int buttonInUse;
 	bool buttonPressed;
 
-//	int nFramesSinceWindowResized;
+	//	int nFramesSinceWindowResized;
 	bool bWindowNeedsShowing;
 
 	GLFWwindow * windowP;
 	ofBaseApp * ofAppPtr;
 
 	bool iconSet;
-	
-	
+
 	void beginDraw();
 	void endDraw();
-	
-//	static ofAppGLFWWindow * thisWindow = static_cast<ofAppGLFWWindow *>(this);
-	
+
+	//	static ofAppGLFWWindow * thisWindow = static_cast<ofAppGLFWWindow *>(this);
+
 	// window settings, this functions can only be called from main before calling ofSetupOpenGL
 	// TODO: remove specialized version of ofSetupOpenGL when these go away
-	[[deprecated("use ofGLFWWindowSettings to create the window")]]
-	void setNumSamples(int samples);
-	[[deprecated("use ofGLFWWindowSettings to create the window")]]
-	void setDoubleBuffering(bool doubleBuff);
-	[[deprecated("use ofGLFWWindowSettings to create the window")]]
-	void setColorBits(int r, int g, int b);
-	[[deprecated("use ofGLFWWindowSettings to create the window")]]
-	void setAlphaBits(int a);
-	[[deprecated("use ofGLFWWindowSettings to create the window")]]
-	void setDepthBits(int depth);
-	[[deprecated("use ofGLFWWindowSettings to create the window")]]
-	void setStencilBits(int stencil);
-	[[deprecated("use ofGLFWWindowSettings to create the window")]]
-	void setMultiDisplayFullscreen(bool bMultiFullscreen); //note this just enables the mode, you have to toggle fullscreen to activate it.
-	
+	[[deprecated("use ofGLFWWindowSettings to create the window")]] void setNumSamples(int samples);
+	[[deprecated("use ofGLFWWindowSettings to create the window")]] void setDoubleBuffering(bool doubleBuff);
+	[[deprecated("use ofGLFWWindowSettings to create the window")]] void setColorBits(int r, int g, int b);
+	[[deprecated("use ofGLFWWindowSettings to create the window")]] void setAlphaBits(int a);
+	[[deprecated("use ofGLFWWindowSettings to create the window")]] void setDepthBits(int depth);
+	[[deprecated("use ofGLFWWindowSettings to create the window")]] void setStencilBits(int stencil);
+	[[deprecated("use ofGLFWWindowSettings to create the window")]] void setMultiDisplayFullscreen(bool bMultiFullscreen); //note this just enables the mode, you have to toggle fullscreen to activate it.
 };
 
-
-
-// TEMPORARY
-#include "GLFW/glfw3.h"
-// TEMP oftostring
-#include "ofUtils.h"
-#include <vector>
+	// TEMPORARY
+	#include "GLFW/glfw3.h"
+	// TEMP oftostring
+	#include "ofUtils.h"
+	#include <vector>
 
 static struct ofMonitors {
 public:
-	ofMonitors() {}
-	~ofMonitors() {}
-	std::vector <ofRectangle> rects;
+	ofMonitors() { }
+	~ofMonitors() { }
+	std::vector<ofRectangle> rects;
 	ofRectangle allMonitorsRect { 0, 0, 0, 0 };
-	GLFWmonitor** monitors;
+	GLFWmonitor ** monitors;
 
 	ofRectangle getRectMonitorForScreenRect(const ofRectangle & rect) {
-		for (unsigned int a=0; a<rects.size(); a++) {
+		for (unsigned int a = 0; a < rects.size(); a++) {
 			if (rects[a].inside(rect.getCenter())) {
 				return rects[a];
 				break;
@@ -231,11 +217,11 @@ public:
 		}
 		return { 0, 0, 0, 0 };
 	}
-	
+
 	ofRectangle getRectForAllMonitors() {
 		return allMonitorsRect;
 	}
-	
+
 	void update() {
 		rects.clear();
 		allMonitorsRect = { 0, 0, 0, 0 };
@@ -243,11 +229,11 @@ public:
 		int numberOfMonitors;
 		monitors = glfwGetMonitors(&numberOfMonitors);
 
-		for (int i=0; i < numberOfMonitors; i++){
+		for (int i = 0; i < numberOfMonitors; i++) {
 			glm::ivec2 pos;
 			glfwGetMonitorPos(monitors[i], &pos.x, &pos.y);
 			const GLFWvidmode * desktopMode = glfwGetVideoMode(monitors[i]);
-			ofRectangle rect = ofRectangle( pos.x, pos.y, desktopMode->width, desktopMode->height );
+			ofRectangle rect = ofRectangle(pos.x, pos.y, desktopMode->width, desktopMode->height);
 			rects.emplace_back(rect);
 			allMonitorsRect = allMonitorsRect.getUnion(rect);
 		}
