@@ -377,6 +377,7 @@ void ofGLProgrammableRenderer::drawInstanced(const ofVboMesh & mesh, ofPolyRende
 //----------------------------------------------------------
 void ofGLProgrammableRenderer::draw(const of3dPrimitive & model, ofPolyRenderMode renderType) const {
 	auto r = const_cast<ofGLProgrammableRenderer *>(this);
+//	auto r = this;
 	r->pushMatrix();
 	r->multMatrix(model.getGlobalTransformMatrix());
 	if (model.isUsingVbo()) {
@@ -568,7 +569,7 @@ void ofGLProgrammableRenderer::draw(const ofVbo & vbo, GLuint drawMode, int firs
 }
 
 //----------------------------------------------------------
-void ofGLProgrammableRenderer::drawElements(const ofVbo & vbo, GLuint drawMode, std::size_t amt, int offsetelements) const {
+void ofGLProgrammableRenderer::drawElements(const ofVbo & vbo, GLuint drawMode, int amt, int offsetelements) const {
 	if (vbo.getUsingVerts()) {
 		vbo.bind();
 		const_cast<ofGLProgrammableRenderer *>(this)->setAttributes(vbo.getUsingVerts(), vbo.getUsingColors(), vbo.getUsingTexCoords(), vbo.getUsingNormals(), drawMode);
