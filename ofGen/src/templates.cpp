@@ -12,6 +12,7 @@ std::string generateUUID(const string & input) {
 }
 
 void copyTemplateFile::info() {
+    std::cout << std::endl;
 	alert("	copyTemplateFile", 96);
 	alert("	from " + from.string(), 2);
 	alert("	to " + to.string(), 90);
@@ -21,7 +22,6 @@ void copyTemplateFile::info() {
 			// std::cout << "	└─ Replacing " << f.first << " : " << f.second << std::endl;
 		}
 	}
-	std::cout << std::endl;
 }
 
 void copyTemplateFile::load() {
@@ -107,7 +107,7 @@ bool copyTemplateFile::run() {
 	}
 
 	else {
-		alert("input file not found " + from.string(), 95);
+		alert("	input file not found " + from.string(), 95);
 		return false;
 	}
 	return true;
@@ -610,7 +610,7 @@ void ofTemplateZed::save() {
 
 void ofTemplateMacos::load() {
 	alert("ofTemplateMacos::load()", 92);
-	alert("here all load save and replace operations are loaded to memory, but not yet executed.");
+	alert("	here all load save and replace operations are loaded to memory, but not yet executed.", 90);
 
 	// ALL ABOUT FILES HERE
 	// auto projectName = conf.projectPath.filename().string();
@@ -674,8 +674,10 @@ void ofTemplateMacos::load() {
 				{ { "emptyExample", conf.projectName } } });
 		}
 
-		copyTemplateFiles.push_back({ conf.projectPath / (conf.projectName + ".xcodeproj/project.xcworkspace"),
-			path / "emptyExample.xcodeproj/project.xcworkspace" });
+		copyTemplateFiles.push_back({
+			path / "emptyExample.xcodeproj/project.xcworkspace",
+			conf.projectPath / (conf.projectName + ".xcodeproj/project.xcworkspace"),
+		});
 	} else {
 
 		// MARK:- IOS sector;

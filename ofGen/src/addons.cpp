@@ -341,7 +341,7 @@ void ofProject::build() {
 }
 
 void gatherProjectInfo() {
-	alert("gatherProjectInfo", 92);
+	// alert("gatherProjectInfo", 92);
 	// Add project files. TODO: additional source folders
 	ofProject project;
 

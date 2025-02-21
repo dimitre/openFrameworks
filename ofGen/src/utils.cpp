@@ -173,6 +173,7 @@ bool genConfig::loadYML() {
 			// FIXME: Remove TEMPORARY
 			auto p = nodeToStrings("platforms");
 			if (p.size() > 0) {
+			    alert ("No templates found but platforms entry found, getting from there", 95);
 				conf.templateNames = p;
 			}
 		}
