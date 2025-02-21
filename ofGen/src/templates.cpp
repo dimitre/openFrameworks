@@ -361,7 +361,9 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 
 	if (a->addonProperties.count("ADDON_FRAMEWORKS")) {
 		for (const auto & f : a->addonProperties["ADDON_FRAMEWORKS"]) {
-			addFramework(f);
+			for (const auto & s : ofSplitString(f, " ")) {
+				addFramework(s);
+			}
 		}
 	}
 
@@ -895,7 +897,6 @@ struct fileJson {
 		}
 	}
 };
-
 
 fileJson workspace;
 fileJson cppProperties;

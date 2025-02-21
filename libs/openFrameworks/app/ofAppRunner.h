@@ -72,7 +72,7 @@ extern ofCoreInternal ofCore;
 void ofInit();
 void ofSetupOpenGL(int w, int h, ofWindowMode screenMode); // sets up the opengl context!
 std::shared_ptr<ofAppBaseWindow> ofCreateWindow(const ofWindowSettings & settings); // sets up the opengl context!
-//std::shared_ptr<ofMainLoop> ofGetMainLoop();
+std::shared_ptr<ofMainLoop> ofGetMainLoop();
 //void ofSetMainLoop(const std::shared_ptr<ofMainLoop> & mainLoop);
 
 template <typename Window>

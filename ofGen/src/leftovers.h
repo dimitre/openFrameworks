@@ -1,22 +1,20 @@
 
 
-bool checkCorrectVariable(const string & variable, const string & state){
+bool checkCorrectVariable(const string & variable, const string & state) {
 	// if (state == "meta") {
 	// 	return std::find(AddonMetaVariables.begin(),
 	// 					 AddonMetaVariables.end(),
 	// 					 variable) != AddonMetaVariables.end();
 	// }
-	if ( state == "macos" || state == "common" ) {
+	if (state == "macos" || state == "common") {
 		return std::find(AddonProjectVariables.begin(),
-						 AddonProjectVariables.end(),
-						 variable) != AddonProjectVariables.end();
+				   AddonProjectVariables.end(),
+				   variable)
+			!= AddonProjectVariables.end();
 	} else {
 		return checkCorrectPlatform(state);
 	}
 }
-
-
-
 
 bool checkCorrectPlatform(const string & state) {
 	if (state == "meta" || state == "common") {
@@ -30,7 +28,6 @@ bool checkCorrectPlatform(const string & state) {
 	return false;
 }
 
-
 const vector<string> parseStates {
 	"common",
 	"linux",
@@ -39,8 +36,6 @@ const vector<string> parseStates {
 	"macos",
 	"ios",
 };
-
-
 
 // const vector<string> AddonMetaVariables {
 // 	"ADDON_NAME",
@@ -80,14 +75,11 @@ const vector<string> AddonProjectVariables = {
 	"ADDON_ADDITIONAL_LIBS",
 };
 
-
-
-
 // FIXME: This seems to be meaningless
-			if(!checkCorrectPlatform(currentParseState)){
-				continue;
-			}
+if (!checkCorrectPlatform(currentParseState)) {
+	continue;
+}
 
-			if(!checkCorrectVariable(variable, currentParseState)){
-				continue;
-			}
+if (!checkCorrectVariable(variable, currentParseState)) {
+	continue;
+}

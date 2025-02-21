@@ -168,9 +168,9 @@ void ofInit() {
 }
 
 //--------------------------------------
-//shared_ptr<ofMainLoop> ofGetMainLoop() {
-//	return ofCore.mainLoop;
-//}
+shared_ptr<ofMainLoop> ofGetMainLoop() {
+	return ofCore.mainLoop.getPtr();
+}
 
 //--------------------------------------
 //void ofSetMainLoop(const shared_ptr<ofMainLoop> & newMainLoop) {

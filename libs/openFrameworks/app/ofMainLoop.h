@@ -7,13 +7,17 @@ class ofBaseApp;
 class ofAppBaseWindow;
 class ofWindowSettings;
 
-class ofMainLoop {
+class ofMainLoop : public std::enable_shared_from_this<ofMainLoop> {
 public:
 	ofMainLoop();
 	virtual ~ofMainLoop();
 
 	std::shared_ptr<ofAppBaseWindow> createWindow(const ofWindowSettings & settings);
 
+	std::shared_ptr<ofMainLoop> getPtr() {
+		return shared_from_this();
+	}
+	
 	template <typename Window>
 	void addWindow(const std::shared_ptr<Window> & window) {
 		allowMultiWindow = Window::allowsMultiWindow();
