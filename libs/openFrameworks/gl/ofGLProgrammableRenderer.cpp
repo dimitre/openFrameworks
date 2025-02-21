@@ -568,7 +568,7 @@ void ofGLProgrammableRenderer::draw(const ofVbo & vbo, GLuint drawMode, int firs
 }
 
 //----------------------------------------------------------
-void ofGLProgrammableRenderer::drawElements(const ofVbo & vbo, GLuint drawMode, int amt, int offsetelements) const {
+void ofGLProgrammableRenderer::drawElements(const ofVbo & vbo, GLuint drawMode, std::size_t amt, int offsetelements) const {
 	if (vbo.getUsingVerts()) {
 		vbo.bind();
 		const_cast<ofGLProgrammableRenderer *>(this)->setAttributes(vbo.getUsingVerts(), vbo.getUsingColors(), vbo.getUsingTexCoords(), vbo.getUsingNormals(), drawMode);
@@ -777,7 +777,7 @@ void ofGLProgrammableRenderer::setupScreenOrtho(float width, float height, float
 	loadMatrix(ortho); // make ortho our new projection matrix.
 
 	matrixMode(OF_MATRIX_MODELVIEW);
-	loadViewMatrix(glm::mat4(1.0));
+	loadViewMatrix(glm::mat4(1.0f));
 
 	currentEyePos = glm::vec3 { viewW / 2.0f, viewH / 2.0f, nearDist };
 }

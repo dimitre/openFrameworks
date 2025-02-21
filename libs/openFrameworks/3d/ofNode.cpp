@@ -710,7 +710,7 @@ void ofNode::createMatrix() {
 	glm::vec3 pos { position };
 	glm::vec3 scl { scale };
 
-	localTransformMatrix = glm::translate(glm::mat4(1.0), pos);
+	localTransformMatrix = glm::translate(glm::mat4(1.0f), pos);
 	localTransformMatrix = localTransformMatrix * glm::toMat4((const glm::quat&)orientation);
 	localTransformMatrix = glm::scale(localTransformMatrix, scl);
 

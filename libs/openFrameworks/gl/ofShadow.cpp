@@ -407,11 +407,11 @@ void ofShadow::update( const ofLight& alight ) {
 
 	if( mLookAtMats.size() != targetNumMatrices ) {
 		mLookAtMats.clear();
-		mLookAtMats.assign(targetNumMatrices, glm::mat4(1.0) );
+		mLookAtMats.assign(targetNumMatrices, glm::mat4(1.0f) );
 	}
 	if( mViewProjMats.size() != targetNumMatrices ) {
 		mViewProjMats.clear();
-		mViewProjMats.assign( targetNumMatrices, glm::mat4(1.0) );
+		mViewProjMats.assign( targetNumMatrices, glm::mat4(1.0f) );
 	}
 
 	if( data->lightType == OF_LIGHT_SPOT || data->lightType == OF_LIGHT_AREA ) {

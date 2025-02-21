@@ -72,7 +72,7 @@ void ofMatrixStack::setOrientation(ofOrientation _orientation, bool vFlip){
 		handedness = OF_RIGHT_HANDED;
 	}
 
-	orientationMatrix = glm::mat4(1.0);
+	orientationMatrix = glm::mat4(1.0f);
 
 	bool vFlipMatrix = customMatrixNeedsFlip();
 
@@ -427,7 +427,7 @@ void ofMatrixStack::matrixMode(ofMatrixMode mode){
 }
 
 void ofMatrixStack::loadIdentityMatrix (void){
-	*currentMatrix = glm::mat4(1.0);
+	*currentMatrix = glm::mat4(1.0f);
 	updatedRelatedMatrices();
 }
 

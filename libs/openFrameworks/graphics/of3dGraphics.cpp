@@ -332,12 +332,12 @@ glm::vec3 of3dGraphics::getBoxResolution() const{
 
 //----------------------------------------------------------
 void of3dGraphics::drawBox( float x, float y, float z, float width, float height, float depth) const{
-	glm::mat4 m = glm::translate(glm::mat4(1.0), glm::vec3(x,y,z));
+	glm::mat4 m = glm::translate(glm::mat4(1.0f), glm::vec3(x,y,z));
 	m = glm::scale(m, glm::vec3(width,height,depth));
 
     renderer->pushMatrix();
     renderer->multMatrix(m);
-	if(renderer->getFillMode() == OF_FILLED || box.getResolution() != glm::vec3(1,1,1)) {
+	if(renderer->getFillMode() == OF_FILLED || box.getResolution() != glm::vec3(1.0f,1.0f,1.0f)) {
         renderCached3dPrimitive( box );
     } else {
         renderCached3dPrimitive( boxWireframe );

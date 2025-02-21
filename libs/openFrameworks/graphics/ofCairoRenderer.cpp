@@ -758,7 +758,7 @@ void ofCairoRenderer::setHexColor(int hexColor) {
 //our openGL wrappers
 glm::mat4 ofCairoRenderer::getCurrentMatrix(ofMatrixMode matrixMode_) const {
 	ofLogWarning() << "getCurrentMatrix not yet implemented for Cairo Renderer.";
-	return glm::mat4(1.0);
+	return glm::mat4(1.0f);
 }
 
 //----------------------------------------------------------
@@ -832,9 +832,9 @@ void ofCairoRenderer::loadIdentityMatrix(void) {
 
 	if (!b3D) return;
 	if (currentMatrixMode == OF_MATRIX_MODELVIEW) {
-		modelView = glm::mat4(1.0);
+		modelView = glm::mat4(1.0f);
 	} else if (currentMatrixMode == OF_MATRIX_PROJECTION) {
-		projection = glm::mat4(1.0);
+		projection = glm::mat4(1.0f);
 	}
 }
 
@@ -1116,19 +1116,19 @@ void ofCairoRenderer::multViewMatrix(const glm::mat4 & m) {
 //----------------------------------------------------------
 glm::mat4 ofCairoRenderer::getCurrentViewMatrix() const {
 	ofLogError("ofCairoRenderer") << "view matrix not supported yet";
-	return glm::mat4(1.0);
+	return glm::mat4(1.0f);
 }
 
 //----------------------------------------------------------
 glm::mat4 ofCairoRenderer::getCurrentNormalMatrix() const {
 	ofLogError("ofCairoRenderer") << "normal matrix not supported yet";
-	return glm::mat4(1.0);
+	return glm::mat4(1.0f);
 }
 
 //----------------------------------------------------------
 glm::mat4 ofCairoRenderer::getCurrentOrientationMatrix() const {
 	ofLogError("ofCairoRenderer") << "orientation matrix not supported yet";
-	return glm::mat4(1.0);
+	return glm::mat4(1.0f);
 }
 
 //----------------------------------------------------------

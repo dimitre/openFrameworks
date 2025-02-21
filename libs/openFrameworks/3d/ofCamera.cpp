@@ -149,18 +149,18 @@ glm::mat4 ofCamera::getProjectionMatrix(const ofRectangle & viewport) const {
 	this->calcClipPlanes(viewport);
 	
 	if(isOrtho) {
-		return glm::translate(glm::mat4(1.0), {-lensOffset.x, -lensOffset.y, 0.f}) * glm::ortho(
-			- viewport.width/2,
-			+ viewport.width/2,
-			- viewport.height/2,
-			+ viewport.height/2,
+		return glm::translate(glm::mat4(1.0f), {-lensOffset.x, -lensOffset.y, 0.f}) * glm::ortho(
+			- viewport.width * 0.5f,
+			+ viewport.width * 0.5f,
+			- viewport.height * 0.5f,
+			+ viewport.height * 0.5f,
 			nearClip,
 			farClip
 		);
 	}else{
 		float aspect = forceAspectRatio ? aspectRatio : viewport.width/viewport.height;
 		auto projection = glm::perspective(glm::radians(fov), aspect, nearClip, farClip);
-		projection = glm::translate(glm::mat4(1.0), {-lensOffset.x, -lensOffset.y, 0.f}) * projection;
+		projection = glm::translate(glm::mat4(1.0f), {-lensOffset.x, -lensOffset.y, 0.f}) * projection;
 		return projection;
 	}
 }
@@ -202,9 +202,9 @@ glm::vec3 ofCamera::screenToWorld(glm::vec3 ScreenXYZ, const ofRectangle & viewp
 glm::vec3 ofCamera::worldToCamera(glm::vec3 WorldXYZ, const ofRectangle & viewport) const {
 	auto MVPmatrix = getModelViewProjectionMatrix(viewport);
 	if(vFlip){
-		MVPmatrix = glm::scale(glm::mat4(1.0), glm::vec3(1.f,-1.f,1.f)) * MVPmatrix;
+		MVPmatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1.f,-1.f,1.f)) * MVPmatrix;
 	}
-	auto camera = MVPmatrix * glm::vec4(WorldXYZ, 1.0);
+	auto camera = MVPmatrix * glm::vec4(WorldXYZ, 1.0f);
 	return glm::vec3(camera) / camera.w;
 	
 }
@@ -213,9 +213,9 @@ glm::vec3 ofCamera::worldToCamera(glm::vec3 WorldXYZ, const ofRectangle & viewpo
 glm::vec3 ofCamera::cameraToWorld(glm::vec3 CameraXYZ, const ofRectangle & viewport) const {
 	auto MVPmatrix = getModelViewProjectionMatrix(viewport);
 	if(vFlip){
-		MVPmatrix = glm::scale(glm::mat4(1.0), glm::vec3(1.f,-1.f,1.f)) * MVPmatrix;
+		MVPmatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1.f,-1.f,1.f)) * MVPmatrix;
 	}
-	auto world = glm::inverse(MVPmatrix) * glm::vec4(CameraXYZ, 1.0);
+	auto world = glm::inverse(MVPmatrix) * glm::vec4(CameraXYZ, 1.0f);
 	return glm::vec3(world) / world.w;
 }
 

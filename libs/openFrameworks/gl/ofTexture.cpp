@@ -925,7 +925,7 @@ void ofTexture::setTextureMatrix(const glm::mat4 & m){
 /// Disable the texture matrix.
 void ofTexture::disableTextureMatrix(){
 	texData.useTextureMatrix = false;
-	texData.textureMatrix = glm::mat4(1.0);
+	texData.textureMatrix = glm::mat4(1.0f);
 }
 
 

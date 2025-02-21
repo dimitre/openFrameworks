@@ -927,7 +927,7 @@ void ofGLRenderer::matrixMode(ofMatrixMode mode) {
 
 //----------------------------------------------------------
 void ofGLRenderer::loadIdentityMatrix(void) {
-	loadMatrix(glm::mat4(1.0));
+	loadMatrix(glm::mat4(1.0f));
 }
 
 //----------------------------------------------------------
