@@ -10,6 +10,12 @@
 #include "ofRectangle.h"
 #include "ofUtils.h" // initUtils
 
+
+
+std::shared_ptr<ofBaseRenderer> & ofCoreInternal::getCurrentRenderer() {
+	return mainLoop.currentWindow.lock()->currentRenderer;
+}
+
 ofCoreInternal ofCore;
 
 using std::shared_ptr;
@@ -26,7 +32,7 @@ void ofSetupOpenGL(const shared_ptr<ofAppGLFWWindow> & windowPtr, int w, int h, 
 	settings.setSize(w, h);
 	settings.windowMode = screenMode;
 	// ofGetMainLoop()->addWindow(windowPtr);
-	ofCore.mainLoop->addWindow(windowPtr);
+	ofCore.mainLoop.addWindow(windowPtr);
 	windowPtr->setup(settings);
 }
 	#endif
@@ -66,8 +72,10 @@ void ofSignalHandler(int signum) {
 	signal(SIGHUP, nullptr);
 	signal(SIGABRT, nullptr);
 
-	if (ofCore.mainLoop) {
-		ofCore.mainLoop->shouldClose(signum);
+	// just if it is shared ptr
+//	if (ofCore.mainLoop)
+	{
+		ofCore.mainLoop.shouldClose(signum);
 	}
 }
 #endif
@@ -160,18 +168,18 @@ void ofInit() {
 }
 
 //--------------------------------------
-shared_ptr<ofMainLoop> ofGetMainLoop() {
-	return ofCore.mainLoop;
-}
+//shared_ptr<ofMainLoop> ofGetMainLoop() {
+//	return ofCore.mainLoop;
+//}
 
 //--------------------------------------
-void ofSetMainLoop(const shared_ptr<ofMainLoop> & newMainLoop) {
-	ofCore.mainLoop = newMainLoop;
-}
+//void ofSetMainLoop(const shared_ptr<ofMainLoop> & newMainLoop) {
+//	ofCore.mainLoop = newMainLoop;
+//}
 
 //--------------------------------------
 int ofRunApp(ofBaseApp * OFSA) {
-	ofCore.mainLoop->run(shared_ptr<ofBaseApp>(OFSA));
+	ofCore.mainLoop.run(shared_ptr<ofBaseApp>(OFSA));
 	auto ret = ofRunMainLoop();
 #if !defined(TARGET_ANDROID) && !defined(TARGET_OF_IOS)
 	ofExitCallback();
@@ -185,7 +193,7 @@ int ofRunApp(ofBaseApp * OFSA) {
 
 //--------------------------------------
 int ofRunApp(shared_ptr<ofBaseApp> && app) {
-	ofCore.mainLoop->run(std::move(app));
+	ofCore.mainLoop.run(std::move(app));
 	auto ret = ofRunMainLoop();
 #if !defined(TARGET_ANDROID) && !defined(TARGET_OF_IOS)
 	ofExitCallback();
@@ -203,11 +211,11 @@ int ofRunApp(shared_ptr<ofBaseApp> && app) {
 
 //--------------------------------------
 void ofRunApp(const shared_ptr<ofAppBaseWindow> & window, shared_ptr<ofBaseApp> && app) {
-	ofCore.mainLoop->run(window, std::move(app));
+	ofCore.mainLoop.run(window, std::move(app));
 }
 
 int ofRunMainLoop() {
-	auto ret = ofCore.mainLoop->loop();
+	auto ret = ofCore.mainLoop.loop();
 	return ret;
 }
 
@@ -228,7 +236,7 @@ void ofSetupOpenGL(int w, int h, ofWindowMode screenMode) {
 
 shared_ptr<ofAppBaseWindow> ofCreateWindow(const ofWindowSettings & settings) {
 	// ofInit();
-	return ofCore.mainLoop->createWindow(settings);
+	return ofCore.mainLoop.createWindow(settings);
 }
 
 //-----------------------	gets called when the app exits
@@ -261,22 +269,23 @@ ofCoreEvents & ofEvents() {
 
 //--------------------------------------
 void ofSetEscapeQuitsApp(bool bQuitOnEsc) {
-	ofCore.mainLoop->setEscapeQuitsLoop(bQuitOnEsc);
+	ofCore.mainLoop.setEscapeQuitsLoop(bQuitOnEsc);
 }
 
 //--------------------------------------
 shared_ptr<ofBaseRenderer> & ofGetCurrentRenderer() {
-	return ofCore.getCurrentWindow()->renderer();
+//	return ofCore.getCurrentWindow()->currentRenderer;
+	return ofCore.mainLoop.currentWindow.lock()->currentRenderer;
 }
 
 //--------------------------------------
 ofBaseApp * ofGetAppPtr() {
-	return ofCore.mainLoop->getCurrentApp().get();
+	return ofCore.mainLoop.getCurrentApp().get();
 }
 
 //--------------------------------------
 std::thread::id ofGetMainThreadId() {
-	return ofCore.mainLoop->get_thread_id();
+	return ofCore.mainLoop.get_thread_id();
 }
 
 bool ofIsCurrentThreadTheMainThread() {
@@ -285,17 +294,17 @@ bool ofIsCurrentThreadTheMainThread() {
 
 //--------------------------------------
 ofAppBaseWindow * ofGetWindowPtr() {
-	return ofCore.mainLoop->getCurrentWindow().get();
+	return ofCore.mainLoop.getCurrentWindow().get();
 }
 
 //--------------------------------------
 std::shared_ptr<ofAppBaseWindow> ofGetCurrentWindow() {
-	return ofCore.mainLoop->getCurrentWindow();
+	return ofCore.mainLoop.getCurrentWindow();
 }
 
 //--------------------------------------
 void ofExit(int status) {
-	ofCore.mainLoop->shouldClose(status);
+	ofCore.mainLoop.shouldClose(status);
 }
 
 //--------------------------------------

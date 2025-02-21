@@ -34,9 +34,9 @@
 
 #include "GLFW/glfw3native.h"
 
-using std::numeric_limits;
-using std::shared_ptr;
-using std::vector;
+// using std::numeric_limits;
+// using std::shared_ptr;
+// using std::vector;
 using std::cout;
 using std::endl;
 
@@ -104,7 +104,7 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 	}
 
 	settings = _settings;
-	
+
 	if (!glfwInit()) {
 		ofLogError("ofAppGLFWWindow") << "couldn't init GLFW";
 		return;
@@ -179,13 +179,13 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 	allMonitors.update();
 	//	ofLogNotice("ofAppGLFWWindow") << "WINDOW MODE IS " << screenMode;
 
-	
+
 	GLFWmonitor *monitor = nullptr;
-	
+
 
 	// FIXME: maybe use as a global variable for the window?
 	bool hideWindow = false;
-	
+
 	int monitorIndex = 0;
 	// Check to see if desired monitor is connected.
 	if (allMonitors.rects.size() > settings.monitor) {
@@ -196,7 +196,7 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 		}
 		ofLogError("ofAppGLFWWindow") << "requested monitor is: " << settings.monitor << " monitor count is: " << allMonitors.rects.size();
 	}
-	
+
 	if (settings.windowMode == OF_GAME_MODE)
 	{
 		windowRect = allMonitors.rects[monitorIndex];
@@ -234,37 +234,37 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 //		return;
 	}
-	
-	
+
+
 	if (!windowP) {
 		ofLogError("ofAppGLFWWindow") << "couldn't create GLFW window";
 		return;
 	}
-	
+
 	// saves window rectangle just created.
 	windowRect = getWindowRect();
 
-	
+
 	if (settings.windowMode == OF_WINDOW || settings.windowMode == OF_FULLSCREEN) {
 		if (settings.isPositionSet()) {
 			windowRect.x = settings.getPosition().x;
 			windowRect.y = settings.getPosition().y;
 		}
-		
+
 		if (monitorIndex > 0) {
 			windowRect.x += allMonitors.rects[monitorIndex].x;
 			windowRect.y += allMonitors.rects[monitorIndex].y;
 			// now it will trigger isPositionSet() as true
 			settings.setPosition({ windowRect.x, windowRect.y });
 		}
-		
+
 		if (settings.isPositionSet()) {
 			setWindowRect(windowRect);
 		} else {
 			setWindowShape(windowRect.width, windowRect.height);
 		}
 	}
-	
+
 
 
 
@@ -309,7 +309,7 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 	glfwMakeContextCurrent(windowP);
 
 //	windowMode = settings.windowMode;
-	
+
 #ifndef TARGET_OPENGLES
 	static bool inited = false;
 	if (!inited) {
@@ -376,7 +376,7 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
         ofLoadImage(iconPixels, path);
         setWindowIcon(iconPixels);
     }
-    
+
     //------------------------------------------------------------
     void ofAppGLFWWindow::setWindowIcon(const ofPixels & iconPixels) {
         iconSet = true;
@@ -390,7 +390,7 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
             buffer[i + 2] += iconPixels[i * 4 + 1] << 8;
             buffer[i + 2] += iconPixels[i * 4 + 2];
         }
-        
+
         XChangeProperty(getX11Display(), getX11Window(), XInternAtom(getX11Display(), "_NET_WM_ICON", False), XA_CARDINAL, 32,
                         PropModeReplace, (const unsigned char *)buffer.data(), length);
         XFlush(getX11Display());
@@ -418,9 +418,9 @@ void ofAppGLFWWindow::update() {
 //		[cocoaWindow setLevel:NSScreenSaverWindowLevel + 1];
 		[cocoaWindow orderFrontRegardless];
 #endif
-		
+
 		bWindowNeedsShowing = false;
-		
+
 		if (settings.windowMode == OF_FULLSCREEN) {
 			// Meant to trigger fullscreen forced
 			settings.windowMode = OF_WINDOWMODE_UNDEFINED;
@@ -436,7 +436,7 @@ void ofAppGLFWWindow::update() {
 
 //		cout << "SHOW WINDOW! " << settings.windowName << endl;
 		glfwShowWindow(windowP);
-		
+
 //		cout << "after show window rect " << getWindowRect() << endl;
 	}
 }
@@ -464,7 +464,7 @@ void ofAppGLFWWindow::endDraw() {
 		std::cout << "flush " << ofGetFrameNum()  << " : " << settings.windowName << std::endl;
 		glFlush();
 	}
-	
+
 	currentRenderer->finishRender();
 }
 
@@ -483,7 +483,7 @@ void ofAppGLFWWindow::draw() {
 	} else {
 		glFlush();
 	}
-	
+
 	currentRenderer->finishRender();
 }
 
@@ -584,7 +584,7 @@ GLFWwindow * ofAppGLFWWindow::getGLFWWindow() {
 //------------------------------------------------------------
 void ofAppGLFWWindow::setWindowRect(const ofRectangle & rect) {
 //	cout << settings.windowName << " setWindowRect " << rect << endl;
-	
+
 	glfwSetWindowMonitor(windowP, NULL, rect.x, rect.y, rect.width, rect.height, GLFW_DONT_CARE);
 }
 
@@ -636,8 +636,8 @@ void ofAppGLFWWindow::setFSTarget(ofWindowMode targetWindowMode) {
 		} else {
 			windowRectFS = allMonitors.getRectMonitorForScreenRect(windowRect);
 		}
-		
-		// 
+
+		//
 		if (settings.fullscreenDisplays.size()) {
 			windowRectFS = allMonitors.getRectFromMonitors(settings.fullscreenDisplays);
 		}
@@ -675,7 +675,7 @@ void ofAppGLFWWindow::setFullscreen(bool fullscreen) {
 		if (([cocoaWindow styleMask] & NSWindowStyleMaskFullScreen) == NSWindowStyleMaskFullScreen) {
 			[cocoaWindow toggleFullScreen:nil];
 		}
-		
+
 		[NSApp setPresentationOptions:NSApplicationPresentationDefault];
 		[cocoaWindow setStyleMask:NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable];
 		[cocoaWindow setHasShadow:YES];
@@ -783,7 +783,7 @@ void ofAppGLFWWindow::setFullscreen(bool fullscreen) {
 //			xev.xclient.data.l[4] = 1;
 //			XSendEvent(display, RootWindow(display, DefaultScreen(display)),
 //				False, SubstructureRedirectMask | SubstructureNotifyMask, &xev);
-//			
+//
 //			// FIXME: review
 //			windowRect.width = maxx - minx;
 //			windowRect.height = maxy - minx;
@@ -894,10 +894,11 @@ static void rotateMouseXY(ofOrientation orientation, int w, int h, double & x, d
 //------------------------------------------------------------
 ofAppGLFWWindow * ofAppGLFWWindow::setCurrent(GLFWwindow * windowP) {
 	auto instance = static_cast<ofAppGLFWWindow *>(glfwGetWindowUserPointer(windowP));
-	auto mainLoop = ofGetMainLoop();
-	if (mainLoop) {
-		mainLoop->setCurrentWindow(instance);
-	}
+//	auto mainLoop = ofGetMainLoop();
+//	if (mainLoop) {
+//		mainLoop->setCurrentWindow(instance);
+//	}
+	ofCore.mainLoop.setCurrentWindow(instance);
 	instance->makeCurrent();
 	return instance;
 }
@@ -905,7 +906,7 @@ ofAppGLFWWindow * ofAppGLFWWindow::setCurrent(GLFWwindow * windowP) {
 //------------------------------------------------------------
 ofAppGLFWWindow * ofAppGLFWWindow::getWindow(GLFWwindow * windowP) {
 	return static_cast<ofAppGLFWWindow *>(glfwGetWindowUserPointer(windowP));
-	
+
 //	auto instance = static_cast<ofAppGLFWWindow *>(glfwGetWindowUserPointer(windowP));
 //	auto mainLoop = ofGetMainLoop();
 //	if (mainLoop) {
@@ -1403,7 +1404,8 @@ void ofAppGLFWWindow::monitor_cb(GLFWmonitor * monitor, int event) {
 //	cout << "monitor_cb!" << endl;
 //	cout << "monitors rect size: " << allMonitors.rects.size() << endl;
 
-	for (auto & w : ofGetMainLoop()->getWindows()) {
+	for (auto & w : ofCore.mainLoop.getWindows()) {
+//	for (auto & w : ofGetMainLoop()->getWindows()) {
 		if (w->settings.showOnlyInSelectedMonitor) {
 //			cout << "monitor_cb windowName " << w->settings.windowName << endl;
 			auto win = static_cast<ofAppGLFWWindow *>(w.get());
@@ -1438,7 +1440,7 @@ void ofAppGLFWWindow::resize_cb(GLFWwindow * windowP_, int w, int h) {
 	instance->events().notifyWindowResized(w, h);
 //	instance->nFramesSinceWindowResized = 0;
 
-	
+
 #if defined(TARGET_OSX)
 	if (!instance->bWindowNeedsShowing) {
 //		 FIXME - only after first update
@@ -1457,7 +1459,7 @@ void ofAppGLFWWindow::framebuffer_size_cb(GLFWwindow * windowP_, int w, int h) {
 //	cout << "framebuffer_size_cb " << w << " : " << h << endl;
 //	auto instance = getWindow(windowP_);
 	ofAppGLFWWindow * instance = setCurrent(windowP_);
-	
+
 	instance->currentRenderer->clear();
 	instance->events().notifyFramebufferResized(w, h);
 }
@@ -1468,7 +1470,7 @@ void ofAppGLFWWindow::exit_cb(GLFWwindow * windowP_) {
 //	auto instance = getWindow(windowP_);
 	ofAppGLFWWindow * instance = setCurrent(windowP_);
 	instance->events().notifyExit();
-	
+
 	// TODO: handle window closing correctly here.
 //	instance->close();
 //	instance->setWindowShouldClose();
@@ -1556,57 +1558,57 @@ void ofAppGLFWWindow::makeCurrent() {
     Display * ofAppGLFWWindow::getX11Display() {
         return glfwGetX11Display();
     }
-    
+
     Window ofAppGLFWWindow::getX11Window() {
         return glfwGetX11Window(windowP);
     }
-    
+
     XIC ofAppGLFWWindow::getX11XIC() {
         return xic;
     }
 #endif
-    
+
 #if defined(TARGET_LINUX) && !defined(TARGET_OPENGLES)
     GLXContext ofAppGLFWWindow::getGLXContext() {
         return glfwGetGLXContext(windowP);
     }
 #endif
-    
+
 #if defined(TARGET_LINUX) && defined(TARGET_OPENGLES)
     EGLDisplay ofAppGLFWWindow::getEGLDisplay() {
         return glfwGetEGLDisplay();
     }
-    
+
     EGLContext ofAppGLFWWindow::getEGLContext() {
         return glfwGetEGLContext(windowP);
     }
-    
+
     EGLSurface ofAppGLFWWindow::getEGLSurface() {
         return glfwGetEGLSurface(windowP);
     }
 #endif
-    
+
 #if defined(TARGET_OSX)
     void * ofAppGLFWWindow::getNSGLContext() {
         return (__bridge void *)glfwGetNSGLContext(windowP);
     }
-    
+
     void * ofAppGLFWWindow::getCocoaWindow() {
         return (__bridge void *)glfwGetCocoaWindow(windowP);
     }
 #endif
-    
+
 #if defined(TARGET_WIN32)
     HGLRC ofAppGLFWWindow::getWGLContext() {
         return glfwGetWGLContext(windowP);
     }
-    
+
     HWND ofAppGLFWWindow::getWin32Window() {
         return glfwGetWin32Window(windowP);
     }
-    
+
 #endif
-    
+
 #endif
 
 

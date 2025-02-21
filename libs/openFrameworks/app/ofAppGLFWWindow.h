@@ -70,27 +70,30 @@ public:
 	void setWindowTitle(const std::string & title) override;
 
 	void setWindowRect(const ofRectangle & rect) override;
-	void setWindowPosition(int x, int y);
-	void setWindowShape(int w, int h);
+	void setWindowPosition(int x, int y) override;
+	void setWindowShape(int w, int h) override;
 
-	void setFullscreen(bool fullscreen);
-	void toggleFullscreen();
+	void setFullscreen(bool fullscreen) override;
+	void toggleFullscreen() override;
+
+	// MARK: WOW not override
 	void setWindowMousePassThrough(bool allowPassThrough);
 
-	void enableSetupScreen();
-	void disableSetupScreen();
+	void enableSetupScreen() override;
+	void disableSetupScreen() override;
 
-	void setVerticalSync(bool bSync);
+	void setVerticalSync(bool bSync) override;
 
-	void setClipboardString(const std::string & text);
-	std::string getClipboardString();
+	void setClipboardString(const std::string & text) override;
+	std::string getClipboardString() override;
 
+	// MARK: WOW not override
 	int getPixelScreenCoordScale();
 
-	void makeCurrent();
-	void swapBuffers();
-	void startRender();
-	void finishRender();
+	void makeCurrent() override;
+	void swapBuffers() override;
+	void startRender() override;
+	void finishRender() override;
 
 	static void listVideoModes();
 	static void listMonitors();
@@ -122,8 +125,8 @@ public:
 	#endif
 
 	#if defined(TARGET_OSX)
-	void * getNSGLContext();
-	void * getCocoaWindow();
+	void * getNSGLContext() override;
+	void * getCocoaWindow() override;
 	#endif
 
 	#if defined(TARGET_WIN32)
@@ -149,7 +152,7 @@ private:
 	static void refresh_cb(GLFWwindow * windowP_);
 	static void monitor_cb(GLFWmonitor * monitor, int event);
 
-	void close();
+	void close() override;
 
 	#if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI_LEGACY)
 	XIM xim;
@@ -177,8 +180,8 @@ private:
 
 	bool iconSet;
 
-	void beginDraw();
-	void endDraw();
+	void beginDraw() override;
+	void endDraw() override;
 
 	//	static ofAppGLFWWindow * thisWindow = static_cast<ofAppGLFWWindow *>(this);
 

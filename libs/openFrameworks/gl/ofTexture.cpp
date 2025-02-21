@@ -19,7 +19,7 @@ static bool	bUsingArbTex		= true;
 static bool bUsingNormalizedTexCoords = false;
 static bool bUseCustomMinMagFilters = false;
 
-using std::set;
+// using std::set;
 
 //---------------------------------
 void ofEnableTextureEdgeHack(){
@@ -189,6 +189,11 @@ void ofRegenerateAllTextures(){
 ofTexture::ofTexture(){
 	resetAnchor();
 	bWantsMipmap = false;
+	
+	quad.setMode(OF_PRIMITIVE_TRIANGLE_FAN);
+	quad.getVertices().resize(4);
+	quad.getTexCoords().resize(4);
+
 }
 
 //----------------------------------------------------------
@@ -264,7 +269,7 @@ ofTextureData& ofTexture::getTextureData(){
 	if(!texData.bAllocated){
 		ofLogError("ofTexture") << "getTextureData(): texture has not been allocated";
 	}
-	
+
 	return texData;
 }
 
@@ -272,7 +277,7 @@ const ofTextureData& ofTexture::getTextureData() const {
 	if(!texData.bAllocated){
 		ofLogError("ofTexture") << "getTextureData(): texture has not been allocated";
 	}
-	
+
 	return texData;
 }
 
@@ -395,12 +400,12 @@ void ofTexture::allocate(int w, int h, int glInternalFormat, bool bUseARBExtensi
 #ifndef TARGET_OPENGLES
 	if (bUseARBExtension && GL_ARB_texture_rectangle){
 		texData.textureTarget = GL_TEXTURE_RECTANGLE_ARB;
-	} else 
+	} else
 #endif
 	{
 		texData.textureTarget = GL_TEXTURE_2D;
 	}
-	
+
 	allocate(texData,glFormat,pixelType);
 }
 
@@ -574,7 +579,7 @@ void ofTexture::loadData(const int16_t * data, int w, int h, int glFormat){
 
 //----------------------------------------------------------
 void ofTexture::loadData(const int32_t * data, int w, int h, int glFormat){
-	
+
 	// FIXME: should w,2 be w,4?
 	ofSetPixelStoreiAlignment(GL_UNPACK_ALIGNMENT,w,2,ofGetNumChannelsFromGLFormat(glFormat));
 	loadData(data, w, h, glFormat, GL_INT);
@@ -663,19 +668,19 @@ void ofTexture::loadData(const void * data, int w, int h, int glFormat, int glTy
 			allocate(w, h, glFormat, glFormat, glType);
 		}
 	}
-	
+
 	// compute new tex co-ords based on the ratio of data's w, h to texture w,h;
 #ifndef TARGET_OPENGLES
 	if (texData.textureTarget == GL_TEXTURE_RECTANGLE_ARB){
 		texData.tex_t = w;
 		texData.tex_u = h;
-	} else 
+	} else
 #endif
 	{
 		texData.tex_t = (float)(w) / (float)texData.tex_w;
 		texData.tex_u = (float)(h) / (float)texData.tex_h;
 	}
-	
+
 	// bind texture
 	glBindTexture(texData.textureTarget, (GLuint) texData.textureID);
 	//update the texture image:
@@ -685,19 +690,19 @@ void ofTexture::loadData(const void * data, int w, int h, int glFormat, int glTy
 	glTexSubImage2D(texData.textureTarget, 0, 0, 0, w, h, glFormat, glType, data);
 	// unbind texture target by binding 0
 	glBindTexture(texData.textureTarget, 0);
-	
+
 	if (bWantsMipmap) {
 		// auto-generate mipmap, since this ofTexture wants us to.
 		generateMipmap();
 	}
-	
+
 }
 
 //----------------------------------------------------------
 void ofTexture::generateMipmap(){
 
 	// Generate mipmaps using hardware-accelerated core GL methods.
-	
+
 	// 1. Check whether the current OpenGL version supports mipmap generation:
 	//    glGenerateMipmap() was introduced to OpenGL core in 3.0, and
 	//    OpenGLES core in 2.0 but earlier versions may support it if they
@@ -707,8 +712,8 @@ void ofTexture::generateMipmap(){
 	if(ofIsGLProgrammableRenderer()){
 		isGlGenerateMipmapAvailable = true;
 	}
-	
-	
+
+
 	if (!isGlGenerateMipmapAvailable && !ofGLCheckExtension("GL_EXT_framebuffer_object")) {
 		static bool versionWarningIssued = false;
 		if (!versionWarningIssued) ofLogWarning() << "Your current OpenGL version does not support mipmap generation via glGenerateMipmap().";
@@ -718,7 +723,7 @@ void ofTexture::generateMipmap(){
 	}
 
 	// 2. Check whether the texture's texture target supports mipmap generation.
-	
+
 	switch (texData.textureTarget) {
 			/// OpenGL ES only supports mipmap for the following two texture targets:
 		case GL_TEXTURE_2D:
@@ -732,7 +737,7 @@ void ofTexture::generateMipmap(){
 #endif
 		{
 			// All good, this particular texture target supports mipmaps.
-			
+
 			// glEnable(texData.textureTarget);	/// < uncomment this hack if you are unlucky enough to run an older ATI card.
 			// See also: https://www.opengl.org/wiki/Common_Mistakes#Automatic_mipmap_generation
 
@@ -746,7 +751,7 @@ void ofTexture::generateMipmap(){
 		{
 			// This particular texture target does not support mipmaps.
 			static bool warningIssuedAlready = false;
-			
+
 			if (!warningIssuedAlready){
 				ofLogWarning() << "Mipmaps are not supported for textureTarget 0x" << std::hex << texData.textureTarget << std::endl
 				<< "Most probably you are trying to create mipmaps from a GL_TEXTURE_RECTANGLE texture." << std::endl
@@ -757,7 +762,7 @@ void ofTexture::generateMipmap(){
 			break;
 		}
 	} // end switch(texData.textureTarget)
-		
+
 }
 
 //----------------------------------------------------------
@@ -768,36 +773,36 @@ void ofTexture::loadScreenData(int x, int y, int w, int h){
 	y = screenHeight - y;
 	y -= h; // top, bottom issues
 	texData.bFlipTexture = true;
-	
+
 	if ( w > texData.tex_w || h > texData.tex_h) {
 		ofLogError("ofTexture") << "loadScreenData(): " << w << "x" << h << " image data too big for "
 		<< texData.tex_w << "x " << texData.tex_h << " allocated texture, not uploading";
 		return;
 	}
-	
+
 	//update our size with the new dimensions - this should be the same size or smaller than the allocated texture size
 	texData.width 	= w;
 	texData.height 	= h;
-	
+
 	//compute new tex co-ords based on the ratio of data's w, h to texture w,h;
 #ifndef TARGET_OPENGLES // DAMIAN
 	if (texData.textureTarget == GL_TEXTURE_RECTANGLE_ARB){
 		texData.tex_t = (float)(w);
 		texData.tex_u = (float)(h);
-	} else 
+	} else
 #endif
 	{
 		texData.tex_t = (float)(w) / (float)texData.tex_w;
 		texData.tex_u = (float)(h) / (float)texData.tex_h;
 	}
-	
-	
+
+
 	glBindTexture(texData.textureTarget,texData.textureID);
 
 	glCopyTexSubImage2D(texData.textureTarget, 0,0,0,x,y,w,h);
 
 	glBindTexture(texData.textureTarget,0);
-	
+
 	if (bWantsMipmap) {
 		generateMipmap();
 	}
@@ -811,7 +816,7 @@ void ofTexture::loadScreenData(int x, int y, int w, int h){
 void ofTexture::setAnchorPercent(float xPct, float yPct){
 	anchor.x  = xPct;
 	anchor.y  = yPct;
-	
+
 	bAnchorIsPct = true;
 }
 
@@ -819,7 +824,7 @@ void ofTexture::setAnchorPercent(float xPct, float yPct){
 void ofTexture::setAnchorPoint(float x, float y){
 	anchor.x = x;
 	anchor.y = y;
-	
+
 	bAnchorIsPct = false;
 }
 
@@ -870,26 +875,26 @@ void ofTexture::disableAlphaMask(){
 
 //----------------------------------------------------------
 glm::vec2 ofTexture::getCoordFromPoint(float xPos, float yPos) const{
-	
+
 	glm::vec2 temp(0);
-	
+
 	if (!isAllocated()) return temp;
-	
-#ifndef TARGET_OPENGLES	
+
+#ifndef TARGET_OPENGLES
 	if (texData.textureTarget == GL_TEXTURE_RECTANGLE_ARB){
-		
+
 		temp = {xPos, yPos};
-		
+
 	} else {
-#endif		
-		// non arb textures are 0 to 1, so we 
-		// (a) convert to a pct: 
-		
+#endif
+		// non arb textures are 0 to 1, so we
+		// (a) convert to a pct:
+
 //		float pctx = xPos / texData.width;
 //		float pcty = yPos / texData.height;
-//		
+//
 //		// (b) mult by our internal pct (since we might not be 0-1 internally)
-//		
+//
 //		pctx *= texData.tex_t;
 //		pcty *= texData.tex_u;
 
@@ -899,13 +904,13 @@ glm::vec2 ofTexture::getCoordFromPoint(float xPos, float yPos) const{
 		float pcty = texData.tex_u * yPos / texData.height;
 
 		temp = {pctx, pcty};
-		
-#ifndef TARGET_OPENGLES	
+
+#ifndef TARGET_OPENGLES
 	}
-#endif		
-	
+#endif
+
 	return temp;
-	
+
 }
 
 //----------------------------------------------------------
@@ -936,25 +941,25 @@ bool ofTexture::isUsingTextureMatrix() const{
 
 //----------------------------------------------------------
 glm::vec2 ofTexture::getCoordFromPercent(float xPct, float yPct) const{
-	
+
 	glm::vec2 temp(0);
-	
+
 	if (!isAllocated()) return temp;
-	
-#ifndef TARGET_OPENGLES	
+
+#ifndef TARGET_OPENGLES
 	if (texData.textureTarget == GL_TEXTURE_RECTANGLE_ARB){
-		
+
 		temp = {xPct * texData.width, yPct * texData.height};
-		
+
 	} else {
-#endif	
+#endif
 		xPct *= texData.tex_t;
 		yPct *= texData.tex_u;
 		temp = {xPct, yPct};
-		
-#ifndef TARGET_OPENGLES	
+
+#ifndef TARGET_OPENGLES
 	}
-#endif	
+#endif
 	return temp;
 }
 
@@ -973,7 +978,7 @@ void ofTexture::setTextureWrap(GLint wrapModeHorizontal, GLint wrapModeVertical)
 void ofTexture::setTextureMinMagFilter(GLint minFilter, GLint magFilter){
 
 	// Issue warning if mipmaps not present for mipmap based min filter.
-	
+
 	if ( (minFilter > GL_LINEAR) && texData.hasMipmap == false ){
 		static bool hasWarnedNoMipmapsForMinFilter = false;
 		if(!hasWarnedNoMipmapsForMinFilter) {
@@ -985,7 +990,7 @@ void ofTexture::setTextureMinMagFilter(GLint minFilter, GLint magFilter){
 	}
 
 	// Issue warning if invalid magFilter specified.
-	
+
 	if ( (magFilter > GL_LINEAR ) ) {
 		static bool hasWarnedInvalidMagFilter = false;
 		if (!hasWarnedInvalidMagFilter) {
@@ -1089,7 +1094,6 @@ ofMesh ofTexture::getMeshForSubsection(float x, float y, float z, float w, float
 		return {};
 	}
 
-	ofMesh quad;
 //	if (quad.hasVertices()) {
 //		return quad;
 //	}
@@ -1106,10 +1110,10 @@ ofMesh ofTexture::getMeshForSubsection(float x, float y, float z, float w, float
 
 	// for rect mode center, let's do this:
 	if (rectMode == OF_RECTMODE_CENTER){
-		px0 -= w*0.5;
-		py0 -= h*0.5;
-		px1 -= w*0.5;
-		py1 -= h*0.5;
+		px0 -= w*0.5f;
+		py0 -= h*0.5f;
+		px1 -= w*0.5f;
+		py1 -= h*0.5f;
 	}
 
 	//we translate our drawing points by our anchor point.
@@ -1157,25 +1161,23 @@ ofMesh ofTexture::getMeshForSubsection(float x, float y, float z, float w, float
 	GLfloat tx1 { bottomRight.x - offsetw };
 	GLfloat ty1 { bottomRight.y - offseth };
 
-	quad.setMode(OF_PRIMITIVE_TRIANGLE_FAN);
-	quad.getVertices().resize(4);
-	quad.getTexCoords().resize(4);
 	
-	quad.getVertices() = {
+//	ofMesh quad;
+	return  { OF_PRIMITIVE_TRIANGLE_FAN, {
 		{px0, py0, z},
 		{px1, py0, z},
 		{px1, py1, z},
 		{px0, py1, z},
+	},
+		{
+			{tx0, ty0},
+			{tx1, ty0},
+			{tx1, ty1},
+			{tx0, ty1},
+		}
 	};
 
-	quad.getTexCoords() = {
-		{tx0, ty0},
-		{tx1, ty0},
-		{tx1, ty1},
-		{tx0, ty1},
-	};
-
-	return quad;
+//	return quad;
 }
 
 // ROGER
@@ -1186,8 +1188,10 @@ void ofTexture::draw(const glm::vec3 & p1, const glm::vec3 & p2, const glm::vec3
 	// before glEnable or else the shader gets confused
 	/// ps: maybe if bUsingArbTex is enabled we should use glActiveTextureARB?
 	//glActiveTexture(GL_TEXTURE0);
-	std::shared_ptr<ofBaseGLRenderer> renderer { ofGetGLRenderer() };
-	if(renderer){
+	// std::shared_ptr<ofBaseGLRenderer> renderer { ofGetGLRenderer() };
+	// if(renderer){
+
+	if(auto renderer { ofGetGLRenderer() }){
 		bind(0);
 		renderer->draw(getQuad(p1,p2,p3,p4),OF_MESH_FILL);
 		unbind(0);
@@ -1202,41 +1206,37 @@ ofMesh ofTexture::getQuad(const glm::vec3 & p1, const glm::vec3 & p2, const glm:
 	// we need a better solution for this, but
 	// to constantly add a 2 pixel border on all uploaded images
 	// is insane..
-	
+
 	GLfloat offsetw = 0.0f;
 	GLfloat offseth = 0.0f;
-	
+
 	if (texData.textureTarget == GL_TEXTURE_2D && bTexHackEnabled) {
 		offsetw = 1.0f / (texData.tex_w);
 		offseth = 1.0f / (texData.tex_h);
 	}
 	// -------------------------------------------------
-	
+
 	GLfloat tx0 = 0+offsetw;
 	GLfloat ty0 = 0+offseth;
 	GLfloat tx1 = texData.tex_t - offsetw;
 	GLfloat ty1 = texData.tex_u - offseth;
 
-	ofMesh quad;
-	quad.getVertices().resize(4);
-	quad.getTexCoords().resize(4);
-	quad.setMode(OF_PRIMITIVE_TRIANGLE_FAN);
-
-	quad.getVertices() = {
+//	ofMesh quad;
+	return { OF_PRIMITIVE_TRIANGLE_FAN, {
 		{p1.x, p1.y, p1.z},
 		{p2.x, p2.y, p2.z},
 		{p3.x, p3.y, p3.z},
 		{p4.x, p4.y, p4.z}
+	},
+		{
+			{tx0,ty0},
+			{tx1,ty0},
+			{tx1,ty1},
+			{tx0,ty1}
+		}
 	};
 
-	quad.getTexCoords() = {
-		{tx0,ty0},
-		{tx1,ty0},
-		{tx1,ty1},
-		{tx0,ty1}
-	};
-
-	return quad;
+//	return quad;
 }
 
 //----------------------------------------------------------

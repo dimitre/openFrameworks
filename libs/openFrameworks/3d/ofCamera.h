@@ -241,13 +241,13 @@ public:
 protected:
 	ofRectangle getViewport() const;
 	std::shared_ptr<ofBaseRenderer> getRenderer() const;
-	void calcClipPlanes(const ofRectangle & viewport);
+	void calcClipPlanes(const ofRectangle & viewport) const;
 
 private:
 	bool isOrtho;
 	float fov;
-	float nearClip;
-	float farClip;
+	mutable float nearClip;
+	mutable float farClip;
 	glm::vec2 lensOffset;
 	bool forceAspectRatio;
 	float aspectRatio; // only used when forceAspect=true, = w / h

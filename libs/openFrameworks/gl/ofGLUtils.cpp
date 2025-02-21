@@ -951,27 +951,36 @@ int ofGLESVersionFromGL(){
 }
 #endif
 
-#ifndef TARGET_PROGRAMMABLE_GL
+//#ifndef TARGET_PROGRAMMABLE_GL
+//shared_ptr<ofBaseGLRenderer> ofGetGLRenderer(){
+//	if(ofGetCurrentRenderer()->getType()==ofGLRenderer::TYPE || ofGetCurrentRenderer()->getType()==ofGLProgrammableRenderer::TYPE){
+//		return (shared_ptr<ofBaseGLRenderer>&)ofGetCurrentRenderer();
+//	}else if(ofGetCurrentRenderer()->getType()==ofRendererCollection::TYPE){
+//		return ((shared_ptr<ofRendererCollection>&)ofGetCurrentRenderer())->getGLRenderer();
+//	}else{
+//		return shared_ptr<ofGLRenderer>();
+//	}
+//}
+//#else
+//shared_ptr<ofBaseGLRenderer> ofGetGLRenderer(){
+//	if(ofGetCurrentRenderer()->getType()==ofGLProgrammableRenderer::TYPE){
+//		return (shared_ptr<ofBaseGLRenderer>&)ofGetCurrentRenderer();
+//	}else if(ofGetCurrentRenderer()->getType()==ofRendererCollection::TYPE){
+//		return ((shared_ptr<ofRendererCollection>&)ofGetCurrentRenderer())->getGLRenderer();
+//	}else{
+//		return shared_ptr<ofGLProgrammableRenderer>();
+//	}
+//}
+//#endif
+
+// EXPERIMENTAL. if it doesnt work uncomment the previous section.
 shared_ptr<ofBaseGLRenderer> ofGetGLRenderer(){
-	if(ofGetCurrentRenderer()->getType()==ofGLRenderer::TYPE || ofGetCurrentRenderer()->getType()==ofGLProgrammableRenderer::TYPE){
-		return (shared_ptr<ofBaseGLRenderer>&)ofGetCurrentRenderer();
-	}else if(ofGetCurrentRenderer()->getType()==ofRendererCollection::TYPE){
-		return ((shared_ptr<ofRendererCollection>&)ofGetCurrentRenderer())->getGLRenderer();
-	}else{
-		return shared_ptr<ofGLRenderer>();
-	}
+//	auto c = ofCore.mainLoop.currentWindow.lock()->currentRenderer;
+//	return (shared_ptr<ofBaseGLRenderer>&)c;
+	return (shared_ptr<ofBaseGLRenderer>&)ofCore.mainLoop.currentWindow.lock()->currentRenderer;
+//	return ofCore.mainLoop.currentWindow.lock()->currentRenderer;
+
 }
-#else
-shared_ptr<ofBaseGLRenderer> ofGetGLRenderer(){
-	if(ofGetCurrentRenderer()->getType()==ofGLProgrammableRenderer::TYPE){
-		return (shared_ptr<ofBaseGLRenderer>&)ofGetCurrentRenderer();
-	}else if(ofGetCurrentRenderer()->getType()==ofRendererCollection::TYPE){
-		return ((shared_ptr<ofRendererCollection>&)ofGetCurrentRenderer())->getGLRenderer();
-	}else{
-		return shared_ptr<ofGLProgrammableRenderer>();
-	}
-}
-#endif
 
 #ifndef TARGET_OPENGLES
 namespace{

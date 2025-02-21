@@ -420,6 +420,7 @@ public:
 
 private:
 	float targetRate = 60.0f;
+	std::chrono::nanoseconds fixedRateTimeNanos;
 	bool bFrameRateSet;
 	ofTimerFps timerFps;
 //	ofTimer timer;
@@ -438,7 +439,6 @@ private:
 		Filtered,
 	} timeMode
 		= System;
-	std::chrono::nanoseconds fixedRateTimeNanos;
 };
 
 bool ofSendMessage(ofMessage msg);

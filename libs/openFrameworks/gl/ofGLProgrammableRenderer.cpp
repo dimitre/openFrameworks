@@ -376,22 +376,24 @@ void ofGLProgrammableRenderer::drawInstanced(const ofVboMesh & mesh, ofPolyRende
 
 //----------------------------------------------------------
 void ofGLProgrammableRenderer::draw(const of3dPrimitive & model, ofPolyRenderMode renderType) const {
-	const_cast<ofGLProgrammableRenderer *>(this)->pushMatrix();
-	const_cast<ofGLProgrammableRenderer *>(this)->multMatrix(model.getGlobalTransformMatrix());
+	auto r = const_cast<ofGLProgrammableRenderer *>(this);
+	r->pushMatrix();
+	r->multMatrix(model.getGlobalTransformMatrix());
 	if (model.isUsingVbo()) {
 		draw(static_cast<const ofVboMesh &>(model.getMesh()), renderType);
 	} else {
 		draw(model.getMesh(), renderType);
 	}
-	const_cast<ofGLProgrammableRenderer *>(this)->popMatrix();
+	r->popMatrix();
 }
 
 //----------------------------------------------------------
 void ofGLProgrammableRenderer::draw(const ofNode & node) const {
-	const_cast<ofGLProgrammableRenderer *>(this)->pushMatrix();
-	const_cast<ofGLProgrammableRenderer *>(this)->multMatrix(node.getGlobalTransformMatrix());
+	auto r = const_cast<ofGLProgrammableRenderer *>(this);
+	r->pushMatrix();
+	r->multMatrix(node.getGlobalTransformMatrix());
 	node.customDraw(this);
-	const_cast<ofGLProgrammableRenderer *>(this)->popMatrix();
+	r->popMatrix();
 }
 
 //----------------------------------------------------------
@@ -735,15 +737,15 @@ void ofGLProgrammableRenderer::setupScreenPerspective(float width, float height,
 		viewH = height;
 	}
 
-	float eyeX = viewW / 2;
-	float eyeY = viewH / 2;
+	float eyeX = viewW * 0.5f;
+	float eyeY = viewH * 0.5f;
 	float halfFov = glm::pi<float>() * fov / 360.0f;
 	float theTan = std::tanf(halfFov);
 	float dist = eyeY / theTan;
 	float aspect = (float)viewW / viewH;
 
-	if (nearDist == 0) nearDist = dist / 10.0f;
-	if (farDist == 0) farDist = dist * 10.0f;
+	if (nearDist == 0.0f) nearDist = dist * 0.1f;
+	if (farDist == 0.0f) farDist = dist * 10.0f;
 
 	matrixMode(OF_MATRIX_PROJECTION);
 	auto persp = glm::perspective(glm::radians(fov), aspect, nearDist, farDist);
@@ -3925,7 +3927,7 @@ void ofGLProgrammableRenderer::configureLinesBundleFromMesh(LinesBundle& aLinesB
 			if( glm::all(glm::lessThan(glm::abs(srcVerts[cindex]-srcVerts[pindex]), EPSILON_VEC3 ))) {
 				if( i != 0 || (i == 0 && bClosed )) {
 					// loop through and find a good next vert //
-					for( int pi = i-2; pi >= 0; pi-- ) {
+					for( std::size_t pi = i-2; pi >= 0; pi-- ) {
 						pindex = (pi) % numPs;
 						if (srcHasIndices) {
 							pindex = srcIndices[pindex];
@@ -3948,7 +3950,7 @@ void ofGLProgrammableRenderer::configureLinesBundleFromMesh(LinesBundle& aLinesB
 //				nvert = glm::vec4(cachedNextVert, 1.f);
 				if( i != targetNumPs - 1 || (i == targetNumPs - 1 && bClosed) ) {
 					// loop through and find a good next vert //
-					for( int ni = i+2; ni < targetNumPs; ni++ ) {
+					for( std::size_t ni = i+2; ni < targetNumPs; ni++ ) {
 						nindex = (ni) % numPs;
 						if (srcHasIndices) {
 							nindex = srcIndices[nindex];

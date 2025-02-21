@@ -16,24 +16,44 @@ public:
 	ofCoreInternal() {};
 	~ofCoreInternal() {};
 
-	std::string name = "virgem";
-
-	std::vector <std::function<void()>> shutdownFunctions;
 	// ofAppRunner
 	bool initialized = false;
 	bool exiting = false;
 	ofCoreEvents noopEvents;
-//	ofMainLoop mainLoop;
-	std::shared_ptr<ofMainLoop> mainLoop { std::make_shared<ofMainLoop>() };
+	ofMainLoop mainLoop;
+	// std::shared_ptr<ofMainLoop> mainLoop { std::make_shared<ofMainLoop>() };
 
 	// ofFileUtils
+
+	void init() {
+		if (initialized) return;
+		initialized  = true;
+		exiting = false;
+	}
+
+
+	std::shared_ptr<ofAppBaseWindow> getCurrentWindow(){
+//		if (mainLoop) //mainLoop is always present. is it?
+		{
+			return mainLoop.currentWindow.lock();
+		}
+		return nullptr;
+	}
+
+	std::shared_ptr<ofBaseRenderer> & getCurrentRenderer();
+//	std::shared_ptr<ofBaseRenderer> & getCurrentRenderer() {
+//		return mainLoop.currentWindow.lock()->currentRenderer;
+//	}
+
+
+	std::vector <std::function<void()>> shutdownFunctions;
 
 	void exit() {
 		if(!initialized) return;
 
 		// controlled destruction of the mainLoop before
 		// any other deinitialization
-		// mainLoop->exit();
+		// mainLoop.exit();
 //		mainLoop.exit();
 
 		// all shutdown functions called
@@ -44,23 +64,6 @@ public:
 		initialized = false;
 		exiting = true;
 	}
-
-	void init() {
-		name = "inicializado";
-		if (initialized) return;
-		initialized  = true;
-		exiting = false;
-	}
-
-	std::shared_ptr<ofAppBaseWindow> getCurrentWindow(){
-//		if (mainLoop) //mainLoop is always present. is it?
-		{
-			return mainLoop->currentWindow.lock();
-		}
-		std::cout << "getCurrentWindow ofCore nullptr name=" << name << std::endl;
-		return nullptr;
-	}
-
 };
 
 extern ofCoreInternal ofCore;
@@ -69,8 +72,8 @@ extern ofCoreInternal ofCore;
 void ofInit();
 void ofSetupOpenGL(int w, int h, ofWindowMode screenMode); // sets up the opengl context!
 std::shared_ptr<ofAppBaseWindow> ofCreateWindow(const ofWindowSettings & settings); // sets up the opengl context!
-std::shared_ptr<ofMainLoop> ofGetMainLoop();
-void ofSetMainLoop(const std::shared_ptr<ofMainLoop> & mainLoop);
+//std::shared_ptr<ofMainLoop> ofGetMainLoop();
+//void ofSetMainLoop(const std::shared_ptr<ofMainLoop> & mainLoop);
 
 template <typename Window>
 void ofSetupOpenGL(const std::shared_ptr<Window> & windowPtr, int w, int h, ofWindowMode screenMode) {
@@ -78,8 +81,8 @@ void ofSetupOpenGL(const std::shared_ptr<Window> & windowPtr, int w, int h, ofWi
 	ofWindowSettings settings;
 	settings.setSize(w, h);
 	settings.windowMode = screenMode;
-	ofGetMainLoop()->addWindow(windowPtr);
-	// ofCore.mainLoop.addWindow(windowPtr);
+	ofCore.mainLoop.addWindow(windowPtr);
+//	ofGetMainLoop()->addWindow(windowPtr);
 	windowPtr->setup(settings);
 }
 

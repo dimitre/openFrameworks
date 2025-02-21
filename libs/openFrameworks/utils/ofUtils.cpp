@@ -247,60 +247,73 @@ uint64_t ofGetFixedStepForFps(double fps) {
 }
 
 ofTimeMode ofGetTimeMode() {
-	if (auto mainLoop = ofGetMainLoop()) {
-		if (auto window = mainLoop->getCurrentWindow()) {
-			return window->events().getTimeMode();
-		}
+	if (auto window = ofCore.mainLoop.getCurrentWindow()) {
+		return window->events().getTimeMode();
 	}
+//	if (auto mainLoop = ofGetMainLoop()) {
+//		if (auto window = mainLoop->getCurrentWindow()) {
+//			return window->events().getTimeMode();
+//		}
+//	}
 	return ofTimeMode(0);
 }
 
 //--------------------------------------
 void ofSetTimeModeSystem() {
-	auto mainLoop = ofGetMainLoop();
-	if (!mainLoop) {
-		ofLogError("ofSetSystemTimeMode") << "ofMainLoop is not initialized yet, can't set time mode";
-		return;
-	}
-	auto window = mainLoop->getCurrentWindow();
-	if (!window) {
+//	auto mainLoop = ofGetMainLoop();
+//	if (!mainLoop) {
+//		ofLogError("ofSetSystemTimeMode") << "ofMainLoop is not initialized yet, can't set time mode";
+//		return;
+//	}
+//	auto window = mainLoop->getCurrentWindow();
+//	if (!window) {
+//		ofLogError("ofSetSystemTimeMode") << "No window setup yet can't set time mode";
+//		return;
+//	}
+	if (auto window = ofCore.mainLoop.getCurrentWindow()) {
+		window->events().setTimeModeSystem();
+		of::priv::getClock().setTimeModeSystem();
+	} else {
 		ofLogError("ofSetSystemTimeMode") << "No window setup yet can't set time mode";
-		return;
 	}
-	window->events().setTimeModeSystem();
-	of::priv::getClock().setTimeModeSystem();
 }
 
 //--------------------------------------
 void ofSetTimeModeFixedRate(uint64_t stepNanos) {
-	auto mainLoop = ofGetMainLoop();
-	if (!mainLoop) {
-		ofLogError("ofSetSystemTimeMode") << "ofMainLoop is not initialized yet, can't set time mode";
-		return;
+//	auto mainLoop = ofGetMainLoop();
+//	if (!mainLoop) {
+//		ofLogError("ofSetSystemTimeMode") << "ofMainLoop is not initialized yet, can't set time mode";
+//		return;
+//	}
+//	auto window = mainLoop->getCurrentWindow();
+//	if (!window) {
+//		ofLogError("ofSetSystemTimeMode") << "No window setup yet can't set time mode";
+//		return;
+//	}
+	if (auto window = ofCore.mainLoop.getCurrentWindow()) {
+		window->events().setTimeModeFixedRate(stepNanos);
+//		of::priv::getClock().setTimeModeFixedRate(stepNanos, *mainLoop);
+		of::priv::getClock().setTimeModeFixedRate(stepNanos, ofCore.mainLoop);
 	}
-	auto window = mainLoop->getCurrentWindow();
-	if (!window) {
-		ofLogError("ofSetSystemTimeMode") << "No window setup yet can't set time mode";
-		return;
-	}
-	window->events().setTimeModeFixedRate(stepNanos);
-	of::priv::getClock().setTimeModeFixedRate(stepNanos, *mainLoop);
 }
 
 //--------------------------------------
 void ofSetTimeModeFiltered(float alpha) {
-	auto mainLoop = ofGetMainLoop();
-	if (!mainLoop) {
-		ofLogError("ofSetSystemTimeMode") << "ofMainLoop is not initialized yet, can't set time mode";
-		return;
+//	auto mainLoop = ofGetMainLoop();
+//	if (!mainLoop) {
+//		ofLogError("ofSetSystemTimeMode") << "ofMainLoop is not initialized yet, can't set time mode";
+//		return;
+//	}
+//	auto window = mainLoop->getCurrentWindow();
+//	if (!window) {
+//		ofLogError("ofSetSystemTimeMode") << "No window setup yet can't set time mode";
+//		return;
+//	}
+	if (auto window = ofCore.mainLoop.getCurrentWindow()) {
+		
+		window->events().setTimeModeFiltered(alpha);
+		of::priv::getClock().setTimeModeSystem();
 	}
-	auto window = mainLoop->getCurrentWindow();
-	if (!window) {
-		ofLogError("ofSetSystemTimeMode") << "No window setup yet can't set time mode";
-		return;
-	}
-	window->events().setTimeModeFiltered(alpha);
-	of::priv::getClock().setTimeModeSystem();
 }
 
 //--------------------------------------

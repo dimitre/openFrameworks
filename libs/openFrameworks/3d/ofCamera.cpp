@@ -145,8 +145,9 @@ void ofCamera::end() {
 //----------------------------------------
 glm::mat4 ofCamera::getProjectionMatrix(const ofRectangle & viewport) const {
 	// autocalculate near/far clip planes if not set by user
-	const_cast<ofCamera*>(this)->calcClipPlanes(viewport);
-
+//	const_cast<ofCamera*>(this)->calcClipPlanes(viewport);
+	this->calcClipPlanes(viewport);
+	
 	if(isOrtho) {
 		return glm::translate(glm::mat4(1.0), {-lensOffset.x, -lensOffset.y, 0.f}) * glm::ortho(
 			- viewport.width/2,
@@ -219,7 +220,7 @@ glm::vec3 ofCamera::cameraToWorld(glm::vec3 CameraXYZ, const ofRectangle & viewp
 }
 
 //----------------------------------------
-void ofCamera::calcClipPlanes(const ofRectangle & viewport) {
+void ofCamera::calcClipPlanes(const ofRectangle & viewport) const {
 	// autocalculate near/far clip planes if not set by user
 	if(nearClip == 0 || farClip == 0) {
 		float dist = getImagePlaneDistance(viewport);

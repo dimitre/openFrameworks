@@ -95,6 +95,8 @@ public:
 	/// See [ofGLUtils](../gl/ofGLUtils.htm) for more information on these types.
 	ofMesh_(ofPrimitiveMode mode, const std::vector<V>& verts);
 
+	ofMesh_(ofPrimitiveMode mode, const std::vector<V>& verts, const std::vector<T>& tCoords);
+
 	virtual ~ofMesh_(){}
 
 	void setFromTriangles( const std::vector<ofMeshFace_<V,N,C,T>>& tris, bool bUseFaceNormal=false );

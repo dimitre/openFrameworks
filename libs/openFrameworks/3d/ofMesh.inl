@@ -14,6 +14,9 @@
 
 #include <unordered_map>
 
+//FIXME: TEMP
+#include "ofAppBaseWindow.h"
+
 //--------------------------------------------------------------
 template<class V, class N, class C, class T>
 ofMesh_<V,N,C,T>::ofMesh_(){
@@ -43,6 +46,21 @@ ofMesh_<V,N,C,T>::ofMesh_(ofPrimitiveMode mode, const std::vector<V>& verts){
 	useIndices = true;
 	setMode(mode);
 	addVertices(verts);
+}
+
+//--------------------------------------------------------------
+template<class V, class N, class C, class T>
+ofMesh_<V,N,C,T>::ofMesh_(ofPrimitiveMode mode, const std::vector<V>& verts, const std::vector<T>& tCoords){
+	bColorsChanged = false;
+	bNormalsChanged = false;
+	bTexCoordsChanged = false;
+	useColors = true;
+	useTextures = true;
+	useNormals = true;
+	useIndices = true;
+	setMode(mode);
+	addVertices(verts);
+	addTexCoords(tCoords);
 }
 
 
@@ -961,6 +979,9 @@ template<class V, class N, class C, class T>
 void ofMesh_<V,N,C,T>::draw(ofPolyRenderMode renderType) const{
 	if(getNumVertices()==0) return;
 	ofGetCurrentRenderer()->draw(*this,renderType,useColors,useTextures,useNormals);
+	// FIXME: Temporary testing
+//	ofCore.mainLoop.currentWindow.lock()->currentRenderer->draw(*this,renderType,useColors,useTextures,useNormals);
+
 }
 
 

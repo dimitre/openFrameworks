@@ -7,8 +7,7 @@ static ofEventArgs voidEventArgs;
 
 //--------------------------------------
 void ofSetFrameRate(int targetRate) {
-	auto window = ofGetMainLoop()->getCurrentWindow();
-	if (window) {
+	if (auto window = ofCore.getCurrentWindow()) {
 		window->events().setFrameRate(targetRate);
 	} else {
 		ofLogWarning("ofEvents") << "Trying to set framerate before mainloop is ready";
@@ -17,8 +16,7 @@ void ofSetFrameRate(int targetRate) {
 
 //--------------------------------------
 float ofGetFrameRate() {
-	auto window = ofGetMainLoop()->getCurrentWindow();
-	if (window) {
+    if (auto window = ofCore.getCurrentWindow()) {
 		return window->events().getFrameRate();
 	} else {
 		return 0.f;
@@ -26,7 +24,7 @@ float ofGetFrameRate() {
 }
 
 bool ofGetTargetFrameRateEnabled() {
-	if (auto window = ofGetMainLoop()->getCurrentWindow()) {
+	if (auto window = ofCore.getCurrentWindow()) {
 		return window->events().getTargetFrameRateEnabled();
 	}
 	return false;
@@ -34,8 +32,7 @@ bool ofGetTargetFrameRateEnabled() {
 
 //--------------------------------------
 float ofGetTargetFrameRate() {
-	auto window = ofGetMainLoop()->getCurrentWindow();
-	if (window) {
+    if (auto window = ofCore.getCurrentWindow()) {
 		return window->events().getTargetFrameRate();
 	} else {
 		return 0.f;
@@ -44,8 +41,7 @@ float ofGetTargetFrameRate() {
 
 //--------------------------------------
 double ofGetLastFrameTime() {
-	auto window = ofGetMainLoop()->getCurrentWindow();
-	if (window) {
+    if (auto window = ofCore.getCurrentWindow()) {
 		return window->events().getLastFrameTime();
 	} else {
 		return 0.0;
@@ -54,8 +50,7 @@ double ofGetLastFrameTime() {
 
 //--------------------------------------
 uint64_t ofGetFrameNum() {
-	auto window = ofGetMainLoop()->getCurrentWindow();
-	if (window) {
+    if (auto window = ofCore.getCurrentWindow()) {
 		return window->events().getFrameNum();
 	} else {
 		return 0;
@@ -64,8 +59,7 @@ uint64_t ofGetFrameNum() {
 
 //--------------------------------------
 bool ofGetMousePressed(int button) { //by default any button
-	auto window = ofGetMainLoop()->getCurrentWindow();
-	if (window) {
+    if (auto window = ofCore.getCurrentWindow()) {
 		return window->events().getMousePressed(button);
 	} else {
 		return false;
@@ -74,8 +68,7 @@ bool ofGetMousePressed(int button) { //by default any button
 
 //--------------------------------------
 bool ofGetKeyPressed(int key) {
-	auto window = ofGetMainLoop()->getCurrentWindow();
-	if (window) {
+    if (auto window = ofCore.getCurrentWindow()) {
 		return window->events().getKeyPressed(key);
 	} else {
 		return false;
@@ -84,8 +77,7 @@ bool ofGetKeyPressed(int key) {
 
 //--------------------------------------
 int ofGetMouseX() {
-	auto window = ofGetMainLoop()->getCurrentWindow();
-	if (window) {
+    if (auto window = ofCore.getCurrentWindow()) {
 		return window->events().getMouseX();
 	} else {
 		return 0;
@@ -94,8 +86,7 @@ int ofGetMouseX() {
 
 //--------------------------------------
 int ofGetMouseY() {
-	auto window = ofGetMainLoop()->getCurrentWindow();
-	if (window) {
+    if (auto window = ofCore.getCurrentWindow()) {
 		return window->events().getMouseY();
 	} else {
 		return 0;
@@ -104,7 +95,7 @@ int ofGetMouseY() {
 
 //--------------------------------------
 int ofGetPreviousMouseX() {
-	auto window = ofGetMainLoop()->getCurrentWindow();
+	auto window = ofCore.getCurrentWindow();
 	if (window) {
 		return window->events().getPreviousMouseX();
 	} else {
@@ -114,8 +105,7 @@ int ofGetPreviousMouseX() {
 
 //--------------------------------------
 int ofGetPreviousMouseY() {
-	auto window = ofGetMainLoop()->getCurrentWindow();
-	if (window) {
+    if (auto window = ofCore.getCurrentWindow()) {
 		return window->events().getPreviousMouseY();
 	} else {
 		return 0;
@@ -215,17 +205,17 @@ void ofCoreEvents::setFrameRate(int _targetRate) {
 	} else {
 		bFrameRateSet = true;
 		targetRate = static_cast<float>(_targetRate);
-		
+
 //		uint64_t nanosPerFrame = 1000000000.0 / (double)targetRate;
 //		timer.setPeriodicEvent(nanosPerFrame);
-		
+
 		timerFps.setFps(_targetRate);
 		fps.setTargetFPS(targetRate);
 		if (timeMode == FixedRate) {
 			ofSetTimeModeFixedRate(ofGetFixedStepForFps(targetRate));
 		}
 	}
-	
+
 }
 
 bool ofCoreEvents::getTargetFrameRateEnabled() const {

@@ -277,7 +277,7 @@ void ofGLRenderer::draw(const ofPolyline & poly) const {
 
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glVertexPointer(3, GL_FLOAT, sizeof(glm::vec3), &poly.getVertices()[0].x);
-		glDrawArrays(poly.isClosed() ? GL_LINE_LOOP : GL_LINE_STRIP, 0, poly.size());
+		glDrawArrays(poly.isClosed() ? GL_LINE_LOOP : GL_LINE_STRIP, 0, (GLsizei)poly.size());
 
 		// use smoothness, if requested:
 		if (currentStyle.smoothing) const_cast<ofGLRenderer *>(this)->endSmoothing();
@@ -1515,7 +1515,7 @@ void ofGLRenderer::drawCircle(float x, float y, float z, float radius) const {
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, sizeof(glm::vec3), &circlePoints[0].x);
-	glDrawArrays(currentStyle.bFill ? GL_TRIANGLE_FAN : GL_LINE_STRIP, 0, circlePoints.size());
+	glDrawArrays(currentStyle.bFill ? GL_TRIANGLE_FAN : GL_LINE_STRIP, 0, (GLsizei)circlePoints.size());
 
 	// use smoothness, if requested:
 	if (currentStyle.smoothing && !currentStyle.bFill) const_cast<ofGLRenderer *>(this)->endSmoothing();
@@ -1535,7 +1535,7 @@ void ofGLRenderer::drawEllipse(float x, float y, float z, float width, float hei
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, sizeof(glm::vec3), &circlePoints[0].x);
-	glDrawArrays(currentStyle.bFill ? GL_TRIANGLE_FAN : GL_LINE_STRIP, 0, circlePoints.size());
+	glDrawArrays(currentStyle.bFill ? GL_TRIANGLE_FAN : GL_LINE_STRIP, 0, (GLsizei)circlePoints.size());
 
 	// use smoothness, if requested:
 	if (currentStyle.smoothing && !currentStyle.bFill) const_cast<ofGLRenderer *>(this)->endSmoothing();

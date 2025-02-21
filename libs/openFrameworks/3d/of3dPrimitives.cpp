@@ -13,6 +13,9 @@
 #include "ofTexture.h"
 #include "of3dUtils.h"
 
+// FIXME: Testing only
+#include "ofAppBaseWindow.h"
+
 using std::vector;
 using std::shared_ptr;
 
@@ -204,7 +207,10 @@ void of3dPrimitive::drawFaces()  const{
 
 //--------------------------------------------------------------
 void of3dPrimitive::draw(ofPolyRenderMode renderType) const{
-    ofGetCurrentRenderer()->draw(*this, renderType);
+	// FIXME: Testing alternative to ofGetCurrentRenderer
+//    ofGetCurrentRenderer()->draw(*this, renderType);
+	// incomplete type ofAppBaseWindow
+	ofCore.mainLoop.currentWindow.lock()->currentRenderer->draw(*this, renderType);
 }
 
 //--------------------------------------------------------------

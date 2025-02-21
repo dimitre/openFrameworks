@@ -22,7 +22,7 @@
 using std::weak_ptr;
 using std::vector;
 
-static ofFloatColor globalAmbient(0.2, 0.2, 0.2, 1.0);
+static ofFloatColor globalAmbient(0.2f, 0.2f, 0.2f, 1.0f);
 
 //----------------------------------------
 void ofEnableLighting() {

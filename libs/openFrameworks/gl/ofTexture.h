@@ -6,6 +6,7 @@
 
 #include <glm/mat4x4.hpp>
 #include "ofGLUtils.h"
+#include "ofMesh.h"
 
 class ofRectangle;
 
@@ -950,6 +951,7 @@ class ofTexture : public ofBaseDraws {
 	/// \internal
 	ofTextureData texData; ///< Internal texture data access.
 	                       ///< For backwards compatibility.
+	mutable ofMesh quad;
 
 
 protected:
@@ -966,7 +968,6 @@ protected:
 
 	bool bAnchorIsPct; ///< Is the anchor point represented as a normalized
 					   ///< (0 - 1) coordinate?
-
 private:
 	bool bWantsMipmap; ///< Should mipmaps be created?
 
