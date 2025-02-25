@@ -195,6 +195,7 @@ bool genConfig::loadYML() {
 		conf.frameworks = nodeToStrings("frameworks");
 		conf.defines = nodeToStrings("defines");
 
+		// FIXME: Maybe rename to additional Sources?
 		conf.additionalSources = nodeToPaths("sources");
 		if (conf.additionalSources.size()) {
 			alert("Additional Source Directories ");

@@ -408,14 +408,13 @@ void gatherProjectInfo() {
 
 		// TODO: Add here additional sources
 		for (auto & a : conf.additionalSources) {
-			alert(">> ADDITIONAL FOLDER " + a.string(), 95);
+			alert(">> Additional Sources Folder: " + a.string(), 95);
 			scanFolder(a, addon->filesMap, true);
 		}
 
 		// addon->showFiles();
-		addon->load();
-
 		// addon->info();
+		addon->load();
 		// conf.addons.emplace_back(addon);
 		project.addons.emplace_back(conf.addons.back());
 	} else {
