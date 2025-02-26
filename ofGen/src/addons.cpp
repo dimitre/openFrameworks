@@ -342,7 +342,6 @@ void ofProject::build() {
 
 void gatherProjectInfo() {
 	// alert("gatherProjectInfo", 92);
-	// Add project files. TODO: additional source folders
 	ofProject project;
 
 	bool hasYml = conf.loadYML();
@@ -396,29 +395,45 @@ void gatherProjectInfo() {
 
 	// DELICATE. treating projects as an addon.
 	if (fs::exists("./src")) {
-		conf.addons.push_back(new ofAddon());
-		ofAddon * addon = conf.addons.back();
-		addon->isProject = true;
-		addon->name = "ProjectSourceFiles_" + conf.projectName;
-		addon->path = "";
+		{
+			conf.addons.push_back(new ofAddon());
+			ofAddon * addon = conf.addons.back();
+			addon->isProject = true;
+			addon->name = "ProjectSourceFiles_" + conf.projectName;
+			addon->path = "";
 
-		for (auto & f : conf.frameworks) {
-			addon->filesMap["frameworks"].emplace_back(f);
+			for (auto & f : conf.frameworks) {
+				addon->filesMap["frameworks"].emplace_back(f);
+			}
+
+			// addon->showFiles();
+			// addon->info();
+			for (auto & path : conf.additionalSources) {
+				addon->filesMap["includes"].emplace_back(path);
+			}
+			addon->load();
+			// conf.addons.emplace_back(addon);
+			project.addons.emplace_back(conf.addons.back());
 		}
 
 		// TODO: Add here additional sources
-		for (auto & a : conf.additionalSources) {
-			alert(">> Additional Sources Folder: " + a.string(), 95);
-			scanFolder(a, addon->filesMap, true);
-		}
+		// for (auto & a : conf.additionalSources) {
+		// 	alert(">> Additional Sources Folder: " + a.string(), 95);
+		// 	conf.addons.push_back(new ofAddon());
+		// 	ofAddon * addon = conf.addons.back();
+		// 	addon->isProject = true;
+		// 	addon->name = "AdditionalSource_" + conf.projectName;
+		// 	addon->path = a;
+		// 	addon->isProject = true;
 
-		// addon->showFiles();
-		// addon->info();
-		addon->load();
-		// conf.addons.emplace_back(addon);
-		project.addons.emplace_back(conf.addons.back());
+		// 	scanFolder(a, addon->filesMap, true);
+		// 	addon->load();
+		// 	project.addons.emplace_back(conf.addons.back());
+		// }
+
 	} else {
 		alert("NO SRC FILE FOUND IN PROJECT", 95);
+		std::exit(1);
 	}
 
 	// fs::path addonsListFile { conf.projectPath / "addons.make" };

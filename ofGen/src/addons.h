@@ -20,6 +20,12 @@ public:
 	void build();
 };
 
+// struct ofAdditional {
+// public:
+//    	fs::path path;
+// 	std::map<std::string, std::vector<fs::path>> filesMap;
+// };
+
 struct ofAddon {
 public:
 	std::string currentParseState { "" };

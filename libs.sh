@@ -50,7 +50,7 @@ checkLib() {
 # fi
 # }
 
-CORELIBS=( brotli cairo FreeImage freetype glew glfw glm json libpng pugixml tess2 uriparser utfcpp zlib openssl curl )
+CORELIBS=( brotli cairo FreeImage freetype glew glfw glm json libpng pugixml tess2 uriparser utfcpp zlib openssl curl pixman )
 # FIXME: TODO: add svgtiny to ofLibs and here
 ADDONLIBS=( assimp libusb libxml2 opencv )
 #svgtiny

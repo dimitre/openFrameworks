@@ -169,7 +169,8 @@ void ofInit() {
 
 //--------------------------------------
 shared_ptr<ofMainLoop> ofGetMainLoop() {
-	return ofCore.mainLoop.getPtr();
+//	return ofCore.mainLoop.getPtr();
+	return ofCore.mainLoop.shared_from_this();
 }
 
 //--------------------------------------
@@ -235,7 +236,7 @@ void ofSetupOpenGL(int w, int h, ofWindowMode screenMode) {
 }
 
 shared_ptr<ofAppBaseWindow> ofCreateWindow(const ofWindowSettings & settings) {
-	// ofInit();
+	ofInit();
 	return ofCore.mainLoop.createWindow(settings);
 }
 

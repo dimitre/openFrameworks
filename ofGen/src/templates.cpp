@@ -12,7 +12,7 @@ std::string generateUUID(const string & input) {
 }
 
 void copyTemplateFile::info() {
-    std::cout << std::endl;
+	std::cout << std::endl;
 	alert("	copyTemplateFile", 96);
 	alert("	from " + from.string(), 2);
 	alert("	to " + to.string(), 90);
@@ -755,6 +755,21 @@ void ofTemplateMacos::load() {
 	//	addFile("../../../libs/openframeworks", "", fp);
 	addFile(fs::path { "bin" } / "data", "", fp);
 
+	for (auto & path : conf.additionalSources) {
+		// fs::path filename = a.filename();
+		//
+		// // if is directory
+		//    	string UUID { generateUUID(path) };
+		// addCommand("Add :objects:" + UUID + ":sourceTree string SOURCE_ROOT");
+		// addCommand("Add :objects:" + UUID + ":isa string PBXGroup");
+		// addCommand("Add :objects:" + UUID + ":fileEncoding string 4");
+		// addCommand("Add :objects:" + UUID + ":name string " + ofPathToString(path.filename()));
+		// addCommand("Add :objects:" + UUID + ":path string " + ofPathToString(path));
+		// addCommand("Add :objects:" + UUID + ":sourceTree string <group>");
+		fp.addToBuildPhase = true;
+		addFile(path, "", fp);
+	}
+
 	// Just testing.
 	// fp.isSrc = false;
 	// fp.isGroupWithoutFolder = true;
@@ -956,10 +971,22 @@ void ofTemplateMake::save() {
 	}
 
 	if (conf.defines.size()) {
-		std::string allDefines = "PROJECT_DEFINES =";
+		// alert("PROJECT_DEFINES", 95);
+		std::string allDefines { "PROJECT_DEFINES =" };
 		for (auto & d : conf.defines) {
 			allDefines += " " + d;
 		}
 		copyTemplateFiles[0].appends.emplace_back(allDefines);
+	}
+	if (conf.additionalSources.size()) {
+		// alert("PROJECT_EXTERNAL_SOURCE_PATHS", 95);
+		std::string defines { "PROJECT_EXTERNAL_SOURCE_PATHS =" };
+		for (auto & d : conf.additionalSources) {
+			defines += " " + d.string();
+		}
+		copyTemplateFiles[0].appends.emplace_back(defines);
+
+		// PROJECT_EXTERNAL_SOURCE_PATHS = ../XP/src/additional
+		// PROJECT_EXTERNAL_SOURCE_PATHS += ../Aura/src2
 	}
 }

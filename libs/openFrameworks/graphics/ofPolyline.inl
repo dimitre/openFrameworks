@@ -17,7 +17,7 @@
 //----------------------------------------------------------
 template<class T>
 ofPolyline_<T>::ofPolyline_(){
-   setRightVector();
+	setRightVector();
 	clear();
 }
 
@@ -1151,7 +1151,7 @@ void ofPolyline_<T>::updateCache(bool bForceUpdate) const {
         normals.clear();
         tangents.clear();
         area = 0;
-		centroid2D = { 0.f };
+		centroid2D = T{ 0.f };
         bCacheIsDirty = false;
 
         if(points.size() < 2) return;
