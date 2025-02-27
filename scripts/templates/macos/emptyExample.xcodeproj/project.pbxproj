@@ -11,12 +11,10 @@
 					"$(OF_CORE_HEADERS)",
 					"src"
 				],
-				"OTHER_CPLUSPLUSFLAGS": "-D__MACOSX_CORE__",
-				"CODE_SIGN_ENTITLEMENTS": "of.entitlements",
-				"GCC_UNROLL_LOOPS": "YES",
-				"GCC_OPTIMIZATION_LEVEL": "3",
-				"COPY_PHASE_STRIP": "YES",
-				"ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS": "YES"
+				"OTHER_LDFLAGS": [
+					"$(OF_CORE_LIBS)",
+					"$(OF_CORE_FRAMEWORKS)"
+				]
 			},
 			"name": "Release"
 		},
@@ -37,26 +35,14 @@
 			"baseConfigurationReference": "E4EB6923138AFD0F00A09F29",
 			"isa": "XCBuildConfiguration",
 			"buildSettings": {
-				"IPHONEOS_DEPLOYMENT_TARGET": "",
-				"COPY_PHASE_STRIP": "YES",
-				"LIBRARY_SEARCH_PATHS": "$(inherited)",
-				"MACOSX_DEPLOYMENT_TARGET": "11.5",
-				"TVOS_DEPLOYMENT_TARGET": "",
-				"XROS_DEPLOYMENT_TARGET": "",
-				"ARCHS": "$(ARCHS_STANDARD)",
 				"HEADER_SEARCH_PATHS": [
 					"$(OF_CORE_HEADERS)",
 					"src"
 				],
 				"OTHER_LDFLAGS": [
 					"$(OF_CORE_LIBS)",
-					"$(OF_CORE_FRAMEWORKS)",
-					"$(LIB_OF)"
-				],
-				"FRAMEWORK_SEARCH_PATHS": "$(inherited)",
-				"WATCHOS_DEPLOYMENT_TARGET": "",
-				"baseConfigurationReference": "E4EB6923138AFD0F00A09F29",
-				"DRIVERKIT_DEPLOYMENT_TARGET": ""
+					"$(OF_CORE_FRAMEWORKS)"
+				]
 			},
 			"name": "Release"
 		},
@@ -160,17 +146,14 @@
 			"baseConfigurationReference": "E4EB6923138AFD0F00A09F29",
 			"isa": "XCBuildConfiguration",
 			"buildSettings": {
-				"GCC_WARN_UNUSED_VARIABLE": "NO",
 				"HEADER_SEARCH_PATHS": [
 					"$(OF_CORE_HEADERS)",
 					"src"
 				],
-				"OTHER_CPLUSPLUSFLAGS": "-D__MACOSX_CORE__",
-				"CODE_SIGN_ENTITLEMENTS": "of.entitlements",
-				"COPY_PHASE_STRIP": "NO",
-				"GCC_OPTIMIZATION_LEVEL": "0",
-				"ENABLE_TESTABILITY": "YES",
-				"ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS": "YES"
+				"OTHER_LDFLAGS": [
+					"$(OF_CORE_LIBS)",
+					"$(OF_CORE_FRAMEWORKS)"
+				]
 			},
 			"name": "Debug"
 		},
@@ -178,26 +161,14 @@
 			"baseConfigurationReference": "E4EB6923138AFD0F00A09F29",
 			"isa": "XCBuildConfiguration",
 			"buildSettings": {
-				"COPY_PHASE_STRIP": "NO",
-				"LIBRARY_SEARCH_PATHS": "$(inherited)",
-				"MACOSX_DEPLOYMENT_TARGET": "11.5",
-				"GCC_DYNAMIC_NO_PIC": "NO",
-				"TVOS_DEPLOYMENT_TARGET": "",
-				"XROS_DEPLOYMENT_TARGET": "",
-				"ARCHS": "$(ARCHS_STANDARD)",
 				"HEADER_SEARCH_PATHS": [
 					"$(OF_CORE_HEADERS)",
 					"src"
 				],
 				"OTHER_LDFLAGS": [
 					"$(OF_CORE_LIBS)",
-					"$(OF_CORE_FRAMEWORKS)",
-					"$(LIB_OF_DEBUG)"
-				],
-				"FRAMEWORK_SEARCH_PATHS": "$(inherited)",
-				"WATCHOS_DEPLOYMENT_TARGET": "",
-				"IPHONEOS_DEPLOYMENT_TARGET": "",
-				"DRIVERKIT_DEPLOYMENT_TARGET": ""
+					"$(OF_CORE_FRAMEWORKS)"
+				]
 			},
 			"name": "Debug"
 		},

@@ -723,13 +723,18 @@ void ofTemplateMacos::load() {
 		uuid["buildPhaseResources"] = "1D60588D0D05DD3D006BFB54";
 		uuid["mediaAssets"] = "9936F60E1BFA4DEE00891288";
 
-		buildConfigurations[0] = "1D6058940D05DD3E006BFB54"; // iOS Debug
-		buildConfigurations[1] = "1D6058950D05DD3E006BFB54"; // iOS Release
-		buildConfigurations[2] = "C01FCF4F08A954540054247B"; // iOS Debug
-		buildConfigurations[3] = "C01FCF5008A954540054247B"; // iOS Release
+		// buildConfigurations[0] = "1D6058940D05DD3E006BFB54"; // iOS Debug
+		// buildConfigurations[1] = "1D6058950D05DD3E006BFB54"; // iOS Release
+		// buildConfigurations[2] = "C01FCF4F08A954540054247B"; // iOS Debug
+		// buildConfigurations[3] = "C01FCF5008A954540054247B"; // iOS Release
 
 		buildConfigs[0] = "1D6058940D05DD3E006BFB54"; // iOS Debug
 		buildConfigs[1] = "1D6058950D05DD3E006BFB54"; // iOS Release
+		buildConfigs[2] = "C01FCF4F08A954540054247B"; // iOS Debug
+		buildConfigs[3] = "C01FCF5008A954540054247B"; // iOS Release
+
+		// buildConfigs[0] = "1D6058940D05DD3E006BFB54"; // iOS Debug
+		// buildConfigs[1] = "1D6058950D05DD3E006BFB54"; // iOS Release
 	}
 
 	addCommand("Set :objects:" + uuid["buildConfigurationList"] + ":name " + conf.projectName);
