@@ -10,6 +10,8 @@ CURRENT_PROJECT_VERSION = 1
 //OF_CODESIGN = 1
 //OF_BUNDLE_DATA_FOLDER = 1
 //OF_BUNDLE_DYLIBS = 1
+// Comment out to build universal or archive / send to app store
+BUILD_ARCHS = -arch arm64
 
 PRODUCT_NAME = $(TARGET_NAME)
 PRODUCT_NAME[config=Debug] = $(TARGET_NAME)Debug
@@ -32,9 +34,6 @@ OTHER_CFLAGS = $(OF_CORE_CFLAGS)
 OTHER_LDFLAGS = $(OF_CORE_LIBS) $(OF_CORE_FRAMEWORKS)
 HEADER_SEARCH_PATHS = $(OF_CORE_HEADERS)
 
-OF_CORE_BUILD_COMMAND = xcodebuild -arch arm64 -project $OF_PATH/libs/openFrameworksCompiled/project/macos/openFrameworksLib.xcodeproj -target openFrameworks -configuration ${CONFIGURATION}
+OF_CORE_BUILD_COMMAND = xcodebuild $BUILD_ARCHS -project $OF_PATH/libs/openFrameworksCompiled/project/macos/openFrameworksLib.xcodeproj -target openFrameworks -configuration ${CONFIGURATION}
 // Uncomment here if you use Intel processor or want to build Universal.
 //OF_CORE_BUILD_COMMAND = xcodebuild -project $OF_PATH/libs/openFrameworksCompiled/project/macos/openFrameworksLib.xcodeproj -target openFrameworks -configuration ${CONFIGURATION}
-
-//FIXME: Remove
-//GCC_PREPROCESSOR_DEFINITIONS=$(inherited) GLM_ENABLE_EXPERIMENTAL GLM_FORCE_CTOR_INIT
