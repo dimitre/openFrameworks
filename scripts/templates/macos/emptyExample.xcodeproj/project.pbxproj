@@ -35,6 +35,7 @@
 			"baseConfigurationReference": "E4EB6923138AFD0F00A09F29",
 			"isa": "XCBuildConfiguration",
 			"buildSettings": {
+				"ENABLE_HARDENED_RUNTIME": "YES",
 				"HEADER_SEARCH_PATHS": [
 					"$(OF_CORE_HEADERS)",
 					"src"
@@ -161,6 +162,7 @@
 			"baseConfigurationReference": "E4EB6923138AFD0F00A09F29",
 			"isa": "XCBuildConfiguration",
 			"buildSettings": {
+				"ENABLE_HARDENED_RUNTIME": "YES",
 				"HEADER_SEARCH_PATHS": [
 					"$(OF_CORE_HEADERS)",
 					"src"

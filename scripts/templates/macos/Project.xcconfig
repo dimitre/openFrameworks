@@ -35,5 +35,3 @@ OTHER_LDFLAGS = $(OF_CORE_LIBS) $(OF_CORE_FRAMEWORKS)
 HEADER_SEARCH_PATHS = $(OF_CORE_HEADERS)
 
 OF_CORE_BUILD_COMMAND = xcodebuild $BUILD_ARCHS -project $OF_PATH/libs/openFrameworksCompiled/project/macos/openFrameworksLib.xcodeproj -target openFrameworks -configuration ${CONFIGURATION}
-// Uncomment here if you use Intel processor or want to build Universal.
-//OF_CORE_BUILD_COMMAND = xcodebuild -project $OF_PATH/libs/openFrameworksCompiled/project/macos/openFrameworksLib.xcodeproj -target openFrameworks -configuration ${CONFIGURATION}
