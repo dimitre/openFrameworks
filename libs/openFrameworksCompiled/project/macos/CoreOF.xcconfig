@@ -95,11 +95,12 @@ INSTALL_PATH = /Applications
 SDKROOT = macosx
 WRAPPER_EXTENSION = app
 
-SKIP_INSTALL = YES
-CONFIGURATION_BUILD_DIR = $(SRCROOT)/bin/
-
 CC = $(OF_PATH)/scripts/macos/cc.sh
 CXX = $(OF_PATH)/scripts/macos/cxx.sh
 
 // Great for disabling and addressing all warnings
 GCC_WARN_64_TO_32_BIT_CONVERSION = YES
+
+
+SKIP_INSTALL = NO
+CONFIGURATION_BUILD_DIR = $(SRCROOT)/bin/
