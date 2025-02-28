@@ -31,7 +31,7 @@ jobs:
       - name: Brew
         uses: tecolicom/actions-use-homebrew-tools@v1
         with:
-          tools: wget2 yaml-cpp fmt ccache # fmt
+          tools: wget2 yaml-cpp fmt ccache nlohmann-json # fmt
 
       - name: ccache
         uses: hendrikmuhs/ccache-action@v1.2.17
