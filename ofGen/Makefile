@@ -19,7 +19,6 @@ OBJS=$(SOURCES:.cpp=.o)
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(info MAKEFILE TEST)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $@ $(LDFLAGS)
 
 purge: clean

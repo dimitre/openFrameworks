@@ -21,6 +21,14 @@ else
   # The package is not installed
 fi
 
+if brew ls --versions nlohmann-json > /dev/null; then
+	echo nlohmann-json already installed
+else
+	echo installing nlohmann-json
+	brew install nlohmann-json
+  # The package is not installed
+fi
+
 # section "Compiling"
 
 make -j
