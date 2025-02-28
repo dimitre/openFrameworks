@@ -371,8 +371,7 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 		{ "ADDON_CFLAGS", "OTHER_CFLAGS" },
 		{ "ADDON_CPPFLAGS", "OTHER_CPLUSPLUSFLAGS" },
 		{ "ADDON_LDFLAGS", "OTHER_LDFLAGS" },
-		// addDefine
-		// { "", "GCC_PREPROCESSOR_DEFINITIONS" },
+		{ "ADDON_DEFINES", "GCC_PREPROCESSOR_DEFINITIONS" },
 	};
 
 	for (auto & param : addonToXCode) {
@@ -380,7 +379,11 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 			for (const auto & c : buildConfigs) {
 				// FIXME: add array here if it doesnt exist. Test with multiple lines
 				for (const auto & flag : a->addonProperties[param.first]) {
-					addCommand("Add :objects:" + c + ":buildSettings:" + param.second + ": string " + flag);
+
+				    std::string value = stringReplace(flag, "$(OF_ROOT)", conf.ofPath.string());
+								alert ("BEFORE " + flag, 95);
+								alert ("AFTER " + value, 95);
+					addCommand("Add :objects:" + c + ":buildSettings:" + param.second + ": string " + value);
 				}
 			}
 		}
@@ -570,14 +573,17 @@ void ofTemplateZed::load() {
 void ofTemplateZed::save() {
 	alert("ofTemplateZed::save()", 92);
 	for (auto & a : conf.addons) {
-		alert("addon " + a->name, 97);
-		// for (auto & f : a->filteredMap) {
-		// 	alert(">>>" + f.first);
-		// 	for (auto & s : f.second) {
-		// 		alert("   " + s.string(), 92);
-		// 	}
-		// }
+		// alert("ofTemplateZed::save addon " + a->name, 95);
+		// alert("ofTemplateZed::save filesMap includes " + a->name, 95);
 
+		// for (auto & f : a->filesMap["includes"]) {
+		//   cout << f << endl;
+		// }
+		// alert("ofTemplateZed::save filteredMap includes " + a->name, 95);
+
+		// for (auto & f : a->filteredMap["includes"]) {
+		//   cout << f << endl;
+		// }
 		for (auto & f : a->filteredMap["includes"]) {
 			std::string inc { "-I" + fs::path(a->path / f).string() };
 			copyTemplateFiles[0].appends.emplace_back(inc);

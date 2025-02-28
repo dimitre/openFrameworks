@@ -136,7 +136,8 @@ void ofAddon::showFiles() {
 }
 
 void ofAddon::loadFiles() {
-	alert("	loadFiles", 34);
+	alert("	loadFiles " + path.string(), 34);
+
 
 	scanFolder(path / "src", filesMap, true);
 
