@@ -1,7 +1,8 @@
 #  Still not recompiling when .h files are changed.
 # $(info MAKEFILE TEST)
 
-CXX=/opt/homebrew/opt/llvm/bin/clang++ # define the compiler to use
+# CXX=/opt/homebrew/opt/llvm/bin/clang++ # define the compiler to use
+CXX=clang # define the compiler to use
 TARGET=ofGen
 SOURCES=src/main.cpp src/templates.cpp src/utils.cpp src/addons.cpp src/uuidxx/src/uuidxx.cpp
 CXXFLAGS=-std=c++20 -Isrc/uuidxx/src -Wfatal-errors -MMD -MP $(shell pkg-config --cflags yaml-cpp nlohmann_json)
