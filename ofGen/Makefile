@@ -7,7 +7,8 @@ TARGET=ofGen
 SOURCES=src/main.cpp src/templates.cpp src/utils.cpp src/addons.cpp src/uuidxx/src/uuidxx.cpp
 CXXFLAGS=-std=c++20 -Isrc/uuidxx/src -Wfatal-errors -MMD -MP $(shell pkg-config --cflags yaml-cpp nlohmann_json)
 # -I../libs/macos/include/
-LDFLAGS=-fuse-ld=lld $(shell pkg-config --libs yaml-cpp nlohmann_json)
+# LDFLAGS=-fuse-ld=lld $(shell pkg-config --libs yaml-cpp nlohmann_json)
+LDFLAGS=$(shell pkg-config --libs yaml-cpp nlohmann_json)
 
 ################################################################################
 ### DO NOT EDIT THE FOLLOWING LINES ############################################
