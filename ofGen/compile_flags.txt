@@ -5,3 +5,8 @@ src/uuidxx/src/*.cpp
 -std=c++20
 -lstdc++fs
 -I/opt/homebrew/Cellar/yaml-cpp/0.8.0/include
+
+
+/opt/homebrew/opt/llvm/bin/clang++ -fuse-ld=lld -std=c++20 -Isrc/uuidxx/src -Wfatal-errors -I/opt/homebrew/Cellar/yaml-cpp/0.8.0/include -I/opt/homebrew/Cellar/nlohmann-json/3.11.3/include src/main.o src/templates.o src/utils.o src/addons.o src/uuidxx/src/uuidxx.o -o ofGen
+
+time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src `pkg-config --libs yaml-cpp` -o ofGen && \

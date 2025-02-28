@@ -379,11 +379,7 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 			for (const auto & c : buildConfigs) {
 				// FIXME: add array here if it doesnt exist. Test with multiple lines
 				for (const auto & flag : a->addonProperties[param.first]) {
-
-				    std::string value = stringReplace(flag, "$(OF_ROOT)", conf.ofPath.string());
-								alert ("BEFORE " + flag, 95);
-								alert ("AFTER " + value, 95);
-					addCommand("Add :objects:" + c + ":buildSettings:" + param.second + ": string " + value);
+					addCommand("Add :objects:" + c + ":buildSettings:" + param.second + ": string " + flag);
 				}
 			}
 		}

@@ -235,7 +235,10 @@ void ofAddon::loadAddonConfig() {
 		line = stringReplace(line, " \\+\\= ", "+=");
 		line = stringReplace(line, " \\+\\=", "+=");
 		line = stringReplace(line, "\\+\\= ", "+=");
-		line = stringReplace(line, "\\$(OF_ROOT)", conf.ofPath.string());
+		// line = stringReplace(line, "\\$(OF_ROOT)", conf.ofPath.string());
+
+		replaceAll(line, "$(OF_ROOT)", conf.ofPath.string());
+
 
 		// Trim., removing whitespace
 		// line.erase(std::remove_if( line.begin(), line.end(), ::isspace), line.end());
