@@ -112,6 +112,9 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 
 
 	glfwDefaultWindowHints();
+	
+	glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, false);
+	
 	glfwWindowHint(GLFW_RED_BITS, settings.redBits);
 	glfwWindowHint(GLFW_GREEN_BITS, settings.greenBits);
 	glfwWindowHint(GLFW_BLUE_BITS, settings.blueBits);

@@ -454,7 +454,8 @@ public:
 	/// Linux: /home/<username>
 	///
 	/// \returns home directory path
-	static std::string getUserHomeDir();
+//	static std::string getUserHomeDir();
+	static fs::path getUserHomeDir();
 
 	/// Make one path relative to another,
 	/// ie. the relative path of "images/felines/lions" to

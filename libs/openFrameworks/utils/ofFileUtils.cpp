@@ -1916,7 +1916,7 @@ std::string ofFilePath::getCurrentExeDir(){
 }
 
 //------------------------------------------------------------------------------------------------------------
-string ofFilePath::getUserHomeDir(){
+fs::path ofFilePath::getUserHomeDir(){
 	#ifdef TARGET_WIN32
 		// getenv will return any Environent Variable on Windows
 		// USERPROFILE is the key on Windows 7 but it might be HOME
@@ -1926,7 +1926,7 @@ string ofFilePath::getUserHomeDir(){
 		struct passwd * pw = getpwuid(getuid());
 		return pw->pw_dir;
 	#else
-		return "";
+		return {};
 	#endif
 }
 
