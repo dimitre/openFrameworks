@@ -2,9 +2,13 @@
 cd "$(dirname "$0")"
 
 VERSION=v0.12.1
-OF_FOLDER=.
+OF_FOLDER=..
 PLATFORM=macos
-LIBS_FOLDER=${OF_FOLDER}/libs/${PLATFORM}
+# LIBS_FOLDER=${OF_FOLDER}/libs/${PLATFORM}
+LIBS_FOLDER=./${PLATFORM}
+
+DOWNLOAD="./_download_${VERSION}"
+# echo ${DOWNLOAD}
 
 COLOR='\033[0;32m'
 COLOR2='\033[0;34m'
@@ -56,8 +60,6 @@ ADDONLIBS=( assimp libusb libxml2 opencv )
 #svgtiny
 ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
 
-DOWNLOAD="${OF_FOLDER}/_download_${VERSION}"
-echo ${DOWNLOAD}
 
 # exit 1
 

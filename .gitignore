@@ -1,27 +1,16 @@
-#########################
-# openFrameworks patterns
-#########################
-
-# build files
-openFrameworks.a
-openFrameworksDebug.a
-openFrameworksUniversal.a
-libs/openFrameworksCompiled/lib/*/*
-!libs/openFrameworksCompiled/lib/*/.gitkeep
-
-# apothecary
-scripts/apothecary
-
-# rule to avoid non-official addons going into git
-# see addons/.gitignore
+*.d
+*.o
+*.a
 addons/*
+examples/*
+libs/macos
+tests/*
 
-# rule to avoid non-official apps going into git
-# see apps/.gitignore
-apps/*
+.DS_Store
+Thumbs.db
+Desktop.ini
 
-# rule to ignore compiled / downloaded libs
-/libs/*
+libs/_*
 !/libs/openFrameworks
 !/libs/openFrameworksCompiled
 
@@ -34,18 +23,6 @@ apps/*
 [Bb]uild/
 [Oo]bj/
 *.o
-examples/**/[Dd]ebug*/
-examples/**/[Rr]elease*/
-examples/**/gcc-debug/
-examples/**/gcc-release/
-examples/**/addons.make
-examples/**/[Mm]akefile
-examples/**/config.make
-examples/**/.gitkeep
-tests/**/[Dd]ebug*/
-tests/**/[Rr]elease*/
-tests/**/gcc-debug/
-tests/**/gcc-release/
 *.mode*
 *.app/
 *.pyc
@@ -99,18 +76,6 @@ ipch/
 local.properties
 .externalToolBuilders
 
-# Android Studio
-.idea
-.gradle
-gradle
-gradlew
-gradlew.bat
-
-# QtCreator
-*.qbs.user
-*.pro.user
-*.pri
-
 
 #########################
 # operating system
@@ -123,18 +88,12 @@ gradlew.bat
 .AppleDouble
 
 # OSX
-.DS_Store
 *.swp
 *~.nib
 # Thumbnails
 ._*
 examples/ios/**/mediaAssets
 
-# Windows
-# Windows image file caches
-Thumbs.db
-# Folder config file
-Desktop.ini
 
 # Android
 .csettings
@@ -149,7 +108,6 @@ Desktop.ini
 
 .mailmap
 /apps*/
-projectGenerator*/
 .cxx/
 
 examples/**/Makefile
