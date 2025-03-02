@@ -29,7 +29,7 @@ else
   # The package is not installed
 fi
 
-# section "Compiling"
+section "Will compile now"
 
 make -j
 
