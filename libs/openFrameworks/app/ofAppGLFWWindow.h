@@ -185,6 +185,8 @@ private:
 
 	//	static ofAppGLFWWindow * thisWindow = static_cast<ofAppGLFWWindow *>(this);
 
+
+#ifdef USEDEPRECATED
 	// window settings, this functions can only be called from main before calling ofSetupOpenGL
 	// TODO: remove specialized version of ofSetupOpenGL when these go away
 	[[deprecated("use ofGLFWWindowSettings to create the window")]] void setNumSamples(int samples);
@@ -194,6 +196,7 @@ private:
 	[[deprecated("use ofGLFWWindowSettings to create the window")]] void setDepthBits(int depth);
 	[[deprecated("use ofGLFWWindowSettings to create the window")]] void setStencilBits(int stencil);
 	[[deprecated("use ofGLFWWindowSettings to create the window")]] void setMultiDisplayFullscreen(bool bMultiFullscreen); //note this just enables the mode, you have to toggle fullscreen to activate it.
+#endif
 };
 
 	// TEMPORARY
