@@ -41,7 +41,7 @@ jobs:
 
       - name: Libs
         # run: ./scripts/macos/libs.sh
-        run: ./libs.sh
+        run: ./libs/libs.sh
 
       - name: ofGen
         run: |

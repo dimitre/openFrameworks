@@ -7,11 +7,15 @@ OF_PATH = ../../..
 MARKETING_VERSION = 0.1.0
 CURRENT_PROJECT_VERSION = 1
 
+BUILD_ARCHS =
+// Comment out next three lines to build universal or archive / send to app store
+BUILD_ARCHS = -arch arm64
+ARCHS = arm64
+ONLY_ACTIVE_ARCH = YES
+
 //OF_CODESIGN = 1
 //OF_BUNDLE_DATA_FOLDER = 1
 //OF_BUNDLE_DYLIBS = 1
-// Comment out to build universal or archive / send to app store
-BUILD_ARCHS = -arch arm64
 
 PRODUCT_NAME = $(TARGET_NAME)
 PRODUCT_NAME[config=Debug] = $(TARGET_NAME)Debug

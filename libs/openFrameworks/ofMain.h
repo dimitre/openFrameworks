@@ -25,14 +25,12 @@
 
 #ifdef OF_USE_LEGACY_MATH
 #include "ofPoint.h"
+#include "ofMath.h"
+#include "ofVectorMath.h"
 #endif
+
 #include "ofRectangle.h"
 #include "ofTypes.h"
-
-//--------------------------
-// math
-//#include "ofMath.h"
-//#include "ofVectorMath.h"
 
 //--------------------------
 // communication
@@ -70,7 +68,7 @@
 #include "ofPixels.h"
 #include "ofPolyline.h"
 #include "ofRendererCollection.h"
-#include "ofTessellator.h"
+//#include "ofTessellator.h"
 #include "ofTrueTypeFont.h"
 
 //--------------------------
