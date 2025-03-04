@@ -31,13 +31,26 @@ int ofGetGLInternalFormat(const ofPixels & pixels);
 int ofGetGLInternalFormat(const ofShortPixels & pixels);
 int ofGetGLInternalFormat(const ofFloatPixels & pixels);
 
-[[deprecated("Use ofGetGLInternalFormat()")]]
-int ofGetGlInternalFormat(const ofPixels & pixels);
-[[deprecated("Use ofGetGLInternalFormat()")]]
-int ofGetGlInternalFormat(const ofShortPixels & pixels);
-[[deprecated("Use ofGetGLInternalFormat()")]]
-int ofGetGlInternalFormat(const ofFloatPixels & pixels);
+// [[deprecated("Use ofGetGLInternalFormat()")]]
+// int ofGetGlInternalFormat(const ofPixels & pixels);
+// [[deprecated("Use ofGetGLInternalFormat()")]]
+// int ofGetGlInternalFormat(const ofShortPixels & pixels);
+// [[deprecated("Use ofGetGLInternalFormat()")]]
+// int ofGetGlInternalFormat(const ofFloatPixels & pixels);
+// [[deprecated("Use ofGetGLInternalFormatName()")]]
+// std::string ofGetGlInternalFormatName(int glInternalFormat);
+// [[deprecated("Use ofGetGLTypeFromInternal()")]]
+// int ofGetGlTypeFromInternal(int glInternalFormat);
+// [[deprecated("Use ofGetGLType()")]]
+// int ofGetGlType(const ofPixels & pixels);
+// [[deprecated("Use ofGetGLType()")]]
+// int ofGetGlType(const ofShortPixels & pixels);
+// [[deprecated("Use ofGetGLType()")]]
+// int ofGetGlType(const ofFloatPixels & pixels);
 
+// template<class T>
+// [[deprecated("Use ofGetGLFormat()")]]
+// int ofGetGlFormat(const ofPixels_<T> & pixels);
 //---------------------------------
 // this is helpful for debugging ofTexture
 
@@ -45,23 +58,11 @@ std::string ofGetGLInternalFormatName(int glInternalFormat);
 int ofGetGLFormatFromInternal(int gInternalFormat);
 int ofGetGLTypeFromInternal(int glInternalFormat);
 
-[[deprecated("Use ofGetGLInternalFormatName()")]]
-std::string ofGetGlInternalFormatName(int glInternalFormat);
-[[deprecated("Use ofGetGLTypeFromInternal()")]]
-int ofGetGlTypeFromInternal(int glInternalFormat);
-
 std::shared_ptr<ofBaseGLRenderer> ofGetGLRenderer();
 
 int ofGetGLType(const ofPixels & pixels);
 int ofGetGLType(const ofShortPixels & pixels);
 int ofGetGLType(const ofFloatPixels & pixels);
-
-[[deprecated("Use ofGetGLType()")]]
-int ofGetGlType(const ofPixels & pixels);
-[[deprecated("Use ofGetGLType()")]]
-int ofGetGlType(const ofShortPixels & pixels);
-[[deprecated("Use ofGetGLType()")]]
-int ofGetGlType(const ofFloatPixels & pixels);
 
 ofImageType ofGetImageTypeFromGLType(int glType);
 
@@ -83,10 +84,6 @@ bool ofGLCheckExtension(std::string searchName);
 bool ofGLSupportsNPOTTextures();
 
 bool ofIsGLProgrammableRenderer();
-
-template<class T>
-[[deprecated("Use ofGetGLFormat()")]]
-int ofGetGlFormat(const ofPixels_<T> & pixels);
 
 template<class T>
 int ofGetGlFormat(const ofPixels_<T> & pixels) {
@@ -177,7 +174,7 @@ void ofDisableGLDebugLog();
 			#define GL_DEPTH_COMPONENT32					GL_DEPTH_COMPONENT32_OES
 		#endif
     #endif
-	
+
 	#ifndef GL_RGBA32F
 		#ifdef GL_RGBA32F_EXT
 			#define GL_RGBA32F								GL_RGBA32F_EXT

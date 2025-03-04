@@ -107,33 +107,29 @@ public:
 	void setDefaultTextureIndex(int defaultTexture);
 	int getDefaultTextureIndex() const;
 
-	[[deprecated("Use getTexture()")]]
-	ofTexture & getTextureReference();
-	[[deprecated("Use getTexture()")]]
-	ofTexture & getTextureReference(int attachmentPoint);
 	ofTexture & getTexture();
 	ofTexture & getTexture(int attachmentPoint);
 	ofTexture & getDepthTexture();
-	[[deprecated("Use getTexture()")]]
-	const ofTexture & getTextureReference() const;
-	[[deprecated("Use getTexture()")]]
-	const ofTexture & getTextureReference(int attachmentPoint) const;
+
 	const ofTexture & getTexture() const ;
 	const ofTexture & getTexture(int attachmentPoint) const;
 	const ofTexture & getDepthTexture() const;
 	void setUseTexture(bool){ /*irrelevant*/ };
 	bool isUsingTexture() const {return true;}
 
-	/// Sets up the framebuffer and binds it for rendering.
-	///
-	/// \warning  This is a convenience method, and is considered unsafe
-	///           in multi-window and/or multi-renderer scenarios.
-	///           If you use more than one renderer, use each renderer's
-	///           explicit void ofBaseGLRenderer::begin(const ofFbo & fbo, ofFboMode mode)
-	///           method instead.
-	/// \sa       void ofBaseGLRenderer::begin(const ofFbo & fbo, ofFboMode mode)
-	[[deprecated("Use begin(OF_FBOMODE_NODEFAULTS)")]]
-	void begin(bool setupScreen) const;
+
+	// [[deprecated("Use getTexture()")]]
+	// ofTexture & getTextureReference();
+	// [[deprecated("Use getTexture()")]]
+	// ofTexture & getTextureReference(int attachmentPoint);
+	// [[deprecated("Use getTexture()")]]
+	// const ofTexture & getTextureReference() const;
+	// [[deprecated("Use getTexture()")]]
+	// const ofTexture & getTextureReference(int attachmentPoint) const;
+	// [[deprecated("Use begin(OF_FBOMODE_NODEFAULTS)")]]
+	// void begin(bool setupScreen) const;
+	//
+
 
 	/// Sets up the framebuffer and binds it for rendering.
 	///
@@ -221,8 +217,8 @@ public:
 	void setActiveDrawBuffers(const std::vector<int>& i);
 	void activateAllDrawBuffers();
 
-	[[deprecated("Use getId()")]]
-	GLuint getFbo() const;
+	// [[deprecated("Use getId()")]]
+	// GLuint getFbo() const;
 
 	/// returns id of the underlying GL object for advanced actions
 	GLuint getId() const;

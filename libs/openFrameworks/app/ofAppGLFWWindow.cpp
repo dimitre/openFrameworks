@@ -1616,34 +1616,34 @@ void ofAppGLFWWindow::makeCurrent() {
 
 
 // DEPRECATED - REMOVE
-#ifdef USEDEPRECATED
-void ofAppGLFWWindow::setNumSamples(int _samples) {
-	settings.numSamples = _samples;
-}
+// #ifdef USEDEPRECATED
+// void ofAppGLFWWindow::setNumSamples(int _samples) {
+// 	settings.numSamples = _samples;
+// }
 
-void ofAppGLFWWindow::setDoubleBuffering(bool doubleBuff) {
-	settings.doubleBuffering = doubleBuff;
-}
+// void ofAppGLFWWindow::setDoubleBuffering(bool doubleBuff) {
+// 	settings.doubleBuffering = doubleBuff;
+// }
 
-void ofAppGLFWWindow::setColorBits(int r, int g, int b) {
-	settings.redBits = r;
-	settings.greenBits = g;
-	settings.blueBits = b;
-}
+// void ofAppGLFWWindow::setColorBits(int r, int g, int b) {
+// 	settings.redBits = r;
+// 	settings.greenBits = g;
+// 	settings.blueBits = b;
+// }
 
-void ofAppGLFWWindow::setAlphaBits(int a) {
-	settings.alphaBits = a;
-}
+// void ofAppGLFWWindow::setAlphaBits(int a) {
+// 	settings.alphaBits = a;
+// }
 
-void ofAppGLFWWindow::setDepthBits(int depth) {
-	settings.depthBits = depth;
-}
+// void ofAppGLFWWindow::setDepthBits(int depth) {
+// 	settings.depthBits = depth;
+// }
 
-void ofAppGLFWWindow::setStencilBits(int stencil) {
-	settings.stencilBits = stencil;
-}
+// void ofAppGLFWWindow::setStencilBits(int stencil) {
+// 	settings.stencilBits = stencil;
+// }
 
-void ofAppGLFWWindow::setMultiDisplayFullscreen(bool bMultiFullscreen) {
-	settings.multiMonitorFullScreen = bMultiFullscreen;
-}
-#endif
+// void ofAppGLFWWindow::setMultiDisplayFullscreen(bool bMultiFullscreen) {
+// 	settings.multiMonitorFullScreen = bMultiFullscreen;
+// }
+// #endif

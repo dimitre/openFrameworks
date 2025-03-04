@@ -844,16 +844,16 @@ void ofFbo::createAndAttachDepthStencilTexture(GLenum target, GLint internalform
 }
 
 //----------------------------------------------------------
-void ofFbo::begin(bool setupScreen) const{
-	auto renderer = settings.renderer.lock();
-	if(renderer){
-        if(setupScreen){
-            renderer->begin(*this, OF_FBOMODE_PERSPECTIVE | OF_FBOMODE_MATRIXFLIP);
-        }else{
-            renderer->begin(*this, OF_FBOMODE_NODEFAULTS);
-        }
-	}
-}
+// void ofFbo::begin(bool setupScreen) const{
+// 	auto renderer = settings.renderer.lock();
+// 	if(renderer){
+//         if(setupScreen){
+//             renderer->begin(*this, OF_FBOMODE_PERSPECTIVE | OF_FBOMODE_MATRIXFLIP);
+//         }else{
+//             renderer->begin(*this, OF_FBOMODE_NODEFAULTS);
+//         }
+// 	}
+// }
 
 
 void ofFbo::begin(ofFboMode mode) const{
@@ -998,24 +998,24 @@ int ofFbo::getDefaultTextureIndex() const
 }
 
 //----------------------------------------------------------
-ofTexture& ofFbo::getTextureReference(){
-	return getTexture();
-}
+// ofTexture& ofFbo::getTextureReference(){
+// 	return getTexture();
+// }
 
-//----------------------------------------------------------
-ofTexture& ofFbo::getTextureReference(int attachmentPoint) {
-	return getTexture(attachmentPoint);
-}
+// //----------------------------------------------------------
+// ofTexture& ofFbo::getTextureReference(int attachmentPoint) {
+// 	return getTexture(attachmentPoint);
+// }
 
-//----------------------------------------------------------
-const ofTexture& ofFbo::getTextureReference() const{
-	return getTexture();
-}
+// //----------------------------------------------------------
+// const ofTexture& ofFbo::getTextureReference() const{
+// 	return getTexture();
+// }
 
-//----------------------------------------------------------
-const ofTexture& ofFbo::getTextureReference(int attachmentPoint) const{
-	return getTexture(attachmentPoint);
-}
+// //----------------------------------------------------------
+// const ofTexture& ofFbo::getTextureReference(int attachmentPoint) const{
+// 	return getTexture(attachmentPoint);
+// }
 
 //----------------------------------------------------------
 ofTexture& ofFbo::getTexture(){
@@ -1159,9 +1159,9 @@ void ofFbo::draw(float x, float y, float width, float height) const{
 }
 
 //----------------------------------------------------------
-GLuint ofFbo::getFbo() const {
-	return fbo;
-}
+// GLuint ofFbo::getFbo() const {
+// 	return fbo;
+// }
 
 //----------------------------------------------------------
 GLuint ofFbo::getId() const {

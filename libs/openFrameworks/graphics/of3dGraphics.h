@@ -121,14 +121,14 @@ void ofDrawSphere(const glm::vec3& position, float radius);
 /// \param radius The radius of the sphere.
 void ofDrawSphere(float radius);
 
-[[deprecated("Use ofDrawSphere")]]
-void ofSphere(float x, float y, float radius) ;
-[[deprecated("Use ofDrawSphere")]]
-void ofSphere(float x, float y, float z, float radius) ;
-[[deprecated("Use ofDrawSphere")]]
-void ofSphere(const glm::vec3& position, float radius) ;
-[[deprecated("Use ofDrawSphere")]]
-void ofSphere(float radius) ;
+// [[deprecated("Use ofDrawSphere")]]
+// void ofSphere(float x, float y, float radius) ;
+// [[deprecated("Use ofDrawSphere")]]
+// void ofSphere(float x, float y, float z, float radius) ;
+// [[deprecated("Use ofDrawSphere")]]
+// void ofSphere(const glm::vec3& position, float radius) ;
+// [[deprecated("Use ofDrawSphere")]]
+// void ofSphere(float radius) ;
 
 /// \brief Set the icosphere resolution for the current renderer.
 ///
@@ -262,7 +262,7 @@ void ofDrawCylinder(float radius, float height);
 ///
 /// \param radiusSegments The number of facets (subdivisions) around the cone's
 ///        circular footprint.
-/// \param heightSegments The number of subdivisions from the cone's top to bottom. 
+/// \param heightSegments The number of subdivisions from the cone's top to bottom.
 /// \param capSegments The number of annular (ring-shaped) subdivisions of the
 ///        cone's endcap. Defaults to 2.
 void ofSetConeResolution( int radiusSegments, int heightSegments, int capSegments=2);
@@ -363,15 +363,15 @@ glm::vec3 ofGetBoxResolution();
 /// \brief Draw a cube with the current renderer.
 ///
 /// A box is a rectangular solid: an extruded rectangle.
-/// It is drawn starting from a 3D reference coordinate. 
+/// It is drawn starting from a 3D reference coordinate.
 /// It has a width (in x), a height (in y), and a depth (in z).
 /// The box is drawn with the current color, e.g. set with ofSetColor().
 /// The box is drawn filled by default; change this with ofFill();
 ///
-/// \param x The x-coordinate of the box's origin. 
-/// \param y The y-coordinate of the box's origin. 
-/// \param z The z-coordinate of the box's origin. 
-/// \param width The width of the box. 
+/// \param x The x-coordinate of the box's origin.
+/// \param y The y-coordinate of the box's origin.
+/// \param z The z-coordinate of the box's origin.
+/// \param width The width of the box.
 /// \param height The height of the box.
 /// \param depth The depth of the box.
 void ofDrawBox( float x, float y, float z, float width, float height, float depth);
@@ -387,23 +387,23 @@ void ofDrawBox( float x, float y, float z, float width, float height, float dept
 /// size. The cube is drawn with the current color, e.g. set with ofSetColor().
 /// The cube is drawn filled by default; change this with ofFill();
 ///
-/// \param x The x-coordinate of the cube's origin. 
-/// \param y The y-coordinate of the cube's origin. 
-/// \param z The z-coordinate of the cube's origin. 
-/// \param size The size of the cube. 
+/// \param x The x-coordinate of the cube's origin.
+/// \param y The y-coordinate of the cube's origin.
+/// \param z The z-coordinate of the cube's origin.
+/// \param size The size of the cube.
 void ofDrawBox(float x, float y, float z, float size);
 
 /// \brief Draws a cube with the current renderer.
 ///
-/// A box is a rectangular solid: an extruded rectangle. 
-/// It is drawn starting from a 3D reference coordinate. 
+/// A box is a rectangular solid: an extruded rectangle.
+/// It is drawn starting from a 3D reference coordinate.
 /// It has a width (in x), a height (in y), and a depth (in z).
 /// The box is drawn with the current color, e.g. set with ofSetColor().
 /// The box is drawn filled by default; change this with ofFill();
 ///
 /// \param position a glm::vec3 which contains the (x,y,z) coordinates for the
 ///        box's reference corner.
-/// \param width The width of the box. 
+/// \param width The width of the box.
 /// \param height The height of the box.
 /// \param depth The depth of the box.
 void ofDrawBox(const glm::vec3& position, float width, float height, float depth);
@@ -417,7 +417,7 @@ void ofDrawBox(const glm::vec3& position, float width, float height, float depth
 ///
 /// \param position a glm::vec3 which contains the (x,y,z) coordinates for the
 ///        cube's reference corner.
-/// \param size The size of the cube. 
+/// \param size The size of the cube.
 void ofDrawBox(const glm::vec3& position, float size);
 
 /// \brief Draws a cube with the current renderer, starting from the origin.
@@ -425,19 +425,19 @@ void ofDrawBox(const glm::vec3& position, float size);
 /// The cube is drawn with the current color, e.g. set with ofSetColor().
 /// The cube is drawn filled by default; change this with ofFill();
 ///
-/// \param size The size of the cube. 
+/// \param size The size of the cube.
 void ofDrawBox(float size);
 
 /// \brief Draws a cube with the current renderer, starting from
 /// the origin.
 ///
-/// A box is a rectangular solid: an extruded rectangle. 
-/// It is drawn starting from the origin of the current reference frame. 
+/// A box is a rectangular solid: an extruded rectangle.
+/// It is drawn starting from the origin of the current reference frame.
 /// It has a width (in x), a height (in y), and a depth (in z).
 /// The box is drawn with the current color, e.g. set with ofSetColor().
 /// The box is drawn filled by default; change this with ofFill();
 ///
-/// \param width The width of the box. 
+/// \param width The width of the box.
 /// \param height The height of the box.
 /// \param depth The depth of the box.
 void ofDrawBox( float width, float height, float depth );
@@ -470,7 +470,7 @@ public:
 	/// \param columns The number of columns to use when drawing planes.
 	/// \param rows The number of rows to use when drawing planes.
 	void setPlaneResolution( int columns, int rows );
-	
+
 	/// \brief Get the current plane resolution as a 2D vector.
 	///
 	/// The resulting vector's x and y values corresponds to the current column

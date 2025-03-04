@@ -17,37 +17,37 @@ using std::string;
 //---------------------------------
 // deprecations
 
-int ofGetGlInternalFormat(const ofPixels& pixels) {
-    return ofGetGLInternalFormat(pixels);
-}
+// int ofGetGlInternalFormat(const ofPixels& pixels) {
+//     return ofGetGLInternalFormat(pixels);
+// }
 
-int ofGetGlInternalFormat(const ofShortPixels& pixels) {
-    return ofGetGLInternalFormat(pixels);
-}
+// int ofGetGlInternalFormat(const ofShortPixels& pixels) {
+//     return ofGetGLInternalFormat(pixels);
+// }
 
-int ofGetGlInternalFormat(const ofFloatPixels& pixels) {
-    return ofGetGLInternalFormat(pixels);
-}
+// int ofGetGlInternalFormat(const ofFloatPixels& pixels) {
+//     return ofGetGLInternalFormat(pixels);
+// }
 
-std::string ofGetGlInternalFormatName(int glInternalFormat) {
-    return ofGetGLInternalFormatName(glInternalFormat);
-}
+// std::string ofGetGlInternalFormatName(int glInternalFormat) {
+//     return ofGetGLInternalFormatName(glInternalFormat);
+// }
 
-int ofGetGlTypeFromInternal(int glInternalFormat) {
-    return ofGetGLTypeFromInternal(glInternalFormat);
-}
+// int ofGetGlTypeFromInternal(int glInternalFormat) {
+//     return ofGetGLTypeFromInternal(glInternalFormat);
+// }
 
-int ofGetGlType(const ofPixels & pixels) {
-    return ofGetGLType(pixels);
-}
+// int ofGetGlType(const ofPixels & pixels) {
+//     return ofGetGLType(pixels);
+// }
 
-int ofGetGlType(const ofShortPixels & pixels) {
-    return ofGetGLType(pixels);
-}
+// int ofGetGlType(const ofShortPixels & pixels) {
+//     return ofGetGLType(pixels);
+// }
 
-int ofGetGlType(const ofFloatPixels & pixels) {
-    return ofGetGLType(pixels);
-}
+// int ofGetGlType(const ofFloatPixels & pixels) {
+//     return ofGetGLType(pixels);
+// }
 
 //---------------------------------
 int ofGetGLInternalFormat(const ofPixels& pixels) {
@@ -884,7 +884,7 @@ string ofGLSLVersionFromGL(int major, int minor){
 string ofGLSLVersionFromGL(){
     int major = 0;
     int minor = 0;
-    
+
     auto glRenderer = std::dynamic_pointer_cast<ofBaseGLRenderer>(ofGetCurrentRenderer());
     if( glRenderer ){
         major = glRenderer->getGLVersionMajor();
@@ -898,11 +898,11 @@ string ofGLSLGetDefaultHeader(){
     string header = "";
 
     auto glRenderer = std::dynamic_pointer_cast<ofBaseGLRenderer>(ofGetCurrentRenderer());
-    
+
     if( glRenderer ){
         string versionStr = ofGLSLVersionFromGL(glRenderer->getGLVersionMajor(), glRenderer->getGLVersionMinor());
         header = "#version "+versionStr+"\n";
-        
+
         #ifdef TARGET_OPENGLES
             if( versionStr != "ES1" ){
                 header += "#extension GL_OES_standard_derivatives : enable\n";

@@ -382,9 +382,9 @@ void ofNode::rotateRad(float radians, const glm::vec3& v) {
 }
 
 //----------------------------------------
-void ofNode::rotate(float degrees, float vx, float vy, float vz) {
-	rotateDeg(degrees, vx, vy, vz);
-}
+// void ofNode::rotate(float degrees, float vx, float vy, float vz) {
+// 	rotateDeg(degrees, vx, vy, vz);
+// }
 
 //----------------------------------------
 void ofNode::rotateDeg(float degrees, float vx, float vy, float vz) {
@@ -397,9 +397,9 @@ void ofNode::rotateRad(float radians, float vx, float vy, float vz) {
 }
 
 //----------------------------------------
-void ofNode::rotateAround(float degrees, const glm::vec3& axis, const glm::vec3& point) {
-	rotateAroundDeg(degrees, axis, point);
-}
+// void ofNode::rotateAround(float degrees, const glm::vec3& axis, const glm::vec3& point) {
+// 	rotateAroundDeg(degrees, axis, point);
+// }
 
 //----------------------------------------
 void ofNode::rotateAroundDeg(float degrees, const glm::vec3& axis, const glm::vec3& point) {
@@ -486,42 +486,41 @@ glm::vec3 ofNode::getUpDir() const {
 	return getYAxis();
 }
 
-#ifdef USEDEPRECATED
-//----------------------------------------
-float ofNode::getPitch() const {
-	return getPitchDeg();
-}
+// #ifdef USEDEPRECATED
+// //----------------------------------------
+// float ofNode::getPitch() const {
+// 	return getPitchDeg();
+// }
 
-//----------------------------------------
-float ofNode::getHeading() const {
-	return getHeadingDeg();
-}
+// //----------------------------------------
+// float ofNode::getHeading() const {
+// 	return getHeadingDeg();
+// }
 
-//----------------------------------------
-float ofNode::getRoll() const {
-	return getRollDeg();
-}
+// //----------------------------------------
+// float ofNode::getRoll() const {
+// 	return getRollDeg();
+// }
 
-//----------------------------------------
-glm::vec3 ofNode::getOrientationEuler() const {
-	return getOrientationEulerDeg();
-}
+// //----------------------------------------
+// glm::vec3 ofNode::getOrientationEuler() const {
+// 	return getOrientationEulerDeg();
+// }
 
-//----------------------------------------
-void ofNode::tilt(float degrees) {
-	rotateDeg(degrees, getXAxis());
-}
+// //----------------------------------------
+// void ofNode::tilt(float degrees) {
+// 	rotateDeg(degrees, getXAxis());
+// }
 
-//----------------------------------------
-void ofNode::pan(float degrees) {
-	rotateDeg(degrees, getYAxis());
-}
+// //----------------------------------------
+// void ofNode::pan(float degrees) {
+// 	rotateDeg(degrees, getYAxis());
+// }
 
-//----------------------------------------
-void ofNode::roll(float degrees) {
-	rotateDeg(degrees, getZAxis());
-}
-
+// //----------------------------------------
+// void ofNode::roll(float degrees) {
+// 	rotateDeg(degrees, getZAxis());
+// }
 
 //----------------------------------------
 void ofNode::rotate(const glm::quat& q) {
@@ -530,10 +529,10 @@ void ofNode::rotate(const glm::quat& q) {
 	onOrientationChanged();
 }
 
-//----------------------------------------
-void ofNode::rotate(float degrees, const glm::vec3& v) {
-	rotateDeg(degrees, v);
-}
+// //----------------------------------------
+// void ofNode::rotate(float degrees, const glm::vec3& v) {
+// 	rotateDeg(degrees, v);
+// }
 
 //----------------------------------------
 void ofNode::rotateAround(const glm::quat& q, const glm::vec3& point) {
@@ -548,16 +547,16 @@ void ofNode::rotateAround(const glm::quat& q, const glm::vec3& point) {
 	onPositionChanged();
 }
 
-//----------------------------------------
-void ofNode::orbit(float longitude, float latitude, float radius, const glm::vec3& centerPoint) {
-	orbitDeg(longitude, latitude, radius, centerPoint);
-}
+// //----------------------------------------
+// void ofNode::orbit(float longitude, float latitude, float radius, const glm::vec3& centerPoint) {
+// 	orbitDeg(longitude, latitude, radius, centerPoint);
+// }
 
-//----------------------------------------
-void ofNode::orbit(float longitude, float latitude, float radius, ofNode& centerNode) {
-	orbitDeg(longitude, latitude, radius, centerNode);
-}
-#endif
+// //----------------------------------------
+// void ofNode::orbit(float longitude, float latitude, float radius, ofNode& centerNode) {
+// 	orbitDeg(longitude, latitude, radius, centerNode);
+// }
+// #endif
 
 //----------------------------------------
 float ofNode::getPitchDeg() const {

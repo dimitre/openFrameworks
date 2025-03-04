@@ -99,43 +99,43 @@ public:
 	/// \returns A normalized 3D vector of the node's local y axis direction.
 	glm::vec3 getUpDir() const;
 
-#ifdef USEDEPRECATED
-	[[deprecated ("Use Deg/Rad versions.")]]
-	float getPitch() const;
+// #ifdef USEDEPRECATED
+// 	[[deprecated ("Use Deg/Rad versions.")]]
+// 	float getPitch() const;
 
-	[[deprecated ("Use Deg/Rad versions.")]]
-	float getHeading() const;
+// 	[[deprecated ("Use Deg/Rad versions.")]]
+// 	float getHeading() const;
 
-	[[deprecated ("Use Deg/Rad versions.")]]
-	float getRoll() const;
+// 	[[deprecated ("Use Deg/Rad versions.")]]
+// 	float getRoll() const;
 
-	[[deprecated ("Use Deg/Rad versions.")]]
-	glm::vec3 getOrientationEuler() const;
+// 	[[deprecated ("Use Deg/Rad versions.")]]
+// 	glm::vec3 getOrientationEuler() const;
 
-	[[deprecated ("Use Deg/Rad versions.")]]
-	void tilt(float degrees);
+// 	[[deprecated ("Use Deg/Rad versions.")]]
+// 	void tilt(float degrees);
 
-	[[deprecated ("Use Deg/Rad versions.")]]
-	void pan(float degrees);
+// 	[[deprecated ("Use Deg/Rad versions.")]]
+// 	void pan(float degrees);
 
-	[[deprecated ("Use Deg/Rad versions.")]]
-	void roll(float degrees);
+// 	[[deprecated ("Use Deg/Rad versions.")]]
+// 	void roll(float degrees);
 
-	[[deprecated ("Use Deg/Rad versions.")]]
-	void rotate(float degrees, const glm::vec3& v);
+// 	[[deprecated ("Use Deg/Rad versions.")]]
+// 	void rotate(float degrees, const glm::vec3& v);
 
-	[[deprecated ("Use Deg/Rad versions.")]]
-	void rotate(float degrees, float vx, float vy, float vz);
+// 	[[deprecated ("Use Deg/Rad versions.")]]
+// 	void rotate(float degrees, float vx, float vy, float vz);
 
-	[[deprecated ("Use Deg/Rad versions.")]]
-	void rotateAround(float degrees, const glm::vec3& axis, const glm::vec3& point);
+// 	[[deprecated ("Use Deg/Rad versions.")]]
+// 	void rotateAround(float degrees, const glm::vec3& axis, const glm::vec3& point);
 
-	[[deprecated ("Use Deg/Rad versions.")]]
-	void orbit(float longitude, float latitude, float radius, const glm::vec3& centerPoint = glm::vec3(0, 0, 0));
+// 	[[deprecated ("Use Deg/Rad versions.")]]
+// 	void orbit(float longitude, float latitude, float radius, const glm::vec3& centerPoint = glm::vec3(0, 0, 0));
 
-	[[deprecated ("Use Deg/Rad versions.")]]
-	void orbit(float longitude, float latitude, float radius, ofNode& centerNode);
-#endif
+// 	[[deprecated ("Use Deg/Rad versions.")]]
+// 	void orbit(float longitude, float latitude, float radius, ofNode& centerNode);
+// #endif
 
 	/// \brief Get pitch of node, aka the rotation along local x axis.
 	/// \returns The rotation around the local x axis in degrees, as a float.
