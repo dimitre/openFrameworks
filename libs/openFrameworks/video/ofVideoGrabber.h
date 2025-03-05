@@ -22,27 +22,15 @@ public:
 	void				close();
 	bool				setup(int w, int h){return setup(w,h,bUseTexture);}
 	bool				setup(int w, int h, bool bTexture);
-	[[deprecated("Use setup")]]
-	bool initGrabber(int w, int h){return setup(w,h);}
-	[[deprecated("Use setup")]]
-	bool initGrabber(int w, int h, bool bTexture);
-	
+
 	bool				setPixelFormat(ofPixelFormat pixelFormat);
 	ofPixelFormat 		getPixelFormat() const;
-	
+
 	void				videoSettings();
 	ofPixels& 			getPixels();
 	const ofPixels&		getPixels() const;
-	[[deprecated("Use getPixels()")]]
-	ofPixels&	getPixelsRef();
-	[[deprecated("Use getPixels()")]]
-	const ofPixels&  getPixelsRef() const;
 	ofTexture &			getTexture();
 	const ofTexture &	getTexture() const;
-	[[deprecated("Use getTexture")]]
-	ofTexture &			getTextureReference();
-	[[deprecated("Use getTexture")]]
-	const ofTexture &	getTextureReference() const;
 	std::vector<ofTexture> & getTexturePlanes();
 	const std::vector<ofTexture> & getTexturePlanes() const;
 	void				setVerbose(bool bTalkToMe);
@@ -83,7 +71,7 @@ public:
 	}
 
 private:
-	
+
 	std::vector<ofTexture> tex;
 	bool bUseTexture;
 	std::shared_ptr<ofBaseVideoGrabber> grabber;
