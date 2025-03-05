@@ -4,7 +4,7 @@
 -fobjc-arc
 -lstdc++fs
 -stdlib=libc++
--mmacosx-version-min=12.0
+-mmacosx-version-min=11.5
 -MMD
 -MP
 -MF

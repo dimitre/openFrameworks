@@ -2,6 +2,7 @@
 
 #include "addons.h"
 #include "templates.h"
+#include <filesystem>
 
 // #include <fstream>
 // #include <iostream>
@@ -397,8 +398,26 @@ void gatherProjectInfo() {
 
 	// now parse project addons, or yml
 
+
+	if (!fs::exists("./src")) {
+	   // FIXME: check if template is ios and copy mm files accordingly. if not copy src files from templates.
+		fs::path from { conf.ofPath / "scripts" / "templates" / "src" };
+		fs::path to { "./src" };
+		alert(from.string(), 95);
+		alert(fs::current_path().string(), 95);
+		try {
+    		fs::copy(from, to, fs::copy_options::recursive | fs::copy_options::update_existing);
+		} catch (fs::filesystem_error & e) {
+			std::cerr << "error copying template file " << from << " : " << to << std::endl;
+		}
+	}
+	// exit(1);
+
 	// DELICATE. treating projects as an addon.
-	if (fs::exists("./src")) {
+	// it works well. not delicate anymore.
+	// src will always exist because we copy them if not.
+	// if (fs::exists("./src"))
+	{
 		{
 			conf.addons.push_back(new ofAddon());
 			ofAddon * addon = conf.addons.back();
@@ -435,10 +454,11 @@ void gatherProjectInfo() {
 		// 	project.addons.emplace_back(conf.addons.back());
 		// }
 
-	} else {
-		alert("NO SRC FILE FOUND IN PROJECT", 95);
-		std::exit(1);
 	}
+	// else {
+	// 	alert("NO SRC FILE FOUND IN PROJECT", 95);
+	// 	std::exit(1);
+	// }
 
 	// fs::path addonsListFile { conf.projectPath / "addons.make" };
 	// if (fs::exists(addonsListFile)) {

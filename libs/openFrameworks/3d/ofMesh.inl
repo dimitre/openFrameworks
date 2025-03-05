@@ -1673,7 +1673,7 @@ const std::vector<ofMeshFace_<V,N,C,T>> & ofMesh_<V,N,C,T>::getUniqueFaces() con
 		// that way we can calculate face normals and use getFaceNormal();
 		faces.resize( indices.size()/3 );
 
-		int index	   = 0;
+		ofIndexType index = 0;
 		int triindex	= 0;
 
 		bool bHasColors	 = hasColors();

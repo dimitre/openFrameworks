@@ -47,7 +47,13 @@ int main(const int argc, const char * argv[]) {
 		if (conf.singleParameter == "build") {
 			conf.build();
 		}
+
+		else if (conf.singleParameter == "buildrun") {
+    		conf.build();
+            conf.run();
+		}
 	}
+
 
 	std::cout << std::endl;
 	alert(getPGVersion(), 92);

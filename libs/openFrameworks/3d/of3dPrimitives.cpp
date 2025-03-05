@@ -152,7 +152,7 @@ void of3dPrimitive::mapTexCoords( float u1, float v1, float u2, float v2 ) {
 	
 	auto prevTcoord = getTexCoords();
     
-	for(std::size_t j = 0; j < getMesh().getNumTexCoords(); j++ ) {
+	for(ofIndexType j = 0; j < getMesh().getNumTexCoords(); j++ ) {
 		auto tcoord = getMesh().getTexCoord(j);
         tcoord.x = ofMap(tcoord.x, prevTcoord.x, prevTcoord.z, u1, u2);
         tcoord.y = ofMap(tcoord.y, prevTcoord.y, prevTcoord.w, v1, v2);
@@ -246,7 +246,7 @@ void of3dPrimitive::drawNormals(float length, bool bFaceNormals) const{
         normalsMesh.getVertices().resize( normals.size() * 2);
         
         if(bFaceNormals) {
-			for(size_t i = 0; i < normals.size(); i++ ) {
+			for(ofIndexType i = 0; i < normals.size(); i++ ) {
                 if(i % 3 == 0) {
                     vert = (vertices[i]+vertices[i+1]+vertices[i+2]) / 3.0f;
                 } else if(i % 3 == 1) {
@@ -260,7 +260,7 @@ void of3dPrimitive::drawNormals(float length, bool bFaceNormals) const{
 				normalsMesh.setVertex(i*2+1, vert+normal);
             }
         } else {
-			for(size_t i = 0; i < normals.size(); i++) {
+			for(ofIndexType i = 0; i < normals.size(); i++) {
                 vert = vertices[i];
 				normal = glm::normalize(normals[i]);
                 normalsMesh.setVertex( i*2, vert);

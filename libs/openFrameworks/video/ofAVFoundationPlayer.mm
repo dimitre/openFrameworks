@@ -431,7 +431,7 @@ void ofAVFoundationPlayer::initTextureCache() {
      *  which is unecessary in this case because the texture already exists.
      *  so... we can use ofTexture::setUseExternalTextureID() to get around this.
      */
-  
+
 	if (!videoTexture.isAllocated()) {
 		int videoTextureW = getWidth();
 		int videoTextureH = getHeight();
@@ -492,7 +492,7 @@ void ofAVFoundationPlayer::initTextureCache() {
     if(err) {
         ofLogError("ofAVFoundationPlayer") << "initTextureCache(): error creating texture cache from image " << err << ".";
     }
-	
+
     CVPixelBufferUnlockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
 
 #ifdef TARGET_OF_IOS
@@ -760,20 +760,3 @@ void * ofAVFoundationPlayer::getAVFoundationVideoPlayer() {
 }
 
 #endif
-
-//-------------------------------------------------------------- DEPRECATED.
-bool ofAVFoundationPlayer::loadMovie(const of::filesystem::path & fileName) {
-    return load(fileName);
-}
-
-ofPixels & ofAVFoundationPlayer::getPixelsRef() {
-    return getPixels();
-}
-
-const ofPixels & ofAVFoundationPlayer::getPixelsRef() const {
-    return getPixels();
-}
-
-ofTexture * ofAVFoundationPlayer::getTexture() {
-    return getTexturePtr();
-}
