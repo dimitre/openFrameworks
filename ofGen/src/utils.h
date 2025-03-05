@@ -16,7 +16,7 @@ using std::string;
 using std::vector;
 
 static inline std::string getPGVersion() {
-	return "ofGen v0.2.2";
+	return "ofGen v0.2.3";
 }
 
 inline std::string colorText(const std::string & s, int color) {
@@ -35,13 +35,13 @@ const std::string sign = colorText(R"(
 ▐▌ ▐▌▐▌   ▐▌   ▐▌   ▐▛▚▖▐▌
 ▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
 ▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
-Project Generator for OpenFrameworks (OFVISION)
-                Prototype v0.2.2⚡️
+Project Generator for OpenFrameworks (OFWorks)
+                Prototype v0.2.3⚡️
 )",
 							 91)
 
 	+ colorText(R"(                Report issues on
-                https://github.com/dimitre/ofLibs/
+                https://github.com/dimitre/ofworks/
 )",
 		92);
 

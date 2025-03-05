@@ -134,7 +134,7 @@ ofVideoPlayer::ofVideoPlayer(const of::filesystem::path & fileName) : ofVideoPla
 //---------------------------------------------------------------------------
 void ofVideoPlayer::setPlayer(shared_ptr<ofBaseVideoPlayer> newPlayer){
 	player = std::move(newPlayer);
-	setPixelFormat(internalPixelFormat);	//this means that it will try to set the pixel format you have been using before. 
+	setPixelFormat(internalPixelFormat);	//this means that it will try to set the pixel format you have been using before.
 											//if the format is not supported ofVideoPlayer's internalPixelFormat will be updated to that of the player's
 }
 
@@ -150,7 +150,7 @@ const shared_ptr<ofBaseVideoPlayer>	ofVideoPlayer::getPlayer() const{
 	return player;
 }
 
-//we only set pixel format on the player if it exists. 
+//we only set pixel format on the player if it exists.
 //if the movie is already loaded then we can't update the format.
 //also if the format is not supported we get the format from the player instead.
 //--------------------------------------------------------------------
@@ -158,18 +158,18 @@ bool ofVideoPlayer::setPixelFormat(ofPixelFormat pixelFormat) {
 	if( player ){
 		if( player->isLoaded() ){
 			ofLogWarning("ofVideoPlayer") << "setPixelFormat(): can't set pixel format of a loaded movie";
-			internalPixelFormat = player->getPixelFormat(); 
+			internalPixelFormat = player->getPixelFormat();
 			return false;
 		}else{
-			if( player->setPixelFormat(pixelFormat) ){		
+			if( player->setPixelFormat(pixelFormat) ){
 				internalPixelFormat = player->getPixelFormat();  //we do this as either way we want the players format
 			}else{
 				internalPixelFormat = player->getPixelFormat();  //we do this as either way we want the players format
-				return false; 					
+				return false;
 			}
 		}
 	}else{
-		internalPixelFormat = pixelFormat;	
+		internalPixelFormat = pixelFormat;
 	}
 	return true;
 }
@@ -188,7 +188,7 @@ bool ofVideoPlayer::load(const of::filesystem::path & fileName){
 		setPlayer(std::make_shared<OF_VID_PLAYER_TYPE>());
 		player->setPixelFormat(internalPixelFormat);
 	}
-	
+
 	bool bOk = player->load(fileName);
 
 	if( bOk){
@@ -211,7 +211,7 @@ bool ofVideoPlayer::load(const of::filesystem::path & fileName){
         }
 		setLoopState(OF_LOOP_NORMAL);
     }
-	
+
 	return bOk;
 }
 
@@ -221,19 +221,14 @@ void ofVideoPlayer::loadAsync(const of::filesystem::path & fileName){
 		setPlayer(std::make_shared<OF_VID_PLAYER_TYPE>());
 		player->setPixelFormat(internalPixelFormat);
 	}
-	
+
 	player->loadAsync(fileName);
 	moviePath = fileName;
 }
 
 //---------------------------------------------------------------------------
-bool ofVideoPlayer::loadMovie(const of::filesystem::path & fileName){
-	return load(fileName);
-}
-
-//---------------------------------------------------------------------------
 of::filesystem::path ofVideoPlayer::getMoviePath() const {
-    return moviePath;	
+    return moviePath;
 }
 
 //---------------------------------------------------------------------------
@@ -243,16 +238,6 @@ ofPixels & ofVideoPlayer::getPixels(){
 
 //---------------------------------------------------------------------------
 const ofPixels&	ofVideoPlayer::getPixels() const{
-	return getPlayer()->getPixels();
-}
-
-//---------------------------------------------------------------------------
-ofPixels& ofVideoPlayer::getPixelsRef(){
-	return getPlayer()->getPixels();
-}
-
-//---------------------------------------------------------------------------
-const ofPixels& ofVideoPlayer::getPixelsRef() const{
 	return getPlayer()->getPixels();
 }
 
@@ -272,16 +257,6 @@ const ofTexture & ofVideoPlayer::getTexture() const{
 	}else{
 		return *playerTex;
 	}
-}
-
-//---------------------------------------------------------------------------
-ofTexture & ofVideoPlayer::getTextureReference(){
-	return getTexture();
-}
-
-//---------------------------------------------------------------------------
-const ofTexture & ofVideoPlayer::getTextureReference() const{
-	return getTexture();
 }
 
 //---------------------------------------------------------------------------
@@ -316,11 +291,11 @@ void ofVideoPlayer::update(){
 	if( player ){
 
 		player->update();
-		
+
 		if( bUseTexture && player->isFrameNew() ) {
-			
+
 			playerTex = player->getTexturePtr();
-			
+
 			if(playerTex == nullptr){
 				if(tex.size()!=player->getPixels().getNumPlanes()){
 					tex.resize(std::max(player->getPixels().getNumPlanes(),static_cast<std::size_t>(1)));
@@ -415,7 +390,7 @@ float ofVideoPlayer::getDuration() const{
 	if( player ){
 		return player->getDuration();
 	}
-	
+
 	return 0.0;
 }
 
@@ -605,5 +580,3 @@ bool ofVideoPlayer::isInitialized() const{
 	}
 	return false;
 }
-
-

@@ -374,14 +374,14 @@ bool ofGetBackgroundAuto(){
 }
 
 //----------------------------------------------------------
-bool ofbClearBg() {
-	return ofGetBackgroundAuto();
-}
+// bool ofbClearBg() {
+// 	return ofGetBackgroundAuto();
+// }
 
 //----------------------------------------------------------
-ofFloatColor ofGetBackground(){
-	return ofGetCurrentRenderer()->getBackgroundColor();
-}
+// ofFloatColor ofGetBackground(){
+// 	return ofGetCurrentRenderer()->getBackgroundColor();
+// }
 
 ofFloatColor ofGetBackgroundColor(){
 	return ofGetCurrentRenderer()->getBackgroundColor();

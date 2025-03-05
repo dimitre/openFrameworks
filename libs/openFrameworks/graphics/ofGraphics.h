@@ -107,8 +107,9 @@ ofFillFlag ofGetFill();
 
 /// \brief Returns the current background color as an ofColor.
 ofFloatColor ofGetBackgroundColor();
-[[deprecated("Use ofGetBackgroundColor")]]
-ofFloatColor ofGetBackground();
+
+// [[deprecated("Use ofGetBackgroundColor")]]
+// ofFloatColor ofGetBackground();
 
 /// \brief Sets the background color.
 ///
@@ -297,8 +298,8 @@ void ofClearFloat(float brightness, float a);
 void ofClearFloat(const ofFloatColor & c);
 
 // OF's access to settings (bgAuto, origin, corner mode):
-[[deprecated("Use ofGetBackgroundAuto")]]
-bool ofbClearBg();
+// [[deprecated("Use ofGetBackgroundAuto")]]
+// bool ofbClearBg();
 
 /// \}
 /// \name 2D Primitives Drawing

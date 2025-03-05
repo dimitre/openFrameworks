@@ -760,58 +760,50 @@ void ofCone(float x, float y, float z, float radius, float height) {
     ofDrawCone(x, y, z, radius, height);
 }
 
-//----------------------------------------------------------
-void ofCone(float x, float y, float radius, float height) {
-    ofDrawCone( x, y, 0, radius, height );
-}
+// //----------------------------------------------------------
+// void ofCone(float x, float y, float radius, float height) {
+//     ofDrawCone( x, y, 0, radius, height );
+// }
 
-//----------------------------------------------------------
-void ofCone(const glm::vec3& position, float radius, float height) {
-    ofDrawCone( position.x, position.y, position.z, radius, height );
-}
+// //----------------------------------------------------------
+// void ofCone(const glm::vec3& position, float radius, float height) {
+//     ofDrawCone( position.x, position.y, position.z, radius, height );
+// }
 
-//----------------------------------------------------------
-void ofCone(float radius, float height) {
-    ofDrawCone(radius, height );
-}
+// //----------------------------------------------------------
+// void ofCone(float radius, float height) {
+//     ofDrawCone(radius, height );
+// }
 
 
 
 // deprecated methods //
 //----------------------------------------------------------
-void ofBox( float x, float y, float z, float width, float height, float depth) {
-    ofDrawBox(x,y,z,width,height,depth);
-}
+// void ofBox( float x, float y, float z, float width, float height, float depth) {
+//     ofDrawBox(x,y,z,width,height,depth);
+// }
 
-//----------------------------------------------------------
-void ofBox(float x, float y, float z, float size) {
-    ofDrawBox( x, y, z, size, size, size );
-}
+// //----------------------------------------------------------
+// void ofBox(float x, float y, float z, float size) {
+//     ofDrawBox( x, y, z, size, size, size );
+// }
 
-//----------------------------------------------------------
-void ofBox(const glm::vec3& position, float width, float height, float depth) {
-    ofDrawBox( position.x, position.y, position.z, width, height, depth );
-}
+// //----------------------------------------------------------
+// void ofBox(const glm::vec3& position, float width, float height, float depth) {
+//     ofDrawBox( position.x, position.y, position.z, width, height, depth );
+// }
 
-//----------------------------------------------------------
-void ofBox(const glm::vec3& position, float size) {
-    ofDrawBox( position.x, position.y, position.z, size, size, size );
-}
+// //----------------------------------------------------------
+// void ofBox(const glm::vec3& position, float size) {
+//     ofDrawBox( position.x, position.y, position.z, size, size, size );
+// }
 
-//----------------------------------------------------------
-void ofBox(float size) {
-    ofDrawBox( size, size, size );
-}
+// //----------------------------------------------------------
+// void ofBox(float size) {
+//     ofDrawBox( size, size, size );
+// }
 
-//----------------------------------------------------------
-void ofBox( float width, float height, float depth ) {
-    ofDrawBox(width,height,depth);
-}
-
-
-
-
-
-
-
-
+// //----------------------------------------------------------
+// void ofBox( float width, float height, float depth ) {
+//     ofDrawBox(width,height,depth);
+// }

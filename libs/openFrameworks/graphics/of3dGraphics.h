@@ -328,14 +328,14 @@ void ofDrawCone(const glm::vec3& position, float radius, float height);
 /// \param height The height to use when drawing this cone.
 void ofDrawCone(float radius, float height);
 
-[[deprecated("Use ofDrawCone")]]
-void ofCone(float x, float y, float z, float radius, float height) ;
-[[deprecated("Use ofDrawCone")]]
-void ofCone(float x, float y, float radius, float height) ;
-[[deprecated("Use ofDrawCone")]]
-void ofCone(const glm::vec3& position, float radius, float height) ;
-[[deprecated("Use ofDrawCone")]]
-void ofCone(float radius, float height) ;
+// [[deprecated("Use ofDrawCone")]]
+// void ofCone(float x, float y, float z, float radius, float height) ;
+// [[deprecated("Use ofDrawCone")]]
+// void ofCone(float x, float y, float radius, float height) ;
+// [[deprecated("Use ofDrawCone")]]
+// void ofCone(const glm::vec3& position, float radius, float height) ;
+// [[deprecated("Use ofDrawCone")]]
+// void ofCone(float radius, float height) ;
 
 /// \section Boxes
 
@@ -443,18 +443,18 @@ void ofDrawBox(float size);
 void ofDrawBox( float width, float height, float depth );
 
 // deprecated methods //
-[[deprecated("Use ofDrawBox")]]
-void ofBox( float x, float y, float z, float width, float height, float depth) ;
-[[deprecated("Use ofDrawBox")]]
-void ofBox(float x, float y, float z, float size) ;
-[[deprecated("Use ofDrawBox")]]
-void ofBox(const glm::vec3& position, float width, float height, float depth) ;
-[[deprecated("Use ofDrawBox")]]
-void ofBox(const glm::vec3& position, float size) ;
-[[deprecated("Use ofDrawBox")]]
-void ofBox(float size) ;
-[[deprecated("Use ofDrawBox")]]
-void ofBox( float width, float height, float depth ) ;
+// [[deprecated("Use ofDrawBox")]]
+// void ofBox( float x, float y, float z, float width, float height, float depth) ;
+// [[deprecated("Use ofDrawBox")]]
+// void ofBox(float x, float y, float z, float size) ;
+// [[deprecated("Use ofDrawBox")]]
+// void ofBox(const glm::vec3& position, float width, float height, float depth) ;
+// [[deprecated("Use ofDrawBox")]]
+// void ofBox(const glm::vec3& position, float size) ;
+// [[deprecated("Use ofDrawBox")]]
+// void ofBox(float size) ;
+// [[deprecated("Use ofDrawBox")]]
+// void ofBox( float width, float height, float depth ) ;
 
 class of3dGraphics{
 public:

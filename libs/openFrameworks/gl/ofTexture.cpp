@@ -58,50 +58,50 @@ void ofDisableNormalizedTexCoords(){
 static bool bUseCustomTextureWrap = false;
 
 //----------------------------------------------------------
-void ofSetTextureWrap(GLfloat wrapS, GLfloat wrapT){
-	bUseCustomTextureWrap = true;
-	GLenum textureTarget = GL_TEXTURE_2D;
-#ifndef TARGET_OPENGLES
-	if (ofGetUsingArbTex() && GL_ARB_texture_rectangle){
-		textureTarget = GL_TEXTURE_RECTANGLE_ARB;
-	};
-#endif
-	glTexParameterf(textureTarget, GL_TEXTURE_WRAP_S, wrapS);
-	glTexParameterf(textureTarget, GL_TEXTURE_WRAP_T, wrapT);
-}
+// void ofSetTextureWrap(GLfloat wrapS, GLfloat wrapT){
+// 	bUseCustomTextureWrap = true;
+// 	GLenum textureTarget = GL_TEXTURE_2D;
+// #ifndef TARGET_OPENGLES
+// 	if (ofGetUsingArbTex() && GL_ARB_texture_rectangle){
+// 		textureTarget = GL_TEXTURE_RECTANGLE_ARB;
+// 	};
+// #endif
+// 	glTexParameterf(textureTarget, GL_TEXTURE_WRAP_S, wrapS);
+// 	glTexParameterf(textureTarget, GL_TEXTURE_WRAP_T, wrapT);
+// }
 
 //----------------------------------------------------------
-bool ofGetUsingCustomTextureWrap(){
-	return bUseCustomTextureWrap;
-}
+// bool ofGetUsingCustomTextureWrap(){
+// 	return bUseCustomTextureWrap;
+// }
 
 //----------------------------------------------------------
-void ofRestoreTextureWrap(){
-	bUseCustomTextureWrap = false;
-}
+// void ofRestoreTextureWrap(){
+// 	bUseCustomTextureWrap = false;
+// }
 
 //----------------------------------------------------------
-void ofSetMinMagFilters(GLfloat minFilter, GLfloat magFilter){
-	bUseCustomMinMagFilters = true;
-	GLenum textureTarget = GL_TEXTURE_2D;
-#ifndef TARGET_OPENGLES
-	if (ofGetUsingArbTex() && GL_ARB_texture_rectangle){
-		textureTarget = GL_TEXTURE_RECTANGLE_ARB;
-	};
-#endif
-	glTexParameterf(textureTarget, GL_TEXTURE_MIN_FILTER, minFilter);
-	glTexParameterf(textureTarget, GL_TEXTURE_MAG_FILTER, magFilter);
-}
+// void ofSetMinMagFilters(GLfloat minFilter, GLfloat magFilter){
+// 	bUseCustomMinMagFilters = true;
+// 	GLenum textureTarget = GL_TEXTURE_2D;
+// #ifndef TARGET_OPENGLES
+// 	if (ofGetUsingArbTex() && GL_ARB_texture_rectangle){
+// 		textureTarget = GL_TEXTURE_RECTANGLE_ARB;
+// 	};
+// #endif
+// 	glTexParameterf(textureTarget, GL_TEXTURE_MIN_FILTER, minFilter);
+// 	glTexParameterf(textureTarget, GL_TEXTURE_MAG_FILTER, magFilter);
+// }
 
 //----------------------------------------------------------
-bool ofGetUsingCustomMinMagFilters(){
-	return bUseCustomMinMagFilters;
-}
+// bool ofGetUsingCustomMinMagFilters(){
+// 	return bUseCustomMinMagFilters;
+// }
 
 //----------------------------------------------------------
-void ofRestoreMinMagFilters(){
-	bUseCustomMinMagFilters = false;
-}
+// void ofRestoreMinMagFilters(){
+// 	bUseCustomMinMagFilters = false;
+// }
 
 //***** global functions to override texture settings
 
@@ -189,7 +189,7 @@ void ofRegenerateAllTextures(){
 ofTexture::ofTexture(){
 	resetAnchor();
 	bWantsMipmap = false;
-	
+
 	quad.setMode(OF_PRIMITIVE_TRIANGLE_FAN);
 	quad.getVertices().resize(4);
 	quad.getTexCoords().resize(4);
@@ -1161,7 +1161,7 @@ ofMesh ofTexture::getMeshForSubsection(float x, float y, float z, float w, float
 	GLfloat tx1 { bottomRight.x - offsetw };
 	GLfloat ty1 { bottomRight.y - offseth };
 
-	
+
 //	ofMesh quad;
 	return  { OF_PRIMITIVE_TRIANGLE_FAN, {
 		{px0, py0, z},

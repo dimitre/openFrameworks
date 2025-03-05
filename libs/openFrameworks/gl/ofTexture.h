@@ -87,68 +87,26 @@ void ofEnableNormalizedTexCoords();
 /// \sa ofEnableNormalizedTexCoords()
 void ofDisableNormalizedTexCoords();
 
-/// \brief Set custom global texture wrapping.
-///
-/// By default, textures are clamped to their edges with GL_CLAMP_TO_EDGE.
-/// Setting a repeat mode like GL_REPEAT allows you to create tiled backgrounds
-/// with small textures.
-///
-/// This overrides individual ofTexture wrap settings.
-///
-/// \sa ofTexture::setTextureWrap
-/// \sa http://www.opengl.org/sdk/docs/man4/html/glTexParameter.xhtml
-///
-/// \warning Deprecated. Use member methods instead.
-///
-/// \param wrapS wrap parameter for texture coordinate s.
-/// \param wrapT wrap parameter for texture coordinate t.
-[[deprecated("Use member method ofTexture::setTextureWrap()")]]
-void ofSetTextureWrap(GLfloat wrapS = GL_CLAMP_TO_EDGE, GLfloat wrapT = GL_CLAMP_TO_EDGE);
 
-/// \brief Check whether OF is using custom global texture wrapping.
-///
-/// \warning Deprecated. Use member methods instead.
-///
-/// \sa ofSetTextureWrap()
-/// \returns true if OF is currently using custom global texture wrapping.
-[[deprecated("Use member method ofTexture::setTextureWrap()")]]
-bool ofGetUsingCustomTextureWrap();
+// [[deprecated("Use member method ofTexture::setTextureWrap()")]]
+// void ofSetTextureWrap(GLfloat wrapS = GL_CLAMP_TO_EDGE, GLfloat wrapT = GL_CLAMP_TO_EDGE);
 
-/// \brief Removes global custom texture wrapping.
-///
-/// Restores individual ofTexture wrap settings.
-///
-/// \warning Deprecated. Use member methods instead.
-///
-/// \sa ofSetTextureWrap()
-[[deprecated("Use member method ofTexture::setTextureWrap()")]]
-void ofRestoreTextureWrap();
+// [[deprecated("Use member method ofTexture::setTextureWrap()")]]
+// bool ofGetUsingCustomTextureWrap();
 
-/// \brief Set custom global texture minification/magnification scaling filters.
-///
-/// This setting allows global control over how OpenGL scales textures. It
-/// overrides individual ofTexture min & mag filter settings.
-///
-/// \warning Deprecated. Use member methods instead.
-///
-/// \sa ofTexture::setTextureMinMagFilter()
-/// \param minFilter minifying filter for scaling a pixel to a smaller area.
-/// \param magFilter magnifying filter for scaling a pixel to a larger area.
-[[deprecated("Use member method ofTexture::setTextureMinMagFilter()")]]
-void ofSetMinMagFilters(GLfloat minFilter = GL_LINEAR, GLfloat magFilter = GL_LINEAR);
+// [[deprecated("Use member method ofTexture::setTextureWrap()")]]
+// void ofRestoreTextureWrap();
 
-/// \brief Check whether OF is using custom global texture scaling filters.
-/// \returns true if OF is currently using custom texture scaling filters.
-/// \warning Deprecated. Use member methods instead.
-[[deprecated("Use member method ofTexture::setTextureMinMagFilter()")]]
-bool ofGetUsingCustomMinMagFilters();
+// [[deprecated("Use member method ofTexture::setTextureMinMagFilter()")]]
+// void ofSetMinMagFilters(GLfloat minFilter = GL_LINEAR, GLfloat magFilter = GL_LINEAR);
 
-/// \brief Removes global custom texture wrapping.
-///
-/// Restores individual ofTexture min mag filter settings.
-/// \warning Deprecated. Use member methods instead.
-[[deprecated("Use member method ofTexture::setTextureMinMagFilter()")]]
-void ofRestoreMinMagFilters();
+// [[deprecated("Use member method ofTexture::setTextureMinMagFilter()")]]
+// bool ofGetUsingCustomMinMagFilters();
+
+// [[deprecated("Use member method ofTexture::setTextureMinMagFilter()")]]
+// void ofRestoreMinMagFilters();
+
+
 
 /// \brief Texture compression types.
 ///

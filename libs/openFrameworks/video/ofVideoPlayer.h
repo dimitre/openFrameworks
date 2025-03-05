@@ -11,8 +11,6 @@ public:
 
 	bool load(const of::filesystem::path & fileName);
 	void loadAsync(const of::filesystem::path & fileName);
-	[[deprecated("Use load")]]
-	bool loadMovie(const of::filesystem::path & fileName);
 
 
 	/// \brief Get the path to the loaded video file.
@@ -49,10 +47,6 @@ public:
 	bool 				isFrameNew() const;
 	ofPixels& 			getPixels();
 	const ofPixels&		getPixels() const;
-	[[deprecated("Use getPixels()")]]
-	ofPixels&	getPixelsRef();
-	[[deprecated("Use getPixels()")]]
-	const ofPixels&  getPixelsRef() const;
 	float 				getPosition() const;
 	float 				getSpeed() const;
 	float 				getDuration() const;
@@ -69,10 +63,6 @@ public:
 	bool 				isUsingTexture() const;
 	ofTexture &			getTexture();
 	const ofTexture &	getTexture() const;
-	[[deprecated("Use getTexture")]]
-	ofTexture &			getTextureReference();
-	[[deprecated("Use getTexture")]]
-	const ofTexture &	getTextureReference() const;
 	std::vector<ofTexture> & getTexturePlanes();
 	const std::vector<ofTexture> & getTexturePlanes() const;
 	void 				draw(float x, float y, float w, float h) const;
