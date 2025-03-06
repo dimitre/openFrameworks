@@ -63,12 +63,6 @@ class ofxCvColorImage : public ofxCvImage {
     // virtual void  operator &= ( ofxCvImage& mom );                         //in base class     
 
 
-    // Get Pixel Data
-    //
-    //virtual unsigned char*  getPixels();                                     //in base class
-	//virtual ofPixelsRef		getPixelsRef();                                //in base class
-    //virtual unsigned char*  getRoiPixels();                                  //in base class
-    // virtual IplImage*  getCvImage();                                        //in base class
     
 	virtual void	convertToGrayscalePlanarImages( ofxCvGrayscaleImage& red, ofxCvGrayscaleImage& green, ofxCvGrayscaleImage& blue );
 	virtual void	convertToGrayscalePlanarImage (ofxCvGrayscaleImage& grayImage, int whichPlane);

@@ -22,7 +22,6 @@ class ofPixels_;
 typedef ofPixels_<unsigned char> ofPixels;
 typedef ofPixels_<float> ofFloatPixels;
 typedef ofPixels_<unsigned short> ofShortPixels;
-typedef ofPixels & ofPixelsRef;
 
 enum ofImageType: short;
 enum ofPixelFormat: short;

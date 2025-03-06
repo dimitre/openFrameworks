@@ -199,7 +199,7 @@ static int getJpegOptionFromImageLoadSetting(const ofImageLoadSettings &settings
 template<typename PixelType>
 static bool loadImage(ofPixels_<PixelType> & pix, const of::filesystem::path & _fileName, const ofImageLoadSettings & settings){
 	ofInitFreeImage();
-
+	
 	auto uriStr = ofPathToString(_fileName);
 	auto fileNameString = ofPathToString(_fileName);
 	UriUriA uri;
@@ -996,18 +996,6 @@ ofPixels_<PixelType> &  ofImage_<PixelType>::getPixels(){
 //------------------------------------
 template<typename PixelType>
 const ofPixels_<PixelType> & ofImage_<PixelType>::getPixels() const{
-	return pixels;
-}
-
-//----------------------------------------------------------
-template<typename PixelType>
-ofPixels_<PixelType> & ofImage_<PixelType>::getPixelsRef(){
-	return pixels;
-}
-
-//----------------------------------------------------------
-template<typename PixelType>
-const ofPixels_<PixelType> & ofImage_<PixelType>::getPixelsRef() const {
 	return pixels;
 }
 

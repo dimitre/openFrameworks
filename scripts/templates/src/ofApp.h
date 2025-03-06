@@ -7,10 +7,10 @@ public:
 	void setup() override;
 	void update() override;
 	void draw() override;
-	void exit() override;
 
 	// void keyPressed(int key) override;
 	// void keyReleased(int key) override;
+	// void exit() override;
 
 	// void mouseMoved(int x, int y ) override;
 	// void mouseDragged(int x, int y, int button) override;

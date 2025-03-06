@@ -408,16 +408,6 @@ public:
     ofPixels_<PixelType> & getPixels();
     const ofPixels_<PixelType> & getPixels() const;
 
-    /// \brief This returns an ofPixels reference that you can use to
-    /// manipulate the raw pixel data of the ofImage.
-    ///
-    /// Make sure you call either update() after making changes to the ofPixels.
-    ///
-    /// \returns An ofPixels reference that you can use to manipulate the raw pixel data of the ofImage.
-    [[deprecated("Use getPixels()")]]
-    ofPixels_<PixelType> & getPixelsRef();
-    [[deprecated("Use getPixels()")]]
-    const ofPixels_<PixelType> & getPixelsRef() const;
 
     operator ofPixels_<PixelType>&();
 

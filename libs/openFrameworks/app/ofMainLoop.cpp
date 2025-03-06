@@ -143,9 +143,10 @@ void ofMainLoop::loopOnce(){
 		} 
 		else {
 			currentWindow = (*i);
-			i->get()->makeCurrent();
-			i->get()->update();
-			i->get()->draw();
+			auto w = i->get();
+			w->update();
+			w->makeCurrent();
+			w->draw();
 
 			++i;
 		}
