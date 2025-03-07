@@ -98,11 +98,8 @@ ifdef MAKEFILE_DEBUG
     $(info detected cross compiling $(CROSS_COMPILING))
 endif
 
-	ifdef GCC_PREFIX
-		#You have specified GCC_PREFIX with an environment variable
-	else
-		GCC_PREFIX = aarch64-linux-gnu
-	endif
+	# define if it is undedined
+	GCC_PREFIX ?= aarch64-linux-gnu
 
 	PLATFORM_CXX = /usr/bin/$(GCC_PREFIX)-g++
 	PLATFORM_CC = /usr/bin/$(GCC_PREFIX)-gcc

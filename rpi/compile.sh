@@ -13,11 +13,11 @@ export PLATFORM_ARCH=aarch64
 export RPI_ROOT=./raspbian
 # echo "${RPI_ROOT}"
 
-if [ ${PLATFORM_ARCH} = "aarch64" ]; then
-export GCC_PREFIX=aarch64-linux-gnu
-else
-export GCC_PREFIX=arm-linux-gnueabihf
-fi
+# if [ ${PLATFORM_ARCH} = "aarch64" ]; then
+# export GCC_PREFIX=aarch64-linux-gnu
+# else
+# export GCC_PREFIX=arm-linux-gnueabihf
+# fi
 # echo ${GCC_PREFIX}
 
 export GST_VERSION=1.0
@@ -25,11 +25,11 @@ export PLATFORM_OS=Linux
 
 # export PKG_CONFIG_LIBDIR=
 export PKG_CONFIG_PATH=${BCM_FOLDER}:${RPI_ROOT}/usr/include:${RPI_ROOT}/usr/lib/pkgconfig:${RPI_ROOT}/usr/lib/${GCC_PREFIX}/pkgconfig:${RPI_ROOT}/usr/share/pkgconfig
-export TOOLCHAIN_ROOT=/usr
-export CXX="${TOOLCHAIN_ROOT}/bin/${GCC_PREFIX}-g++"
-export CC="${TOOLCHAIN_ROOT}/bin/${GCC_PREFIX}-gcc"
-export AR=${TOOLCHAIN_ROOT}/bin/${GCC_PREFIX}-ar
-export LD=${TOOLCHAIN_ROOT}/bin/${GCC_PREFIX}-ld
+# export TOOLCHAIN_ROOT=/usr
+# export CXX="${TOOLCHAIN_ROOT}/bin/${GCC_PREFIX}-g++"
+# export CC="${TOOLCHAIN_ROOT}/bin/${GCC_PREFIX}-gcc"
+# export AR=${TOOLCHAIN_ROOT}/bin/${GCC_PREFIX}-ar
+# export LD=${TOOLCHAIN_ROOT}/bin/${GCC_PREFIX}-ld
 
 
 echo "##[group]**** Building emptyExample ****"
