@@ -13,21 +13,22 @@ section() {
 section "OF Vision, compiling ofGen"
 
 # pwd
-if brew ls --versions yaml-cpp > /dev/null; then
-	echo yaml-cpp already installed
-else
-	echo installing yaml-cpp
-	brew install yaml-cpp
-  # The package is not installed
-fi
+# MACOS only
+# if brew ls --versions yaml-cpp > /dev/null; then
+# 	echo yaml-cpp already installed
+# else
+# 	echo installing yaml-cpp
+# 	brew install yaml-cpp
+#   # The package is not installed
+# fi
 
-if brew ls --versions nlohmann-json > /dev/null; then
-	echo nlohmann-json already installed
-else
-	echo installing nlohmann-json
-	brew install nlohmann-json
-  # The package is not installed
-fi
+# if brew ls --versions nlohmann-json > /dev/null; then
+# 	echo nlohmann-json already installed
+# else
+# 	echo installing nlohmann-json
+# 	brew install nlohmann-json
+#   # The package is not installed
+# fi
 
 section "Will compile now"
 
