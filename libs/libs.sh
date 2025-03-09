@@ -75,7 +75,11 @@ checkLib() {
 		if ! command -v $lib 2>&1 >/dev/null
 		then
 		    echo "<$lib> not found, installing via brew"
-		    executa brew install $lib
+			if [[ ${PLATFORM} == "macos"]]; then
+    		    executa brew install $lib
+            else
+                executa sudo apt install $lib
+			fi
 	    else
 			echo "$lib ok"
 		fi
