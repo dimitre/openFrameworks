@@ -78,7 +78,7 @@ checkLib() {
 			if [[ ${PLATFORM} == "macos" ]]; then
     		    executa brew install $lib
             else
-                executa sudo apt install $lib
+                executa sudo apt install -y $lib
 			fi
 	    else
 			echo "$lib ok"
