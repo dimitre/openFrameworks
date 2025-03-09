@@ -3,8 +3,48 @@ cd "$(dirname "$0")"
 
 VERSION=v0.12.1
 OF_FOLDER=..
-PLATFORM=macos
+# PLATFORM=macos
+#rpi-aarch64.zip
+
+for i in "$@"; do
+  case $i in
+    -p=*|--platform=*)
+      PLATFORM="${i#*=}"
+      shift # past argument=value
+      ;;
+    -l=*|--searchpath=*)
+      SEARCHPATH="${i#*=}"
+      shift # past argument=value
+      ;;
+  esac
+done
+
 # LIBS_FOLDER=${OF_FOLDER}/libs/${PLATFORM}
+PLATFORM="${PLATFORM:-macos}"
+# echo ${PLATFORM}
+# exit
+
+if [[ "$(uname -s)" == "Darwin" ]]; then
+    PLATFORM=macos
+fi
+
+if [ -f /etc/rpi-issue ]; then
+    PLATFORM=rpi-aarch64
+fi
+
+# unameOut="$(uname -s)"
+# case "${unameOut}" in
+#     Linux*)     machine=Linux;;
+#     Darwin*)    machine=macos;;
+#     CYGWIN*)    machine=Cygwin;;
+#     MINGW*)     machine=MinGw;;
+#     MSYS_NT*)   machine=MSys;;
+#     *)          machine="UNKNOWN:${unameOut}"
+# esac
+# echo ${machine}
+# exit
+
+
 LIBS_FOLDER=./${PLATFORM}
 
 DOWNLOAD="./_download_${VERSION}"
