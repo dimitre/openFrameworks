@@ -758,8 +758,9 @@ bool ofGLRenderer::texturesNeedVFlip() const {
 void ofGLRenderer::setupScreenPerspective(float width, float height, float fov, float nearDist, float farDist) {
 	float viewW, viewH;
 	if (width < 0.0f || height < 0.0f) {
-		ofRectangle currentViewport = getCurrentViewport();
-
+//		ofRectangle currentViewport = getCurrentViewport();
+		ofRectangle currentViewport = matrixStack.getFullSurfaceViewport();
+		
 		viewW = currentViewport.width;
 		viewH = currentViewport.height;
 	} else {

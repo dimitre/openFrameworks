@@ -95,16 +95,6 @@ void ofGLProgrammableRenderer::startRender() {
 	beginDefaultShader();
 	viewport();
 
-
-//	ofRectangle r = ofRectangle(
-//								0, 0,
-//								1280 * 2.0,
-//								720 * 2.0
-//								);
-//	cout << r << endl;
-//	viewport(r);
-
-
 	//	std::cout << matrixStack.getCurrentViewport() << std::endl;
 	// to do non auto clear on PC for now - we do something like "single" buffering --
 	// it's not that pretty but it work for the most part
