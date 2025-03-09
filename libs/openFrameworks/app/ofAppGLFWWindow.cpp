@@ -535,6 +535,8 @@ int ofAppGLFWWindow::getPixelScreenCoordScale() {
 
 //------------------------------------------------------------
 ofRectangle ofAppGLFWWindow::getWindowRect() {
+//	return windowRect;
+
 	glm::ivec2 pos;
 	glfwGetWindowPos( windowP, &pos.x, &pos.y );
 	glm::ivec2 size;
@@ -550,21 +552,18 @@ glm::ivec2 ofAppGLFWWindow::getWindowSize() {
 }
 
 //------------------------------------------------------------
-glm::ivec2 ofAppGLFWWindow::getFramebufferSize() {
-	// FIXME: cache size and handle in framebuffer_size_cb
-	glm::ivec2 size;
-	// FIXME: Put back glfwGetFramebufferSize
-
-	glfwGetFramebufferSize(windowP, &size.x, &size.y);
-//	cout << "getFramebufferSize " << settings.windowName << " : " << size << " : " << ofGetFrameNum() << endl;
-	return size;
-}
-
-//------------------------------------------------------------
 glm::ivec2 ofAppGLFWWindow::getWindowPosition() {
 	glm::ivec2 pos;
 	glfwGetWindowPos( windowP, &pos.x, &pos.y );
 	return pos;
+}
+
+//------------------------------------------------------------
+glm::ivec2 ofAppGLFWWindow::getFramebufferSize() {
+	// FIXME: cache size and handle in framebuffer_size_cb
+	glm::ivec2 size;
+	glfwGetFramebufferSize(windowP, &size.x, &size.y);
+	return size;
 }
 
 //------------------------------------------------------------
@@ -576,11 +575,13 @@ glm::ivec2 ofAppGLFWWindow::getScreenSize() {
 
 //------------------------------------------------------------
 int ofAppGLFWWindow::getWidth() {
+	windowRect = getWindowRect();
 	return windowRect.width;
 }
 
 //------------------------------------------------------------
 int ofAppGLFWWindow::getHeight() {
+	windowRect = getWindowRect();
 	return windowRect.height;
 }
 
@@ -592,7 +593,7 @@ GLFWwindow * ofAppGLFWWindow::getGLFWWindow() {
 //------------------------------------------------------------
 void ofAppGLFWWindow::setWindowRect(const ofRectangle & rect) {
 //	cout << settings.windowName << " setWindowRect " << rect << endl;
-
+	windowRect = rect;
 	glfwSetWindowMonitor(windowP, NULL, rect.x, rect.y, rect.width, rect.height, GLFW_DONT_CARE);
 }
 
@@ -633,28 +634,26 @@ void ofAppGLFWWindow::disableSetupScreen() {
 
 //------------------------------------------------------------
 void ofAppGLFWWindow::setFSTarget(ofWindowMode targetWindowMode) {
-//	cout << "setFSTarget " << targetWindowMode << endl;
 	if (targetWindowMode == OF_FULLSCREEN) {
-		// save window shape before going fullscreen
-		windowRect = getWindowRect();
-//		cout << "saving window rect " << windowRect << endl;
 
+		windowRectBackup = getWindowRect(); // to restore window dimensions on FS exit
+		ofRectangle windowRectFS;
+
+		// FIXME: Maybe not needed.
 		if (settings.multiMonitorFullScreen) {
 			windowRectFS = allMonitors.getRectForAllMonitors();
 		} else {
-			windowRectFS = allMonitors.getRectMonitorForScreenRect(windowRect);
+			windowRectFS = allMonitors.getRectMonitorForScreenRect(getWindowRect());
 		}
 
-		//
 		if (settings.fullscreenDisplays.size()) {
 			windowRectFS = allMonitors.getRectFromMonitors(settings.fullscreenDisplays);
 		}
-//		cout << "windowRectFS " << windowRectFS << " : " << settings.windowName << endl;
 		setWindowRect(windowRectFS);
 	}
 
 	else if (targetWindowMode == OF_WINDOW) {
-		setWindowRect(windowRect);
+		setWindowRect(windowRectBackup);
 		setWindowTitle(settings.title);
 	}
 }
@@ -1446,7 +1445,6 @@ void ofAppGLFWWindow::resize_cb(GLFWwindow * windowP_, int w, int h) {
 //	auto instance = getWindow(windowP_);
 	ofAppGLFWWindow * instance = setCurrent(windowP_);
 	instance->events().notifyWindowResized(w, h);
-//	instance->nFramesSinceWindowResized = 0;
 
 
 #if defined(TARGET_OSX)

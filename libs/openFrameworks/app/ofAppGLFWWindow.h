@@ -62,10 +62,12 @@ public:
 	ofWindowSettings getSettings() { return settings; }
 
 	glm::ivec2 getScreenSize() override;
-	glm::ivec2 getWindowSize() override;
-	glm::ivec2 getFramebufferSize() override;
-	glm::ivec2 getWindowPosition() override;
+
 	ofRectangle getWindowRect() override;
+	glm::ivec2 getWindowPosition() override;
+	glm::ivec2 getWindowSize() override;
+
+	glm::ivec2 getFramebufferSize() override;
 
 	void setWindowTitle(const std::string & title) override;
 
@@ -166,7 +168,7 @@ private:
 	bool bEnableSetupScreen;
 
 	ofRectangle windowRect { 20, 20, 800, 600 };
-	ofRectangle windowRectFS { 0, 0, 1920, 1080 };
+	ofRectangle windowRectBackup;
 	void setFSTarget(ofWindowMode targetWindowMode);
 
 	int buttonInUse;
@@ -214,6 +216,7 @@ public:
 	GLFWmonitor ** monitors;
 
 	ofRectangle getRectMonitorForScreenRect(const ofRectangle & rect) {
+		update();
 		for (unsigned int a = 0; a < rects.size(); a++) {
 			if (rects[a].inside(rect.getCenter())) {
 				return rects[a];

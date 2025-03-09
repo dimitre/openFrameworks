@@ -167,6 +167,7 @@ void ofMatrixStack::viewport(float x, float y, float width, float height, bool v
 	if (vflip){
 		y = renderSurfaceSize.y - (y + height);
 	}
+	
 	currentViewport.set(x,y,width,height);
 }
 
@@ -193,7 +194,7 @@ ofRectangle ofMatrixStack::getNativeViewport() const{
 
 ofRectangle ofMatrixStack::getFullSurfaceViewport() const {
 	if (currentRenderSurface) {
-		return { 0.0f, 0.0f, currentRenderSurface->getWidth(),currentRenderSurface->getHeight() };
+		return { 0.0f, 0.0f, currentRenderSurface->getWidth(), currentRenderSurface->getHeight() };
 	} else if (currentWindow) {
 		// FIXME: ofRectangle accepting int as parameter.
 
