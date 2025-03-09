@@ -117,23 +117,11 @@ bool ofMatrixStack::customMatrixNeedsFlip() const{
 }
 
 int ofMatrixStack::getRenderSurfaceWidth() const{
-	if(currentRenderSurface){
-		return currentRenderSurface->getWidth();
-	}else if(currentWindow){
-		return currentWindow->getFramebufferSize().x;
-	}else{
-		return 0;
-	}
+	return getRenderSurfaceSize().x;
 }
 
 int ofMatrixStack::getRenderSurfaceHeight() const{
-	if(currentRenderSurface){
-		return currentRenderSurface->getHeight();
-	}else if(currentWindow){
-		return currentWindow->getFramebufferSize().y;
-	}else{
-		return 0;
-	}
+	return getRenderSurfaceSize().y;
 }
 
 glm::ivec2 ofMatrixStack::getRenderSurfaceSize() const {
@@ -141,7 +129,7 @@ glm::ivec2 ofMatrixStack::getRenderSurfaceSize() const {
 		return currentRenderSurface->getSize();
 	} else if (currentWindow) {
 		// FIXME: FramebufferSize
-		// return currentWindow->getWindowSize();
+//		 return currentWindow->getWindowSize();
 		return currentWindow->getFramebufferSize();
 
 	} else {
@@ -168,26 +156,26 @@ void ofMatrixStack::viewport(float x, float y, float width, float height, bool v
 		swap(x,y);
 	}
 
-	auto xy = getRenderSurfaceSize();
+	auto renderSurfaceSize = getRenderSurfaceSize();
 
 	if(width < 0 || height < 0){
-		width = xy.x;
-		height = xy.y;
-//		width = getRenderSurfaceWidth();
-//		height = getRenderSurfaceHeight();
+		width = renderSurfaceSize.x;
+		height = renderSurfaceSize.y;
 		vflip = isVFlipped();
 	}
 
 	if (vflip){
-//		y = getRenderSurfaceHeight() - (y + height);
-		y = xy.y - (y + height);
+		y = renderSurfaceSize.y - (y + height);
 	}
-
 	currentViewport.set(x,y,width,height);
 }
 
+using std::cout;
+using std::endl;
+
 ofRectangle ofMatrixStack::getCurrentViewport() const{
 	ofRectangle tmpCurrentViewport = currentViewport;
+
 	if (isVFlipped()){
 		tmpCurrentViewport.y = getRenderSurfaceHeight() - (tmpCurrentViewport.y + tmpCurrentViewport.height);
 	}
@@ -208,6 +196,8 @@ ofRectangle ofMatrixStack::getFullSurfaceViewport() const {
 		return { 0.0f, 0.0f, currentRenderSurface->getWidth(),currentRenderSurface->getHeight() };
 	} else if (currentWindow) {
 		// FIXME: ofRectangle accepting int as parameter.
+
+//		return { 0, 0, (float)currentWindow->getWidth(), (float)currentWindow->getHeight() };
 		return { 0, 0, (float)currentWindow->getWidth(), (float)currentWindow->getHeight() };
 	} else {
 		return {}; //ofRectangle();

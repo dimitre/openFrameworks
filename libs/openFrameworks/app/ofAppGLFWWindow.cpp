@@ -113,7 +113,7 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 
 	glfwDefaultWindowHints();
 
-	glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, false);
+	glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, settings.highResolutionCapable);
 
 	glfwWindowHint(GLFW_RED_BITS, settings.redBits);
 	glfwWindowHint(GLFW_GREEN_BITS, settings.greenBits);
@@ -133,6 +133,8 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 	glfwWindowHint(GLFW_SAMPLES, settings.numSamples);
 	glfwWindowHint(GLFW_RESIZABLE, settings.resizable);
 	glfwWindowHint(GLFW_DECORATED, settings.decorated);
+	
+	
 
 #ifdef TARGET_OPENGLES
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, settings.glesVersion);
@@ -203,7 +205,8 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 	if (settings.windowMode == OF_GAME_MODE)
 	{
 		windowRect = allMonitors.rects[monitorIndex];
-		monitor = allMonitors.monitors[monitorIndex];
+//		monitor = allMonitors.monitors[monitorIndex];
+		monitor = glfwGetPrimaryMonitor();
 	}
 
 //	cout << "will create window" << endl;
@@ -550,6 +553,8 @@ glm::ivec2 ofAppGLFWWindow::getWindowSize() {
 glm::ivec2 ofAppGLFWWindow::getFramebufferSize() {
 	// FIXME: cache size and handle in framebuffer_size_cb
 	glm::ivec2 size;
+	// FIXME: Put back glfwGetFramebufferSize
+
 	glfwGetFramebufferSize(windowP, &size.x, &size.y);
 //	cout << "getFramebufferSize " << settings.windowName << " : " << size << " : " << ofGetFrameNum() << endl;
 	return size;

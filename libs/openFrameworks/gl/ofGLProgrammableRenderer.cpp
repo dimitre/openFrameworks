@@ -20,6 +20,9 @@ using std::string;
 using std::swap;
 using std::vector;
 
+using std::cout;
+using std::endl;
+
 static const string MODEL_MATRIX_UNIFORM = "modelMatrix";
 static const string VIEW_MATRIX_UNIFORM = "viewMatrix";
 static const string MODELVIEW_MATRIX_UNIFORM = "modelViewMatrix";
@@ -91,6 +94,18 @@ void ofGLProgrammableRenderer::startRender() {
 	matrixStack.setRenderSurface(*window);
 	beginDefaultShader();
 	viewport();
+
+
+//	ofRectangle r = ofRectangle(
+//								0, 0,
+//								1280 * 2.0,
+//								720 * 2.0
+//								);
+//	cout << r << endl;
+//	viewport(r);
+
+
+	//	std::cout << matrixStack.getCurrentViewport() << std::endl;
 	// to do non auto clear on PC for now - we do something like "single" buffering --
 	// it's not that pretty but it work for the most part
 
@@ -725,12 +740,16 @@ void ofGLProgrammableRenderer::setOrientation(ofOrientation orientation, bool vF
 	uploadMatrices();
 }
 
+
+using std::cout;
+using std::endl;
 //----------------------------------------------------------
 void ofGLProgrammableRenderer::setupScreenPerspective(float width, float height, float fov, float nearDist, float farDist) {
 	float viewW, viewH;
-	if (width < 0 || height < 0) {
-		ofRectangle currentViewport = getCurrentViewport();
 
+	if (width < 0 || height < 0) {
+//		ofRectangle currentViewport = getCurrentViewport();
+		ofRectangle currentViewport = matrixStack.getFullSurfaceViewport();
 		viewW = currentViewport.width;
 		viewH = currentViewport.height;
 	} else {
@@ -763,7 +782,7 @@ void ofGLProgrammableRenderer::setupScreenPerspective(float width, float height,
 void ofGLProgrammableRenderer::setupScreenOrtho(float width, float height, float nearDist, float farDist) {
 	float viewW, viewH;
 	if (width < 0 || height < 0) {
-		ofRectangle currentViewport = getCurrentViewport();
+		ofRectangle currentViewport { getCurrentViewport() };
 
 		viewW = currentViewport.width;
 		viewH = currentViewport.height;
