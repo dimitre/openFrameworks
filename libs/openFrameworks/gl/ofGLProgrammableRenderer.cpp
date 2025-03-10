@@ -2171,7 +2171,6 @@ void ofGLProgrammableRenderer::drawString(string textString, float x, float y, f
 		break;
 
 	case OF_BITMAPMODE_SCREEN:
-
 		hasViewport = true;
 		mutThis->pushView();
 
@@ -2189,6 +2188,7 @@ void ofGLProgrammableRenderer::drawString(string textString, float x, float y, f
 		break;
 
 	case OF_BITMAPMODE_VIEWPORT:
+		// FIXME:  matrixStack.getFullSurfaceViewport(); ?
 
 		rViewport = getCurrentViewport();
 
@@ -2226,7 +2226,8 @@ void ofGLProgrammableRenderer::drawString(string textString, float x, float y, f
 		// then doing the good old (v + 1.0) / 2. to get unsigned normalized screen (0,1) coordinates.
 		// we then multiply x by width and y by height to get window coordinates.
 
-		rViewport = getCurrentViewport();
+//		rViewport = getCurrentViewport();
+		rViewport = matrixStack.getFullSurfaceViewport();
 
 		glm::mat4 mat = matrixStack.getProjectionMatrixNoOrientation() * matrixStack.getModelViewMatrix();
 		glm::vec4 dScreen4 = mat * glm::vec4(x, y, z, 1.0f);
