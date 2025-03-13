@@ -10,12 +10,62 @@ class ofBaseApp;
 class ofBaseRenderer;
 class ofCoreEvents;
 
+#include <chrono>
+
+using namespace std::chrono;
+using namespace std::chrono_literals;
+
+struct fpsCounter {
+protected:
+	using space = duration<long double, std::nano>;
+	time_point<steady_clock> lastTick;
+	steady_clock::duration onesec = 1s;
+	space interval = onesec / 30.0;
+	space accum = onesec / 30.0;
+//	bool firstTick = true;
+	int nTicks = 0;
+
+public:
+	void setTargetFps(double f) {
+		interval = onesec / f;
+		accum = onesec / f;
+	}
+
+	void tick() {
+		if (nTicks == 0) {
+			nTicks ++;
+			lastTick = steady_clock::now();
+			return;
+		} else if (nTicks == 1) {
+			nTicks ++;
+			accum = interval;
+			lastTick = steady_clock::now();
+		} else {
+			
+			interval = steady_clock::now() - lastTick;
+			//		double ratio = (double)  ofGetMouseX() / (double)ofGetWindowWidth();
+			double ratio = 0.1;
+			accum = interval * ratio + accum * (1.0 - ratio);
+			lastTick = steady_clock::now();
+		}
+	}
+	
+	double get() {
+//		cout << "get" << endl;
+//		cout << onesec << endl;
+//		cout << accum << endl;
+//		cout << (onesec / accum) << endl;
+//		cout << "-----" << endl;
+		return onesec / accum;
+	}
+};
 
 struct ofCoreInternal {
 public:
 	ofCoreInternal() {};
 	~ofCoreInternal() {};
 
+	fpsCounter fps;
 	// ofAppRunner
 	bool initialized = false;
 	bool exiting = false;
@@ -37,15 +87,10 @@ public:
 		{
 			return mainLoop.currentWindow.lock();
 		}
-		return nullptr;
+//		return nullptr;
 	}
 
 	std::shared_ptr<ofBaseRenderer> & getCurrentRenderer();
-//	std::shared_ptr<ofBaseRenderer> & getCurrentRenderer() {
-//		return mainLoop.currentWindow.lock()->currentRenderer;
-//	}
-
-
 	std::vector <std::function<void()>> shutdownFunctions;
 
 	void exit() {

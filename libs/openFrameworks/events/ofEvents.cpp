@@ -16,6 +16,10 @@ void ofSetFrameRate(int targetRate) {
 
 //--------------------------------------
 float ofGetFrameRate() {
+	
+//	return fps.getFps();
+//	return ofCoreEvents::getFrameRate();
+	
     if (auto window = ofCore.getCurrentWindow()) {
 		return window->events().getFrameRate();
 	} else {
@@ -315,6 +319,7 @@ bool ofCoreEvents::notifyDraw() {
 //		timer.waitNext();
 		timerFps.waitNext();
 	}
+	ofCore.fps.tick();
 	fps.newFrame();
 	auto attended = ofNotifyEvent(draw, voidEventArgs);
 	return attended;

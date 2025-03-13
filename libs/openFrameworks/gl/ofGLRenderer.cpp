@@ -1590,7 +1590,9 @@ void ofGLRenderer::drawString(std::string textString, float x, float y, float z)
 
 	case OF_BITMAPMODE_VIEWPORT:
 
-		rViewport = getCurrentViewport();
+//		rViewport = getCurrentViewport();
+		rViewport = matrixStack.getFullSurfaceViewport();
+
 
 		hasProjection = true;
 		mutThis->matrixMode(OF_MATRIX_PROJECTION);
@@ -1632,7 +1634,8 @@ void ofGLRenderer::drawString(std::string textString, float x, float y, float z)
 		//
 		// this could probably be backported to the GL2 Renderer =)
 
-		rViewport = getCurrentViewport();
+//		rViewport = getCurrentViewport();
+		rViewport = matrixStack.getFullSurfaceViewport();
 
 		glm::mat4 modelview { 1.0f };
 		glm::mat4 projection { 1.0f };

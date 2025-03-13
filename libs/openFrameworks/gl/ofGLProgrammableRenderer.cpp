@@ -2188,9 +2188,8 @@ void ofGLProgrammableRenderer::drawString(string textString, float x, float y, f
 		break;
 
 	case OF_BITMAPMODE_VIEWPORT:
-		// FIXME:  matrixStack.getFullSurfaceViewport(); ?
-
-		rViewport = getCurrentViewport();
+//		rViewport = getCurrentViewport();
+		rViewport = matrixStack.getFullSurfaceViewport();
 
 		hasProjection = true;
 		mutThis->matrixMode(OF_MATRIX_PROJECTION);

@@ -58,12 +58,12 @@ ofAppGLFWWindow::ofAppGLFWWindow() : coreEvents(new ofCoreEvents){
 }
 
 ofAppGLFWWindow::~ofAppGLFWWindow() {
-	cout << "ofAppGLFWWindow::~ofAppGLFWWindow() " << settings.windowName << endl;
+//	cout << "ofAppGLFWWindow::~ofAppGLFWWindow() " << settings.windowName << endl;
 	close();
 }
 
 void ofAppGLFWWindow::close() {
-	cout << "ofAppGLFWWindow::close! " << settings.windowName << endl;
+//	cout << "ofAppGLFWWindow::close! " << settings.windowName << endl;
 
 	if (windowP) {
 		glfwSetMouseButtonCallback( windowP, nullptr );

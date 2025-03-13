@@ -3,6 +3,11 @@
 #include <deque>
 #include <chrono>
 
+
+using namespace std::chrono;
+using namespace std::chrono_literals;
+
+
 class ofFpsCounter {
 public:
 	ofFpsCounter();
