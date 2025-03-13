@@ -16,11 +16,14 @@ BUILD_ARCHS = -arch arm64
 ARCHS = arm64
 ONLY_ACTIVE_ARCH = YES
 
-// APP Store : Uncomment the next four lines to build universal, set data folder to inside bundle
+// APP Store : Uncomment the next block to build universal, set data folder to inside bundle
 //BUILD_ARCHS =
 //ARCHS = $(ARCHS_STANDARD)
 //ONLY_ACTIVE_ARCH = NO
 //OF_BUNDLE_DATA_FOLDER = 1
+//DEVELOPMENT_TEAM = -
+//CODE_SIGN_STYLE = Automatic
+//CODE_SIGN_IDENTITY[sdk=macosx*] = Apple Development
 
 //OF_CODESIGN = 1
 //OF_BUNDLE_DYLIBS = 1
