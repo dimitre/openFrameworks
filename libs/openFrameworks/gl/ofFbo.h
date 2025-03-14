@@ -33,8 +33,8 @@ struct ofFboSettings {
 	GLint depthStencilInternalFormat; ///< GL_DEPTH_COMPONENT(16/24/32)
 	int wrapModeHorizontal;           ///< GL_REPEAT, GL_MIRRORED_REPEAT, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER etc.
 	int wrapModeVertical;             ///< GL_REPEAT, GL_MIRRORED_REPEAT, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER etc.
-	int minFilter;                    ///< GL_NEAREST, GL_LINEAR etc.
-	int maxFilter;                    ///< GL_NEAREST, GL_LINEAR etc.
+	int minFilter = GL_NEAREST;                    ///< GL_NEAREST, GL_LINEAR etc.
+	int maxFilter = GL_NEAREST;                    ///< GL_NEAREST, GL_LINEAR etc.
 	int numSamples;                   ///< number of samples for multisampling (set 0 to disable)
 	ofFboSettings(std::shared_ptr<ofBaseGLRenderer> renderer=nullptr);
 	bool operator!=(const ofFboSettings & other);

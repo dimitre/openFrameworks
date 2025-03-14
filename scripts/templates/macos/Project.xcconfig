@@ -7,7 +7,7 @@ OF_PATH = ../../..
 MARKETING_VERSION = 0.1.0
 CURRENT_PROJECT_VERSION = 1
 
-INFOPLIST_KEY_NSHumanReadableCopyright = Made using openFrameworks fork (ofWorks) By Dmtr.org in 2025.
+INFOPLIST_KEY_NSHumanReadableCopyright = Made using openFrameworks fork ofWorks
 INFOPLIST_KEY_CFBundleDevelopmentRegion = en
 INFOPLIST_KEY_NSHighResolutionCapable = YES
 //INFOPLIST_KEY_NSCameraUseContinuityCameraDeviceType =
