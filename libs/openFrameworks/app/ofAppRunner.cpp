@@ -34,6 +34,8 @@ void ofSetupOpenGL(const shared_ptr<ofAppGLFWWindow> & windowPtr, int w, int h, 
 	// ofGetMainLoop()->addWindow(windowPtr);
 	ofCore.mainLoop.addWindow(windowPtr);
 	windowPtr->setup(settings);
+	
+
 }
 	#endif
 #endif
@@ -99,20 +101,14 @@ void ofInit() {
 		ofURLFileLoaderShutdown,
 		ofTrueTypeShutdown,
 		ofCloseFreeImage,
-		// not even needed. empty function
-		of::priv::endutils,
 #ifndef TARGET_NO_SOUND
 		ofSoundShutdown,
 #endif
-
-#if defined(OF_VIDEO_CAPTURE_QUICKTIME) || defined(OF_VIDEO_PLAYER_QUICKTIME)
-		closeQuicktime,
-#endif
-
 #ifdef TARGET_LINUX
 		ofGstUtils::quitGstMainLoop,
 #endif
 	};
+
 //	std::cout << "ofInit() " << std::endl;
 #if defined(TARGET_ANDROID) || defined(TARGET_OF_IOS)
 	// manage own exit
@@ -132,9 +128,11 @@ void ofInit() {
 	signal(SIGABRT, &ofSignalHandler); // abort signal
 #endif
 
-	of::priv::initutils();
-	of::priv::initfileutils();
+//	of::priv::initutils();
+	ofResetElapsedTimeCounter();
+	of::random::Engine::construct();
 
+	
 #ifdef WIN32_HIGH_RES_TIMING
 	timeBeginPeriod(1); // ! experimental, sets high res time
 		// you need to call timeEndPeriod.

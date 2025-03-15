@@ -66,16 +66,11 @@ using std::vector;
 
 namespace of {
 namespace priv {
-void initutils() {
-	ofResetElapsedTimeCounter();
-	of::random::Engine::construct();
-}
+//void initutils() {
+//	ofResetElapsedTimeCounter();
+//	of::random::Engine::construct();
+//}
 
-void endutils() {
-	//#ifdef TARGET_OSX
-	//        mach_port_deallocate(mach_task_self(), cs);
-	//#endif
-}
 
 class Clock {
 public:

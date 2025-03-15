@@ -3,6 +3,9 @@
 #include "ofLog.h"
 #include "ofUtils.h"
 
+// ofCore object.
+#include "ofAppRunner.h"
+
 #ifndef TARGET_WIN32
 	#include <pwd.h>
 	#include <sys/stat.h>
@@ -23,49 +26,6 @@ using std::istream;
 using std::ostream;
 using std::ios;
 
-namespace{
-	bool enableDataPath = true;
-
-	//--------------------------------------------------
-	fs::path defaultDataPath(){
-	#if defined TARGET_OSX
-		try {
-			return fs::canonical(ofFilePath::getCurrentExeDirFS() / "../../../data/");
-		} catch(...) {
-			return ofFilePath::getCurrentExeDirFS() / "../../../data/";
-		}
-	#elif defined TARGET_ANDROID
-		return string("sdcard/");
-	#else
-		try {
-            return fs::canonical(ofFilePath::getCurrentExeDirFS() / "data/").make_preferred();
-        } catch(...) {
-			return (ofFilePath::getCurrentExeDirFS() / "data/");
-		}
-	#endif
-	}
-
-	//--------------------------------------------------
-	fs::path & defaultWorkingDirectory() {
-		static auto * defaultWorkingDirectory = new fs::path(ofFilePath::getCurrentExeDirFS());
-		return * defaultWorkingDirectory;
-	}
-
-	//--------------------------------------------------
-	fs::path & dataPathRoot() {
-		static auto * dataPathRoot = new fs::path(defaultDataPath());
-		return *dataPathRoot;
-	}
-}
-
-namespace of{
-	namespace priv{
-		void initfileutils() {
-			// FIXME: Why absolute?
-			defaultWorkingDirectory() = fs::absolute(fs::current_path());
-		}
-	}
-}
 
 
 //------------------------------------------------------------------------------------------------------------
@@ -1938,18 +1898,18 @@ std::string ofFilePath::makeRelative(const fs::path & from, const fs::path & to)
 
 //--------------------------------------------------
 void ofEnableDataPath(){
-	enableDataPath = true;
+	ofCore.enableDataPath = true;
 }
 
 //--------------------------------------------------
 void ofDisableDataPath(){
-	enableDataPath = false;
+	ofCore.enableDataPath = false;
 }
 
 //--------------------------------------------------
 bool ofRestoreWorkingDirectoryToDefault(){
 	try{
-		fs::current_path(defaultWorkingDirectory());
+		fs::current_path(ofCore.defaultWorkingDirectory);
 		return true;
 	}catch(...){
 		return false;
@@ -1958,7 +1918,8 @@ bool ofRestoreWorkingDirectoryToDefault(){
 
 //--------------------------------------------------
 void ofSetDataPathRoot(const fs::path& newRoot){
-	dataPathRoot() = newRoot;
+	ofCore.dataPath = newRoot;
+//	dataPathRoot() = newRoot;
 }
 
 //--------------------------------------------------
@@ -1967,7 +1928,7 @@ fs::path ofToDataPathFS(const fs::path & path, bool makeAbsolute){
 		return path;
 	}
 
-	if (!enableDataPath) {
+	if (!ofCore.enableDataPath) {
 		return path;
 	}
 
@@ -1975,17 +1936,17 @@ fs::path ofToDataPathFS(const fs::path & path, bool makeAbsolute){
 
 	// if our Current Working Directory has changed (e.g. file open dialog)
 #ifdef TARGET_WIN32
-	if (defaultWorkingDirectory() != fs::current_path()) {
+	if (ofCore.defaultWorkingDirectory != fs::current_path()) {
 		// change our cwd back to where it was on app load
 		bool ret = ofRestoreWorkingDirectoryToDefault();
 		if(!ret){
-			ofLogWarning("ofUtils") << "ofToDataPath: error while trying to change back to default working directory " << defaultWorkingDirectory();
+			ofLogWarning("ofUtils") << "ofToDataPath: error while trying to change back to default working directory " << ofCore.defaultWorkingDirectory;
 		}
 	}
 #endif
 
 	// this could be performed here, or wherever we might think we accidentally change the cwd, e.g. after file dialogs on windows
-	const auto & dataPath = dataPathRoot();
+//	const auto & dataPath = dataPathRoot();
 	fs::path inputPath(path);
 	fs::path outputPath;
 
@@ -2007,13 +1968,13 @@ fs::path ofToDataPathFS(const fs::path & path, bool makeAbsolute){
 	// here we check whether path already refers to the data folder by looking for common elements
 	// if the path begins with the full contents of dataPathRoot then the data path has already been added
 	// we compare inputPath.toString() rather that the input var path to ensure common formatting against dataPath.toString()
-	auto dirDataPath = dataPath;
+	auto dirDataPath = ofCore.dataPath;
 	// also, we strip the trailing slash from dataPath since `path` may be input as a file formatted path even if it is a folder (i.e. missing trailing slash)
 	
 	// FIXME: unneeded after we remove string operations
-	dirDataPath = ofFilePath::addTrailingSlash(dataPath);
+	dirDataPath = ofFilePath::addTrailingSlash(ofCore.dataPath);
 
-	auto relativeDirDataPath = ofFilePath::makeRelative(fs::current_path(), dataPath);
+	auto relativeDirDataPath = ofFilePath::makeRelative(fs::current_path(), ofCore.dataPath);
 	
 	// FIXME: unneeded after we remove string operations
 	relativeDirDataPath = ofFilePath::addTrailingSlash(relativeDirDataPath);

@@ -1361,12 +1361,3 @@ private:
 	/// `ofUTF8Iterator(...)` is invalid, this variable will be empty.
 	std::string src_valid;
 };
-
-/*! \cond PRIVATE */
-namespace of {
-namespace priv {
-void initutils();
-void endutils();
-}
-}
-/*! \endcond */

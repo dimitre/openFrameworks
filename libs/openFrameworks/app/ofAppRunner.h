@@ -3,6 +3,10 @@
 #include "ofMainLoop.h"
 #include "ofWindowSettings.h"
 
+// FIXME: temporario
+#include "ofFileUtils.h"
+
+
 class ofRectangle;
 class ofAppBaseWindow;
 class ofAppGLFWWindow;
@@ -60,17 +64,47 @@ public:
 	}
 };
 
+using std::cout;
+using std::endl;
+
 struct ofCoreInternal {
+protected:
+	// ofAppRunner
+	bool initialized = false;
+
 public:
 	ofCoreInternal() {};
 	~ofCoreInternal() {};
 
-	fpsCounter fps;
-	// ofAppRunner
-	bool initialized = false;
 	bool exiting = false;
 	ofCoreEvents noopEvents;
+
 	ofMainLoop mainLoop;
+	fpsCounter fps;
+	
+	
+	//--------------------------------------------------
+	fs::path defaultDataPath(){
+	#if defined TARGET_OSX
+		try {
+			return fs::canonical(ofFilePath::getCurrentExeDirFS() / "../../../data/");
+		} catch(...) {
+			return ofFilePath::getCurrentExeDirFS() / "../../../data/";
+		}
+	#elif defined TARGET_ANDROID
+		return string("sdcard/");
+	#else
+		try {
+			return fs::canonical(ofFilePath::getCurrentExeDirFS() / "data/").make_preferred();
+		} catch(...) {
+			return (ofFilePath::getCurrentExeDirFS() / "data/");
+		}
+	#endif
+	}
+	
+	of::filesystem::path dataPath;
+	of::filesystem::path defaultWorkingDirectory;
+	bool enableDataPath = true;
 	// std::shared_ptr<ofMainLoop> mainLoop { std::make_shared<ofMainLoop>() };
 
 	// ofFileUtils
@@ -79,6 +113,9 @@ public:
 		if (initialized) return;
 		initialized  = true;
 		exiting = false;
+		
+		defaultWorkingDirectory = fs::absolute(fs::current_path());
+		dataPath = defaultDataPath();
 	}
 
 

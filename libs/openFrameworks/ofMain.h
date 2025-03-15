@@ -1,5 +1,6 @@
 #pragma once
 
+
 //--------------------------
 // utils
 #include "ofConstants.h"
@@ -73,8 +74,8 @@
 
 //--------------------------
 // app
-#include "ofAppBaseWindow.h"
 #include "ofAppRunner.h"
+#include "ofAppBaseWindow.h"
 #include "ofBaseApp.h"
 #include "ofMainLoop.h"
 #if !defined(TARGET_OF_IOS) & !defined(TARGET_ANDROID) & !defined(TARGET_EMSCRIPTEN) & !defined(TARGET_RASPBERRY_PI_LEGACY)
