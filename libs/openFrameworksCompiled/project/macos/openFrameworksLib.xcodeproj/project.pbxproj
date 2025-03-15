@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		033AD5512D85DA010095C094 /* ofTime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 033AD5502D85DA010095C094 /* ofTime.cpp */; };
+		033AD5522D85DA010095C094 /* ofTime.h in Headers */ = {isa = PBXBuildFile; fileRef = 033AD54F2D85DA010095C094 /* ofTime.h */; };
 		0353245D2BEFEC7B00B50A35 /* ofTimerFps.h in Headers */ = {isa = PBXBuildFile; fileRef = 0353245B2BEFEC7A00B50A35 /* ofTimerFps.h */; };
 		0353245E2BEFEC7B00B50A35 /* ofTimerFps.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0353245C2BEFEC7B00B50A35 /* ofTimerFps.cpp */; };
 		19662F2E2834A44400B622ED /* ofGraphicsCairo.h in Headers */ = {isa = PBXBuildFile; fileRef = 19662F2C2834A44400B622ED /* ofGraphicsCairo.h */; };
@@ -153,6 +155,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		033AD54F2D85DA010095C094 /* ofTime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofTime.h; sourceTree = "<group>"; };
+		033AD5502D85DA010095C094 /* ofTime.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofTime.cpp; sourceTree = "<group>"; };
 		0353245B2BEFEC7A00B50A35 /* ofTimerFps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofTimerFps.h; sourceTree = "<group>"; };
 		0353245C2BEFEC7B00B50A35 /* ofTimerFps.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofTimerFps.cpp; sourceTree = "<group>"; };
 		19662F2C2834A44400B622ED /* ofGraphicsCairo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofGraphicsCairo.h; sourceTree = "<group>"; };
@@ -540,6 +544,8 @@
 			children = (
 				692C298719DC5C5500C27C5D /* ofFpsCounter.cpp */,
 				692C298819DC5C5500C27C5D /* ofFpsCounter.h */,
+				033AD54F2D85DA010095C094 /* ofTime.h */,
+				033AD5502D85DA010095C094 /* ofTime.cpp */,
 				692C298919DC5C5500C27C5D /* ofTimer.cpp */,
 				692C298A19DC5C5500C27C5D /* ofTimer.h */,
 				0353245C2BEFEC7B00B50A35 /* ofTimerFps.cpp */,
@@ -671,6 +677,7 @@
 				E4C5E387131AC1B10050F992 /* ofRtAudioSoundStream.h in Headers */,
 				772BDF74146928600030F0EE /* ofOpenALSoundPlayer.h in Headers */,
 				E486629A1D8C61B000D1735C /* ofAVFoundationGrabber.h in Headers */,
+				033AD5522D85DA010095C094 /* ofTime.h in Headers */,
 				DAC22D4016E7A4AF0020226D /* ofParameter.h in Headers */,
 				E43EEAC429E66B78001C7596 /* ofAVEngineSoundPlayer.h in Headers */,
 				BF6276A62BAD9900008864C1 /* ofBaseTypes.h in Headers */,
@@ -749,6 +756,7 @@
 				6678E96F19FEAFA900C00581 /* ofSoundBuffer.cpp in Sources */,
 				E4F3BA6912F4C4BF002D19BB /* ofCamera.cpp in Sources */,
 				E4F3BA6B12F4C4BF002D19BB /* ofEasyCam.cpp in Sources */,
+				033AD5512D85DA010095C094 /* ofTime.cpp in Sources */,
 				E4F3BA7312F4C4BF002D19BB /* ofNode.cpp in Sources */,
 				6944251F1FE4548B00770088 /* ofSoundBaseTypes.cpp in Sources */,
 				2292E73E19E3049700DE9411 /* ofBufferObject.cpp in Sources */,

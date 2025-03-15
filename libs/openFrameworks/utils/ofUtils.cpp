@@ -167,76 +167,6 @@ Clock & getClock() {
 }
 
 //--------------------------------------
-uint64_t ofTime::getAsMilliseconds() const {
-	auto seconds = std::chrono::seconds(this->seconds);
-	auto nanoseconds = std::chrono::nanoseconds(this->nanoseconds);
-	return (std::chrono::duration_cast<std::chrono::milliseconds>(seconds) + std::chrono::duration_cast<std::chrono::milliseconds>(nanoseconds)).count();
-}
-
-//--------------------------------------
-uint64_t ofTime::getAsMicroseconds() const {
-	auto seconds = std::chrono::seconds(this->seconds);
-	auto nanoseconds = std::chrono::nanoseconds(this->nanoseconds);
-	return (std::chrono::duration_cast<std::chrono::microseconds>(seconds) + std::chrono::duration_cast<std::chrono::microseconds>(nanoseconds)).count();
-}
-
-//--------------------------------------
-uint64_t ofTime::getAsNanoseconds() const {
-	auto seconds = std::chrono::seconds(this->seconds);
-	auto nanoseconds = std::chrono::nanoseconds(this->nanoseconds);
-	return (std::chrono::duration_cast<std::chrono::nanoseconds>(seconds) + nanoseconds).count();
-}
-
-//--------------------------------------
-double ofTime::getAsSeconds() const {
-	return seconds + nanoseconds / 1000000000.;
-}
-
-#ifndef TARGET_WIN32
-timespec ofTime::getAsTimespec() const {
-	timespec ret;
-	ret.tv_sec = seconds;
-	ret.tv_nsec = nanoseconds;
-	return ret;
-}
-#endif
-
-//--------------------------------------
-std::chrono::time_point<std::chrono::nanoseconds> ofTime::getAsTimePoint() const {
-	auto seconds = std::chrono::seconds(this->seconds);
-	auto nanoseconds = std::chrono::nanoseconds(this->nanoseconds);
-	return std::chrono::time_point<std::chrono::nanoseconds>(
-		std::chrono::duration_cast<std::chrono::nanoseconds>(seconds) + nanoseconds);
-}
-
-//--------------------------------------
-std::chrono::nanoseconds ofTime::operator-(const ofTime & other) const {
-	auto seconds = std::chrono::seconds(this->seconds) - std::chrono::seconds(other.seconds);
-	auto nanoseconds = std::chrono::nanoseconds(this->nanoseconds) - std::chrono::nanoseconds(other.nanoseconds);
-	return std::chrono::duration_cast<std::chrono::nanoseconds>(seconds) + nanoseconds;
-}
-
-//--------------------------------------
-bool ofTime::operator<(const ofTime & other) const {
-	return seconds < other.seconds || (seconds == other.seconds && nanoseconds < other.nanoseconds);
-}
-
-//--------------------------------------
-bool ofTime::operator>(const ofTime & other) const {
-	return seconds > other.seconds || (seconds == other.seconds && nanoseconds > other.nanoseconds);
-}
-
-//--------------------------------------
-bool ofTime::operator<=(const ofTime & other) const {
-	return seconds <= other.seconds || (seconds == other.seconds && nanoseconds <= other.nanoseconds);
-}
-
-//--------------------------------------
-bool ofTime::operator>=(const ofTime & other) const {
-	return seconds >= other.seconds || (seconds == other.seconds && nanoseconds >= other.nanoseconds);
-}
-
-//--------------------------------------
 uint64_t ofGetFixedStepForFps(double fps) {
 	return 1'000'000'000 / fps;
 }
@@ -305,7 +235,7 @@ void ofSetTimeModeFiltered(float alpha) {
 //		return;
 //	}
 	if (auto window = ofCore.mainLoop.getCurrentWindow()) {
-		
+
 		window->events().setTimeModeFiltered(alpha);
 		of::priv::getClock().setTimeModeSystem();
 	}
@@ -318,21 +248,26 @@ ofTime ofGetCurrentTime() {
 
 //--------------------------------------
 uint64_t ofGetElapsedTimeMillis() {
-	return std::chrono::duration_cast<std::chrono::milliseconds>(of::priv::getClock().getElapsedTime()).count();
+	return ofCore.clock.getElapsedTimeMillis();
+//	return std::chrono::duration_cast<std::chrono::milliseconds>(of::priv::getClock().getElapsedTime()).count();
 }
 
 //--------------------------------------
 uint64_t ofGetElapsedTimeMicros() {
-	return std::chrono::duration_cast<std::chrono::microseconds>(of::priv::getClock().getElapsedTime()).count();
+	return ofCore.clock.getElapsedTimeMicros();
+//	return std::chrono::duration_cast<std::chrono::microseconds>(of::priv::getClock().getElapsedTime()).count();
 }
 
 //--------------------------------------
 float ofGetElapsedTimef() {
-	return std::chrono::duration<double>(of::priv::getClock().getElapsedTime()).count();
+//	return std::chrono::duration<double>(of::priv::getClock().getElapsedTime()).count() - ofCore.clock.getElapsedTimef();
+//	return std::chrono::duration<double>(of::priv::getClock().getElapsedTime()).count();
+	return ofCore.clock.getElapsedTimef();
 }
 
 //--------------------------------------
 void ofResetElapsedTimeCounter() {
+	ofCore.clock.resetElapsedTimeCounter();
 	of::priv::getClock().resetElapsedTimeCounter();
 }
 

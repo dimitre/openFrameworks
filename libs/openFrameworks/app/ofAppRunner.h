@@ -67,6 +67,41 @@ public:
 using std::cout;
 using std::endl;
 
+
+// MARK: - CLOCK
+
+struct ofClock {
+protected:
+	std::chrono::time_point<std::chrono::steady_clock> timeStart = std::chrono::steady_clock::now();
+
+public:
+	ofClock() {};
+	~ofClock() {};
+//	using space = std::chrono::duration<long long, std::nano>;
+//	space interval;
+	
+	typedef std::chrono::duration<float> float_seconds;
+	
+	float getElapsedTimef() {
+		return duration_cast<float_seconds>(std::chrono::steady_clock::now() - timeStart).count();
+	}
+	
+	void resetElapsedTimeCounter() {
+		timeStart = std::chrono::steady_clock::now();
+	}
+	
+	uint64_t getElapsedTimeMillis() {
+		return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - timeStart).count();
+	}
+
+	uint64_t getElapsedTimeMicros() {
+		return std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - timeStart).count();
+	}
+};
+
+
+
+
 struct ofCoreInternal {
 protected:
 	// ofAppRunner
@@ -82,6 +117,7 @@ public:
 	ofMainLoop mainLoop;
 	fpsCounter fps;
 	
+	ofClock clock;
 	
 	//--------------------------------------------------
 	fs::path defaultDataPath(){
@@ -111,7 +147,7 @@ public:
 
 	void init() {
 		if (initialized) return;
-		initialized  = true;
+		initialized = true;
 		exiting = false;
 		
 		defaultWorkingDirectory = fs::absolute(fs::current_path());
@@ -137,18 +173,23 @@ public:
 		// any other deinitialization
 		// mainLoop.exit();
 //		mainLoop.exit();
+		initialized = false;
+		exiting = true;
 
 		// all shutdown functions called
 		for (const auto & func : shutdownFunctions) {
 			func();
 		}
 
-		initialized = false;
-		exiting = true;
 	}
 };
 
 extern ofCoreInternal ofCore;
+
+
+
+
+
 
 
 void ofInit();
