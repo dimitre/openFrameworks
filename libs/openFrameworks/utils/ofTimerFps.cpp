@@ -9,7 +9,8 @@ void ofTimerFps::reset() {
 
 ofTimerFps::ofTimerFps() {
 	reset();
-	interval = duration_cast<microseconds>(1s) / currentFPS;
+	//interval = duration_cast<microseconds>(1s) / currentFPS;
+	interval = 1s / currentFPS;
 };
 
 void ofTimerFps::setFps(int fps) {
