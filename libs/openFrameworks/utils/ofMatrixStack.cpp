@@ -365,7 +365,7 @@ void ofMatrixStack::clearStacks(){
 		tmpCounter++;
 	}
 	if (tmpCounter > 0 ){
-		ofLogWarning("ofMatrixStack") << "clearStacks(): found " << tmpCounter << " extra viewports on the stack, did you forget to popView() somewhere?";
+		ofLogWarning("ofMatrixStack") << "clearStacks(): found " << tmpCounter << " extra viewports on the stack, did you forget to popView() somewhere? " << tmpCounter;
 	}
 
 	tmpCounter = 0;

@@ -273,7 +273,8 @@ enum ofTargetPlatform{
 #endif
 
 #include <tesselator.h>
-typedef TESSindex ofIndexType;
+//typedef TESSindex ofIndexType;
+typedef std::size_t ofIndexType;
 
 
 #define OF_EXIT_APP(val)		std::exit(val);
