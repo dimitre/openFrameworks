@@ -116,17 +116,20 @@ bool copyTemplateFile::run() {
 string ofTemplateMacos::addFile(const fs::path & path, const fs::path & folder, const fileProperties & fp) {
 	string UUID { "" };
 	//	alert("xc::addFile " + path.string() + " :folder:" + folder.string(), 31);
+
+
 	{
-		string fileType { "file" };
+		string fileType;
 		fileType = extensionToFileType[path.extension()];
 
-		if (fileType == "") {
+		if (empty(fileType)) {
 			if (fs::is_directory(path) || fp.isGroupWithoutFolder) {
 				fileType = "folder";
-			} else {
-				// Break here if fileType is not set. and it is not a folder
-				return {};
 			}
+			// else {
+			// 	// Break here if fileType is not set. and it is not a folder
+			// 	return {};
+			// }
 		}
 		UUID = generateUUID(path);
 
@@ -137,7 +140,10 @@ string ofTemplateMacos::addFile(const fs::path & path, const fs::path & folder, 
 		} else {
 			addCommand("Add :objects:" + UUID + ":isa string PBXFileReference");
 		}
-		addCommand("Add :objects:" + UUID + ":lastKnownFileType string " + fileType);
+		// if (!empty(fileType)) {
+		// addCommand("Add :objects:" + UUID + ":lastKnownFileType string " + fileType);
+		// }
+
 		addCommand("Add :objects:" + UUID + ":name string " + ofPathToString(path.filename()));
 
 		if (fp.absolute || fp.isRelativeToSDK || path.is_absolute()) { //
@@ -244,7 +250,7 @@ string ofTemplateMacos::addFile(const fs::path & path, const fs::path & folder, 
 void ofTemplateMacos::addSrc(const fs::path & srcFile, const fs::path & folder) {
 	// alert ("xcodeProject::addSrc " + ofPathToString(srcFile) + " : " + ofPathToString(folder), 31);
 
-	string ext = ofPathToString(srcFile.extension());
+	string ext = srcFile.extension().string();
 
 	//		.reference = true,
 	//		.addToBuildPhase = true,
@@ -258,7 +264,8 @@ void ofTemplateMacos::addSrc(const fs::path & srcFile, const fs::path & folder) 
 	fp.addToBuildPhase = true;
 	fp.isSrc = true;
 
-	if (ext == ".h" || ext == ".hpp") {
+
+	if (ext == ".h" || ext == ".hpp" || ext == ".inl") {
 		fp.addToBuildPhase = false;
 	} else if (ext == ".xib") {
 		fp.addToBuildPhase = false;
@@ -737,7 +744,10 @@ void ofTemplateMacos::load() {
 	}
 	fp.absolute = true;
 	//	addFile("../../../libs/openframeworks", "", fp);
-	addFile(fs::path { "bin" } / "data", "", fp);
+
+	if (fs::exists("bin/data")) {
+		addFile(fs::path { "bin" } / "data", "", fp);
+	}
 
 	for (auto & path : conf.additionalSources) {
 		// fs::path filename = a.filename();

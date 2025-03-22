@@ -155,6 +155,7 @@ public:
 		return p;
 	}
 
+
 	std::map<fs::path, std::string> extensionToFileType {
 		{ ".framework", "wrapper.framework" },
 		{ ".xcframework", "wrapper.xcframework" },
@@ -164,6 +165,7 @@ public:
 		{ ".c", "sourcecode.cpp.c" },
 		{ ".h", "sourcecode.cpp.h" },
 		{ ".hpp", "sourcecode.cpp.h" },
+		// { ".inl", "sourcecode.cpp.h" },
 		{ ".mm", "sourcecode.cpp.objcpp" },
 		{ ".m", "sourcecode.cpp.objcpp" },
 

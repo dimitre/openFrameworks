@@ -20,6 +20,8 @@ void scanFolder(const fs::path & path,
 	if (!fs::is_directory(path)) return;
 	alert("	scanFolder " + path.string(), 92);
 
+
+
 	// do we want to add all root paths to includes or not?
 	filesMap["includes"].emplace_back(path);
 	alert("	add includes: " + path.string(), 34);
@@ -28,6 +30,7 @@ void scanFolder(const fs::path & path,
 		 it != fs::recursive_directory_iterator();
 		 ++it) {
 		auto f = it->path();
+		// cout << f << endl;
 
 		// avoid hidden folders like .git etc.
 		if (f.filename().c_str()[0] == '.') {
@@ -59,6 +62,7 @@ void scanFolder(const fs::path & path,
 			} else if (ext == ".dylib" || ext == ".so" || ext == ".dll") {
 				filesMap["sharedLibs"].emplace_back(f);
 			} else if (ext == ".h" || ext == ".hpp" || ext == ".m" || ext == ".tcc" || ext == ".inl" || ext == ".in") {
+
 				filesMap["headers"].emplace_back(f);
 			} else if (ext == ".c" || ext == ".cpp" || ext == ".cc" || ext == ".cxx" || ext == ".mm") {
 				filesMap["sources"].emplace_back(f);
@@ -167,7 +171,7 @@ void ofAddon::loadFiles() {
 					} else {
 						hasPlatformFolder = true;
 						scanFolder(folder, filesMap, true);
-						alert("		folder yes exist " + folder.string(), 94);
+						alert("		folder yes exists " + folder.string(), 94);
 					}
 				}
 			}
