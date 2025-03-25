@@ -1,10 +1,5 @@
 #include "ofFbo.h"
 
-// #include "ofAppRunner.h"
-// #include "ofUtils.h"
-// #include "ofGraphics.h"
-
-// #include "ofGLRenderer.h"
 #include "ofBufferObject.h"
 #include "ofGLUtils.h"
 #include "ofLog.h"
@@ -490,13 +485,6 @@ void ofFbo::clearDepthStencilBuffer(float depth, int stencil){
 }
 #endif
 
-#ifdef USEDEPRECATED
-//--------------------------------------------------------------
-void ofFbo::destroy() {
-	clear();
-}
-#endif
-
 //--------------------------------------------------------------
 bool ofFbo::checkGLSupport() {
 #ifndef TARGET_OPENGLES
@@ -841,58 +829,12 @@ void ofFbo::createAndAttachDepthStencilTexture(GLenum target, GLint internalform
 	glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, target, depthBufferTex.texData.textureID, 0);
 }
 
-//----------------------------------------------------------
-// void ofFbo::begin(bool setupScreen) const{
-// 	auto renderer = settings.renderer.lock();
-// 	if(renderer){
-//         if(setupScreen){
-//             renderer->begin(*this, OF_FBOMODE_PERSPECTIVE | OF_FBOMODE_MATRIXFLIP);
-//         }else{
-//             renderer->begin(*this, OF_FBOMODE_NODEFAULTS);
-//         }
-// 	}
-// }
-
-
 void ofFbo::begin(ofFboMode mode) const{
     auto renderer = settings.renderer.lock();
     if(renderer){
         renderer->begin(*this, mode);
     }
 }
-
-
-//----------------------------------------------------------
-/*void ofFbo::begin() const {
-	auto renderer = settings.renderer.lock();
-	if (renderer) {
-		renderer->begin(*this, true);
-	}
-}
-
-//----------------------------------------------------------
-void ofFbo::beginNoPerspective() const {
-	auto renderer = settings.renderer.lock();
-	if (renderer) {
-		renderer->begin(*this, false);
-	}
-}
-
-//----------------------------------------------------------
-void ofFbo::beginNoMatrixFlip() const {
-	auto renderer = settings.renderer.lock();
-	if (renderer) {
-		renderer->beginNoMatrixFlip(*this);
-	}
-}
-
-//----------------------------------------------------------
-void ofFbo::beginNoMatrixFlipNoPerspective() const {
-	auto renderer = settings.renderer.lock();
-	if (renderer) {
-		renderer->beginNoMatrixFlipNoPerspective(*this);
-	}
-}*/
 
 //----------------------------------------------------------
 void ofFbo::end() const{
@@ -994,26 +936,6 @@ int ofFbo::getDefaultTextureIndex() const
 {
 	return defaultTextureIndex;
 }
-
-//----------------------------------------------------------
-// ofTexture& ofFbo::getTextureReference(){
-// 	return getTexture();
-// }
-
-// //----------------------------------------------------------
-// ofTexture& ofFbo::getTextureReference(int attachmentPoint) {
-// 	return getTexture(attachmentPoint);
-// }
-
-// //----------------------------------------------------------
-// const ofTexture& ofFbo::getTextureReference() const{
-// 	return getTexture();
-// }
-
-// //----------------------------------------------------------
-// const ofTexture& ofFbo::getTextureReference(int attachmentPoint) const{
-// 	return getTexture(attachmentPoint);
-// }
 
 //----------------------------------------------------------
 ofTexture& ofFbo::getTexture(){
@@ -1155,11 +1077,6 @@ void ofFbo::draw(float x, float y, float width, float height) const{
 	if(!bIsAllocated || settings.numColorbuffers==0) return;
     getTexture().draw(x, y, width, height);
 }
-
-//----------------------------------------------------------
-// GLuint ofFbo::getFbo() const {
-// 	return fbo;
-// }
 
 //----------------------------------------------------------
 GLuint ofFbo::getId() const {
