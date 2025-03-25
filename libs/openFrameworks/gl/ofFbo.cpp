@@ -24,7 +24,6 @@
 using std::unordered_map;
 using std::vector;
 
-ofTexture			depthBufferTex;
 
 /*
 
@@ -814,7 +813,6 @@ void ofFbo::attachTexture(ofTexture & tex, GLenum internalFormat, GLenum attachm
 
 //----------------------------------------------------------
 void ofFbo::createAndAttachDepthStencilTexture(GLenum target, GLint internalformat, GLenum  attachment, GLenum transferFormat, GLenum transferType){
-
 
 	// allocate depthBufferTex as depth buffer;
 	depthBufferTex.texData.glInternalFormat = internalformat;
