@@ -16,9 +16,7 @@ using std::string;
 using std::vector;
 
 static inline std::string getPGVersion() {
-	return "ofGen v0.2.8";
-
-
+	return "ofGen v0.2.9";
 }
 
 inline std::string colorText(const std::string & s, int color) {
@@ -38,7 +36,7 @@ const std::string sign = colorText(R"(
 ▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
 ▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
 Project Generator for OpenFrameworks (OFWorks)
-                Prototype v0.2.8⚡️
+                Prototype v0.2.9⚡️
 )",
 							 91)
 
@@ -178,6 +176,10 @@ struct genConfig {
 	// vector<std::string> singleParameters;
 	std::string singleParameter;
 
+	std::string openCommand;
+	std::string buildCommand;
+	std::string runCommand;
+
 	bool doesTemplateExist(std::string val) {
 		return std::find(templateNames.begin(), templateNames.end(), val) != templateNames.end();
 	}
@@ -268,31 +270,37 @@ ofGen templates=zed,macos,make addons=ofxMidi,ofxOpencv ofpath=../../.. path=/Vo
 )" << endl;
 	}
 
+	// void open();
 	void open() {
-		projectName = fs::current_path().filename().string();
-		std::string command = "open " + projectName + ".xcodeproj";
-		cout << command << endl;
-		system(command.c_str());
+		if (!empty(openCommand)) {
+			system(openCommand.c_str());
+		}
 	}
 
 	void build() {
+		if (!empty(buildCommand)) {
+			system(buildCommand.c_str());
+		}
 		// std::string command = "open " + projectName + ".xcodeproj";
 		// cout << command << endl;
-		system("xcodebuild");
+		// system("xcodebuild");
 	}
 
 	void run() {
-    	projectName = fs::current_path().filename().string();
-    	std::string command = "open -n bin/" + projectName + ".app";
-    	cout << command << endl;
-    	system(command.c_str());
+    	if (!empty(runCommand)) {
+    		system(runCommand.c_str());
+    	}
+		// projectName = fs::current_path().filename().string();
+		// std::string command = "open -n bin/" + projectName + ".app";
+		// cout << command << endl;
+		// system(command.c_str());
 	}
 
 	YAML::Node config;
 	void import();
 	bool loadYML();
-    vector<string> nodeToStrings(const string & index);
-    vector<fs::path> nodeToPaths(const string & index);
+	vector<string> nodeToStrings(const string & index);
+	vector<fs::path> nodeToPaths(const string & index);
 	// void scanFolderRecursive(const fs::path & path);
 };
 // conf
@@ -300,29 +308,27 @@ ofGen templates=zed,macos,make addons=ofxMidi,ofxOpencv ofpath=../../.. path=/Vo
 
 extern genConfig conf;
 
-
 inline void replace_all(
-    std::string& s,
-    std::string const& toReplace,
-    std::string const& replaceWith
-) {
-    std::string buf;
-    std::size_t pos = 0;
-    std::size_t prevPos;
+	std::string & s,
+	std::string const & toReplace,
+	std::string const & replaceWith) {
+	std::string buf;
+	std::size_t pos = 0;
+	std::size_t prevPos;
 
-    // Reserves rough estimate of final size of string.
-    buf.reserve(s.size());
+	// Reserves rough estimate of final size of string.
+	buf.reserve(s.size());
 
-    while (true) {
-        prevPos = pos;
-        pos = s.find(toReplace, pos);
-        if (pos == std::string::npos)
-            break;
-        buf.append(s, prevPos, pos - prevPos);
-        buf += replaceWith;
-        pos += toReplace.size();
-    }
+	while (true) {
+		prevPos = pos;
+		pos = s.find(toReplace, pos);
+		if (pos == std::string::npos)
+			break;
+		buf.append(s, prevPos, pos - prevPos);
+		buf += replaceWith;
+		pos += toReplace.size();
+	}
 
-    buf.append(s, prevPos, s.size() - prevPos);
-    s.swap(buf);
+	buf.append(s, prevPos, s.size() - prevPos);
+	s.swap(buf);
 }

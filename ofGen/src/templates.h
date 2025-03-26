@@ -37,6 +37,10 @@ public:
 	fs::path path;
 	ofTemplate() { }
 
+	std::string openCommand;
+	std::string buildCommand;
+	std::string runCommand;
+
 	std::vector<copyTemplateFile> copyTemplateFiles;
 
 	void info() {
@@ -85,6 +89,10 @@ public:
 	ofTemplateMacos() {
 		name = "macos";
 		path = conf.ofPath / "scripts" / "templates" / name;
+
+		openCommand = "open " + conf.projectName + ".xcodeproj";
+		buildCommand = "xcodebuild";
+		runCommand = "open -n bin/" + conf.projectName + ".app";
 	}
 	void load() override;
 	void save() override;
@@ -208,6 +216,9 @@ public:
 	ofTemplateMake() {
 		name = "make";
 		path = conf.ofPath / "scripts" / "templates" / name;
+
+		buildCommand = "make -j";
+		runCommand = "make RunRelease";
 	}
 	void load() override;
 	void save() override;
@@ -218,6 +229,8 @@ public:
 	ofTemplateZed() {
 		name = "zed";
 		path = conf.ofPath / "scripts" / "templates" / name;
+
+		openCommand = "zed . ";
 	}
 	void load() override;
 	void save() override;
@@ -228,10 +241,11 @@ public:
 	ofTemplateVSCode() {
 		name = "vscode";
 		path = conf.ofPath / "scripts" / "templates" / name;
+
+		openCommand = "vscode . ";
 	}
 	void load() override;
 	void save() override;
-
 
 	// void addAddon(ofAddon * a) override;
 };

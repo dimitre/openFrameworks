@@ -110,6 +110,9 @@ std::vector<std::string> ofSplitString(const std::string & s, const std::string 
 	return res;
 }
 
+// void genConfig::open() {
+// }
+
 void genConfig::import() {
 	if (fs::exists("of.yml")) {
 		alert("of.yml already present", 32);
@@ -173,7 +176,7 @@ bool genConfig::loadYML() {
 			// FIXME: Remove TEMPORARY
 			auto p = nodeToStrings("platforms");
 			if (p.size() > 0) {
-			    alert ("No templates found but platforms entry found, getting from there", 95);
+				alert("No templates found but platforms entry found, getting from there", 95);
 				conf.templateNames = p;
 			}
 		}
@@ -189,7 +192,6 @@ bool genConfig::loadYML() {
 		for (auto & t : conf.templateNames) {
 			cout << t << endl;
 		}
-
 
 		// FIXME: no lugar disso fazer mesmo um map<string, vector<string>> pra parsear todos de uma vez.
 		conf.frameworks = nodeToStrings("frameworks");

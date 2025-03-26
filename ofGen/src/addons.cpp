@@ -21,8 +21,6 @@ void scanFolder(const fs::path & path,
 	if (!fs::is_directory(path)) return;
 	alert("	scanFolder " + path.string(), 92);
 
-
-
 	// do we want to add all root paths to includes or not?
 	filesMap["includes"].emplace_back(path);
 	alert("	add includes: " + path.string(), 34);
@@ -144,7 +142,6 @@ void ofAddon::showFiles() {
 void ofAddon::loadFiles() {
 	alert("	loadFiles " + path.string(), 34);
 
-
 	scanFolder(path / "src", filesMap, true);
 
 	// get addon libs, it can be none, one or multiple
@@ -244,7 +241,6 @@ void ofAddon::loadAddonConfig() {
 		// line = stringReplace(line, "\\$(OF_ROOT)", conf.ofPath.string());
 
 		replaceAll(line, "$(OF_ROOT)", conf.ofPath.string());
-
 
 		// Trim., removing whitespace
 		// line.erase(std::remove_if( line.begin(), line.end(), ::isspace), line.end());
@@ -392,6 +388,19 @@ void gatherProjectInfo() {
 			alert("invalid template name : " + t + ", exiting", 95);
 			std::exit(1);
 		}
+
+		if (empty(conf.openCommand) && !empty(conf.templates.back()->openCommand)) {
+			conf.openCommand = conf.templates.back()->openCommand;
+		}
+
+		if (empty(conf.buildCommand) && !empty(conf.templates.back()->buildCommand)) {
+			conf.buildCommand = conf.templates.back()->buildCommand;
+		}
+
+		if (empty(conf.runCommand) && !empty(conf.templates.back()->runCommand)) {
+			conf.runCommand = conf.templates.back()->runCommand;
+		}
+
 	}
 
 	// load templates, show info of each template
@@ -403,15 +412,14 @@ void gatherProjectInfo() {
 
 	// now parse project addons, or yml
 
-
 	if (!fs::exists("./src")) {
-	   // FIXME: check if template is ios and copy mm files accordingly. if not copy src files from templates.
+		// FIXME: check if template is ios and copy mm files accordingly. if not copy src files from templates.
 		fs::path from { conf.ofPath / "scripts" / "templates" / "src" };
 		fs::path to { "./src" };
 		alert(from.string(), 95);
 		alert(fs::current_path().string(), 95);
 		try {
-    		fs::copy(from, to, fs::copy_options::recursive | fs::copy_options::update_existing);
+			fs::copy(from, to, fs::copy_options::recursive | fs::copy_options::update_existing);
 		} catch (fs::filesystem_error & e) {
 			std::cerr << "error copying template file " << from << " : " << to << std::endl;
 		}
@@ -458,7 +466,6 @@ void gatherProjectInfo() {
 		// 	addon->load();
 		// 	project.addons.emplace_back(conf.addons.back());
 		// }
-
 	}
 	// else {
 	// 	alert("NO SRC FILE FOUND IN PROJECT", 95);

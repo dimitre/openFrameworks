@@ -144,6 +144,8 @@ public:
 	// std::shared_ptr<ofMainLoop> mainLoop { std::make_shared<ofMainLoop>() };
 
 	// ofFileUtils
+	
+//	bool isInit() { return initialized; }
 
 	void init() {
 		if (initialized) return;

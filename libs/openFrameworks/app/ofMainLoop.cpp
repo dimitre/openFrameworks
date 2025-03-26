@@ -94,7 +94,7 @@ void ofMainLoop::run(const std::shared_ptr<ofAppBaseWindow> & window, std::share
 #endif
 	}
 	currentWindow = window;
-	
+
 	// FIXME: remove?
 	window->makeCurrent();
 	if(!windowLoop){
@@ -121,26 +121,26 @@ int ofMainLoop::loop(){
 	}else{
 		windowLoop();
 	}
-	exit();	
+	exit();
 	return status;
 }
 
 void ofMainLoop::loopOnce(){
 	if(bShouldClose) return;
-	
+
 //	std::cout << "ofMainLoop::loopOnce()" << std::endl;
 	auto i = windows.begin();
-	
+
 //	currentWindow = (*i);
 //	// here, not looping all windows
 //	i->get()->makeCurrent();
 //	i->get()->update();
 //	i->get()->draw();
-	
+
 	for ( ; i != windows.end(); ) {
 		if (i->get()->getWindowShouldClose()) {
 			i = windows.erase(i);
-		} 
+		}
 		else {
 			currentWindow = (*i);
 			auto w = i->get();
@@ -151,10 +151,10 @@ void ofMainLoop::loopOnce(){
 			++i;
 		}
 	}
-	
 
 
-	
+
+
 //	for(auto i = windows.begin(); !windows.empty() && i != windows.end();){
 //		if(i->get()->getWindowShouldClose()){
 ////			const auto & window = i->first;
@@ -231,7 +231,7 @@ void ofMainLoop::exit(){
 //		ofRemoveListener(window->events().touchMoved,app.get(),&ofBaseApp::touchMoved,OF_EVENT_ORDER_APP);
 //		ofRemoveListener(window->events().touchUp,app.get(),&ofBaseApp::touchUp,OF_EVENT_ORDER_APP);
 #ifdef TARGET_ANDROID
-		
+
 		// FIXME: how will this work with Android?
 //		auto androidApp = dynamic_cast<ofxAndroidApp*>(app.get());
 //		if(androidApp){
@@ -257,7 +257,7 @@ void ofMainLoop::exit(){
 //		window_app.second.reset();
 //	}
 //	windowsApps.clear();
-	
+
 	mainApp.reset();
 	windows.clear();
 }
@@ -274,7 +274,7 @@ void ofMainLoop::setCurrentWindow(ofAppBaseWindow * window){
 	if(currentWindow.lock().get() == window){
 		return;
 	}
-	
+
 	for (const auto & w : windows) {
 		if (w.get() == window) {
 			currentWindow = w;
@@ -324,7 +324,7 @@ void ofMainLoop::ofBeginWindow(int n) {
 		windows[thisWindow]->update();
 //		windows[n].draw();
 		windows[thisWindow]->beginDraw();
-		
+
 	}
 //		currentWindow.beginDraw();
 }
