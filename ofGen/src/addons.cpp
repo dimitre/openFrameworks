@@ -60,10 +60,10 @@ void scanFolder(const fs::path & path,
 				filesMap["libs"].emplace_back(f);
 			} else if (ext == ".dylib" || ext == ".so" || ext == ".dll") {
 				filesMap["sharedLibs"].emplace_back(f);
-			} else if (ext == ".h" || ext == ".hpp" || ext == ".m" || ext == ".tcc" || ext == ".inl" || ext == ".in") {
+			} else if (ext == ".h" || ext == ".hpp" || ext == ".tcc" || ext == ".inl" || ext == ".in") {
 
 				filesMap["headers"].emplace_back(f);
-			} else if (ext == ".c" || ext == ".cpp" || ext == ".cc" || ext == ".cxx" || ext == ".mm") {
+			} else if (ext == ".c" || ext == ".cpp" || ext == ".cc" || ext == ".cxx" || ext == ".m" || ext == ".mm") {
 				filesMap["sources"].emplace_back(f);
 			} else {
 				alert("		no desired extension " + f.string(), 94);

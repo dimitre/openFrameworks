@@ -265,7 +265,7 @@ void ofTemplateMacos::addSrc(const fs::path & srcFile, const fs::path & folder) 
 	fp.isSrc = true;
 
 
-	if (ext == ".h" || ext == ".hpp" || ext == ".m" || ext == ".tcc" || ext == ".inl" || ext == ".in") {
+	if (ext == ".h" || ext == ".hpp" || ext == ".tcc" || ext == ".inl" || ext == ".in") {
 		fp.addToBuildPhase = false;
 	} else if (ext == ".xib") {
 		fp.addToBuildPhase = false;
