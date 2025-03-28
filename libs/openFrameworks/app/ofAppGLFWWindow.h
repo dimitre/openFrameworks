@@ -231,19 +231,23 @@ public:
 	}
 
 	void update() {
+		int numberOfMonitors;
+		monitors = glfwGetMonitors(&numberOfMonitors);
+
+		std::cout << "ofMonitors update numberOfMonitors " << numberOfMonitors << std::endl;
 		rects.clear();
 		allMonitorsRect = { 0, 0, 0, 0 };
 
-		int numberOfMonitors;
-		monitors = glfwGetMonitors(&numberOfMonitors);
 
 		for (int i = 0; i < numberOfMonitors; i++) {
 			glm::ivec2 pos;
 			glfwGetMonitorPos(monitors[i], &pos.x, &pos.y);
 			const GLFWvidmode * desktopMode = glfwGetVideoMode(monitors[i]);
-			ofRectangle rect = ofRectangle(pos.x, pos.y, desktopMode->width, desktopMode->height);
-			rects.emplace_back(rect);
-			allMonitorsRect = allMonitorsRect.getUnion(rect);
+			if (desktopMode != NULL) {
+				ofRectangle rect = ofRectangle(pos.x, pos.y, desktopMode->width, desktopMode->height);
+				rects.emplace_back(rect);
+				allMonitorsRect = allMonitorsRect.getUnion(rect);
+			}
 		}
 	}
 
