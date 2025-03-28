@@ -8,6 +8,12 @@
 
 #include "ofShader.h"
 
+#if !defined(GLM_FORCE_CTOR_INIT)
+	#define GLM_FORCE_CTOR_INIT
+#endif
+#if !defined(GLM_ENABLE_EXPERIMENTAL)
+	#define GLM_ENABLE_EXPERIMENTAL
+#endif
 #include <glm/mat4x4.hpp>
 
 class ofVboMesh;
@@ -57,7 +63,9 @@ public:
 	static bool hasActiveCubeMap();
 	static std::shared_ptr<ofCubeMap::Data> getActiveData();
 	static void clearTextureData(std::shared_ptr<ofCubeMap::Data> adata);
+	#ifdef TARGET_ANDROID
 	static void regenerateAllTextures();
+	#endif
 	static const ofTexture & getBrdfLutTexture();
 
 	ofCubeMap();
@@ -159,7 +167,7 @@ protected:
 
 	GLint mGLInternalFormat;
 
-	glm::mat4 projectionMat { 1.0f };
+	glm::mat4 projectionMat;
 
 	static ofTexture sBrdfLutTex;
 	static ofVboMesh sCubeMesh;

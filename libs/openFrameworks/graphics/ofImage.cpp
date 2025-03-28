@@ -199,7 +199,7 @@ static int getJpegOptionFromImageLoadSetting(const ofImageLoadSettings &settings
 template<typename PixelType>
 static bool loadImage(ofPixels_<PixelType> & pix, const of::filesystem::path & _fileName, const ofImageLoadSettings & settings){
 	ofInitFreeImage();
-	
+
 	auto uriStr = ofPathToString(_fileName);
 	auto fileNameString = ofPathToString(_fileName);
 	UriUriA uri;
@@ -228,10 +228,23 @@ static bool loadImage(ofPixels_<PixelType> & pix, const of::filesystem::path & _
 		return ofLoadImage(pix, ofLoadURL(ofPathToString(_fileName)).data);
 	}
 
+
+	ofFile file(_fileName);
+	if (!file.exists()) {
+		ofLogError("loadImage") << "File not found: " << _fileName;
+		return false;
+	}
+
+	std::uint64_t fileSize = file.getSize();
+	if (fileSize == 0) {
+		ofLogError("loadImage") << "File is empty: " << _fileName;
+		return false;
+	}
 	
 	bool bLoaded = false;
 	FIBITMAP * bmp = nullptr;
 
+	try {
 	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
 #ifdef OF_OS_WINDOWS
 	fif = FreeImage_GetFileTypeU(_fileName.c_str(), 0);
@@ -251,7 +264,11 @@ static bool loadImage(ofPixels_<PixelType> & pix, const of::filesystem::path & _
 		if(fif == FIF_JPEG) {
 			option = getJpegOptionFromImageLoadSetting(settings);
 		}
+		if (!FreeImage_FIFSupportsReading(fif)) {
+			std::cerr << "Error: FreeImage does not support reading this format." << std::endl;
+		}
 		auto fileName = ofToDataPathFS(_fileName);
+
 
 #ifdef OF_OS_WINDOWS
 		bmp = FreeImage_LoadU(fif, fileName.c_str(), option | settings.freeImageFlags);
@@ -263,6 +280,16 @@ static bool loadImage(ofPixels_<PixelType> & pix, const of::filesystem::path & _
 			bLoaded = true;
 		}
 	}
+
+	}
+catch (const std::exception & e) {
+	std::cerr << "Exception caught in FreeImage_Load: " << e.what() << std::endl;
+	return false;
+}
+catch (...) {
+	std::cerr << "Unknown exception caught in FreeImage_Load." << std::endl;
+	return false;
+}
 
 	//-----------------------------
 
@@ -1001,6 +1028,18 @@ const ofPixels_<PixelType> & ofImage_<PixelType>::getPixels() const{
 
 //----------------------------------------------------------
 template<typename PixelType>
+ofPixels_<PixelType> & ofImage_<PixelType>::getPixelsRef(){
+	return pixels;
+}
+
+//----------------------------------------------------------
+template<typename PixelType>
+const ofPixels_<PixelType> & ofImage_<PixelType>::getPixelsRef() const {
+	return pixels;
+}
+
+//----------------------------------------------------------
+template<typename PixelType>
 ofImage_<PixelType>::operator ofPixels_<PixelType>&(){
 	return pixels;
 }
@@ -1193,8 +1232,8 @@ void ofImage_<PixelType>::resize(int newWidth, int newHeight){
 //------------------------------------
 template<typename PixelType>
 void ofImage_<PixelType>::crop(int x, int y, int w, int h){
-	w = std::clamp(w,1,int(getWidth()));
-	h = std::clamp(h,1,int(getHeight()));
+	w = glm::clamp(w,1,int(getWidth()));
+	h = glm::clamp(h,1,int(getHeight()));
 
 	pixels.crop(x,y,w,h);
 	update();
@@ -1203,8 +1242,8 @@ void ofImage_<PixelType>::crop(int x, int y, int w, int h){
 //------------------------------------
 template<typename PixelType>
 void ofImage_<PixelType>::cropFrom(const ofImage_<PixelType> & otherImage, int x, int y, int w, int h){
-	w = std::clamp(w,1,int(otherImage.getWidth()));
-	h = std::clamp(h,1,int(otherImage.getHeight()));
+	w = glm::clamp(w,1,int(otherImage.getWidth()));
+	h = glm::clamp(h,1,int(otherImage.getHeight()));
 
 	otherImage.pixels.cropTo(pixels, x, y, w, h);
 	update();
