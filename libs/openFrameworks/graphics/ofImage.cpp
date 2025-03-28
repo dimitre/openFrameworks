@@ -1028,18 +1028,6 @@ const ofPixels_<PixelType> & ofImage_<PixelType>::getPixels() const{
 
 //----------------------------------------------------------
 template<typename PixelType>
-ofPixels_<PixelType> & ofImage_<PixelType>::getPixelsRef(){
-	return pixels;
-}
-
-//----------------------------------------------------------
-template<typename PixelType>
-const ofPixels_<PixelType> & ofImage_<PixelType>::getPixelsRef() const {
-	return pixels;
-}
-
-//----------------------------------------------------------
-template<typename PixelType>
 ofImage_<PixelType>::operator ofPixels_<PixelType>&(){
 	return pixels;
 }
