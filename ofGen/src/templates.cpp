@@ -117,20 +117,16 @@ string ofTemplateMacos::addFile(const fs::path & path, const fs::path & folder, 
 	string UUID { "" };
 	//	alert("xc::addFile " + path.string() + " :folder:" + folder.string(), 31);
 
-
+	fs::path ext { path.extension() };
 	{
-		string fileType;
-		fileType = extensionToFileType[path.extension()];
+		string fileType = extensionToFileType[ext];
 
 		if (empty(fileType)) {
 			if (fs::is_directory(path) || fp.isGroupWithoutFolder) {
 				fileType = "folder";
 			}
-			// else {
-			// 	// Break here if fileType is not set. and it is not a folder
-			// 	return {};
-			// }
 		}
+
 		UUID = generateUUID(path);
 
 		// This is adding a file. any file.
@@ -140,6 +136,7 @@ string ofTemplateMacos::addFile(const fs::path & path, const fs::path & folder, 
 		} else {
 			addCommand("Add :objects:" + UUID + ":isa string PBXFileReference");
 		}
+
 		// if (!empty(fileType)) {
 		// addCommand("Add :objects:" + UUID + ":lastKnownFileType string " + fileType);
 		// }
@@ -197,7 +194,7 @@ string ofTemplateMacos::addFile(const fs::path & path, const fs::path & folder, 
 
 		if (fp.copyFilesBuildPhase) {
 			// If we are going to add xcframeworks to copy files -> destination frameworks, we should include here
-			if (fileType == "wrapper.framework" || fileType == ".xcframework") {
+			if (ext == ".framework") { // || fileType == ".xcframework"
 				// copy to frameworks
 				addCommand("# ---- copyPhase Frameworks " + buildUUID);
 				addCommand("Add :objects:E4C2427710CC5ABF004149E2:files: string " + buildUUID);

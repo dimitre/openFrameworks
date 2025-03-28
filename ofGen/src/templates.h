@@ -173,6 +173,9 @@ public:
 		{ ".c", "sourcecode.cpp.c" },
 		{ ".h", "sourcecode.cpp.h" },
 		{ ".hpp", "sourcecode.cpp.h" },
+		// two new ones. .in to fulfill ofxAssimp needs.
+		{ ".inc", "sourcecode.cpp.h" },
+		{ ".in", "sourcecode.cpp.h" },
 		// { ".inl", "sourcecode.cpp.h" },
 		{ ".mm", "sourcecode.cpp.objcpp" },
 		{ ".m", "sourcecode.cpp.objcpp" },
