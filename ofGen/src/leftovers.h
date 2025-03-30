@@ -1,6 +1,6 @@
 
 
-bool checkCorrectVariable(const string & variable, const string & state) {
+bool checkCorrectVariable(const std::string & variable, const std::string & state) {
 	// if (state == "meta") {
 	// 	return std::find(AddonMetaVariables.begin(),
 	// 					 AddonMetaVariables.end(),
@@ -16,7 +16,7 @@ bool checkCorrectVariable(const string & variable, const string & state) {
 	}
 }
 
-bool checkCorrectPlatform(const string & state) {
+bool checkCorrectPlatform(const std::string & state) {
 	if (state == "meta" || state == "common") {
 		return true;
 	}

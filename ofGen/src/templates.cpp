@@ -2,12 +2,11 @@
 #include "addons.h"
 #include "uuidxx.h"
 #include <nlohmann/json.hpp>
-// #include <iostream> //in utils
 #include <fstream> //in utils
 
 using nlohmann::json;
 
-std::string generateUUID(const string & input) {
+std::string generateUUID(const std::string & input) {
 	return uuidxx::uuid::Generate().ToString(false);
 }
 
@@ -113,13 +112,13 @@ bool copyTemplateFile::run() {
 	return true;
 }
 
-string ofTemplateMacos::addFile(const fs::path & path, const fs::path & folder, const fileProperties & fp) {
-	string UUID { "" };
+std::string ofTemplateMacos::addFile(const fs::path & path, const fs::path & folder, const fileProperties & fp) {
+	std::string UUID { "" };
 	//	alert("xc::addFile " + path.string() + " :folder:" + folder.string(), 31);
 
 	fs::path ext { path.extension() };
 	{
-		string fileType = extensionToFileType[ext];
+		std::string fileType = extensionToFileType[ext];
 
 		if (empty(fileType)) {
 			if (fs::is_directory(path) || fp.isGroupWithoutFolder) {
@@ -174,7 +173,7 @@ string ofTemplateMacos::addFile(const fs::path & path, const fs::path & folder, 
 		// addCommand("# ---- addFileToFolder UUID : " + ofPathToString(folder));
 		addCommand("Add :objects:" + folderUUID + ":children: string " + UUID);
 
-		string buildUUID { generateUUID(ofPathToString(path) + "-build") };
+		std::string buildUUID { generateUUID(ofPathToString(path) + "-build") };
 		// If any other option is true, add buildUUID entries.
 		if (
 			fp.addToBuildPhase || fp.codeSignOnCopy || fp.copyFilesBuildPhase || fp.addToBuildResource || fp.addToResources
@@ -247,7 +246,7 @@ string ofTemplateMacos::addFile(const fs::path & path, const fs::path & folder, 
 void ofTemplateMacos::addSrc(const fs::path & srcFile, const fs::path & folder) {
 	// alert ("xcodeProject::addSrc " + ofPathToString(srcFile) + " : " + ofPathToString(folder), 31);
 
-	string ext = srcFile.extension().string();
+	std::string ext { srcFile.extension().string() };
 
 	//		.reference = true,
 	//		.addToBuildPhase = true,
@@ -282,7 +281,7 @@ void ofTemplateMacos::addSrc(const fs::path & srcFile, const fs::path & folder) 
 		fp.addToResources = true;
 	}
 
-	string UUID {
+	std::string UUID {
 		addFile(srcFile, folder, fp)
 	};
 
@@ -399,7 +398,7 @@ void ofTemplateMacos::addFramework(const fs::path & path) {
 
 	bool isRelativeToSDK = false;
 	size_t found = pathString.find('/');
-	if (found == string::npos) {
+	if (found == std::string::npos) {
 		isRelativeToSDK = true;
 	}
 
@@ -413,7 +412,7 @@ void ofTemplateMacos::addFramework(const fs::path & path) {
 	// fp.frameworksBuildPhase = (target != "ios" && !folder.empty());
 	fp.frameworksBuildPhase = target != "ios";
 
-	string UUID;
+	std::string UUID { "" };
 	if (isRelativeToSDK) {
 		fs::path frameworkPath { "System/Library/Frameworks/" + pathString + ".framework" };
 		// fs::path frameworkPath { "System/Library/Frameworks/" + pathString + ".framework" };
@@ -436,8 +435,8 @@ void ofTemplateMacos::addFramework(const fs::path & path) {
 	if (!isRelativeToSDK) {
 		fs::path pathFS { path };
 		addCommand("# ----- FRAMEWORK_SEARCH_PATHS");
-		string parent { pathFS.parent_path().string() };
-		string ext { pathFS.extension().string() };
+		std::string parent { pathFS.parent_path().string() };
+		std::string ext { pathFS.extension().string() };
 
 		for (auto & c : buildConfigs) {
 			if (ext == ".framework") {
@@ -464,8 +463,8 @@ void ofTemplateMacos::edit(std::string & str) {
 		// alert (c, 31);
 		// readable comments enabled now.
 		if (c != "" && c[0] != '#') {
-			vector<string> cols { ofSplitString(c, " ") };
-			string thispath { cols[1] };
+			std::vector<std::string> cols { ofSplitString(c, " ") };
+			std::string thispath { cols[1] };
 			// cout << thispath << endl;
 			// stringReplace(thispath, "\:", "\/");
 
@@ -606,7 +605,7 @@ void ofTemplateMacos::load() {
 		std::cerr << "Error creating directories: " << e.what() << std::endl;
 	}
 
-	std::pair<string, string> rootReplacements;
+	std::pair<std::string, std::string> rootReplacements;
 
 	// Just replace ofPath if it is not default relative to project
 	if (!fs::equivalent(conf.ofPath, "../../..")) {
@@ -652,7 +651,7 @@ void ofTemplateMacos::load() {
 
 	if (target == "osx" || target == "macos") {
 		for (auto & f : { "Release", "Debug" }) {
-			copyTemplateFiles.push_back({ path / ("emptyExample.xcodeproj/xcshareddata/xcschemes/emptyExample " + string(f) + ".xcscheme"),
+			copyTemplateFiles.push_back({ path / ("emptyExample.xcodeproj/xcshareddata/xcschemes/emptyExample " + std::string(f) + ".xcscheme"),
 				schemeFolder / (conf.projectName + " " + f + ".xcscheme"),
 				{ { "emptyExample", conf.projectName } } });
 		}
@@ -774,7 +773,7 @@ void ofTemplateMacos::load() {
 	// add headers files
 }
 
-string ofTemplateMacos::getFolderUUID(const fs::path & folder, fs::path base) {
+std::string ofTemplateMacos::getFolderUUID(const fs::path & folder, fs::path base) {
 	// alert("xcodeProject::getFolderUUID " + folder.string() + " base:" + base.string(), 95); //+" : isfolder="+ofToString(isFolder)+" : base="+ base.string());
 	auto fullPathFolder = folder;
 
@@ -783,9 +782,9 @@ string ofTemplateMacos::getFolderUUID(const fs::path & folder, fs::path base) {
 		return folderUUID[fullPathFolder];
 	} else {
 		// in this case it is not found, so it creates UUID for the entire path
-		vector<fs::path> folders = std::vector(folder.begin(), folder.end());
-		string lastFolderUUID = folderUUID[""]; // root folder uuid
-		string lastFolder = "";
+		std::vector<fs::path> folders = std::vector(folder.begin(), folder.end());
+		std::string lastFolderUUID = folderUUID[""]; // root folder uuid
+		std::string lastFolder = "";
 
 		if (folders.size()) {
 			// Iterating every folder from full path

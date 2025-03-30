@@ -132,7 +132,7 @@ unzipCore() {
 }
 
 LIBADDONS=(
-	"assimp:ofxAssimpModelLoader"
+	# "assimp:ofxAssimpModelLoader"
 	"assimp:ofxAssimp"
     "libusb:ofxKinect"
     "libxml2:ofxSvg"

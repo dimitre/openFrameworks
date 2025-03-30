@@ -3,20 +3,18 @@
 #include <iostream> // cout
 #include <map>
 #include <vector>
-
 #include <filesystem>
 namespace fs = std::filesystem;
-
 #include <yaml-cpp/yaml.h>
 
 // static constexpr std::string_view VERSION = "ofGen v0.4";
 using std::cout;
 using std::endl;
-using std::string;
-using std::vector;
+// using std::string;
+// using std::vector;
 
 static inline std::string getPGVersion() {
-	return "ofGen v0.3.1";
+	return "ofGen v0.3.2";
 }
 
 inline std::string colorText(const std::string & s, int color) {
@@ -36,7 +34,7 @@ const std::string sign = colorText(R"(
 ▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
 ▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
 Project Generator for OpenFrameworks (OFWorks)
-                Prototype v0.3.1⚡️
+                Prototype v0.3.2⚡️
 )",
 							 91)
 
@@ -194,7 +192,7 @@ templates : zed,macos
 */
 		if (argc > 1) {
 			for (int a = 1; a < argc; a++) {
-				string param = argv[a];
+				std::string param = argv[a];
 				std::vector<std::string> parameters = ofSplitString(param, "=");
 				if (parameters.size() == 2) {
 					parametersMap[parameters[0]] = parameters[1];
@@ -299,8 +297,8 @@ ofGen templates=zed,macos,make addons=ofxMidi,ofxOpencv ofpath=../../.. path=/Vo
 	YAML::Node config;
 	void import();
 	bool loadYML();
-	vector<string> nodeToStrings(const string & index);
-	vector<fs::path> nodeToPaths(const string & index);
+	std::vector<std::string> nodeToStrings(const std::string & index);
+	std::vector<fs::path> nodeToPaths(const std::string & index);
 	// void scanFolderRecursive(const fs::path & path);
 };
 // conf

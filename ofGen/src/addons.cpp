@@ -2,16 +2,7 @@
 
 #include "addons.h"
 #include "templates.h"
-
 #include <filesystem>
-
-// #include <fstream>
-// #include <iostream>
-
-// using std::cout;
-// using std::endl;
-// using std::string;
-// using std::vector;
 
 void scanFolder(const fs::path & path,
 	std::map<std::string, std::vector<fs::path>> & filesMap,
@@ -346,8 +337,8 @@ void ofProject::build() {
 	}
 }
 
-void gatherProjectInfo() {
-	// alert("gatherProjectInfo", 92);
+void buildProject() {
+	// alert("buildProject", 92);
 	ofProject project;
 
 	bool hasYml = conf.loadYML();

@@ -1,9 +1,5 @@
-// #include "functions.h"
 #include "utils.h"
-// extern genConfig conf;
-
 #include "addons.h"
-
 #include <chrono>
 
 int main(const int argc, const char * argv[]) {
@@ -11,49 +7,47 @@ int main(const int argc, const char * argv[]) {
 
 	std::cout << sign << std::endl; // HEADER
 	conf.parseParameters(argc, argv);
-
 	bool build = true;
 
-	if (conf.singleParameter == "colors") {
-		testColors();
+	if (!empty(conf.singleParameter)) {
 		build = false;
+
+		// First parameters without bulding project.
+		if (conf.singleParameter == "colors") {
+			testColors();
+		} else if (conf.singleParameter == "import") {
+			conf.import();
+		} else if (conf.singleParameter == "help") {
+			conf.help();
+		}
+		// Now building projects
+		else if (conf.singleParameter == "open") {
+			buildProject();
+			conf.open();
+		} else if (conf.singleParameter == "build") {
+			buildProject();
+			conf.build();
+		} else if (conf.singleParameter == "buildrun") {
+			buildProject();
+			conf.build();
+			conf.run();
+		} else {
+			alert("exiting: invalid parameter " + conf.singleParameter, 95);
+			exit(1);
+		}
 	}
-
-	else if (conf.singleParameter == "import") {
-		conf.import();
-		build = false;
-	}
-
-	else if (conf.singleParameter == "help") {
-		conf.help();
-		build = false;
-	}
-
-
 	if (build) {
-		gatherProjectInfo();
+		buildProject();
 
 		// if (!conf.isValidOfPath()) {
 		// 	alert("OF not found in default path " + conf.ofPath.string());
 		// 	conf.help();
 		// } else {
 		// 	alert("of path OK, proceeding");
-		// 	gatherProjectInfo();
+		// 	buildProject();
 		// }
-
-		if (conf.singleParameter == "open") {
-			conf.open();
-		}
-		if (conf.singleParameter == "build") {
-			conf.build();
-		}
-
-		else if (conf.singleParameter == "buildrun") {
-    		conf.build();
-            conf.run();
-		}
 	}
-
+	// }
 
 	std::cout << std::endl;
 	alert(getPGVersion(), 92);

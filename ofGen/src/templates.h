@@ -7,11 +7,11 @@
 
 // using std::cout;
 // using std::endl;
-// using std::string;
-// using std::vector;
+using std::string;
+using std::vector;
 struct ofAddon;
 
-std::string generateUUID(const string & input);
+std::string generateUUID(const std::string & input);
 
 struct copyTemplateFile {
 public:
@@ -131,7 +131,7 @@ public:
 	};
 
 	void addSrc(const fs::path & srcFile, const fs::path & folder) override;
-	string addFile(const fs::path & path, const fs::path & folder, const fileProperties & fp);
+	std::string addFile(const fs::path & path, const fs::path & folder, const fileProperties & fp);
 
 	// void build() override {};
 
@@ -140,19 +140,19 @@ public:
 
 	std::string getFolderUUID(const fs::path & folder, fs::path base);
 
-	std::vector<string> commands;
+	std::vector<std::string> commands;
 	bool debugCommands = false;
 
-	void addCommand(const string & command) {
+	void addCommand(const std::string & command) {
 		if (debugCommands) {
 			alert(command, 31);
 		}
 		commands.emplace_back(command);
 	}
 
-	fs::path getPathTo(fs::path path, string limit) {
+	fs::path getPathTo(fs::path path, std::string limit) {
 		fs::path p;
-		vector<fs::path> folders = std::vector(path.begin(), path.end());
+		std::vector<fs::path> folders = std::vector(path.begin(), path.end());
 		for (auto & f : folders) {
 			p /= f;
 			if (f.string() == limit) {
@@ -209,9 +209,9 @@ public:
 		"E4B69B4F0A3A1720003C02F2", //macOS Release SDKROOT macosx
 	};
 
-	std::map<fs::path, string> folderUUID;
+	std::map<fs::path, std::string> folderUUID;
 	// Temporary
-	std::map<string, fs::path> folderFromUUID;
+	std::map<std::string, fs::path> folderFromUUID;
 };
 
 struct ofTemplateMake : public ofTemplate {

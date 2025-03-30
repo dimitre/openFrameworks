@@ -1,19 +1,8 @@
-
-// // #if __has_include(<filesystem>)
-// #include <filesystem>
-// namespace fs = std::filesystem;
-// // #else
-// // 	#include <experimental/filesystem>
-// // 	namespace fs = std::__fs::filesystem;
-// // #endif
-
+#include "utils.h"
 #include <fstream> // ifstream
 #include <iostream> // cout
 #include <regex>
 #include <vector>
-
-// #include "addons.h"
-#include "utils.h"
 
 genConfig conf;
 
@@ -164,7 +153,7 @@ bool genConfig::loadYML() {
 		config = YAML::LoadFile(configFile);
 		if (config["ofpath"]) { // use ofpath only if the key exists.
 			auto ofPathYML = config["ofpath"];
-			ofPath = ofPathYML.as<string>();
+			ofPath = ofPathYML.as<std::string>();
 		}
 
 		conf.addonsNames = nodeToStrings("addons");
@@ -218,23 +207,23 @@ bool genConfig::loadYML() {
 	return true;
 }
 
-std::vector<string> genConfig::nodeToStrings(const string & index) {
-	std::vector<string> out;
+std::vector<std::string> genConfig::nodeToStrings(const std::string & index) {
+	std::vector<std::string> out;
 	if (config[index]) {
 		auto items = config[index];
 		for (std::size_t i = 0; i < items.size(); i++) {
-			out.emplace_back(items[i].as<string>());
+			out.emplace_back(items[i].as<std::string>());
 		}
 	}
 	return out;
 }
 
-std::vector<fs::path> genConfig::nodeToPaths(const string & index) {
+std::vector<fs::path> genConfig::nodeToPaths(const std::string & index) {
 	std::vector<fs::path> out;
 	if (config[index]) {
 		auto items = config[index];
 		for (std::size_t i = 0; i < items.size(); i++) {
-			out.emplace_back(items[i].as<string>());
+			out.emplace_back(items[i].as<std::string>());
 		}
 	}
 	return out;
