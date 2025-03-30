@@ -1,4 +1,4 @@
-ofxAssimpModelLoader
+ofxAssimp
 ofxGui
 ofxKinect
 ofxNetwork

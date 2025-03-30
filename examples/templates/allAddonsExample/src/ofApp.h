@@ -4,7 +4,7 @@
 #include "ofxNetwork.h"
 #include "ofxOsc.h"
 #include "ofxXmlSettings.h"
-#include "ofxAssimpModelLoader.h"
+#include "ofxAssimp.h"
 #include "ofxThreadedImageLoader.h"
 #include "ofxKinect.h"
 #include "ofxGui.h"
@@ -40,7 +40,7 @@ class ofApp : public ofBaseApp{
 		ofxTCPServer server;
 		ofxOscSender osc_sender;
 		ofxXmlSettings settings;
-		ofxAssimpModelLoader betterModelLoader;
+		ofxAssimp::Scene betterModelLoader;
 		ofxThreadedImageLoader threadedLoader;
 		ofxKinect kinect;
 		ofxPanel gui;
