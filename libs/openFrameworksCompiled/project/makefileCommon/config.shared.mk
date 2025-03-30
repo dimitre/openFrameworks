@@ -204,9 +204,9 @@ endif
 
 # $(info OF_LIBS_OF_COMPILED_PROJECT_PATH $(OF_LIBS_OF_COMPILED_PROJECT_PATH))
 # $(info PLATFORM_LIB_SUBPATH $(PLATFORM_LIB_SUBPATH))
-$(info =========)
-$(info $(OF_LIBS_OF_COMPILED_PROJECT_PATH)/$(PLATFORM_LIB_SUBPATH))
-$(info =========)
+# $(info =========)
+# $(info $(OF_LIBS_OF_COMPILED_PROJECT_PATH)/$(PLATFORM_LIB_SUBPATH))
+# $(info =========)
 
 ifeq ($(wildcard $(OF_LIBS_OF_COMPILED_PROJECT_PATH)/$(PLATFORM_LIB_SUBPATH)),)
 $(error This package doesn't support your platform, $(OF_LIBS_OF_COMPILED_PROJECT_PATH) probably you downloaded the wrong package?)

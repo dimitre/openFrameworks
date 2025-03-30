@@ -22,34 +22,43 @@ NC='\033[0m' # No Color
 
 function buildExample() {
     echo "##[group]Building $1"
-    cp scripts/templates/make/{Makefile,config.make} examples/templates/$1/
+    # cp scripts/templates/make/{Makefile,config.make} examples/templates/$1/
     # cp scripts/templates/macos/config.make examples/templates/$1/
-    make -j -C examples/templates/$1/
+    cd examples/templates/$1
+    ofGen -templates=make
+    make -j Debug
     echo "##[endgroup]"
+    cd ../../..
 }
 
 buildExample emptyExample
-# buildExample allAddonsExample
+buildExample allAddonsExample
 
-echo "##[group]Running unit tests"
+# echo "##[group]Running unit tests"
+echo "Running unit tests"
+
 cd tests
 for group in *; do
     if [ -d $group ]; then
         echo "##[group] $group"
         for test in $group/*; do
             if [ -d $test ]; then
+
                 cd $test
-                cp ../../../scripts/templates/make/{Makefile,config.make} .
-                make -j2 Debug
+                echo $test
+                ofGen -templates=make
+                # cp ../../../scripts/templates/make/{Makefile,config.make} .
+                make -j Debug
                 make RunDebug
 				errorcode=$?
 				if [[ $errorcode -ne 0 ]]; then
 					exit $errorcode
 				fi
-                # cd $ROOT/tests
+
+				cd ../..
             fi
         done
         echo "##[endgroup]"
     fi
 done
-echo "##[endgroup]"
+# echo "##[endgroup]"

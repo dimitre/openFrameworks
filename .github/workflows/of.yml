@@ -49,11 +49,16 @@ jobs:
           ./compile.sh
           ./install.sh
 
-      - name: XCodebuild
-        # run: ./scripts/macos/libs.sh
+      - name: XCodebuild Core
         run: |
           cd libs/openFrameworksCompiled/project/macos
           xcodebuild -arch arm64
+
+      - name: Make OF Core
+        # run: ./scripts/macos/libs.sh
+        run: |
+          cd libs/openFrameworksCompiled/project/
+          make -j Debug
 
       - name: All Addons Example
         run: |
@@ -61,21 +66,5 @@ jobs:
           ofGen
           xcodebuild -arch arm64
 
-      - name: Make OF Core
-        # run: ./scripts/macos/libs.sh
-        run: |
-          cd libs/openFrameworksCompiled/project/
-          make -j
-
       - name: Tests
         run: ./scripts/macos/tests.sh
-#       - name: Build
-#         run: if [ ${{ matrix.cfg.opt }} = "xcode" ]; then
-#           scripts/ci/${{ matrix.cfg.target }}/build.sh ${{ matrix.cfg.opt }};
-#           else
-#           scripts/ci/${{ matrix.cfg.target }}/run_tests.sh;
-#           fi
-#         env:
-#           DEVELOPER_DIR: "/Applications/Xcode.app/Contents/Developer"
-#           SDKROOT: "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
-# # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
