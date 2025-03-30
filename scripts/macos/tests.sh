@@ -25,7 +25,7 @@ function buildExample() {
     # cp scripts/templates/make/{Makefile,config.make} examples/templates/$1/
     # cp scripts/templates/macos/config.make examples/templates/$1/
     cd examples/templates/$1
-    ofGen -templates=make
+    ofGen templates=make
     make -j Debug
     echo "##[endgroup]"
     cd ../../..
@@ -46,7 +46,7 @@ for group in *; do
 
                 cd $test
                 echo $test
-                ofGen -templates=make
+                ofGen templates=make
                 # cp ../../../scripts/templates/make/{Makefile,config.make} .
                 make -j Debug
                 make RunDebug
