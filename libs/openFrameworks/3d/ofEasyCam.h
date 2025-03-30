@@ -217,9 +217,9 @@ private:
 	float sensitivityScroll = 1.0f;
 
 	/// \brief The previous mouse position.
-	glm::vec2 prevMouse;
+	glm::ivec2 prevMouse;
 	/// \brief The mouse velocity (mouse position delta).
-	glm::vec2 mouseVel;
+	glm::ivec2 mouseVel;
 
 	void updateRotation();
 	void updateTranslation();
@@ -227,7 +227,7 @@ private:
 	void mousePressed(ofMouseEventArgs & mouse);
 	void mouseReleased(ofMouseEventArgs & mouse);
 	void mouseScrolled(ofMouseEventArgs & mouse);
-	void updateMouse(const glm::vec2 & mouse);
+	void updateMouse(const glm::ivec2 & mouse);
 	/// \brief Returns the up axis vector;
 	glm::vec3 up() const;
 
@@ -249,7 +249,7 @@ private:
 	glm::vec3 lastPressAxisZ;
 	glm::vec3 lastPressPosition;
 	glm::quat lastPressOrientation;
-	glm::vec2 lastPressMouse;
+	glm::ivec2 lastPressMouse { 0, 0 };
 
 	/// \}
 
@@ -266,7 +266,7 @@ private:
 	bool doInertia = false;
 	glm::vec3 upAxis { 0, 1, 0 };
 
-	glm::vec2 mouseAtScroll;
+	glm::ivec2 mouseAtScroll;
 
 	TransformType currentTransformType;
 	/// \brief This struct holds the combination of mouse button and key press that will trigger a specific interaction.

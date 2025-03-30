@@ -175,7 +175,7 @@ public:
 	}
 };
 
-class ofMouseEventArgs : public ofEventArgs, public glm::vec2 {
+class ofMouseEventArgs : public ofEventArgs, public glm::ivec2 {
 public:
 	enum Type {
 		Pressed,
@@ -194,14 +194,14 @@ public:
 		, scrollY(0.f) { }
 
 	ofMouseEventArgs(Type type, float x, float y, int button)
-		: glm::vec2(x, y)
+		: glm::ivec2(x, y)
 		, type(type)
 		, button(button)
 		, scrollX(0.f)
 		, scrollY(0.f) { }
 
 	ofMouseEventArgs(Type type, float x, float y, int button, int modifiers)
-		: glm::vec2(x, y)
+		: glm::ivec2(x, y)
 		, type(type)
 		, button(button)
 		, scrollX(0.f)
@@ -209,7 +209,7 @@ public:
 		, modifiers(modifiers) { }
 
 	ofMouseEventArgs(Type type, float x, float y)
-		: glm::vec2(x, y)
+		: glm::ivec2(x, y)
 		, type(type)
 		, button(0)
 		, scrollX(0.f)
@@ -227,7 +227,7 @@ public:
 	}
 };
 
-class ofTouchEventArgs : public ofEventArgs, public glm::vec2 {
+class ofTouchEventArgs : public ofEventArgs, public glm::ivec2 {
 public:
 	enum Type {
 		down,
@@ -255,7 +255,7 @@ public:
 	}
 
 	ofTouchEventArgs(Type type, float x, float y, int id)
-		: glm::vec2(x, y)
+	: glm::ivec2{x, y}
 		, type(type)
 		, id(id)
 		, time(0)

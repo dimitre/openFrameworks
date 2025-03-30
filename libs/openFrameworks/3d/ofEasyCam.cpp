@@ -383,7 +383,8 @@ void ofEasyCam::mousePressed(ofMouseEventArgs & mouse){
 			}
 		}
 		if(currentTransformType == TRANSFORM_ROTATE){
-			bInsideArcball = glm::length(mouse - glm::vec2(area.getCenter())) < std::min(area.width/2, area.height/2);
+			bInsideArcball = glm::length
+			(glm::vec3(mouse, 0.0f) - area.getCenter()) < std::min(area.width/2, area.height/2);
 		}
 		bApplyInertia = false;
 	}
@@ -434,7 +435,7 @@ void ofEasyCam::mouseScrolled(ofMouseEventArgs & mouse){
 }
 
 //----------------------------------------
-void ofEasyCam::updateMouse(const glm::vec2 & mouse){
+void ofEasyCam::updateMouse(const glm::ivec2 & mouse){
 	ofRectangle area = getControlArea();
 	int vFlip =(isVFlipped()?-1:1);
 
@@ -447,9 +448,9 @@ void ofEasyCam::updateMouse(const glm::vec2 & mouse){
 				rot.x = vFlip * -mouseVel.y * sensitivityRot.x * glm::pi<float>() / std::min(area.width, area.height);
 				rot.y = -mouseVel.x * sensitivityRot.y * glm::pi<float>() / std::min(area.width, area.height);
 			}else{
-				glm::vec2 center(area.getCenter());
-				rot.z = sensitivityRot.z * -vFlip * glm::orientedAngle(glm::normalize(mouse - center),
-																	   glm::normalize(lastPressMouse - center));
+				glm::ivec2 center(area.getCenter());
+				rot.z = sensitivityRot.z * -vFlip * glm::orientedAngle(glm::normalize(glm::vec2(mouse - center)),
+																	   glm::normalize(glm::vec2(lastPressMouse - center)));
 			}
 			break;
 		case TRANSFORM_TRANSLATE_XY:

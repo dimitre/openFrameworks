@@ -2181,9 +2181,9 @@ void ofGLProgrammableRenderer::drawString(string textString, float x, float y, f
 		mutThis->loadIdentityMatrix();
 		mutThis->matrixMode(OF_MATRIX_MODELVIEW);
 
-		modelView = glm::translate(modelView, glm::vec3(-1, -1, 0));
-		modelView = glm::scale(modelView, glm::vec3(2 / rViewport.width, 2 / rViewport.height, 1));
-		modelView = glm::translate(modelView, glm::vec3(x, y, 0));
+		modelView = glm::translate(modelView, glm::vec3(-1.0f, -1.0f, 0.0f));
+		modelView = glm::scale(modelView, glm::vec3(2.0f / rViewport.width, 2.0f / rViewport.height, 1.0f));
+		modelView = glm::translate(modelView, glm::vec3(x, y, 0.0f));
 		mutThis->loadMatrix(modelView);
 		break;
 
@@ -2200,9 +2200,9 @@ void ofGLProgrammableRenderer::drawString(string textString, float x, float y, f
 		mutThis->matrixMode(OF_MATRIX_MODELVIEW);
 		mutThis->pushMatrix();
 
-		modelView = glm::translate(modelView, glm::vec3(-1, -1, 0));
-		modelView = glm::scale(modelView, glm::vec3(2 / rViewport.width, 2 / rViewport.height, 1));
-		modelView = glm::translate(modelView, glm::vec3(x, y, 0));
+		modelView = glm::translate(modelView, glm::vec3(-1.0f, -1.0f, 0.0f));
+		modelView = glm::scale(modelView, glm::vec3(2.0f / rViewport.width, 2.0f / rViewport.height, 1.0f));
+		modelView = glm::translate(modelView, glm::vec3(x, y, 0.0f));
 		mutThis->loadMatrix(modelView);
 		break;
 

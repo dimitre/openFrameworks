@@ -50,7 +50,7 @@ public:
 	std::string windowName { "main" };
 	ofWindowMode windowMode = OF_WINDOW;
 
-	bool highResolutionCapable = false;
+	bool highResolutionCapable = true;
 
 //	void setRect(const ofRectangle & rect) {
 //		setPosition(rect.getPosition());

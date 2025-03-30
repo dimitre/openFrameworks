@@ -472,7 +472,8 @@ const ofTexture & ofBitmapFont::getTexture() const{
 	if(!texture.isAllocated()){
 		ofBitmapFont::init();
 		texture.allocate(pixels,false);
-		texture.setTextureMinMagFilter(GL_LINEAR,GL_NEAREST);
+//		texture.setTextureMinMagFilter(GL_LINEAR,GL_NEAREST);
+		texture.setTextureMinMagFilter(GL_NEAREST, GL_NEAREST);
 	}
 	return texture;
 }
