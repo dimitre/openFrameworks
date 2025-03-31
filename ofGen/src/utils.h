@@ -102,7 +102,11 @@ inline static std::string getPlatformString() {
 
 	struct utsname sysinfo;
 	uname(&sysinfo);
-	return std::string(sysinfo.sysname) + std::string(sysinfo.machine);
+	std::string sysarch { "linux" + std::string(sysinfo.machine) };
+	if (sysarch == "linuxx86_64") {
+	   sysarch = "linux64";
+	}
+	return sysarch;
 
 	// if (
 	// 	arch == "armv6l" || arch == "armv7l" || arch == "aarch64") {
