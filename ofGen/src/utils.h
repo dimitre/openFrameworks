@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef __linux__
+    #include <sys/utsname.h>
+#endif
+
 #include <iostream> // cout
 #include <map>
 #include <vector>
@@ -94,8 +98,8 @@ inline static std::string getPlatformString() {
 #ifdef __linux__
 	// std::string arch = execute_popen("uname -m");
 	// std::string arch = popen("uname -m");
-	#include <iostream>
-	#include <sys/utsname.h>
+	// #include <iostream>
+
 	struct utsname sysinfo;
 	uname(&sysinfo);
 	return sysinfo.machine;
