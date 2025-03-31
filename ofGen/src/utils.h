@@ -93,7 +93,7 @@ std::vector<std::string> ofSplitString(const std::string & s, const std::string 
 inline static std::string getPlatformString() {
 #ifdef __linux__
 	// std::string arch = execute_popen("uname -m");
-	std::string arch = popen("uname -m");
+	// std::string arch = popen("uname -m");
 	#include <iostream>
 	#include <sys/utsname.h>
 	struct utsname sysinfo;
