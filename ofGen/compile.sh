@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/sh
 cd "$(dirname "$0")"
 
 COLOR='\033[0;32m'
