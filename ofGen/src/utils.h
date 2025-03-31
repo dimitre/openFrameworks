@@ -94,12 +94,17 @@ inline static std::string getPlatformString() {
 #ifdef __linux__
 	// std::string arch = execute_popen("uname -m");
 	std::string arch = popen("uname -m");
-	if (
-		arch == "armv6l" || arch == "armv7l" || arch == "aarch64") {
-		return "linux" + arch;
-	} else {
-		return "linux64";
-	}
+	#include <iostream>
+	#include <sys/utsname.h>
+	struct utsname sysinfo;
+	uname(&sysinfo);
+	return sysinfo.machine;
+	// if (
+	// 	arch == "armv6l" || arch == "armv7l" || arch == "aarch64") {
+	// 	return "linux" + arch;
+	// } else {
+	// 	return "linux64";
+	// }
 #elif defined(__WIN32__)
 	#if defined(__MINGW32__) || defined(__MINGW64__)
 	return "msys2";
