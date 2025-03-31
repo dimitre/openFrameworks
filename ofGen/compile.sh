@@ -42,15 +42,15 @@ section "Will compile now"
 # else
     # echo "GITHUB_REPOSITORY, compiling oldstyle"
 
-    CXX=c++
-    LINKEROPTIONS=
-    if [[ ${PWD} == "/Volumes/tool/ofw/ofGen" ]]; then
-        CXX=/opt/homebrew/opt/llvm/bin/clang++
-        LINKEROPTIONS=-fuse-ld=lld
-    fi
+CXX=c++
+LINKEROPTIONS=""
+if [[ ${PWD} == "/Volumes/tool/ofw/ofGen" ]]; then
+    CXX=/opt/homebrew/opt/llvm/bin/clang++
+    LINKEROPTIONS=-fuse-ld=lld
+fi
 
-    time $CXX -c src/*.cpp src/uuidxx/src/*.cpp `pkg-config --cflags yaml-cpp` -Isrc/uuidxx/src -I../libs/macos/include/ -Wfatal-errors -std=c++20 && \
-    time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src `pkg-config --libs yaml-cpp` -o ofGen
+time $CXX -c src/*.cpp src/uuidxx/src/*.cpp `pkg-config --cflags yaml-cpp` -Isrc/uuidxx/src -I../libs/macos/include/ -Wfatal-errors -std=c++20 && \
+time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src `pkg-config --libs yaml-cpp` -o ofGen
 # fi
 
 # if [[ -n $GITHUB_REPOSITORY ]]; then
