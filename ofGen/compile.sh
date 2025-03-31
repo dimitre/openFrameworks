@@ -9,18 +9,33 @@ section() {
     printf "💻${COLOR} ${@} ${NC}\n\r"
 }
 
+checkPackage() {
+    dpkg --status $1 &> /dev/null
+    if [ $? -eq 0 ]; then
+    echo "$1: Already installed"
+    else
+    sudo apt-get install -y $1
+    fi
+}
+
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    checkPackage libyaml-cpp-dev
+        # ...
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    if brew ls --versions yaml-cpp > /dev/null; then
+	echo yaml-cpp already installed
+    else
+	echo installing yaml-cpp
+	brew install yaml-cpp
+      # The package is not installed
+    fi
+fi
 
 section "OF Vision, compiling ofGen"
 
 # pwd
 # MACOS only
-# if brew ls --versions yaml-cpp > /dev/null; then
-# 	echo yaml-cpp already installed
-# else
-# 	echo installing yaml-cpp
-# 	brew install yaml-cpp
-#   # The package is not installed
-# fi
+
 
 # if brew ls --versions nlohmann-json > /dev/null; then
 # 	echo nlohmann-json already installed
