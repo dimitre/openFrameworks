@@ -30,6 +30,10 @@ section "OF Vision, compiling ofGen"
 #   # The package is not installed
 # fi
 
+# UBUNTU
+# sudo apt install libyaml-cpp-dev
+
+
 section "Will compile now"
 
 # if [[ -z $GITHUB_REPOSITORY ]]; then

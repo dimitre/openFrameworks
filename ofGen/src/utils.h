@@ -92,7 +92,7 @@ std::vector<std::string> ofSplitString(const std::string & s, const std::string 
 
 inline static std::string getPlatformString() {
 #ifdef __linux__
-	string arch = execute_popen("uname -m");
+	std::string arch = execute_popen("uname -m");
 	if (
 		arch == "armv6l" || arch == "armv7l" || arch == "aarch64") {
 		return "linux" + arch;
