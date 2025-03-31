@@ -40,7 +40,7 @@ section "Will compile now"
 
     CXX=c++
     LINKEROPTIONS=
-    if [[ ${PWD} == "/Volumes/tool/ofw/ofGen" ]] then
+    if [[ ${PWD} == "/Volumes/tool/ofw/ofGen" ]]; then
         CXX=/opt/homebrew/opt/llvm/bin/clang++
         LINKEROPTIONS=-fuse-ld=lld
     fi
