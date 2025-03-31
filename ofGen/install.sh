@@ -9,7 +9,7 @@ section() {
     printf "💿${COLOR} ${@} ${NC}\n\r"
 }
 
-section "OpenFrameworks ofGen (tool to generate projects)"
+section "OFWorks ofGen (tool to generate projects)"
 echo This will install a symlink in /usr/local/bin/ so ofGen can be called from any directory.
 echo If you need to uninstall in the future you can use the $ofw/ofGen/uninstall.sh script
 echo It is recommended to install, so you can just invoke ofGen from your project folder

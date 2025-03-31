@@ -1,5 +1,7 @@
 
 
+#include <string>
+
 bool checkCorrectVariable(const std::string & variable, const std::string & state) {
 	// if (state == "meta") {
 	// 	return std::find(AddonMetaVariables.begin(),

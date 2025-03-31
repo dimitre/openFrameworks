@@ -337,7 +337,7 @@ void ofProject::build() {
 	}
 }
 
-void buildProject() {
+bool buildProject() {
 	// alert("buildProject", 92);
 	ofProject project;
 
@@ -356,7 +356,7 @@ void buildProject() {
 	if (!conf.isValidOfPath()) {
 		alert("OF not found in default path " + conf.ofPath.string());
 		conf.help();
-		return;
+		return false;
 	} else {
 		alert("of path OK, proceeding");
 	}
@@ -377,7 +377,8 @@ void buildProject() {
 			project.templates.emplace_back(conf.templates.back());
 		} else {
 			alert("invalid template name : " + t + ", exiting", 95);
-			std::exit(1);
+			return false;
+			// std::exit(1);
 		}
 
 		if (empty(conf.openCommand) && !empty(conf.templates.back()->openCommand)) {
@@ -391,7 +392,6 @@ void buildProject() {
 		if (empty(conf.runCommand) && !empty(conf.templates.back()->runCommand)) {
 			conf.runCommand = conf.templates.back()->runCommand;
 		}
-
 	}
 
 	// load templates, show info of each template
@@ -413,6 +413,7 @@ void buildProject() {
 			fs::copy(from, to, fs::copy_options::recursive | fs::copy_options::update_existing);
 		} catch (fs::filesystem_error & e) {
 			std::cerr << "error copying template file " << from << " : " << to << std::endl;
+			return false;
 		}
 	}
 	// exit(1);
@@ -497,4 +498,6 @@ void buildProject() {
 
 	// pass files to projects.
 	project.build();
+
+	return true;
 }

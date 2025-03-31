@@ -60,6 +60,6 @@ void scanFolder(const fs::path & path,
 
 // void parseAddon( const fs::path & addonPath ) {
 //
-void buildProject();
+bool buildProject();
 void parseConfigAllAddons();
 void createTemplates();

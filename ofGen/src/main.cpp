@@ -7,8 +7,8 @@ int main(const int argc, const char * argv[]) {
 
 	std::cout << sign << std::endl; // HEADER
 	conf.parseParameters(argc, argv);
-	bool build = true;
 
+	bool build = true;
 	if (!empty(conf.singleParameter)) {
 		build = false;
 
@@ -22,13 +22,13 @@ int main(const int argc, const char * argv[]) {
 		}
 		// Now building projects
 		else if (conf.singleParameter == "open") {
-			buildProject();
+			build = buildProject();
 			conf.open();
 		} else if (conf.singleParameter == "build") {
-			buildProject();
+			build = buildProject();
 			conf.build();
 		} else if (conf.singleParameter == "buildrun") {
-			buildProject();
+			build = buildProject();
 			conf.build();
 			conf.run();
 		} else {
@@ -37,7 +37,7 @@ int main(const int argc, const char * argv[]) {
 		}
 	}
 	if (build) {
-		buildProject();
+		build = buildProject();
 
 		// if (!conf.isValidOfPath()) {
 		// 	alert("OF not found in default path " + conf.ofPath.string());

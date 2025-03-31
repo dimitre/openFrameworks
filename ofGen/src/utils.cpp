@@ -143,6 +143,7 @@ void genConfig::import() {
 	}
 }
 
+
 bool genConfig::loadYML() {
 	fs::path configFile { "of.yml" };
 	if (!fs::exists(configFile)) {
