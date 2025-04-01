@@ -1,5 +1,6 @@
 #include "ofColor.h"
 #include <limits>
+#include <cmath>
 
 
 template<typename PixelType> const ofColor_<PixelType> ofColor_<PixelType>::gray(limit() / 2, limit() / 2, limit() / 2);
@@ -355,7 +356,7 @@ void ofColor_<PixelType>::getHsb(float& hue,
                                  float& saturation,
                                  float& brightness) const {
 	float max = getBrightness();
-	
+
 	float min = r;
 	if(g < min) {
 		min = g;
@@ -363,14 +364,14 @@ void ofColor_<PixelType>::getHsb(float& hue,
 	if(b < min) {
 		min = b;
 	}
-	
+
 	if(max == min) { // grays
 		hue = 0.f;
 		saturation = 0.f;
 		brightness = max;
 		return;
 	}
-	
+
 	float hueSixth;
 	if(r == max) {
 		hueSixth = (g - b) / (max - min);
@@ -466,7 +467,7 @@ void ofColor_<PixelType>::setHsb(float hue, float saturation, float brightness, 
 				break;
 		}
 	}
-    
+
     // finally assign the alpha
     a = alpha;
 }
@@ -636,7 +637,7 @@ const PixelType & ofColor_<PixelType>::operator [] (std::size_t n) const{
 			return g;
 		case 2:
 			return b;
-		case 3: 
+		case 3:
 			return a;
 		default:
 			return r;
