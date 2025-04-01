@@ -345,15 +345,21 @@ bool buildProject() {
 	if (hasYml) {
 		alert("of.yml found, building from there", 95);
 	} else {
-		alert("of.yml not found, building from addons.make", 95);
-
+		alert("building from addons.make", 95);
 		fs::path addonsListFile { conf.projectPath / "addons.make" };
 		if (fs::exists(addonsListFile)) {
 			conf.addonsNames = textToVector(addonsListFile);
+		} else {
+			alert("no addons.make found", 95);
 		}
 
 		alert("No templates found, ofgen will deduce from platform", 95);
-		conf.templateNames.emplace_back( getPlatformString() );
+#ifdef __linux__
+		conf.templateNames.emplace_back("zed");
+		conf.templateNames.emplace_back("make");
+#elif defined(__APPLE_CC__)
+		conf.templateNames.emplace_back("macos");
+#endif
 	}
 
 	if (!conf.isValidOfPath()) {
