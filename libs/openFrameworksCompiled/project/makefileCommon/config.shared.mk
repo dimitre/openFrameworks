@@ -209,7 +209,7 @@ endif
 # $(info =========)
 
 ifeq ($(wildcard $(OF_LIBS_OF_COMPILED_PROJECT_PATH)/$(PLATFORM_LIB_SUBPATH)),)
-$(error This package doesn't support your platform, $(OF_LIBS_OF_COMPILED_PROJECT_PATH) probably you downloaded the wrong package?)
+$(error This package doesn't support your platform, $(PLATFORM_LIB_SUBPATH) probably you downloaded the wrong package?)
 endif
 
 # generate a list of valid core platform variants from the files in the platform makefiles directory
