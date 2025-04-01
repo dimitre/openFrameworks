@@ -351,6 +351,9 @@ bool buildProject() {
 		if (fs::exists(addonsListFile)) {
 			conf.addonsNames = textToVector(addonsListFile);
 		}
+
+		alert("No templates found, ofgen will deduce from platform", 95);
+		conf.templateNames.emplace_back( getPlatformString() );
 	}
 
 	if (!conf.isValidOfPath()) {

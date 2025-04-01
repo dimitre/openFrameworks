@@ -1,5 +1,5 @@
-#include "utils.h"
 #include "addons.h"
+#include "utils.h"
 #include <chrono>
 
 int main(const int argc, const char * argv[]) {
@@ -22,41 +22,37 @@ int main(const int argc, const char * argv[]) {
 		}
 		// Now building projects
 		else if (conf.singleParameter == "open") {
-			build = buildProject();
+			buildProject();
 			conf.open();
 		} else if (conf.singleParameter == "build") {
-			build = buildProject();
+			buildProject();
 			conf.build();
 		} else if (conf.singleParameter == "buildrun") {
-			build = buildProject();
+			buildProject();
 			conf.build();
 			conf.run();
 		} else {
 			alert("exiting: invalid parameter " + conf.singleParameter, 95);
 			exit(1);
 		}
+	} else {
+		buildProject();
+		auto t2 = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> ms_double = t2 - t1;
+		std::cout << "" << ms_double.count() << " seconds" << std::endl;
 	}
-	if (build) {
-		build = buildProject();
-
-		// if (!conf.isValidOfPath()) {
-		// 	alert("OF not found in default path " + conf.ofPath.string());
-		// 	conf.help();
-		// } else {
-		// 	alert("of path OK, proceeding");
-		// 	buildProject();
-		// }
-	}
+	// if (build) {
+	// 	build = buildProject();
 	// }
 
 	std::cout << std::endl;
 	alert(getPGVersion(), 92);
 
-	if (build) {
-		auto t2 = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<double> ms_double = t2 - t1;
-		std::cout << "" << ms_double.count() << " seconds" << std::endl;
-	}
-	std::cout << std::endl;
+	// if (build) {
+	// 	auto t2 = std::chrono::high_resolution_clock::now();
+	// 	std::chrono::duration<double> ms_double = t2 - t1;
+	// 	std::cout << "" << ms_double.count() << " seconds" << std::endl;
+	// }
+	// std::cout << std::endl;
 	return 0;
 }

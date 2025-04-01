@@ -170,7 +170,7 @@ struct genConfig {
 	// 	{ "../apps/werkApps/Pulsar" }
 	// };
 	// std::vector<std::string> templateNames { "macos", "zed", "make" }; //"vscode",
-	std::vector<std::string> templateNames { "macos" }; //"vscode",
+	std::vector<std::string> templateNames; //"vscode",
 	// std::vector<std::string> templateNames; //"vscode",
 
 	// FIXME: implement platforms in addons from here.
@@ -198,7 +198,7 @@ struct genConfig {
 	}
 
 	void parseParameters(const int argc, const char * argv[]) {
-        alert ("platform string " + getPlatformString(), 95);
+        // alert ("platform string " + getPlatformString(), 95);
 		// alert("parseParameters", 92);
 		/*
 addons : ofxMicroUI,ofxTools

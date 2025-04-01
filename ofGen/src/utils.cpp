@@ -143,7 +143,6 @@ void genConfig::import() {
 	}
 }
 
-
 bool genConfig::loadYML() {
 	fs::path configFile { "of.yml" };
 	if (!fs::exists(configFile)) {
@@ -163,12 +162,8 @@ bool genConfig::loadYML() {
 		if (templateNames.size() > 0) {
 			conf.templateNames = templateNames;
 		} else {
-			// FIXME: Remove TEMPORARY
-			auto p = nodeToStrings("platforms");
-			if (p.size() > 0) {
-				alert("No templates found but platforms entry found, getting from there", 95);
-				conf.templateNames = p;
-			}
+			alert("No templates found, ofgen will deduce from platform", 95);
+			conf.templateNames.emplace_back( getPlatformString() );
 		}
 
 		cout << endl;
