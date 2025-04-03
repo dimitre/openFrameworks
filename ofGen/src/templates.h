@@ -127,6 +127,7 @@ public:
 		{ "frameworks", "E7E077E715D3B6510020DFD4" },
 		{ "afterPhase", "928F60851B6710B200E2D791" },
 		{ "buildPhases", "E4C2427710CC5ABF004149E2" },
+		{ "linkBinaryWithLibraries", "E4B69B590A3A1756003C02F2" },
 		{ "", "" },
 	};
 
@@ -201,12 +202,12 @@ public:
 	// 	"E4B69B600A3A1757003C02F2", //Debug
 	// };
 
-	std::string buildConfigs[4] = {
+	std::string buildConfigs[2] = {
 		"E4B69B600A3A1757003C02F2", //macOS Debug
 		"E4B69B610A3A1757003C02F2", //macOS Release
 
-		"E4B69B4E0A3A1720003C02F2", //macOS Debug SDKROOT macosx
-		"E4B69B4F0A3A1720003C02F2", //macOS Release SDKROOT macosx
+		// "E4B69B4E0A3A1720003C02F2", //macOS Debug SDKROOT macosx
+		// "E4B69B4F0A3A1720003C02F2", //macOS Release SDKROOT macosx
 	};
 
 	std::map<fs::path, std::string> folderUUID;

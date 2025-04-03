@@ -1,8 +1,8 @@
 #include "templates.h"
 #include "addons.h"
 #include "uuidxx.h"
-#include <nlohmann/json.hpp>
 #include <fstream> //in utils
+#include <nlohmann/json.hpp>
 
 using nlohmann::json;
 
@@ -179,7 +179,7 @@ std::string ofTemplateMacos::addFile(const fs::path & path, const fs::path & fol
 			fp.addToBuildPhase || fp.codeSignOnCopy || fp.copyFilesBuildPhase || fp.addToBuildResource || fp.addToResources
 			//|| fp.frameworksBuildPhase ~ I've just removed this one, favoring -InFrameworks
 		) {
-			addCommand("# ---- addToBuildPhase " + buildUUID);
+			addCommand("# ---- addFileToBuildUUID " + buildUUID);
 			addCommand("Add :objects:" + buildUUID + ":isa string PBXBuildFile");
 			addCommand("Add :objects:" + buildUUID + ":fileRef string " + UUID);
 		}
@@ -223,22 +223,22 @@ std::string ofTemplateMacos::addFile(const fs::path & path, const fs::path & fol
 			}
 		}
 
-		if (fp.frameworksBuildPhase) { // Link Binary With Libraries
+		if (fp.linkBinaryWithLibraries) { // Link Binary With Libraries
 			auto tempUUID = generateUUID(ofPathToString(path) + "-InFrameworks");
 			addCommand("Add :objects:" + tempUUID + ":fileRef string " + UUID);
 			addCommand("Add :objects:" + tempUUID + ":isa string PBXBuildFile");
 
-			addCommand("# --- PBXFrameworksBuildPhase");
-			addCommand("Add :objects:E4B69B590A3A1756003C02F2:files: string " + tempUUID);
+			addCommand("# --- linkBinaryWithLibraries");
+			addCommand("Add :objects:" + uuid["linkBinaryWithLibraries"] + ":files: string " + tempUUID);
 		}
 
-		if (path.extension() == ".framework") {
-			addCommand("# ---- Frameworks Folder " + UUID);
-			addCommand("Add :objects:901808C02053638E004A7774:children: string " + UUID);
+		// if (path.extension() == ".framework") {
+		// 	addCommand("# ---- Frameworks Folder " + UUID);
+		// 	addCommand("Add :objects:901808C02053638E004A7774:children: string " + UUID);
 
-			addCommand("# ---- PBXFrameworksBuildPhase " + buildUUID);
-			addCommand("Add :objects:1D60588F0D05DD3D006BFB54:files: string " + buildUUID);
-		}
+		// 	addCommand("# ---- PBXFrameworksBuildPhase " + buildUUID);
+		// 	addCommand("Add :objects:1D60588F0D05DD3D006BFB54:files: string " + buildUUID);
+		// }
 	}
 	return UUID;
 }
@@ -260,7 +260,6 @@ void ofTemplateMacos::addSrc(const fs::path & srcFile, const fs::path & folder) 
 	fp.addToBuildPhase = true;
 	fp.isSrc = true;
 
-
 	if (ext == ".h" || ext == ".hpp" || ext == ".tcc" || ext == ".inl" || ext == ".in") {
 		fp.addToBuildPhase = false;
 	} else if (ext == ".xib") {
@@ -271,12 +270,36 @@ void ofTemplateMacos::addSrc(const fs::path & srcFile, const fs::path & folder) 
 		fp.addToBuildResource = true;
 		fp.addToResources = true;
 	} else if (ext == ".entitlements") {
-		fp.addToBuildResource = true;
+		// fixme, needed?
+		// fp.addToBuildResource = true;
 		fp.addToResources = true;
 	} else if (ext == ".info") {
+		// fp.addToBuildResource = true;
+		fp.addToResources = true;
+	}
+
+	// FROM PG Latest
+	else if (ext == ".xcassets") {
 		fp.addToBuildResource = true;
 		fp.addToResources = true;
-	} else if (target == "ios") {
+	} else if (ext == ".modulemap") {
+		fp.addToBuildPhase = false;
+	} else if (ext == ".bundle") {
+		fp.addToBuildResource = true;
+		fp.addToResources = true;
+	} else if (ext == ".tbd") {
+		fp.linkBinaryWithLibraries = true;
+	}
+
+	else if (ext == ".swift") {
+		fp.addToBuildPhase = true;
+		for (auto & c : buildConfigs) {
+			addCommand("Add :objects:" + c + ":buildSettings:OTHER_SWIFT_FLAGS: string -cxx-interoperability-mode=swift-5.9");
+			// mark all Swift files as C++ interop available :)
+		}
+	}
+
+	if (target == "ios") {
 		fp.addToBuildPhase = true;
 		fp.addToResources = true;
 	}
@@ -383,6 +406,7 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 				// FIXME: add array here if it doesnt exist. Test with multiple lines
 				for (const auto & flag : a->addonProperties[param.first]) {
 					addCommand("Add :objects:" + c + ":buildSettings:" + param.second + ": string " + flag);
+					alert(commands.back(), 95);
 				}
 			}
 		}
@@ -409,8 +433,8 @@ void ofTemplateMacos::addFramework(const fs::path & path) {
 	fp.codeSignOnCopy = !isRelativeToSDK;
 	fp.copyFilesBuildPhase = !isRelativeToSDK;
 	fp.isRelativeToSDK = isRelativeToSDK;
-	// fp.frameworksBuildPhase = (target != "ios" && !folder.empty());
-	fp.frameworksBuildPhase = target != "ios";
+	// fp.frameworksBuildPhase = target != "ios";
+	fp.linkBinaryWithLibraries = !	fp.isRelativeToSDK && path.extension().string() == ".framework";
 
 	std::string UUID { "" };
 	if (isRelativeToSDK) {
@@ -433,16 +457,21 @@ void ofTemplateMacos::addFramework(const fs::path & path) {
 	}
 
 	if (!isRelativeToSDK) {
-		fs::path pathFS { path };
 		addCommand("# ----- FRAMEWORK_SEARCH_PATHS");
-		std::string parent { pathFS.parent_path().string() };
-		std::string ext { pathFS.extension().string() };
+		std::string parent { path.parent_path().string() };
+		std::string ext { path.extension().string() };
+
+		// alert("path " + path.string(), 94);
+		// alert("parent " + parent, 94);
 
 		for (auto & c : buildConfigs) {
 			if (ext == ".framework") {
+				fp.linkBinaryWithLibraries = true;
+				// addCommand("Add :objects:" + c + ":buildSettings:FRAMEWORK_SEARCH_PATHS array");
 				addCommand("Add :objects:" + c + ":buildSettings:FRAMEWORK_SEARCH_PATHS: string " + parent);
 			}
 			if (ext == ".xcframework") {
+				// addCommand("Add :objects:" + c + ":buildSettings:XCFRAMEWORK_SEARCH_PATHS array");
 				addCommand("Add :objects:" + c + ":buildSettings:XCFRAMEWORK_SEARCH_PATHS: string " + parent);
 			}
 		}
@@ -460,77 +489,96 @@ void ofTemplateMacos::edit(std::string & str) {
 	}
 
 	for (auto & c : commands) {
-		// alert (c, 31);
-		// readable comments enabled now.
-		if (c != "" && c[0] != '#') {
-			std::vector<std::string> cols { ofSplitString(c, " ") };
-			std::string thispath { cols[1] };
-			// cout << thispath << endl;
-			// stringReplace(thispath, "\:", "\/");
+		if (c == "" || c[0] == '#') {
+			continue;
+		}
 
-			std::replace(thispath.begin(), thispath.end(), ':', '/');
+		std::vector<std::string> cols { ofSplitString(c, " ") };
+		std::string thispath { cols[1] };
 
-			// cout << thispath << endl;
-			// cout << "----" << endl;
-			// ofStringReplace(thispath, ":", "/");
+		std::replace(thispath.begin(), thispath.end(), ':', '/');
 
-			if (thispath.substr(thispath.length() - 1) != "/") {
-				//if (cols[0] == "Set") {
-				try {
-					json::json_pointer p { json::json_pointer(thispath) };
+		if (thispath.substr(thispath.length() - 1) != "/") {
+			//if (cols[0] == "Set") {
+			try {
+				json::json_pointer p { json::json_pointer(thispath) };
 
-					if (cols[2] == "string") {
-						// find position after find word
-						auto stringStart { c.find("string ") + 7 };
-						try {
-							j[p] = c.substr(stringStart);
-						} catch (std::exception & e) {
+				if (cols[2] == "string") {
+					// find position after find word
+					auto stringStart { c.find("string ") + 7 };
+					try {
+						j[p] = c.substr(stringStart);
+					} catch (std::exception & e) {
 
-							std::cerr << "substr " << c.substr(stringStart) << "\n"
-									  << "pointer " << p << "\n"
-									  << e.what()
-									  << std::endl;
-							std::exit(1);
-						}
-						// j[p] = cols[3];
-					} else if (cols[2] == "array") {
-						try {
-							//								j[p] = {};
-							j[p] = json::array({});
-						} catch (std::exception & e) {
-							std::cerr << "array " << e.what() << std::endl;
-							std::exit(1);
-						}
+						std::cerr << "substr " << c.substr(stringStart) << "\n"
+								  << "pointer " << p << "\n"
+								  << e.what()
+								  << std::endl;
+						std::exit(1);
 					}
-				} catch (std::exception & e) {
-					std::cerr << "json error " << std::endl;
-					std::cout << "pointer " << thispath << std::endl;
-					std::cerr << e.what() << std::endl;
-					std::cerr << "--------------------------------------------------" << std::endl;
+					// j[p] = cols[3];
+				} else if (cols[2] == "array") {
+					try {
+						//								j[p] = {};
+						j[p] = json::array({});
+					} catch (std::exception & e) {
+						std::cerr << "array " << e.what() << std::endl;
+						std::exit(1);
+					}
+					// alert("ARRAYYY " + cols[1] + ":" + cols[3], 94);
+
+				} else {
+					alert("WOWW " + cols[2], 94);
 					std::exit(1);
 				}
+			} catch (std::exception & e) {
+				std::cerr << "json error " << std::endl;
+				std::cout << "pointer " << thispath << std::endl;
+				std::cerr << e.what() << std::endl;
+				std::cerr << "--------------------------------------------------" << std::endl;
+				std::exit(1);
+			}
 
-			} else {
-				thispath = thispath.substr(0, thispath.length() - 1);
-				//					cout << thispath << endl;
-				json::json_pointer p = json::json_pointer(thispath);
-				try {
-					// Fixing XCode one item array issue
-					if (!j[p].is_array()) {
-						auto v { j[p] };
-						j[p] = json::array();
-						if (!v.is_null()) {
-							j[p].emplace_back(v);
-						}
-					}
-					j[p].emplace_back(cols[3]);
-
-				} catch (std::exception & e) {
-					std::cerr << "json error " << std::endl;
-					std::cerr << e.what() << std::endl;
-					std::cerr << thispath << std::endl;
-					std::cerr << "-------------------------" << std::endl;
+		} else {
+			thispath = thispath.substr(0, thispath.length() - 1);
+			//					cout << thispath << endl;
+			json::json_pointer p = json::json_pointer(thispath);
+			try {
+				// Fixing XCode one item array issue
+				//
+				bool notyet = false;
+				if (!j[p].is_array()) {
+					alert("this path is not array yet " + thispath, 96);
+					j[p] = json::array();
+					notyet = true;
+					// auto v { j[p] };
+					// if (!v.is_null()) {
+					// j[p].emplace_back(v);
+					// }
 				}
+
+				std::string val = cols[3];
+				if (cols[2] == "string") {
+					// find position after find word
+					auto stringStart { c.find("string ") + 7 };
+					val = c.substr(stringStart);
+					// try {
+					// 	j[p].emplace_back(c.substr(stringStart));
+					// }
+				}
+				j[p].emplace_back(val);
+
+				if (notyet) {
+					alert(thispath, 95);
+					alert(val, 96);
+				}
+				// alert("OWW2 " + val, 96);
+
+			} catch (std::exception & e) {
+				std::cerr << "json error " << std::endl;
+				std::cerr << e.what() << std::endl;
+				std::cerr << thispath << std::endl;
+				std::cerr << "-------------------------" << std::endl;
 			}
 		}
 	}
@@ -712,20 +760,28 @@ void ofTemplateMacos::load() {
 
 		buildConfigs[0] = "1D6058940D05DD3E006BFB54"; // iOS Debug
 		buildConfigs[1] = "1D6058950D05DD3E006BFB54"; // iOS Release
-		buildConfigs[2] = "C01FCF4F08A954540054247B"; // iOS Debug
-		buildConfigs[3] = "C01FCF5008A954540054247B"; // iOS Release
+		// buildConfigs[2] = "C01FCF4F08A954540054247B"; // iOS Debug
+		// buildConfigs[3] = "C01FCF5008A954540054247B"; // iOS Release
 
 		// buildConfigs[0] = "1D6058940D05DD3E006BFB54"; // iOS Debug
 		// buildConfigs[1] = "1D6058950D05DD3E006BFB54"; // iOS Release
 	}
 
-	addCommand("Set :objects:" + uuid["buildConfigurationList"] + ":name " + conf.projectName);
+	addCommand("Set :objects:" + uuid["buildConfigurationList"] + ":name string " + conf.projectName);
 
 	// Just OSX here, debug app naming.
 	if (target == "osx" || target == "macos") {
 		// TODO: Hardcode to variable
 		// FIXME: Debug needed in name?
-		addCommand("Set :objects:E4B69B5B0A3A1756003C02F2:path " + conf.projectName + "Debug.app");
+		addCommand("Set :objects:E4B69B5B0A3A1756003C02F2:path string " + conf.projectName + "Debug.app");
+
+		if (!ofIsPathInPath(fs::current_path(), conf.ofPath)) {
+			addCommand("Set :objects:" + folderUUID["openFrameworks"] + ":path string " + conf.ofPath.string() + "/libs/openFrameworks");
+			addCommand("Set :objects:" + folderUUID["openFrameworks"] + ":sourceTree string <absolute>");
+
+			addCommand("Set :objects:" + folderUUID["addons"] + ":path string " + conf.ofPath.string() + "/addons");
+			addCommand("Set :objects:" + folderUUID["addons"] + ":sourceTree string <absolute>");
+		}
 	}
 
 	fileProperties fp;

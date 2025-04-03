@@ -4,7 +4,7 @@
 # CXX=/opt/homebrew/opt/llvm/bin/clang++ # define the compiler to use
 # # define the compiler to use
 CXX=c++
-TARGET=ofGen
+TARGET=ofgen
 SOURCES=src/main.cpp src/templates.cpp src/utils.cpp src/addons.cpp src/uuidxx/src/uuidxx.cpp
 CXXFLAGS=-std=c++20 -Isrc/uuidxx/src -MMD -MP $(shell pkgconf --cflags yaml-cpp nlohmann_json)
 # -Wfatal-errors

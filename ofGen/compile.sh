@@ -31,7 +31,7 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     fi
 fi
 
-section "OF Vision, compiling ofGen"
+section "OF Vision, compiling ofgen"
 
 # pwd
 # MACOS only
@@ -65,7 +65,7 @@ if [[ ${PWD} == "/Volumes/tool/ofw/ofGen" ]]; then
 fi
 
 time $CXX -c src/*.cpp src/uuidxx/src/*.cpp `pkg-config --cflags yaml-cpp` -Isrc/uuidxx/src -I../libs/macos/include/ -Wfatal-errors -std=c++20 && \
-time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src `pkg-config --libs yaml-cpp` -o ofGen
+time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src `pkg-config --libs yaml-cpp` -o ofgen
 # fi
 
 # if [[ -n $GITHUB_REPOSITORY ]]; then
@@ -73,14 +73,14 @@ time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src `pkg-config --libs yaml-cpp` -o of
 # LEFTOVERS
 #
 #
-# if [[ ${PWD} == "/Volumes/tool/ofw/ofGen" ]] then
-# time ./ofGen platforms=zed,macos addons=ofxMicroUI,ofxTools ofroot=../../.. path=/Volumes/tool/ofw/apps/Werkapps/Pulsar
-# time ./ofGen platforms=zed,macos path=../examples/templates/allAddonsExample
+# if [[ `${PWD}` == "/Volumes/tool/ofw/ofgen" ]]; then
+# time ./ofgen platforms=zed,macos addons=ofxMicroUI,ofxTools ofroot=../../.. path=/Volumes/tool/ofw/apps/Werkapps/Pulsar
+# time ./ofgen platforms=zed,macos path=../examples/templates/allAddonsExample
 # fi
 
-# include-what-you-use g++ -Wfatal-errors -std=c++20 src/main.cpp src/utils.cpp -o ofGen -O3
+# include-what-you-use g++ -Wfatal-errors -std=c++20 src/main.cpp src/utils.cpp -o ofgen -O3
 
 # -lstdc++fs
 # # time include-what-you-use -c src/*.cpp -Wfatal-errors -std=c++17
-# time include-what-you-use -fuse-ld=lld *.o -o ofGen && time ./ofGen
+# time include-what-you-use -fuse-ld=lld *.o -o ofgen && time ./ofgen
 # CXX=time ccache c++

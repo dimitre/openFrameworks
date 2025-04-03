@@ -45,7 +45,7 @@ public:
 			accum = interval;
 			lastTick = steady_clock::now();
 		} else {
-			
+
 			interval = steady_clock::now() - lastTick;
 			//		double ratio = (double)  ofGetMouseX() / (double)ofGetWindowWidth();
 			double ratio = 0.1;
@@ -53,7 +53,7 @@ public:
 			lastTick = steady_clock::now();
 		}
 	}
-	
+
 	double get() {
 //		cout << "get" << endl;
 //		cout << onesec << endl;
@@ -71,7 +71,7 @@ using std::endl;
 // MARK: - CLOCK
 
 struct ofClock {
-protected:
+private:
 	std::chrono::time_point<std::chrono::steady_clock> timeStart = std::chrono::steady_clock::now();
 
 public:
@@ -79,17 +79,17 @@ public:
 	~ofClock() {};
 //	using space = std::chrono::duration<long long, std::nano>;
 //	space interval;
-	
+
 	typedef std::chrono::duration<float> float_seconds;
-	
+
 	float getElapsedTimef() {
 		return duration_cast<float_seconds>(std::chrono::steady_clock::now() - timeStart).count();
 	}
-	
+
 	void resetElapsedTimeCounter() {
 		timeStart = std::chrono::steady_clock::now();
 	}
-	
+
 	uint64_t getElapsedTimeMillis() {
 		return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - timeStart).count();
 	}
@@ -103,7 +103,7 @@ public:
 
 
 struct ofCoreInternal {
-protected:
+private:
 	// ofAppRunner
 	bool initialized = false;
 
@@ -116,9 +116,9 @@ public:
 
 	ofMainLoop mainLoop;
 	fpsCounter fps;
-	
+
 	ofClock clock;
-	
+
 	//--------------------------------------------------
 	fs::path defaultDataPath(){
 	#if defined TARGET_OSX
@@ -137,21 +137,21 @@ public:
 		}
 	#endif
 	}
-	
+
 	of::filesystem::path dataPath;
 	of::filesystem::path defaultWorkingDirectory;
 	bool enableDataPath = true;
 	// std::shared_ptr<ofMainLoop> mainLoop { std::make_shared<ofMainLoop>() };
 
 	// ofFileUtils
-	
+
 //	bool isInit() { return initialized; }
 
 	void init() {
 		if (initialized) return;
 		initialized = true;
 		exiting = false;
-		
+
 		defaultWorkingDirectory = fs::absolute(fs::current_path());
 		dataPath = defaultDataPath();
 	}
