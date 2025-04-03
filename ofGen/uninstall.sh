@@ -1,2 +1,2 @@
 #!/bin/zsh
-sudo rm /usr/local/bin/ofGen
+sudo rm /usr/local/bin/ofgen

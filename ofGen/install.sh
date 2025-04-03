@@ -9,10 +9,10 @@ section() {
     printf "💿${COLOR} ${@} ${NC}\n\r"
 }
 
-section "OFWorks ofGen (tool to generate projects)"
-echo This will install a symlink in /usr/local/bin/ so ofGen can be called from any directory.
-echo If you need to uninstall in the future you can use the $ofw/ofGen/uninstall.sh script
-echo It is recommended to install, so you can just invoke ofGen from your project folder
+section "OFWorks ofgen (tool to generate projects)"
+echo This will install a symlink in /usr/local/bin/ so ofgen can be called from any directory.
+echo If you need to uninstall in the future you can use the $ofw/ofgen/uninstall.sh script
+    echo It is recommended to install, so you can just invoke ofgen from your project folder
 echo and have your project built.
 echo You will be asked for user password.
 # read -p "Proceed? (y/n) " -n 1 -r
@@ -21,7 +21,7 @@ echo You will be asked for user password.
 #
 if [[ -n $GITHUB_REPOSITORY ]]; then
     echo WOW GITHUB_REPOSITORY
-    sudo ln -sf "$PWD/ofGen" /usr/local/bin/ofGen
+    sudo ln -sf "$PWD/ofgen" /usr/local/bin/ofgen
 	echo All good!
 else
 
@@ -30,7 +30,7 @@ echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 # -sf parameters will overwrite old symlink if it is already installed
-	sudo ln -sf "$PWD/ofGen" /usr/local/bin/ofGen
+	sudo ln -sf "$PWD/ofgen" /usr/local/bin/ofgen
 	echo All good!
 else
 	echo OK, ofGen not installed
