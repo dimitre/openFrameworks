@@ -20,7 +20,6 @@ for i in "$@"; do
 done
 
 # LIBS_FOLDER=${OF_FOLDER}/libs/${PLATFORM}
-PLATFORM="${PLATFORM:-macos}"
 # echo ${PLATFORM}
 # exit
 
@@ -43,6 +42,7 @@ elif [[ "$(uname -s)" == "Linux" ]]; then
     fi
 fi
 
+PLATFORM="${PLATFORM:-macos}"
 
 
 # unameOut="$(uname -s)"
