@@ -18,7 +18,7 @@ executa2() {
     printf "✅${COLOR2} ${@} ${NC}\r\n"
 }
 executa() { #echoes and execute. dry run is "executa2"
-	printf "✅${COLOR3} $@ ${NC}\r\n"
+	printf "${COLOR3} $@ ${NC}\r\n"
     $@
 }
 
