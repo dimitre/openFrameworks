@@ -10,6 +10,8 @@
 #include "ofLog.h"
 
 #include "ofMath.h" // ofInterpolateHermite ofRandom
+// FIXME: needed? adicionei pra funcionar no ubuntu
+#include <math.h>
 
 #include <glm/trigonometric.hpp>
 
