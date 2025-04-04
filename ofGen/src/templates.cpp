@@ -406,7 +406,7 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 				// FIXME: add array here if it doesnt exist. Test with multiple lines
 				for (const auto & flag : a->addonProperties[param.first]) {
 					addCommand("Add :objects:" + c + ":buildSettings:" + param.second + ": string " + flag);
-					alert(commands.back(), 95);
+					// alert(commands.back(), 95);
 				}
 			}
 		}
@@ -546,11 +546,11 @@ void ofTemplateMacos::edit(std::string & str) {
 			try {
 				// Fixing XCode one item array issue
 				//
-				bool notyet = false;
+				// bool notyet = false;
 				if (!j[p].is_array()) {
-					alert("this path is not array yet " + thispath, 96);
+					// alert("this path is not array yet " + thispath, 96);
 					j[p] = json::array();
-					notyet = true;
+					// notyet = true;
 					// auto v { j[p] };
 					// if (!v.is_null()) {
 					// j[p].emplace_back(v);
@@ -568,10 +568,10 @@ void ofTemplateMacos::edit(std::string & str) {
 				}
 				j[p].emplace_back(val);
 
-				if (notyet) {
-					alert(thispath, 95);
-					alert(val, 96);
-				}
+				// if (notyet) {
+				// 	alert(thispath, 95);
+				// 	alert(val, 96);
+				// }
 				// alert("OWW2 " + val, 96);
 
 			} catch (std::exception & e) {

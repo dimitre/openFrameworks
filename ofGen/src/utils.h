@@ -1,13 +1,13 @@
 #pragma once
 
 #ifdef __linux__
-    #include <sys/utsname.h>
+	#include <sys/utsname.h>
 #endif
 
+#include <filesystem>
 #include <iostream> // cout
 #include <map>
 #include <vector>
-#include <filesystem>
 namespace fs = std::filesystem;
 #include <yaml-cpp/yaml.h>
 
@@ -104,7 +104,7 @@ inline static std::string getPlatformString() {
 	uname(&sysinfo);
 	std::string sysarch { "linux" + std::string(sysinfo.machine) };
 	if (sysarch == "linuxx86_64") {
-	   sysarch = "linux64";
+		sysarch = "linux64";
 	}
 	return sysarch;
 
@@ -198,7 +198,7 @@ struct genConfig {
 	}
 
 	void parseParameters(const int argc, const char * argv[]) {
-        // alert ("platform string " + getPlatformString(), 95);
+		// alert ("platform string " + getPlatformString(), 95);
 		// alert("parseParameters", 92);
 		/*
 addons : ofxMicroUI,ofxTools
@@ -292,6 +292,7 @@ ofGen templates=zed,macos,make addons=ofxMidi,ofxOpencv ofpath=../../.. path=/Vo
 	}
 
 	void build() {
+		alert("BUILDING", 5);
 		if (!empty(buildCommand)) {
 			system(buildCommand.c_str());
 		}
@@ -301,9 +302,9 @@ ofGen templates=zed,macos,make addons=ofxMidi,ofxOpencv ofpath=../../.. path=/Vo
 	}
 
 	void run() {
-    	if (!empty(runCommand)) {
-    		system(runCommand.c_str());
-    	}
+		if (!empty(runCommand)) {
+			system(runCommand.c_str());
+		}
 		// projectName = fs::current_path().filename().string();
 		// std::string command = "open -n bin/" + projectName + ".app";
 		// cout << command << endl;
