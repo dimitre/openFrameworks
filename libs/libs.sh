@@ -151,8 +151,10 @@ unzipCore() {
 	executa "rm -rf ${LIBS_FOLDER}/*.{txt,md,MIT}"
 	executa "rm -rf ${LIBS_FOLDER}/{LICENSE,COPYING}"
 	executa "rm -rf ${LIBS_FOLDER}/LICENSES"
-	#executa "mv ${LIBS_FOLDER}/lib/${PLATFORM}/* ${LIBS_FOLDER}/lib/"
-	#executa "rm -rf ${LIBS_FOLDER}/lib/${PLATFORM}"
+
+	# remover no futuro
+	executa "mv ${LIBS_FOLDER}/lib/${PLATFORM}/* ${LIBS_FOLDER}/lib/"
+	executa "rm -rf ${LIBS_FOLDER}/lib/${PLATFORM}"
 }
 
 
