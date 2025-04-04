@@ -52,6 +52,15 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
     ADDONLIBS=( assimp libusb libxml2 opencv )
     ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
 
+    LIBADDONS=(
+	# "assimp:ofxAssimpModelLoader"
+	"assimp:ofxAssimp"
+        "libusb:ofxKinect"
+        "libxml2:ofxSvg"
+        "opencv:ofxOpenCv"
+        # "svgtiny:ofxSvg"
+    )
+
 elif [[ "$(uname -s)" == "Linux" ]]; then
 	CORELIBS=( kissfft )
 	ADDONLIBS=(  )
@@ -146,14 +155,7 @@ unzipCore() {
 	#executa "rm -rf ${LIBS_FOLDER}/lib/${PLATFORM}"
 }
 
-LIBADDONS=(
-	# "assimp:ofxAssimpModelLoader"
-	"assimp:ofxAssimp"
-    "libusb:ofxKinect"
-    "libxml2:ofxSvg"
-    "opencv:ofxOpenCv"
-    # "svgtiny:ofxSvg"
-)
+
 
 unzipAddons() {
 	for libaddon in "${LIBADDONS[@]}" ; do
