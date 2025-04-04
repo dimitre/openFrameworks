@@ -178,7 +178,7 @@ void ofApp::draw() {
 			box.transformGL();
 			for (int i = 0; i < ofBoxPrimitive::SIDES_TOTAL; i++) {
 				ofPushMatrix();
-				ofTranslate(boxSides[i].getNormal(0) * sin(ofGetElapsedTimef()) * 50.0f);
+				ofTranslate(boxSides[i].getNormal(0) * std::sin(ofGetElapsedTimef()) * 50.0f);
 				boxSides[i].draw();
 				ofPopMatrix();
 			}
