@@ -127,7 +127,7 @@ getlink() {
     do
         PARAMS+=" "https://github.com/dimitre/ofLibs/releases/download/${VERSION}/oflib_${LIBNAME}_${PLATFORM}.zip
     done
-    executa wget2 --clobber=off ${PARAMS} -P ${DOWNLOAD}
+    executa "wget2 --clobber=off ${PARAMS} -P ${DOWNLOAD}"
 }
 
 unzipCore() {
@@ -160,8 +160,8 @@ unzipAddons() {
 		lib=${libaddon%%:*}
 		addon=${libaddon#*:}
 		OUTFOLDER=${OF_FOLDER}/addons/${addon}/libs/${lib}
-		executa mkdir -p ${OUTFOLDER}
-		executa unzip -qq -o -d ${OUTFOLDER} ${DOWNLOAD}/oflib_${lib}_${PLATFORM}.zip
+		executa "mkdir -p ${OUTFOLDER}"
+		executa "unzip -qq -o -d ${OUTFOLDER} ${DOWNLOAD}/oflib_${lib}_${PLATFORM}.zip"
 	done
 }
 
