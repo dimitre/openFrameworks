@@ -966,7 +966,7 @@ void ofCairoRenderer::setupScreenPerspective(float width, float height, float fo
 	float eyeX = viewW / 2;
 	float eyeY = viewH / 2;
 	float halfFov = glm::pi<float>() * fov / 360.0f;
-	float theTan = std::tanf(halfFov);
+	float theTan = std::tan(halfFov);
 	float dist = eyeY / theTan;
 	float aspect = (float)viewW / viewH;
 
