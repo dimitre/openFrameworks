@@ -104,7 +104,7 @@ void SrcNode::addChild( std::shared_ptr<SrcNode> akiddo ) {
 
 //----------------------------------------
 unsigned int SrcNode::getNumChildren() {
-	return (unsigned int)mKids.size();
+	return mKids.size();
 }
 
 //----------------------------------------
@@ -113,7 +113,7 @@ std::vector< std::shared_ptr<SrcNode> >& SrcNode::getChildren() {
 }
 
 //--------------------------------------------------------------
-std::string SrcNode::getAsString( unsigned int aLevel ) {
+std::string SrcNode::getAsString( int aLevel ) {
 	std::stringstream oStr;// = "";
 	for( unsigned int i = 0; i < aLevel; i++ ) {
 		oStr << "  ";
