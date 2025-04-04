@@ -53,8 +53,8 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
     ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
 
     LIBADDONS=(
-	# "assimp:ofxAssimpModelLoader"
-	"assimp:ofxAssimp"
+    	# "assimp:ofxAssimpModelLoader"
+    	"assimp:ofxAssimp"
         "libusb:ofxKinect"
         "libxml2:ofxSvg"
         "opencv:ofxOpenCv"
@@ -62,7 +62,7 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
     )
 
 elif [[ "$(uname -s)" == "Linux" ]]; then
-	CORELIBS=( kissfft )
+	CORELIBS=( kissfft glm )
 	ADDONLIBS=(  )
 	ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
 	section Linux
