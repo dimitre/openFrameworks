@@ -9,16 +9,16 @@ COLOR3='\033[0;95m'
 NC='\033[0m' # No Color
 
 section() {
-    printf "⚡️${COLOR} ${@} ${NC}\n\r"
+    printf "⚡️${COLOR} ${@} ${NC}\r\n"
 }
 sectionOK() {
-    printf "💾${COLOR} ${@} ${NC}\n\r"
+	printf "💾${COLOR} ${@} ${NC}\r\n"
 }
 executa2() {
-    printf "✅${COLOR2} ${@} ${NC}\n\r"
+    printf "✅${COLOR2} ${@} ${NC}\r\n"
 }
 executa() { #echoes and execute. dry run is "executa2"
-    printf "✅${COLOR3} ${@} ${NC}\n\r"
+	printf "✅${COLOR3} ${@} ${NC}\r\n"
     $@
 }
 
