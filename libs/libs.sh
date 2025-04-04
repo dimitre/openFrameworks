@@ -9,16 +9,16 @@ COLOR3='\033[0;95m'
 NC='\033[0m' # No Color
 
 section() {
-    printf "⚡️${COLOR} ${@} ${NC}\r\n"
+    printf "⚡️ ${COLOR}$@ ${NC}\r\n"
 }
 sectionOK() {
-	printf "💾${COLOR} ${@} ${NC}\r\n"
+	printf "💾 ${COLOR}$@ ${NC}\r\n"
 }
 executa2() {
-    printf "✅${COLOR2} ${@} ${NC}\r\n"
+    printf "✅ ${COLOR2}$@ ${NC}\r\n"
 }
 executa() { #echoes and execute. dry run is "executa2"
-	printf "${COLOR3} $@ ${NC}\r\n"
+	printf "✅ ${COLOR2}$@ ${NC}\r\n"
     $@
 }
 
@@ -142,8 +142,8 @@ unzipCore() {
 	executa "rm -rf ${LIBS_FOLDER}/*.{txt,md,MIT}"
 	executa "rm -rf ${LIBS_FOLDER}/{LICENSE,COPYING}"
 	executa "rm -rf ${LIBS_FOLDER}/LICENSES"
-	executa "mv ${LIBS_FOLDER}/lib/${PLATFORM}/* ${LIBS_FOLDER}/lib/"
-	executa "rm -rf ${LIBS_FOLDER}/lib/${PLATFORM}"
+	#executa "mv ${LIBS_FOLDER}/lib/${PLATFORM}/* ${LIBS_FOLDER}/lib/"
+	#executa "rm -rf ${LIBS_FOLDER}/lib/${PLATFORM}"
 }
 
 LIBADDONS=(
