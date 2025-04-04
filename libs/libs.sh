@@ -136,14 +136,14 @@ unzipCore() {
 	    filename="${DOWNLOAD}/oflib_${LIBNAME}_${PLATFORM}.zip"
 		# executa unzip -o ${filename} -d ${LIBS_FOLDER}
 		# -q = quiet -qq = quieter
-		executa unzip -qq -o ${filename} -d ${LIBS_FOLDER}
+		executa "unzip -qq -o ${filename} -d ${LIBS_FOLDER}"
 	done
 
-	executa rm -rf ${LIBS_FOLDER}/*.{txt,md,MIT}
-	executa rm -rf ${LIBS_FOLDER}/{LICENSE,COPYING}
-	executa rm -rf ${LIBS_FOLDER}/LICENSES
-	executa mv ${LIBS_FOLDER}/lib/${PLATFORM}/* ${LIBS_FOLDER}/lib/
-	executa rm -rf ${LIBS_FOLDER}/lib/${PLATFORM}
+	executa "rm -rf ${LIBS_FOLDER}/*.{txt,md,MIT}"
+	executa "rm -rf ${LIBS_FOLDER}/{LICENSE,COPYING}"
+	executa "rm -rf ${LIBS_FOLDER}/LICENSES"
+	executa "mv ${LIBS_FOLDER}/lib/${PLATFORM}/* ${LIBS_FOLDER}/lib/"
+	executa "rm -rf ${LIBS_FOLDER}/lib/${PLATFORM}"
 }
 
 LIBADDONS=(
