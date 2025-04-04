@@ -26,11 +26,25 @@ PLATFORM="${PLATFORM:-macos}"
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
     PLATFORM=macos
+    CORELIBS=( brotli cairo FreeImage freetype glew glfw glm json libpng pugixml tess2 uriparser utfcpp zlib openssl curl pixman )
+    # FIXME: TODO: add svgtiny to ofLibs and here
+    ADDONLIBS=( assimp libusb libxml2 opencv )
+    ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
+
+elif [[ "$(uname -s)" == "Linux" ]]; then
+	CORELIBS=( kissfft )
+	ADDONLIBS=(  )
+	ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
+
+	if [[ "$(uname -s)" == "x86_64" ]]; then
+		PLATFORM=linux64
+	if [ -f /etc/rpi-issue ]; then
+		PLATFORM=rpi-aarch64
+    elif
+    fi
 fi
 
-if [ -f /etc/rpi-issue ]; then
-    PLATFORM=rpi-aarch64
-fi
+
 
 # unameOut="$(uname -s)"
 # case "${unameOut}" in
@@ -98,11 +112,7 @@ checkLib() {
 # fi
 # }
 
-CORELIBS=( brotli cairo FreeImage freetype glew glfw glm json libpng pugixml tess2 uriparser utfcpp zlib openssl curl pixman )
-# FIXME: TODO: add svgtiny to ofLibs and here
-ADDONLIBS=( assimp libusb libxml2 opencv )
-#svgtiny
-ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
+
 
 
 # exit 1
