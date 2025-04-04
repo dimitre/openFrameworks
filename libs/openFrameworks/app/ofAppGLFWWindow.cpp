@@ -133,8 +133,8 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 	glfwWindowHint(GLFW_SAMPLES, settings.numSamples);
 	glfwWindowHint(GLFW_RESIZABLE, settings.resizable);
 	glfwWindowHint(GLFW_DECORATED, settings.decorated);
-	
-	
+
+
 
 #ifdef TARGET_OPENGLES
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, settings.glesVersion);
@@ -387,7 +387,7 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
     void ofAppGLFWWindow::setWindowIcon(const ofPixels & iconPixels) {
         iconSet = true;
         int length = 2 + iconPixels.getWidth() * iconPixels.getHeight();
-        vector<unsigned long> buffer(length);
+        std::vector<unsigned long> buffer(length);
         buffer[0] = iconPixels.getWidth();
         buffer[1] = iconPixels.getHeight();
         for (size_t i = 0; i < iconPixels.getWidth() * iconPixels.getHeight(); i++) {
