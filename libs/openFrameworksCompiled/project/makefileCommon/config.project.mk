@@ -457,7 +457,7 @@ ifdef PROJECT_LD
 	LINKER = $(PROJECT_LD)
 endif
 
-LINKER ?= $(CXX) -fuse-ld=ld
+LINKER ?= $(CXX) -fuse-ld=lld
 
 
 # ifdef ${ccache}
