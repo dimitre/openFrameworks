@@ -29,8 +29,11 @@ int main(const int argc, const char * argv[]) {
 			conf.build();
 		} else if (conf.singleParameter == "buildrun") {
 			buildProject();
-			conf.build();
-			conf.run();
+			int result = conf.build();
+			// cout << "OWWWW " << x << endl;
+			if (result == 0) {
+				conf.run();
+			}
 		} else {
 			alert("exiting: invalid parameter " + conf.singleParameter, 95);
 			exit(1);

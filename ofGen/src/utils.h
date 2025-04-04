@@ -18,7 +18,7 @@ using std::endl;
 // using std::vector;
 
 static inline std::string getPGVersion() {
-	return "ofGen v0.3.6";
+	return "ofGen v0.3.7";
 }
 
 inline std::string colorText(const std::string & s, int color) {
@@ -38,7 +38,7 @@ const std::string sign = colorText(R"(
 ▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
 ▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
 Project Generator for OFWorks (OpenFrameworks fork)
-                Prototype v0.3.6⚡️
+                Prototype v0.3.7⚡️
 )",
 							 91)
 
@@ -291,11 +291,12 @@ ofGen templates=zed,macos,make addons=ofxMidi,ofxOpencv ofpath=../../.. path=/Vo
 		}
 	}
 
-	void build() {
+	int build() {
 		alert("BUILDING", 5);
 		if (!empty(buildCommand)) {
-			system(buildCommand.c_str());
+			return std::system(buildCommand.c_str());
 		}
+		return -1;
 		// std::string command = "open " + projectName + ".xcodeproj";
 		// cout << command << endl;
 		// system("xcodebuild");
@@ -303,13 +304,21 @@ ofGen templates=zed,macos,make addons=ofxMidi,ofxOpencv ofpath=../../.. path=/Vo
 
 	void run() {
 		if (!empty(runCommand)) {
-			system(runCommand.c_str());
+			std::system(runCommand.c_str());
 		}
 		// projectName = fs::current_path().filename().string();
 		// std::string command = "open -n bin/" + projectName + ".app";
 		// cout << command << endl;
 		// system(command.c_str());
 	}
+
+	// void buildrun() {
+	// 	std::string command { buildCommand };
+	// 	if (!empty(runCommand)) {
+	// 		command = " && " + runCommand;
+	// 	}
+	// 	std::system(command.c_str());
+	// }
 
 	YAML::Node config;
 	void import();
