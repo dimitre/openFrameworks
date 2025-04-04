@@ -55,9 +55,9 @@ elif [[ "$(uname -s)" == "Linux" ]]; then
 	ADDONLIBS=(  )
 	ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
 	section Linux
-	uname -s
+	uname -m
 
-	if [[ "$(uname -s)" == "x86_64" ]]; then
+	if [[ "$(uname -m)" == "x86_64" ]]; then
 		PLATFORM=linux64
 	elif [ -f /etc/rpi-issue ]; then
 		PLATFORM=rpi-aarch64
