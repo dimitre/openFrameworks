@@ -60,7 +60,7 @@ void ofCamera::setupPerspective(bool _vFlip, float fov, float nearDist, float fa
 	float eyeX = orientedViewport.width * 0.5;
 	float eyeY = orientedViewport.height * 0.5f;
 	float halfFov = glm::pi<float>() * fov / 360.0f;
-	float theTan = std::tanf(halfFov);
+	float theTan = std::tan(halfFov);
 	float dist = eyeY / theTan;
 
 	if(nearDist == 0) nearDist = dist / 10.0f;
