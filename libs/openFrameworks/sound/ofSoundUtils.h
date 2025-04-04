@@ -9,6 +9,7 @@
 
 #include <glm/gtc/constants.hpp>
 #include <algorithm>
+#include <cmath>
 
 inline void ofStereoVolumes(float volume, float pan, float & left, float & right){
 	pan = std::clamp(pan, -1.0f, 1.0f);
