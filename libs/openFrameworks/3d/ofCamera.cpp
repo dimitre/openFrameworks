@@ -128,7 +128,7 @@ bool ofCamera::getOrtho() const {
 
 //----------------------------------------
 float ofCamera::getImagePlaneDistance(const ofRectangle & viewport) const {
-	return viewport.height / (2.0f * std::tanf(glm::pi<float>() * fov / 360.0f));
+	return viewport.height / (2.0f * std::tan(glm::pi<float>() * fov / 360.0f));
 }
 
 //----------------------------------------
