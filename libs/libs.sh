@@ -42,7 +42,7 @@ elif [[ "$(uname -s)" == "Linux" ]]; then
     fi
 fi
 
-PLATFORM="${PLATFORM:-macos}"
+# PLATFORM="${PLATFORM:-macos}"
 
 
 # unameOut="$(uname -s)"
