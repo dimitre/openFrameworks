@@ -38,9 +38,8 @@ elif [[ "$(uname -s)" == "Linux" ]]; then
 
 	if [[ "$(uname -s)" == "x86_64" ]]; then
 		PLATFORM=linux64
-	if [ -f /etc/rpi-issue ]; then
+	elif [ -f /etc/rpi-issue ]; then
 		PLATFORM=rpi-aarch64
-    elif
     fi
 fi
 
