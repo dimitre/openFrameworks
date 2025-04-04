@@ -62,7 +62,7 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
     )
 
 elif [[ "$(uname -s)" == "Linux" ]]; then
-	CORELIBS=( kissfft glm )
+	CORELIBS=( kissfft glm tess2 )
 	ADDONLIBS=(  )
 	ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
 	section Linux
