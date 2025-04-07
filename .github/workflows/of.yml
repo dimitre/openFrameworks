@@ -14,33 +14,30 @@ concurrency:
 
 env:
   ccache: ccache
-  RELEASE: latest
 
 jobs:
-  build-macos:
-    # runs-on: macos-latest
-    runs-on: macos-15
+  ofworks:
     strategy:
       matrix:
         cfg:
-          - { target: macos, opt: "xcode" }
-          # - { target: osx, opt: "makefiles" }
+          - { os: macos-latest }
+          - { os: ubuntu-latest }
+    runs-on: ${{ matrix.cfg.os }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Brew
-        uses: tecolicom/actions-use-homebrew-tools@v1
+        if: matrix.cfg.os == macos-latest
+        uses: tecolicom/actions-use-homebrew-tools@v1.3
         with:
           tools: wget2 yaml-cpp fmt ccache nlohmann-json # fmt
 
       - name: ccache
         uses: hendrikmuhs/ccache-action@v1.2.17
-        # uses: hendrikmuhs/ccache-action@latest
         with:
-          key: ${{ matrix.cfg.target }}-${{ matrix.cfg.opt }}
+          key: ${{ matrix.cfg.platform }}-${{ matrix.cfg.target }}
 
       - name: Libs
-        # run: ./scripts/macos/libs.sh
         run: ./libs/libs.sh
 
       - name: ofGen
@@ -50,12 +47,12 @@ jobs:
           ./install.sh
 
       - name: XCodebuild Core
+        if: matrix.cfg.os == macos-latest
         run: |
           cd libs/openFrameworksCompiled/project/macos
           xcodebuild -arch arm64
 
       - name: Make OF Core
-        # run: ./scripts/macos/libs.sh
         run: |
           cd libs/openFrameworksCompiled/project/
           make -j Debug
@@ -63,8 +60,8 @@ jobs:
       - name: All Addons Example
         run: |
           cd examples/templates/allAddonsExample
-          ofGen
-          xcodebuild -arch arm64
+          ofGen buildrun
+          # xcodebuild -arch arm64
 
       - name: Tests
         run: ./scripts/macos/tests.sh

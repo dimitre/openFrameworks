@@ -31,7 +31,8 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     fi
 fi
 
-section "OF Vision, compiling ofgen"
+section "OFWorks, compiling ofgen"
+# section "Will compile now"
 
 # pwd
 # MACOS only
@@ -49,7 +50,6 @@ section "OF Vision, compiling ofgen"
 # sudo apt install libyaml-cpp-dev
 
 
-section "Will compile now"
 
 # if [[ -z $GITHUB_REPOSITORY ]]; then
 #     section "Using Make"

@@ -121,7 +121,8 @@ endif
 .PHONY: all Debug Release after clean CleanDebug CleanRelease help force
 
 # $(info MAKEFLAGS XXX = ${MAKEFLAGS})
-JOBS = -j
+# JOBS = -j
+JOBS =
 
 Release:
 	@echo Compiling OF library for Release
