@@ -70,4 +70,4 @@ jobs:
           # xcodebuild -arch arm64
 
       - name: Tests
-        run: ./scripts/macos/tests.sh
+        run: ./scripts/tests.sh
