@@ -29,7 +29,7 @@ checkPackageBrew() {
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     checkPackageApt libyaml-cpp-dev
-    checkPackageApt nlohmann-json-dev
+    checkPackageApt nlohmann-json3-dev
         # ...
 elif [[ "$OSTYPE" == "darwin"* ]]; then
 	checkPackageBrew yaml-cpp
