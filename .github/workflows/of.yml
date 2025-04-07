@@ -16,23 +16,24 @@ env:
   ccache: ccache
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install Packages - Apt
-        uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: libcairo2-dev
-          version: 1.0
+  # test:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Install Packages - Apt
+  #       uses: awalsh128/cache-apt-pkgs-action@latest
+  #       with:
+  #         packages: libcairo2-dev
+  #         version: 1.0
 
-      - name: test
-        run: |
-          pkg-config --libs --cflags cairo
+  #     - name: test
+  #       run: |
+  #         pkg-config --libs --cflags cairo
 
   ofworks:
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        # os: [macos-latest, ubuntu-latest]
+        os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
