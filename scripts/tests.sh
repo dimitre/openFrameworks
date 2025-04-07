@@ -7,9 +7,9 @@ section() {
     printf "⚡️ ${COLOR} ${@} ${NC}\n\r"
 }
 
-OF_FOLDER=../..
-PLATFORM=macos
-LIBS_FOLDER=${OF_FOLDER}/libs/${PLATFORM}
+OF_FOLDER=..
+# PLATFORM=macos
+# LIBS_FOLDER=${OF_FOLDER}/libs/${PLATFORM}
 section OK tests
 cd $OF_FOLDER
 
