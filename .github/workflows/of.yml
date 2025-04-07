@@ -66,7 +66,7 @@ jobs:
       - name: All Addons Example
         run: |
           cd examples/templates/allAddonsExample
-          ofGen buildrun
+          ofgen buildrun
           # xcodebuild -arch arm64
 
       - name: Tests
