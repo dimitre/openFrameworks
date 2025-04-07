@@ -9,7 +9,7 @@ section() {
     printf "💻${COLOR} ${@} ${NC}\n\r"
 }
 
-checkPackage() {
+checkPackageApt() {
     dpkg --status $1 &> /dev/null
     if [ $? -eq 0 ]; then
     echo "$1: Already installed"
@@ -18,17 +18,22 @@ checkPackage() {
     fi
 }
 
+checkPackageBrew() {
+	if brew ls --versions $1 > /dev/null; then
+		echo $1 already installed
+    else
+    	echo installing $1
+    	brew install $1
+    fi
+}
+
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    checkPackage libyaml-cpp-dev
+    checkPackageApt libyaml-cpp-dev
+    checkPackageApt nlohmann-json-dev
         # ...
 elif [[ "$OSTYPE" == "darwin"* ]]; then
-    if brew ls --versions yaml-cpp > /dev/null; then
-	echo yaml-cpp already installed
-    else
-	echo installing yaml-cpp
-	brew install yaml-cpp
-      # The package is not installed
-    fi
+	checkPackageBrew yaml-cpp
+	checkPackageBrew nlohmann-json
 fi
 
 section "OFWorks, compiling ofgen"
