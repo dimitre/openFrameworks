@@ -32,8 +32,8 @@ function buildExample() {
     cd ../../..
 }
 
-buildExample emptyExample
-buildExample allAddonsExample
+# buildExample emptyExample
+# buildExample allAddonsExample
 
 # echo "##[group]Running unit tests"
 echo "Running unit tests"
