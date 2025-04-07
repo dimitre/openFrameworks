@@ -19,15 +19,13 @@ jobs:
   ofworks:
     strategy:
       matrix:
-        cfg:
-          - { os: macos-latest }
-          - { os: ubuntu-latest }
-    runs-on: ${{ matrix.cfg.os }}
+        os: [macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Brew
-        if: matrix.cfg.os == macos-latest
+        if: matrix.os == 'macos-latest'
         uses: tecolicom/actions-use-homebrew-tools@v1.3
         with:
           tools: wget2 yaml-cpp fmt ccache nlohmann-json # fmt
@@ -47,7 +45,7 @@ jobs:
           ./install.sh
 
       - name: XCodebuild Core
-        if: matrix.cfg.os == macos-latest
+        if: matrix.os == 'macos-latest'
         run: |
           cd libs/openFrameworksCompiled/project/macos
           xcodebuild -arch arm64
