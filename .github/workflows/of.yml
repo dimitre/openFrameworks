@@ -27,7 +27,7 @@ jobs:
 
       - name: test
         run: |
-          pkgconfig --libs --cflags cairo
+          pkg-config --libs --cflags cairo
 
   ofworks:
     strategy:
