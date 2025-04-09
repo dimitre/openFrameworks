@@ -32,7 +32,7 @@ jobs:
   ofworks:
     strategy:
       matrix:
-        # os: [macos-latest, ubuntu-latest]
+        os: [macos-latest, ubuntu-latest]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
