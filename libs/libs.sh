@@ -47,7 +47,7 @@ done
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
     PLATFORM=macos
-    CORELIBS=( brotli cairo FreeImage freetype glew glfw glm json libpng pugixml tess2 uriparser utfcpp zlib openssl curl pixman )
+    CORELIBS=( brotli cairo FreeImage freetype glew glfw glm json libpng pugixml rtAudio tess2 uriparser utfcpp zlib openssl curl pixman )
     # FIXME: TODO: add svgtiny to ofLibs and here
     ADDONLIBS=( assimp libusb libxml2 opencv )
     ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"

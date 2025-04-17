@@ -3,9 +3,7 @@
 #include "ofUtils.h"
 #include "ofAppRunner.h"
 #include "ofLog.h"
-#include "ofConstants.h"
-#include <RtAudio.h>
-#include <cstring>
+#include <rtaudio/RtAudio.h>
 
 using std::vector;
 using std::shared_ptr;
@@ -148,7 +146,8 @@ bool ofRtAudioSoundStream::setup(const ofSoundStreamSettings & settings_)
 			ofLogNotice() << "Initialing RtAudio with UNSPECIFIED API";
 			audio = std::make_shared<RtAudio>();
 		}
-		ofLogNotice() << "Initialized RtAudio with API: " << RtAudio::getApiName(audio->getCurrentApi());
+        //needs latest RtAudio - this breaks in slightly older linux 
+		//ofLogNotice() << "Initialized RtAudio with API: " << RtAudio::getApiName(audio->getCurrentApi());
 	}
 	catch (std::exception &error) {
 		ofLogError() << "Failed to initialize RtAudio: " << error.what();
@@ -205,7 +204,9 @@ void ofRtAudioSoundStream::start() {
 	if (audio == nullptr) return;
 
 	try {
-		audio->startStream();
+		if (!audio->isStreamRunning()) {
+			audio->startStream();
+		}
 	}
 	catch (std::exception &error) {
 		ofLogError() << error.what();
@@ -305,7 +306,7 @@ int ofRtAudioSoundStream::rtAudioCallback(void *outputBuffer, void *inputBuffer,
 			rtStreamPtr->settings.inCallback(rtStreamPtr->inputBuffer);
 		}
 		// [damian] not sure what this is for? assuming it's for underruns? or for when the sound system becomes broken?
-		std::memset(fPtrIn, 0, nFramesPerBuffer * nInputChannels * sizeof(float));
+		memset(fPtrIn, 0, nFramesPerBuffer * nInputChannels * sizeof(float));
 	}
 
 	if (nOutputChannels > 0) {

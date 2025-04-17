@@ -174,7 +174,7 @@ enum ofTargetPlatform{
 #elif defined(TARGET_OSX)
 	#define TARGET_GLFW_WINDOW
     #define OF_CAIRO
-
+	#define OF_RTAUDIO
 
 	#include <GL/glew.h>
     #include <OpenGL/OpenGL.h>

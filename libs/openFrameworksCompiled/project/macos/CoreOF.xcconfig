@@ -23,6 +23,7 @@ OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libglfw3.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libglm.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libpng16.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libpugixml.a
+OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/librtaudio.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libtess2.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/liburiparser.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libz.a
@@ -91,4 +92,3 @@ CONFIGURATION_BUILD_DIR = $(SRCROOT)/bin/
 // STRIP_INSTALLED_PRODUCT for that.
 //COPY_PHASE_STRIP[config=Debug] = NO
 //COPY_PHASE_STRIP[config=Release] = YES
-
