@@ -1002,6 +1002,9 @@ void ofTrueTypeFont::drawChar(uint32_t c, float x, float y, bool vFlipped) const
 
 	ofIndexType firstIndex = stringQuads.getVertices().size();
 
+	// FIXME: optimize to addvertices, addtexcoords.
+	// this is called every frame every string.
+	// add index can be done only once (maybe)
 	stringQuads.addVertex(glm::vec3(xmin,ymin,0.f));
 	stringQuads.addVertex(glm::vec3(xmax,ymin,0.f));
 	stringQuads.addVertex(glm::vec3(xmax,ymax,0.f));
@@ -1241,6 +1244,7 @@ void ofTrueTypeFont::createStringMesh(const string& str, float x, float y, bool 
 const ofMesh & ofTrueTypeFont::getStringMesh(const string& c, float x, float y, bool vFlipped) const{
 	stringQuads.clear();
 	createStringMesh(c,x,y,vFlipped);
+//	std::cout << "ARWIL " << c << " : " << stringQuads.getVertices().size() << std::endl;
 	return stringQuads;
 }
 

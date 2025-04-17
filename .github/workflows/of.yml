@@ -84,3 +84,37 @@ jobs:
 
       - name: Tests
         run: ./scripts/tests.sh
+
+  ofworks-rpi:
+    strategy:
+      matrix:
+        # os: [ubuntu-latest]
+        cfg:
+          - {
+              platform: rpi-aarch64,
+              os: ubuntu-latest,
+              prefix: aarch64-linux-gnu,
+              toolchain: aarch64-linux-gnu-gcc,
+            }
+        # os: [ubuntu-latest]
+    runs-on: ${{ matrix.cfg.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: RPI - apt multistrap
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: multistrap gcc-${{matrix.cfg.prefix}} g++-${{matrix.cfg.prefix}}
+          version: 1.0
+
+      - name: RPI - multistrap
+        if: matrix.cfg.platform == 'rpi-aarch64' || matrix.cfg.platform == 'rpi-armv6l'
+        shell: bash
+        run: |
+          mkdir -p raspbian/etc/apt/apt.conf.d/
+          echo 'Acquire::AllowInsecureRepositories "true";' | sudo tee raspbian/etc/apt/apt.conf.d/90insecure
+          multistrap -a arm64 -d raspbian -f ./scripts/rpi/multistrap.conf
+
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@v1.2.17
+        with:
+          key: ${{ runner.os }}-${{ matrix.cfg.platform }}-ccache
