@@ -1,4 +1,12 @@
+addons/**
 *.a
 *.o
+*.d
 */obj/**
 *.app/**
+.DS_Store
+libs/openFrameworksCompiled/lib/
+.cache/
+libs/macos
+examples/*
+apps/*

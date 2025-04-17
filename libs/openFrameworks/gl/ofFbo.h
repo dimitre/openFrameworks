@@ -53,8 +53,6 @@ public:
 	ofFbo & operator=(ofFbo && fbo);
 	virtual ~ofFbo();
 
-	/// ofFbo::Settings is currently deprecated in favor of the ofFboSettings struct
-	typedef ofFboSettings Settings;
 
 	void allocate(int width, int height, int internalformat = GL_RGBA, int numSamples = 0);
 	//void allocateForShadow(int width, int height);
@@ -63,10 +61,6 @@ public:
 
 	void clear();
 
-#ifdef USEDEPRECATED
-	[[deprecated("Use clear()")]]
-	void destroy();
-#endif
 
 
 #ifndef TARGET_OPENGLES
