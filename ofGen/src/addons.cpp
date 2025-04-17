@@ -337,6 +337,15 @@ void ofProject::build() {
 	}
 }
 
+void ofProject::eraseTemplates() {
+   	divider();
+	alert("ofProject::eraseTemplates", 92);
+	for (auto & t : templates) {
+		t->load();
+		t->eraseFiles();
+	}
+}
+
 bool buildProject() {
 	// alert("buildProject", 92);
 	ofProject project;

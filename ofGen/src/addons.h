@@ -18,6 +18,7 @@ public:
 	std::vector<ofAddon *> addons;
 	std::vector<ofTemplate *> templates;
 	void build();
+	void eraseTemplates();
 };
 
 // struct ofAdditional {

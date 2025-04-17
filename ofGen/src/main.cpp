@@ -34,7 +34,11 @@ int main(const int argc, const char * argv[]) {
 			if (result == 0) {
 				conf.run();
 			}
-		} else {
+		} else if (conf.singleParameter == "cleantemplates") {
+			// project.eraseTemplates();
+		}
+
+		else {
 			alert("exiting: invalid parameter " + conf.singleParameter, 95);
 			exit(1);
 		}

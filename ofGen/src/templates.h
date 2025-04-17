@@ -67,7 +67,7 @@ public:
 	}
 
 	virtual void edit(std::string & str) {
-    	std::cout << "ofTemplate::edit() called on primitive member " << name << std::endl;
+		std::cout << "ofTemplate::edit() called on primitive member " << name << std::endl;
 	};
 
 	// FIXME: uma funcao pra zerar o commands list quando sai de um projeto entra no proximo.
@@ -76,6 +76,12 @@ public:
 		for (auto & c : copyTemplateFiles) {
 			c.run();
 			// c.info();
+		}
+	}
+
+	void eraseFiles() {
+		for (auto & c : copyTemplateFiles) {
+		  alert("will remove " + c.to.string(), 96);
 		}
 	}
 };
@@ -163,7 +169,6 @@ public:
 		}
 		return p;
 	}
-
 
 	std::map<fs::path, std::string> extensionToFileType {
 		{ ".framework", "wrapper.framework" },
