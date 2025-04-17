@@ -4,6 +4,13 @@
 #include "ofCubeMap.h"
 #include "ofImage.h"
 #include "ofGLProgrammableRenderer.h"
+
+#if !defined(GLM_FORCE_CTOR_INIT)
+	#define GLM_FORCE_CTOR_INIT
+#endif
+#if !defined(GLM_ENABLE_EXPERIMENTAL)
+	#define GLM_ENABLE_EXPERIMENTAL
+#endif
 #include <glm/vec2.hpp>
 #include <glm/gtx/transform.hpp>
 
@@ -106,7 +113,7 @@ bool ofMaterial::isPBRSupported() {
 	#if defined(TARGET_OPENGLES) && !defined(TARGET_EMSCRIPTEN)
 	return false;
 	#endif
-
+	
 	if( !ofIsGLProgrammableRenderer() ) {
 		return false;
 	}
@@ -123,7 +130,7 @@ void ofMaterial::setPBR(bool ab) {
 		data.isPbr = false;
 		return;
 	}
-
+	
 	#if defined(TARGET_OPENGLES) && !defined(TARGET_EMSCRIPTEN)
 	if( ab ) {
 		if( !bPrintedPBRRenderWarning ) {
@@ -134,8 +141,8 @@ void ofMaterial::setPBR(bool ab) {
 		return;
 	}
 	#endif
-
-
+	
+	
 	data.isPbr = ab;
 }
 
@@ -149,8 +156,8 @@ void ofMaterial::setColors(ofFloatColor oDiffuse, ofFloatColor oAmbient, ofFloat
 
 //----------------------------------------------------------
 void ofMaterial::setup(const ofMaterialSettings & settings){
-	if(settings.customUniforms != data.customUniforms || settings.postFragment != data.postFragment ||
-		settings.mainVertexKey != data.mainVertexKey || settings.mainFragmentKey != data.mainFragmentKey ||
+	if(settings.customUniforms != data.customUniforms || settings.postFragment != data.postFragment || 
+		settings.mainVertexKey != data.mainVertexKey || settings.mainFragmentKey != data.mainFragmentKey || 
 		settings.isPbr != data.isPbr){
 		shaders.clear();
 		uniforms1f.clear();
@@ -175,9 +182,9 @@ void ofMaterial::setShaderMain(std::string aShaderSrc, GLenum atype, std::string
 		ofLogWarning("ofMaterial::setShaderMain") << "only available on PBR materials.";
 		return;
 	}
-
+	
 	if(atype == GL_VERTEX_SHADER) {
-		// we would like to replace the current shader at key
+		// we would like to replace the current shader at key 
 		// using a skey instead of shadersrc as key so we can easily overwrite
 		if( data.mainVertexKey == skey) {
 			// delete previous shader here, whether frag shader has same key or not
@@ -281,13 +288,13 @@ bool ofMaterial::loadTexture( const ofMaterialTextureType& aMaterialTextureType,
 
 //----------------------------------------------------------
 bool ofMaterial::loadTexture( const ofMaterialTextureType& aMaterialTextureType, std::string apath, bool bTex2d, bool mirrorY ) {
-
+	
 	bool bWasUsingArb = ofGetUsingArbTex();
 	bTex2d ? ofDisableArbTex() : ofEnableArbTex();
-
+	
 	auto tex { std::make_shared<ofTexture>() };
 	bool bLoadOk = ofLoadImage(*tex, apath, mirrorY );
-
+	
 	if( bLoadOk ) {
 		// if there was a previous instance, then erase it, then replace it
 		if( mLocalTextures.find(aMaterialTextureType) != mLocalTextures.end() ) {
@@ -301,7 +308,7 @@ bool ofMaterial::loadTexture( const ofMaterialTextureType& aMaterialTextureType,
 	} else {
 		ofLogError("ofMaterial") << "loadTexture(): FAILED for " << getUniformName(aMaterialTextureType) << " at path: " << apath;
 	}
-
+	
 	bWasUsingArb ? ofEnableArbTex() : ofDisableArbTex();
 	return bLoadOk;
 }
@@ -341,8 +348,8 @@ void ofMaterial::setTexture(const ofMaterialTextureType& aMaterialTextureType,co
 			setPBR(true);
 		}
 	}
-
-
+	
+	
 
 	if(aMaterialTextureType == OF_MATERIAL_TEXTURE_CLEARCOAT ||
 	   aMaterialTextureType == OF_MATERIAL_TEXTURE_CLEARCOAT_ROUGHNESS ||
@@ -432,7 +439,7 @@ void ofMaterial::setClearCoatTexture( const ofTexture& aTex ) {
 //----------------------------------------------------
 void ofMaterial::setMetallic( const float& ametallic ) {
 	data.metallic = ametallic;
-
+	
 	if( isBound() && isPBR() && currentRenderShader) {
 		currentRenderShader->setUniform1f("mat_metallic", data.metallic );
 	}
@@ -642,12 +649,12 @@ void ofMaterial::mergeCustomUniformTextures() {
 		OF_MATERIAL_TEXTURE_ROUGHNESS,
 		OF_MATERIAL_TEXTURE_METALLIC
 	} );
-
+	
 	mergeCustomUniformTextures(OF_MATERIAL_TEXTURE_ROUGHNESS_METALLIC, {
 		OF_MATERIAL_TEXTURE_OCCLUSION,
 		OF_MATERIAL_TEXTURE_ROUGHNESS_METALLIC
 	} );
-
+	
 	mergeCustomUniformTextures(OF_MATERIAL_TEXTURE_AO_ROUGHNESS_METALLIC, {
 		OF_MATERIAL_TEXTURE_OCCLUSION,
 		OF_MATERIAL_TEXTURE_ROUGHNESS,
@@ -664,7 +671,7 @@ void ofMaterial::mergeCustomUniformTextures(ofMaterialTextureType mainType, std:
 		int texTarget;
 		bool bMatchingTextures = true;
 		int minTexLocation = 99999;
-
+		
 		for(size_t i = 0; i < mtsSize; i++ ) {
 			if(!hasTexture(mergeTypes[i])){
 				bHasAllMergeTypes = false;
@@ -686,7 +693,7 @@ void ofMaterial::mergeCustomUniformTextures(ofMaterialTextureType mainType, std:
 				}
 			}
 		}
-
+		
 		if(bHasAllMergeTypes && bMatchingTextures && minTexLocation < 1000){
 			for(size_t i = 0; i < mtsSize; i++ ) {
 				removeCustomUniformTexture(mergeTypes[i]);
@@ -750,9 +757,9 @@ void ofMaterial::initDepthShaders(ofGLProgrammableRenderer & renderer) const {
 					depthShadersMap[&renderer].erase(sids.first);
 				}
 			}
-
+			
 			ofLogVerbose("ofMaterial :: initShaders : depth shaders: " ) << depthShadersMap.size() << " | " << ofGetFrameNum();
-
+			
 			auto trendererShaders = mDepthShaders.find(&renderer);
 			if( trendererShaders != mDepthShaders.end() ) {
 				if(trendererShaders->second) {
@@ -763,12 +770,12 @@ void ofMaterial::initDepthShaders(ofGLProgrammableRenderer & renderer) const {
 			mDepthShaderIdsToRemove.clear();
 		}
 	}
-
+	
 	// now lets check the depth shaders
 	if( getDepthShaderStringId() != "" ) {
 		auto depthShaders = mDepthShaders.find(&renderer);
 		const std::string shaderId = getDepthShaderStringId();
-
+		
 		if(depthShaders == mDepthShaders.end() ||
 		   depthShaders->second->shaderId != shaderId ){
 			if(depthShadersMap[&renderer].find(shaderId) != depthShadersMap[&renderer].end()){
@@ -784,17 +791,17 @@ void ofMaterial::initDepthShaders(ofGLProgrammableRenderer & renderer) const {
 				mDepthShaders[&renderer] = nullptr;
 			}
 		}
-
+		
 		if(mDepthShaders[&renderer] == nullptr){
 			ofLogVerbose("ofMaterial") << "initDepthShaders : allocating depth shaders | " << ofGetFrameNum();
-
+			
 			mDepthShaders[&renderer].reset(new DepthShaders);
 			mDepthShaders[&renderer]->shaderId = shaderId;
-
+			
 			depthShadersMap[&renderer][shaderId] = mDepthShaders[&renderer];
 		}
 	}
-
+	
 }
 
 //-----------------------------------------------------------
@@ -803,28 +810,28 @@ const ofShader& ofMaterial::getShadowDepthShader( const ofShadow& ashadow, ofGLP
 //	std::string shadowId = ofToString(ashadow.getData()->lightType, 0)+"_"+ofToString(ashadow.getNumShadowDepthPasses(), 0);
 	unsigned int shadowShaderId = ashadow.getData()->lightType + ((ashadow.getNumShadowDepthPasses()+1)*100);
 	auto shadowShader = mDepthShaders[&renderer]->shaders.find(shadowShaderId);
-
+	
 	if(shadowShader == mDepthShaders[&renderer]->shaders.end() || !mDepthShaders[&renderer]->shaders[shadowShaderId] ) {
 		auto nDepthShader { std::make_shared<ofShader>() };
-
+		
 		auto customUniforms = data.customUniforms;
 		for( auto & custom : mCustomUniforms ){
 			customUniforms += custom.second + " " + custom.first + ";\n";
 		}
-
+		
 		std::string definesString = getDefinesString();
 		definesString += "#define SAMPLER sampler2D\n";
 		definesString += "#define TEXTURE texture\n";
 		std::string extraVertString = definesString;
 		extraVertString += customUniforms;
-
+		
 		std::string srcMain = extraVertString+shaderDepthVertexSource(data);
 		ofLogVerbose("--ofMaterial::getShadowDepthShader--");
 		if(!ashadow.setupShadowDepthShader( *nDepthShader, srcMain )) {
 			ofLogError("ofMaterial :: getShadowDepthShader() : error loading depth shader: ") << data.mainDepthVertexKey;
 		}
 		ofLogVerbose(nDepthShader->getShaderSource(GL_VERTEX_SHADER));
-
+		
 		mDepthShaders[&renderer]->shaders[shadowShaderId] = nDepthShader;
 	}
 	return *mDepthShaders[&renderer]->shaders[shadowShaderId];
@@ -832,7 +839,7 @@ const ofShader& ofMaterial::getShadowDepthShader( const ofShadow& ashadow, ofGLP
 
 //-----------------------------------------------------------
 void ofMaterial::initShaders(ofGLProgrammableRenderer & renderer) const{
-	// remove any shaders that have their main source remove
+	// remove any shaders that have their main source remove 
 	{
 		if( mShaderIdsToRemove.size() ) {
 			for( auto& sids : mShaderIdsToRemove ) {
@@ -857,15 +864,15 @@ void ofMaterial::initShaders(ofGLProgrammableRenderer & renderer) const{
 			mShaderIdsToRemove.clear();
 		}
 	}
-
+	
 
     auto rendererShaders = shaders.find(&renderer);
-
+	
 	size_t numLights = ofLightsData().size();
 	// only support for a single cube map at a time
-	size_t numCubeMaps = ofCubeMapsData().size() > 0 ? 1 : 0;
+	size_t numCubeMaps = ofCubeMap::getCubeMapsData().size() > 0 ? 1 : 0;
 	const std::string shaderId = getShaderStringId();
-
+	
 	if(rendererShaders == shaders.end() ||
 	   rendererShaders->second->numLights != numLights ||
 	   rendererShaders->second->numCubeMaps != numCubeMaps ||
@@ -893,14 +900,14 @@ void ofMaterial::initShaders(ofGLProgrammableRenderer & renderer) const{
         }
 
 		std::string definesString = getDefinesString();
-
+		
 		ofLogVerbose("ofMaterial") << " defines--------------- " << std::endl;
 		ofLogVerbose("ofMaterial") << definesString;
 		ofLogVerbose("ofMaterial") << "textures --------------- " << uniformstex.size();
 		for (auto & uniform : uniformstex) {
 			ofLogVerbose() << uniform.first << ", " << uniform.second.textureTarget <<", " << uniform.second.textureID << ", " << uniform.second.textureLocation << std::endl;
 		}
-
+		
 		std::string extraVertString = definesString;
 //		if( hasTexture(OF_MATERIAL_TEXTURE_DISPLACEMENT) ) {
 //			extraVertString += "\nuniform SAMPLER "+getUniformName(OF_MATERIAL_TEXTURE_DISPLACEMENT)+";\n";
@@ -909,14 +916,14 @@ void ofMaterial::initShaders(ofGLProgrammableRenderer & renderer) const{
 		ofLogVerbose( "ofMaterial" ) << " extraVertString------------------- ";
 		ofLogVerbose() << extraVertString;
 		ofLogVerbose( "ofMaterial" ) << "! extraVertString !------------------- " << std::endl;
-
+     
         #ifndef TARGET_OPENGLES
             string vertexRectHeader = renderer.defaultVertexShaderHeader(GL_TEXTURE_RECTANGLE);
             string fragmentRectHeader = renderer.defaultFragmentShaderHeader(GL_TEXTURE_RECTANGLE);
         #endif
         string vertex2DHeader = renderer.defaultVertexShaderHeader(GL_TEXTURE_2D);
         string fragment2DHeader = renderer.defaultFragmentShaderHeader(GL_TEXTURE_2D);
-
+		
 		#if defined(TARGET_OPENGLES) && defined(TARGET_EMSCRIPTEN)
 		// TODO: Should this be in programmable renderer?
 		if(ofIsGLProgrammableRenderer()) {
@@ -955,7 +962,7 @@ void ofMaterial::initShaders(ofGLProgrammableRenderer & renderer) const{
 //			}
 		}
 		#endif
-
+		
 		ofLogVerbose( "ofMaterial" ) << " fragment2DHeader------------------- ";
 		ofLogVerbose() << fragment2DHeader;
 		ofLogVerbose( "ofMaterial" ) << " fragment2DHeader ";
@@ -964,7 +971,7 @@ void ofMaterial::initShaders(ofGLProgrammableRenderer & renderer) const{
         shaders[&renderer]->numLights = numLights;
 		shaders[&renderer]->numCubeMaps = numCubeMaps;
 		shaders[&renderer]->shaderId = shaderId;
-
+		
         shaders[&renderer]->noTexture.setupShaderFromSource(GL_VERTEX_SHADER,vertexSource(isPBR(),vertex2DHeader,numLights,false,false,extraVertString,data));
         shaders[&renderer]->noTexture.setupShaderFromSource(GL_FRAGMENT_SHADER,fragmentSource(isPBR(),fragment2DHeader, customUniforms, data,numLights,false,false, definesString));
         shaders[&renderer]->noTexture.bindDefaults();
@@ -1007,11 +1014,11 @@ void ofMaterial::initShaders(ofGLProgrammableRenderer & renderer) const{
 
 const ofShader & ofMaterial::getShader(int textureTarget, bool geometryHasColor, ofGLProgrammableRenderer & renderer) const{
     initShaders(renderer);
-
+	
 	if(bHasCustomShader && customShader){
 		return *customShader;
 	}
-
+	
 	// override the textureTarget argument coming from the programmable renderer
 	// the renderer is passing the textureTarget based on if there is a texture that is bound
 	// if there is no texture bound, then go ahead and switch to the diffuse texture
@@ -1020,7 +1027,7 @@ const ofShader & ofMaterial::getShader(int textureTarget, bool geometryHasColor,
 		const auto& dt = uniformstex.at(loc);
 		textureTarget = dt.textureTarget;
 	}
-
+	
 	switch(textureTarget){
 	case OF_NO_TEXTURE:
         if(geometryHasColor){
@@ -1048,10 +1055,10 @@ const ofShader & ofMaterial::getShader(int textureTarget, bool geometryHasColor,
 
 void ofMaterial::updateMaterial(const ofShader & shader,ofGLProgrammableRenderer & renderer) const{
 	currentRenderShader = &shader;
-
+	
 	shader.setUniform4fv("mat_emissive", &data.emissive.r);
 	shader.setUniform2f("mat_texcoord_scale", data.texCoordScale );
-
+	
 	if( isPBR() ) {
 		shader.setUniform3f("uCameraPos", renderer.getCurrentEyePosition());
 		shader.setUniform4fv("mat_diffuse", &data.diffuse.r );
@@ -1061,7 +1068,7 @@ void ofMaterial::updateMaterial(const ofShader & shader,ofGLProgrammableRenderer
 		if( isClearCoatEnabled() ) {
 			shader.setUniform2f("mat_clearcoat", data.clearCoatStrength, data.clearCoatRoughness );
 		}
-
+		
 		if( hasTexture(OF_MATERIAL_TEXTURE_DISPLACEMENT) ) {
 			shader.setUniform1f("mat_displacement_strength", data.displacementStrength );
 			shader.setUniform1f("mat_displacement_normals_strength", data.displacementNormalsStrength );
@@ -1069,8 +1076,8 @@ void ofMaterial::updateMaterial(const ofShader & shader,ofGLProgrammableRenderer
 		if( hasTexture(OF_MATERIAL_TEXTURE_NORMAL) || hasTexture(OF_MATERIAL_TEXTURE_DISPLACEMENT) ) {
 			shader.setUniform1f("mat_normal_mix", data.normalGeomToNormalMapMix );
 		}
-
-		std::shared_ptr<ofCubeMap::Data> cubeMapData = ofCubeMap::getActiveData();
+		
+		auto cubeMapData = ofCubeMap::getActiveData();
 		if( cubeMapData ) {
 			shader.setUniform1f("mat_ibl_exposure", cubeMapData->exposure );
 			shader.setUniform1f("uCubeMapEnabled", 1.0f );
@@ -1080,7 +1087,7 @@ void ofMaterial::updateMaterial(const ofShader & shader,ofGLProgrammableRenderer
 			shader.setUniform1f("uCubeMapEnabled", 0.0f );
 			shader.setUniform1f("uEnvMapMaxMips", 1.0f );
 		}
-
+		
 	} else {
 		shader.setUniform4fv("mat_ambient", &data.ambient.r);
 		shader.setUniform4fv("mat_diffuse", &data.diffuse.r);
@@ -1132,7 +1139,6 @@ void ofMaterial::updateLights(const ofShader & shader,ofGLProgrammableRenderer &
 		shared_ptr<ofLight::Data> light = ofLightsData()[i].lock();
 		if(!light || !light->isEnabled){
 			shader.setUniform1f("lights["+idx+"].enabled",0);
-//			lights[i].enabled = 0;
 			continue;
 		}
 		glm::vec4 lightEyePosition = light->position;
@@ -1152,35 +1158,20 @@ void ofMaterial::updateLights(const ofShader & shader,ofGLProgrammableRenderer &
 			}
 			if( light->lightType != OF_LIGHT_POINT ) {
 				shader.setUniform3f("lights["+idx+"].direction", light->direction );
-//				lights[i].direction = light->direction;
 			}
 		}
-
-//		lights[i].enabled = 1;
-//		lights[i].type = light->lightType;
-//		lights[i].position = lightEyePosition;
 
 		shader.setUniform1f("lights["+idx+"].enabled",1);
 		shader.setUniform1f("lights["+idx+"].type", light->lightType);
 		shader.setUniform4f("lights["+idx+"].position", lightEyePosition);
 		if( !isPBR() ) {
-//			lights[i].ambient = light->ambientColor;
-//			lights[i].specular = light->specularColor;
-
 			shader.setUniform4f("lights["+idx+"].ambient", light->ambientColor);
 			shader.setUniform4f("lights["+idx+"].specular", light->specularColor);
 		}
-//		lights[idx].diffuse = light->diffuseColor;
 		shader.setUniform4f("lights["+idx+"].diffuse", light->diffuseColor);
 
 		if(light->lightType!=OF_LIGHT_DIRECTIONAL){
 			// TODO: add in light radius if pbr?
-
-//			lights[idx].radius = 0.0f;
-//			lights[idx].constantAttenuation = light->attenuation_constant;
-//			lights[idx].linearAttenuation = light->attenuation_linear;
-//			lights[idx].quadraticAttenuation = light->attenuation_quadratic;
-
 			shader.setUniform1f("lights["+idx+"].radius", 0.0f);
 			shader.setUniform1f("lights["+idx+"].constantAttenuation", light->attenuation_constant);
 			shader.setUniform1f("lights["+idx+"].linearAttenuation", light->attenuation_linear);
@@ -1195,16 +1186,9 @@ void ofMaterial::updateLights(const ofShader & shader,ofGLProgrammableRenderer &
 				glm::vec4 direction4 = renderer.getCurrentViewMatrix() * glm::vec4(direction,1.0);
 				direction = glm::vec3(direction4) / direction4.w;
 				direction = direction - glm::vec3(lightEyePosition);
-
 				shader.setUniform3f("lights["+idx+"].spotDirection", glm::normalize(direction));
-//				lights[idx].spotDirection = glm::normalize(direction);
-
 			}
 			//shader.setUniform3f("lights["+idx+"].spotDirection", glm::normalize(direction));
-//			lights[idx].spotExponent = light->exponent;
-//			lights[idx].spotCutoff = light->spotCutOff;
-//			lights[idx].spotCosCutoff = std::cos(glm::radians(light->spotCutOff)));
-
 			shader.setUniform1f("lights["+idx+"].spotExponent", light->exponent);
 			shader.setUniform1f("lights["+idx+"].spotCutoff", light->spotCutOff);
 			shader.setUniform1f("lights["+idx+"].spotCosCutoff", std::cos(glm::radians(light->spotCutOff)));
@@ -1212,15 +1196,8 @@ void ofMaterial::updateLights(const ofShader & shader,ofGLProgrammableRenderer &
 			if( !isPBR() ) {
 				glm::vec3 halfVector(glm::normalize(glm::vec4(0.f, 0.f, 1.f, 0.f) + lightEyePosition));
 				shader.setUniform3f("lights["+idx+"].halfVector", halfVector);
-
-//				lights[idx].halfVector = light->halfVector;
-
 			}
 		}else if(light->lightType==OF_LIGHT_AREA){
-
-//			lights[idx].width = light->width;
-//			lights[idx].height = light->height;
-
 			shader.setUniform1f("lights["+idx+"].width", light->width);
 			shader.setUniform1f("lights["+idx+"].height", light->height);
 			glm::vec3 direction = light->direction;
@@ -1229,12 +1206,9 @@ void ofMaterial::updateLights(const ofShader & shader,ofGLProgrammableRenderer &
 				glm::vec4 direction4 = renderer.getCurrentViewMatrix() * glm::vec4(direction, 1.0);
 				direction = glm::vec3(direction4) / direction4.w;
 				direction = direction - glm::vec3(lightEyePosition);
-
-//				lights[idx].spotDirection = glm::normalize(direction);
-
 				shader.setUniform3f("lights["+idx+"].spotDirection", glm::normalize(direction));
 			}
-
+			
 			auto right = light->right;
 			auto up = light->up;
 			if( !isPBR() ) {
@@ -1244,12 +1218,7 @@ void ofMaterial::updateLights(const ofShader & shader,ofGLProgrammableRenderer &
 				right = right - glm::vec3(lightEyePosition);
 				up = glm::cross(right, direction);
 			}
-
-			// FIXME: why toGlm in one and not in another?
-//			lights[idx].right = glm::normalize(toGlm(right));
-//			lights[idx].up = glm::normalize(up));
-
-			shader.setUniform3f("lights["+idx+"].right", glm::normalize(right));
+			shader.setUniform3f("lights["+idx+"].right", glm::normalize(toGlm(right)));
 			shader.setUniform3f("lights["+idx+"].up", glm::normalize(up));
 		}
 	}
@@ -1331,7 +1300,7 @@ void ofMaterial::setCustomUniformTexture(const std::string & name, const ofTextu
 
 //--------------------------------------------------------
 void ofMaterial::setCustomUniformTexture(const std::string & name, int textureTarget, GLint textureID){
-
+	
 	int textureLocation = -1;
 	// if the texture uniform name is not registered, then try to find a new location //
 	if( uniformstex.count(name) < 1 ) {
@@ -1361,7 +1330,7 @@ void ofMaterial::setCustomUniformTexture(const std::string & name, int textureTa
 	} else {
 		textureLocation = uniformstex[name].textureLocation;
 	}
-
+	
 	if( textureLocation > -1 ) {
 		setCustomUniformTexture(name, textureTarget, textureID, textureLocation);
 	}
@@ -1428,7 +1397,7 @@ void ofMaterial::addShaderDefine( const std::string & aDefineName ) {
 //--------------------------------------------------------
 void ofMaterial::addShaderDefine( const std::string & aDefineName, const std::string & aDefineValue ) {
 	if( aDefineName.empty() ) return;
-
+	
 	bool bUpdateDefines = false;
 	if( mDefines.count(aDefineName) < 1 ) {
 		bUpdateDefines = true;
@@ -1447,16 +1416,16 @@ void ofMaterial::addShaderDefine( const std::string & aDefineName, const std::st
 //--------------------------------------------------------
 bool ofMaterial::removeShaderDefine( const std::string & aDefineName ) {
 	if( aDefineName.empty() ) return false;
-
+	
 	if(mDefines.count(aDefineName) > 0 ) {
 		mDefines.erase(aDefineName);
-
+		
 		// update the unique id using uniqueIdString string //
 		data.uniqueIdString = "";
 		for( auto& def : mDefines ) {
 			data.uniqueIdString += def.first;
 		}
-
+		
 		return true;
 	}
 	return false;
@@ -1468,7 +1437,7 @@ const std::string ofMaterial::getDefinesString() const {
 	for( auto& diter : mDefines ) {
 		definesString += "#define "+diter.first+" "+diter.second+"\n";
 	}
-
+	
 	if( isPBR() ) {
 		#ifdef TARGET_OPENGLES
 		definesString += "#define PBR_QUALITY_LEVEL_LOW 1 \n";
@@ -1476,16 +1445,16 @@ const std::string ofMaterial::getDefinesString() const {
 		definesString += "#define PBR_QUALITY_LEVEL_HIGH 1\n";
 		#endif
 	}
-
-	if(isPBR() && ofCubeMapsData().size() > 0 && ofIsGLProgrammableRenderer() ) {
+	
+	if(isPBR() && ofCubeMap::getCubeMapsData().size() > 0 && ofIsGLProgrammableRenderer() ) {
 //		const auto& cubeMapData = ofCubeMap::getActiveData();
-
+		
 		definesString += "#define HAS_CUBE_MAP 1\n";
-
+		
 		bool bHasIrradiance = false;
 		bool bPreFilteredMap = false;
 		bool bBrdfLutTex = false;
-		for( auto cmdWeak : ofCubeMapsData() ) {
+		for( auto cmdWeak : ofCubeMap::getCubeMapsData() ) {
 			auto cmd = cmdWeak.lock();
 			if( !cmd ) continue;
 			if( cmd->bIrradianceAllocated ) {
@@ -1498,7 +1467,7 @@ const std::string ofMaterial::getDefinesString() const {
 				bBrdfLutTex=true;
 			}
 		}
-
+		
 		if(bHasIrradiance) {
 			definesString += "#define HAS_TEX_ENV_IRRADIANCE 1\n";
 		}
@@ -1510,9 +1479,9 @@ const std::string ofMaterial::getDefinesString() const {
 		}
 		// need to add .0 to be read as a float in the shader for gl es
 		//definesString += "#define ENV_MAP_MAX_MIPS "+ofToString(ofCubeMap::getNumMipMaps(),0)+".0\n";
-
+		
 	}
-
+	
 	definesString += ofShadow::getShaderDefinesAsString();
 	return definesString;
 }
@@ -1537,7 +1506,7 @@ namespace{
     string shaderHeader(string header, int maxLights, bool hasTexture, bool hasColor){
 //        header += "#define MAX_LIGHTS " + ofToString(std::max(1,maxLights)) + "\n";
 		header += "#define MAX_LIGHTS " + ofToString(maxLights) + "\n";
-
+		
         if(hasTexture){
             header += "#define HAS_TEXTURE 1\n";
 		} else {
@@ -1548,7 +1517,7 @@ namespace{
 		} else {
 			header += "#define HAS_COLOR 0\n";
 		}
-
+		
         return header;
     }
 
@@ -1575,7 +1544,7 @@ namespace{
 	string fragmentSource(bool bPBR, string defaultHeader, string customUniforms, const ofMaterialSettings& adata, int maxLights, bool hasTexture, bool hasColor, string definesString){
     // string fragmentSource(bool bPBR, string defaultHeader, string customUniforms, string postFragment, int maxLights, bool hasTexture, bool hasColor, string definesString){
         auto source = bPBR ? shader_pbr_frag : fragmentShader;
-
+		
 		string postFragment = adata.postFragment;
         if(postFragment.empty()){
             postFragment = "vec4 postFragment(vec4 localColor){ return localColor; }";
@@ -1592,7 +1561,7 @@ namespace{
 			}
 			ofStringReplace(source, "%mainFragment%", mainFrag);
 		}
-
+		
 		if(bPBR) {
 			string addIncludes = shader_utils;
 			addIncludes += shader_pbr_material;
@@ -1603,8 +1572,8 @@ namespace{
 			// set PBR includes here
 			ofStringReplace(source, "%additional_includes%", addIncludes);
 		}
-
-
+		
+		
 		if( ofIsGLProgrammableRenderer() ) {
 			#if defined(TARGET_OPENGLES)
 				#if defined(TARGET_EMSCRIPTEN)
@@ -1618,7 +1587,7 @@ namespace{
 		} else {
 			ofStringReplace(source, "%shader_shadow_include%", "" );
 		}
-
+		
         source = shaderHeader(defaultHeader, maxLights, hasTexture, hasColor) + definesString + source;
         return source;
     }
@@ -1627,14 +1596,14 @@ namespace{
 //		auto source = bPBR ? shader_pbr_vert : vertexShader;
 		string header = "#define IN in\n";
 		auto source = shader_pbr_vert;
-
+		
 		string mainVertex = adata.mainDepthVertex;
 		if( mainVertex.empty() ) {
 			mainVertex = shader_pbr_main_depth_vert;
 		}
 		ofStringReplace(source, "%mainVertex%", mainVertex);
 		ofStringReplace(source, "%additional_includes%", "");
-
+		
 //		if( bPBR ) {
 //			ofStringReplace(source, "%additional_includes%", addShaderSrc);
 //		} else {
