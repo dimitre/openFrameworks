@@ -298,7 +298,7 @@ void initWindows(){
 	char value_data_char[2048];
 	string fontsDir = ofGetEnv("windir");
 	fontsDir += "\\Fonts\\";
-	
+
 	for (DWORD i = 0; i < value_count; ++i)
 	{
 			DWORD name_len = 2048;
@@ -457,7 +457,6 @@ ofTrueTypeFont::ofTrueTypeFont()
 	bLoadedOk = false;
 	letterSpacing = 1;
 	spaceSize = 1;
-	fontUnitScale = 1;
 	stringQuads.setMode(OF_PRIMITIVE_TRIANGLES);
 	ascenderHeight = 0;
 	descenderHeight = 0;
@@ -494,7 +493,7 @@ ofTrueTypeFont::ofTrueTypeFont(const ofTrueTypeFont& mom)
 	glyphBBox = mom.glyphBBox;
 	letterSpacing = mom.letterSpacing;
 	spaceSize = mom.spaceSize;
-	fontUnitScale = mom.fontUnitScale;
+//	fontUnitScale = mom.fontUnitScale;
 
 	cps = mom.cps; // properties for each character
 	settings = mom.settings;
@@ -526,7 +525,7 @@ ofTrueTypeFont & ofTrueTypeFont::operator=(const ofTrueTypeFont& mom){
 	glyphBBox = mom.glyphBBox;
 	letterSpacing = mom.letterSpacing;
 	spaceSize = mom.spaceSize;
-	fontUnitScale = mom.fontUnitScale;
+//	fontUnitScale = mom.fontUnitScale;
 
 	cps = mom.cps; // properties for each character
 	settings = mom.settings;
@@ -559,7 +558,7 @@ ofTrueTypeFont::ofTrueTypeFont(ofTrueTypeFont&& mom)
 	glyphBBox = mom.glyphBBox;
 	letterSpacing = mom.letterSpacing;
 	spaceSize = mom.spaceSize;
-	fontUnitScale = mom.fontUnitScale;
+//	fontUnitScale = mom.fontUnitScale;
 
 	cps = mom.cps; // properties for each character
 	settings = mom.settings;
@@ -590,7 +589,7 @@ ofTrueTypeFont & ofTrueTypeFont::operator=(ofTrueTypeFont&& mom){
 	glyphBBox = mom.glyphBBox;
 	letterSpacing = mom.letterSpacing;
 	spaceSize = mom.spaceSize;
-	fontUnitScale = mom.fontUnitScale;
+//	fontUnitScale = mom.fontUnitScale;
 
 	cps = mom.cps; // properties for each character
 	settings = mom.settings;
@@ -689,7 +688,7 @@ ofTrueTypeFont::glyph ofTrueTypeFont::loadGlyph(uint32_t utf8) const{
 
 //-----------------------------------------------------------
 bool ofTrueTypeFont::load(const of::filesystem::path & filename, int fontSize, bool antialiased, bool fullCharacterSet, bool makeContours, float simplifyAmt, int dpi) {
-	
+
 	ofTrueTypeFontSettings settings(filename,fontSize);
 	settings.antialiased = antialiased;
 	settings.contours = makeContours;
@@ -728,18 +727,30 @@ bool ofTrueTypeFont::load(const ofTrueTypeFontSettings & _settings){
 	if(settings.ranges.empty()){
 		settings.ranges.push_back(ofUnicode::Latin1Supplement);
 	}
+	// TODO: Add punctuation here, for any case.
 	int border = 1;
 
 
-	FT_Set_Char_Size( face.get(), dbl_to_int26p6(settings.fontSize), dbl_to_int26p6(settings.fontSize), settings.dpi, settings.dpi);
-	fontUnitScale = (float(settings.fontSize * settings.dpi)) / (72 * face->units_per_EM);
-	lineHeight = face->height * fontUnitScale;
-	ascenderHeight = face->ascender * fontUnitScale;
-	descenderHeight = face->descender * fontUnitScale;
-	glyphBBox.set(face->bbox.xMin * fontUnitScale,
-				   face->bbox.yMin * fontUnitScale,
-				  (face->bbox.xMax - face->bbox.xMin) * fontUnitScale,
-				  (face->bbox.yMax - face->bbox.yMin) * fontUnitScale);
+//	FT_Set_Char_Size( face.get(), dbl_to_int26p6(settings.fontSize), dbl_to_int26p6(settings.fontSize), settings.dpi, settings.dpi);
+
+	FT_Set_Char_Size( face.get(), 0, dbl_to_int26p6(settings.fontSize * 1.333333333334f), settings.dpi, settings.dpi);
+//	FT_Set_Char_Size( face.get(), 0, dbl_to_int26p6(settings.fontSize * 1.333333333334f), 0, 0);
+
+	lineHeight = face->height;
+//	cout << "face->height :: " << face->height << endl;
+
+
+
+	ascenderHeight = face->ascender;
+	descenderHeight = face->descender;
+	glyphBBox.set(face->bbox.xMin,
+				   face->bbox.yMin,
+				  (face->bbox.xMax - face->bbox.xMin),
+				  (face->bbox.yMax - face->bbox.yMin));
+
+	cout << "glyphBBox :: " << glyphBBox << endl;
+// 144 = glyphBBox :: -1200, -600, 2655, 1793
+// 0 = glyphBBox :: -1200, -600, 2655, 1793
 
 	//--------------- initialize character info and textures
 	auto nGlyphs = std::accumulate(settings.ranges.begin(), settings.ranges.end(), 0u,
@@ -985,12 +996,17 @@ void ofTrueTypeFont::drawChar(uint32_t c, float x, float y, bool vFlipped) const
 		return;
 	}
 
-	auto props = getGlyphProperties(c);
+	auto props { getGlyphProperties(c) };
 
-	float xmin		= props.xmin+x;
-	float ymin		= props.ymin;
-	float xmax		= props.xmax+x;
-	float ymax		= props.ymax;
+//	props.xmin *= 0.5;
+//	props.ymin *= 0.5;
+//	props.xmax *= 0.5;
+//	props.ymax *= 0.5;
+	
+	float xmin = props.xmin+x;
+	float ymin = props.ymin;
+	float xmax = props.xmax+x;
+	float ymax = props.ymax;
 
 	if(!vFlipped){
 	   ymin *= -1.0;
@@ -1000,29 +1016,39 @@ void ofTrueTypeFont::drawChar(uint32_t c, float x, float y, bool vFlipped) const
 	ymin += y;
 	ymax += y;
 
-	ofIndexType firstIndex = stringQuads.getVertices().size();
+
 
 	// FIXME: optimize to addvertices, addtexcoords.
 	// this is called every frame every string.
 	// add index can be done only once (maybe)
-	stringQuads.addVertex(glm::vec3(xmin,ymin,0.f));
-	stringQuads.addVertex(glm::vec3(xmax,ymin,0.f));
-	stringQuads.addVertex(glm::vec3(xmax,ymax,0.f));
-	stringQuads.addVertex(glm::vec3(xmin,ymax,0.f));
+	auto firstIndex { (int)stringQuads.getVertices().size() };
 
-	stringQuads.addTexCoord(glm::vec2(props.t1,props.v1));
-	stringQuads.addTexCoord(glm::vec2(props.t2,props.v1));
-	stringQuads.addTexCoord(glm::vec2(props.t2,props.v2));
-	stringQuads.addTexCoord(glm::vec2(props.t1,props.v2));
+	stringQuads.addVertices({
+		{ xmin,ymin,0.f },
+		{ xmax,ymin,0.f },
+		{ xmax,ymax,0.f },
+		{ xmin,ymax,0.f },
+	});
 
-	stringQuads.addIndex(firstIndex);
-	stringQuads.addIndex(firstIndex+1);
-	stringQuads.addIndex(firstIndex+2);
-	stringQuads.addIndex(firstIndex+2);
-	stringQuads.addIndex(firstIndex+3);
-	stringQuads.addIndex(firstIndex);
-	
-	
+
+	stringQuads.addTexCoords({
+		{ props.t1, props.v1 },
+		{ props.t2, props.v1 },
+		{ props.t2, props.v2 },
+		{ props.t1, props.v2 }
+	});
+
+	stringQuads.addIndices(
+						   {
+							   firstIndex,
+							   firstIndex+1,
+							   firstIndex+2,
+							   firstIndex+2,
+							   firstIndex+3,
+							   firstIndex
+						   }
+	);
+
 }
 
 //-----------------------------------------------------------
@@ -1191,11 +1217,11 @@ ofRectangle ofTrueTypeFont::getStringBoundingBox(const string& c, float x, float
 	// Calculate bounding box by iterating over glyph properties
 	// Meaning of props can be deduced from illustration at top of:
 	// https://www.freetype.org/freetype2/docs/tutorial/step2.html
-	// 
+	//
 	// We deliberately not generate a mesh and iterate over its
 	// vertices, as this would not correctly return spacing for
 	// blank characters.
-	
+
 	float w = 0;
 	iterateString( c, x, y, vflip, [&]( uint32_t c, glm::vec2 pos ){
 		auto props = getGlyphProperties( c );
@@ -1304,22 +1330,22 @@ ofTexture ofTrueTypeFont::getStringTexture(const string& str, bool vflip) const{
 		try{
 			if (c != '\n') {
 				auto g = loadGlyph(c);
-				
+
 				if (c == '\t'){
 					auto temp = loadGlyph(' ');
 					glyphs.push_back(temp);
 				}else{
 					glyphs.push_back(g);
 				}
-				 
+
 				int x = pos.x + g.props.xmin;
 				int y = pos.y;
 				glyphPositions.emplace_back(x, y);
-				
+
 				if(c == '\t')lineWidth += g.props.advance + getGlyphProperties(' ').advance * spaceSize * TAB_WIDTH;
 				else if(c == ' ')lineWidth += g.props.advance + getGlyphProperties(' ').advance * spaceSize;
 				else if(isValidGlyph(c))lineWidth += g.props.advance + getGlyphProperties(' ').advance * (letterSpacing - 1.f);
-				
+
 				width = max(width, lineWidth);
 				y += g.props.ymax;
 				height = max(height, y + getLineHeight());
@@ -1353,10 +1379,10 @@ ofTexture ofTrueTypeFont::getStringTexture(const string& str, bool vflip) const{
 }
 
 //-----------------------------------------------------------
-void ofTrueTypeFont::drawString(const string &  c, float x, float y) const{
+void ofTrueTypeFont::drawString(const string & c, float x, float y) const{
 
 	if (!bLoadedOk){
-		ofLogError("ofTrueTypeFont") << "drawString(): font not allocated";
+		ofLogError("ofTrueTypeFont") << "drawString(): font not allocated " << c;
 		return;
 	}
 

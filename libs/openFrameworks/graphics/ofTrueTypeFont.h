@@ -401,7 +401,6 @@ protected:
 	ofRectangle glyphBBox;
 	float letterSpacing;
 	float spaceSize;
-	float fontUnitScale;
 
 	struct glyphProps {
 		std::size_t characterIndex;
