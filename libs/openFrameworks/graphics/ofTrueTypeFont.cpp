@@ -1030,7 +1030,6 @@ void ofTrueTypeFont::drawChar(uint32_t c, float x, float y, bool vFlipped) const
 		{ xmin,ymax,0.f },
 	});
 
-
 	stringQuads.addTexCoords({
 		{ props.t1, props.v1 },
 		{ props.t2, props.v1 },
@@ -1038,17 +1037,14 @@ void ofTrueTypeFont::drawChar(uint32_t c, float x, float y, bool vFlipped) const
 		{ props.t1, props.v2 }
 	});
 
-	stringQuads.addIndices(
-						   {
-							   firstIndex,
-							   firstIndex+1,
-							   firstIndex+2,
-							   firstIndex+2,
-							   firstIndex+3,
-							   firstIndex
-						   }
-	);
-
+	stringQuads.addIndices({
+	   firstIndex,
+	   firstIndex+1,
+	   firstIndex+2,
+	   firstIndex+2,
+	   firstIndex+3,
+	   firstIndex
+	});
 }
 
 //-----------------------------------------------------------
