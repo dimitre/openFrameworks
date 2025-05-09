@@ -181,7 +181,7 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 		sharedContext = (GLFWwindow *)settings.shareContextWith->getWindowContext();
 	}
 
-	allMonitors.update();
+//	allMonitors.update();
 	//	ofLogNotice("ofAppGLFWWindow") << "WINDOW MODE IS " << screenMode;
 
 
@@ -193,6 +193,9 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 
 	int monitorIndex = 0;
 	// Check to see if desired monitor is connected.
+	
+	allMonitors.update();
+//	cout << "ofAppGLFWWindow allMonitors size " << allMonitors.rects.size();
 	if (allMonitors.rects.size() > settings.monitor) {
 		monitorIndex = settings.monitor;
 	} else {

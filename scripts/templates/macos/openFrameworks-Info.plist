@@ -22,6 +22,8 @@
 	<string>This app needs to access the camera</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app needs to access the microphone</string>
+	<key>NSCameraUseContinuityCameraDeviceType</key>
+	<true/>
 	<key>ITSAppUsesNonExemptEncryption</key>
     <false/>
 </dict>

@@ -423,12 +423,13 @@ void ofBackgroundGradient(const ofFloatColor& start, const ofFloatColor& end, of
 		// this could be optimized by building a single mesh once, then copying
 		// it and just adding the colors whenever the function is called.
 		///TODO: revert to glm::vec2!!
-		glm::vec2 center(w / 2, h / 2);
+		glm::vec2 center(w * 0.5f, h * 0.5f);
 		gradientMesh.addVertex(glm::vec3(center, 0.f));
 		gradientMesh.addColor(start);
 		float n = 32; // circular gradient resolution
-		float angleBisector = glm::two_pi<float>() / (n * 2.0);
-		float smallRadius = ofDist(0, 0, w / 2, h / 2);
+		float angleBisector = glm::two_pi<float>() / (n * 2.0f);
+//		float smallRadius = ofDist(0, 0, w / 2, h / 2);
+		float smallRadius = glm::distance({0, 0}, center);
 		float bigRadius = smallRadius / std::cos(angleBisector);
 		for (int i = 0; i <= n; i++) {
 			float theta = i * glm::two_pi<float>() / n;

@@ -32,6 +32,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     checkPackageApt nlohmann-json3-dev
         # ...
 elif [[ "$OSTYPE" == "darwin"* ]]; then
+    checkPackageBrew pkg-config
 	checkPackageBrew yaml-cpp
 	checkPackageBrew nlohmann-json
 fi

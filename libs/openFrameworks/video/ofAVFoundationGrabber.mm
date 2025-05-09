@@ -37,10 +37,14 @@
 
 - (BOOL)initCapture:(int)framerate capWidth:(int)w capHeight:(int)h{
 	NSArray * devices;
+	
 	if (@available(macOS 10.15, *)) {
+		std::cout << "OSXVideoGrabber inside first" << std::endl;
 		NSMutableArray *deviceTypes = [NSMutableArray arrayWithObject:AVCaptureDeviceTypeBuiltInWideAngleCamera];
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 140000
 		if (@available(macOS 14.0, *)) {
+			std::cout << "OSXVideoGrabber inside wow" << std::endl;
+
 			if (&AVCaptureDeviceTypeExternal != nil) {
 				[deviceTypes addObject:AVCaptureDeviceTypeExternal];
 				[deviceTypes addObject:AVCaptureDeviceTypeContinuityCamera];
@@ -53,6 +57,8 @@
 			position:AVCaptureDevicePositionUnspecified];
 		devices = [session devices];
 	} else {
+		std::cout << "OSXVideoGrabber inside second" << std::endl;
+		
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 		devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
@@ -257,6 +263,7 @@
 }
 
 -(void)stopCapture{
+	std::cout << "OSXVideoGrabber stopCapture" << std::endl;
 	if(self.captureSession) {
 		if(captureOutput){
 			if(captureOutput.sampleBufferDelegate != nil) {
