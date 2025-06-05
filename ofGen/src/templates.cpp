@@ -224,6 +224,7 @@ std::string ofTemplateMacos::addFile(const fs::path & path, const fs::path & fol
 		}
 
 		if (fp.linkBinaryWithLibraries) { // Link Binary With Libraries
+		    alert ("fp.linkBinaryWithLibraries " + path.string(), 35);
 			auto tempUUID = generateUUID(ofPathToString(path) + "-InFrameworks");
 			addCommand("Add :objects:" + tempUUID + ":fileRef string " + UUID);
 			addCommand("Add :objects:" + tempUUID + ":isa string PBXBuildFile");
@@ -416,7 +417,7 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 void ofTemplateMacos::addFramework(const fs::path & path) {
 	// TODO: Convert this in a function to parse both ADDON_FRAMEWORKS definition in .mk and filesystem frameworks found.
 	// void addFramework (const std::string & path);
-	alert("		addFramework " + path.string(), 95);
+	alert("addFramework " + path.string(), 95);
 
 	std::string pathString = path.string();
 
@@ -434,7 +435,9 @@ void ofTemplateMacos::addFramework(const fs::path & path) {
 	fp.copyFilesBuildPhase = !isRelativeToSDK;
 	fp.isRelativeToSDK = isRelativeToSDK;
 	// fp.frameworksBuildPhase = target != "ios";
-	fp.linkBinaryWithLibraries = !	fp.isRelativeToSDK && path.extension().string() == ".framework";
+	// fp.linkBinaryWithLibraries = !	fp.isRelativeToSDK && path.extension().string() == ".framework";
+	// fp.linkBinaryWithLibraries = path.extension().string() == ".framework";
+	fp.linkBinaryWithLibraries = path.extension().string() != ".xcframework";
 
 	std::string UUID { "" };
 	if (isRelativeToSDK) {
