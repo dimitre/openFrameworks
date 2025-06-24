@@ -8,7 +8,7 @@
 #include "ofLog.h"
 #include "ofSystemUtils.h"
 
-#include "ofURLFileLoader.h"
+//#include "ofURLFileLoader.h"
 
 #include "ofUtils.h"
 

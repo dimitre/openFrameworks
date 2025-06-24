@@ -84,7 +84,8 @@ void ofSignalHandler(int signum) {
 }
 
 void ofExitCallback();
-void ofURLFileLoaderShutdown();
+//void ofURLFileLoaderShutdown();
+void ofURLFileLoaderShutdown() {};
 void ofTrueTypeShutdown();
 void ofCloseFreeImage();
 

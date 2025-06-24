@@ -28,9 +28,9 @@ OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libtess2.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/liburiparser.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libz.a
 
-OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libssl.a
-OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libcurl.a
-OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libcrypto.a
+//OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libssl.a
+//OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libcurl.a
+//OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libcrypto.a
 
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libpixman-1.a
 //OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libpixman-arm-neon.a

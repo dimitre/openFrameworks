@@ -5,7 +5,7 @@
 
 #include <FreeImage.h>
 
-#include "ofURLFileLoader.h"
+//#include "ofURLFileLoader.h"
 #include <uriparser/Uri.h>
 
 #if defined(TARGET_ANDROID)
@@ -224,9 +224,9 @@ static bool loadImage(ofPixels_<PixelType> & pix, const of::filesystem::path & _
 	std::string scheme(uri.scheme.first, uri.scheme.afterLast);
 	uriFreeUriMembersA(&uri);
 
-	if(scheme == "http" || scheme == "https"){
-		return ofLoadImage(pix, ofLoadURL(ofPathToString(_fileName)).data);
-	}
+//	if(scheme == "http" || scheme == "https"){
+//		return ofLoadImage(pix, ofLoadURL(ofPathToString(_fileName)).data);
+//	}
 
 
 	ofFile file(_fileName);
