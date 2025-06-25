@@ -453,6 +453,13 @@ ifdef PROJECT_CC
 endif
 
 # Dimitre test, 21 jan 2025
+#
+LLD := $(shell command -v lld 2> /dev/null)
+ifdef LLD
+#ifeq (, $(shell which lld))
+	LINKER?=$(CXX) -fuse-ld=lld
+endif
+
 ifdef PROJECT_LD
 	LINKER = $(PROJECT_LD)
 endif
@@ -460,6 +467,9 @@ endif
 # LINKER ?= $(CXX) -fuse-ld=lld
 # LINKER ?= $(CXX) -fuse-ld=lld
 # LINKER ?= LD
+LINKER ?= $(CXX)
+#
+$(info 🔗 LINKER $(LINKER))
 
 
 # ifdef ${ccache}
