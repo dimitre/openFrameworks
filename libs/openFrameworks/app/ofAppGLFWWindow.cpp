@@ -221,6 +221,7 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 			if (d < allMonitors.rects.size()) {
 //				cout << "glfw ok opening " << endl;
 				displayOK = true;
+				cout << "mon size: " << allMonitors.rects[d] << endl;
 //				break;
 			} else {
 //				cout << "glfw not enough displays" << endl;
@@ -652,6 +653,8 @@ void ofAppGLFWWindow::setFSTarget(ofWindowMode targetWindowMode) {
 		if (settings.fullscreenDisplays.size()) {
 			windowRectFS = allMonitors.getRectFromMonitors(settings.fullscreenDisplays);
 		}
+		// FIXME: remove
+		cout << "windowRectFS " << windowRectFS << endl;
 		setWindowRect(windowRectFS);
 	}
 

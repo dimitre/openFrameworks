@@ -337,6 +337,11 @@
         deviceNames.push_back([captureDevice.localizedName UTF8String]);
 		 ofLogNotice() << "Device: " << i << ": " << deviceNames.back();
 		i++;
+		NSLog(@"modelID %@", captureDevice.modelID);
+		NSLog(@"uniqueID %@", captureDevice.uniqueID);
+		NSLog(@"manufacturer %@", captureDevice.manufacturer);
+		
+
     }
     return deviceNames;
 }
