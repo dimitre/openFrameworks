@@ -46,5 +46,29 @@
     "shell": "system",
     "show_summary": true,
     "show_output": true
+  },
+
+  {
+    "label": "Build and Run Debug",
+    "command": "make -j && make RunDebug",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "hide": "never",
+    "shell": "system",
+    "show_summary": true,
+    "show_output": true
+  },
+  {
+    "label": "Build Debug",
+    "command": "make",
+    "args": ["-j", "Debug"],
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "hide": "never",
+    "shell": "system",
+    "show_summary": true,
+    "show_output": true
   }
 ]

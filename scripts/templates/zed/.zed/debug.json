@@ -1,0 +1,13 @@
+[
+  {
+    "label": "Debug binary",
+    "build": {
+      "command": "make",
+      "args": ["-j"],
+      "cwd": "$ZED_WORKTREE_ROOT"
+    },
+    "program": "bin/$PROJECT_NAME.app",
+    "request": "launch",
+    "adapter": "CodeLLDB"
+  }
+]
