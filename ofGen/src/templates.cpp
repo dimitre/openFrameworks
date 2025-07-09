@@ -83,16 +83,18 @@ bool copyTemplateFile::run() {
 		} else {
 			// no replacements, straight copy
 			if (isFolder) {
-				try {
-					// Remove exists? Remove destination folder?
-					if (fs::exists(to)) {
-					    fs::remove_all(to);
+				// Remove exists? Remove destination folder?
+				if (fs::exists(to)) {
+					try {
+						fs::remove_all(to);
+					} catch (fs::filesystem_error & e) {
+						std::cerr << "Error removing template folder: " << to << " " << e.what() << std::endl;
+						return false;
 					}
-					// if (!fs::exists(to)) {
-						fs::copy(from, to, fs::copy_options::recursive | fs::copy_options::update_existing);
-					// }
+				}
+				try {
+					fs::copy(from, to, fs::copy_options::recursive | fs::copy_options::update_existing);
 				} catch (fs::filesystem_error & e) {
-					// catch (const std::exception & e) {
 					std::cerr << "Error copying template files: " << e.what() << std::endl;
 					return false;
 				}
@@ -227,7 +229,7 @@ std::string ofTemplateMacos::addFile(const fs::path & path, const fs::path & fol
 		}
 
 		if (fp.linkBinaryWithLibraries) { // Link Binary With Libraries
-		    alert ("fp.linkBinaryWithLibraries " + path.string(), 35);
+			alert("fp.linkBinaryWithLibraries " + path.string(), 35);
 			auto tempUUID = generateUUID(ofPathToString(path) + "-InFrameworks");
 			addCommand("Add :objects:" + tempUUID + ":fileRef string " + UUID);
 			addCommand("Add :objects:" + tempUUID + ":isa string PBXBuildFile");
@@ -617,10 +619,25 @@ void ofTemplateZed::load() {
 	copyTemplateFiles.push_back({ path / "compile_flags.txt",
 		conf.projectPath / "compile_flags.txt" });
 
-	copyTemplateFiles.push_back({ path / ".zed",
-		conf.projectPath / ".zed" });
+	// copyTemplateFiles.push_back({ path / ".zed",
+	// 	conf.projectPath / ".zed" });
+	// copyTemplateFiles.back().isFolder = true;
 
-	copyTemplateFiles.back().isFolder = true;
+	copyTemplateFiles.push_back({ path / ".zed/keymap.json",
+		conf.projectPath / ".zed/keymap.json" });
+	copyTemplateFiles.push_back({ path / ".zed/settings.json",
+		conf.projectPath / ".zed/settings.json" });
+	copyTemplateFiles.push_back({ path / ".zed/tasks.json",
+		conf.projectPath / ".zed/tasks.json" });
+
+	// copyTemplateFiles.push_back({ path / "emptyExample.xcodeproj" / "project.pbxproj",
+	// 	xcodeProject / "project.pbxproj",
+	// 	{ { "emptyExample", conf.projectName },
+	// 		rootReplacements } });
+
+	copyTemplateFiles.push_back({ path / ".zed/debug.json",
+									conf.projectPath / ".zed/debug.json",
+		{{ "$PROJECT_NAME", conf.projectName }}});
 }
 
 void ofTemplateZed::save() {
@@ -691,8 +708,10 @@ void ofTemplateMacos::load() {
 		}
 	}
 
-	copyTemplateFiles.push_back({ path / "mediaAssets", conf.projectPath / "mediaAssets" });
-	copyTemplateFiles.back().isFolder = true;
+	if (fs::exists(path / "mediaAssets")) {
+		copyTemplateFiles.push_back({ path / "mediaAssets", conf.projectPath / "mediaAssets" });
+		copyTemplateFiles.back().isFolder = true;
+	}
 
 	// Equivalent to SaveScheme in projectGenerator
 	//
