@@ -85,9 +85,12 @@ bool copyTemplateFile::run() {
 			if (isFolder) {
 				try {
 					// Remove exists? Remove destination folder?
-					if (!fs::exists(to)) {
-						fs::copy(from, to, fs::copy_options::recursive | fs::copy_options::update_existing);
+					if (fs::exists(to)) {
+					    fs::remove_all(to);
 					}
+					// if (!fs::exists(to)) {
+						fs::copy(from, to, fs::copy_options::recursive | fs::copy_options::update_existing);
+					// }
 				} catch (fs::filesystem_error & e) {
 					// catch (const std::exception & e) {
 					std::cerr << "Error copying template files: " << e.what() << std::endl;

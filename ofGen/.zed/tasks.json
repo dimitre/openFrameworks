@@ -1,7 +1,7 @@
 [
   {
-    "label": "Build",
-    "command": "compile.sh", //&& ./ofbuild
+    "label": "Build ok",
+    "command": "./compile.sh", //&& ./ofbuild
     "use_new_terminal": false,
     "allow_concurrent_runs": false,
     "reveal": "always",
