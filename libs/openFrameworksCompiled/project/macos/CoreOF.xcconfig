@@ -40,8 +40,10 @@ LIBS_SEARCH_PATHS = $(OF_PATH)/libs/macos/lib
 
 OF_CORE_HEADERS = $(HEADER_OF) $(HEADER_OF_LIBS)
 
-OF_CORE_FRAMEWORKS = -framework Accelerate -framework AGL -framework AppKit -framework ApplicationServices -framework AudioToolbox -framework AVFoundation -framework Cocoa -framework CoreAudio -framework CoreFoundation -framework CoreMedia -framework CoreServices -framework CoreVideo -framework Foundation -framework IOKit -framework OpenGL -framework QuartzCore -framework Security -framework SystemConfiguration -framework Metal
+//OF_CORE_FRAMEWORKS = -framework Accelerate -framework AGL -framework AppKit -framework ApplicationServices -framework AudioToolbox -framework AVFoundation -framework Cocoa -framework CoreAudio -framework CoreFoundation -framework CoreMedia -framework CoreServices -framework CoreVideo -framework Foundation -framework IOKit -framework OpenGL -framework QuartzCore -framework Security -framework SystemConfiguration -framework Metal
 
+//AppKit ApplicationServices AudioToolbox CoreFoundation CoreServices CoreVideo Foundation Security Metal SystemConfiguration
+OF_CORE_FRAMEWORKS = -framework Accelerate -framework AGL -framework AVFoundation -framework Cocoa -framework CoreAudio -framework CoreMedia -framework IOKit -framework OpenGL -framework QuartzCore
 
 ALWAYS_SEARCH_USER_PATHS = NO
 //DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING = YES
