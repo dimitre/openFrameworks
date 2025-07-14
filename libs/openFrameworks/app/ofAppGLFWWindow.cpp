@@ -217,11 +217,11 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 	bool displayOK = false;
 	if (settings.fullscreenDisplays.size()) {
 		for (auto & d : settings.fullscreenDisplays) {
-			cout << "GLFWWindow fullscreenDisplays " << d << " : " << allMonitors.rects.size() << endl;
+//			cout << "GLFWWindow fullscreenDisplays " << d << " : " << allMonitors.rects.size() << endl;
 			if (d < allMonitors.rects.size()) {
 //				cout << "glfw ok opening " << endl;
 				displayOK = true;
-				cout << "mon size: " << allMonitors.rects[d] << endl;
+//				cout << "mon size: " << allMonitors.rects[d] << endl;
 //				break;
 			} else {
 //				cout << "glfw not enough displays" << endl;
@@ -269,8 +269,10 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 		}
 
 		if (settings.isPositionSet()) {
+//			cout << "OWW setWindowRect" << endl;
 			setWindowRect(windowRect);
 		} else {
+//			cout << "OWW setWindowShape " << windowRect << endl;
 			setWindowShape(windowRect.width, windowRect.height);
 		}
 	}

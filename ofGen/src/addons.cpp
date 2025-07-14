@@ -133,6 +133,11 @@ void ofAddon::showFiles() {
 void ofAddon::loadFiles() {
 	alert("	loadFiles " + path.string(), 34);
 
+	for (auto & l : addonProperties["ADDON_LIBS"]) {
+		alert("WOW addon libs " + l, 35);
+		filesMap["libs"].emplace_back(l);
+	}
+
 	scanFolder(path / "src", filesMap, true);
 
 	// get addon libs, it can be none, one or multiple
@@ -245,7 +250,7 @@ void ofAddon::loadAddonConfig() {
 		// FIXME: consider other Platforms soon.
 		bool consider = currentParseState == "common:" || currentParseState == "macos:" || currentParseState == "osx:";
 
-		if (consider)
+		if (consider) {
 			if (line.find("=") != string::npos) {
 				bool addToValue = false;
 				vector<string> varValue;
@@ -273,6 +278,7 @@ void ofAddon::loadAddonConfig() {
 					addonProperties[variable].emplace_back(value);
 				}
 			}
+		}
 	}
 
 	const static std::map<std::string, std::string> exclusionsType {
@@ -338,7 +344,7 @@ void ofProject::build() {
 }
 
 void ofProject::eraseTemplates() {
-   	divider();
+	divider();
 	alert("ofProject::eraseTemplates", 92);
 	for (auto & t : templates) {
 		t->load();
