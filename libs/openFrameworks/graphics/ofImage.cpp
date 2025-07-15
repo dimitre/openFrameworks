@@ -1,9 +1,7 @@
 #include "ofImage.h"
 #include "ofAppRunner.h"
 #include "ofPixels.h"
-#include "ofFileUtils.h"
-
-#include <FreeImage.h>
+//#include "ofFileUtils.h"
 
 #ifdef OFXURL
 #include "ofURLFileLoader.h"
@@ -14,6 +12,9 @@
 #if defined(TARGET_ANDROID)
 #include "ofxAndroidUtils.h"
 #endif
+
+#include <FreeImage.h>
+
 
 
 //----------------------------------------------------------
@@ -233,13 +234,16 @@ static bool loadImage(ofPixels_<PixelType> & pix, const of::filesystem::path & _
 	}
 #endif
 
-	ofFile file(_fileName);
-	if (!file.exists()) {
+//	ofFile file(_fileName);
+//	if (!file.exists()) {
+	if (!of::filesystem::exists(ofToDataPathFS(_fileName))) {
 		ofLogError("loadImage") << "File not found: " << _fileName;
 		return false;
 	}
 
-	std::uint64_t fileSize = file.getSize();
+//	std::uint64_t fileSize = file.getSize();
+	auto fileSize = fs::file_size(ofToDataPathFS(_fileName));
+//	std::uint64_t fileSize = file.getSize();
 	if (fileSize == 0) {
 		ofLogError("loadImage") << "File is empty: " << _fileName;
 		return false;
@@ -450,7 +454,9 @@ static bool saveImage(const ofPixels_<PixelType> & _pix, const of::filesystem::p
 		return false;
 	}
 
-	ofFilePath::createEnclosingDirectory(_fileName);
+	// MARK: test
+//	ofFilePath::createEnclosingDirectory(_fileName);
+	
 	auto fileName = ofToDataPathFS(_fileName);
 	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
 #ifdef OF_OS_WINDOWS
@@ -994,13 +1000,6 @@ void ofImage_<PixelType>::allocate(int w, int h, ofImageType newType){
 	type	= pixels.getImageType();
 }
 
-
-//------------------------------------
-template<typename PixelType>
-bool ofImage_<PixelType>::bAllocated(){
-    return pixels.isAllocated();
-}
-
 //------------------------------------
 template<typename PixelType>
 void ofImage_<PixelType>::clear(){
@@ -1046,19 +1045,6 @@ ofTexture & ofImage_<PixelType>::getTexture(){
 template<typename PixelType>
 const ofTexture & ofImage_<PixelType>::getTexture() const{
 	return tex;
-}
-
-//------------------------------------
-// for getting a reference to the texture
-template<typename PixelType>
-ofTexture & ofImage_<PixelType>::getTextureReference(){
-	return getTexture();
-}
-
-//------------------------------------
-template<typename PixelType>
-const ofTexture & ofImage_<PixelType>::getTextureReference() const{
-	return getTexture();
 }
 
 //----------------------------------------------------------

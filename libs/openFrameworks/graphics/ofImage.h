@@ -202,13 +202,6 @@ public:
     /// \returns true if the image has been allocated.
     bool isAllocated() const {return pixels.isAllocated();}
 
-    /// \brief Whether the image has been allocated either by a call to
-    /// allocate or by loading pixel data into the image.
-    /// \deprecated Use isAllocated() instead
-    /// \returns true if the image has been allocated.
-    [[deprecated("Use isAllocated()")]]
-    bool bAllocated();
-
     /// \brief This clears the texture and pixels contained within the ofImage.
 	void clear();
 
@@ -226,12 +219,6 @@ public:
     /// into the texture.
 	bool load(const ofBuffer & buffer, const ofImageLoadSettings &settings = ofImageLoadSettings());
 
-//    [[deprecated("Use load")]]
-//	bool loadImage(const of::filesystem::path  & fileName);
-//    [[deprecated("Use load")]]
-//	bool loadImage(const ofBuffer & buffer);
-//    [[deprecated("Use load")]]
-//	bool loadImage(const ofFile & file);
 
     virtual ~ofImage_();
 
@@ -368,11 +355,6 @@ public:
 	/// \brief Returns a const reference to the texture that the ofImage contains.
 	/// \returns A const reference to the texture that the ofImage contains.
     const ofTexture & getTexture() const;
-
-    [[deprecated("Use getTexture")]]
-	ofTexture & getTextureReference();
-    [[deprecated("Use getTexture")]]
-	const ofTexture & getTextureReference() const;
 
     /// \brief Binds the oftexture instance that the ofImage contains so that
     /// it can be used for advanced drawing.
@@ -604,13 +586,6 @@ public:
     /// \param buffer ofBuffer to save image to.
     /// \param compressionLevel The ofImageQualityType.
 	bool save(ofBuffer & buffer, ofImageFormat imageFormat = OF_IMAGE_FORMAT_PNG, ofImageQualityType compressionLevel = OF_IMAGE_QUALITY_BEST) const;
-
-//    [[deprecated("Use save")]]
-//	void saveImage(const of::filesystem::path & fileName, ofImageQualityType compressionLevel = OF_IMAGE_QUALITY_BEST) const;
-//    [[deprecated("Use save")]]
-//	void saveImage(ofBuffer & buffer, ofImageQualityType compressionLevel = OF_IMAGE_QUALITY_BEST) const;
-//    [[deprecated("Use save")]]
-//	void saveImage(const ofFile & file, ofImageQualityType compressionLevel = OF_IMAGE_QUALITY_BEST) const;
 
     /// \}
     /// \name Operators
