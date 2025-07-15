@@ -805,11 +805,11 @@ ofImage_<PixelType>::~ofImage_(){
 	clear();
 }
 
-//----------------------------------------------------------
-template<typename PixelType>
-bool ofImage_<PixelType>::loadImage(const ofFile & file){
-	return load(file);
-}
+////----------------------------------------------------------
+//template<typename PixelType>
+//bool ofImage_<PixelType>::loadImage(const ofFile & file){
+//	return load(file);
+//}
 
 //----------------------------------------------------------
 template<typename PixelType>
@@ -829,10 +829,10 @@ bool ofImage_<PixelType>::load(const of::filesystem::path & fileName, const ofIm
 }
 
 //----------------------------------------------------------
-template<typename PixelType>
-bool ofImage_<PixelType>::loadImage(const of::filesystem::path & fileName){
-	return load(fileName);
-}
+//template<typename PixelType>
+//bool ofImage_<PixelType>::loadImage(const of::filesystem::path & fileName){
+//	return load(fileName);
+//}
 
 //----------------------------------------------------------
 template<typename PixelType>
@@ -851,11 +851,11 @@ bool ofImage_<PixelType>::load(const ofBuffer & buffer, const ofImageLoadSetting
 	return bLoadedOk;
 }
 
-//----------------------------------------------------------
-template<typename PixelType>
-bool ofImage_<PixelType>::loadImage(const ofBuffer & buffer){
-	return load(buffer);
-}
+////----------------------------------------------------------
+//template<typename PixelType>
+//bool ofImage_<PixelType>::loadImage(const ofBuffer & buffer){
+//	return load(buffer);
+//}
 
 //----------------------------------------------------------
 template<typename PixelType>
@@ -870,22 +870,22 @@ bool ofImage_<PixelType>::save(ofBuffer & buffer, ofImageFormat imageFormat, ofI
 }
 
 //----------------------------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::saveImage(const of::filesystem::path & fileName, ofImageQualityType qualityLevel) const {
-	save(fileName, qualityLevel);
-}
+//template<typename PixelType>
+//void ofImage_<PixelType>::saveImage(const of::filesystem::path & fileName, ofImageQualityType qualityLevel) const {
+//	save(fileName, qualityLevel);
+//}
 
 //----------------------------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::saveImage(ofBuffer & buffer, ofImageQualityType qualityLevel) const {
-    save(buffer, OF_IMAGE_FORMAT_PNG, qualityLevel);
-}
-
-//----------------------------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::saveImage(const ofFile & file, ofImageQualityType compressionLevel) const {
-	save(file,compressionLevel);
-}
+//template<typename PixelType>
+//void ofImage_<PixelType>::saveImage(ofBuffer & buffer, ofImageQualityType qualityLevel) const {
+//    save(buffer, OF_IMAGE_FORMAT_PNG, qualityLevel);
+//}
+//
+////----------------------------------------------------------
+//template<typename PixelType>
+//void ofImage_<PixelType>::saveImage(const ofFile & file, ofImageQualityType compressionLevel) const {
+//	save(file,compressionLevel);
+//}
 
 // we could cap these values - but it might be more useful
 // to be able to set anchor points outside the image

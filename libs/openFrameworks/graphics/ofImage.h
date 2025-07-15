@@ -6,7 +6,7 @@
 #include "ofGLUtils.h"
 #include "ofPixels.h"
 
-class ofFile;
+//class ofFile;
 class ofBuffer;
 
 /// \file
@@ -226,12 +226,12 @@ public:
     /// into the texture.
 	bool load(const ofBuffer & buffer, const ofImageLoadSettings &settings = ofImageLoadSettings());
 
-    [[deprecated("Use load")]]
-	bool loadImage(const of::filesystem::path  & fileName);
-    [[deprecated("Use load")]]
-	bool loadImage(const ofBuffer & buffer);
-    [[deprecated("Use load")]]
-	bool loadImage(const ofFile & file);
+//    [[deprecated("Use load")]]
+//	bool loadImage(const of::filesystem::path  & fileName);
+//    [[deprecated("Use load")]]
+//	bool loadImage(const ofBuffer & buffer);
+//    [[deprecated("Use load")]]
+//	bool loadImage(const ofFile & file);
 
     virtual ~ofImage_();
 
@@ -605,12 +605,12 @@ public:
     /// \param compressionLevel The ofImageQualityType.
 	bool save(ofBuffer & buffer, ofImageFormat imageFormat = OF_IMAGE_FORMAT_PNG, ofImageQualityType compressionLevel = OF_IMAGE_QUALITY_BEST) const;
 
-    [[deprecated("Use save")]]
-	void saveImage(const of::filesystem::path & fileName, ofImageQualityType compressionLevel = OF_IMAGE_QUALITY_BEST) const;
-    [[deprecated("Use save")]]
-	void saveImage(ofBuffer & buffer, ofImageQualityType compressionLevel = OF_IMAGE_QUALITY_BEST) const;
-    [[deprecated("Use save")]]
-	void saveImage(const ofFile & file, ofImageQualityType compressionLevel = OF_IMAGE_QUALITY_BEST) const;
+//    [[deprecated("Use save")]]
+//	void saveImage(const of::filesystem::path & fileName, ofImageQualityType compressionLevel = OF_IMAGE_QUALITY_BEST) const;
+//    [[deprecated("Use save")]]
+//	void saveImage(ofBuffer & buffer, ofImageQualityType compressionLevel = OF_IMAGE_QUALITY_BEST) const;
+//    [[deprecated("Use save")]]
+//	void saveImage(const ofFile & file, ofImageQualityType compressionLevel = OF_IMAGE_QUALITY_BEST) const;
 
     /// \}
     /// \name Operators

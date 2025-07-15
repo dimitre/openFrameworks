@@ -202,7 +202,8 @@ private:
 };
 
 	// TEMPORARY
-	#include "GLFW/glfw3.h"
+	#include <GLFW/glfw3.h>
+
 	// TEMP oftostring
 	#include "ofUtils.h"
 	#include <vector>
