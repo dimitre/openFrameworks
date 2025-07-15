@@ -13,10 +13,10 @@ OF_CORE_LIBS = $(OF_PATH)/libs/openFrameworksCompiled/lib/macos/openFrameworks.a
 OF_CORE_LIBS[config=Debug] = $(OF_PATH)/libs/openFrameworksCompiled/lib/macos/openFrameworksDebug.a
 
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libFreeImage.a
+// Brotli is needed by freetype.
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libbrotlicommon.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libbrotlidec.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libbrotlienc.a
-OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libcairo.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libfreetype.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libglew.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libglfw3.a
@@ -28,10 +28,33 @@ OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libtess2.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/liburiparser.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libz.a
 
+
+//-rw-r--r--@ 1 d  staff  30497712 Jun  5 14:02 libcurl.a
+//-rw-r--r--@ 1 d  staff  14408152 Jun  5 14:02 libcrypto.a
+//-rw-r--r--@ 1 d  staff   5790656 Jul 11 17:40 libFreeImage.a
+//-rw-r--r--@ 1 d  staff   3490736 Jul 14 14:31 libcairo.a
+//-rw-r--r--@ 1 d  staff   3275096 Jul 14 17:44 libpixman-1.a
+//-rw-r--r--@ 1 d  staff   3198800 Apr  7 18:07 libglew.a
+//-rw-r--r--@ 1 d  staff   2847656 Jun  5 14:02 libssl.a
+//-rw-r--r--@ 1 d  staff   1933096 Apr  7 17:06 libfreetype.a
+//-rw-r--r--@ 1 d  staff   1461848 Apr  7 17:06 libglm.a
+//-rw-r--r--@ 1 d  staff   1454736 Apr  7 17:06 libbrotlienc.a
+//-rw-r--r--@ 1 d  staff    658312 May  3 19:38 libglfw3.a
+//-rw-r--r--@ 1 d  staff    598048 Jun 15 14:16 libpng16.a
+//-rw-r--r--@ 1 d  staff    510880 Apr  7 18:01 libpugixml.a
+//-rw-r--r--@ 1 d  staff    267952 Apr  7 17:06 libbrotlicommon.a
+//-rw-r--r--@ 1 d  staff    254968 Apr  7 17:10 liburiparser.a
+//-rw-r--r--@ 1 d  staff    225736 Apr 17 01:26 librtaudio.a
+//-rw-r--r--@ 1 d  staff    225464 Apr  7 17:10 libz.a
+//-rw-r--r--@ 1 d  staff    102768 Apr  7 17:06 libbrotlidec.a
+//-rw-r--r--@ 1 d  staff     88376 Apr  7 18:01 libtess2.a
+//lrwxr-xr-x@ 1 d  staff        10 Jul 14 18:38 libpng.a -> libpng16.a
+
 //OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libssl.a
 //OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libcurl.a
 //OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libcrypto.a
 
+//OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libcairo.a
 //OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libpixman-1.a
 //OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libpixman-arm-neon.a
 
