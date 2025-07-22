@@ -607,6 +607,11 @@ void ofTemplateMake::load() {
 	copyTemplateFiles.push_back({ path / "config.make",
 		conf.projectPath / "config.make" });
 
+	for (auto & l : conf.nodeToStrings("make")) {
+	    copyTemplateFiles.back().appends.emplace_back(l);
+	    alert(l, 35);
+	}
+
 	copyTemplateFiles.push_back({ path / "Makefile",
 		conf.projectPath / "Makefile" });
 }

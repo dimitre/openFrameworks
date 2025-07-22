@@ -155,7 +155,7 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 	if (settings.glVersionMajor >= 3) {
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR > 2) || (GLFW_VERSION_MAJOR > 3)
-		glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, settings.transparent);
+		glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, settings.transparent ? GLFW_TRUE : GLFW_FALSE);
 #endif
 #if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4)
 			if( settings.mousePassThrough && settings.transparent && settings.decorated) {
@@ -655,8 +655,6 @@ void ofAppGLFWWindow::setFSTarget(ofWindowMode targetWindowMode) {
 		if (settings.fullscreenDisplays.size()) {
 			windowRectFS = allMonitors.getRectFromMonitors(settings.fullscreenDisplays);
 		}
-		// FIXME: remove
-		cout << "windowRectFS " << windowRectFS << endl;
 		setWindowRect(windowRectFS);
 	}
 
