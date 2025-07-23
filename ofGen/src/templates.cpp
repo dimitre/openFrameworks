@@ -627,6 +627,10 @@ void ofTemplateZed::load() {
 	// copyTemplateFiles.push_back({ path / ".zed",
 	// 	conf.projectPath / ".zed" });
 	// copyTemplateFiles.back().isFolder = true;
+	fs::path folder { conf.projectPath / ".zed" };
+	if (!fs::exists(folder)) {
+	    fs::create_directory(folder);
+	}
 
 	copyTemplateFiles.push_back({ path / ".zed/keymap.json",
 		conf.projectPath / ".zed/keymap.json" });

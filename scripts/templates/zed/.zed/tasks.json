@@ -7,8 +7,8 @@
     "reveal": "always",
     "hide": "never",
     "shell": "system",
-    "show_summary": true,
-    "show_output": true
+    "show_summary": true
+    // "show_output": true
   },
   {
     "label": "Build Release",
@@ -19,8 +19,8 @@
     "reveal": "always",
     "hide": "never",
     "shell": "system",
-    "show_summary": true,
-    "show_output": true
+    "show_summary": true
+    // "show_output": true
   },
   {
     "label": "Run Release",
@@ -31,8 +31,8 @@
     "reveal": "always",
     "hide": "never",
     "shell": "system",
-    "show_summary": true,
-    "show_output": true
+    "show_summary": true
+    // "show_output": true
   },
 
   {
@@ -44,8 +44,8 @@
     "reveal": "always",
     "hide": "never",
     "shell": "system",
-    "show_summary": true,
-    "show_output": true
+    "show_summary": true
+    // "show_output": true
   },
 
   {
@@ -56,8 +56,8 @@
     "reveal": "always",
     "hide": "never",
     "shell": "system",
-    "show_summary": true,
-    "show_output": true
+    "show_summary": true
+    // "show_output": true
   },
   {
     "label": "Build Debug",
@@ -68,7 +68,7 @@
     "reveal": "always",
     "hide": "never",
     "shell": "system",
-    "show_summary": true,
-    "show_output": true
+    "show_summary": true
+    // "show_output": true
   }
 ]
