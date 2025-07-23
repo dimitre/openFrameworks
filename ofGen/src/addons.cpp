@@ -95,8 +95,8 @@ void ofAddon::refine() {
 			for (const auto & e : exclusionsMap[f.first]) {
 				if (ofIsPathInPath(s, e)) {
 					add = false;
-					alert("	└─excluded " + s.string(), 0);
-					alert("	   exclusion=" + e.string() + ", section=" + f.first, 90);
+					alert("	└─ excluded " + s.string(), 0);
+					alert("	    exclusion=" + e.string() + ", section=" + f.first, 90);
 					continue;
 				}
 			}
@@ -189,7 +189,7 @@ void ofAddon::loadFiles() {
 		}
 
 		if (!hasPlatformFolder) {
-			alert("		don't have platform folder, will scan everything " + folderLibs.string(), 35);
+			alert("		platform folder not found, will scan everything " + folderLibs.string(), 35);
 			scanFolder(folderLibs, filesMap, true);
 		}
 	}

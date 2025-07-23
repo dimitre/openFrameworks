@@ -17,7 +17,7 @@ void copyTemplateFile::info() {
 	alert("	to " + to.string(), 90);
 	for (auto & f : findReplaces) {
 		if (!empty(f.first)) {
-			alert("	└─ Replacing " + f.first + " : " + f.second, 0);
+			alert("	└─ Replacing " + f.first + " : " + f.second, 94);
 			// std::cout << "	└─ Replacing " << f.first << " : " << f.second << std::endl;
 		}
 	}
@@ -63,7 +63,7 @@ bool copyTemplateFile::run() {
 			}
 
 			for (auto & a : appends) {
-				alert("		└─append " + a, 2);
+				alert("	└─append " + a, 94);
 				contents += "\n" + a;
 			}
 
@@ -111,7 +111,7 @@ bool copyTemplateFile::run() {
 	}
 
 	else {
-		alert("	input file not found " + from.string(), 95);
+		alert("	input file not found " + from.string(), 91);
 		return false;
 	}
 	return true;
@@ -229,7 +229,7 @@ std::string ofTemplateMacos::addFile(const fs::path & path, const fs::path & fol
 		}
 
 		if (fp.linkBinaryWithLibraries) { // Link Binary With Libraries
-			alert("fp.linkBinaryWithLibraries " + path.string(), 35);
+			// alert("fp.linkBinaryWithLibraries " + path.string(), 35);
 			auto tempUUID = generateUUID(ofPathToString(path) + "-InFrameworks");
 			addCommand("Add :objects:" + tempUUID + ":fileRef string " + UUID);
 			addCommand("Add :objects:" + tempUUID + ":isa string PBXBuildFile");
@@ -422,7 +422,7 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 void ofTemplateMacos::addFramework(const fs::path & path) {
 	// TODO: Convert this in a function to parse both ADDON_FRAMEWORKS definition in .mk and filesystem frameworks found.
 	// void addFramework (const std::string & path);
-	alert("addFramework " + path.string(), 95);
+	alert(" addFramework " + path.string(), 95);
 
 	std::string pathString = path.string();
 
@@ -609,7 +609,7 @@ void ofTemplateMake::load() {
 
 	for (auto & l : conf.nodeToStrings("make")) {
 	    copyTemplateFiles.back().appends.emplace_back(l);
-	    alert(l, 35);
+	    // alert(l, 35);
 	}
 
 	copyTemplateFiles.push_back({ path / "Makefile",
@@ -1035,7 +1035,7 @@ void ofTemplateVSCode::save() {
 void ofTemplateMake::save() {
 	alert("ofTemplateMake::save()", 92);
 	if (conf.addons.size()) {
-		alert("    saving addons.make", 2);
+		alert(" saving addons.make", 2);
 		fs::path fileName { conf.projectPath / "addons.make" };
 		std::ofstream addonsMake(fileName);
 		for (auto & a : conf.addons) {

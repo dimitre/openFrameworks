@@ -1,7 +1,7 @@
 [
   {
     "label": "Build and Run Release",
-    "command": "make -j && make RunRelease",
+    "command": "time make -j && make RunRelease",
     "use_new_terminal": false,
     "allow_concurrent_runs": false,
     "reveal": "always",
@@ -12,7 +12,7 @@
   },
   {
     "label": "Build Release",
-    "command": "make",
+    "command": "time make",
     "args": ["-j", "-s"],
     "use_new_terminal": false,
     "allow_concurrent_runs": false,
