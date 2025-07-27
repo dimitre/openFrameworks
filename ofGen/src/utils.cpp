@@ -113,6 +113,8 @@ void genConfig::import() {
 			std::string line;
 			while (std::getline(file, line)) {
 				// msg(line, 33);
+				// next line trims whitespace at the end.
+				line =  line.substr(0, line.find_last_not_of(" \f\n\r\t\v") + 1);
 				node["addons"].push_back(line);
 			}
 		}
@@ -163,7 +165,7 @@ bool genConfig::loadYML() {
 			conf.templateNames = templateNames;
 		} else {
 			alert("No templates found, ofgen will deduce from platform", 95);
-			conf.templateNames.emplace_back( getPlatformString() );
+			conf.templateNames.emplace_back(getPlatformString());
 		}
 
 		cout << endl;
