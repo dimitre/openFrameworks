@@ -313,6 +313,9 @@ void SrcScene::processNodesRecursive(aiNode* anode, std::shared_ptr<SrcNode> aPa
 //-------------------------------------------
 void SrcScene::processMeshes(aiNode* anode, std::shared_ptr<SrcNode> aSrcNode) {
 	// the meshes are per node it seems
+	
+	mSrcNodes.reserve(anode->mNumMeshes);
+	
 	for(unsigned int i = 0; i < anode->mNumMeshes; i++) {
 		unsigned int meshIndex = anode->mMeshes[i];
 		if( meshIndex >= mSrcMeshes.size() ) {
@@ -324,14 +327,14 @@ void SrcScene::processMeshes(aiNode* anode, std::shared_ptr<SrcNode> aSrcNode) {
 		} else {
 			ofLogVerbose("ofxAssimp::SrcScene::processNodesRecursive") << " going to process mesh: " << scene->mMeshes[meshIndex]->mName.data << " from node: " << anode->mName.data << " num scene meshes: " << scene->mNumMeshes;
 			// ok, open slot for a src mesh //
-			auto srcMesh = std::make_shared<ofxAssimp::SrcMesh>();
+			auto srcMesh { std::make_shared<ofxAssimp::SrcMesh>() };
 			srcMesh->setAiMesh(scene->mMeshes[meshIndex], anode );
 			loadGLResources(srcMesh, srcMesh->getAiMesh());
 			mSrcMeshes.push_back(srcMesh);
 			if(aSrcNode) {
 				aSrcNode->addChild(srcMesh);
 			} else {
-				mSrcNodes.push_back(srcMesh);
+				mSrcNodes.emplace_back(srcMesh);
 			}
 		}
 	}

@@ -103,7 +103,7 @@ ofTexture& SrcMesh::getTexture(ofMaterialTextureType aType){
 void SrcMesh::setAiMesh( aiMesh* amesh, aiNode* aAiNode ) {
 	SrcNode::setAiNode(aAiNode);
 	mAiMesh = amesh;
-	if( mAiMesh != NULL ) {
+	if( mAiMesh != nullptr ) {
 		vbo = std::make_shared<ofVbo>();
 		mName = mAiMesh->mName.data;
 		getName(); // forces setting of the name
