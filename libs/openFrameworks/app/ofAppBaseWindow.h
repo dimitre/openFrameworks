@@ -82,7 +82,7 @@ public:
 	virtual void finishRender(){}
 
 	virtual void * getWindowContext(){ return nullptr; }
-	
+
 	virtual void beginDraw(){}
 	virtual void endDraw(){}
 
@@ -110,13 +110,13 @@ public:
 	virtual HGLRC getWGLContext(){ return 0; }
 	virtual HWND getWin32Window(){ return 0; }
 #endif
-	
+
 	ofWindowSettings settings;
 
 //private:
 	ofOrientation orientation = OF_ORIENTATION_DEFAULT;
 	ofWindowMode windowMode = OF_WINDOW;
-	
+
 	std::shared_ptr<ofBaseRenderer> currentRenderer;
 
 };
