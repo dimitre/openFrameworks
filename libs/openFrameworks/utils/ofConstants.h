@@ -272,6 +272,11 @@ enum ofTargetPlatform{
 	#define TARGET_LITTLE_ENDIAN
 #endif
 
+#ifdef TARGET_GLFW_WINDOW
+	#undef TARGET_GLFW_WINDOW
+	#define TARGET_RGFW_WINDOW
+#endif
+
 #include <tesselator.h>
 typedef TESSindex ofIndexType;
 //typedef std::size_t ofIndexType;
