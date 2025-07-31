@@ -202,7 +202,7 @@ bool ofMesh_<V,N,C,T>::hasIndices() const{
 //--------------------------------------------------------------
 template<class V, class N, class C, class T>
 void ofMesh_<V,N,C,T>::addVertex(const V& v){
-	vertices.push_back(v);
+	vertices.emplace_back(v);
 	bVertsChanged = true;
 	bFacesDirty = true;
 }

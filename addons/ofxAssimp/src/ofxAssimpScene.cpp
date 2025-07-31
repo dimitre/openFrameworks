@@ -82,9 +82,9 @@ bool Scene::processScene() {
 			mAnimations.clear();
 			//			mAnimations = mSrcScene->getAnimations();
 			auto& srcAnims = mSrcScene->getAnimations();
+			mAnimations.reserve(srcAnims.size());
 			for( auto& srcA : srcAnims ) {
-				auto nanim = std::make_shared<ofxAssimp::Animation>( srcA );
-				mAnimations.push_back(nanim);
+				mAnimations.emplace_back( std::make_shared<ofxAssimp::Animation>( srcA ) );
 			}
 			if(mAnimations.size() > 0 ) {
 				mAnimationIndex = -1; // set to -1 so it will trigger playing
@@ -119,6 +119,7 @@ bool Scene::processScene() {
 			}
 			
 			
+			
 			for(unsigned int a = 0; a < mesh->mNumBones; ++a) {
 				aiBone* bone = mesh->mBones[a];
 				if( !bone ) {
@@ -134,7 +135,7 @@ bool Scene::processScene() {
 				
 				for( auto modelBone : mBones ) {
 					if( modelBone->getSrcBone()->getAiNode() == boneNode ) {
-						modelMesh->mBones.push_back(modelBone);
+						modelMesh->mBones.emplace_back(modelBone);
 						break;
 					}
 				}

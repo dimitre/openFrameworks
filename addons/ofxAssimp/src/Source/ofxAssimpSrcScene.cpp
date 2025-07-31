@@ -314,7 +314,8 @@ void SrcScene::processNodesRecursive(aiNode* anode, std::shared_ptr<SrcNode> aPa
 void SrcScene::processMeshes(aiNode* anode, std::shared_ptr<SrcNode> aSrcNode) {
 	// the meshes are per node it seems
 	
-	mSrcNodes.reserve(anode->mNumMeshes);
+//	mSrcNodes.reserve(anode->mNumMeshes);
+	mSrcMeshes.reserve(anode->mNumMeshes);
 	
 	for(unsigned int i = 0; i < anode->mNumMeshes; i++) {
 		unsigned int meshIndex = anode->mMeshes[i];
@@ -330,7 +331,7 @@ void SrcScene::processMeshes(aiNode* anode, std::shared_ptr<SrcNode> aSrcNode) {
 			auto srcMesh { std::make_shared<ofxAssimp::SrcMesh>() };
 			srcMesh->setAiMesh(scene->mMeshes[meshIndex], anode );
 			loadGLResources(srcMesh, srcMesh->getAiMesh());
-			mSrcMeshes.push_back(srcMesh);
+			mSrcMeshes.emplace_back(srcMesh);
 			if(aSrcNode) {
 				aSrcNode->addChild(srcMesh);
 			} else {
@@ -458,13 +459,14 @@ void SrcScene::processAnimations() {
 		return;
 	}
 	
+	mAnimations.reserve(scene->mNumAnimations);
 	for (unsigned int i = 0; i < scene->mNumAnimations; i++) {
 		aiAnimation* animation = scene->mAnimations[i];
 		if(animation == nullptr) {
 			continue;
 		}
 //		mAnimations.push_back(Animation(scene, animation));
-		mAnimations.push_back(Animation(i, animation));
+		mAnimations.emplace_back(Animation(i, animation));
 		// now lets parse the animation by getting all of the channels
 		for( unsigned int j = 0; j < animation->mNumChannels; j++ ) {
 			// grab the node animation that holds all of the key frames

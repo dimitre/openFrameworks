@@ -102,6 +102,7 @@ public:
 		ofm.setMode(OF_PRIMITIVE_TRIANGLES);
 		
 		// copy vertices
+//		ofm.vertices.reserve(aim->mNumVertices);
 		for (unsigned int i=0; i < aim->mNumVertices;i++){
 			ofm.addVertex(glm::vec3(aim->mVertices[i].x,aim->mVertices[i].y,aim->mVertices[i].z));
 		}

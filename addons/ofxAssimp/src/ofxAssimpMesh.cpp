@@ -67,7 +67,7 @@ std::shared_ptr<ofxAssimp::Texture> Mesh::getTexture( unsigned int aindex ) {
 		return mSrcMesh->getAllMeshTextures()[aindex];
 	}
 	ofLogWarning("ofxAssimp::Mesh::getTexture") << "SrcMesh is not set.";
-	return std::shared_ptr<ofxAssimp::Texture>();
+	return nullptr;
 }
 
 //-------------------------------------------
