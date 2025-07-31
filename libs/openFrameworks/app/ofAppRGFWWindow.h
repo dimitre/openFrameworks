@@ -12,8 +12,8 @@ typedef struct _XIC * XIC;
 	#endif
 
 class ofBaseApp;
-struct RGFWwindow;
-struct RGFWmonitor;
+struct RGFW_window;
+struct RGFW_monitor;
 class ofCoreEvents;
 
 template <typename T>
@@ -57,7 +57,7 @@ public:
 	ofCoreEvents & events() override;
 //	std::shared_ptr<ofBaseRenderer> & renderer() override;
 
-	RGFWwindow * getRGFWWindow();
+	RGFW_window * getRGFWWindow();
 	void * getWindowContext() override { return getRGFWWindow(); }
 	ofWindowSettings getSettings() { return settings; }
 
@@ -137,22 +137,22 @@ public:
 	#endif
 
 private:
-	static ofAppRGFWWindow * setCurrent(RGFWwindow * windowP);
-	static ofAppRGFWWindow * getWindow(RGFWwindow * windowP);
-	static void mouse_cb(RGFWwindow * windowP_, int button, int state, int mods);
-	static void motion_cb(RGFWwindow * windowP_, double x, double y);
-	static void entry_cb(RGFWwindow * windowP_, int entered);
-	static void keyboard_cb(RGFWwindow * windowP_, int key, int scancode, int action, int mods);
-	static void char_cb(RGFWwindow * windowP_, uint32_t key);
-	static void position_cb(RGFWwindow * windowP_, int x, int y);
-	static void resize_cb(RGFWwindow * windowP_, int w, int h);
-	static void framebuffer_size_cb(RGFWwindow * windowP_, int w, int h);
-	static void exit_cb(RGFWwindow * windowP_);
-	static void scroll_cb(RGFWwindow * windowP_, double x, double y);
-	static void drop_cb(RGFWwindow * windowP_, int numFiles, const char ** dropString);
+	static ofAppRGFWWindow * setCurrent(RGFW_window * windowP);
+	static ofAppRGFWWindow * getWindow(RGFW_window * windowP);
+	static void mouse_cb(RGFW_window * windowP_, int button, int state, int mods);
+	static void motion_cb(RGFW_window * windowP_, double x, double y);
+	static void entry_cb(RGFW_window * windowP_, int entered);
+	static void keyboard_cb(RGFW_window * windowP_, int key, int scancode, int action, int mods);
+	static void char_cb(RGFW_window * windowP_, uint32_t key);
+	static void position_cb(RGFW_window * windowP_, int x, int y);
+	static void resize_cb(RGFW_window * windowP_, int w, int h);
+	static void framebuffer_size_cb(RGFW_window * windowP_, int w, int h);
+	static void exit_cb(RGFW_window * windowP_);
+	static void scroll_cb(RGFW_window * windowP_, double x, double y);
+	static void drop_cb(RGFW_window * windowP_, int numFiles, const char ** dropString);
 	static void error_cb(int errorCode, const char * errorDescription);
-	static void refresh_cb(RGFWwindow * windowP_);
-	static void monitor_cb(RGFWmonitor * monitor, int event);
+	static void refresh_cb(RGFW_window * windowP_);
+	static void monitor_cb(RGFW_monitor * monitor, int event);
 
 	void close() override;
 
@@ -177,7 +177,7 @@ private:
 	//	int nFramesSinceWindowResized;
 	bool bWindowNeedsShowing;
 
-	RGFWwindow * windowP;
+	RGFW_window * windowP;
 	ofBaseApp * ofAppPtr;
 
 	bool iconSet;
