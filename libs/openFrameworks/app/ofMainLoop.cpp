@@ -33,9 +33,12 @@
 #elif defined(TARGET_EMSCRIPTEN)
 	#include "ofxAppEmscriptenWindow.h"
 	typedef ofxAppEmscriptenWindow ofWindow;
-#else
+#elif defined(TARGET_GLFW_WINDOW)
 	#include "ofAppGLFWWindow.h"
 	typedef ofAppGLFWWindow ofWindow;
+#elif defined(TARGET_RGFW_WINDOW)
+	#include "ofAppRGFWWindow.h"
+	typedef ofAppRGFWWindow ofWindow;
 #endif
 
 ofMainLoop::ofMainLoop() : bShouldClose(false), status(0), allowMultiWindow(true), escapeQuits(true) {

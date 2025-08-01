@@ -40,7 +40,7 @@ public:
 	static bool doesLoop() { return false; }
 	static bool allowsMultiWindow() { return true; }
 	static bool needsPolling() { return true; }
-	void pollEvents();
+	static void pollEvents();
 
 	// this functions are only meant to be called from inside OF don't call them from your code
 	//	using ofAppBaseWindow::setup;

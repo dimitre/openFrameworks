@@ -22,11 +22,17 @@ using std::shared_ptr;
 
 #if !defined(TARGET_NODISPLAY)
 	#if !defined(TARGET_OF_IOS) & !defined(TARGET_ANDROID) & !defined(TARGET_EMSCRIPTEN) & !defined(TARGET_RASPBERRY_PI_LEGACY)
-		#include "ofAppGLFWWindow.h"
+		#ifdef TARGET_GLFW_WINDOW
+			#include "ofAppGLFWWindow.h"
+			typedef ofAppGLFWWindow ofWindow;
+		#elif defined(TARGET_RGFW_WINDOW)
+			#include "ofAppRGFWWindow.h"
+			typedef ofAppRGFWWindow ofWindow;
+		#endif
 //special case so we preserve supplied settngs
 //TODO: remove me when we remove the ofAppGLFWWindow setters.
 //--------------------------------------
-void ofSetupOpenGL(const shared_ptr<ofAppGLFWWindow> & windowPtr, int w, int h, ofWindowMode screenMode) {
+void ofSetupOpenGL(const shared_ptr<ofWindow> & windowPtr, int w, int h, ofWindowMode screenMode) {
 	ofInit();
 	auto settings = windowPtr->getSettings();
 	settings.setSize(w, h);
@@ -34,7 +40,7 @@ void ofSetupOpenGL(const shared_ptr<ofAppGLFWWindow> & windowPtr, int w, int h, 
 	// ofGetMainLoop()->addWindow(windowPtr);
 	ofCore.mainLoop.addWindow(windowPtr);
 	windowPtr->setup(settings);
-	
+
 
 }
 	#endif
@@ -133,7 +139,7 @@ void ofInit() {
 	ofResetElapsedTimeCounter();
 	of::random::Engine::construct();
 
-	
+
 #ifdef WIN32_HIGH_RES_TIMING
 	timeBeginPeriod(1); // ! experimental, sets high res time
 		// you need to call timeEndPeriod.

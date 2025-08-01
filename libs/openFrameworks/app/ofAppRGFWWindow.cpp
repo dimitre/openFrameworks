@@ -359,7 +359,7 @@ void ofAppRGFWWindow::update() {
 	if (bWindowNeedsShowing && windowP) {
 		// not working.
 #ifdef TARGET_OSX
-		NSWindow * cocoaWindow = RGFW_getCocoaWindow(windowP);
+		NSWindow * cocoaWindow = windowP->src.window;
 //		[cocoaWindow setLevel:NSScreenSaverWindowLevel + 1];
 		[cocoaWindow orderFrontRegardless];
 #endif
@@ -591,7 +591,7 @@ void ofAppRGFWWindow::setFullscreen(bool fullscreen) {
 	if (targetWindowMode == settings.windowMode) return;
 
 #ifdef TARGET_OSX
-	NSWindow * cocoaWindow = RGFW_getCocoaWindow(windowP);
+	NSWindow * cocoaWindow = windowP->src.window;
 
 	if (targetWindowMode == OF_FULLSCREEN) {
 		[NSApp setPresentationOptions:NSApplicationPresentationHideMenuBar | NSApplicationPresentationHideDock];
@@ -615,7 +615,7 @@ void ofAppRGFWWindow::setFullscreen(bool fullscreen) {
 
 #elif defined(TARGET_WIN32)
 
-	HWND hwnd = RGFW_getWin32Window(windowP);
+	HWND hwnd = windowP->src.window;
 
 	setFSTarget(targetWindowMode);
 
@@ -652,8 +652,8 @@ void ofAppRGFWWindow::setFullscreen(bool fullscreen) {
 #elif defined(TARGET_LINUX)
 //	#include <X11/Xatom.h>
 //
-//	Window nativeWin = RGFW_getX11Window(windowP);
-//	Display * display = RGFW_getX11Display();
+//	Window nativeWin = windowP->src.window;
+//	Display * display = windowP->src.display;
 //	if (targetWindowMode == OF_FULLSCREEN) {
 //
 //		// FIXME: Remove legacy code here
@@ -669,10 +669,10 @@ void ofAppRGFWWindow::setFullscreen(bool fullscreen) {
 //			int x, y, w, h;
 //			int monitorLeft = 0, monitorRight = 0, monitorTop = 0, monitorBottom = 0;
 //			for (int i = 0; i < monitorCount; i++) {
-//				RGFW_getMonitorPos(monitors[i], &x, &y);
-//				auto videoMode = RGFW_getVideoMode(monitors[i]);
-//				w = videoMode->width;
-//				h = videoMode->height;
+//				x = monitors[i].x; y = monitors[i].y;
+//				auto videoMode = monitors[i].mode;
+//				w = videoMode->area.w;
+//				h = videoMode->area.h;
 //				if (x < minx) {
 //					monitorLeft = i;
 //					minx = x;
@@ -717,14 +717,14 @@ void ofAppRGFWWindow::setFullscreen(bool fullscreen) {
 ////			currentW = maxx - minx;
 ////			currentH = maxy - minx;
 //		} else {
-//			auto monitor = RGFW_getWindowMonitor(windowP);
+//			auto monitor = RGFW_window_getMonitor(windowP);
 //			if (monitor) {
-//				auto videoMode = RGFW_getVideoMode(monitor);
+//				auto videoMode = monitor.mode;
 //				if (videoMode) {
-//					windowRect.width = videoMode->width;
-//					windowRect.height = videoMode->height;
-////					currentW = videoMode->width;
-////					currentH = videoMode->height;
+//					windowRect.width = videoMode->area.w;
+//					windowRect.height = videoMode-area.h;
+////					currentW = videoMode->area.w;
+////					currentH = videoMode->area.h;
 //				}
 //			}
 //		}
@@ -831,7 +831,7 @@ ofAppRGFWWindow * ofAppRGFWWindow::setCurrent(RGFW_window * windowP) {
 //------------------------------------------------------------
 ofAppRGFWWindow * ofAppRGFWWindow::getWindow(RGFW_window * windowP) {
 	return static_cast<ofAppRGFWWindow *>(windowP->userPtr);
-//	auto instance = static_cast<ofAppRGFWWindow *>(RGFW_getWindowUserPointer(windowP));
+//	auto instance = static_cast<ofAppRGFWWindow *>(windowP->userPtr);
 //	auto mainLoop = ofGetMainLoop();
 //	if (mainLoop) {
 //		mainLoop->setCurrentWindow(instance);
@@ -1355,7 +1355,7 @@ void ofAppRGFWWindow::resize_cb(RGFW_window* windowP_, struct RGFW_rect r) {
 #if defined(TARGET_OSX)
 	if (!instance->bWindowNeedsShowing) {
 //		 FIXME - only after first update
-		NSWindow * cocoaWindow = RGFW_getCocoaWindow(windowP_);
+		NSWindow * cocoaWindow = windowP_->src.window;
 		if (([cocoaWindow styleMask] & NSWindowStyleMaskFullScreen) == NSWindowStyleMaskFullScreen) {
 			instance->settings.windowMode = OF_FULLSCREEN;
 		} else {
@@ -1498,11 +1498,11 @@ void ofAppRGFWWindow::makeCurrent() {
 
 #if defined(TARGET_OSX)
     void * ofAppRGFWWindow::getNSGLContext() {
-        return (__bridge void *)RGFW_getNSGLContext(windowP);
+        return (__bridge void *)windowP->src.ctx.ctx;
     }
 
     void * ofAppRGFWWindow::getCocoaWindow() {
-        return (__bridge void *)RGFW_getCocoaWindow(windowP);
+        return (__bridge void *)windowP->src.window;
     }
 #endif
 
