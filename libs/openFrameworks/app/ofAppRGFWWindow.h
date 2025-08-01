@@ -5,6 +5,9 @@
 // MARK: Target
 #include "ofConstants.h"
 
+#include <stdint.h>
+#include <stddef.h>
+
 #if defined(TARGET_RGFW_WINDOW)
 	#if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI_LEGACY)
 typedef struct _XIM * XIM;
@@ -37,7 +40,7 @@ public:
 	static bool doesLoop() { return false; }
 	static bool allowsMultiWindow() { return true; }
 	static bool needsPolling() { return true; }
-	static void pollEvents();
+	void pollEvents();
 
 	// this functions are only meant to be called from inside OF don't call them from your code
 	//	using ofAppBaseWindow::setup;
@@ -139,21 +142,21 @@ public:
 private:
 	static ofAppRGFWWindow * setCurrent(RGFW_window * windowP);
 	static ofAppRGFWWindow * getWindow(RGFW_window * windowP);
-	static void mouse_cb(RGFW_window * windowP_, int button, int state, int mods);
-	static void motion_cb(RGFW_window * windowP_, double x, double y);
-	static void entry_cb(RGFW_window * windowP_, int entered);
-	static void keyboard_cb(RGFW_window * windowP_, int key, int scancode, int action, int mods);
-	static void char_cb(RGFW_window * windowP_, uint32_t key);
-	static void position_cb(RGFW_window * windowP_, int x, int y);
-	static void resize_cb(RGFW_window * windowP_, int w, int h);
-	static void framebuffer_size_cb(RGFW_window * windowP_, int w, int h);
+	static void mouse_cb(RGFW_window* win, uint8_t button, double scroll, uint8_t pressed);
+	static void motion_cb(RGFW_window* win, struct RGFW_point point, struct RGFW_point vector);
+	static void entry_cb(RGFW_window* win, RGFW_point point, uint8_t status);
+	static void keyboard_cb(RGFW_window* win, uint8_t key, uint8_t keyChar, uint8_t keyMod, uint8_t repeat, uint8_t pressed);
+	static void position_cb(RGFW_window* win, struct RGFW_rect r);
+	static void resize_cb(RGFW_window* win, struct RGFW_rect r);
 	static void exit_cb(RGFW_window * windowP_);
-	static void scroll_cb(RGFW_window * windowP_, double x, double y);
-	static void drop_cb(RGFW_window * windowP_, int numFiles, const char ** dropString);
-	static void error_cb(int errorCode, const char * errorDescription);
+	static void drop_cb(RGFW_window* win, char** droppedFiles, size_t droppedFilesCount);
+	static void error_cb(uint8_t type, uint8_t err, struct RGFW_debugContext ctx, const char* msg);
 	static void refresh_cb(RGFW_window * windowP_);
-	static void monitor_cb(RGFW_monitor * monitor, int event);
 
+	static void monitor_cb(RGFW_monitor * monitor, int event);
+	static void char_cb(RGFW_window * windowP_, uint32_t key);
+	static void scroll_cb(RGFW_window * windowP_, double x, double y);
+	static void framebuffer_size_cb(RGFW_window * windowP_, int w, int h);
 	void close() override;
 
 	#if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI_LEGACY)
@@ -234,7 +237,7 @@ public:
 
 	void update() {
 		size_t numberOfMonitors;
-		monitors = RGFW_getMonitors(&len);
+		monitors = RGFW_getMonitors(&numberOfMonitors);
 
 		std::cout << "ofMonitors update numberOfMonitors " << numberOfMonitors << std::endl;
 		rects.clear();

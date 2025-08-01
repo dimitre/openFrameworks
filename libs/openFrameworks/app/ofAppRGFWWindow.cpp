@@ -1,4 +1,5 @@
 #include "ofAppRGFWWindow.h"
+#include "ofEvents.h"
 
 #if defined(TARGET_RGFW_WINDOW)
 #include "ofGLProgrammableRenderer.h"
@@ -47,8 +48,8 @@ void ofAppRGFWWindow::close() {
 		//hide the window before we destroy it stops a flicker on OS X on exit.
 		RGFW_window_hide(windowP);
 
-		// We must ensure renderer is destroyed *before* glfw destroys the window in glfwDestroyWindow,
-		// as `glfwDestroyWindow` at least on Windows has the effect of unloading OpenGL, making all
+		// We must ensure renderer is destroyed *before* RGFW destroys the window in RGFW_window_close,
+		// as `RGFW_window_close` at least on Windows has the effect of unloading OpenGL, making all
 		// calls to OpenGL illegal.
 		currentRenderer.reset();
 
@@ -70,83 +71,56 @@ void ofAppRGFWWindow::setup(const ofWindowSettings & _settings) {
 	}
 
 	settings = _settings;
-
-	if (!glfwInit()) {
-		ofLogError("ofAppRGFWWindow") << "couldn't init RGFW";
-		return;
-	}
-
-
-	// glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, settings.highResolutionCapable);
-
-	glfwWindowHint(GLFW_RED_BITS, settings.redBits);
-	glfwWindowHint(GLFW_GREEN_BITS, settings.greenBits);
-	glfwWindowHint(GLFW_BLUE_BITS, settings.blueBits);
-	glfwWindowHint(GLFW_ALPHA_BITS, settings.alphaBits);
-	glfwWindowHint(GLFW_DEPTH_BITS, settings.depthBits);
-	glfwWindowHint(GLFW_STENCIL_BITS, settings.stencilBits);
+	RGFW_setHint_OpenGL(RGFW_glRed, settings.redBits);
+	RGFW_setHint_OpenGL(RGFW_glGreen, settings.greenBits);
+	RGFW_setHint_OpenGL(RGFW_glBlue, settings.blueBits);
+	RGFW_setHint_OpenGL(RGFW_glAlpha, settings.alphaBits);
+	RGFW_setHint_OpenGL(RGFW_glDepth, settings.depthBits);
+	RGFW_setHint_OpenGL(RGFW_glStencil, settings.stencilBits);
 
 	RGFW_setHint_OpenGL(RGFW_glStereo, settings.stereo);
 	RGFW_setHint_OpenGL(RGFW_glDoubleBuffer, settings.doubleBuffering ? 1 : 0);
-	RGFW_setHint_OpenGL(RGFW_glSamples, setting.numSamples);
-
-	glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
-	glfwWindowHint(GLFW_MAXIMIZED, settings.maximized);
-	glfwWindowHint(GLFW_RESIZABLE, settings.resizable);
-	glfwWindowHint(GLFW_DECORATED, settings.decorated);
-
-
+	RGFW_setHint_OpenGL(RGFW_glSamples, settings.numSamples);
 
 #ifdef TARGET_OPENGLES
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, settings.glesVersion);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+	RGFW_setHint_OpenGL(RGFW_glMajor, settings.glesVersion);
+	RGFW_setHint_OpenGL(RGFW_glMinor, 0);
+	RGFW_setHint_OpenGL(RGFW_glProfile, RGFW_glES);
 	if (settings.glesVersion >= 2) {
 		currentRenderer = std::make_shared<ofGLProgrammableRenderer>(this);
 	} else {
 		currentRenderer = std::make_shared<ofGLRenderer>(this);
 	}
 #else
-	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, settings.glVersionMajor);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, settings.glVersionMinor);
+	RGFW_setHint_OpenGL(RGFW_glMajor, settings.glVersionMajor);
+	RGFW_setHint_OpenGL(RGFW_glMinor, settings.glVersionMinor);
 	if ((settings.glVersionMajor == 3 && settings.glVersionMinor >= 2) || settings.glVersionMajor >= 4) {
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		RGFW_setHint_OpenGL(RGFW_glProfile, RGFW_glCore);
 	}
 	if (settings.glVersionMajor >= 3) {
-		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR > 2) || (GLFW_VERSION_MAJOR > 3)
-		glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, settings.transparent ? GLFW_TRUE : GLFW_FALSE);
-#endif
-#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4)
-			if( settings.mousePassThrough && settings.transparent && settings.decorated) {
-				ofLogError("ofAppRGFWWindow") << "window is decorated and has transparent input pass through. use floating...";
-			}
-			glfwWindowHint(GLFW_MOUSE_PASSTHROUGH, settings.mousePassThrough);
-			glfwWindowHint(GLFW_FLOATING, settings.floating);
-#endif
+		/* TODO I'm not sure if this is correct */
+		RGFW_setHint_OpenGL(RGFW_glProfile, RGFW_glCompatibility);
+		if( settings.mousePassThrough && settings.transparent && settings.decorated) {
+			ofLogError("ofAppRGFWWindow") << "window is decorated and has transparent input pass through. use floating...";
+		}
 		currentRenderer = std::make_shared<ofGLProgrammableRenderer>(this);
 	} else {
 		currentRenderer = std::make_shared<ofGLRenderer>(this);
 	}
 #endif
 
-
-
-
-
-
-
-	GLFWwindow * sharedContext = nullptr;
+	RGFW_window* sharedContext = NULL;
 	if (settings.shareContextWith) {
-		sharedContext = (GLFWwindow *)settings.shareContextWith->getWindowContext();
+		sharedContext = (RGFW_window*)settings.shareContextWith->getWindowContext();
+		RGFW_window_makeCurrentContext_OpenGL(sharedContext);
+		RGFW_setHint_OpenGL(RGFW_glShareWithCurrentContext, RGFW_TRUE);
 	}
 
 //	allMonitors.update();
 	//	ofLogNotice("ofAppRGFWWindow") << "WINDOW MODE IS " << screenMode;
 
 
-	GLFWmonitor *monitor = nullptr;
+	RGFW_monitor monitor;
 
 
 	// FIXME: maybe use as a global variable for the window?
@@ -170,7 +144,7 @@ void ofAppRGFWWindow::setup(const ofWindowSettings & _settings) {
 	{
 		windowRect = allMonitors.rects[monitorIndex];
 //		monitor = allMonitors.monitors[monitorIndex];
-		monitor = glfwGetPrimaryMonitor();
+		monitor = RGFW_getPrimaryMonitor();
 	}
 
 //	cout << "will create window" << endl;
@@ -178,37 +152,51 @@ void ofAppRGFWWindow::setup(const ofWindowSettings & _settings) {
 	bool displayOK = false;
 	if (settings.fullscreenDisplays.size()) {
 		for (auto & d : settings.fullscreenDisplays) {
-//			cout << "GLFWWindow fullscreenDisplays " << d << " : " << allMonitors.rects.size() << endl;
+//			cout << "RGFW_window fullscreenDisplays " << d << " : " << allMonitors.rects.size() << endl;
 			if (d < allMonitors.rects.size()) {
-//				cout << "glfw ok opening " << endl;
 				displayOK = true;
-//				cout << "mon size: " << allMonitors.rects[d] << endl;
 //				break;
 			} else {
-//				cout << "glfw not enough displays" << endl;
 //				return nullptr;
 			}
-//			cout << d << endl;
 		}
 	} else {
 		displayOK = true;
 	}
 
-//	cout << "glfw displayok " << displayOK << endl;
-	windowP = glfwCreateWindow(settings.getWidth(), settings.getHeight(), settings.title.c_str(), monitor, sharedContext);
+	RGFW_windowFlags flags = RGFW_windowHide;
+	if (settings.maximized) flags |= RGFW_windowMaximize;
+	if (settings.resizable == 0) flags |= RGFW_windowNoResize;
+	if (settings.decorated == 0) flags |= RGFW_windowNoBorder;
+	if (settings.transparent) flags |= RGFW_windowTransparent;
 
-	if (displayOK) {
-		glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
-	} else {
-		// MARK: - WINDOW
-//		cout << "glfw hint visible false" << endl;
-		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-//		return;
+
+	/* TODO GLFW_COCOA_RETINA_FRAMEBUFFER */
+	if (settings.highResolutionCapable) {
+
 	}
 
+	RGFW_setWindowRefreshCallback(refresh_cb);
+	RGFW_setMouseButtonCallback(mouse_cb);
+	RGFW_setMousePosCallback(motion_cb);
+	RGFW_setMouseNotifyCallback(entry_cb);
+	RGFW_setKeyCallback(keyboard_cb);
+	RGFW_setWindowMovedCallback(position_cb);
+	RGFW_setWindowQuitCallback(exit_cb);
+	RGFW_setDndCallback(drop_cb);
+	RGFW_setWindowResizedCallback(resize_cb);
+
+	windowP = RGFW_createWindow(settings.title.c_str(), RGFW_RECT(0, 0, settings.getWidth(), settings.getHeight()), flags);
+
+	if (displayOK) {
+		RGFW_window_show(windowP);
+	}
+
+	RGFW_window_setMousePassthrough(windowP, RGFW_BOOL(settings.mousePassThrough));
+	RGFW_window_setFloating(windowP, settings.floating);
 
 	if (!windowP) {
-		ofLogError("ofAppRGFWWindow") << "couldn't create GLFW window";
+		ofLogError("ofAppRGFWWindow") << "couldn't create RGFW window";
 		return;
 	}
 
@@ -260,14 +248,12 @@ void ofAppRGFWWindow::setup(const ofWindowSettings & _settings) {
 //		}
 #endif
 
-		//FIXME: check if it works with hint GLFW_AUTO_ICONIFY
 		if (settings.iconified) {
 			iconify(true);
 		}
 
-		//FIXME: check if it works with hint GLFW_MAXIMIZED
 		if (settings.maximized) {
-			glfwMaximizeWindow(windowP);
+			RGFW_window_maximize(windowP);
 		}
 	}
 
@@ -278,8 +264,8 @@ void ofAppRGFWWindow::setup(const ofWindowSettings & _settings) {
 //		cout << "HIDE U" << endl;
 	}
 
-	glfwSetWindowUserPointer(windowP, this);
-	glfwMakeContextCurrent(windowP);
+	windowP->userPtr = this;
+	RGFW_window_makeCurrentWindow_OpenGL(windowP);
 
 //	windowMode = settings.windowMode;
 
@@ -310,20 +296,6 @@ void ofAppRGFWWindow::setup(const ofWindowSettings & _settings) {
 	}
 
 //	setVerticalSync(true);
-	glfwSetMonitorCallback( monitor_cb );
-
-	glfwSetMouseButtonCallback(windowP, mouse_cb);
-	glfwSetCursorPosCallback(windowP, motion_cb);
-	glfwSetCursorEnterCallback(windowP, entry_cb);
-	glfwSetKeyCallback(windowP, keyboard_cb);
-	glfwSetCharCallback(windowP, char_cb);
-	glfwSetWindowSizeCallback(windowP, resize_cb);
-	glfwSetWindowPosCallback(windowP,position_cb);
-	glfwSetFramebufferSizeCallback(windowP, framebuffer_size_cb);
-	glfwSetWindowCloseCallback(windowP, exit_cb);
-	glfwSetScrollCallback(windowP, scroll_cb);
-	glfwSetDropCallback(windowP, drop_cb);
-	glfwSetWindowRefreshCallback(windowP, refresh_cb);
 
 #ifdef TARGET_LINUX
 	XSetLocaleModifiers("");
@@ -387,7 +359,7 @@ void ofAppRGFWWindow::update() {
 	if (bWindowNeedsShowing && windowP) {
 		// not working.
 #ifdef TARGET_OSX
-		NSWindow * cocoaWindow = glfwGetCocoaWindow(windowP);
+		NSWindow * cocoaWindow = RGFW_getCocoaWindow(windowP);
 //		[cocoaWindow setLevel:NSScreenSaverWindowLevel + 1];
 		[cocoaWindow orderFrontRegardless];
 #endif
@@ -404,11 +376,11 @@ void ofAppRGFWWindow::update() {
 
 		// FIXME: Test only
 		if (settings.opacity != 1.0) {
-			glfwSetWindowOpacity(windowP, settings.opacity);
+			RGFW_window_setOpacity(windowP, settings.opacity);
 		}
 
 //		cout << "SHOW WINDOW! " << settings.windowName << endl;
-		glfwShowWindow(windowP);
+		RGFW_window_show(windowP);
 
 //		cout << "after show window rect " << getWindowRect() << endl;
 	}
@@ -416,10 +388,7 @@ void ofAppRGFWWindow::update() {
 
 //--------------------------------------------
 void ofAppRGFWWindow::pollEvents() {
-	RGFW_event event;
-	while (RGFW_window_checkEvent(windowP, &event)) {
-
-	}
+	RGFW_window_checkEvents(windowP, 0);
 }
 
 
@@ -433,13 +402,8 @@ void ofAppRGFWWindow::beginDraw() {
 
 //--------------------------------------------
 void ofAppRGFWWindow::endDraw() {
-	if (settings.doubleBuffering) {
-		RGFW_window_swapBuffers_OpenGL(windowP);
-		//		std::cout << "swap buffers " << ofGetFrameNum() << std::endl;
-	} else {
-		std::cout << "flush " << ofGetFrameNum()  << " : " << settings.windowName << std::endl;
-		glFlush();
-	}
+	RGFW_window_swapBuffers_OpenGL(windowP);
+	glFlush();
 
 	currentRenderer->finishRender();
 }
@@ -453,19 +417,15 @@ void ofAppRGFWWindow::draw() {
 
 	events().notifyDraw();
 
-	if (settings.doubleBuffering) {
-		glfwSwapBuffers(windowP);
-		//		std::cout << "swap buffers " << ofGetFrameNum() << std::endl;
-	} else {
-		glFlush();
-	}
+	RGFW_window_swapBuffers_OpenGL(windowP);
+	glFlush();
 
 	currentRenderer->finishRender();
 }
 
 //--------------------------------------------
 void ofAppRGFWWindow::swapBuffers() {
-	glfwSwapBuffers(windowP);
+	RGFW_window_swapBuffers_OpenGL(windowP);
 }
 
 //--------------------------------------------
@@ -481,7 +441,7 @@ void ofAppRGFWWindow::finishRender() {
 
 //--------------------------------------------
 bool ofAppRGFWWindow::getWindowShouldClose() {
-	return glfwWindowShouldClose(windowP);
+	return RGFW_window_shouldClose(windowP);
 }
 
 //--------------------------------------------
@@ -498,41 +458,31 @@ void ofAppRGFWWindow::setWindowTitle(const std::string & title) {
 //------------------------------------------------------------
 int ofAppRGFWWindow::getPixelScreenCoordScale() {
 	// FIXME: cache?
-	glm::vec2 contentScale;
-	glfwGetWindowContentScale(windowP, &contentScale.x, &contentScale.y);
-	return contentScale.x;
+	RGFW_monitor mon = RGFW_window_getMonitor(windowP);
+	return mon.scaleX;
 }
 
 //------------------------------------------------------------
 ofRectangle ofAppRGFWWindow::getWindowRect() {
 //	return windowRect;
-
-	glm::ivec2 pos;
-	glfwGetWindowPos( windowP, &pos.x, &pos.y );
-	glm::ivec2 size;
-	glfwGetWindowSize(windowP, &size.x, &size.y);
-	return ofRectangle(pos.x, pos.y, size.x, size.y);
+	return ofRectangle(windowP->r.x, windowP->r.y, windowP->r.w, windowP->r.h);
 }
 
 //------------------------------------------------------------
 glm::ivec2 ofAppRGFWWindow::getWindowSize() {
-	glm::ivec2 size;
-	glfwGetWindowSize(windowP, &size.x, &size.y);
+	glm::ivec2 size = {windowP->r.w, windowP->r.h};
 	return size;
 }
 
 //------------------------------------------------------------
 glm::ivec2 ofAppRGFWWindow::getWindowPosition() {
-	glm::ivec2 pos;
-	glfwGetWindowPos( windowP, &pos.x, &pos.y );
+	glm::ivec2 pos = RGFW_POINT(windowP->r.x, windowP->r.y);
 	return pos;
 }
 
 //------------------------------------------------------------
 glm::ivec2 ofAppRGFWWindow::getFramebufferSize() {
-	// FIXME: cache size and handle in framebuffer_size_cb
-	glm::ivec2 size;
-	glfwGetFramebufferSize(windowP, &size.x, &size.y);
+	glm::ivec2 size = {windowP->r.w, windowP->r.h};
 	return size;
 }
 
@@ -556,7 +506,7 @@ int ofAppRGFWWindow::getHeight() {
 }
 
 //------------------------------------------------------------
-GLFWwindow * ofAppRGFWWindow::getGLFWWindow() {
+RGFW_window * ofAppRGFWWindow::getRGFWWindow() {
 	return windowP;
 }
 
@@ -564,32 +514,32 @@ GLFWwindow * ofAppRGFWWindow::getGLFWWindow() {
 void ofAppRGFWWindow::setWindowRect(const ofRectangle & rect) {
 //	cout << settings.windowName << " setWindowRect " << rect << endl;
 	windowRect = rect;
-	glfwSetWindowMonitor(windowP, NULL, rect.x, rect.y, rect.width, rect.height, GLFW_DONT_CARE);
+	RGFW_monitor_scaleToWindow(RGFW_window_getMonitor(windowP), windowP);
 }
 
 //------------------------------------------------------------
 void ofAppRGFWWindow::setWindowPosition(int x, int y) {
-	glfwSetWindowPos(windowP, x, y);
+	RGFW_window_move(windowP, RGFW_POINT(x, y));
 }
 
 //------------------------------------------------------------
 void ofAppRGFWWindow::setWindowShape(int w, int h) {
 //	cout << "setWindowShape " << w << " : " <<  h << endl;
-	glfwSetWindowSize(windowP, w, h);
+	RGFW_window_resize(windowP, RGFW_AREA(w, h));
 }
 
 //------------------------------------------------------------
 void ofAppRGFWWindow::hideCursor() {
 	if (settings.windowMode == OF_FULLSCREEN || settings.windowMode == OF_GAME_MODE) {
-		glfwSetInputMode(windowP, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		RGFW_window_holdMouse(windowP, RGFW_AREA(windowP->r.w, windowP->r.h));
 	} else {
-		glfwSetInputMode(windowP, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+		RGFW_window_showMouse(windowP, RGFW_FALSE);
 	}
 };
 
 //------------------------------------------------------------
 void ofAppRGFWWindow::showCursor() {
-	glfwSetInputMode(windowP, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	RGFW_window_showMouse(windowP, RGFW_TRUE);
 };
 
 //------------------------------------------------------------
@@ -641,7 +591,7 @@ void ofAppRGFWWindow::setFullscreen(bool fullscreen) {
 	if (targetWindowMode == settings.windowMode) return;
 
 #ifdef TARGET_OSX
-	NSWindow * cocoaWindow = glfwGetCocoaWindow(windowP);
+	NSWindow * cocoaWindow = RGFW_getCocoaWindow(windowP);
 
 	if (targetWindowMode == OF_FULLSCREEN) {
 		[NSApp setPresentationOptions:NSApplicationPresentationHideMenuBar | NSApplicationPresentationHideDock];
@@ -665,7 +615,7 @@ void ofAppRGFWWindow::setFullscreen(bool fullscreen) {
 
 #elif defined(TARGET_WIN32)
 
-	HWND hwnd = glfwGetWin32Window(windowP);
+	HWND hwnd = RGFW_getWin32Window(windowP);
 
 	setFSTarget(targetWindowMode);
 
@@ -702,14 +652,14 @@ void ofAppRGFWWindow::setFullscreen(bool fullscreen) {
 #elif defined(TARGET_LINUX)
 //	#include <X11/Xatom.h>
 //
-//	Window nativeWin = glfwGetX11Window(windowP);
-//	Display * display = glfwGetX11Display();
+//	Window nativeWin = RGFW_getX11Window(windowP);
+//	Display * display = RGFW_getX11Display();
 //	if (targetWindowMode == OF_FULLSCREEN) {
 //
 //		// FIXME: Remove legacy code here
 //
 //		int monitorCount;
-//		GLFWmonitor ** monitors = glfwGetMonitors(&monitorCount);
+//		RGFW_monitor ** monitors = RGFW_getMonitors(&monitorCount);
 //		if (settings.multiMonitorFullScreen && monitorCount > 1) {
 //			// find the monitors at the edges of the virtual desktop
 //			int minx = numeric_limits<int>::max();
@@ -719,8 +669,8 @@ void ofAppRGFWWindow::setFullscreen(bool fullscreen) {
 //			int x, y, w, h;
 //			int monitorLeft = 0, monitorRight = 0, monitorTop = 0, monitorBottom = 0;
 //			for (int i = 0; i < monitorCount; i++) {
-//				glfwGetMonitorPos(monitors[i], &x, &y);
-//				auto videoMode = glfwGetVideoMode(monitors[i]);
+//				RGFW_getMonitorPos(monitors[i], &x, &y);
+//				auto videoMode = RGFW_getVideoMode(monitors[i]);
 //				w = videoMode->width;
 //				h = videoMode->height;
 //				if (x < minx) {
@@ -767,9 +717,9 @@ void ofAppRGFWWindow::setFullscreen(bool fullscreen) {
 ////			currentW = maxx - minx;
 ////			currentH = maxy - minx;
 //		} else {
-//			auto monitor = glfwGetWindowMonitor(windowP);
+//			auto monitor = RGFW_getWindowMonitor(windowP);
 //			if (monitor) {
-//				auto videoMode = glfwGetVideoMode(monitor);
+//				auto videoMode = RGFW_getVideoMode(monitor);
 //				if (videoMode) {
 //					windowRect.width = videoMode->width;
 //					windowRect.height = videoMode->height;
@@ -835,13 +785,11 @@ void ofAppRGFWWindow::toggleFullscreen() {
 void ofAppRGFWWindow::setWindowMousePassThrough(bool allowPassThrough) {
 	if(settings.mousePassThrough == allowPassThrough) return;
 	settings.mousePassThrough = allowPassThrough;
-#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4)
-	glfwSetWindowAttrib(getGLFWWindow(), GLFW_MOUSE_PASSTHROUGH, settings.mousePassThrough);
-#endif
+	RGFW_window_setMousePassthrough(getRGFWWindow(),allowPassThrough);
 }
 
 //------------------------------------------------------------
-// FIXME: this can be up on base class. it is not GLFW exclusive
+// FIXME: this can be up on base class. it is not RGFW exclusive
 static void rotateMouseXY(ofOrientation orientation, int w, int h, double & x, double & y) {
 	int savedY;
 	switch (orientation) {
@@ -869,8 +817,8 @@ static void rotateMouseXY(ofOrientation orientation, int w, int h, double & x, d
 }
 
 //------------------------------------------------------------
-ofAppRGFWWindow * ofAppRGFWWindow::setCurrent(GLFWwindow * windowP) {
-	auto instance = static_cast<ofAppRGFWWindow *>(glfwGetWindowUserPointer(windowP));
+ofAppRGFWWindow * ofAppRGFWWindow::setCurrent(RGFW_window * windowP) {
+	auto instance = static_cast<ofAppRGFWWindow *>(windowP->userPtr);
 //	auto mainLoop = ofGetMainLoop();
 //	if (mainLoop) {
 //		mainLoop->setCurrentWindow(instance);
@@ -881,10 +829,9 @@ ofAppRGFWWindow * ofAppRGFWWindow::setCurrent(GLFWwindow * windowP) {
 }
 
 //------------------------------------------------------------
-ofAppRGFWWindow * ofAppRGFWWindow::getWindow(GLFWwindow * windowP) {
-	return static_cast<ofAppRGFWWindow *>(glfwGetWindowUserPointer(windowP));
-
-//	auto instance = static_cast<ofAppRGFWWindow *>(glfwGetWindowUserPointer(windowP));
+ofAppRGFWWindow * ofAppRGFWWindow::getWindow(RGFW_window * windowP) {
+	return static_cast<ofAppRGFWWindow *>(windowP->userPtr);
+//	auto instance = static_cast<ofAppRGFWWindow *>(RGFW_getWindowUserPointer(windowP));
 //	auto mainLoop = ofGetMainLoop();
 //	if (mainLoop) {
 //		mainLoop->setCurrentWindow(instance);
@@ -894,18 +841,18 @@ ofAppRGFWWindow * ofAppRGFWWindow::getWindow(GLFWwindow * windowP) {
 }
 
 namespace {
-	int glfwtToOFModifiers(int mods) {
+	int rgfwtToOFModifiers(int mods) {
 		int modifiers = 0;
-		if (mods & GLFW_MOD_SHIFT) {
+		if (mods & RGFW_modShift) {
 			modifiers |= OF_KEY_SHIFT;
 		}
-		if (mods & GLFW_MOD_ALT) {
+		if (mods & RGFW_modAlt) {
 			modifiers |= OF_KEY_ALT;
 		}
-		if (mods & GLFW_MOD_CONTROL) {
+		if (mods & RGFW_modControl) {
 			modifiers |= OF_KEY_CONTROL;
 		}
-		if (mods & GLFW_MOD_SUPER) {
+		if (mods & RGFW_modSuper) {
 			modifiers |= OF_KEY_SUPER;
 		}
 		return modifiers;
@@ -956,11 +903,6 @@ unsigned long keycodeToUnicode(ofAppRGFWWindow * window, int scancode, int modif
 	static BYTE keyboardState[256];
 	GetKeyboardState(keyboardState);
 
-	// Careful: keycode arrives translated into GLFW key codes,
-	// but keycode needs to be a virtual key (VK_...) so we're
-	// in deep troble, since this information has been removed
-	// by GLFW...
-	//
 	// The way around this is to ask the operating system
 	// nicely to create a virtual key for us, based on
 	// the scancode and the currently bound keyboard layout.
@@ -990,12 +932,6 @@ unsigned long keycodeToUnicode(ofAppRGFWWindow * window, int scancode, int modif
 
 	static const CFBundleRef tisBundle = CFBundleGetBundleWithIdentifier(CFSTR("com.apple.HIToolbox"));
 
-	// We need to call some system methods, following GLFW's example
-	// in their OS X version of ```_glfwPlatformGetKeyName```.
-	//
-	// We know these methods must be available, since GLFW uses them
-	// internally.
-	//
 	// The most important method is ```UCKeyTranslate``` - everything
 	// else here is just a royal preparation party to feed it with the
 	// correct parameters.
@@ -1021,19 +957,19 @@ unsigned long keycodeToUnicode(ofAppRGFWWindow * window, int scancode, int modif
 
 	UInt32 mod_OSX = 0;
 	{
-		// We have to translate the GLFW modifier bitflags back to OS X,
+		// We have to translate the RGFW modifier bitflags back to OS X,
 		// so that SHIFT, CONTROL, etc can be taken into account when
 		// calculating the unicode codepoint.
 
 		// UCKeyTranslate expects the Carbon-era modifier mask values,
 		// so use these instead of the NSEventModifierFlag enums
-		if (modifier & GLFW_MOD_SHIFT)
+		if (modifier & RGFW_modShift)
 			mod_OSX |= 512; // Carbon shiftKey value
-		if (modifier & GLFW_MOD_CONTROL)
+		if (modifier & RGFW_modControl)
 			mod_OSX |= 4096; // Carbon controlKey value
-		if (modifier & GLFW_MOD_ALT)
+		if (modifier & RGFW_modAlt)
 			mod_OSX |= 2048; // Carbon optionKey value
-		if (modifier & GLFW_MOD_SUPER)
+		if (modifier & RGFW_modSuper)
 			mod_OSX |= 256; // Carbon cmdKey
 
 		// shift into 1 byte as per the Apple docs
@@ -1056,35 +992,32 @@ unsigned long keycodeToUnicode(ofAppRGFWWindow * window, int scancode, int modif
 }
 
 //------------------------------------------------------------
-void ofAppRGFWWindow::mouse_cb(GLFWwindow * windowP_, int button, int state, int mods) {
+void ofAppRGFWWindow::mouse_cb(RGFW_window* windowP_, uint8_t button, double scroll, uint8_t state) {
 	auto instance = setCurrent(windowP_);
-//	auto instance = getWindow(windowP_);
-
-#ifdef TARGET_OSX
-	//we do this as unlike glut, glfw doesn't report right click for ctrl click or middle click for alt click
-	if (instance->events().getKeyPressed(OF_KEY_CONTROL) && button == GLFW_MOUSE_BUTTON_LEFT) {
-		button = GLFW_MOUSE_BUTTON_RIGHT;
-	}
-	if (instance->events().getKeyPressed(OF_KEY_ALT) && button == GLFW_MOUSE_BUTTON_LEFT) {
-		button = GLFW_MOUSE_BUTTON_MIDDLE;
-	}
-#endif
 
 	switch (button) {
-	case GLFW_MOUSE_BUTTON_LEFT:
-		button = OF_MOUSE_BUTTON_LEFT;
-		break;
-	case GLFW_MOUSE_BUTTON_RIGHT:
-		button = OF_MOUSE_BUTTON_RIGHT;
-		break;
-	case GLFW_MOUSE_BUTTON_MIDDLE:
-		button = OF_MOUSE_BUTTON_MIDDLE;
-		break;
+		case RGFW_mouseLeft:
+			button = OF_MOUSE_BUTTON_LEFT;
+			break;
+		case RGFW_mouseRight:
+			button = OF_MOUSE_BUTTON_RIGHT;
+			break;
+		case RGFW_mouseMiddle:
+			button = OF_MOUSE_BUTTON_MIDDLE;
+			break;
+		case RGFW_mouseScrollUp:
+			ofAppRGFWWindow::scroll_cb(windowP_, 0, 1); // Positive scroll for up
+			return;
+		case RGFW_mouseScrollDown:
+			ofAppRGFWWindow::scroll_cb(windowP_, 0, -1); // Negative scroll for down
+			return;
+		default: break;
 	}
+
 	instance->buttonInUse = button;
 
 	ofMouseEventArgs::Type action;
-	if (state == GLFW_PRESS) {
+	if (state == RGFW_TRUE) {
 		action = ofMouseEventArgs::Pressed;
 		instance->buttonPressed = true;
 	} else {
@@ -1092,7 +1025,8 @@ void ofAppRGFWWindow::mouse_cb(GLFWwindow * windowP_, int button, int state, int
 		instance->buttonPressed = false;
 	}
 
-	int modifiers = glfwtToOFModifiers(mods);
+	/* TODO for some reason this wants key mods on a mouse event */
+	int modifiers = 0; //rgfwtToOFModifiers(mods);
 
 	ofMouseEventArgs args(action, instance->events().getMouseX(), instance->events().getMouseY(), button, modifiers);
 
@@ -1100,8 +1034,11 @@ void ofAppRGFWWindow::mouse_cb(GLFWwindow * windowP_, int button, int state, int
 }
 
 //------------------------------------------------------------
-void ofAppRGFWWindow::motion_cb(GLFWwindow * windowP_, double x, double y) {
+void ofAppRGFWWindow::motion_cb(RGFW_window* windowP_, struct RGFW_point point, struct RGFW_point vector) {
 //	auto instance = getWindow(windowP_);
+	/*  TODO send vector data when raw data is needed */
+	double x = point.x;
+	double y = point.y;
 	ofAppRGFWWindow * instance = setCurrent(windowP_);
 	rotateMouseXY(instance->orientation, instance->getWidth(), instance->getHeight(), x, y);
 
@@ -1121,12 +1058,12 @@ void ofAppRGFWWindow::motion_cb(GLFWwindow * windowP_, double x, double y) {
 }
 
 //------------------------------------------------------------
-void ofAppRGFWWindow::entry_cb(GLFWwindow * windowP_, int entered) {
+void ofAppRGFWWindow::entry_cb(RGFW_window* windowP_, RGFW_point point, uint8_t status) {
 	ofAppRGFWWindow * instance = setCurrent(windowP_);
 //	auto instance = getWindow(windowP_);
 
 	ofMouseEventArgs::Type action;
-	if (entered) {
+	if (status) {
 		action = ofMouseEventArgs::Entered;
 	} else {
 		action = ofMouseEventArgs::Exited;
@@ -1141,7 +1078,7 @@ void ofAppRGFWWindow::entry_cb(GLFWwindow * windowP_, int entered) {
 }
 
 //------------------------------------------------------------
-void ofAppRGFWWindow::scroll_cb(GLFWwindow * windowP_, double x, double y) {
+void ofAppRGFWWindow::scroll_cb(RGFW_window * windowP_, double x, double y) {
 	ofAppRGFWWindow * instance = setCurrent(windowP_);
 //	auto instance = getWindow(windowP_);
 	rotateMouseXY(instance->orientation, instance->getWidth(), instance->getHeight(), x, y);
@@ -1157,218 +1094,214 @@ void ofAppRGFWWindow::scroll_cb(GLFWwindow * windowP_, double x, double y) {
 }
 
 //------------------------------------------------------------
-void ofAppRGFWWindow::drop_cb(GLFWwindow * windowP_, int numFiles, const char ** dropString) {
+void ofAppRGFWWindow::drop_cb(RGFW_window* windowP_, char**  droppedFiles, size_t numFiles) {
 //	auto instance = getWindow(windowP_);
 	ofAppRGFWWindow * instance = setCurrent(windowP_);
 	ofDragInfo drag;
 	drag.position = { instance->events().getMouseX(), instance->events().getMouseY() };
 	drag.files.resize(numFiles);
 	for (int i = 0; i < (int)drag.files.size(); i++) {
-		drag.files[i] = dropString[i];
+		drag.files[i] = droppedFiles[i];
 	}
 	instance->events().notifyDragEvent(drag);
 }
 
 //------------------------------------------------------------
-void ofAppRGFWWindow::error_cb(int errorCode, const char * errorDescription) {
-	ofLogError("ofAppRGFWWindow") << errorCode << ": " << errorDescription;
+void ofAppRGFWWindow::error_cb(RGFW_debugType type, RGFW_errorCode err, RGFW_debugContext ctx, const char* msg) {
+	ofLogError("ofAppRGFWWindow") << err << ": " << msg;
 }
 
 //------------------------------------------------------------
-void ofAppRGFWWindow::keyboard_cb(GLFWwindow * windowP_, int keycode, int scancode, int action, int mods) {
+
+void ofAppRGFWWindow::keyboard_cb(RGFW_window* windowP_, uint8_t keycode, uint8_t keyChar, uint8_t mods, uint8_t repeat, uint8_t action) {
 	int key = 0;
 	uint32_t codepoint = 0;
 	ofAppRGFWWindow * instance = setCurrent(windowP_);
 //	auto instance = getWindow(windowP_);
 //	cout << "keyboard_cb " << instance->settings.windowName << endl;
+	uint32_t scancode = RGFW_rgfwToApiKey(keycode);
 	switch (keycode) {
-	case GLFW_KEY_ESCAPE:
-		key = OF_KEY_ESC;
-		break;
-	case GLFW_KEY_F1:
-		key = OF_KEY_F1;
-		break;
-	case GLFW_KEY_F2:
-		key = OF_KEY_F2;
-		break;
-	case GLFW_KEY_F3:
-		key = OF_KEY_F3;
-		break;
-	case GLFW_KEY_F4:
-		key = OF_KEY_F4;
-		break;
-	case GLFW_KEY_F5:
-		key = OF_KEY_F5;
-		break;
-	case GLFW_KEY_F6:
-		key = OF_KEY_F6;
-		break;
-	case GLFW_KEY_F7:
-		key = OF_KEY_F7;
-		break;
-	case GLFW_KEY_F8:
-		key = OF_KEY_F8;
-		break;
-	case GLFW_KEY_F9:
-		key = OF_KEY_F9;
-		break;
-	case GLFW_KEY_F10:
-		key = OF_KEY_F10;
-		break;
-	case GLFW_KEY_F11:
-		key = OF_KEY_F11;
-		break;
-	case GLFW_KEY_F12:
-		key = OF_KEY_F12;
-		break;
-	case GLFW_KEY_LEFT:
-		key = OF_KEY_LEFT;
-		break;
-	case GLFW_KEY_RIGHT:
-		key = OF_KEY_RIGHT;
-		break;
-	case GLFW_KEY_UP:
-		key = OF_KEY_UP;
-		break;
-	case GLFW_KEY_DOWN:
-		key = OF_KEY_DOWN;
-		break;
-	case GLFW_KEY_PAGE_UP:
-		key = OF_KEY_PAGE_UP;
-		break;
-	case GLFW_KEY_PAGE_DOWN:
-		key = OF_KEY_PAGE_DOWN;
-		break;
-	case GLFW_KEY_HOME:
-		key = OF_KEY_HOME;
-		break;
-	case GLFW_KEY_END:
-		key = OF_KEY_END;
-		break;
-	case GLFW_KEY_INSERT:
-		key = OF_KEY_INSERT;
-		break;
-	case GLFW_KEY_LEFT_SHIFT:
-		key = OF_KEY_LEFT_SHIFT;
-		break;
-	case GLFW_KEY_LEFT_CONTROL:
-		key = OF_KEY_LEFT_CONTROL;
-		break;
-	case GLFW_KEY_LEFT_ALT:
-		key = OF_KEY_LEFT_ALT;
-		break;
-	case GLFW_KEY_LEFT_SUPER:
-		key = OF_KEY_LEFT_SUPER;
-		break;
-	case GLFW_KEY_RIGHT_SHIFT:
-		key = OF_KEY_RIGHT_SHIFT;
-		break;
-	case GLFW_KEY_RIGHT_CONTROL:
-		key = OF_KEY_RIGHT_CONTROL;
-		break;
-	case GLFW_KEY_RIGHT_ALT:
-		key = OF_KEY_RIGHT_ALT;
-		break;
-	case GLFW_KEY_RIGHT_SUPER:
-		key = OF_KEY_RIGHT_SUPER;
-		break;
-	case GLFW_KEY_BACKSPACE:
-		key = OF_KEY_BACKSPACE;
-		break;
-	case GLFW_KEY_DELETE:
-		key = OF_KEY_DEL;
-		break;
-	case GLFW_KEY_ENTER:
-		key = OF_KEY_RETURN;
-		codepoint = '\n';
-		break;
-	case GLFW_KEY_KP_ENTER:
-		key = OF_KEY_RETURN;
-		codepoint = '\n';
-		break;
-	case GLFW_KEY_TAB:
-		key = OF_KEY_TAB;
-		codepoint = '\t';
-		break;
-	case GLFW_KEY_KP_0:
-		key = codepoint = '0';
-		break;
-	case GLFW_KEY_KP_1:
-		key = codepoint = '1';
-		break;
-	case GLFW_KEY_KP_2:
-		key = codepoint = '2';
-		break;
-	case GLFW_KEY_KP_3:
-		key = codepoint = '3';
-		break;
-	case GLFW_KEY_KP_4:
-		key = codepoint = '4';
-		break;
-	case GLFW_KEY_KP_5:
-		key = codepoint = '5';
-		break;
-	case GLFW_KEY_KP_6:
-		key = codepoint = '6';
-		break;
-	case GLFW_KEY_KP_7:
-		key = codepoint = '7';
-		break;
-	case GLFW_KEY_KP_8:
-		key = codepoint = '8';
-		break;
-	case GLFW_KEY_KP_9:
-		key = codepoint = '9';
-		break;
-	case GLFW_KEY_KP_DIVIDE:
-		key = codepoint = '/';
-		break;
-	case GLFW_KEY_KP_MULTIPLY:
-		key = codepoint = '*';
-		break;
-	case GLFW_KEY_KP_SUBTRACT:
-		key = codepoint = '-';
-		break;
-	case GLFW_KEY_KP_ADD:
-		key = codepoint = '+';
-		break;
-	case GLFW_KEY_KP_DECIMAL:
-		key = codepoint = '.';
-		break;
-	case GLFW_KEY_KP_EQUAL:
-		key = codepoint = '=';
-		break;
-	default:
-		codepoint = keycodeToUnicode(instance, scancode, mods);
-//		codepoint = scancode;
-		key = codepoint;
-		break;
+		case RGFW_escape:
+			key = OF_KEY_ESC;
+			break;
+		case RGFW_F1:
+			key = OF_KEY_F1;
+			break;
+		case RGFW_F2:
+			key = OF_KEY_F2;
+			break;
+		case RGFW_F3:
+			key = OF_KEY_F3;
+			break;
+		case RGFW_F4:
+			key = OF_KEY_F4;
+			break;
+		case RGFW_F5:
+			key = OF_KEY_F5;
+			break;
+		case RGFW_F6:
+			key = OF_KEY_F6;
+			break;
+		case RGFW_F7:
+			key = OF_KEY_F7;
+			break;
+		case RGFW_F8:
+			key = OF_KEY_F8;
+			break;
+		case RGFW_F9:
+			key = OF_KEY_F9;
+			break;
+		case RGFW_F10:
+			key = OF_KEY_F10;
+			break;
+		case RGFW_F11:
+			key = OF_KEY_F11;
+			break;
+		case RGFW_F12:
+			key = OF_KEY_F12;
+			break;
+		case RGFW_left:
+			key = OF_KEY_LEFT;
+			break;
+		case RGFW_right:
+			key = OF_KEY_RIGHT;
+			break;
+		case RGFW_up:
+			key = OF_KEY_UP;
+			break;
+		case RGFW_down:
+			key = OF_KEY_DOWN;
+			break;
+		case RGFW_pageUp:
+			key = OF_KEY_PAGE_UP;
+			break;
+		case RGFW_pageDown:
+			key = OF_KEY_PAGE_DOWN;
+			break;
+		case RGFW_home:
+			key = OF_KEY_HOME;
+			break;
+		case RGFW_end:
+			key = OF_KEY_END;
+			break;
+		case RGFW_insert:
+			key = OF_KEY_INSERT;
+			break;
+		case RGFW_shiftL:
+			key = OF_KEY_LEFT_SHIFT;
+			break;
+		case RGFW_controlL:
+			key = OF_KEY_LEFT_CONTROL;
+			break;
+		case RGFW_altL:
+			key = OF_KEY_LEFT_ALT;
+			break;
+		case RGFW_superL:
+			key = OF_KEY_LEFT_SUPER;
+			break;
+		case RGFW_shiftR:
+			key = OF_KEY_RIGHT_SHIFT;
+			break;
+		case RGFW_controlR:
+			key = OF_KEY_RIGHT_CONTROL;
+			break;
+		case RGFW_altR:
+			key = OF_KEY_RIGHT_ALT;
+			break;
+		case RGFW_superR:
+			key = OF_KEY_RIGHT_SUPER;
+			break;
+		case RGFW_backSpace:
+			key = OF_KEY_BACKSPACE;
+			break;
+		case RGFW_delete:
+			key = OF_KEY_DEL;
+			break;
+		case RGFW_enter:
+			key = OF_KEY_RETURN;
+			codepoint = '\n';
+			break;
+		case RGFW_KP_Return:
+			key = OF_KEY_RETURN;
+			codepoint = '\n';
+			break;
+		case RGFW_tab:
+			key = OF_KEY_TAB;
+			codepoint = '\t';
+			break;
+		case RGFW_KP_0:
+			key = codepoint = '0';
+			break;
+		case RGFW_KP_1:
+			key = codepoint = '1';
+			break;
+		case RGFW_KP_2:
+			key = codepoint = '2';
+			break;
+		case RGFW_KP_3:
+			key = codepoint = '3';
+			break;
+		case RGFW_KP_4:
+			key = codepoint = '4';
+			break;
+		case RGFW_KP_5:
+			key = codepoint = '5';
+			break;
+		case RGFW_KP_6:
+			key = codepoint = '6';
+			break;
+		case RGFW_KP_7:
+			key = codepoint = '7';
+			break;
+		case RGFW_KP_8:
+			key = codepoint = '8';
+			break;
+		case RGFW_KP_9:
+			key = codepoint = '9';
+			break;
+		case RGFW_KP_Slash:
+			key = codepoint = '/';
+			break;
+		case RGFW_multiply:
+			key = codepoint = '*';
+			break;
+		case RGFW_KP_Minus:
+			key = codepoint = '-';
+			break;
+		case RGFW_KP_Period:
+			key = codepoint = '.';
+			break;
+		default:
+			codepoint = keycodeToUnicode(instance, scancode, mods);
+			key = codepoint;
+			break;
 	}
+	int modifiers = rgfwtToOFModifiers(mods);
 
-	int modifiers = glfwtToOFModifiers(mods);
-
-	if (action == GLFW_PRESS) {
+	if (action == RGFW_TRUE && action) {
 		ofKeyEventArgs keyE(ofKeyEventArgs::Pressed, key, keycode, scancode, codepoint, modifiers);
 		instance->events().notifyKeyEvent(keyE);
-	} else if (action == GLFW_REPEAT) {
+	} else if (repeat && action) {
 		ofKeyEventArgs keyE(ofKeyEventArgs::Pressed, key, keycode, scancode, codepoint, modifiers);
 		keyE.isRepeat = true;
 		instance->events().notifyKeyEvent(keyE);
-	} else if (action == GLFW_RELEASE) {
+	} else if (action == RGFW_FALSE) {
 		ofKeyEventArgs keyE(ofKeyEventArgs::Released, key, keycode, scancode, codepoint, modifiers);
 		instance->events().notifyKeyEvent(keyE);
 	}
+
+	ofAppRGFWWindow::char_cb(windowP_, keyChar);
 }
 
 //------------------------------------------------------------
-void ofAppRGFWWindow::char_cb(GLFWwindow * windowP_, uint32_t key) {
+void ofAppRGFWWindow::char_cb(RGFW_window * windowP_, uint32_t key) {
 	ofAppRGFWWindow * instance = setCurrent(windowP_);
 //	auto instance = getWindow(windowP_);
 	instance->events().charEvent.notify(key);
 }
 
 //------------------------------------------------------------
-void ofAppRGFWWindow::refresh_cb(GLFWwindow * windowP_) {
+void ofAppRGFWWindow::refresh_cb(RGFW_window * windowP_) {
 //	auto instance = getWindow(windowP_);
 	ofAppRGFWWindow * instance = setCurrent(windowP_);
 	instance->draw();
@@ -1376,7 +1309,7 @@ void ofAppRGFWWindow::refresh_cb(GLFWwindow * windowP_) {
 }
 
 //------------------------------------------------------------
-void ofAppRGFWWindow::monitor_cb(GLFWmonitor * monitor, int event) {
+void ofAppRGFWWindow::monitor_cb(RGFW_monitor * monitor, int event) {
 	allMonitors.update();
 //	cout << "monitor_cb!" << endl;
 //	cout << "monitors rect size: " << allMonitors.rects.size() << endl;
@@ -1390,10 +1323,10 @@ void ofAppRGFWWindow::monitor_cb(GLFWmonitor * monitor, int event) {
 				if (w->settings.windowMode == OF_FULLSCREEN) {
 					w->setWindowRect(allMonitors.rects[w->settings.monitor]);
 				}
-				// TODO: set window to monitor, if it is windowed.
-				glfwShowWindow(win->getGLFWWindow());
+				RGFW_window_moveToMonitor(win->getRGFWWindow(), *monitor);
+				RGFW_window_show(win->getRGFWWindow());
 			} else {
-				glfwHideWindow(win->getGLFWWindow());
+				RGFW_window_hide(win->getRGFWWindow());
 			}
 		}
 	}
@@ -1401,26 +1334,28 @@ void ofAppRGFWWindow::monitor_cb(GLFWmonitor * monitor, int event) {
 }
 
 //------------------------------------------------------------
-void ofAppRGFWWindow::position_cb(GLFWwindow* windowP_, int x, int y){
+void ofAppRGFWWindow::position_cb(RGFW_window* windowP_, struct RGFW_rect r) {
 	ofAppRGFWWindow * instance = setCurrent(windowP_);
 //	auto instance = getWindow(windowP_);
 //	if (instance->settings.windowMode == OF_WINDOW) {
 //		instance->windowRect.x = x;
 //		instance->windowRect.y = y;
 //	}
-	instance->events().notifyWindowMoved(x, y);
+	instance->events().notifyWindowMoved(r.x, r.y);
 }
 //------------------------------------------------------------
-void ofAppRGFWWindow::resize_cb(GLFWwindow * windowP_, int w, int h) {
+void ofAppRGFWWindow::resize_cb(RGFW_window* windowP_, struct RGFW_rect r) {
 //	auto instance = getWindow(windowP_);
 	ofAppRGFWWindow * instance = setCurrent(windowP_);
-	instance->events().notifyWindowResized(w, h);
+	int w = r.w, h = r.h;
 
+	instance->events().notifyWindowResized(w, h);
+	ofAppRGFWWindow::framebuffer_size_cb(windowP_, w, h);
 
 #if defined(TARGET_OSX)
 	if (!instance->bWindowNeedsShowing) {
 //		 FIXME - only after first update
-		NSWindow * cocoaWindow = glfwGetCocoaWindow(windowP_);
+		NSWindow * cocoaWindow = RGFW_getCocoaWindow(windowP_);
 		if (([cocoaWindow styleMask] & NSWindowStyleMaskFullScreen) == NSWindowStyleMaskFullScreen) {
 			instance->settings.windowMode = OF_FULLSCREEN;
 		} else {
@@ -1431,9 +1366,7 @@ void ofAppRGFWWindow::resize_cb(GLFWwindow * windowP_, int w, int h) {
 }
 
 //------------------------------------------------------------
-void ofAppRGFWWindow::framebuffer_size_cb(GLFWwindow * windowP_, int w, int h) {
-//	cout << "framebuffer_size_cb " << w << " : " << h << endl;
-//	auto instance = getWindow(windowP_);
+void ofAppRGFWWindow::framebuffer_size_cb(RGFW_window * windowP_, int w, int h) {
 	ofAppRGFWWindow * instance = setCurrent(windowP_);
 
 	instance->currentRenderer->clear();
@@ -1441,7 +1374,7 @@ void ofAppRGFWWindow::framebuffer_size_cb(GLFWwindow * windowP_, int w, int h) {
 }
 
 //--------------------------------------------
-void ofAppRGFWWindow::exit_cb(GLFWwindow * windowP_) {
+void ofAppRGFWWindow::exit_cb(RGFW_window * windowP_) {
 //	cout << "exit_cb " <<  endl;
 //	auto instance = getWindow(windowP_);
 	ofAppRGFWWindow * instance = setCurrent(windowP_);
@@ -1455,20 +1388,21 @@ void ofAppRGFWWindow::exit_cb(GLFWwindow * windowP_) {
 //------------------------------------------------------------
 void ofAppRGFWWindow::setVerticalSync(bool bVerticalSync) {
 	if (bVerticalSync) {
-		glfwSwapInterval(1);
+		RGFW_window_swapInterval_OpenGL(windowP, 1);
 	} else {
-		glfwSwapInterval(0);
+		RGFW_window_swapInterval_OpenGL(windowP, 0);
 	}
 }
 
 //------------------------------------------------------------
 void ofAppRGFWWindow::setClipboardString(const std::string & text) {
-	glfwSetClipboardString(ofAppRGFWWindow::windowP, text.c_str());
+	RGFW_writeClipboard(text.c_str(), text.size());
 }
 
 //------------------------------------------------------------
 std::string ofAppRGFWWindow::getClipboardString() {
-	const char * clipboard = glfwGetClipboardString(ofAppRGFWWindow::windowP);
+	size_t size;
+	const char * clipboard = RGFW_readClipboard(&size);
 
 	if (clipboard) {
 		return clipboard;
@@ -1479,64 +1413,62 @@ std::string ofAppRGFWWindow::getClipboardString() {
 
 //------------------------------------------------------------
 void ofAppRGFWWindow::listVideoModes() {
-	glfwInit();
-	int numModes;
-	const GLFWvidmode * vidModes = glfwGetVideoModes(nullptr, &numModes);
-	for (int i = 0; i < numModes; i++) {
-		ofLogNotice() << vidModes[i].width << " x " << vidModes[i].height
-					  << vidModes[i].redBits + vidModes[i].greenBits + vidModes[i].blueBits << "bit";
+	RGFW_init();
+
+	size_t count;
+	const auto monitors = RGFW_getMonitors(&count);
+	for (int i = 0; i < count; i++) {
+		ofLogNotice() << monitors[i].mode.area.w << " x " << monitors[i].mode.area.h
+					  << monitors[i].mode.red + monitors[i].mode.green + monitors[i].mode.blue << "bit";
 	}
 }
 
 //------------------------------------------------------------
 void ofAppRGFWWindow::listMonitors() {
-	glfwInit();
-	int count;
-	const auto monitors = glfwGetMonitors(&count);
+	RGFW_init();
+	size_t count;
+	const auto monitors = RGFW_getMonitors(&count);
 	for (int i = 0; i < count; i++) {
 		auto monitor = monitors[i];
-		int w, h, x, y;
-		glfwGetMonitorPhysicalSize(monitor, &w, &h);
-		glfwGetMonitorPos(monitor, &x, &y);
-		ofLogNotice() << i << ": " << glfwGetMonitorName(monitor) << ", physical size: " << w << "x" << h << "mm at " << x << ", " << y;
+		int w = monitor.physW, h = monitors->physH, x = monitor.x, y = monitor.y;
+		ofLogNotice() << i << ": " << monitor.name<< ", physical size: " << w << "x" << h << "mm at " << x << ", " << y;
 	}
 }
 
 //------------------------------------------------------------
 bool ofAppRGFWWindow::isWindowIconified() {
-	return glfwGetWindowAttrib(windowP, GLFW_ICONIFIED);
+	return RGFW_window_isMinimized(windowP);
 }
 
 //------------------------------------------------------------
 bool ofAppRGFWWindow::isWindowActive() {
-	//	return glfwGetWindowParam(GLFW_ACTIVE);
-	return true;
+	return RGFW_window_isInFocus(windowP);
 }
 
 //------------------------------------------------------------
 bool ofAppRGFWWindow::isWindowResizeable() {
-	return !glfwGetWindowAttrib(windowP, GLFW_RESIZABLE);
+	return !(windowP->_flags & RGFW_windowNoResize);
 }
 
 //------------------------------------------------------------
 void ofAppRGFWWindow::iconify(bool bIconify) {
 	if (bIconify)
-		glfwIconifyWindow(windowP);
+		RGFW_window_maximize(windowP);
 	else
-		glfwRestoreWindow(windowP);
+		RGFW_window_show(windowP);
 }
 
 void ofAppRGFWWindow::makeCurrent() {
-	glfwMakeContextCurrent(windowP);
+	RGFW_window_makeCurrentWindow_OpenGL(windowP);
 }
 
 #if defined(TARGET_LINUX)
     Display * ofAppRGFWWindow::getX11Display() {
-        return glfwGetX11Display();
+        return windowP->src.display;
     }
 
     Window ofAppRGFWWindow::getX11Window() {
-        return glfwGetX11Window(windowP);
+        return windowP->src.window;
     }
 
     XIC ofAppRGFWWindow::getX11XIC() {
@@ -1546,31 +1478,31 @@ void ofAppRGFWWindow::makeCurrent() {
 
 #if defined(TARGET_LINUX) && !defined(TARGET_OPENGLES)
     GLXContext ofAppRGFWWindow::getGLXContext() {
-        return glfwGetGLXContext(windowP);
+        return windowP->src.ctx.ctx;
     }
 #endif
 
 #if defined(TARGET_LINUX) && defined(TARGET_OPENGLES)
     EGLDisplay ofAppRGFWWindow::getEGLDisplay() {
-        return glfwGetEGLDisplay();
+        return windowP->src.ctx.EGL_display;;
     }
 
     EGLContext ofAppRGFWWindow::getEGLContext() {
-        return glfwGetEGLContext(windowP);
+        return windowP->src.ctx.EGL_context;
     }
 
     EGLSurface ofAppRGFWWindow::getEGLSurface() {
-        return glfwGetEGLSurface(windowP);
-    }
+        return   windowP->src.ctx.EGL_surface;
+	}
 #endif
 
 #if defined(TARGET_OSX)
     void * ofAppRGFWWindow::getNSGLContext() {
-        return (__bridge void *)glfwGetNSGLContext(windowP);
+        return (__bridge void *)RGFW_getNSGLContext(windowP);
     }
 
     void * ofAppRGFWWindow::getCocoaWindow() {
-        return (__bridge void *)glfwGetCocoaWindow(windowP);
+        return (__bridge void *)RGFW_getCocoaWindow(windowP);
     }
 #endif
 
