@@ -9674,9 +9674,9 @@ void RGFW_window_resize(RGFW_window* win, RGFW_area a) {
 	win->r.h = (i32)a.h;
 
 
-	((void(*)(id, SEL, CGRect))objc_msgSend)((id)win->src.view, sel_registerName("setFrame:"),  (NSRect){{0, 0}, {(float)win->r.w, (float)win->r.h}});
+	((void(*)(id, SEL, CGRect))objc_msgSend)((id)win->src.view, sel_registerName("setFrame:"),  (NSRect){{0, 0}, {(double)win->r.w, (double)win->r.h}});
 	((void(*)(id, SEL, NSRect, bool, bool))objc_msgSend)
-		((id)win->src.window, sel_registerName("setFrame:display:animate:"), (NSRect){{(double)win->r.x, (double)win->r.y}, {(double)win->r.w, (double)(win->r.h + offset)}}, true, true);
+		((id)win->src.window, sel_registerName("setFrame:display:animate:"), (NSRect){{(double)win->r.x, (double)win->r.y}, {(double)win->r.w, (double)win->r.h + offset}}, true, true);
 }
 
 void RGFW_window_focus(RGFW_window* win) {
