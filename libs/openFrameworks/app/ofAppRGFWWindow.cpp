@@ -187,6 +187,8 @@ void ofAppRGFWWindow::setup(const ofWindowSettings & _settings) {
 	RGFW_setWindowResizedCallback(resize_cb);
 
 	windowP = RGFW_createWindow(settings.title.c_str(), RGFW_RECT(0, 0, settings.getWidth(), settings.getHeight()), flags);
+	/* Do not queue events, we don't use the event queue anyway */
+	RGFW_setQueueEvents(RGFW_FALSE);
 
 	if (displayOK) {
 		RGFW_window_show(windowP);
@@ -388,7 +390,7 @@ void ofAppRGFWWindow::update() {
 
 //--------------------------------------------
 void ofAppRGFWWindow::pollEvents() {
-	RGFW_window_checkEvents(windowP, 0);
+	RGFW_pollEvents();
 }
 
 
@@ -1108,6 +1110,7 @@ void ofAppRGFWWindow::drop_cb(RGFW_window* windowP_, char**  droppedFiles, size_
 
 //------------------------------------------------------------
 void ofAppRGFWWindow::error_cb(RGFW_debugType type, RGFW_errorCode err, RGFW_debugContext ctx, const char* msg) {
+	if (type != RGFW_typeError) return;
 	ofLogError("ofAppRGFWWindow") << err << ": " << msg;
 }
 
@@ -1464,8 +1467,8 @@ void ofAppRGFWWindow::makeCurrent() {
 
 #if defined(TARGET_LINUX)
     Display * ofAppRGFWWindow::getX11Display() {
-        return windowP->src.display;
-    }
+		return _RGFW->display;
+	}
 
     Window ofAppRGFWWindow::getX11Window() {
         return windowP->src.window;
