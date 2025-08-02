@@ -30,6 +30,8 @@
 // Raspi removed to use GLFW
 //#elif defined(TARGET_RASPBERRY_PI)
 //	#include "ofAppEGLWindow.h"
+#pragma message(WOW)
+
 #elif defined(TARGET_EMSCRIPTEN)
 	#include "ofxAppEmscriptenWindow.h"
 	typedef ofxAppEmscriptenWindow ofWindow;
