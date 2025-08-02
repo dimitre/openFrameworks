@@ -155,7 +155,7 @@
 		033AD5502D85DA010095C094 /* ofTime.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofTime.cpp; sourceTree = "<group>"; };
 		0353245B2BEFEC7A00B50A35 /* ofTimerFps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofTimerFps.h; sourceTree = "<group>"; };
 		0353245C2BEFEC7B00B50A35 /* ofTimerFps.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofTimerFps.cpp; sourceTree = "<group>"; };
-		1926CF872E3E98FA002C95B5 /* ofAppRGFWWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofAppRGFWWindow.cpp; sourceTree = "<group>"; };
+		1926CF872E3E98FA002C95B5 /* ofAppRGFWWindow.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = ofAppRGFWWindow.cpp; sourceTree = "<group>"; };
 		1926CF892E3E9902002C95B5 /* ofAppRGFWWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofAppRGFWWindow.h; sourceTree = "<group>"; };
 		22246D91176C9987008A8AF4 /* ofGLProgrammableRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofGLProgrammableRenderer.cpp; path = gl/ofGLProgrammableRenderer.cpp; sourceTree = "<group>"; };
 		22246D92176C9987008A8AF4 /* ofGLProgrammableRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofGLProgrammableRenderer.h; path = gl/ofGLProgrammableRenderer.h; sourceTree = "<group>"; };

@@ -9154,7 +9154,7 @@ void RGFW_window_blitSurface(RGFW_window* win, RGFW_surface* surface) {
 
     size_t depth = (surface->image.format >= RGFW_formatRGBA8) ? 4 : 3;
 	id image = ((id (*)(Class, SEL))objc_msgSend)(objc_getClass("NSImage"), sel_getUid("alloc"));
-	NSSize size = (NSSize){surface->image.size.w, surface->image.size.h};
+	NSSize size = (NSSize){(double)surface->image.size.w, (double)surface->image.size.h};
 	image = ((id (*)(id, SEL, NSSize))objc_msgSend)((id)image, sel_getUid("initWithSize:"), size);
 
 	id rep  = NSBitmapImageRep_initWithBitmapData(&surface->image.data, win->r.w, win->r.h , 8, (i32)depth, (depth == 4), false,
@@ -9315,7 +9315,7 @@ RGFW_glContext* RGFW_window_createContext_OpenGL(RGFW_window* win) {
 	if (win->src.view)
 		NSRelease(win->src.view);
 	win->src.view = (id) ((id(*)(id, SEL, NSRect, u32*))objc_msgSend) (NSAlloc(_RGFW->customViewClasses[1]),
-							sel_registerName("initWithFrame:pixelFormat:"), (NSRect){{0, 0}, {win->r.w, win->r.h}}, (u32*)format);
+							sel_registerName("initWithFrame:pixelFormat:"), (NSRect){{0, 0}, {(double)win->r.w, (double)win->r.h}}, (u32*)format);
 
 	id share = NULL;
 
@@ -9654,7 +9654,7 @@ void RGFW_window_move(RGFW_window* win, RGFW_point v) {
 	win->r.x = v.x;
 	win->r.y = v.y;
 	((void(*)(id, SEL, NSRect, bool, bool))objc_msgSend)
-		((id)win->src.window, sel_registerName("setFrame:display:animate:"), (NSRect){{win->r.x, win->r.y}, {win->r.w, win->r.h}}, true, true);
+		((id)win->src.window, sel_registerName("setFrame:display:animate:"), (NSRect){{(double)win->r.x, (double)win->r.y}, {(double)win->r.w, (double)win->r.h}}, true, true);
 }
 
 void RGFW_window_resize(RGFW_window* win, RGFW_area a) {
@@ -9668,9 +9668,9 @@ void RGFW_window_resize(RGFW_window* win, RGFW_area a) {
 	win->r.h = (i32)a.h;
 
 
-	((void(*)(id, SEL, CGRect))objc_msgSend)((id)win->src.view, sel_registerName("setFrame:"),  (NSRect){{0, 0}, {win->r.w, win->r.h}});
+	((void(*)(id, SEL, CGRect))objc_msgSend)((id)win->src.view, sel_registerName("setFrame:"),  (NSRect){{0, 0}, {(double)win->r.w, (double)win->r.h}});
 	((void(*)(id, SEL, NSRect, bool, bool))objc_msgSend)
-		((id)win->src.window, sel_registerName("setFrame:display:animate:"), (NSRect){{win->r.x, win->r.y}, {win->r.w, win->r.h + offset}}, true, true);
+		((id)win->src.window, sel_registerName("setFrame:display:animate:"), (NSRect){{(double)win->r.x, (double)win->r.y}, {(double)win->r.w, (double)win->r.h + offset}}, true, true);
 }
 
 void RGFW_window_focus(RGFW_window* win) {
@@ -9770,12 +9770,12 @@ void RGFW_window_setAspectRatio(RGFW_window* win, RGFW_area a) {
 	if (a.w == 0 && a.h == 0) a = RGFW_AREA(1, 1);
 
 	((void (*)(id, SEL, NSSize))objc_msgSend)
-		((id)win->src.window, sel_registerName("setContentAspectRatio:"), (NSSize){a.w, a.h});
+		((id)win->src.window, sel_registerName("setContentAspectRatio:"), (NSSize){(double)a.w, (double)a.h});
 }
 
 void RGFW_window_setMinSize(RGFW_window* win, RGFW_area a) {
 	((void (*)(id, SEL, NSSize))objc_msgSend)
-		((id)win->src.window, sel_registerName("setMinSize:"), (NSSize){a.w, a.h});
+		((id)win->src.window, sel_registerName("setMinSize:"), (NSSize){(double)a.w, (double)a.h});
 }
 
 void RGFW_window_setMaxSize(RGFW_window* win, RGFW_area a) {
@@ -9784,7 +9784,7 @@ void RGFW_window_setMaxSize(RGFW_window* win, RGFW_area a) {
 	}
 
 	((void (*)(id, SEL, NSSize))objc_msgSend)
-		((id)win->src.window, sel_registerName("setMaxSize:"), (NSSize){a.w, a.h});
+		((id)win->src.window, sel_registerName("setMaxSize:"), (NSSize){(double)a.w, (double)a.h});
 }
 
 RGFW_bool RGFW_window_setIconEx(RGFW_window* win, RGFW_image img, u8 type) {
@@ -9802,7 +9802,7 @@ RGFW_bool RGFW_window_setIconEx(RGFW_window* win, RGFW_image img, u8 type) {
 	RGFW_image_copy(&img2, &img);
 
 	/* Add ze representation. */
-	id dock_image = ((id(*)(id, SEL, NSSize))objc_msgSend) (NSAlloc((id)objc_getClass("NSImage")), sel_registerName("initWithSize:"), ((NSSize){img.size.w, img.size.h}));
+	id dock_image = ((id(*)(id, SEL, NSSize))objc_msgSend) (NSAlloc((id)objc_getClass("NSImage")), sel_registerName("initWithSize:"), ((NSSize){(double)img.size.w, (double)img.size.h}));
 
 	objc_msgSend_void_id(dock_image, sel_registerName("addRepresentation:"), representation);
 
@@ -9834,7 +9834,7 @@ RGFW_mouse* RGFW_loadMouse(RGFW_image img) {
 	RGFW_image_copy(&img2, &img);
 
 	/* Add ze representation. */
-	id cursor_image = ((id(*)(id, SEL, NSSize))objc_msgSend) (NSAlloc((id)objc_getClass("NSImage")), sel_registerName("initWithSize:"), ((NSSize){img.size.w, img.size.h}));
+	id cursor_image = ((id(*)(id, SEL, NSSize))objc_msgSend) (NSAlloc((id)objc_getClass("NSImage")), sel_registerName("initWithSize:"), ((NSSize){(double)img.size.w, (double)img.size.h}));
 
 	objc_msgSend_void_id(cursor_image, sel_registerName("addRepresentation:"), representation);
 
@@ -9898,7 +9898,7 @@ void RGFW_releaseCursor(RGFW_window* win) {
 void RGFW_captureCursor(RGFW_window* win, RGFW_rect r) {
 	RGFW_UNUSED(win);
 
-	CGWarpMouseCursorPosition((CGPoint){r.x + (r.w / 2), r.y + (r.h / 2)});
+	CGWarpMouseCursorPosition((CGPoint){(double)(r.x + (r.w / 2)), (double)(r.y + (r.h / 2))});
 	CGAssociateMouseAndMouseCursorPosition(0);
 }
 
@@ -9906,7 +9906,7 @@ void RGFW_window_moveMouse(RGFW_window* win, RGFW_point v) {
 	RGFW_UNUSED(win);
 
 	win->_lastMousePoint = RGFW_POINT(v.x - win->r.x, v.y - win->r.y);
-	CGWarpMouseCursorPosition((CGPoint){v.x, v.y});
+	CGWarpMouseCursorPosition((CGPoint){(double)v.x, (double)v.y});
 }
 
 
@@ -10034,7 +10034,7 @@ RGFW_monitor* RGFW_getMonitors(size_t* len) {
 }
 
 RGFW_bool RGFW_monitor_requestMode(RGFW_monitor mon, RGFW_monitorMode mode, RGFW_modeRequest request) {
-    CGPoint point = { mon.x, mon.y };
+    CGPoint point = { (double)mon.x, (double)mon.y };
 
     CGDirectDisplayID display;
     u32 displayCount = 0;
