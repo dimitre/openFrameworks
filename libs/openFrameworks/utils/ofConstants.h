@@ -272,7 +272,7 @@ enum ofTargetPlatform{
 	#define TARGET_LITTLE_ENDIAN
 #endif
 
-#ifdef FORCE_RGFW
+#ifdef FORCE_GLFW
 	#ifdef TARGET_GLFW_WINDOW
 		#undef TARGET_GLFW_WINDOW
 		#define TARGET_RGFW_WINDOW
