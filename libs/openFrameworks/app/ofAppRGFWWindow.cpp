@@ -13,9 +13,9 @@
 	#include "ofImage.h"
 #endif
 
-#ifdef TARGET_OSX
-#import "Cocoa/Cocoa.h"
-#endif
+//#ifdef TARGET_OSX
+//#import "Cocoa/Cocoa.h"
+//#endif
 
 // using std::numeric_limits;
 // using std::shared_ptr;

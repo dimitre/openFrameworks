@@ -272,9 +272,11 @@ enum ofTargetPlatform{
 	#define TARGET_LITTLE_ENDIAN
 #endif
 
-#ifdef TARGET_GLFW_WINDOW
-	#undef TARGET_GLFW_WINDOW
-	#define TARGET_RGFW_WINDOW
+#ifdef FORCE_RGFW
+	#ifdef TARGET_GLFW_WINDOW
+		#undef TARGET_GLFW_WINDOW
+		#define TARGET_RGFW_WINDOW
+	#endif
 #endif
 
 #include <tesselator.h>
