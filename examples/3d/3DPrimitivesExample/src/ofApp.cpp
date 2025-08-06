@@ -294,18 +294,18 @@ void ofApp::draw() {
 			cylinder.transformGL();
 			ofPushMatrix(); {
 				if (topCap.getNumNormals() > 0) {
-					ofTranslate(topCap.getNormal(0) * (cos(ofGetElapsedTimef() * 5) + 1)*.5f * 100.0f);
+					ofTranslate(topCap.getNormal(0) * (std::cos(ofGetElapsedTimef() * 5) + 1)*.5f * 100.0f);
 					topCap.draw();
 				}
 			} ofPopMatrix();
 			ofPushMatrix(); {
 				if (bottomCap.getNumNormals() > 0) {
-					ofTranslate(bottomCap.getNormal(0) * (cos(ofGetElapsedTimef() * 4) + 1)*.5f * 100.0f);
+					ofTranslate(bottomCap.getNormal(0) * (std::cos(ofGetElapsedTimef() * 4) + 1)*.5f * 100.0f);
 					bottomCap.draw();
 				}
 			} ofPopMatrix();
 			ofPushMatrix(); {
-				float scale = (cos(ofGetElapsedTimef() * 3) + 1)*.5f + .2;
+				float scale = (std::cos(ofGetElapsedTimef() * 3) + 1)*.5f + .2;
 				ofScale(scale, scale, scale);
 				body.draw();
 			} ofPopMatrix();
