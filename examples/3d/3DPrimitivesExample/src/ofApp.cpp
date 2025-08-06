@@ -55,14 +55,14 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	pointLight.setPosition((ofGetWidth()*.5)+ cos(ofGetElapsedTimef()*.5)*(ofGetWidth()*.3), ofGetHeight()/2, 500);
-	pointLight2.setPosition((ofGetWidth()*.5)+ cos(ofGetElapsedTimef()*.15)*(ofGetWidth()*.3),
-							ofGetHeight()*.5 + sin(ofGetElapsedTimef()*.7)*(ofGetHeight()), -300);
+	pointLight.setPosition((ofGetWidth()*.5)+ std::cos(ofGetElapsedTimef()*.5)*(ofGetWidth()*.3), ofGetHeight()/2, 500);
+	pointLight2.setPosition((ofGetWidth()*.5)+ std::cos(ofGetElapsedTimef()*.15)*(ofGetWidth()*.3),
+							ofGetHeight()*.5 + std::sin(ofGetElapsedTimef()*.7)*(ofGetHeight()), -300);
 
 	pointLight3.setPosition(
-							cos(ofGetElapsedTimef()*1.5) * ofGetWidth()*.5,
-							sin(ofGetElapsedTimef()*1.5f) * ofGetWidth()*.5,
-							cos(ofGetElapsedTimef()*.2) * ofGetWidth()
+							std::cos(ofGetElapsedTimef()*1.5) * ofGetWidth()*.5,
+							std::sin(ofGetElapsedTimef()*1.5f) * ofGetWidth()*.5,
+							std::cos(ofGetElapsedTimef()*.2) * ofGetWidth()
 	);
 
 	//ofSetWindowTitle("Framerate: "+ofToString(ofGetFrameRate(), 0));
@@ -74,8 +74,8 @@ void ofApp::update() {
 //--------------------------------------------------------------
 void ofApp::draw() {
 
-	float spinX = sin(ofGetElapsedTimef()*.35f);
-	float spinY = cos(ofGetElapsedTimef()*.075f);
+	float spinX = std::sin(ofGetElapsedTimef()*.35f);
+	float spinY = std::cos(ofGetElapsedTimef()*.075f);
 
 	if (bMousePressed) {
 		spinX = spinY = 0.0f;
@@ -178,7 +178,7 @@ void ofApp::draw() {
 			box.transformGL();
 			for (int i = 0; i < ofBoxPrimitive::SIDES_TOTAL; i++) {
 				ofPushMatrix();
-				ofTranslate(boxSides[i].getNormal(0) * sin(ofGetElapsedTimef()) * 50.0f);
+				ofTranslate(boxSides[i].getNormal(0) * std::sin(ofGetElapsedTimef()) * 50.0f);
 				boxSides[i].draw();
 				ofPopMatrix();
 			}
