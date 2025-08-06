@@ -239,7 +239,7 @@ public:
 		size_t numberOfMonitors;
 		monitors = RGFW_getMonitors(&numberOfMonitors);
 
-		std::cout << "ofMonitors update numberOfMonitors " << numberOfMonitors << std::endl;
+		std::cout << "RGFW: ofMonitors update numberOfMonitors " << numberOfMonitors << std::endl;
 		rects.clear();
 		allMonitorsRect = { 0, 0, 0, 0 };
 
