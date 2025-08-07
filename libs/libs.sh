@@ -45,6 +45,23 @@ done
 # echo ${PLATFORM}
 # exit
 
+if [[ "$OSTYPE" == "msys"* ]]; then
+    # PLATFORM=windows
+    PLATFORM=vs
+    CORELIBS=( brotli cairo FreeImage freetype glew glfw glm json libpng pugixml rtAudio tess2 uriparser utfcpp zlib openssl curl pixman )
+    ADDONLIBS=( assimp libusb libxml2 opencv )
+    ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
+
+    LIBADDONS=(
+    	# "assimp:ofxAssimpModelLoader"
+    	"assimp:ofxAssimp"
+        "libusb:ofxKinect"
+        "libxml2:ofxSvg"
+        "opencv:ofxOpenCv"
+        # "svgtiny:ofxSvg"
+    )
+else
+
 if [[ "$(uname -s)" == "Darwin" ]]; then
     PLATFORM=macos
     CORELIBS=( brotli cairo FreeImage freetype glew glfw glm json libpng pugixml rtAudio tess2 uriparser utfcpp zlib openssl curl pixman )
