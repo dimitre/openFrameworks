@@ -9,6 +9,16 @@ section() {
     printf "💻${COLOR} ${@} ${NC}\n\r"
 }
 
+checkPackageMSYS() {
+    # dpkg --status $1 &> /dev/null
+    # if [ $? -eq 0 ]; then
+    # echo "$1: Already installed"
+    # else
+    pacman -S mingw-w64-x86_64-yaml-cpp
+    sudo apt-get install -y $1
+    # fi
+}
+
 checkPackageApt() {
     dpkg --status $1 &> /dev/null
     if [ $? -eq 0 ]; then
@@ -35,6 +45,9 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     checkPackageBrew pkg-config
 	checkPackageBrew yaml-cpp
 	checkPackageBrew nlohmann-json
+else
+    section "Which OS is this?"
+    echo "$OSTYPE"
 fi
 
 section "OFWorks, compiling ofgen"
