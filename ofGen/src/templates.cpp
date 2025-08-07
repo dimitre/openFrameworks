@@ -608,8 +608,8 @@ void ofTemplateMake::load() {
 		conf.projectPath / "config.make" });
 
 	for (auto & l : conf.nodeToStrings("make")) {
-	    copyTemplateFiles.back().appends.emplace_back(l);
-	    // alert(l, 35);
+		copyTemplateFiles.back().appends.emplace_back(l);
+		// alert(l, 35);
 	}
 
 	copyTemplateFiles.push_back({ path / "Makefile",
@@ -629,7 +629,7 @@ void ofTemplateZed::load() {
 	// copyTemplateFiles.back().isFolder = true;
 	fs::path folder { conf.projectPath / ".zed" };
 	if (!fs::exists(folder)) {
-	    fs::create_directory(folder);
+		fs::create_directory(folder);
 	}
 
 	copyTemplateFiles.push_back({ path / ".zed/keymap.json",
@@ -645,8 +645,8 @@ void ofTemplateZed::load() {
 	// 		rootReplacements } });
 
 	copyTemplateFiles.push_back({ path / ".zed/debug.json",
-									conf.projectPath / ".zed/debug.json",
-		{{ "$PROJECT_NAME", conf.projectName }}});
+		conf.projectPath / ".zed/debug.json",
+		{ { "$PROJECT_NAME", conf.projectName } } });
 }
 
 void ofTemplateZed::save() {
@@ -1092,4 +1092,30 @@ void ofTemplateMacos::save() {
 	}
 	//	for (auto & c : commands) cout << c << endl;
 	// return true;
+}
+
+
+
+void ofTemplateVisualStudio::addAddon(ofAddon * a) {
+
+#ifdef PORT
+   	ofLogVerbose("visualStudioProject::") << "Adding addon: [" << addon.name << "]";
+	// Handle additional vcxproj files in the addon
+	fs::path additionalFolder = addon.addonPath / (addon.name + "Lib");
+	if (fs::exists(additionalFolder)) {
+		for (const auto &entry : fs::directory_iterator(additionalFolder)) {
+			auto f = entry.path();
+			if (f.extension() == ".vcxproj") {
+				additionalvcxproj.emplace_back(f);
+			}
+		}
+	}
+    #endif
+
+	for (auto & f : a->filteredMap["includes"]) {
+		fs::path p = a->path / f;
+		addInclude(p);
+		// alert ("->" + p.string(), 95);
+		// addCommand("Add :objects:" + c + ":buildSettings:HEADER_SEARCH_PATHS: string " + ofPathToString(p));
+	}
 }

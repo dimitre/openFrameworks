@@ -399,6 +399,9 @@ bool buildProject() {
 		} else if (t == "vscode") {
 			conf.templates.emplace_back(new ofTemplateVSCode());
 			project.templates.emplace_back(conf.templates.back());
+		} else if (t == "visualstudio") {
+			conf.templates.emplace_back(new ofTemplateVisualStudio());
+			project.templates.emplace_back(conf.templates.back());
 		} else {
 			alert("invalid template name : " + t + ", exiting", 95);
 			return false;

@@ -71,7 +71,7 @@ LINKEROPTIONS=""
 # fi
 
 time $CXX -c src/*.cpp src/uuidxx/src/*.cpp `pkg-config --cflags yaml-cpp` -Isrc/uuidxx/src -I../libs/macos/include/ -Wfatal-errors -std=c++20 && \
-time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src `pkg-config --libs yaml-cpp` -o ofgen
+time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src ../libs/macos/lib/libpugixml** `pkg-config --libs yaml-cpp` -o ofgen
 # fi
 
 # if [[ -n $GITHUB_REPOSITORY ]]; then

@@ -164,6 +164,9 @@ bool genConfig::loadYML() {
 		if (templateNames.size() > 0) {
 			conf.templateNames = templateNames;
 		} else {
+		    // FIXME: this is an error in linux64 (no template with this name)
+			// better idea is having a lookup table with platforms and default templates.
+			// and apply directly to ofgen import
 			alert("No templates found, ofgen will deduce from platform", 95);
 			conf.templateNames.emplace_back(getPlatformString());
 		}
