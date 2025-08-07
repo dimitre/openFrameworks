@@ -48,6 +48,7 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
 	checkPackageBrew nlohmann-json
 elif [[ "$OSTYPE" == "msys"* ]]; then
     checkPackageMSYS yaml-cpp
+
 else
     section "Which OS is this?"
     echo "$OSTYPE"

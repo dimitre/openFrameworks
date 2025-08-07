@@ -48,18 +48,29 @@ done
 if [[ "$OSTYPE" == "msys"* ]]; then
     # PLATFORM=windows
     PLATFORM=vs
-    CORELIBS=( brotli cairo FreeImage freetype glew glfw glm json libpng pugixml rtAudio tess2 uriparser utfcpp zlib openssl curl pixman )
-    ADDONLIBS=( assimp libusb libxml2 opencv )
-    ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
+    # CORELIBS=( brotli cairo FreeImage freetype glew glfw glm json libpng pugixml rtAudio tess2 uriparser utfcpp zlib openssl curl pixman )
+    # ADDONLIBS=( assimp libusb libxml2 opencv )
+    # ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
+    # LIBADDONS=(
+    # 	# "assimp:ofxAssimpModelLoader"
+    # 	"assimp:ofxAssimp"
+    #     "libusb:ofxKinect"
+    #     "libxml2:ofxSvg"
+    #     "opencv:ofxOpenCv"
+    #     # "svgtiny:ofxSvg"
+    # )
+    PACMANLIBS="openssl python gcc assimp cairo curl freeglut FreeImage glew glfw glm libsndfile libusb libxml2 mpg123 nlohmann-json openal opencv pugixml rtaudio uriparser utf8cpp"
 
-    LIBADDONS=(
-    	# "assimp:ofxAssimpModelLoader"
-    	"assimp:ofxAssimp"
-        "libusb:ofxKinect"
-        "libxml2:ofxSvg"
-        "opencv:ofxOpenCv"
-        # "svgtiny:ofxSvg"
-    )
+    PARAMS="pacman -Syyuw --noconfirm"
+    for LIBNAME in ${PACMANLIBS[@]}
+    do
+        PARAMS+=" mingw-w64-x86_64-${LIBNAME}"
+    done
+    executa "${PARAMS}"
+
+
+
+
 
 elif [[ "$(uname -s)" == "Darwin" ]]; then
     PLATFORM=macos
