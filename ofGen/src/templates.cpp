@@ -901,7 +901,8 @@ std::string ofTemplateMacos::getFolderUUID(const fs::path & folder, fs::path bas
 
 				else {
 					// CREATING A NEW FOLDER
-					string thisUUID = generateUUID(fullPath);
+					// string thisUUID = generateUUID(fullPath);
+					string thisUUID = generateUUID(fullPath.string());
 					folderUUID[fullPath] = thisUUID;
 					folderFromUUID[thisUUID] = fullPath;
 
