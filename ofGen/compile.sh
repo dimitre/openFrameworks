@@ -14,8 +14,9 @@ checkPackageMSYS() {
     # if [ $? -eq 0 ]; then
     # echo "$1: Already installed"
     # else
-    pacman -S mingw-w64-x86_64-yaml-cpp
-    sudo apt-get install -y $1
+    # FIXME: avoid prompt
+    pacman -S mingw-w64-x86_64-$1
+    # sudo apt-get install -y $1
     # fi
 }
 
@@ -45,6 +46,8 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     checkPackageBrew pkg-config
 	checkPackageBrew yaml-cpp
 	checkPackageBrew nlohmann-json
+elif [[ "$OSTYPE" == "msys"* ]]; then
+    checkPackageMSYS yaml-cpp
 else
     section "Which OS is this?"
     echo "$OSTYPE"

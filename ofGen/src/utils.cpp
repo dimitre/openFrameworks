@@ -152,7 +152,8 @@ bool genConfig::loadYML() {
 		return false;
 		// alert("missing of.yml file ", 31);
 	} else {
-		config = YAML::LoadFile(configFile);
+		// config = YAML::LoadFile(configFile);
+		config = YAML::LoadFile(configFile.string());
 		if (config["ofpath"]) { // use ofpath only if the key exists.
 			auto ofPathYML = config["ofpath"];
 			ofPath = ofPathYML.as<std::string>();

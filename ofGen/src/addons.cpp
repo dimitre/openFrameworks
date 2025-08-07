@@ -311,7 +311,8 @@ void parseConfigAllAddons() {
 			ofAddon * addon = conf.addons.back();
 
 			// ofAddon addon;
-			addon->name = d.path().filename();
+			// addon->name = d.path().filename();
+			addon->name = d.path().filename().string();
 			// check if local addon exists, if not check in of addons folder.
 			addon->path = d.path();
 			addon->load();

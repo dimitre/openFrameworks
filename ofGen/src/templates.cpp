@@ -131,7 +131,8 @@ std::string ofTemplateMacos::addFile(const fs::path & path, const fs::path & fol
 			}
 		}
 
-		UUID = generateUUID(path);
+		// UUID = generateUUID(path);
+		UUID = generateUUID(path.string());
 
 		// This is adding a file. any file.
 		addCommand("Add :objects:" + UUID + ":fileEncoding string 4");
