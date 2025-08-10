@@ -143,14 +143,14 @@ private:
 	static ofAppRGFWWindow * setCurrent(RGFW_window * windowP);
 	static ofAppRGFWWindow * getWindow(RGFW_window * windowP);
 	static void mouse_cb(RGFW_window* win, uint8_t button, double scroll, uint8_t pressed);
-	static void motion_cb(RGFW_window* win, struct RGFW_point point, struct RGFW_point vector);
-	static void entry_cb(RGFW_window* win, RGFW_point point, uint8_t status);
+	static void motion_cb(RGFW_window* win, int32_t x, int32_t y, float vecX, float vecY);
+	static void entry_cb(RGFW_window* win, int32_t x, int32_t y, uint8_t status);
 	static void keyboard_cb(RGFW_window* win, uint8_t key, uint8_t keyChar, uint8_t keyMod, uint8_t repeat, uint8_t pressed);
-	static void position_cb(RGFW_window* win, struct RGFW_rect r);
-	static void resize_cb(RGFW_window* win, struct RGFW_rect r);
+	static void position_cb(RGFW_window* win, int32_t x, int32_t y);
+	static void resize_cb(RGFW_window* win, int32_t w, int32_t h);
 	static void exit_cb(RGFW_window * windowP_);
 	static void drop_cb(RGFW_window* win, char** droppedFiles, size_t droppedFilesCount);
-	static void error_cb(uint8_t type, uint8_t err, struct RGFW_debugContext ctx, const char* msg);
+	static void error_cb(uint8_t type, uint8_t err, const char* msg);
 	static void refresh_cb(RGFW_window * windowP_);
 
 	static void monitor_cb(RGFW_monitor * monitor, int event);
@@ -206,6 +206,7 @@ private:
 
 	// TEMPORARY
 	#define RGFWDEF
+	#define RGFW_OPENGL
 	#include <RGFW.h>
 
 	// TEMP oftostring
@@ -246,7 +247,7 @@ public:
 
 		for (int i = 0; i < numberOfMonitors; i++) {
 			glm::ivec2 pos = {monitors[i].x, monitors[i].x};
-			ofRectangle rect = ofRectangle(pos.x, pos.y, monitors[i].mode.area.w, monitors[i].mode.area.h);
+			ofRectangle rect = ofRectangle(pos.x, pos.y, monitors[i].mode.w, monitors[i].mode.h);
 			rects.emplace_back(rect);
 			allMonitorsRect = allMonitorsRect.getUnion(rect);
 		}
