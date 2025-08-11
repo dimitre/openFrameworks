@@ -5,17 +5,17 @@
 #include "ofGLProgrammableRenderer.h"
 #include "ofGLRenderer.h"
 
-#define RGFW_IMPLEMENTATION
+#define RGFW_NATIVE /* tell RGFW to define native structs so we don't have to use get/fetch for everything */
+#define RGFW_OPENGL
+#define RGFWDEF
 #include <RGFW.h>
 
-#ifdef TARGET_LINUX
-	#include "ofIcon.h"
-	#include "ofImage.h"
+#ifdef RGFW_X11
+#include <X11/XKBlib.h>
 #endif
 
-//#ifdef TARGET_OSX
-//#import "Cocoa/Cocoa.h"
-//#endif
+#include "ofIcon.h"
+#include "ofImage.h"
 
 // using std::numeric_limits;
 // using std::shared_ptr;
@@ -75,35 +75,36 @@ void ofAppRGFWWindow::setup(const ofWindowSettings & _settings) {
 	}
 
 	settings = _settings;
-	RGFW_setHint_OpenGL(RGFW_glRed, settings.redBits);
-	RGFW_setHint_OpenGL(RGFW_glGreen, settings.greenBits);
-	RGFW_setHint_OpenGL(RGFW_glBlue, settings.blueBits);
-	RGFW_setHint_OpenGL(RGFW_glAlpha, settings.alphaBits);
-	RGFW_setHint_OpenGL(RGFW_glDepth, settings.depthBits);
-	RGFW_setHint_OpenGL(RGFW_glStencil, settings.stencilBits);
+    RGFW_glHints* hints = RGFW_getGlobalHints_OpenGL();
+	hints->red = settings.redBits;
+	hints->green = settings.greenBits;
+	hints->blue = settings.blueBits;
+	hints->alpha = settings.alphaBits;
+	hints->depth = settings.depthBits;
+	hints->stencil = settings.stencilBits;
 
-	RGFW_setHint_OpenGL(RGFW_glStereo, settings.stereo);
-	RGFW_setHint_OpenGL(RGFW_glDoubleBuffer, settings.doubleBuffering ? 1 : 0);
-	RGFW_setHint_OpenGL(RGFW_glSamples, settings.numSamples);
+	hints->stereo, settings.stereo;
+	hints->doubleBuffer, settings.doubleBuffering ? 1 : 0;
+	hints->samples, settings.numSamples;
 
 #ifdef TARGET_OPENGLES
-	RGFW_setHint_OpenGL(RGFW_glMajor, settings.glesVersion);
-	RGFW_setHint_OpenGL(RGFW_glMinor, 0);
-	RGFW_setHint_OpenGL(RGFW_glProfile, RGFW_glES);
+	hints->major, settings.glesVersion);
+	hints->minor, 0);
+	hints->profile, RGFW_glES);
 	if (settings.glesVersion >= 2) {
 		currentRenderer = std::make_shared<ofGLProgrammableRenderer>(this);
 	} else {
 		currentRenderer = std::make_shared<ofGLRenderer>(this);
 	}
 #else
-	RGFW_setHint_OpenGL(RGFW_glMajor, settings.glVersionMajor);
-	RGFW_setHint_OpenGL(RGFW_glMinor, settings.glVersionMinor);
+	hints->major, settings.glVersionMajor;
+	hints->minor, settings.glVersionMinor;
 	if ((settings.glVersionMajor == 3 && settings.glVersionMinor >= 2) || settings.glVersionMajor >= 4) {
-		RGFW_setHint_OpenGL(RGFW_glProfile, RGFW_glCore);
+		hints->profile, RGFW_glCore;
 	}
 	if (settings.glVersionMajor >= 3) {
 		/* TODO I'm not sure if this is correct */
-		RGFW_setHint_OpenGL(RGFW_glProfile, RGFW_glCompatibility);
+		hints->profile = RGFW_glCompatibility;
 		if( settings.mousePassThrough && settings.transparent && settings.decorated) {
 			ofLogError("ofAppRGFWWindow") << "window is decorated and has transparent input pass through. use floating...";
 		}
@@ -115,10 +116,10 @@ void ofAppRGFWWindow::setup(const ofWindowSettings & _settings) {
 
 	RGFW_window* sharedContext = NULL;
 	if (settings.shareContextWith) {
-		sharedContext = (RGFW_window*)settings.shareContextWith->getWindowContext();
-		RGFW_window_makeCurrentContext_OpenGL(sharedContext);
-		RGFW_setHint_OpenGL(RGFW_glShareWithCurrentContext, RGFW_TRUE);
+		hints->share = RGFW_window_getContext_OpenGL(sharedContext);
 	}
+
+    RGFW_setGlobalHints_OpenGL(hints);
 
 //	allMonitors.update();
 	//	ofLogNotice("ofAppRGFWWindow") << "WINDOW MODE IS " << screenMode;
@@ -168,7 +169,7 @@ void ofAppRGFWWindow::setup(const ofWindowSettings & _settings) {
 		displayOK = true;
 	}
 
-	RGFW_windowFlags flags = RGFW_windowHide;
+	RGFW_windowFlags flags = RGFW_windowOpenGL | RGFW_windowHide;
 	if (settings.maximized) flags |= RGFW_windowMaximize;
 	if (settings.resizable == 0) flags |= RGFW_windowNoResize;
 	if (settings.decorated == 0) flags |= RGFW_windowNoBorder;
@@ -187,12 +188,10 @@ void ofAppRGFWWindow::setup(const ofWindowSettings & _settings) {
 	RGFW_setKeyCallback(keyboard_cb);
 	RGFW_setWindowMovedCallback(position_cb);
 	RGFW_setWindowQuitCallback(exit_cb);
-	RGFW_setDndCallback(drop_cb);
+	RGFW_setDropCallback(drop_cb);
 	RGFW_setWindowResizedCallback(resize_cb);
 
-	windowP = RGFW_createWindow(settings.title.c_str(), RGFW_RECT(0, 0, settings.getWidth(), settings.getHeight()), flags);
-	/* Do not queue events, we don't use the event queue anyway */
-	RGFW_setQueueEvents(RGFW_FALSE);
+	windowP = RGFW_createWindow(settings.title.c_str(), 0, 0, settings.getWidth(), settings.getHeight(), flags);
 
 	if (displayOK) {
 		RGFW_window_show(windowP);
@@ -320,33 +319,19 @@ void ofAppRGFWWindow::setup(const ofWindowSettings & _settings) {
 
 }
 
-#ifdef TARGET_LINUX
     //------------------------------------------------------------
-    void ofAppRGFWWindow::setWindowIcon(const of::filesystem::path & path) {
-        ofPixels iconPixels;
-        ofLoadImage(iconPixels, path);
-        setWindowIcon(iconPixels);
-    }
+void ofAppRGFWWindow::setWindowIcon(const of::filesystem::path & path) {
+	ofPixels iconPixels;
+	ofLoadImage(iconPixels, path);
+	setWindowIcon(iconPixels);
+}
 
-    //------------------------------------------------------------
-    void ofAppRGFWWindow::setWindowIcon(const ofPixels & iconPixels) {
-        iconSet = true;
-        int length = 2 + iconPixels.getWidth() * iconPixels.getHeight();
-        std::vector<unsigned long> buffer(length);
-        buffer[0] = iconPixels.getWidth();
-        buffer[1] = iconPixels.getHeight();
-        for (size_t i = 0; i < iconPixels.getWidth() * iconPixels.getHeight(); i++) {
-            buffer[i + 2] = iconPixels[i * 4 + 3] << 24;
-            buffer[i + 2] += iconPixels[i * 4 + 0] << 16;
-            buffer[i + 2] += iconPixels[i * 4 + 1] << 8;
-            buffer[i + 2] += iconPixels[i * 4 + 2];
-        }
-
-        XChangeProperty(getX11Display(), getX11Window(), XInternAtom(getX11Display(), "_NET_WM_ICON", False), XA_CARDINAL, 32,
-                        PropModeReplace, (const unsigned char *)buffer.data(), length);
-        XFlush(getX11Display());
-    }
-#endif
+//------------------------------------------------------------
+void ofAppRGFWWindow::setWindowIcon(const ofPixels & iconPixels) {
+	iconSet = true;
+	/* this assumes the format is RGBA, which I think is what openFrameworks does anyway */
+	RGFW_window_setIcon(windowP, (u8*)iconPixels.getData(), iconPixels.getWidth(), iconPixels.getHeight(), RGFW_formatRGBA8);
+}
 
 //--------------------------------------------
 ofCoreEvents & ofAppRGFWWindow::events() {
@@ -471,24 +456,24 @@ int ofAppRGFWWindow::getPixelScreenCoordScale() {
 //------------------------------------------------------------
 ofRectangle ofAppRGFWWindow::getWindowRect() {
 //	return windowRect;
-	return ofRectangle(windowP->r.x, windowP->r.y, windowP->r.w, windowP->r.h);
+	return ofRectangle(windowP->x, windowP->y, windowP->w, windowP->h);
 }
 
 //------------------------------------------------------------
 glm::ivec2 ofAppRGFWWindow::getWindowSize() {
-	glm::ivec2 size = {windowP->r.w, windowP->r.h};
+	glm::ivec2 size = {windowP->w, windowP->h};
 	return size;
 }
 
 //------------------------------------------------------------
 glm::ivec2 ofAppRGFWWindow::getWindowPosition() {
-	glm::ivec2 pos = RGFW_POINT(windowP->r.x, windowP->r.y);
+	glm::ivec2 pos = {windowP->x, windowP->y};
 	return pos;
 }
 
 //------------------------------------------------------------
 glm::ivec2 ofAppRGFWWindow::getFramebufferSize() {
-	glm::ivec2 size = {windowP->r.w, windowP->r.h};
+	glm::ivec2 size = {windowP->w, windowP->h};
 	return size;
 }
 
@@ -525,19 +510,19 @@ void ofAppRGFWWindow::setWindowRect(const ofRectangle & rect) {
 
 //------------------------------------------------------------
 void ofAppRGFWWindow::setWindowPosition(int x, int y) {
-	RGFW_window_move(windowP, RGFW_POINT(x, y));
+	RGFW_window_move(windowP, x, y);
 }
 
 //------------------------------------------------------------
 void ofAppRGFWWindow::setWindowShape(int w, int h) {
 //	cout << "setWindowShape " << w << " : " <<  h << endl;
-	RGFW_window_resize(windowP, RGFW_AREA(w, h));
+	RGFW_window_resize(windowP, w, h);
 }
 
 //------------------------------------------------------------
 void ofAppRGFWWindow::hideCursor() {
 	if (settings.windowMode == OF_FULLSCREEN || settings.windowMode == OF_GAME_MODE) {
-		RGFW_window_holdMouse(windowP, RGFW_AREA(windowP->r.w, windowP->r.h));
+		RGFW_window_holdMouse(windowP);
 	} else {
 		RGFW_window_showMouse(windowP, RGFW_FALSE);
 	}
@@ -1040,11 +1025,11 @@ void ofAppRGFWWindow::mouse_cb(RGFW_window* windowP_, uint8_t button, double scr
 }
 
 //------------------------------------------------------------
-void ofAppRGFWWindow::motion_cb(RGFW_window* windowP_, struct RGFW_point point, struct RGFW_point vector) {
+void ofAppRGFWWindow::motion_cb(RGFW_window* windowP_, int32_t x1, int32_t y1, float vecX, float vecY) {
 //	auto instance = getWindow(windowP_);
 	/*  TODO send vector data when raw data is needed */
-	double x = point.x;
-	double y = point.y;
+	double x = x1;
+	double y = y1;
 	ofAppRGFWWindow * instance = setCurrent(windowP_);
 	rotateMouseXY(instance->orientation, instance->getWidth(), instance->getHeight(), x, y);
 
@@ -1064,7 +1049,7 @@ void ofAppRGFWWindow::motion_cb(RGFW_window* windowP_, struct RGFW_point point, 
 }
 
 //------------------------------------------------------------
-void ofAppRGFWWindow::entry_cb(RGFW_window* windowP_, RGFW_point point, uint8_t status) {
+void ofAppRGFWWindow::entry_cb(RGFW_window* windowP_, int32_t x, int32_t y, uint8_t status) {
 	ofAppRGFWWindow * instance = setCurrent(windowP_);
 //	auto instance = getWindow(windowP_);
 
@@ -1113,7 +1098,7 @@ void ofAppRGFWWindow::drop_cb(RGFW_window* windowP_, char**  droppedFiles, size_
 }
 
 //------------------------------------------------------------
-void ofAppRGFWWindow::error_cb(RGFW_debugType type, RGFW_errorCode err, RGFW_debugContext ctx, const char* msg) {
+void ofAppRGFWWindow::error_cb(RGFW_debugType type, RGFW_errorCode err, const char* msg) {
 	if (type != RGFW_typeError) return;
 	ofLogError("ofAppRGFWWindow") << err << ": " << msg;
 }
@@ -1228,7 +1213,7 @@ void ofAppRGFWWindow::keyboard_cb(RGFW_window* windowP_, uint8_t keycode, uint8_
 			key = OF_KEY_RETURN;
 			codepoint = '\n';
 			break;
-		case RGFW_KP_Return:
+		case RGFW_kpReturn:
 			key = OF_KEY_RETURN;
 			codepoint = '\n';
 			break;
@@ -1236,46 +1221,52 @@ void ofAppRGFWWindow::keyboard_cb(RGFW_window* windowP_, uint8_t keycode, uint8_
 			key = OF_KEY_TAB;
 			codepoint = '\t';
 			break;
-		case RGFW_KP_0:
+		case RGFW_kp0:
 			key = codepoint = '0';
 			break;
-		case RGFW_KP_1:
+		case RGFW_kp1:
 			key = codepoint = '1';
 			break;
-		case RGFW_KP_2:
+		case RGFW_kp2:
 			key = codepoint = '2';
 			break;
-		case RGFW_KP_3:
+		case RGFW_kp3:
 			key = codepoint = '3';
 			break;
-		case RGFW_KP_4:
+		case RGFW_kp4:
 			key = codepoint = '4';
 			break;
-		case RGFW_KP_5:
+		case RGFW_kp5:
 			key = codepoint = '5';
 			break;
-		case RGFW_KP_6:
+		case RGFW_kp6:
 			key = codepoint = '6';
 			break;
-		case RGFW_KP_7:
+		case RGFW_kp7:
 			key = codepoint = '7';
 			break;
-		case RGFW_KP_8:
+		case RGFW_kp8:
 			key = codepoint = '8';
 			break;
-		case RGFW_KP_9:
+		case RGFW_kp9:
 			key = codepoint = '9';
 			break;
-		case RGFW_KP_Slash:
+		case RGFW_kpSlash:
 			key = codepoint = '/';
 			break;
-		case RGFW_multiply:
+		case RGFW_kpMultiply:
 			key = codepoint = '*';
 			break;
-		case RGFW_KP_Minus:
+		case RGFW_kpEqual:
+			key = codepoint = '=';
+			break;
+		case RGFW_kpPlus:
+			key = codepoint = '+';
+			break;
+		case RGFW_kpMinus:
 			key = codepoint = '-';
 			break;
-		case RGFW_KP_Period:
+		case RGFW_kpPeriod:
 			key = codepoint = '.';
 			break;
 		default:
@@ -1341,20 +1332,19 @@ void ofAppRGFWWindow::monitor_cb(RGFW_monitor * monitor, int event) {
 }
 
 //------------------------------------------------------------
-void ofAppRGFWWindow::position_cb(RGFW_window* windowP_, struct RGFW_rect r) {
+void ofAppRGFWWindow::position_cb(RGFW_window* windowP_, int32_t x, int32_t y) {
 	ofAppRGFWWindow * instance = setCurrent(windowP_);
 //	auto instance = getWindow(windowP_);
 //	if (instance->settings.windowMode == OF_WINDOW) {
 //		instance->windowRect.x = x;
 //		instance->windowRect.y = y;
 //	}
-	instance->events().notifyWindowMoved(r.x, r.y);
+	instance->events().notifyWindowMoved(x, y);
 }
 //------------------------------------------------------------
-void ofAppRGFWWindow::resize_cb(RGFW_window* windowP_, struct RGFW_rect r) {
+void ofAppRGFWWindow::resize_cb(RGFW_window* windowP_, int32_t w, int32_t h) {
 //	auto instance = getWindow(windowP_);
 	ofAppRGFWWindow * instance = setCurrent(windowP_);
-	int w = r.w, h = r.h;
 
 	instance->events().notifyWindowResized(w, h);
 	ofAppRGFWWindow::framebuffer_size_cb(windowP_, w, h);
@@ -1425,7 +1415,7 @@ void ofAppRGFWWindow::listVideoModes() {
 	size_t count;
 	const auto monitors = RGFW_getMonitors(&count);
 	for (int i = 0; i < count; i++) {
-		ofLogNotice() << monitors[i].mode.area.w << " x " << monitors[i].mode.area.h
+		ofLogNotice() << monitors[i].mode.w << " x " << monitors[i].mode.h
 					  << monitors[i].mode.red + monitors[i].mode.green + monitors[i].mode.blue << "bit";
 	}
 }
@@ -1454,7 +1444,7 @@ bool ofAppRGFWWindow::isWindowActive() {
 
 //------------------------------------------------------------
 bool ofAppRGFWWindow::isWindowResizeable() {
-	return !(windowP->_flags & RGFW_windowNoResize);
+	return !(windowP->internal.flags & RGFW_windowNoResize);
 }
 
 //------------------------------------------------------------
@@ -1471,7 +1461,7 @@ void ofAppRGFWWindow::makeCurrent() {
 
 #if defined(TARGET_LINUX)
     Display * ofAppRGFWWindow::getX11Display() {
-		return _RGFW->display;
+		return (Display*)RGFW_getDisplay_X11();
 	}
 
     Window ofAppRGFWWindow::getX11Window() {
@@ -1485,27 +1475,27 @@ void ofAppRGFWWindow::makeCurrent() {
 
 #if defined(TARGET_LINUX) && !defined(TARGET_OPENGLES)
     GLXContext ofAppRGFWWindow::getGLXContext() {
-        return windowP->src.ctx.ctx;
+        return RGFW_window_getContext_OpenGL(windowP)->ctx;
     }
 #endif
 
 #if defined(TARGET_LINUX) && defined(TARGET_OPENGLES)
     EGLDisplay ofAppRGFWWindow::getEGLDisplay() {
-        return windowP->src.ctx.EGL_display;;
+        return RGFW_window_getContext_OpenGL(windowP)->EGL_display;;
     }
 
     EGLContext ofAppRGFWWindow::getEGLContext() {
-        return windowP->src.ctx.EGL_context;
+        return RGFW_window_getContext_OpenGL(windowP)->EGL_context;
     }
 
     EGLSurface ofAppRGFWWindow::getEGLSurface() {
-        return   windowP->src.ctx.EGL_surface;
+        return   RGFW_window_getContext_OpenGL(windowP)->EGL_surface;
 	}
 #endif
 
 #if defined(TARGET_OSX)
     void * ofAppRGFWWindow::getNSGLContext() {
-        return (__bridge void *)windowP->src.ctx.ctx;
+        return (__bridge void *)RGFW_window_getContext_OpenGL(windowP)->ctx;
     }
 
     void * ofAppRGFWWindow::getCocoaWindow() {
@@ -1515,7 +1505,7 @@ void ofAppRGFWWindow::makeCurrent() {
 
 #if defined(TARGET_WIN32)
     HGLRC ofAppRGFWWindow::getWGLContext() {
-        return windowP->src.ctx.ctx;
+        return RGFW_window_getContext_OpenGL(windowP)->ctx;
     }
 
     HWND ofAppRGFWWindow::getWin32Window() {
