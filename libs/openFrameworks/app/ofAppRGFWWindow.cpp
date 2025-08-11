@@ -5,14 +5,17 @@
 #include "ofGLProgrammableRenderer.h"
 #include "ofGLRenderer.h"
 
+#define RGFW_NATIVE /* tell RGFW to define native structs so we don't have to use get/fetch for everything */
 #define RGFW_OPENGL
-#define RGFW_IMPLEMENTATION
+#define RGFWDEF
 #include <RGFW.h>
 
-#ifdef TARGET_LINUX
-	#include "ofIcon.h"
-	#include "ofImage.h"
+#ifdef RGFW_X11
+#include <X11/XKBlib.h>
 #endif
+
+#include "ofIcon.h"
+#include "ofImage.h"
 
 // using std::numeric_limits;
 // using std::shared_ptr;
@@ -316,33 +319,19 @@ void ofAppRGFWWindow::setup(const ofWindowSettings & _settings) {
 
 }
 
-#ifdef TARGET_LINUX
     //------------------------------------------------------------
-    void ofAppRGFWWindow::setWindowIcon(const of::filesystem::path & path) {
-        ofPixels iconPixels;
-        ofLoadImage(iconPixels, path);
-        setWindowIcon(iconPixels);
-    }
+void ofAppRGFWWindow::setWindowIcon(const of::filesystem::path & path) {
+	ofPixels iconPixels;
+	ofLoadImage(iconPixels, path);
+	setWindowIcon(iconPixels);
+}
 
-    //------------------------------------------------------------
-    void ofAppRGFWWindow::setWindowIcon(const ofPixels & iconPixels) {
-        iconSet = true;
-        int length = 2 + iconPixels.getWidth() * iconPixels.getHeight();
-        std::vector<unsigned long> buffer(length);
-        buffer[0] = iconPixels.getWidth();
-        buffer[1] = iconPixels.getHeight();
-        for (size_t i = 0; i < iconPixels.getWidth() * iconPixels.getHeight(); i++) {
-            buffer[i + 2] = iconPixels[i * 4 + 3] << 24;
-            buffer[i + 2] += iconPixels[i * 4 + 0] << 16;
-            buffer[i + 2] += iconPixels[i * 4 + 1] << 8;
-            buffer[i + 2] += iconPixels[i * 4 + 2];
-        }
-
-        XChangeProperty(getX11Display(), getX11Window(), XInternAtom(getX11Display(), "_NET_WM_ICON", False), XA_CARDINAL, 32,
-                        PropModeReplace, (const unsigned char *)buffer.data(), length);
-        XFlush(getX11Display());
-    }
-#endif
+//------------------------------------------------------------
+void ofAppRGFWWindow::setWindowIcon(const ofPixels & iconPixels) {
+	iconSet = true;
+	/* this assumes the format is RGBA, which I think is what openFrameworks does anyway */
+	RGFW_window_setIcon(windowP, (u8*)iconPixels.getData(), iconPixels.getWidth(), iconPixels.getHeight(), RGFW_formatRGBA8);
+}
 
 //--------------------------------------------
 ofCoreEvents & ofAppRGFWWindow::events() {
@@ -1472,7 +1461,7 @@ void ofAppRGFWWindow::makeCurrent() {
 
 #if defined(TARGET_LINUX)
     Display * ofAppRGFWWindow::getX11Display() {
-		return _RGFW->display;
+		return (Display*)RGFW_getDisplay_X11();
 	}
 
     Window ofAppRGFWWindow::getX11Window() {
