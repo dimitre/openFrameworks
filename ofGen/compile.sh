@@ -42,7 +42,6 @@ CXX=c++
 LINKEROPTIONS=""
 
 COMPILECOMMAND=time $CXX -c src/*.cpp src/uuidxx/src/*.cpp `pkg-config --cflags yaml-cpp` -Isrc/uuidxx/src -I../libs/macos/include/ -Wfatal-errors -std=c++20 && \
-LINKCOMMAND=time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src ../libs/macos/lib/libpugixml** `pkg-config --libs yaml-cpp` -o ofgen
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     checkPackageApt libyaml-cpp-dev
@@ -55,6 +54,7 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     checkPackageBrew pkg-config
 	checkPackageBrew yaml-cpp
 	checkPackageBrew nlohmann-json
+	LINKCOMMAND=time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src ../libs/macos/lib/libpugixml** `pkg-config --libs yaml-cpp` -o ofgen
 
 elif [[ "$OSTYPE" == "msys"* ]]; then
     checkPackageMSYS yaml-cpp
