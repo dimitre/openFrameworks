@@ -14,6 +14,10 @@
 #include <X11/XKBlib.h>
 #endif
 
+#ifdef RGFW_MACOS
+#import <AppKit/Appkit.h>
+#endif
+
 #include "ofIcon.h"
 #include "ofImage.h"
 
@@ -350,7 +354,7 @@ void ofAppRGFWWindow::update() {
 	if (bWindowNeedsShowing && windowP) {
 		// not working.
 #ifdef TARGET_OSX
-		NSWindow * cocoaWindow = windowP->src.window;
+		NSWindow * cocoaWindow = (__bridge NSWindow*)windowP->src.window;
 //		[cocoaWindow setLevel:NSScreenSaverWindowLevel + 1];
 		[cocoaWindow orderFrontRegardless];
 #endif
@@ -582,7 +586,7 @@ void ofAppRGFWWindow::setFullscreen(bool fullscreen) {
 	if (targetWindowMode == settings.windowMode) return;
 
 #ifdef TARGET_OSX
-	NSWindow * cocoaWindow = windowP->src.window;
+	NSWindow * cocoaWindow = (__bridge NSWindow*)windowP->src.window;
 
 	if (targetWindowMode == OF_FULLSCREEN) {
 		[NSApp setPresentationOptions:NSApplicationPresentationHideMenuBar | NSApplicationPresentationHideDock];
@@ -606,7 +610,7 @@ void ofAppRGFWWindow::setFullscreen(bool fullscreen) {
 
 #elif defined(TARGET_WIN32)
 
-	HWND hwnd = windowP->src.window;
+	HWND hwnd = (HWND)windowP->src.window;
 
 	setFSTarget(targetWindowMode);
 
@@ -643,7 +647,7 @@ void ofAppRGFWWindow::setFullscreen(bool fullscreen) {
 #elif defined(TARGET_LINUX)
 //	#include <X11/Xatom.h>
 //
-//	Window nativeWin = windowP->src.window;
+//	Window nativeWin = (Window)windowP->src.window;
 //	Display * display = windowP->src.display;
 //	if (targetWindowMode == OF_FULLSCREEN) {
 //
@@ -1352,7 +1356,7 @@ void ofAppRGFWWindow::resize_cb(RGFW_window* windowP_, int32_t w, int32_t h) {
 #if defined(TARGET_OSX)
 	if (!instance->bWindowNeedsShowing) {
 //		 FIXME - only after first update
-		NSWindow * cocoaWindow = windowP_->src.window;
+		NSWindow * cocoaWindow = (__bridge NSWindow*)windowP_->src.window;
 		if (([cocoaWindow styleMask] & NSWindowStyleMaskFullScreen) == NSWindowStyleMaskFullScreen) {
 			instance->settings.windowMode = OF_FULLSCREEN;
 		} else {
@@ -1465,7 +1469,7 @@ void ofAppRGFWWindow::makeCurrent() {
 	}
 
     Window ofAppRGFWWindow::getX11Window() {
-        return windowP->src.window;
+        return (Window)windowP->src.window;
     }
 
     XIC ofAppRGFWWindow::getX11XIC() {
@@ -1495,11 +1499,11 @@ void ofAppRGFWWindow::makeCurrent() {
 
 #if defined(TARGET_OSX)
     void * ofAppRGFWWindow::getNSGLContext() {
-        return (__bridge void *)RGFW_window_getContext_OpenGL(windowP)->ctx;
+        return RGFW_window_getContext_OpenGL(windowP)->ctx;
     }
 
     void * ofAppRGFWWindow::getCocoaWindow() {
-        return (__bridge void *)windowP->src.window;
+        return windowP->src.window;
     }
 #endif
 
