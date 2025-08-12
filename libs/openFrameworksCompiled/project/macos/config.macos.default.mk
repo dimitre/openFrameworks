@@ -119,9 +119,6 @@ PLATFORM_CXXFLAGS += -mmacosx-version-min=$(MAC_OS_MIN_VERSION)
 PLATFORM_CXXFLAGS += -x objective-c++
 PLATFORM_CXXFLAGS += $(MAC_OS_CPP_VER)
 
-# Enable ARC
-PLATFORM_CFLAGS += -fobjc-arc
-
 ifeq ($(USE_GST),1)
 	PLATFORM_CFLAGS += -I/Library/Frameworks/Gstreamer.framework/Headers
 endif
