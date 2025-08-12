@@ -38,15 +38,24 @@ checkPackageBrew() {
     fi
 }
 
+CXX=c++
+LINKEROPTIONS=""
+
+COMPILECOMMAND=time $CXX -c src/*.cpp src/uuidxx/src/*.cpp `pkg-config --cflags yaml-cpp` -Isrc/uuidxx/src -I../libs/macos/include/ -Wfatal-errors -std=c++20 && \
+LINKCOMMAND=time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src ../libs/macos/lib/libpugixml** `pkg-config --libs yaml-cpp` -o ofgen
+
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     checkPackageApt libyaml-cpp-dev
     checkPackageApt nlohmann-json3-dev
     checkPackageApt libpugixml-dev
+    LINKCOMMAND=time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src `pkg-config --libs yaml-cpp pugixml` -o ofgen
+
         # ...
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     checkPackageBrew pkg-config
 	checkPackageBrew yaml-cpp
 	checkPackageBrew nlohmann-json
+
 elif [[ "$OSTYPE" == "msys"* ]]; then
     checkPackageMSYS yaml-cpp
 
@@ -56,24 +65,11 @@ else
 fi
 
 section "OFWorks, compiling ofgen"
-# section "Will compile now"
 
-# pwd
-# MACOS only
+${COMPILECOMMAND}
+${LINKCOMMAND}
 
-
-# if brew ls --versions nlohmann-json > /dev/null; then
-# 	echo nlohmann-json already installed
-# else
-# 	echo installing nlohmann-json
-# 	brew install nlohmann-json
-#   # The package is not installed
-# fi
-
-# UBUNTU
-# sudo apt install libyaml-cpp-dev
-
-
+section "done"
 
 # if [[ -z $GITHUB_REPOSITORY ]]; then
 #     section "Using Make"
@@ -81,15 +77,11 @@ section "OFWorks, compiling ofgen"
 # else
     # echo "GITHUB_REPOSITORY, compiling oldstyle"
 
-CXX=c++
-LINKEROPTIONS=""
 # if [[ ${PWD} == "/Volumes/tool/ofw/ofGen" ]]; then
 #     CXX=/opt/homebrew/opt/llvm/bin/clang++
 #     LINKEROPTIONS=-fuse-ld=lld
 # fi
 
-time $CXX -c src/*.cpp src/uuidxx/src/*.cpp `pkg-config --cflags yaml-cpp` -Isrc/uuidxx/src -I../libs/macos/include/ -Wfatal-errors -std=c++20 && \
-time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src ../libs/macos/lib/libpugixml** `pkg-config --libs yaml-cpp` -o ofgen
 # fi
 
 # if [[ -n $GITHUB_REPOSITORY ]]; then

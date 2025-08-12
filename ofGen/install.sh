@@ -30,6 +30,10 @@ echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 # -sf parameters will overwrite old symlink if it is already installed
+	if [[ ! -d "/usr/local/bin" ]]; then
+  		echo "/usr/local/bin does not exist. creating."
+    	sudo mkdir /usr/local/bin
+	fi
 	sudo ln -sf "$PWD/ofgen" /usr/local/bin/ofgen
 	echo All good!
 else
