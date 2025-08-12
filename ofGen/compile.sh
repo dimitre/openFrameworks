@@ -41,6 +41,7 @@ checkPackageBrew() {
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     checkPackageApt libyaml-cpp-dev
     checkPackageApt nlohmann-json3-dev
+    checkPackageApt libpugixml-dev
         # ...
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     checkPackageBrew pkg-config
