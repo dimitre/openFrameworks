@@ -114,10 +114,10 @@ public:
 	Display * getX11Display();
 	Window getX11Window();
 	XIC getX11XIC();
+	#endif
 
 	void setWindowIcon(const of::filesystem::path & path);
 	void setWindowIcon(const ofPixels & iconPixels);
-	#endif
 
 	#if defined(TARGET_LINUX) && !defined(TARGET_OPENGLES)
 	GLXContext getGLXContext();

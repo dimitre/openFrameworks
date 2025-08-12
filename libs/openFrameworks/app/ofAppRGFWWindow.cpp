@@ -83,24 +83,24 @@ void ofAppRGFWWindow::setup(const ofWindowSettings & _settings) {
 	hints->depth = settings.depthBits;
 	hints->stencil = settings.stencilBits;
 
-	hints->stereo, settings.stereo;
-	hints->doubleBuffer, settings.doubleBuffering ? 1 : 0;
-	hints->samples, settings.numSamples;
+	hints->stereo =  settings.stereo;
+	hints->doubleBuffer = settings.doubleBuffering ? 1 : 0;
+	hints->samples = settings.numSamples;
 
 #ifdef TARGET_OPENGLES
-	hints->major, settings.glesVersion);
-	hints->minor, 0);
-	hints->profile, RGFW_glES);
+	hints->major = settings.glesVersion);
+	hints->minor = 0;
+	hints->profile = RGFW_glES);
 	if (settings.glesVersion >= 2) {
 		currentRenderer = std::make_shared<ofGLProgrammableRenderer>(this);
 	} else {
 		currentRenderer = std::make_shared<ofGLRenderer>(this);
 	}
 #else
-	hints->major, settings.glVersionMajor;
-	hints->minor, settings.glVersionMinor;
+	hints->major = settings.glVersionMajor;
+	hints->minor = settings.glVersionMinor;
 	if ((settings.glVersionMajor == 3 && settings.glVersionMinor >= 2) || settings.glVersionMajor >= 4) {
-		hints->profile, RGFW_glCore;
+		hints->profile = RGFW_glCore;
 	}
 	if (settings.glVersionMajor >= 3) {
 		/* TODO I'm not sure if this is correct */
