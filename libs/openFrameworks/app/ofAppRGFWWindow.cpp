@@ -192,7 +192,7 @@ void ofAppRGFWWindow::setup(const ofWindowSettings & _settings) {
 	RGFW_setKeyCallback(keyboard_cb);
 	RGFW_setWindowMovedCallback(position_cb);
 	RGFW_setWindowQuitCallback(exit_cb);
-	RGFW_setDropCallback(drop_cb);
+	RGFW_setDataDropCallback(drop_cb);
 	RGFW_setWindowResizedCallback(resize_cb);
 
 	windowP = RGFW_createWindow(settings.title.c_str(), 0, 0, settings.getWidth(), settings.getHeight(), flags);
