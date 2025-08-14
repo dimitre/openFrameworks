@@ -30,6 +30,9 @@ if [[ -n $GITHUB_REPOSITORY ]]; then
        	${SUDO} mkdir /usr/local/bin
 	fi
     ${SUDO} ln -sf "$PWD/ofgen" /usr/local/bin/ofgen
+    if [[ "$OSTYPE" == "cygwin"* ]]; then
+    	${SUDO} ln -sf "$PWD/ofgen.exe" /usr/local/bin/ofgen
+    fi
 	echo All good!
 else
 

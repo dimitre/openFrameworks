@@ -137,6 +137,7 @@ checkLib() {
 			if [[ ${PLATFORM} == "macos" ]]; then
 				echo "$lib not found, installing via brew"
     		    executa brew install $lib
+            # FIXME: msys2 doesn't want sudo, check via other stuff.
             else
             	echo "$lib not found, installing via apt"
                 executa sudo apt-get install -y $lib
