@@ -65,10 +65,18 @@ jobs:
           ./compile.sh
         # ./install.sh
 
+      - name: test /usr/local/bin
+        run: |
+          ls /usr/local/bin
+
       - name: ofGen install
         run: |
           cd ofGen
           ./install.sh
+
+      - name: test /usr/local/bin
+        run: |
+          ls /usr/local/bin
 
       - name: ofGen test
         run: |
