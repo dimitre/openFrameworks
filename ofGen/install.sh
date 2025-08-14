@@ -25,6 +25,10 @@ echo You will be asked for user password.
 #
 if [[ -n $GITHUB_REPOSITORY ]]; then
     echo WOW GITHUB_REPOSITORY
+   	if [[ ! -d "/usr/local/bin" ]]; then
+   		echo "/usr/local/bin does not exist. creating."
+       	${SUDO} mkdir /usr/local/bin
+	fi
     ${SUDO} ln -sf "$PWD/ofgen" /usr/local/bin/ofgen
 	echo All good!
 else
