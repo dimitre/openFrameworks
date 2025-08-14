@@ -30,9 +30,7 @@ if [[ -n $GITHUB_REPOSITORY ]]; then
        	${SUDO} mkdir /usr/local/bin
 	fi
     ${SUDO} ln -sf "$PWD/ofgen" /usr/local/bin/ofgen
-    if [[ "$OSTYPE" == "cygwin"* ]]; then
-    	${SUDO} ln -sf "$PWD/ofgen.exe" /usr/local/bin/ofgen
-    fi
+
 	echo All good!
 else
 
@@ -43,9 +41,12 @@ then
 # -sf parameters will overwrite old symlink if it is already installed
 	if [[ ! -d "/usr/local/bin" ]]; then
   		echo "/usr/local/bin does not exist. creating."
-    	sudo mkdir /usr/local/bin
+    	${SUDO} mkdir /usr/local/bin
 	fi
-	sudo ln -sf "$PWD/ofgen" /usr/local/bin/ofgen
+	${SUDO} ln -sf "$PWD/ofgen" /usr/local/bin/ofgen
+	if [[ "$OSTYPE" == "cygwin"* ]]; then
+    	${SUDO} ln -sf "$PWD/ofgen.exe" /usr/local/bin/ofgen
+    fi
 	echo All good!
 else
 	echo OK, ofGen not installed
