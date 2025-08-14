@@ -45,7 +45,8 @@ done
 # echo ${PLATFORM}
 # exit
 
-if [[ "$OSTYPE" == "msys"* ]]; then
+# if [[ "$OSTYPE" == "msys"* ]]; then
+if [[ "$OSTYPE" == "cygwin"* ]]; then
     # PLATFORM=windows
     PLATFORM=vs
     # CORELIBS=( brotli cairo FreeImage freetype glew glfw glm json libpng pugixml rtAudio tess2 uriparser utfcpp zlib openssl curl pixman )
