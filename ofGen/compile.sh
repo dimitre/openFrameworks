@@ -25,6 +25,7 @@ checkPackageApt() {
     if [ $? -eq 0 ]; then
     echo "$1: Already installed"
     else
+    echo "installing $1"
     sudo apt-get install -y $1
     fi
 }

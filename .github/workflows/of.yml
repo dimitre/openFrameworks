@@ -59,10 +59,15 @@ jobs:
       - name: Libs
         run: ./libs/libs.sh
 
-      - name: ofGen compile and install
+      - name: ofGen compile
         run: |
           cd ofGen
           ./compile.sh
+        # ./install.sh
+
+      - name: ofGen install
+        run: |
+          cd ofGen
           ./install.sh
 
       - name: ofGen test
