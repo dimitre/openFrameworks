@@ -208,9 +208,10 @@ endif
 # $(info $(OF_LIBS_OF_COMPILED_PROJECT_PATH)/$(PLATFORM_LIB_SUBPATH))
 # $(info =========)
 
-ifeq ($(wildcard $(OF_LIBS_OF_COMPILED_PROJECT_PATH)/$(PLATFORM_LIB_SUBPATH)),)
-$(error This package doesn't support your platform, $(PLATFORM_LIB_SUBPATH) probably you downloaded the wrong package?)
-endif
+# Commented out this error. msys2 is installed via pacman.
+# ifeq ($(wildcard $(OF_LIBS_OF_COMPILED_PROJECT_PATH)/$(PLATFORM_LIB_SUBPATH)),)
+# $(error This package doesn't support your platform, $(PLATFORM_LIB_SUBPATH) probably you downloaded the wrong package?)
+# endif
 
 # generate a list of valid core platform variants from the files in the platform makefiles directory
 AVAILABLE_PLATFORM_VARIANTS=$(shell $(FIND) $(OF_PLATFORM_MAKEFILES)/config.*.mk -maxdepth 1 -type f | sed -E 's/.*\.([^\.]*)\.mk/\1/' )
