@@ -196,7 +196,7 @@ void ofAppRGFWWindow::setup(const ofWindowSettings & _settings) {
 	RGFW_setWindowResizedCallback(resize_cb);
 
 	windowP = RGFW_createWindow(settings.title.c_str(), 0, 0, settings.getWidth(), settings.getHeight(), flags);
-
+	windowP->userPtr = this;
 	if (displayOK) {
 		RGFW_window_show(windowP);
 	}
@@ -273,7 +273,6 @@ void ofAppRGFWWindow::setup(const ofWindowSettings & _settings) {
 //		cout << "HIDE U" << endl;
 	}
 
-	windowP->userPtr = this;
 	RGFW_window_makeCurrentWindow_OpenGL(windowP);
 
 //	windowMode = settings.windowMode;
