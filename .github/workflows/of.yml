@@ -79,47 +79,22 @@ jobs:
       #     version: 1.0
 
       - name: ccache
-        uses: hendrikmuhs/ccache-action@v1.2.17
+        uses: hendrikmuhs/ccache-action@v1.2.18
         with:
           key: ${{ matrix.cfg.platform }}-${{ matrix.cfg.target }}
 
       - name: Libs
-        # if: matrix.os != 'windows-latest'
         run: ./libs/libs.sh
-
-      # - name: Libs Windows
-      #   if: matrix.os == 'windows-latest'
-      #   shell: msys2 {0}
-      #   run: |
-      #     ./libs/libs.sh
-      #     # ls -alFR ./libs
-
-      # - name: ofgen compile Windows
-      #   if: matrix.os == 'windows-latest'
-      #   shell: msys2 {0}
-      #   run: |
-      #     cd ofGen
-      #     ./compile.sh
-      #     ./install.sh
-      #     ofgen colors
 
       - name: ofgen compile
         run: |
           cd ofGen
           ./compile.sh
 
-      # - name: test /usr/local/bin
-      #   run: |
-      #     ls /usr/local/bin
-
       - name: ofgen install
         run: |
           cd ofGen
           ./install.sh
-
-      # - name: test /usr/local/bin
-      #   run: |
-      #     ls /usr/local/bin
 
       - name: ofgen test
         run: |
