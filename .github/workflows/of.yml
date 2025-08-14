@@ -38,7 +38,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Packages - Brew
+      - name: Cache Packages - Linux Apt
+        if: matrix.os == 'ubuntu-latest'
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: wget2 libyaml-cpp-dev nlohmann-json3-dev libpugixml-dev
+          version: 1.0
+
+      - name: Cache Packages - macOS Brew
         if: matrix.os == 'macos-latest'
         uses: tecolicom/actions-use-homebrew-tools@v1.3
         with:
