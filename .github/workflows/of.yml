@@ -55,12 +55,13 @@ jobs:
       - uses: msys2/setup-msys2@v2.28.0
         if: matrix.os == 'windows-latest'
         with:
-          pacboy: wget2:p
+          pacboy: wget2:p yaml-cpp:p pugixml:p nlohmann-json:p fmt:p
           update: true
           install: >-
             git
             unzip
             pkgconf
+            ccache
 
       # - name: Install Packages - Apt
       #   if: matrix.os == 'ubuntu-latest'
