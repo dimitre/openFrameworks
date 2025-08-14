@@ -58,6 +58,7 @@ jobs:
           install: >-
             git
             unzip
+            wget2
 
       # - name: Install Packages - Apt
       #   if: matrix.os == 'ubuntu-latest'
