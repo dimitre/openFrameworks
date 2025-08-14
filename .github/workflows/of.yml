@@ -66,7 +66,7 @@ jobs:
       - name: Libs
         run: ./libs/libs.sh
 
-      - name: ofGen compile
+      - name: ofgen compile
         run: |
           cd ofGen
           ./compile.sh
@@ -76,7 +76,7 @@ jobs:
         run: |
           ls /usr/local/bin
 
-      - name: ofGen install
+      - name: ofgen install
         run: |
           cd ofGen
           ./install.sh
@@ -85,9 +85,9 @@ jobs:
         run: |
           ls /usr/local/bin
 
-      - name: ofGen test
+      - name: ofgen test
         run: |
-          ofGen colors
+          ofgen colors
 
       - name: XCodebuild Core
         if: matrix.os == 'macos-latest'
