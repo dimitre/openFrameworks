@@ -32,7 +32,7 @@ jobs:
   ofworks:
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
         # os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
@@ -51,6 +51,14 @@ jobs:
         with:
           tools: wget2 yaml-cpp fmt ccache nlohmann-json # fmt
 
+      - uses: msys2/setup-msys2@v2.28.0
+        if: matrix.os == 'windows-latest'
+        with:
+          update: true
+          install: >-
+            git
+            unzip
+
       # - name: Install Packages - Apt
       #   if: matrix.os == 'ubuntu-latest'
       #   uses: awalsh128/cache-apt-pkgs-action@latest
@@ -66,24 +74,29 @@ jobs:
       - name: Libs
         run: ./libs/libs.sh
 
+      - name: Libs Windows
+        if: matrix.os == 'windows-latest'
+        shell: msys2 {0}
+        run: ./libs/libs.sh
+
       - name: ofgen compile
         run: |
           cd ofGen
           ./compile.sh
         # ./install.sh
 
-      - name: test /usr/local/bin
-        run: |
-          ls /usr/local/bin
+      # - name: test /usr/local/bin
+      #   run: |
+      #     ls /usr/local/bin
 
       - name: ofgen install
         run: |
           cd ofGen
           ./install.sh
 
-      - name: test /usr/local/bin
-        run: |
-          ls /usr/local/bin
+      # - name: test /usr/local/bin
+      #   run: |
+      #     ls /usr/local/bin
 
       - name: ofgen test
         run: |
