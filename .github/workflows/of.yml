@@ -85,7 +85,7 @@ jobs:
         shell: msys2 {0}
         run: |
           ./libs/libs.sh
-          ls -alFR ./libs
+          # ls -alFR ./libs
 
       - name: ofgen compile Windows
         if: matrix.os == 'windows-latest'

@@ -57,8 +57,14 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
 	checkPackageBrew nlohmann-json
 	LINKCOMMAND=time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src ../libs/macos/lib/libpugixml** `pkg-config --libs yaml-cpp` -o ofgen
 
-elif [[ "$OSTYPE" == "msys"* ]]; then
+# elif [[ "$OSTYPE" == "msys"* ]]; then
+elif [[ "$OSTYPE" == "cygwin"* ]]; then
     checkPackageMSYS yaml-cpp
+    checkPackageMSYS pugixml
+    checkPackageMSYS nlohmann-json
+    checkPackageMSYS fmt
+    checkPackageMSYS toolchain
+    LINKCOMMAND=time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src `pkg-config --libs yaml-cpp pugixml` -o ofgen
 
 else
     section "Which OS is this?"
