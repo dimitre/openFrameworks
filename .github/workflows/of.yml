@@ -60,6 +60,7 @@ jobs:
           install: >-
             git
             unzip
+            pkgconf
 
       # - name: Install Packages - Apt
       #   if: matrix.os == 'ubuntu-latest'
