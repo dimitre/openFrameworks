@@ -60,7 +60,8 @@ if [[ "$OSTYPE" == "cygwin"* ]]; then
     #     "opencv:ofxOpenCv"
     #     # "svgtiny:ofxSvg"
     # )
-    PACMANLIBS="openssl python gcc assimp cairo curl freeglut FreeImage glew glfw glm libsndfile libusb libxml2 mpg123 nlohmann-json openal opencv pugixml rtaudio uriparser utf8cpp"
+    # gcc
+    PACMANLIBS="toolchain openssl python assimp cairo curl freeglut FreeImage glew glfw glm libsndfile libusb libxml2 mpg123 nlohmann-json openal opencv pugixml rtaudio uriparser utf8cpp"
 
     PARAMS="pacman -Syyuw --noconfirm"
     for LIBNAME in ${PACMANLIBS[@]}
