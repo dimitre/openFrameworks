@@ -84,24 +84,24 @@ jobs:
           key: ${{ matrix.cfg.platform }}-${{ matrix.cfg.target }}
 
       - name: Libs
-        if: matrix.os != 'windows-latest'
+        # if: matrix.os != 'windows-latest'
         run: ./libs/libs.sh
 
-      - name: Libs Windows
-        if: matrix.os == 'windows-latest'
-        shell: msys2 {0}
-        run: |
-          ./libs/libs.sh
-          # ls -alFR ./libs
+      # - name: Libs Windows
+      #   if: matrix.os == 'windows-latest'
+      #   shell: msys2 {0}
+      #   run: |
+      #     ./libs/libs.sh
+      #     # ls -alFR ./libs
 
-      - name: ofgen compile Windows
-        if: matrix.os == 'windows-latest'
-        shell: msys2 {0}
-        run: |
-          cd ofGen
-          ./compile.sh
-          ./install.sh
-          ofgen colors
+      # - name: ofgen compile Windows
+      #   if: matrix.os == 'windows-latest'
+      #   shell: msys2 {0}
+      #   run: |
+      #     cd ofGen
+      #     ./compile.sh
+      #     ./install.sh
+      #     ofgen colors
 
       - name: ofgen compile
         run: |
@@ -125,22 +125,21 @@ jobs:
         run: |
           ofgen colors
 
-      - name: XCodebuild Core
-        if: matrix.os == 'macos-latest'
-        run: |
-          cd libs/openFrameworksCompiled/project/macos
-          xcodebuild -arch arm64
-
+      # - name: XCodebuild Core
+      #   if: matrix.os == 'macos-latest'
+      #   run: |
+      #     cd libs/openFrameworksCompiled/project/macos
+      #     xcodebuild -arch arm64
       # - name: Make OF Core
       #   run: |
       #     cd libs/openFrameworksCompiled/project/
       #     make -j Debug
-
       - name: All Addons Example
         run: |
           cd examples/templates/allAddonsExample
           ofgen buildrun
-          # xcodebuild -arch arm64
+          ls -alF
+        # xcodebuild -arch arm64
 
       - name: Tests
         run: ./scripts/tests.sh
