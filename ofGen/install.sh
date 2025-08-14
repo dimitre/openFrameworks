@@ -4,6 +4,10 @@ cd "$(dirname "$0")"
 COLOR='\033[0;32m'
 COLOR2='\033[0;34m'
 NC='\033[0m' # No Color
+SUDO='sudo'
+if [[ "$OSTYPE" == "cygwin"* ]]; then
+	SUDO=''
+fi
 
 section() {
     printf "💿${COLOR} ${@} ${NC}\n\r"
@@ -21,7 +25,7 @@ echo You will be asked for user password.
 #
 if [[ -n $GITHUB_REPOSITORY ]]; then
     echo WOW GITHUB_REPOSITORY
-    sudo ln -sf "$PWD/ofgen" /usr/local/bin/ofgen
+    ${SUDO} ln -sf "$PWD/ofgen" /usr/local/bin/ofgen
 	echo All good!
 else
 
