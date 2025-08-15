@@ -174,7 +174,9 @@ getlink() {
     done
 
     if [[ "$OSTYPE" == "cygwin"* ]]; then
-        executa "cd ${DOWNLOAD}; wget ${PARAMS} "
+        executa "cd ${DOWNLOAD}"
+        executa "wget ${PARAMS}"
+        executa "cd .."
     else
         executa "wget2 --clobber=off ${PARAMS} -P ${DOWNLOAD}"
     fi
