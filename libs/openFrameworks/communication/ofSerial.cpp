@@ -1,5 +1,6 @@
 #include "ofSerial.h"
 #include "ofUtils.h"
+#include "ofLog.h"
 #include <fcntl.h>
 #include <errno.h>
 #include <ctype.h>
@@ -42,16 +43,12 @@
 	#endif*/
 #endif
 
-
 // serial error codes
 #define OF_SERIAL_NO_DATA 	-2
 #define OF_SERIAL_ERROR		-1
 
 using std::vector;
 using std::string;
-
-#include "ofLog.h"
-
 
 #ifdef TARGET_WIN32
 
