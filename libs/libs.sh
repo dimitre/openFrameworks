@@ -65,12 +65,12 @@ if [[ "$OSTYPE" == "cygwin"* ]]; then
     # gcc
     PACMANLIBS="toolchain openssl python assimp cairo curl freeglut FreeImage glew glfw glm libsndfile libusb libxml2 mpg123 nlohmann-json openal opencv pugixml rtaudio uriparser utf8cpp"
 
-    PARAMS="pacman -Syyuw --noconfirm"
+    PACMANPARAMS="pacman -Syyuw --noconfirm"
     for LIBNAME in ${PACMANLIBS[@]}
     do
-        PARAMS+=" mingw-w64-x86_64-${LIBNAME}"
+        PACMANPARAMS+=" mingw-w64-x86_64-${LIBNAME}"
     done
-    executa "${PARAMS}"
+    executa "${PACMANPARAMS}"
 
 
 
