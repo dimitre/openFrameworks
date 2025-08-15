@@ -172,7 +172,13 @@ getlink() {
     do
         PARAMS+=" "https://github.com/dimitre/ofLibs/releases/download/${VERSION}/oflib_${LIBNAME}_${PLATFORM}.zip
     done
-    executa "wget2 --clobber=off ${PARAMS} -P ${DOWNLOAD}"
+
+    if [[ "$OSTYPE" == "cygwin"* ]]; then
+        executa "cd ${DOWNLOAD}; wget ${PARAMS} "
+    else
+        executa "wget2 --clobber=off ${PARAMS} -P ${DOWNLOAD}"
+    fi
+
 }
 
 unzipCore() {
