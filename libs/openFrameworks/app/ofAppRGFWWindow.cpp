@@ -476,7 +476,8 @@ glm::ivec2 ofAppRGFWWindow::getWindowPosition() {
 
 //------------------------------------------------------------
 glm::ivec2 ofAppRGFWWindow::getFramebufferSize() {
-	glm::ivec2 size = {windowP->w, windowP->h};
+	RGFW_monitor mon = RGFW_window_getMonitor(windowP);
+	glm::ivec2 size = {windowP->w  * mon.pixelRatio, windowP->h * mon.pixelRatio};
 	return size;
 }
 
@@ -1350,7 +1351,9 @@ void ofAppRGFWWindow::resize_cb(RGFW_window* windowP_, int32_t w, int32_t h) {
 	ofAppRGFWWindow * instance = setCurrent(windowP_);
 
 	instance->events().notifyWindowResized(w, h);
-	ofAppRGFWWindow::framebuffer_size_cb(windowP_, w, h);
+
+	RGFW_monitor mon = RGFW_window_getMonitor(windowP);
+	ofAppRGFWWindow::framebuffer_size_cb(windowP_, w * mon.pixelRatio, h * mon.pixelRatio);
 
 #if defined(TARGET_OSX)
 	if (!instance->bWindowNeedsShowing) {
@@ -1369,6 +1372,7 @@ void ofAppRGFWWindow::resize_cb(RGFW_window* windowP_, int32_t w, int32_t h) {
 void ofAppRGFWWindow::framebuffer_size_cb(RGFW_window * windowP_, int w, int h) {
 	ofAppRGFWWindow * instance = setCurrent(windowP_);
 
+	RGFW_monitor mon = RGFW_window_getMonitor(windowP);
 	instance->currentRenderer->clear();
 	instance->events().notifyFramebufferResized(w, h);
 }
