@@ -42,7 +42,6 @@
 	#endif*/
 #endif
 
-#include "ofLog.h"
 
 // serial error codes
 #define OF_SERIAL_NO_DATA 	-2
@@ -50,6 +49,9 @@
 
 using std::vector;
 using std::string;
+
+#include "ofLog.h"
+
 
 #ifdef TARGET_WIN32
 
