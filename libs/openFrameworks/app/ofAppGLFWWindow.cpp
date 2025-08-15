@@ -732,7 +732,7 @@ void ofAppGLFWWindow::setFullscreen(bool fullscreen) {
 	}
 
 //	SetWindowPos(hwnd, HWND_TOPMOST, xpos, ypos, fullscreenW, fullscreenH, SWP_SHOWWINDOW);
-	SetWindowPos(hwnd, HWND_TOPMOST, windowRectFS.x, windowRectFS.y, windowRectFS.width, windowRectFS.height, SWP_SHOWWINDOW);
+	SetWindowPos(hwnd, HWND_TOPMOST, windowRect.x, windowRect.y, windowRect.width, windowRect.height, SWP_SHOWWINDOW);
 
 
 #elif defined(TARGET_LINUX)
