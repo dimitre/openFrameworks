@@ -70,7 +70,9 @@ if [[ "$OSTYPE" == "cygwin"* ]]; then
     do
         PACMANPARAMS+=" mingw-w64-x86_64-${LIBNAME}"
     done
-    executa "${PACMANPARAMS}"
+
+    # FIXME VOLTAR
+    # executa "${PACMANPARAMS}"
 
 
 
