@@ -375,6 +375,11 @@ bool buildProject() {
 		conf.templateNames.emplace_back("make");
 #elif defined(__APPLE_CC__)
 		conf.templateNames.emplace_back("macos");
+		conf.templateNames.emplace_back("zed");
+		conf.templateNames.emplace_back("make");
+#elif defined(__MINGW32__) || defined(__MINGW64__)
+        conf.templateNames.emplace_back("vscode");
+		conf.templateNames.emplace_back("make");
 #endif
 	}
 
