@@ -1,6 +1,5 @@
 #include "ofSerial.h"
 #include "ofUtils.h"
-#include "ofLog.h"
 #include <fcntl.h>
 #include <errno.h>
 #include <ctype.h>
@@ -42,6 +41,8 @@
 		#include <initguid.h> // needed for dev-c++ & DEFINE_GUID
 	#endif*/
 #endif
+
+#include "ofLog.h"
 
 // serial error codes
 #define OF_SERIAL_NO_DATA 	-2
