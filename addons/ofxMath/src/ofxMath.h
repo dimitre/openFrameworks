@@ -3,3 +3,4 @@
 #include "ofVectorMath.h"
 #include "ofMath.h"
 #include "ofVec2f.h"
+#include "ofPoint.h"
