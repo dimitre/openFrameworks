@@ -138,7 +138,7 @@ public:
 	HGLRC getWGLContext();
 	HWND getWin32Window();
 	#endif
-
+	void setPixelRatio(float ratio);
 private:
 	static ofAppRGFWWindow * setCurrent(RGFW_window * windowP);
 	static ofAppRGFWWindow * getWindow(RGFW_window * windowP);
@@ -181,6 +181,7 @@ private:
 	bool bWindowNeedsShowing;
 
 	RGFW_window * windowP;
+	float pixelRatio;
 	ofBaseApp * ofAppPtr;
 
 	bool iconSet;

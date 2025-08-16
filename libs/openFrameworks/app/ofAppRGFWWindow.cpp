@@ -201,6 +201,10 @@ void ofAppRGFWWindow::setup(const ofWindowSettings & _settings) {
 		RGFW_window_show(windowP);
 	}
 
+
+	RGFW_monitor mon = RGFW_window_getMonitor(windowP);
+	pixelRatio = mon.pixelRatio;
+
 	RGFW_window_setMousePassthrough(windowP, RGFW_BOOL(settings.mousePassThrough));
 	RGFW_window_setFloating(windowP, settings.floating);
 
@@ -476,8 +480,7 @@ glm::ivec2 ofAppRGFWWindow::getWindowPosition() {
 
 //------------------------------------------------------------
 glm::ivec2 ofAppRGFWWindow::getFramebufferSize() {
-	RGFW_monitor mon = RGFW_window_getMonitor(windowP);
-	glm::ivec2 size = {windowP->w  * mon.pixelRatio, windowP->h * mon.pixelRatio};
+	glm::ivec2 size = {windowP->w  * pixelRatio, windowP->h * pixelRatio};
 	return size;
 }
 
@@ -509,7 +512,9 @@ RGFW_window * ofAppRGFWWindow::getRGFWWindow() {
 void ofAppRGFWWindow::setWindowRect(const ofRectangle & rect) {
 //	cout << settings.windowName << " setWindowRect " << rect << endl;
 	windowRect = rect;
-	RGFW_monitor_scaleToWindow(RGFW_window_getMonitor(windowP), windowP);
+	RGFW_monitor mon = RGFW_window_getMonitor(windowP);
+	pixelRatio = mon.pixelRatio;
+	RGFW_monitor_scaleToWindow(mon, windowP);
 }
 
 //------------------------------------------------------------
@@ -835,6 +840,10 @@ ofAppRGFWWindow * ofAppRGFWWindow::getWindow(RGFW_window * windowP) {
 //	return instance;
 }
 
+void ofAppRGFWWindow::setPixelRatio(float ratio) {
+	pixelRatio = ratio;
+}
+
 namespace {
 	int rgfwtToOFModifiers(int mods) {
 		int modifiers = 0;
@@ -1030,11 +1039,12 @@ void ofAppRGFWWindow::mouse_cb(RGFW_window* windowP_, uint8_t button, double scr
 
 //------------------------------------------------------------
 void ofAppRGFWWindow::motion_cb(RGFW_window* windowP_, int32_t x1, int32_t y1, float vecX, float vecY) {
-//	auto instance = getWindow(windowP_);
+	ofAppRGFWWindow * instance = setCurrent(windowP_);
+
+	//	auto instance = getWindow(windowP_);
 	/*  TODO send vector data when raw data is needed */
 	double x = x1;
 	double y = y1;
-	ofAppRGFWWindow * instance = setCurrent(windowP_);
 	rotateMouseXY(instance->orientation, instance->getWidth(), instance->getHeight(), x, y);
 
 	ofMouseEventArgs::Type action;
@@ -1338,7 +1348,8 @@ void ofAppRGFWWindow::monitor_cb(RGFW_monitor * monitor, int event) {
 //------------------------------------------------------------
 void ofAppRGFWWindow::position_cb(RGFW_window* windowP_, int32_t x, int32_t y) {
 	ofAppRGFWWindow * instance = setCurrent(windowP_);
-//	auto instance = getWindow(windowP_);
+
+	//	auto instance = getWindow(windowP_);
 //	if (instance->settings.windowMode == OF_WINDOW) {
 //		instance->windowRect.x = x;
 //		instance->windowRect.y = y;
@@ -1352,8 +1363,7 @@ void ofAppRGFWWindow::resize_cb(RGFW_window* windowP_, int32_t w, int32_t h) {
 
 	instance->events().notifyWindowResized(w, h);
 
-	RGFW_monitor mon = RGFW_window_getMonitor(windowP_);
-	ofAppRGFWWindow::framebuffer_size_cb(windowP_, w * mon.pixelRatio, h * mon.pixelRatio);
+	ofAppRGFWWindow::framebuffer_size_cb(windowP_, w * instance->pixelRatio, h * instance->pixelRatio);
 
 #if defined(TARGET_OSX)
 	if (!instance->bWindowNeedsShowing) {
@@ -1372,7 +1382,6 @@ void ofAppRGFWWindow::resize_cb(RGFW_window* windowP_, int32_t w, int32_t h) {
 void ofAppRGFWWindow::framebuffer_size_cb(RGFW_window * windowP_, int w, int h) {
 	ofAppRGFWWindow * instance = setCurrent(windowP_);
 
-	RGFW_monitor mon = RGFW_window_getMonitor(windowP_);
 	instance->currentRenderer->clear();
 	instance->events().notifyFramebufferResized(w, h);
 }
