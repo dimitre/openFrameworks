@@ -1352,7 +1352,7 @@ void ofAppRGFWWindow::resize_cb(RGFW_window* windowP_, int32_t w, int32_t h) {
 
 	instance->events().notifyWindowResized(w, h);
 
-	RGFW_monitor mon = RGFW_window_getMonitor(windowP);
+	RGFW_monitor mon = RGFW_window_getMonitor(windowP_);
 	ofAppRGFWWindow::framebuffer_size_cb(windowP_, w * mon.pixelRatio, h * mon.pixelRatio);
 
 #if defined(TARGET_OSX)
