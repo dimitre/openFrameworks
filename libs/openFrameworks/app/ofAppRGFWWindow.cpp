@@ -1372,7 +1372,7 @@ void ofAppRGFWWindow::resize_cb(RGFW_window* windowP_, int32_t w, int32_t h) {
 void ofAppRGFWWindow::framebuffer_size_cb(RGFW_window * windowP_, int w, int h) {
 	ofAppRGFWWindow * instance = setCurrent(windowP_);
 
-	RGFW_monitor mon = RGFW_window_getMonitor(windowP);
+	RGFW_monitor mon = RGFW_window_getMonitor(windowP_);
 	instance->currentRenderer->clear();
 	instance->events().notifyFramebufferResized(w, h);
 }
