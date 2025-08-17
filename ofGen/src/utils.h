@@ -18,7 +18,7 @@ using std::endl;
 // using std::vector;
 
 static inline std::string getPGVersion() {
-	return "ofGen v0.4.9";
+	return "ofGen v0.5.0";
 }
 
 inline std::string colorText(const std::string & s, int color) {
@@ -38,7 +38,7 @@ const std::string sign = colorText(R"(
 ▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
 ▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
 Project Generator for OFWorks (OpenFrameworks fork)
-                Prototype v0.4.9⚡️
+                Prototype v0.5.0⚡️
 )",
 							 91)
 
@@ -306,7 +306,13 @@ ofGen templates=zed,macos,make addons=ofxMidi,ofxOpencv ofpath=../../.. path=/Vo
 
 	void run() {
 		if (!empty(runCommand)) {
-			std::system(runCommand.c_str());
+			int result = std::system(runCommand.c_str());
+			if (result == 0) {
+				std::cout << "Success." << std::endl;
+			} else {
+				std::cerr << "Fail with error " << result << std::endl;
+				// Further analysis of the return code might be needed based on the command
+			}
 		}
 		// projectName = fs::current_path().filename().string();
 		// std::string command = "open -n bin/" + projectName + ".app";
