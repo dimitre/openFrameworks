@@ -33,8 +33,18 @@ int main(const int argc, const char * argv[]) {
 			// cout << "OWWWW " << x << endl;
 			if (result == 0) {
 				conf.run();
+			} else {
+				std::cerr << "Fail with error " << result << std::endl;
 			}
-		} else if (conf.singleParameter == "cleantemplates") {
+		}
+
+		// FIXME: finish this way of displaying the command to build and run to be used in bash
+		else if (conf.singleParameter == "echobuildrun") {
+			buildProject();
+			cout << conf.buildCommand << endl;
+			exit(1);
+		}
+		else if (conf.singleParameter == "cleantemplates") {
 			// project.eraseTemplates();
 		}
 
