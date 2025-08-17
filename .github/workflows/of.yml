@@ -112,7 +112,9 @@ jobs:
       - name: All Addons Example
         run: |
           cd examples/templates/allAddonsExample
-          ofgen buildrun
+          ofgen
+          make -j
+        # ofgen buildrun
         # ls -alF
         # xcodebuild -arch arm64
 
