@@ -2,6 +2,7 @@
 
 #include <glm/vec3.hpp>
 #include <iostream>
+#include <algorithm>
 
 /// \class ofColor_
 ///

@@ -16,7 +16,6 @@
 #include "ofGLUtils.h"
 #include "ofColor.h"
 
-
 #include <map>
 
 using std::weak_ptr;
