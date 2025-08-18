@@ -21,6 +21,7 @@ meta:
 	ADDON_TAGS = "computer vision" "3D sensing" "kinect"
 	ADDON_URL = http://github.com/ofTheo/ofxKinect
 
+
 common:
 	# dependencies with other addons, a list of them separated by spaces
 	# or use += in several lines

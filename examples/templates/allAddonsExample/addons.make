@@ -6,3 +6,5 @@ ofxOpenCv
 ofxOsc
 ofxThreadedImageLoader
 ofxXmlSettings
+ofxURL
+ofxSvg

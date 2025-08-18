@@ -817,7 +817,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_9)",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.5;
+				MACOSX_DEPLOYMENT_TARGET = 11.6;
 				OBJROOT = "$(SRCROOT)/../../lib/macos/build/debug/";
 				PRODUCT_NAME = openFrameworksDebug;
 				SDKROOT = macosx;
@@ -845,7 +845,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_9)",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.5;
+				MACOSX_DEPLOYMENT_TARGET = 11.6;
 				OBJROOT = "$(SRCROOT)/../../lib/macos/build/release/";
 				PRODUCT_NAME = openFrameworks;
 				SDKROOT = macosx;
