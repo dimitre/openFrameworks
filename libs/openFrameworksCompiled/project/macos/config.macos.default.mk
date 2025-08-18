@@ -1,6 +1,11 @@
 # $(info 💻 WWWW)
 
-
+../../../libs/openFrameworksCompiled/lib/macos/obj/Release/libs/openFrameworks/app/RGFW.o:
+	mkdir -p ../../../libs/openFrameworksCompiled/lib/macos/obj/Release/libs/openFrameworks/app/
+	cc -x c -c ../../../libs/openFrameworks/app/RGFW.cpp -o $@
+../../../libs/openFrameworksCompiled/lib/macos/obj/Debug/libs/openFrameworks/app/RGFW.o:
+	mkdir -p ../../../libs/openFrameworksCompiled/lib/macos/obj/Debug/libs/openFrameworks/app/
+	cc -x c -c ../../../libs/openFrameworks/app/RGFW.cpp -o $@
 
 PLATFORM_PROJECT_DEBUG_BIN_NAME=$(APPNAME)_debug
 PLATFORM_PROJECT_RELEASE_BIN_NAME=$(APPNAME)
