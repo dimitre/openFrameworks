@@ -259,3 +259,6 @@ public:
 	/// \return unique id of the active HTTP request
 	virtual int handleRequestAsync(const ofHttpRequest & request) = 0;
 };
+
+
+void ofURLFileLoaderShutdown();

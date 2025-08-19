@@ -91,7 +91,7 @@ void ofSignalHandler(int signum) {
 
 void ofExitCallback();
 //void ofURLFileLoaderShutdown();
-void ofURLFileLoaderShutdown() {};
+//void ofURLFileLoaderShutdown() {};
 void ofTrueTypeShutdown();
 void ofCloseFreeImage();
 
@@ -105,7 +105,7 @@ void ofInit() {
 
 	ofCore.init();
 	ofCore.shutdownFunctions = {
-		ofURLFileLoaderShutdown,
+//		ofURLFileLoaderShutdown,
 		ofTrueTypeShutdown,
 		ofCloseFreeImage,
 #ifndef TARGET_NO_SOUND

@@ -502,6 +502,8 @@ static bool initialized = false;
 static ofURLFileLoader & getFileLoader() {
 	static ofURLFileLoader * fileLoader = new ofURLFileLoader;
 	initialized = true;
+	
+	ofCore.shutdownFunctions.emplace_back(ofURLFileLoaderShutdown);
 	return *fileLoader;
 }
 
