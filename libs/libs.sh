@@ -170,18 +170,19 @@ checkLib() {
 # exit 1
 
 getlink() {
-    for LIBNAME in ${ALLLIBS[@]}
-    do
-        PARAMS+=" "https://github.com/dimitre/ofLibs/releases/download/${VERSION}/oflib_${LIBNAME}_${PLATFORM}.zip
-        # github uses redirect, so it is needed -L parameter in curl.
-        PARAMSMSYS+= "curl -L -o oflib_${LIBNAME}_${PLATFORM}.zip https://github.com/dimitre/ofLibs/releases/download/${VERSION}/oflib_${LIBNAME}_${PLATFORM}.zip;"
-    done
-
     if [[ "$OSTYPE" == "cygwin"* ]]; then
-        executa "cd ${DOWNLOAD}"
-        executa ${PARAMSMSYS}
-        executa "cd .."
+        for LIBNAME in ${ALLLIBS[@]}
+        do
+            # github uses redirect, so it is needed -L parameter in curl.
+            executa "curl -L -o ${DOWNLOAD}/oflib_${LIBNAME}_${PLATFORM}.zip https://github.com/dimitre/ofLibs/releases/download/${VERSION}/oflib_${LIBNAME}_${PLATFORM}.zip"
+        done
     else
+
+        for LIBNAME in ${ALLLIBS[@]}
+        do
+            PARAMS+=" "https://github.com/dimitre/ofLibs/releases/download/${VERSION}/oflib_${LIBNAME}_${PLATFORM}.zip
+        done
+
         executa "wget2 --clobber=off ${PARAMS} -P ${DOWNLOAD}"
     fi
 
