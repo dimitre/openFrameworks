@@ -173,16 +173,13 @@ getlink() {
     for LIBNAME in ${ALLLIBS[@]}
     do
         PARAMS+=" "https://github.com/dimitre/ofLibs/releases/download/${VERSION}/oflib_${LIBNAME}_${PLATFORM}.zip
-        PARAMSMSYS+= "curl -O https://github.com/dimitre/ofLibs/releases/download/${VERSION}/oflib_${LIBNAME}_${PLATFORM}.zip;"
+        # github uses redirect, so it is needed -L parameter in curl.
+        PARAMSMSYS+= "curl -L -o oflib_${LIBNAME}_${PLATFORM}.zip https://github.com/dimitre/ofLibs/releases/download/${VERSION}/oflib_${LIBNAME}_${PLATFORM}.zip;"
     done
 
     if [[ "$OSTYPE" == "cygwin"* ]]; then
         executa "cd ${DOWNLOAD}"
         executa ${PARAMSMSYS}
-        # for P in "${PARAMS[@]}"; do
-            # executa "curl -OL ${P}"
-        # done
-        # executa "curl -OL ${PARAMS}"
         executa "cd .."
     else
         executa "wget2 --clobber=off ${PARAMS} -P ${DOWNLOAD}"
