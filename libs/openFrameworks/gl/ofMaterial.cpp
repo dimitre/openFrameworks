@@ -1170,10 +1170,16 @@ void ofMaterial::updateLights(const ofShader & shader,ofGLProgrammableRenderer &
 		}
 		shader.setUniform4f("lights["+idx+"].diffuse", light->diffuseColor);
 
+		
+
 		if(light->lightType!=OF_LIGHT_DIRECTIONAL){
 			// TODO: add in light radius if pbr?
+
+
 			shader.setUniform1f("lights["+idx+"].radius", 0.0f);
 			shader.setUniform1f("lights["+idx+"].constantAttenuation", light->attenuation_constant);
+			
+
 			shader.setUniform1f("lights["+idx+"].linearAttenuation", light->attenuation_linear);
 			shader.setUniform1f("lights["+idx+"].quadraticAttenuation", light->attenuation_quadratic);
 		}

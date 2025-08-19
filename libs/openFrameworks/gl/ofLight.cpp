@@ -259,6 +259,7 @@ bool ofLight::getIsPointLight() const{
 //----------------------------------------
 void ofLight::setAttenuation( float constant, float linear, float quadratic ) {
     // falloff = 0 -> 1, 0 being least amount of fallof, 1.0 being most //
+	
 	data->attenuation_constant    = constant;
 	data->attenuation_linear      = linear;
 	data->attenuation_quadratic   = quadratic;

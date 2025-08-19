@@ -271,6 +271,8 @@ public:
 	std::shared_ptr<ofxAssimp::SrcScene> getSrcScene();
 	void calculateDimensions();
 	
+	std::vector< std::shared_ptr<ofxAssimp::Animation> > getAllAnimations() { return mAnimations; }
+	
 	
 protected:
 	std::shared_ptr<AnimationMixer> _getAnimationMixer();

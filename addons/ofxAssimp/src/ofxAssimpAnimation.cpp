@@ -96,6 +96,7 @@ void Animation::update() {
 	
 //	std::cout << "Animation: " << getName() << " timeStep: " << timeStep << " position: " << position << " | " << ofGetFrameNum() << std::endl;
 
+//	cout << position << endl;
 	if(position > 1.0 && loopType == OF_LOOP_NONE) {
 		position = 1.0;
 		stop();
@@ -248,6 +249,7 @@ void Animation::setPosition(float position) {
 
 //-------------------------------------------
 void Animation::setLoopType(ofLoopType state) {
+	cout << "Animation::setLoopType" << state << endl;
 	loopType = state;
 }
 
