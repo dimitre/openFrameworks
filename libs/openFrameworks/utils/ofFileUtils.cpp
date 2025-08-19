@@ -654,9 +654,9 @@ std::string ofFile::getAbsolutePath() const {
 
 //------------------------------------------------------------------------------------------------------------
 bool ofFile::canRead() const {
-	
+
 #ifdef TARGET_WIN32
-	DWORD attr = GetFileAttributes(myFile.native().c_str());
+	DWORD attr = GetFileAttributesW(myFile.native().c_str());
 	if (attr == INVALID_FILE_ATTRIBUTES)
 	{
 		return false;
@@ -1492,7 +1492,7 @@ void ofDirectory::sort(const SortMode & mode){
             ss.stringInt = ofToString(ss.nameInt);
             sort.push_back(ss);
         }
-        
+
         ofSort(sort, naturalStr);
         files.clear();
         files.reserve(sort.size());
@@ -1503,7 +1503,7 @@ void ofDirectory::sort(const SortMode & mode){
     else if(mode == ofDirectory::SORT_FAST){
         std::vector <string> sort;
         sort.reserve(files.size());
-        
+
         for( auto & f : files ){
             string ss = f.getFileName();
             sort.push_back(ss);
@@ -1711,7 +1711,7 @@ std::string ofFilePath::addTrailingSlash(const fs::path & _path){
 
 
 //------------------------------------------------------------------------------------------------------------
-// FIXME: - start using fs::path.extension() 
+// FIXME: - start using fs::path.extension()
 string ofFilePath::getFileExt(const fs::path & filename){
 	return ofFile(filename,ofFile::Reference).getExtension();
 }
@@ -1970,12 +1970,12 @@ fs::path ofToDataPathFS(const fs::path & path, bool makeAbsolute){
 	// we compare inputPath.toString() rather that the input var path to ensure common formatting against dataPath.toString()
 	auto dirDataPath = ofCore.dataPath;
 	// also, we strip the trailing slash from dataPath since `path` may be input as a file formatted path even if it is a folder (i.e. missing trailing slash)
-	
+
 	// FIXME: unneeded after we remove string operations
 	dirDataPath = ofFilePath::addTrailingSlash(ofCore.dataPath);
 
 	auto relativeDirDataPath = ofFilePath::makeRelative(fs::current_path(), ofCore.dataPath);
-	
+
 	// FIXME: unneeded after we remove string operations
 	relativeDirDataPath = ofFilePath::addTrailingSlash(relativeDirDataPath);
 
