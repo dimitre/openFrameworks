@@ -173,13 +173,15 @@ getlink() {
     for LIBNAME in ${ALLLIBS[@]}
     do
         PARAMS+=" "https://github.com/dimitre/ofLibs/releases/download/${VERSION}/oflib_${LIBNAME}_${PLATFORM}.zip
+        PARAMSMSYS+= "curl -O https://github.com/dimitre/ofLibs/releases/download/${VERSION}/oflib_${LIBNAME}_${PLATFORM}.zip;"
     done
 
     if [[ "$OSTYPE" == "cygwin"* ]]; then
         executa "cd ${DOWNLOAD}"
-        for P in "${PARAMS[@]}"; do
-            executa "curl -OL ${P}"
-        done
+        executa ${PARAMSMSYS}
+        # for P in "${PARAMS[@]}"; do
+            # executa "curl -OL ${P}"
+        # done
         # executa "curl -OL ${PARAMS}"
         executa "cd .."
     else
