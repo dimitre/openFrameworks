@@ -50,7 +50,7 @@ if [[ "$OSTYPE" == "cygwin"* ]]; then
     # PLATFORM=windows
     # PLATFORM=vs
     PLATFORM=msys2
-    CORELIBS=( tess2 kissfft )
+    CORELIBS=( tess2 kissfft videoInput )
     # CORELIBS=( brotli cairo FreeImage freetype glew glfw glm json libpng pugixml rtAudio tess2 uriparser utfcpp zlib openssl curl pixman )
     ADDONLIBS=( )
     ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
