@@ -1965,7 +1965,7 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::plane(float width, float height, int columns,
 
 	mesh.setMode(mode);
 
-	V vert { 0, 0, 0 };
+	V vert;
 	N normal(0, 0, 1); // always facing forward //
 	T texcoord;
 
@@ -1983,6 +1983,7 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::plane(float width, float height, int columns,
 
 			vert.x = texcoord.x * width - halfW;
 			vert.y = -(texcoord.y-1) * height - halfH;
+			vert.z = 0;
 
 			mesh.addVertex(vert);
 			mesh.addTexCoord(texcoord);
