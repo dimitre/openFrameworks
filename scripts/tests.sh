@@ -50,7 +50,10 @@ for group in *; do
                 # ofGen templates=make
                 # make -j Debug
                 # make RunDebug
-                ofgen buildrun
+                # ofgen buildrun
+                ofgen
+                make -j Debug
+                make RunDebug
 				errorcode=$?
 				if [[ $errorcode -ne 0 ]]; then
 					exit $errorcode

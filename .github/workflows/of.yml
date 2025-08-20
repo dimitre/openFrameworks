@@ -118,8 +118,8 @@ jobs:
         # ls -alF
         # xcodebuild -arch arm64
 
-      # - name: Tests
-      # run: ./scripts/tests.sh
+      - name: Tests
+        run: ./scripts/tests.sh
 
   ofworks-rpi:
     if: false

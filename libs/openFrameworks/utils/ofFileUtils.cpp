@@ -689,7 +689,7 @@ bool ofFile::canRead() const {
 //------------------------------------------------------------------------------------------------------------
 bool ofFile::canWrite() const {
 #ifdef TARGET_WIN32
-	DWORD attr = GetFileAttributes(myFile.native().c_str());
+	DWORD attr = GetFileAttributesW(myFile.native().c_str());
 	if (attr == INVALID_FILE_ATTRIBUTES){
 		return false;
 	}else{
