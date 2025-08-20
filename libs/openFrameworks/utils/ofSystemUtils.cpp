@@ -400,9 +400,7 @@ ofFileDialogResult ofSystemLoadDialog(std::string windowTitle, bool bFolderSelec
 		if (defaultPath != "") {
 			// wcscpy(szDir, ofToDataPathFS(defaultPath).c_str());
 			// ofn.lpstrInitialDir = szDir;
-			const char* lpcstr = ofToDataPathFS(defaultPath).c_str();
-
-			ofn.lpstrInitialDir = lpcstr;
+			ofn.lpstrInitialDir = convertWideToNarrow(ofToDataPathFS(defaultPath).c_str());
 		}
 
 		if (windowTitle != "") {
