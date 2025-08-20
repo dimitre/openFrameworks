@@ -806,7 +806,7 @@ void ofGLRenderer::setupScreenOrtho(float width, float height, float nearDist, f
 	loadMatrix(orthoMat); // make ortho our new projection matrix.
 
 	matrixMode(OF_MATRIX_MODELVIEW);
-	loadViewMatrix({ 1.0f });
+	loadViewMatrix( glm::mat4 { 1.0f } );
 }
 
 //----------------------------------------------------------
