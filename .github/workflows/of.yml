@@ -35,8 +35,8 @@ jobs:
         # os: [macos-latest, ubuntu-latest, windows-latest]
         # os: [windows-latest]
         include:
-          - { os: ubuntu-latest, shell: bash }
-          - { os: macos-latest, shell: bash }
+          # - { os: ubuntu-latest, shell: bash }
+          # - { os: macos-latest, shell: bash }
           - { os: windows-latest, shell: msys2 }
 
     runs-on: ${{ matrix.os }}

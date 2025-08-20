@@ -1,2 +1,3 @@
 ofxUnitTests
 ofxNetwork
+ofxURL
