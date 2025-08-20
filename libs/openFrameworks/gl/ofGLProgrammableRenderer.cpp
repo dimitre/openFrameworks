@@ -1017,7 +1017,7 @@ glm::mat4 ofGLProgrammableRenderer::getCurrentMatrix(ofMatrixMode matrixMode_) c
 		break;
 	default:
 		ofLogWarning() << "Invalid getCurrentMatrix query";
-		return { 1.0f };
+		return glm::mat4{ 1.0f };
 		break;
 	}
 }
