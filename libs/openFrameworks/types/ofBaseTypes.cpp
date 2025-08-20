@@ -159,7 +159,7 @@ void ofBaseVideoPlayer::previousFrame(){
 //---------------------------------------------------------------------------
 glm::mat4 ofBaseRenderer::getCurrentOrientationMatrix() const {
 	ofLogWarning() << "getCurrentOrientationMatrix() Not implemented for this renderer. Returning Identity matrix.";
-	return { 1.0f };
+	return glm::mat4{ 1.0f };
 }
 
 void ofBaseRenderer::draw(const ofMesh & mesh, ofPolyRenderMode renderType) const{
