@@ -398,10 +398,10 @@ ofFileDialogResult ofSystemLoadDialog(std::string windowTitle, bool bFolderSelec
 		//the title if specified
 		wchar_t szTitle[MAX_PATH];
 		if (defaultPath != "") {
-			// wcscpy(szDir, ofToDataPathFS(defaultPath).c_str());
-			// ofn.lpstrInitialDir = szDir;
-			auto d = convertWideToNarrow(ofToDataPathFS(defaultPath).c_str());
-			ofn.lpstrInitialDir = d.c_str();
+			wcscpy(szDir, ofToDataPathFS(defaultPath).c_str());
+			ofn.lpstrInitialDir = szDir;
+			// auto d = convertWideToNarrow(ofToDataPathFS(defaultPath).c_str());
+			// ofn.lpstrInitialDir = d.c_str();
 		}
 
 		if (windowTitle != "") {
