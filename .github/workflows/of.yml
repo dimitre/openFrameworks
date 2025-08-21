@@ -62,7 +62,7 @@ jobs:
       - uses: msys2/setup-msys2@v2.28.0
         if: matrix.os == 'windows-latest' && matrix.platform == 'msys2'
         with: #toolchain:p
-          pacboy: gcc:p pkgconf:p base-devel:p wget2:p yaml-cpp:p pugixml:p nlohmann-json:p fmt:p openssl:p python:p assimp:p cairo:p curl:p freeglut:p FreeImage:p glew:p glfw:p glm:p libsndfile:p libusb:p libxml2:p mpg123:p openal:p opencv:p rtaudio:p uriparser:p utf8cpp:p
+          pacboy: gcc:p pkgconf:p wget2:p yaml-cpp:p pugixml:p nlohmann-json:p fmt:p openssl:p python:p assimp:p cairo:p curl:p freeglut:p FreeImage:p glew:p glfw:p glm:p libsndfile:p libusb:p libxml2:p mpg123:p openal:p opencv:p rtaudio:p uriparser:p utf8cpp:p
           update: true
           install: >-
             git
