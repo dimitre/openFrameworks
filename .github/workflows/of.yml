@@ -76,15 +76,12 @@ jobs:
       - name: Test tools
         if: matrix.os == 'windows-latest' && matrix.platform == 'msys2'
         run: |
-          gcc
-          g++
-          c++
-          find
-          ar
-          pkgconf
+          whereis gcc
+          whereis g++
+          whereis c++
+          whereis find
+          whereis ar
           whereis pkgconf
-          lld
-          ld
           whereis ld
           whereis lld
 
