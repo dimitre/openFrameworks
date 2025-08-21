@@ -70,8 +70,8 @@ jobs:
             pkgconf
             ccache
             gcc
-            make
-          # base-devel
+            base-devel
+          # make pkg-conf ?
 
       # - name: Install Packages - Apt
       #   if: matrix.os == 'ubuntu-latest'
