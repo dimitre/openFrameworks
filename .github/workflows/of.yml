@@ -61,15 +61,16 @@ jobs:
 
       - uses: msys2/setup-msys2@v2.28.0
         if: matrix.os == 'windows-latest'
-        with:
-          pacboy: wget2:p yaml-cpp:p pugixml:p nlohmann-json:p fmt:p toolchain:p openssl:p python:p assimp:p cairo:p curl:p freeglut:p FreeImage:p glew:p glfw:p glm:p libsndfile:p libusb:p libxml2:p mpg123:p openal:p opencv:p rtaudio:p uriparser:p utf8cpp:p
+        with: #toolchain:p
+          pacboy: gcc:p wget2:p yaml-cpp:p pugixml:p nlohmann-json:p fmt:p openssl:p python:p assimp:p cairo:p curl:p freeglut:p FreeImage:p glew:p glfw:p glm:p libsndfile:p libusb:p libxml2:p mpg123:p openal:p opencv:p rtaudio:p uriparser:p utf8cpp:p
           update: true
           install: >-
             git
             unzip
             pkgconf
             ccache
-            base-devel
+            gcc
+          # base-devel
 
       # - name: Install Packages - Apt
       #   if: matrix.os == 'ubuntu-latest'
@@ -81,7 +82,7 @@ jobs:
       - name: ccache
         uses: hendrikmuhs/ccache-action@v1.2.18
         with:
-          key: ${{ matrix.cfg.platform }}-${{ matrix.cfg.target }}
+          key: ${{ matrix.platform }}-${{ matrix.target }}
 
       - name: Libs
         run: ./libs/libs.sh
@@ -126,7 +127,7 @@ jobs:
     strategy:
       matrix:
         # os: [ubuntu-latest]
-        cfg:
+        include:
           - {
               platform: rpi-aarch64,
               os: ubuntu-latest,
@@ -134,17 +135,17 @@ jobs:
               toolchain: aarch64-linux-gnu-gcc,
             }
         # os: [ubuntu-latest]
-    runs-on: ${{ matrix.cfg.os }}
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - name: RPI - apt multistrap
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: multistrap gcc-${{matrix.cfg.prefix}} g++-${{matrix.cfg.prefix}}
+          packages: multistrap gcc-${{matrix.prefix}} g++-${{matrix.prefix}}
           version: 1.0
 
       - name: RPI - multistrap
-        if: matrix.cfg.platform == 'rpi-aarch64' || matrix.cfg.platform == 'rpi-armv6l'
+        if: matrix.platform == 'rpi-aarch64' || matrix.platform == 'rpi-armv6l'
         shell: bash
         run: |
           mkdir -p raspbian/etc/apt/apt.conf.d/
@@ -154,4 +155,4 @@ jobs:
       - name: ccache
         uses: hendrikmuhs/ccache-action@v1.2.18
         with:
-          key: ${{ runner.os }}-${{ matrix.cfg.platform }}-ccache
+          key: ${{ runner.os }}-${{ matrix.platform }}-ccache

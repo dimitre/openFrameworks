@@ -6,6 +6,9 @@
 // FIXME: ofConstants Targets
 #include "ofConstants.h"
 
+#include "ofAppGLFWWindow.h"
+
+
 #include <condition_variable>
 #include <mutex>
 
@@ -616,9 +619,28 @@ std::string ofSystemTextBoxDialog(std::string question, std::string text) {
 		[alert setAccessoryView:label];
 		[[alert window] setInitialFirstResponder:label];
 
-		NSInteger returnCode = [alert runModal];
+//		NSInteger returnCode = [alert runModal];
+		
+		
+		NSWindow * primaryWindow = [NSApp mainWindow];
+//		NSWindow *keyWindow = [NSApp keyWindow];
+
+//		NSWindow * cocoaWindow = glfwGetCocoaWindow(ofAppGLFWWindow::getGLFWWindow());
+//
+		NSInteger returnCode = [alert runModalForWindow:primaryWindow];
+		
+
+//		__block std::string textOut = "";
+//		[alert beginSheetModalForWindow:primaryWindow completionHandler:^(NSModalResponse result) {
+//			if (result == NSAlertFirstButtonReturn) {
+//				textOut = [[label stringValue] UTF8String];
+//			} else if (result == NSAlertSecondButtonReturn) {
+//				textOut = "";
+//			}
+//		}];
+
 		restoreAppWindowFocus();
-		// if OK was clicked, assign value to text
+//		 if OK was clicked, assign value to text
 		if (returnCode == NSAlertFirstButtonReturn)
 			text = [[label stringValue] UTF8String];
 		else
