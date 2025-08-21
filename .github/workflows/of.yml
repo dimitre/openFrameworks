@@ -70,6 +70,7 @@ jobs:
             pkgconf
             ccache
             gcc
+            make
           # base-devel
 
       # - name: Install Packages - Apt
