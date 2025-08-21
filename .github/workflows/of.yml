@@ -83,15 +83,14 @@ jobs:
           whereis ar
           whereis pkgconf
           whereis ld
-          whereis lld
-
           ls /mingw64/bin/pkgconf
           ls /mingw64/bin/gcc
           ls /mingw64/bin/g++
           ls /mingw64/bin/c++
           ls /mingw64/bin/ld
-          ls /mingw64/bin/lld
-          ls /usr/bin/lld
+        # whereis lld
+        # ls /mingw64/bin/lld
+        # ls /usr/bin/lld
 
       # - name: Install Packages - Apt
       #   if: matrix.os == 'ubuntu-latest'

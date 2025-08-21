@@ -38,7 +38,9 @@ CXX = $(MINGW_PREFIX)/bin/g++
 FIND ?= /usr/bin/find
 PLATFORM_AR = $(MINGW_PREFIX)/bin/ar
 #PLATFORM_LD = $(MINGW_PREFIX)/bin/ld
-PLATFORM_LD = /usr/bin/lld
+# PLATFORM_LD = /usr/bin/ld
+PLATFORM_LD = $(MINGW_PREFIX)/bin/ld
+
 PLATFORM_RESOURCE_COMPILER = $(MINGW_PREFIX)/bin/windres
 PLATFORM_PKG_CONFIG = $(MINGW_PREFIX)/bin/pkgconf
 
