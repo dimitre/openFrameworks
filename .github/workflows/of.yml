@@ -130,6 +130,12 @@ jobs:
       #   run: |
       #     cd libs/openFrameworksCompiled/project/
       #     make -j Debug
+      - name: Empty Example
+        run: |
+          cd examples/templates/emptyExample
+          ofgen
+          make -j
+
       - name: All Addons Example
         run: |
           cd examples/templates/allAddonsExample

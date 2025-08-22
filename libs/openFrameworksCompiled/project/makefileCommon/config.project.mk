@@ -454,21 +454,21 @@ endif
 
 # Dimitre test, 21 jan 2025
 #
-LLD := $(shell command -v lld 2> /dev/null)
+# LLD := $(shell command -v lld 2> /dev/null)
 # ifdef LLD
-ifeq (, $(shell which lld))
-	LINKER?=$(CXX) -fuse-ld=lld
-endif
+# ifeq (, $(shell which lld))
+	# LINKER?=$(CXX) -fuse-ld=lld
+# endif
 
 ifdef PROJECT_LD
-	LINKER = $(PROJECT_LD)
+	LD = $(PROJECT_LD)
 endif
 
 # LINKER ?= $(CXX) -fuse-ld=lld
 # LINKER ?= $(CXX) -fuse-ld=lld
 # LINKER ?= LD
-LINKER ?= $(CXX)
-$(info 💾 LINKER $(LINKER))
+# LINKER ?= $(CXX)
+$(info 💾 LD $(LD))
 #
 # $(info 🔗 LINKER $(LINKER))
 
