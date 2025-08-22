@@ -7,6 +7,9 @@
 	mkdir -p ../../../libs/openFrameworksCompiled/lib/macos/obj/Debug/libs/openFrameworks/app/
 	cc -x c -c ../../../libs/openFrameworks/app/RGFW.cpp -o $@
 
+
+PLATFORM_LD = c++
+
 PLATFORM_PROJECT_DEBUG_BIN_NAME=$(APPNAME)_debug
 PLATFORM_PROJECT_RELEASE_BIN_NAME=$(APPNAME)
 PLATFORM_RUN_COMMAND = cd bin/$(BIN_NAME).app/Contents/MacOS/;./$(BIN_NAME)

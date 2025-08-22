@@ -619,16 +619,16 @@ std::string ofSystemTextBoxDialog(std::string question, std::string text) {
 		[alert setAccessoryView:label];
 		[[alert window] setInitialFirstResponder:label];
 
-//		NSInteger returnCode = [alert runModal];
-		
-		
-		NSWindow * primaryWindow = [NSApp mainWindow];
+		NSInteger returnCode = [alert runModal];
+
+
+		// NSWindow * primaryWindow = [NSApp mainWindow];
 //		NSWindow *keyWindow = [NSApp keyWindow];
 
 //		NSWindow * cocoaWindow = glfwGetCocoaWindow(ofAppGLFWWindow::getGLFWWindow());
 //
-		NSInteger returnCode = [alert runModalForWindow:primaryWindow];
-		
+		// NSInteger returnCode = [alert runModalForWindow:primaryWindow];
+
 
 //		__block std::string textOut = "";
 //		[alert beginSheetModalForWindow:primaryWindow completionHandler:^(NSModalResponse result) {
