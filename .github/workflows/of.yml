@@ -67,9 +67,8 @@ jobs:
           install: >-
             git
             unzip
-            pkgconf
             ccache
-            gcc
+            make
             base-devel
           # make pkg-conf ?
 
