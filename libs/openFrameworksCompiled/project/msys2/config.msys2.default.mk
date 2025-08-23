@@ -137,9 +137,10 @@ PLATFORM_LDFLAGS += -lpthread
 	# PLATFORM_LDFLAGS += -Wl,--disable-dynamicbase,--disable-high-entropy-va,--default-image-base-low
 # endif
 
-ifeq ($(findstring OF_USING_STD_FS, $(PLATFORM_DEFINES)),OF_USING_STD_FS)
-	PLATFORM_LDFLAGS += -lstdc++fs
-endif
+# ifeq ($(findstring OF_USING_STD_FS, $(PLATFORM_DEFINES)),OF_USING_STD_FS)
+# 	PLATFORM_LDFLAGS += -lstdc++fs
+# endif
+PLATFORM_LDFLAGS += -lstdc++fs
 
 
 ##########################################################################################
