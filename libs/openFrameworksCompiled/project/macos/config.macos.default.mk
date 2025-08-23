@@ -8,7 +8,8 @@
 	cc -x c -c ../../../libs/openFrameworks/app/RGFW.cpp -o $@
 
 
-PLATFORM_LD = c++
+# PLATFORM_LD = g++
+LD = g++
 
 PLATFORM_PROJECT_DEBUG_BIN_NAME=$(APPNAME)_debug
 PLATFORM_PROJECT_RELEASE_BIN_NAME=$(APPNAME)
