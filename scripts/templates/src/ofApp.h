@@ -7,8 +7,7 @@ public:
 	void setup() override;
 	void update() override;
 	void draw() override;
-
-	// void keyPressed(int key) override;
+	void keyPressed(int key) override;
 	// void keyReleased(int key) override;
 	// void exit() override;
 
