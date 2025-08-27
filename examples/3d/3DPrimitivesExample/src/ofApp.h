@@ -1,6 +1,8 @@
 #pragma once
 
-#include "ofMain.h"
+#include "ofMainLite.h"
+#include "ofLight.h"
+#include "ofMaterial.h"
 
 class ofApp : public ofBaseApp{
 
