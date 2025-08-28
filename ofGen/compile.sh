@@ -74,7 +74,9 @@ fi
 
 section "OFWorks, compiling ofgen"
 
+echo ${COMPILECOMMAND}
 ${COMPILECOMMAND}
+echo ${LINKCOMMAND}
 ${LINKCOMMAND}
 
 section "done"
