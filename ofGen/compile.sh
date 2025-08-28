@@ -9,16 +9,16 @@ section() {
     printf "💻${COLOR} ${@} ${NC}\n\r"
 }
 
-checkPackageMSYS() {
-    # dpkg --status $1 &> /dev/null
-    # if [ $? -eq 0 ]; then
-    # echo "$1: Already installed"
-    # else
-    # FIXME: avoid prompt
-    pacman -S mingw-w64-x86_64-$1
-    # sudo apt-get install -y $1
-    # fi
-}
+# checkPackageMSYS() {
+#     # dpkg --status $1 &> /dev/null
+#     # if [ $? -eq 0 ]; then
+#     # echo "$1: Already installed"
+#     # else
+#     # FIXME: avoid prompt
+#     pacman -S mingw-w64-x86_64-$1
+#     # sudo apt-get install -y $1
+#     # fi
+# }
 
 checkPackageApt() {
     dpkg --status $1 &> /dev/null
@@ -59,11 +59,12 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
 
 # elif [[ "$OSTYPE" == "msys"* ]]; then
 elif [[ "$OSTYPE" == "cygwin"* ]]; then
-    checkPackageMSYS yaml-cpp
-    checkPackageMSYS pugixml
-    checkPackageMSYS nlohmann-json
-    checkPackageMSYS fmt
-    checkPackageMSYS toolchain
+    # checkPackageMSYS yaml-cpp
+    # checkPackageMSYS pugixml
+    # checkPackageMSYS nlohmann-json
+    # checkPackageMSYS fmt
+    # checkPackageMSYS toolchain
+    pacman -S --needed mingw-w64-x86_64-yaml-cpp mingw-w64-x86_64-pugixml mingw-w64-x86_64-nlohmann-json mingw-w64-x86_64-fmt mingw-w64-x86_64-toolchain
     LINKCOMMAND=time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src `pkg-config --libs yaml-cpp pugixml` -o ofgen
 
 else

@@ -1,7 +1,6 @@
 #!/bin/bash
 cd "$(dirname "$0")"
 
-
 COLOR='\033[0;32m'
 COLOR2='\033[0;34m'
 COLOR3='\033[0;95m'
@@ -9,17 +8,17 @@ COLOR3='\033[0;95m'
 NC='\033[0m' # No Color
 
 section() {
-    printf "⚡️ ${COLOR}$@ ${NC}\r\n"
+	printf "⚡️ ${COLOR}$@ ${NC}\r\n"
 }
 sectionOK() {
 	printf "💾 ${COLOR}$@ ${NC}\r\n"
 }
 executa2() {
-    printf "✅ ${COLOR2}$@ ${NC}\r\n"
+	printf "✅ ${COLOR2}$@ ${NC}\r\n"
 }
 executa() { #echoes and execute. dry run is "executa2"
 	printf "✅ ${COLOR2}$@ ${NC}\r\n"
-    $@
+	$@
 }
 
 
@@ -29,16 +28,16 @@ OF_FOLDER=..
 #rpi-aarch64.zip
 
 for i in "$@"; do
-  case $i in
-    -p=*|--platform=*)
-      PLATFORM="${i#*=}"
-      shift # past argument=value
-      ;;
-    -l=*|--searchpath=*)
-      SEARCHPATH="${i#*=}"
-      shift # past argument=value
-      ;;
-  esac
+	case $i in
+	-p=*|--platform=*)
+		PLATFORM="${i#*=}"
+		shift # past argument=value
+		;;
+	-l=*|--searchpath=*)
+		SEARCHPATH="${i#*=}"
+		shift # past argument=value
+		;;
+	esac
 done
 
 # LIBS_FOLDER=${OF_FOLDER}/libs/${PLATFORM}
@@ -46,60 +45,59 @@ done
 # exit
 
 # if [[ "$OSTYPE" == "msys"* ]]; then
+# This is MSYS / MING Windows
 if [[ "$OSTYPE" == "cygwin"* ]]; then
-    # PLATFORM=windows
-    # PLATFORM=vs
-    PLATFORM=msys2
-    CORELIBS=( tess2 kissfft videoInput )
-    # CORELIBS=( brotli cairo FreeImage freetype glew glfw glm json libpng pugixml rtAudio tess2 uriparser utfcpp zlib openssl curl pixman )
-    ADDONLIBS=( )
-    ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
-    # LIBADDONS=(
-    # 	# "assimp:ofxAssimpModelLoader"
-    # 	"assimp:ofxAssimp"
-    #     "libusb:ofxKinect"
-    #     "libxml2:ofxSvg"
-    #     "opencv:ofxOpenCv"
-    #     # "svgtiny:ofxSvg"
-    # )
-    # gcc
-    PACMANLIBS="toolchain openssl python assimp cairo curl freeglut FreeImage glew glfw glm libsndfile libusb libxml2 mpg123 nlohmann-json openal opencv pugixml rtaudio uriparser utf8cpp"
+	PLATFORM=msys2
+	CORELIBS=( tess2 kissfft videoInput )
+	# CORELIBS=( brotli cairo FreeImage freetype glew glfw glm json libpng pugixml rtAudio tess2 uriparser utfcpp zlib openssl curl pixman )
+	ADDONLIBS=( )
+	ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
+	# LIBADDONS=(
+	# 	# "assimp:ofxAssimpModelLoader"
+	# 	"assimp:ofxAssimp"
+	#	 "libusb:ofxKinect"
+	#	 "libxml2:ofxSvg"
+	#	 "opencv:ofxOpenCv"
+	#	 # "svgtiny:ofxSvg"
+	# )
+	# gcc
+	PACMANLIBS="toolchain openssl python assimp cairo curl freeglut FreeImage glew glfw glm libsndfile libusb libxml2 mpg123 nlohmann-json openal opencv pugixml rtaudio uriparser utf8cpp"
 
-    PACMANPARAMS="pacman -Syyuw --noconfirm"
-    for LIBNAME in ${PACMANLIBS[@]}
-    do
-        PACMANPARAMS+=" mingw-w64-x86_64-${LIBNAME}"
-    done
+	PACMANPARAMS="pacman -Syyuw --noconfirm"
+	for LIBNAME in ${PACMANLIBS[@]}
+	do
+		PACMANPARAMS+=" mingw-w64-x86_64-${LIBNAME}"
+	done
 
-    # FIXME VOLTAR
-    # executa "${PACMANPARAMS}"
+	# FIXME VOLTAR
+	# executa "${PACMANPARAMS}"
 
 
 
 
 
 elif [[ "$(uname -s)" == "Darwin" ]]; then
-    PLATFORM=macos
-    CORELIBS=( brotli cairo FreeImage freetype glew glfw glm json libpng pugixml rtAudio tess2 uriparser utfcpp zlib openssl curl pixman )
-    # FIXME: TODO: add svgtiny to ofLibs and here
-    ADDONLIBS=( assimp libusb libxml2 opencv )
-    ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
+	PLATFORM=macos
+	CORELIBS=( brotli cairo FreeImage freetype glew glfw glm json libpng pugixml rtAudio tess2 uriparser utfcpp zlib openssl curl pixman )
+	# FIXME: TODO: add svgtiny to ofLibs and here
+	ADDONLIBS=( assimp libusb libxml2 opencv )
+	ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
 
-    LIBADDONS=(
-    	# "assimp:ofxAssimpModelLoader"
-    	"assimp:ofxAssimp"
-        "libusb:ofxKinect"
-        "libxml2:ofxSvg"
-        "opencv:ofxOpenCv"
-        # "svgtiny:ofxSvg"
-    )
+	LIBADDONS=(
+		# "assimp:ofxAssimpModelLoader"
+		"assimp:ofxAssimp"
+		"libusb:ofxKinect"
+		"libxml2:ofxSvg"
+		"opencv:ofxOpenCv"
+		# "svgtiny:ofxSvg"
+	)
 
 elif [[ "$(uname -s)" == "Linux" ]]; then
 	GSTREAMER_VERSION=1.0
 	sudo apt-get -y install libcairo2-dev make libgtk2.0-dev nlohmann-json3-dev libssl3 libcurl4 brotli libcurl4-openssl-dev libjack-jackd2-0 libjack-jackd2-dev freeglut3-dev libasound2-dev libxmu-dev libxxf86vm-dev libgl1-mesa-dev libraw1394-dev libudev-dev libdrm-dev libglew-dev libopenal-dev libsndfile1-dev libfreeimage-dev libcairo2-dev libfreetype6-dev libssl-dev libpulse-dev libusb-1.0-0-dev libopencv-dev libassimp-dev librtaudio-dev liburiparser-dev libpugixml-dev libgtk2.0-0 libxcursor-dev libxi-dev libxinerama-dev libglfw3-dev libxml2-dev libgstreamer${GSTREAMER_VERSION}-dev libgstreamer-plugins-base${GSTREAMER_VERSION}-dev gstreamer${GSTREAMER_VERSION}-pulseaudio gstreamer${GSTREAMER_VERSION}-x gstreamer${GSTREAMER_VERSION}-plugins-bad gstreamer${GSTREAMER_VERSION}-alsa gstreamer${GSTREAMER_VERSION}-plugins-base gstreamer${GSTREAMER_VERSION}-plugins-good gstreamer1.0-libav
 
 	CORELIBS=( kissfft glm tess2 utfcpp )
-	ADDONLIBS=(  )
+	ADDONLIBS=(	)
 	ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
 	section Linux
 	uname -m
@@ -108,7 +106,7 @@ elif [[ "$(uname -s)" == "Linux" ]]; then
 		PLATFORM=linux64
 	elif [ -f /etc/rpi-issue ]; then
 		PLATFORM=rpi-aarch64
-    fi
+	fi
 fi
 
 # PLATFORM="${PLATFORM:-macos}"
@@ -116,12 +114,12 @@ fi
 
 # unameOut="$(uname -s)"
 # case "${unameOut}" in
-#     Linux*)     machine=Linux;;
-#     Darwin*)    machine=macos;;
-#     CYGWIN*)    machine=Cygwin;;
-#     MINGW*)     machine=MinGw;;
-#     MSYS_NT*)   machine=MSys;;
-#     *)          machine="UNKNOWN:${unameOut}"
+#	 Linux*)	 machine=Linux;;
+#	 Darwin*)	machine=macos;;
+#	 CYGWIN*)	machine=Cygwin;;
+#	 MINGW*)	 machine=MinGw;;
+#	 MSYS_NT*)	 machine=MSys;;
+#	 *)			machine="UNKNOWN:${unameOut}"
 # esac
 # echo ${machine}
 # exit
@@ -140,13 +138,13 @@ checkLib() {
 		then
 			if [[ ${PLATFORM} == "macos" ]]; then
 				echo "$lib not found, installing via brew"
-    		    executa brew install $lib
-            # FIXME: msys2 doesn't want sudo, check via other stuff.
-            else
-            	echo "$lib not found, installing via apt"
-                executa sudo apt-get install -y $lib
+				executa brew install $lib
+			# FIXME: msys2 doesn't want sudo, check via other stuff.
+			else
+				echo "$lib not found, installing via apt"
+				executa sudo apt-get install -y $lib
 			fi
-	    else
+		else
 			echo "$lib ok"
 		fi
 	done
@@ -157,8 +155,8 @@ checkLib() {
 # section Check Wget2
 # if ! command -v wget2 2>&1 >/dev/null
 # then
-#     echo "<wget2> not found, installing via brew"
-#     executa brew install wget2
+#	 echo "<wget2> not found, installing via brew"
+#	 executa brew install wget2
 # else
 # 	echo "ok"
 # fi
@@ -170,28 +168,28 @@ checkLib() {
 # exit 1
 
 getlink() {
-    if [[ "$OSTYPE" == "cygwin"* ]]; then
-        for LIBNAME in ${ALLLIBS[@]}
-        do
-            # github uses redirect, so it is needed -L parameter in curl.
-            executa "curl -L -o ${DOWNLOAD}/oflib_${LIBNAME}_${PLATFORM}.zip https://github.com/dimitre/ofLibs/releases/download/${VERSION}/oflib_${LIBNAME}_${PLATFORM}.zip"
-        done
-    else
+	if [[ "$OSTYPE" == "cygwin"* ]]; then
+		for LIBNAME in ${ALLLIBS[@]}
+		do
+			# github uses redirect, so it is needed -L parameter in curl.
+			executa "curl -L -o ${DOWNLOAD}/oflib_${LIBNAME}_${PLATFORM}.zip https://github.com/dimitre/ofLibs/releases/download/${VERSION}/oflib_${LIBNAME}_${PLATFORM}.zip"
+		done
+	else
 
-        for LIBNAME in ${ALLLIBS[@]}
-        do
-            PARAMS+=" "https://github.com/dimitre/ofLibs/releases/download/${VERSION}/oflib_${LIBNAME}_${PLATFORM}.zip
-        done
+		for LIBNAME in ${ALLLIBS[@]}
+		do
+			PARAMS+=" "https://github.com/dimitre/ofLibs/releases/download/${VERSION}/oflib_${LIBNAME}_${PLATFORM}.zip
+		done
 
-        executa "wget2 --clobber=off ${PARAMS} -P ${DOWNLOAD}"
-    fi
+		executa "wget2 --clobber=off ${PARAMS} -P ${DOWNLOAD}"
+	fi
 
 }
 
 unzipCore() {
 	for LIBNAME in ${CORELIBS[@]}
 	do
-	    filename="${DOWNLOAD}/oflib_${LIBNAME}_${PLATFORM}.zip"
+		filename="${DOWNLOAD}/oflib_${LIBNAME}_${PLATFORM}.zip"
 		# executa unzip -o ${filename} -d ${LIBS_FOLDER}
 		# -q = quiet -qq = quieter
 		executa "unzip -qq -o ${filename} -d ${LIBS_FOLDER}"
@@ -222,7 +220,7 @@ unzipAddons() {
 sectionOK OpenFrameworks install ofLibs
 # ccache
 checkLib wget2
-#  fmt yaml-cpp
+#	fmt yaml-cpp
 # checkWget2
 executa mkdir -p ${DOWNLOAD}
 getlink
