@@ -44,7 +44,7 @@ class ofThread {
 public:
 	/// \brief Create an ofThread.
 	ofThread();
-//	virtual ~ofThread() { }
+	virtual ~ofThread() { }
 
 	/// \brief Check the running status of the thread.
 	/// \returns true iff the thread is currently running.
