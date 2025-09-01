@@ -61,6 +61,12 @@ targets:
         # - ${var:ofPath}/libs/openFrameworksCompiled/lib/${var:platform}/openFrameworks.a
         - ${var:ofPath}/libs/openFrameworksCompiled/lib/${var:platform}/libopenFrameworks.a
         # - ${var:ofPath}/libs/openFrameworksCompiled/lib/${var:platform}/libopenFrameworks.a
+      staticLinks[:linux]:
+        - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
+
+      staticLinks[:macos]:
         - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
         - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
         - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
