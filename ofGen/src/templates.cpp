@@ -1128,7 +1128,9 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 	if (a->addonProperties.count("ADDON_FRAMEWORKS")) {
 		for (const auto & f : a->addonProperties["ADDON_FRAMEWORKS"]) {
 			for (const auto & s : ofSplitString(f, " ")) {
-			    alert("     appleFramework " + s, 95);
+			    // alert("     appleFramework " + s, 95);
+				alert("	└─ appleFramework " + s, 94);
+
 				projectYaml["abstracts:*"]["settings:Cxx"]["appleFrameworks"].push_back(s);
 			}
 		}

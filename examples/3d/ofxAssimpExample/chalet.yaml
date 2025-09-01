@@ -1,14 +1,10 @@
 name: OF
 version: 0.3.3
 variables:
-  generator: ofGen v0.5.5
+  generator: ofGen v0.5.6
   addons: ProjectSourceFiles_ofxAssimpExample,ofxAssimp,ofxGui
   platform: macos
   ofPath: ../../..
-externalDependencies:
-  ofLib:
-    kind: local
-    path: ${var:ofPath}
 abstracts:*:
   language: C++
   language[toolchain:apple-llvm]: Objective-C++
@@ -44,6 +40,12 @@ targets:
     settings:Cxx:
       staticLinks:
         - ${var:ofPath}/libs/openFrameworksCompiled/lib/${var:platform}/libopenFrameworks.a
+        - ../../../addons/ofxAssimp/libs/assimp/lib/macos/libassimp.a
+      staticLinks[:linux]:
+        - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
+      staticLinks[:macos]:
         - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
         - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
         - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
@@ -56,7 +58,6 @@ targets:
         - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
         - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
         - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
-        - ../../../addons/ofxAssimp/libs/assimp/lib/macos/libassimp.a
       includeDirs:
         - ${var:ofPath}/libs/openFrameworks/**
         - ${var:ofPath}/libs/openFrameworks
@@ -102,7 +103,7 @@ targets:
         - .DS_Store
         - .settings
         - .vscode
-    copyFilesOnRun[:macos]: ${var:path}/bin/data
+    runWorkingDirectory: bin
 distribution:
   ofxAssimpExample:
     kind: bundle

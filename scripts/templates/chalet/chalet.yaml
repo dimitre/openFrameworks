@@ -5,10 +5,25 @@ variables:
   addons: "ofxMicroUI,ofxTools,ofxMidi,ofxMicroUIMidiController,ofxScenes,ofxSvg,ofxCurve,ofxVideoWriter,ofxAssimp"
   platform: macos
   ofPath: ../../..
-externalDependencies:
-  ofLib:
-    kind: local
-    path: ${var:ofPath}
+# externalDependencies:
+#   ofLib:
+#     kind: local
+#     path: ${var:ofPath}
+# package:
+#   of-static:
+#     # kind: staticLibrary
+#     files:
+#       include:
+#         - ${var:ofPath}/libs/openFrameworks/{3d,communication,events,gl,graphics,math,sound,types,utils,video}/*.cpp
+#         - ${var:ofPath}/libs/openFrameworks/app/{ofBaseApp,ofMainLoop,ofAppRunner,ofAppGLFWWindow}.cpp
+#       include[:macos]:
+#         - ${var:ofPath}/libs/openFrameworks/**.{mm,m}
+
+#       exclude[:macos]:
+#         - ${var:ofPath}/libs/openFrameworks/video/ofDirectShowPlayer.cpp
+#         - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils,ofMediaFoundationPlayer,ofDirectShowGrabber}.cpp
+#         - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
+
 abstracts:*:
   language: C++
   language[toolchain:apple-llvm]: Objective-C++
@@ -31,6 +46,7 @@ abstracts:*:
       - ${var:ofPath}/libs/openFrameworks/**
       # - ${var:ofPath}/libs/openFrameworks
       - ${var:ofPath}/libs/{${var:platform}}/include
+
     # includeDirs[:macos]:
     # libDirs[:macos]: ${var:ofPath}/libs/fmod/lib/osx
     # links[:macos]: fmod
@@ -51,15 +67,40 @@ abstracts:*:
       - QuartzCore
       # - CoreMIDI
 targets:
+  # OFLib:
+  #   kind: chaletProject
+  #   location: ${var:ofPath}
+  # OF:
+  #   kind: staticLibrary
+  #   files:
+  #     include:
+  #       - ${var:ofPath}/libs/openFrameworks/{3d,communication,events,gl,graphics,math,sound,types,utils,video}/*.cpp
+  #       - ${var:ofPath}/libs/openFrameworks/app/{ofBaseApp,ofMainLoop,ofAppRunner,ofAppGLFWWindow}.cpp
+  #     include[:macos]:
+  #       - ${var:ofPath}/libs/openFrameworks/**.{mm,m}
+
+  #     exclude[:macos]:
+  #       - ${var:ofPath}/libs/openFrameworks/video/ofDirectShowPlayer.cpp
+  #       - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils,ofMediaFoundationPlayer,ofDirectShowGrabber}.cpp
+  #       - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
   empty:
-    # importPackages: [ofLib]
     kind: executable
+    # importPackages: [of-static]
+
     settings:Cxx:
       staticLinks:
-        # - ${var:ofPath}/addons/ofxAssimp/libs/assimp/lib/${var:platform}/libassimp.a
+        # - OF
 
-        # - ${var:ofPath}/libs/openFrameworksCompiled/lib/${var:platform}/openFrameworks.a
         - ${var:ofPath}/libs/openFrameworksCompiled/lib/${var:platform}/libopenFrameworks.a
+        # - ${var:ofPath}/libs/openFrameworksCompiled/lib/${var:platform}/openFrameworks.a
+        # - ${var:ofPath}/addons/ofxAssimp/libs/assimp/lib/${var:platform}/libassimp.a
+        # [66/66] Archiving /Users/z/Dmtr/ofworks/apps/apps2025/Empty/build/arm64-apple-darwin_Release/ext.OFLib/libOF.a
+
+        # - build/arm64-apple-darwin_Release/${ar:OF}
+        # - ${externalBuild:OF}/${ar:OF}
+        # - ${externalBuild:OF}${ar:OF}
+        # - ${externalBuild:OF}/libOF.a
+        # - ${externalBuild:OF}
         # - ${var:ofPath}/libs/openFrameworksCompiled/lib/${var:platform}/libopenFrameworks.a
       staticLinks[:linux]:
         - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
@@ -114,7 +155,10 @@ targets:
         - .vscode
         # - ${var:ofPath}/addons/{${var:addons}}/src/ios
 
-    copyFilesOnRun[:macos]: ${var:path}/bin/data
+    copyFilesOnRun[:macos]: bin/data
+    # runWorkingDirectory: "bin"
+    # rootDir[:macos]: ../../..
+    # copyFilesOnRun[:macos]: ${var:path}/bin/data
 distribution:
   empty:
     kind: bundle
