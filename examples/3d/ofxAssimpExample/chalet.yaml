@@ -1,0 +1,128 @@
+name: OF
+version: 0.3.3
+variables:
+  generator: ofGen v0.5.5
+  addons: ProjectSourceFiles_ofxAssimpExample,ofxAssimp,ofxGui
+  platform: macos
+  ofPath: ../../..
+externalDependencies:
+  ofLib:
+    kind: local
+    path: ${var:ofPath}
+abstracts:*:
+  language: C++
+  language[toolchain:apple-llvm]: Objective-C++
+  settings:Cxx:
+    cppStandard: c++20
+    warningsPreset: minimal
+    runtimeTypeInformation: true
+    threads: true
+    exceptions: true
+    defines:
+      - __MACOSX_CORE__
+    defines[:debug]:
+      - DEBUG
+    compileOptions[:macos]:
+      - -fobjc-arc
+    includeDirs:
+      - ${var:ofPath}/libs/openFrameworks/**
+      - ${var:ofPath}/libs/{${var:platform}}/include
+    appleFrameworks:
+      - Accelerate
+      - AGL
+      - ApplicationServices
+      - AVFoundation
+      - IOKit
+      - Cocoa
+      - CoreAudio
+      - CoreMedia
+      - OpenGL
+      - QuartzCore
+targets:
+  ofxAssimpExample:
+    kind: executable
+    settings:Cxx:
+      staticLinks:
+        - ${var:ofPath}/libs/openFrameworksCompiled/lib/${var:platform}/libopenFrameworks.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libpng16.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libbrotlidec.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libbrotlicommon.a
+        - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
+        - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
+        - ../../../addons/ofxAssimp/libs/assimp/lib/macos/libassimp.a
+      includeDirs:
+        - ${var:ofPath}/libs/openFrameworks/**
+        - ${var:ofPath}/libs/openFrameworks
+        - src
+        - ../../../addons/ofxAssimp/libs/assimp/include
+        - ../../../addons/ofxAssimp/libs/assimp/include/assimp
+        - ../../../addons/ofxAssimp/libs/assimp/include/assimp/Compiler
+        - ../../../addons/ofxAssimp/libs/assimp/include/assimp/port
+        - ../../../addons/ofxAssimp/libs/assimp/include/assimp/port/AndroidJNI
+        - ../../../addons/ofxAssimp/libs/assimp/lib/macos
+        - ../../../addons/ofxAssimp/src
+        - ../../../addons/ofxAssimp/src/Source
+        - ../../../addons/ofxGui/src
+    files:
+      include:
+        - src/main.cpp
+        - src/ofApp.cpp
+        - ../../../addons/ofxAssimp/src/Source/ofxAssimpSrcAnimKeyCollection.cpp
+        - ../../../addons/ofxAssimp/src/Source/ofxAssimpSrcBone.cpp
+        - ../../../addons/ofxAssimp/src/Source/ofxAssimpSrcMesh.cpp
+        - ../../../addons/ofxAssimp/src/Source/ofxAssimpSrcNode.cpp
+        - ../../../addons/ofxAssimp/src/Source/ofxAssimpSrcScene.cpp
+        - ../../../addons/ofxAssimp/src/ofxAssimpAnimation.cpp
+        - ../../../addons/ofxAssimp/src/ofxAssimpAnimationMixer.cpp
+        - ../../../addons/ofxAssimp/src/ofxAssimpBone.cpp
+        - ../../../addons/ofxAssimp/src/ofxAssimpBounds.cpp
+        - ../../../addons/ofxAssimp/src/ofxAssimpMesh.cpp
+        - ../../../addons/ofxAssimp/src/ofxAssimpNode.cpp
+        - ../../../addons/ofxAssimp/src/ofxAssimpScene.cpp
+        - ../../../addons/ofxAssimp/src/ofxAssimpSkeleton.cpp
+        - ../../../addons/ofxAssimp/src/ofxAssimpTexture.cpp
+        - ../../../addons/ofxGui/src/ofxBaseGui.cpp
+        - ../../../addons/ofxGui/src/ofxButton.cpp
+        - ../../../addons/ofxGui/src/ofxColorPicker.cpp
+        - ../../../addons/ofxGui/src/ofxGuiGroup.cpp
+        - ../../../addons/ofxGui/src/ofxInputField.cpp
+        - ../../../addons/ofxGui/src/ofxLabel.cpp
+        - ../../../addons/ofxGui/src/ofxPanel.cpp
+        - ../../../addons/ofxGui/src/ofxSlider.cpp
+        - ../../../addons/ofxGui/src/ofxSliderGroup.cpp
+        - ../../../addons/ofxGui/src/ofxToggle.cpp
+      exclude:
+        - .DS_Store
+        - .settings
+        - .vscode
+    copyFilesOnRun[:macos]: ${var:path}/bin/data
+distribution:
+  ofxAssimpExample:
+    kind: bundle
+    buildTargets: "*"
+    exclude:
+      - data/.gitkeep
+    macosBundle:
+      type: app
+      icon: ${var:ofPath}/libs/openFrameworksCompiled/project/macos/of.icns
+      infoPropertyList:
+        CFBundleDevelopmentRegion: en-US
+        CFBundleDisplayName: ${name}
+        CFBundleExecutable: ${mainExecutable}
+        CFBundleIconFile: ${icon}
+        CFBundleIdentifier: com.developer.application
+        CFBundleInfoDictionaryVersion: 6.0
+        CFBundleName: ${bundleName}
+        CFBundlePackageType: APPL
+        CFBundleShortVersionString: 1.0.0
+        CFBundleVersion: 1.0.0
+        CFBundleSignature: ????
+        LSMinimumSystemVersion: 10.8
+        NSHighResolutionCapable: true
