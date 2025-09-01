@@ -12,6 +12,8 @@
 
 #include <glm/gtx/vector_angle.hpp>
 //#include <glm/gtx/transform.hpp>
+#include <algorithm> // std::clamp
+#include <cmath> // std::lerp
 
 
 //----------------------------------------------------------

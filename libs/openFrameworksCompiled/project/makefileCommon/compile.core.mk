@@ -52,6 +52,9 @@ $(info 💿 Using CCACHE - compile.core.mk )
 endif
 
 # $(info ------)
+$(info 💾 PROJECT_LD = $(PROJECT_LD))
+$(info 💾 PLATFORM_LD = $(PLATFORM_LD))
+
 $(info 💾 CXX = $(CXX))
 $(info 💾 CC = $(CC))
 $(info 💾 LD = $(LD))

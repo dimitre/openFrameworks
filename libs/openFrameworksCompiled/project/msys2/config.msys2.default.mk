@@ -25,9 +25,9 @@
 #   core source code.
 ##########################################################################################
 
-#MINGW_PREFIX ?= /mingw32
+# MINGW_PREFIX ?= /mingw32
 MINGW_PREFIX ?= /mingw64
-PLATFORM_CFLAGS += -std=gnu++17 -DUNICODE -D_UNICODE
+PLATFORM_CFLAGS += -std=gnu++20 -DUNICODE -D_UNICODE
 #PLATFORM_CFLAGS += -IC:/msys64/mingw32/include/gstreamer-1.0 -DOF_VIDEO_PLAYER_GSTREAMER
 
 CC = $(MINGW_PREFIX)/bin/gcc
@@ -35,11 +35,28 @@ CXX = $(MINGW_PREFIX)/bin/g++
 
 FIND ?= /usr/bin/find
 PLATFORM_AR = $(MINGW_PREFIX)/bin/ar
-#PLATFORM_LD = $(MINGW_PREFIX)/bin/ld
-PLATFORM_LD = /usr/bin/lld
+
+# PLATFORM_LD = $(MINGW_PREFIX)/bin/ld
+# LD = $(MINGW_PREFIX)/bin/ld
+# LD = $(MINGW_PREFIX)/bin/g++
+# PLATFORM_LD = $(MINGW_PREFIX)/bin/g++
+
+# LLVM Linker
+# LD = ld64.lld
+# PLATFORM_LD = ld64.lld
+
+# PLATFORM_LD = /usr/bin/lld-link
+# LD = /usr/bin/lld-link
+
+
+# this is the GNU Linker
+#LD = ld
+#PLATFORM_LD = ld
+
+
+
 PLATFORM_RESOURCE_COMPILER = $(MINGW_PREFIX)/bin/windres
 PLATFORM_PKG_CONFIG = $(MINGW_PREFIX)/bin/pkgconf
-
 
 PLATFORM_PROJECT_DEBUG_BIN_NAME=$(APPNAME)_debug.exe
 PLATFORM_PROJECT_RELEASE_BIN_NAME=$(APPNAME).exe
@@ -128,9 +145,9 @@ PLATFORM_CFLAGS += -fexceptions
 PLATFORM_LDFLAGS += -lpthread
 
 
-ifeq ($(findstring MINGW64,$(MSYSTEM)),MINGW64)
-	PLATFORM_LDFLAGS += -Wl,--disable-dynamicbase,--disable-high-entropy-va,--default-image-base-low
-endif
+# ifeq ($(findstring MINGW64,$(MSYSTEM)),MINGW64)
+# 	PLATFORM_LDFLAGS += -Wl,--disable-dynamicbase,--disable-high-entropy-va,--default-image-base-low
+# endif
 
 ifeq ($(findstring OF_USING_STD_FS, $(PLATFORM_DEFINES)),OF_USING_STD_FS)
 	PLATFORM_LDFLAGS += -lstdc++fs

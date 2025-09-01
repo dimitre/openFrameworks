@@ -408,6 +408,9 @@ bool buildProject() {
 		} else if (t == "visualstudio") {
 			conf.templates.emplace_back(new ofTemplateVisualStudio());
 			project.templates.emplace_back(conf.templates.back());
+		} else if (t == "chalet") {
+			conf.templates.emplace_back(new ofTemplateChalet());
+			project.templates.emplace_back(conf.templates.back());
 		} else {
 			alert("invalid template name : " + t + ", exiting", 95);
 			return false;

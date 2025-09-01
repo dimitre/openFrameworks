@@ -18,7 +18,7 @@ using std::endl;
 // using std::vector;
 
 static inline std::string getPGVersion() {
-	return "ofGen v0.5.0";
+	return "ofGen v0.5.5";
 }
 
 inline std::string colorText(const std::string & s, int color) {
@@ -38,7 +38,7 @@ const std::string sign = colorText(R"(
 ▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
 ▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
 Project Generator for OFWorks (OpenFrameworks fork)
-                Prototype v0.5.0⚡️
+                Prototype v0.5.5⚡️
 )",
 							 91)
 
@@ -363,4 +363,22 @@ inline void replace_all(
 
 	buf.append(s, prevPos, s.size() - prevPos);
 	s.swap(buf);
+}
+
+
+inline std::string joinStrings(const std::vector<std::string>& vec, const std::string& delimiter) {
+   std::string result = "";
+   if (vec.empty()) {
+       return result;
+   }
+
+   // Append the first element
+   result += vec[0];
+
+   // Append remaining elements with the delimiter
+   for (size_t i = 1; i < vec.size(); ++i) {
+       result += delimiter;
+       result += vec[i];
+   }
+   return result;
 }

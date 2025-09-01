@@ -9,7 +9,7 @@
 
 #ifndef TARGET_WIN32
 	#include <unistd.h>
-#endif	
+#endif
 
 #if defined( TARGET_OSX ) || defined( TARGET_LINUX )
 	#include <sys/ioctl.h>
@@ -378,9 +378,9 @@ bool ofSerial::setup(string portName, int baud){
 			cfsetispeed(&options, B230400);
 		cfsetospeed(&options, B230400);
 		break;
-		   case 12000000: 
+		   case 12000000:
 			cfsetispeed(&options, 12000000);
-		cfsetospeed(&options, 12000000);	
+		cfsetospeed(&options, 12000000);
 		break;
 		   default:
 			cfsetispeed(&options, B9600);
@@ -449,7 +449,6 @@ bool ofSerial::setup(string portName, int baud){
 		swprintf(buf, 80, L"baud=%d parity=N data=8 stop=1", bps);
 
 		if(!BuildCommDCBW(buf, &cfg.dcb)){
-//			ofLogError("ofSerial") << "setup(): unable to build comm dcb, (" << buf << ")";
 			ofLogError("ofSerial") << "setup(): unable to build comm dcb";
 		}
 
@@ -631,7 +630,7 @@ int ofSerial::readByte(){
 			ofLogError("ofSerial") << "readByte(): couldn't read from port";
 			return OF_SERIAL_ERROR;
 		}
-	
+
 		if(nRead == 0){
 			return OF_SERIAL_NO_DATA;
 		}

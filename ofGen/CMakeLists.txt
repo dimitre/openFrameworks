@@ -1,46 +1,76 @@
 cmake_minimum_required(VERSION 3.18)
+project(ofgen LANGUAGES CXX)
+
+# Use a modern C++20 build
 set(CMAKE_CXX_STANDARD 20)
-project(ofGen LANGUAGES CXX)
-find_package(yaml-cpp)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-# add_subdirectory (src)
-# add_subdirectory (src/uuidxx/src)
+# Ensure pkg‑config is available
+find_package(PkgConfig REQUIRED)
 
+# ------------------------------------------------------------------
+# Find third‑party libraries (pkg‑config is the simplest, but you
+# can also swap to find_package() if you prefer)
+# ------------------------------------------------------------------
+pkg_check_modules(YAML REQUIRED yaml-cpp)
+pkg_check_modules(PUGIXML REQUIRED pugixml)
+pkg_check_modules(JSON REQUIRED nlohmann_json)
 
-add_executable(ofGen src/main.cpp src/addons.cpp src/templates.cpp src/utils.cpp src/uuidxx/src/uuidxx.cpp)
-# target_include_directories(ofGen PUBLIC src/uuidxx/src)
-target_include_directories(
-    ofGen
-    PUBLIC src
-    PUBLIC src/uuidxx/src
+# ------------------------------------------------------------------
+# Add the executable
+# ------------------------------------------------------------------
+add_executable(ofgen
+    src/main.cpp
+    src/addons.cpp
+    src/templates.cpp
+    src/utils.cpp
+    src/uuidxx/src/uuidxx.cpp
 )
 
-# find_package(PkgConfig)
-find_package(yaml-cpp)
-include_directories(${YAML_CPP_INCLUDE_DIR})
-message(STATUS "YAML CMAKE FILE: ${yaml-cpp_CONFIG}")
-message(STATUS "YAML_CPP_INCLUDE_DIR: [${YAML_CPP_INCLUDE_DIR}]")
-message(STATUS "YAML_CPP_LIBRARY_DIR: [${YAML_CPP_LIBRARY_DIR}]")
-message(STATUS "YAML_CPP_SHARED_LIBS_BUILT: [${YAML_CPP_SHARED_LIBS_BUILT}]")
-message(STATUS "YAML_CPP_LIBRARIES: [${YAML_CPP_LIBRARIES}]")
+target_include_directories(ofgen
+    PRIVATE
+        ${YAML_INCLUDE_DIRS}
+        ${PUGIXML_INCLUDE_DIRS}
+        ${JSON_INCLUDE_DIRS}
+        src
+        src/uuidxx/src
+)
 
-#  YAML_CPP_INCLUDE_DIR       - include directory
-#  YAML_CPP_LIBRARY_DIR       - directory containing libraries
-#  YAML_CPP_SHARED_LIBS_BUILT - whether we have built shared libraries or not
-#  YAML_CPP_LIBRARIES         - libraries to link against
+link_directories(${YAML_LIBRARY_DIRS})          # Adds -L… to the link command
 
-include_directories(${YAML_INCLUDE_DIRS})
-# target_link_libraries(ofGen ${YAML_LIBRARIES})
-target_link_libraries(ofGen ${YAML_CPP_LIBRARIES})
-target_include_directories(ofGen PUBLIC ${YAML_CPP_INCLUDE_DIR})
-target_compile_options(ofGen PUBLIC ${YAML_CFLAGS_OTHER})
+target_link_directories(
+       ofgen PRIVATE
+       ${YAML_LIBRARY_DIRS}   # expands to /opt/homebrew/Cellar/yaml-cpp/0.8.0/lib
+       ${PUGIXML_LIBRARY_DIRS}   # expands to /opt/homebrew/Cellar/yaml-cpp/0.8.0/lib
+   )
 
-#find_package(PkgConfig QUIET)
-find_package(nlohmann_json)
-#pkg_check_modules(JSON "nlohmann_json")
-message(STATUS "JSON: [${JSON}]")
+target_link_libraries(ofgen
+    PRIVATE
+        ${YAML_LIBRARIES}
+        ${PUGIXML_LIBRARIES}
+        ${JSON_LIBRARIES}
+)
 
+target_compile_options(ofgen
+    PRIVATE
+        ${YAML_CFLAGS_OTHER}
+        ${PUGIXML_CFLAGS_OTHER}
+        ${JSON_CFLAGS_OTHER}
+)
 
-target_link_libraries(ofGen ${JSON_LIBRARIES})
-target_include_directories(ofGen PUBLIC ${JSON_INCLUDE_DIRS})
-target_compile_options(ofGen PUBLIC ${JSON_CFLAGS_OTHER})
+# ------------------------------------------------------------------
+# Optional: export a target for downstream CMake projects
+# ------------------------------------------------------------------
+install(TARGETS ofgen
+        RUNTIME DESTINATION bin
+)
+
+# message(STATUS "YAML_INCLUDE_DIRS: ${YAML_INCLUDE_DIRS}")
+# message(STATUS "YAML_LIBRARIES   : ${YAML_LIBRARIES}")
+# message(STATUS "YAML_LIBRARY_DIRS: ${YAML_LIBRARY_DIRS}")
+
+# message(STATUS "PUGIXML_INCLUDE_DIRS: ${PUGIXML_INCLUDE_DIRS}")
+# message(STATUS "PUGIXML_LIBRARIES  : ${PUGIXML_LIBRARIES}")
+# message(STATUS "JSON_INCLUDE_DIRS  : ${JSON_INCLUDE_DIRS}")
+# message(STATUS "JSON_LIBRARIES    : ${JSON_LIBRARIES}")

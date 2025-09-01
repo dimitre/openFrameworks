@@ -1,9 +1,10 @@
 #include "templates.h"
 #include "addons.h"
+#include "utils.h"
 #include "uuidxx.h"
+#include <cmath>
 #include <fstream> //in utils
 #include <nlohmann/json.hpp>
-
 using nlohmann::json;
 
 std::string generateUUID(const std::string & input) {
@@ -947,59 +948,6 @@ std::string ofTemplateMacos::getFolderUUID(const fs::path & folder, fs::path bas
 	}
 }
 
-struct fileJson {
-	fs::path fileName;
-	json data;
-
-	// only works for workspace
-	void addPath(fs::path folder) {
-		std::string path = folder.is_absolute() ? folder.string() : "${workspaceRoot}/../" + folder.string();
-		json object;
-		object["path"] = path;
-		json::json_pointer p = json::json_pointer("/folders");
-		data[p].emplace_back(object);
-	}
-
-	void addToArray(string pointer, fs::path value) {
-		json::json_pointer p = json::json_pointer(pointer);
-		if (!data[p].is_array()) {
-			data[p] = json::array();
-		}
-
-		std::string path = fs::path(value).is_absolute() ? value.string() : "${workspaceRoot}/" + value.string();
-		data[p].emplace_back(path);
-	}
-
-	void load() {
-		if (!fs::exists(fileName)) {
-			std::cerr << "JSON file not found " << fileName.string() << std::endl;
-			return;
-		}
-
-		std::ifstream ifs(fileName);
-		try {
-			data = json::parse(ifs);
-		} catch (json::parse_error & ex) {
-			std::cerr << "JSON parse error at byte" << ex.byte << std::endl;
-			std::cerr << "fileName" << fileName.string() << std::endl;
-		}
-	}
-
-	void save() {
-		//		alert ("saving now " + fileName.string(), 33);
-		//		std::cout << data.dump(1, '\t') << std::endl;
-		std::ofstream jsonFile(fileName);
-		try {
-			jsonFile << data.dump(1, '\t');
-		} catch (std::exception & e) {
-			std::cerr << "Error saving json to " << fileName.string() << ": " << e.what() << std::endl;
-		}
-	}
-};
-
-fileJson workspace;
-fileJson cppProperties;
-
 void ofTemplateVSCode::load() {
 	alert("ofTemplateVSCode::load()", 92);
 	// bool ok = ofTemplateMake::load();
@@ -1018,12 +966,11 @@ void ofTemplateVSCode::load() {
 
 	for (auto & a : conf.addons) {
 		// alert("parsing addon " + a->name, 97);
-		for (auto & f : a->filteredMap) {
-			// alert(">>>" + f.first);
-			for (auto & s : f.second) {
-				alert("   " + s.string(), 92);
-			}
-		}
+		// for (auto & f : a->filteredMap) {
+		// 	for (auto & s : f.second) {
+		// 		alert("   " + s.string(), 92);
+		// 	}
+		// }
 
 		for (auto & f : a->filteredMap["includes"]) {
 			workspace.addPath(a->path);
@@ -1096,23 +1043,21 @@ void ofTemplateMacos::save() {
 	// return true;
 }
 
-
-
 void ofTemplateVisualStudio::addAddon(ofAddon * a) {
 
 #ifdef PORT
-   	ofLogVerbose("visualStudioProject::") << "Adding addon: [" << addon.name << "]";
+	ofLogVerbose("visualStudioProject::") << "Adding addon: [" << addon.name << "]";
 	// Handle additional vcxproj files in the addon
 	fs::path additionalFolder = addon.addonPath / (addon.name + "Lib");
 	if (fs::exists(additionalFolder)) {
-		for (const auto &entry : fs::directory_iterator(additionalFolder)) {
+		for (const auto & entry : fs::directory_iterator(additionalFolder)) {
 			auto f = entry.path();
 			if (f.extension() == ".vcxproj") {
 				additionalvcxproj.emplace_back(f);
 			}
 		}
 	}
-    #endif
+#endif
 
 	for (auto & f : a->filteredMap["includes"]) {
 		fs::path p = a->path / f;
@@ -1120,4 +1065,108 @@ void ofTemplateVisualStudio::addAddon(ofAddon * a) {
 		// alert ("->" + p.string(), 95);
 		// addCommand("Add :objects:" + c + ":buildSettings:HEADER_SEARCH_PATHS: string " + ofPathToString(p));
 	}
+}
+
+void ofTemplateChalet::load() {
+	alert("ofTemplateChalet::load()", 92);
+
+	fs::path projectFrom { path / "chalet.yaml" };
+	alert(projectFrom.string(), 35);
+
+	std::vector<std::string> addonsNames;
+	for (auto & a : conf.addons) {
+		addonsNames.emplace_back(a->name);
+	}
+
+	projectYaml = YAML::LoadFile(projectFrom.string());
+	projectYaml["variables"]["addons"] = joinStrings(addonsNames, ",");
+
+	// for (auto & f : conf.frameworks) {
+	// 	projectYaml["abstracts:*"]["appleFrameworks"].push_back(f);
+	// }
+
+	for (auto & a : conf.addons) {
+		// for (auto & l : a->filteredMap["libs"]) {
+		// 	string libPath { "${var:ofPath}/addons/" + a->name + '/' + l.string() };
+		// 	projectYaml["targets"]["empty"]["settings:Cxx"]["staticLinks"].push_back(libPath);
+		// }
+		// for (auto & f : a->filteredMap["includes"]) {
+		// }
+	}
+}
+
+void ofTemplateChalet::addAddon(ofAddon * a) {
+	alert("ofTemplateChalet::addAddon() " + a->name, 92);
+
+	// auto out = projectYaml["variables"];
+	projectYaml["variables"]["generator"] = getPGVersion();
+	// projectYaml["variables"].push_back(std::pair<string,string> ("generator", "version"));
+	// projectYaml["variables"] << YAML::Key << "generator";
+	// projectYaml["variables"] << YAML::Value << getPGVersion();
+
+	for (auto & f : a->filteredMap["sources"]) {
+		fs::path p { a->path / f };
+		projectYaml["targets"]["empty"]["files"]["include"].push_back(p.string());
+
+	}
+	// for (auto & f : a->filteredMap["headers"]) {
+	// }
+
+	for (auto & f : a->filteredMap["includes"]) {
+		fs::path p { a->path / f };
+		projectYaml["targets"]["empty"]["settings:Cxx"]["includeDirs"].push_back(p.string());
+	}
+
+	for (auto & f : a->filteredMap["libs"]) {
+		fs::path p { a->path / f };
+		// string libPath { "${var:ofPath}/addons/" + a->name + '/' + f.string() };
+		string libPath { p.string() };
+		projectYaml["targets"]["empty"]["settings:Cxx"]["staticLinks"].push_back(libPath);
+	}
+
+	if (a->addonProperties.count("ADDON_FRAMEWORKS")) {
+		for (const auto & f : a->addonProperties["ADDON_FRAMEWORKS"]) {
+			for (const auto & s : ofSplitString(f, " ")) {
+			    alert("     appleFramework " + s, 95);
+				projectYaml["abstracts:*"]["settings:Cxx"]["appleFrameworks"].push_back(s);
+			}
+		}
+	}
+
+	// FIXME: handle cflags etc.
+	// const std::map<std::string, std::string> addonToXCode {
+	// 	{ "ADDON_CFLAGS", "OTHER_CFLAGS" },
+	// 	{ "ADDON_CPPFLAGS", "OTHER_CPLUSPLUSFLAGS" },
+	// 	{ "ADDON_LDFLAGS", "OTHER_LDFLAGS" },
+	// 	{ "ADDON_DEFINES", "GCC_PREPROCESSOR_DEFINITIONS" },
+	// };
+}
+
+
+void ofTemplateChalet::save() {
+    // Change key "empty" to project name in targets
+    {
+        auto targets = projectYaml["targets"];
+        YAML::Node emptyNode = targets["empty"];
+        targets[conf.projectName] = emptyNode;
+        targets.remove("empty");
+    }
+
+    // Change key "empty" to project name in distribution
+    {
+        auto distribution = projectYaml["distribution"];
+        YAML::Node emptyNode = distribution["empty"];
+        distribution[conf.projectName] = emptyNode;
+        distribution.remove("empty");
+    }
+
+	alert("ofTemplateChalet::save()", 92);
+
+	fs::path projectTo { conf.projectPath / "chalet.yaml" };
+	alert(projectTo.string(), 35);
+	std::ofstream saveFile(projectTo.string());
+	// std::string comment = "generator " + getPGVersion();
+	// saveFile << YAML::Comment(comment) << projectYaml;
+	saveFile << projectYaml;
+	saveFile.close();
 }

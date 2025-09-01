@@ -2,7 +2,7 @@
 
 #include <glm/vec3.hpp>
 #include <iostream>
-#include <algorithm>
+#include <algorithm> //std::clamp
 
 /// \class ofColor_
 ///

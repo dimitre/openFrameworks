@@ -2,42 +2,32 @@ name: OF
 
 on:
   push:
-    paths-ignore:
-      # - "ofGen/*"
-      - "**/*.md"
-      - "**/*.txt"
-      - "examples/**"
+    # paths-ignore:
+#       - "examples/**"
 
-concurrency:
-  group: ${{ github.workflow }}
-  cancel-in-progress: true
+# concurrency:
+#   group: ${{ github.workflow }}
+#   cancel-in-progress: false
 
 env:
   ccache: ccache
 
 jobs:
-  # test:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Install Packages - Apt
-  #       uses: awalsh128/cache-apt-pkgs-action@latest
-  #       with:
-  #         packages: libcairo2-dev
-  #         version: 1.0
-
-  #     - name: test
-  #       run: |
-  #         pkg-config --libs --cflags cairo
-
   ofworks:
     strategy:
       matrix:
         # os: [macos-latest, ubuntu-latest, windows-latest]
         # os: [windows-latest]
         include:
-          # - { os: ubuntu-latest, shell: bash }
+          - { os: ubuntu-latest, shell: bash }
           # - { os: macos-latest, shell: bash }
-          - { os: windows-latest, platform: msys2, shell: msys2 }
+          - {
+              os: windows-latest,
+              platform: msys2,
+              shell: msys2 -c 'export PATH=$PATH:/c/hostedtoolcache/windows/chalet-org/chalet/latest/windows-x64',
+            }
+
+          - { os: windows-latest, platform: vs, shell: powershell }
 
     runs-on: ${{ matrix.os }}
     defaults:
@@ -70,6 +60,13 @@ jobs:
             ccache
             base-devel
           # make pkg-conf ?
+          #
+      - uses: msys2/setup-msys2@v2.28.0
+        if: matrix.os == 'windows-latest' && matrix.platform == 'vs'
+        with:
+          pacboy: pkgconf:p
+          install: >-
+            base-devel
 
       - name: Test tools
         if: matrix.os == 'windows-latest' && matrix.platform == 'msys2'
@@ -102,6 +99,18 @@ jobs:
         with:
           key: ${{ matrix.platform }}-${{ matrix.target }}
 
+      - name: Install Chalet
+        uses: jaxxstorm/action-install-gh-release@v2.1.0
+        with:
+          repo: chalet-org/chalet
+          cache: enable
+          extension: .zip
+          prerelease: "false"
+
+      - name: Chalet Test / Version
+        run: |
+          chalet --version
+
       - name: Libs
         run: ./libs/libs.sh
 
@@ -128,17 +137,23 @@ jobs:
       #   run: |
       #     cd libs/openFrameworksCompiled/project/
       #     make -j Debug
-      - name: Empty Example
-        run: |
-          cd examples/templates/emptyExample
-          ofgen
-          make -j
-
+      # - name: Empty Example
+      #   run: |
+      #     cd examples/templates/emptyExample
+      #     ofgen templates=chalet
+      #     chalet buildrun
+      # ofgen
+      # make -j
+      #
+      #
       - name: All Addons Example
         run: |
           cd examples/templates/allAddonsExample
-          ofgen
-          make -j
+          ofgen templates=chalet
+          chalet buildrun
+
+        # ofgen
+        # make -j
         # ofgen buildrun
         # ls -alF
         # xcodebuild -arch arm64
@@ -180,3 +195,16 @@ jobs:
         uses: hendrikmuhs/ccache-action@v1.2.18
         with:
           key: ${{ runner.os }}-${{ matrix.platform }}-ccache
+
+  # test:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Install Packages - Apt
+  #       uses: awalsh128/cache-apt-pkgs-action@latest
+  #       with:
+  #         packages: libcairo2-dev
+  #         version: 1.0
+
+  #     - name: test
+  #       run: |
+  #         pkg-config --libs --cflags cairo

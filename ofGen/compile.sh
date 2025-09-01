@@ -74,10 +74,16 @@ fi
 
 section "OFWorks, compiling ofgen"
 
-echo ${COMPILECOMMAND}
-${COMPILECOMMAND}
-echo ${LINKCOMMAND}
-${LINKCOMMAND}
+# echo ${COMPILECOMMAND}
+# ${COMPILECOMMAND}
+# echo ${LINKCOMMAND}
+# ${LINKCOMMAND}
+
+mkdir build
+cd build
+cmake ..
+cmake --build . --config Release
+sudo cmake --install . --config Release
 
 section "done"
 

@@ -1,0 +1,3 @@
+ofpath: ../../..
+
+templates: [chalet, make, zed, macos]

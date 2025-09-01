@@ -170,6 +170,7 @@ public:
     /// \{
 
     ofImage_();
+	~ofImage_();
 
     ofImage_(const ofPixels_<PixelType> & pix);
 	ofImage_(const of::filesystem::path & fileName, const ofImageLoadSettings &settings = ofImageLoadSettings());
@@ -219,8 +220,6 @@ public:
     /// into the texture.
 	bool load(const ofBuffer & buffer, const ofImageLoadSettings &settings = ofImageLoadSettings());
 
-
-    virtual ~ofImage_();
 
     /// \}
     /// \name Drawing

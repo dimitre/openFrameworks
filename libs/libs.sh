@@ -46,6 +46,9 @@ done
 
 # if [[ "$OSTYPE" == "msys"* ]]; then
 # This is MSYS / MING Windows
+
+echo "ostype = ${OSTYPE}"
+
 if [[ "$OSTYPE" == "cygwin"* ]]; then
 	PLATFORM=msys2
 	CORELIBS=( tess2 kissfft videoInput )

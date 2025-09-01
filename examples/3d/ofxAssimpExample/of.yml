@@ -1,0 +1,7 @@
+ofpath: ../../..
+
+addons:
+  - ofxAssimp
+  - ofxGui
+
+templates: [chalet, make, zed, macos]
