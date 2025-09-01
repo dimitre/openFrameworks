@@ -1079,6 +1079,7 @@ void ofTemplateChalet::load() {
 	}
 
 	projectYaml = YAML::LoadFile(projectFrom.string());
+	projectYaml["variables"]["platform"] = getPlatformString();
 	projectYaml["variables"]["addons"] = joinStrings(addonsNames, ",");
 
 	// for (auto & f : conf.frameworks) {
