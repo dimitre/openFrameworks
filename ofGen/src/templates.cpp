@@ -424,7 +424,7 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 void ofTemplateMacos::addFramework(const fs::path & path) {
 	// TODO: Convert this in a function to parse both ADDON_FRAMEWORKS definition in .mk and filesystem frameworks found.
 	// void addFramework (const std::string & path);
-	alert(" addFramework " + path.string(), 95);
+	alert("	addFramework " + path.string(), 95);
 
 	std::string pathString = path.string();
 
@@ -1130,12 +1130,16 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 			for (const auto & s : ofSplitString(f, " ")) {
 			    // alert("     appleFramework " + s, 95);
 				alert("	└─ appleFramework " + s, 94);
-
 				projectYaml["abstracts:*"]["settings:Cxx"]["appleFrameworks"].push_back(s);
 			}
 		}
 	}
 
+	for (const fs::path & f : a->filteredMap["frameworks"]) {
+		// addFramework(a->path / f);
+		alert("	└─ appleFramework " + f.string(), 94);
+		projectYaml["abstracts:*"]["settings:Cxx"]["appleFrameworks"].push_back(f.string());
+	}
 	// FIXME: handle cflags etc.
 	// const std::map<std::string, std::string> addonToXCode {
 	// 	{ "ADDON_CFLAGS", "OTHER_CFLAGS" },
