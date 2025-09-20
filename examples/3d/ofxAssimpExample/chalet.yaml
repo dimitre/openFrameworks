@@ -35,11 +35,22 @@ abstracts:*:
       - OpenGL
       - QuartzCore
 targets:
+  OF:
+    kind: staticLibrary
+    files:
+      include:
+        - ${var:ofPath}/libs/openFrameworks/{3d,communication,events,gl,graphics,math,sound,types,utils,video}/*.cpp
+        - ${var:ofPath}/libs/openFrameworks/app/{ofBaseApp,ofMainLoop,ofAppRunner,ofAppGLFWWindow}.cpp
+      include[:macos]:
+        - ${var:ofPath}/libs/openFrameworks/**.{mm,m}
+      exclude[:macos]:
+        - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils,ofMediaFoundationPlayer,ofDirectShowGrabber,ofDirectShowPlayer}.cpp
+        - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
   ofxAssimpExample:
     kind: executable
     settings:Cxx:
       staticLinks:
-        - ${var:ofPath}/libs/openFrameworksCompiled/lib/${var:platform}/libopenFrameworks.a
+        - OF
         - ../../../addons/ofxAssimp/libs/assimp/lib/macos/libassimp.a
       staticLinks[:linux]:
         - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
@@ -103,6 +114,10 @@ targets:
         - .DS_Store
         - .settings
         - .vscode
+        - .clangd
+        - .zed
+        - compile_flags.txt
+    copyFilesOnRun[:macos]: bin/data
     runWorkingDirectory: bin
 distribution:
   ofxAssimpExample:

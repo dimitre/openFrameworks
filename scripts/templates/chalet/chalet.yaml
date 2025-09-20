@@ -70,28 +70,27 @@ targets:
   # OFLib:
   #   kind: chaletProject
   #   location: ${var:ofPath}
-  # OF:
-  #   kind: staticLibrary
-  #   files:
-  #     include:
-  #       - ${var:ofPath}/libs/openFrameworks/{3d,communication,events,gl,graphics,math,sound,types,utils,video}/*.cpp
-  #       - ${var:ofPath}/libs/openFrameworks/app/{ofBaseApp,ofMainLoop,ofAppRunner,ofAppGLFWWindow}.cpp
-  #     include[:macos]:
-  #       - ${var:ofPath}/libs/openFrameworks/**.{mm,m}
+  OF:
+    kind: staticLibrary
+    files:
+      include:
+        - ${var:ofPath}/libs/openFrameworks/{3d,communication,events,gl,graphics,math,sound,types,utils,video}/*.cpp
+        - ${var:ofPath}/libs/openFrameworks/app/{ofBaseApp,ofMainLoop,ofAppRunner,ofAppGLFWWindow}.cpp
+      include[:macos]:
+        - ${var:ofPath}/libs/openFrameworks/**.{mm,m}
 
-  #     exclude[:macos]:
-  #       - ${var:ofPath}/libs/openFrameworks/video/ofDirectShowPlayer.cpp
-  #       - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils,ofMediaFoundationPlayer,ofDirectShowGrabber}.cpp
-  #       - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
+      exclude[:macos]:
+        - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils,ofMediaFoundationPlayer,ofDirectShowGrabber,ofDirectShowPlayer}.cpp
+        - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
   empty:
     kind: executable
     # importPackages: [of-static]
 
     settings:Cxx:
       staticLinks:
-        # - OF
+        - OF
 
-        - ${var:ofPath}/libs/openFrameworksCompiled/lib/${var:platform}/libopenFrameworks.a
+        # - ${var:ofPath}/libs/openFrameworksCompiled/lib/${var:platform}/libopenFrameworks.a
         # - ${var:ofPath}/libs/openFrameworksCompiled/lib/${var:platform}/openFrameworks.a
         # - ${var:ofPath}/addons/ofxAssimp/libs/assimp/lib/${var:platform}/libassimp.a
         # [66/66] Archiving /Users/z/Dmtr/ofworks/apps/apps2025/Empty/build/arm64-apple-darwin_Release/ext.OFLib/libOF.a
@@ -120,45 +119,24 @@ targets:
         - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
         - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
         - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
-
-        # -
-        # {libbrotlienc,libbrotlicommon,libfreetype,libpixman-1,,libz,libFreeImage,libcairo,libglew,libpng,libssl,libcrypto,libglfw3,libpng16,libtess2,libcurl,libglm,,}.a
-
-      # - ${var:ofPath}/OFLib/arm64-apple-darwin_Release/libOFW.a
       includeDirs:
-        # - ${var:path}/src/
-        # - ./src
-        # - src/**
         - ${var:ofPath}/libs/openFrameworks/**
         - ${var:ofPath}/libs/openFrameworks
-        # - ${var:ofPath}/addons/{${var:addons}}/src/
-        # ofxAssimp have src/Source, ofxTools have src/ subfolders
-        # - ${var:ofPath}/addons/{${var:addons}}/src/**
-        # - ${var:ofPath}/addons/{${var:addons}}/libs/**/include/**/*
-        # - ${var:ofPath}/addons/{${var:addons}}/libs/**/include
-
-        # # ofxMidi, non standard paths
-        # - ${var:ofPath}/addons/{${var:addons}}/libs/**
-
     files:
       include:
-        # - src/*.cpp
-        # - src/*.mm
-        # - src/**/*.cpp
-        # - ${var:ofPath}/addons/{${var:addons}}/src/**.cpp
-        # - ${var:ofPath}/addons/{${var:addons}}/libs/**/**.cpp
-        # - ${var:ofPath}/addons/{${var:addons}}/src/**.mm
 
       exclude:
         - .DS_Store
         - .settings
         - .vscode
+        - .clangd
+        - .zed
+        - compile_flags.txt
         # - ${var:ofPath}/addons/{${var:addons}}/src/ios
 
     copyFilesOnRun[:macos]: bin/data
-    # runWorkingDirectory: "bin"
-    # rootDir[:macos]: ../../..
-    # copyFilesOnRun[:macos]: ${var:path}/bin/data
+    runWorkingDirectory: "bin"
+
 distribution:
   empty:
     kind: bundle

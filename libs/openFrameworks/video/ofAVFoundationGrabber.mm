@@ -39,11 +39,11 @@
 	NSArray * devices;
 	
 	if (@available(macOS 10.15, *)) {
-		std::cout << "OSXVideoGrabber inside first" << std::endl;
+//		std::cout << "OSXVideoGrabber inside first" << std::endl;
 		NSMutableArray *deviceTypes = [NSMutableArray arrayWithObject:AVCaptureDeviceTypeBuiltInWideAngleCamera];
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 140000
 		if (@available(macOS 14.0, *)) {
-			std::cout << "OSXVideoGrabber inside wow" << std::endl;
+//			std::cout << "OSXVideoGrabber inside wow" << std::endl;
 
 			if (&AVCaptureDeviceTypeExternal != nil) {
 				[deviceTypes addObject:AVCaptureDeviceTypeExternal];
@@ -57,7 +57,7 @@
 			position:AVCaptureDevicePositionUnspecified];
 		devices = [session devices];
 	} else {
-		std::cout << "OSXVideoGrabber inside second" << std::endl;
+//		std::cout << "OSXVideoGrabber inside second" << std::endl;
 		
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -66,24 +66,28 @@
 	}
 	
 	if([devices count] > 1) {
-		// Sort devices: "FaceTime" devices first, then alphabetically
 		devices = [devices sortedArrayUsingComparator:^NSComparisonResult(AVCaptureDevice *d1, AVCaptureDevice *d2) {
-			NSString *name1 = d1.localizedName;
-			NSString *name2 = d2.localizedName;
-
-			BOOL isFaceTime1 = [name1 hasPrefix:@"FaceTime"];
-			BOOL isFaceTime2 = [name2 hasPrefix:@"FaceTime"];
-
-			if (isFaceTime1 && !isFaceTime2) {
-				return NSOrderedAscending; // FaceTime first
-			} else if (!isFaceTime1 && isFaceTime2) {
-				return NSOrderedDescending; // FaceTime first
-			} else {
-				// Otherwise alphabetical
-				return [name1 compare:name2];
-			}
+			return [d1.localizedName compare:d2.localizedName];
 		}];
 	}
+//		// Sort devices: "FaceTime" devices first, then alphabetically
+//		devices = [devices sortedArrayUsingComparator:^NSComparisonResult(AVCaptureDevice *d1, AVCaptureDevice *d2) {
+//			NSString *name1 = d1.localizedName;
+//			NSString *name2 = d2.localizedName;
+//
+////			BOOL isFaceTime1 = [name1 hasPrefix:@"FaceTime"];
+////			BOOL isFaceTime2 = [name2 hasPrefix:@"FaceTime"];
+////
+////			if (isFaceTime1 && !isFaceTime2) {
+////				return NSOrderedAscending; // FaceTime first
+////			} else if (!isFaceTime1 && isFaceTime2) {
+////				return NSOrderedDescending; // FaceTime first
+////			} else {
+//				// Otherwise alphabetical
+//				return [name1 compare:name2];
+////			}
+//		}];
+//	}
 	
 	if([devices count] > 0) {
 		if(deviceID>[devices count]-1)
@@ -312,36 +316,41 @@
 #pragma clang diagnostic pop
 	}
 
+	
 	if([devices count] > 1) {
-		// Sort devices: "FaceTime" devices first, then alphabetically
 		devices = [devices sortedArrayUsingComparator:^NSComparisonResult(AVCaptureDevice *d1, AVCaptureDevice *d2) {
-			NSString *name1 = d1.localizedName;
-			NSString *name2 = d2.localizedName;
-
-			BOOL isFaceTime1 = [name1 hasPrefix:@"FaceTime"];
-			BOOL isFaceTime2 = [name2 hasPrefix:@"FaceTime"];
-
-			if (isFaceTime1 && !isFaceTime2) {
-				return NSOrderedAscending; // FaceTime first
-			} else if (!isFaceTime1 && isFaceTime2) {
-				return NSOrderedDescending; // FaceTime first
-			} else {
-				// Otherwise alphabetical
-				return [name1 compare:name2];
-			}
+			return [d1.localizedName compare:d2.localizedName];
 		}];
 	}
+//	if([devices count] > 1) {
+//		// Sort devices: "FaceTime" devices first, then alphabetically
+//		devices = [devices sortedArrayUsingComparator:^NSComparisonResult(AVCaptureDevice *d1, AVCaptureDevice *d2) {
+//			NSString *name1 = d1.localizedName;
+//			NSString *name2 = d2.localizedName;
+////
+////			BOOL isFaceTime1 = [name1 hasPrefix:@"FaceTime"];
+////			BOOL isFaceTime2 = [name2 hasPrefix:@"FaceTime"];
+////
+////			if (isFaceTime1 && !isFaceTime2) {
+////				return NSOrderedAscending; // FaceTime first
+////			} else if (!isFaceTime1 && isFaceTime2) {
+////				return NSOrderedDescending; // FaceTime first
+////			} else
+//			{
+//				// Otherwise alphabetical
+//				return [name1 compare:name2];
+//			}
+//		}];
+//	}
 
 	int i=0;
 	for (AVCaptureDevice * captureDevice in devices){
-        deviceNames.push_back([captureDevice.localizedName UTF8String]);
+        deviceNames.emplace_back([captureDevice.localizedName UTF8String]);
 		 ofLogNotice() << "Device: " << i << ": " << deviceNames.back();
 		i++;
 		NSLog(@"modelID %@", captureDevice.modelID);
 		NSLog(@"uniqueID %@", captureDevice.uniqueID);
 		NSLog(@"manufacturer %@", captureDevice.manufacturer);
-		
-
     }
     return deviceNames;
 }
@@ -571,14 +580,13 @@ void ofAVFoundationGrabber::updatePixelsCB(){
 
 std::vector <ofVideoDevice> ofAVFoundationGrabber::listDevices() const{
 	std::vector <std::string> devList = [grabber listDevices];
-
     std::vector <ofVideoDevice> devices;
     for(int i = 0; i < devList.size(); i++){
-        ofVideoDevice vd;
-        vd.deviceName = devList[i];
-        vd.id = i;
-        vd.bAvailable = true;
-        devices.push_back(vd);
+		devices.emplace_back(ofVideoDevice{
+			.deviceName = devList[i],
+			.id = i,
+			.bAvailable = true
+		});
     }
 
     return devices;

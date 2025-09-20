@@ -10,7 +10,9 @@ void ofxSvgGroup::draw() const {
 	if( !isVisible() ) return;
 	
     std::size_t numElements = mChildren.size();
+	cout << numElements << endl;
 	for( std::size_t i = 0; i < numElements; i++ ) {
+		cout << i << endl;
 		mChildren[i]->draw();
 	}
 }

@@ -1,14 +1,10 @@
 name: OF
 version: 0.3.3
 variables:
-  generator: ofGen v0.5.5
+  generator: ofGen v0.5.6
   addons: ProjectSourceFiles_3DPrimitivesExample
   platform: macos
   ofPath: ../../..
-externalDependencies:
-  ofLib:
-    kind: local
-    path: ${var:ofPath}
 abstracts:*:
   language: C++
   language[toolchain:apple-llvm]: Objective-C++
@@ -39,11 +35,27 @@ abstracts:*:
       - OpenGL
       - QuartzCore
 targets:
+  OF:
+    kind: staticLibrary
+    files:
+      include:
+        - ${var:ofPath}/libs/openFrameworks/{3d,communication,events,gl,graphics,math,sound,types,utils,video}/*.cpp
+        - ${var:ofPath}/libs/openFrameworks/app/{ofBaseApp,ofMainLoop,ofAppRunner,ofAppGLFWWindow}.cpp
+      include[:macos]:
+        - ${var:ofPath}/libs/openFrameworks/**.{mm,m}
+      exclude[:macos]:
+        - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils,ofMediaFoundationPlayer,ofDirectShowGrabber,ofDirectShowPlayer}.cpp
+        - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
   3DPrimitivesExample:
     kind: executable
     settings:Cxx:
       staticLinks:
-        - ${var:ofPath}/libs/openFrameworksCompiled/lib/${var:platform}/libopenFrameworks.a
+        - OF
+      staticLinks[:linux]:
+        - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
+      staticLinks[:macos]:
         - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
         - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
         - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
@@ -68,7 +80,11 @@ targets:
         - .DS_Store
         - .settings
         - .vscode
-    copyFilesOnRun[:macos]: ${var:path}/bin/data
+        - .clangd
+        - .zed
+        - compile_flags.txt
+    copyFilesOnRun[:macos]: bin/data
+    runWorkingDirectory: bin
 distribution:
   3DPrimitivesExample:
     kind: bundle

@@ -16,6 +16,9 @@ BUILD_ARCHS = -arch arm64
 ARCHS = arm64
 ONLY_ACTIVE_ARCH = YES
 
+// ARC, uncomment to disable
+//CLANG_ENABLE_OBJC_ARC = NO
+
 // APP Store : Uncomment the next block to build universal, set data folder to inside bundle
 //BUILD_ARCHS =
 //ARCHS = $(ARCHS_STANDARD)

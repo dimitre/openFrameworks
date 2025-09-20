@@ -206,14 +206,17 @@ bool ofxSvg::loadFromString(const std::string& data, std::string url) {
 	
 	ofXml xml;
 	xml.parse(data);
+	
     
     if( xml ) {
         ofXml svgNode = xml.getFirstChild();
         
         validateXmlSvgRoot( svgNode );
+
         ofXml::Attribute viewBoxAttr = svgNode.getAttribute("viewBox");
+
         if(svgNode) {
-			
+
 			std::vector<Measurement> values = {
 				parseMeasurement(svgNode.getAttribute("x").getValue()),
 				parseMeasurement(svgNode.getAttribute("y").getValue()),
@@ -235,6 +238,8 @@ bool ofxSvg::loadFromString(const std::string& data, std::string url) {
 			mBounds.width = values[2].value;
 			mBounds.height = values[3].value;
 			
+
+			
 //			mBounds.x        = ofToFloat( cleanString( svgNode.getAttribute("x").getValue(), "px") );
 //			mBounds.y        = ofToFloat( cleanString( svgNode.getAttribute("y").getValue(), "px" ));
 //			mBounds.width    = ofToFloat( cleanString( svgNode.getAttribute("width").getValue(), "px" ));
@@ -252,6 +257,7 @@ bool ofxSvg::loadFromString(const std::string& data, std::string url) {
                 mViewbox.height = ofToFloat( tvals[3] );
             }
         }
+		
 		
 		if(svgNode) {
 			ofLogVerbose("ofxSvg") << svgNode.findFirst("style").toString() << "  bounds: " << mBounds;
@@ -276,12 +282,16 @@ bool ofxSvg::loadFromString(const std::string& data, std::string url) {
 		
 		// the defs are added in the _parseXmlNode function //
 		_parseXmlNode( svgNode, mChildren );
+		
+
 		// then set the parent to be the document
 //		for( auto& child : mChildren ) {
 //			child->setParent(*this);
 //		}
 		
 		ofLogVerbose("ofxSvg") << " number of defs elements: " << mDefElements.size();
+		
+
     }
     
     return true;
