@@ -28,8 +28,8 @@ jobs:
           #     shell: msys2 -c 'export PATH=$PATH:/c/hostedtoolcache/windows/chalet-org/chalet/latest/windows-x64',
           #   }
 
-          # - { os: windows-latest, platform: vs, shell: bash }
-          - { os: windows-latest, platform: vs, shell: powershell }
+          - { os: windows-latest, platform: vs, shell: bash }
+          # - { os: windows-latest, platform: vs, shell: powershell }
 
     runs-on: ${{ matrix.os }}
     defaults:
@@ -85,13 +85,12 @@ jobs:
             base-devel
           # make pkg-conf ?
           #
-      - uses: msys2/setup-msys2@v2.28.0
-        if: runner.os == 'Windows' && matrix.platform == 'vs'
-        with:
-          pacboy: pkgconf:p
-          install: >-
-            base-devel
-
+      # - uses: msys2/setup-msys2@v2.28.0
+      #   if: runner.os == 'Windows' && matrix.platform == 'vs'
+      #   with:
+      #     pacboy: pkgconf:p
+      #     install: >-
+      #       base-devel
       - name: Test tools
         if: runner.os == 'Windows' && matrix.platform == 'msys2'
         run: |
@@ -136,6 +135,12 @@ jobs:
           chalet --version
 
       - name: Libs
+        if: runner.os != Windows
+        run: ./libs/libs.sh
+
+      - name: Libs
+        if: runner.os == Windows
+        shell: powershell
         run: ./libs/libs.sh
 
       - name: ofgen compile
@@ -143,10 +148,10 @@ jobs:
           cd ofGen
           ./compile.sh
 
-      - name: ofgen install
-        run: |
-          cd ofGen
-          ./install.sh
+      # - name: ofgen install
+      #   run: |
+      #     cd ofGen
+      #     ./install.sh
 
       - name: ofgen test
         run: |
