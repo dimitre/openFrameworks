@@ -135,11 +135,11 @@ jobs:
           chalet --version
 
       - name: Libs
-        if: runner.os != Windows
+        if: runner.os != 'Windows'
         run: ./libs/libs.sh
 
       - name: Libs
-        if: runner.os == Windows
+        if: runner.os == 'Windows'
         shell: powershell
         run: ./libs/libs.sh
 
