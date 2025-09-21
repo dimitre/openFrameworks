@@ -9,8 +9,8 @@ on:
 #   group: ${{ github.workflow }}
 #   cancel-in-progress: false
 
-env:
-  ccache: ccache
+# env:
+# ccache: ccache
 
 jobs:
   ofworks:
@@ -47,18 +47,26 @@ jobs:
         shell: powershell
         run: choco install pkgconfiglite -y
 
-      - name: Install vcpkg
-        if: runner.os == 'Windows'
-        # shell: powershell
-        run: |
-          git clone https://github.com/microsoft/vcpkg.git
-          .\vcpkg\bootstrap-vcpkg.bat
-      - name: Install packages
-        if: runner.os == 'Windows'
-        # shell: powershell
-        run: |
-          .\vcpkg\vcpkg install yaml-cpp:x64-windows  nlohmann-json:x64-windows pugixml:x64-windows
-          .\vcpkg\vcpkg integrate install
+      - name: vcpkg build
+        uses: johnwason/vcpkg-action@v7
+        id: vcpkg
+        with:
+          pkgs: yaml-cpp nlohmann-json pugixml
+          triplet: x64-windows-release
+          token: ${{ github.token }}
+
+      # - name: Install vcpkg
+      #   if: runner.os == 'Windows'
+      #   # shell: powershell
+      #   run: |
+      #     git clone https://github.com/microsoft/vcpkg.git
+      #     .\vcpkg\bootstrap-vcpkg.bat
+      # - name: Install packages
+      #   if: runner.os == 'Windows'
+      #   # shell: powershell
+      #   run: |
+      #     .\vcpkg\vcpkg install yaml-cpp:x64-windows  nlohmann-json:x64-windows pugixml:x64-windows
+      #     .\vcpkg\vcpkg integrate install
 
       - name: Cache Packages - Linux Apt
         if: runner.os == 'Linux'
@@ -71,7 +79,7 @@ jobs:
         if: runner.os == 'macOS'
         uses: tecolicom/actions-use-homebrew-tools@v1.3
         with:
-          tools: wget2 yaml-cpp fmt ccache nlohmann-json # fmt
+          tools: wget2 yaml-cpp fmt nlohmann-json # fmt ccache
 
       - uses: msys2/setup-msys2@v2.28.0
         if: runner.os == 'Windows' && matrix.platform == 'msys2'
@@ -117,10 +125,10 @@ jobs:
       #     packages: libssl3 libcurl4 brotli libcurl4-openssl-dev nlohmann-json3-dev libyaml-cpp-dev wget2 make libjack-jackd2-0 libjack-jackd2-dev freeglut3-dev libasound2-dev libxmu-dev libxxf86vm-dev g++ libgl1-mesa-dev libglu1-mesa-dev libraw1394-dev libudev-dev libdrm-dev libglew-dev libopenal-dev libsndfile1-dev libfreeimage-dev libcairo2-dev libfreetype6-dev libpulse-dev libusb-1.0-0-dev libgtk2.0-dev libopencv-dev libassimp-dev librtaudio-dev gdb libglfw3-dev liburiparser-dev libpugixml-dev libgconf-2-4 libgtk2.0-0 libpoco-dev libxcursor-dev libxi-dev libxinerama-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-libav gstreamer1.0-pulseaudio gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good
       #     version: 1.0
 
-      - name: ccache
-        uses: hendrikmuhs/ccache-action@v1.2.19
-        with:
-          key: ${{ matrix.platform }}-${{ matrix.target }}
+      # - name: ccache
+      #   uses: hendrikmuhs/ccache-action@v1.2.19
+      #   with:
+      #     key: ${{ matrix.platform }}-${{ matrix.target }}
 
       - name: Install Chalet
         uses: jaxxstorm/action-install-gh-release@v2.1.0
