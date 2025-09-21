@@ -42,11 +42,13 @@ checkPackageBrew() {
 #CXX=c++
 #LINKEROPTIONS=""
 #COMPILECOMMAND=time $CXX -c src/*.cpp src/uuidxx/src/*.cpp `pkg-config --cflags yaml-cpp` -Isrc/uuidxx/src -I../libs/macos/include/ -Wfatal-errors -std=c++20 && \
+SUDO=''
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     checkPackageApt libyaml-cpp-dev
     checkPackageApt nlohmann-json3-dev
     checkPackageApt libpugixml-dev
+    SUDO=sudo
     #LINKCOMMAND=time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src `pkg-config --libs yaml-cpp pugixml` -o ofgen
 
         # ...
@@ -54,6 +56,7 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     checkPackageBrew pkg-config
 	checkPackageBrew yaml-cpp
 	checkPackageBrew nlohmann-json
+	SUDO=sudo
 	#LINKCOMMAND=time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src ../libs/macos/lib/libpugixml** `pkg-config --libs yaml-cpp` -o ofgen
 
 # elif [[ "$OSTYPE" == "msys"* ]]; then
@@ -82,7 +85,7 @@ mkdir build
 cd build
 cmake ..
 cmake --build . --config Release
-sudo cmake --install . --config Release
+${SUDO} cmake --install . --config Release
 
 section "done"
 
