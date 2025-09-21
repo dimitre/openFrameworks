@@ -49,13 +49,13 @@ jobs:
 
       - name: Install vcpkg
         if: runner.os == 'Windows'
-        shell: powershell
+        # shell: powershell
         run: |
           git clone https://github.com/microsoft/vcpkg.git
           .\vcpkg\bootstrap-vcpkg.bat
-      - name: Install yaml-cpp with vcpkg
+      - name: Install packages
         if: runner.os == 'Windows'
-        shell: powershell
+        # shell: powershell
         run: |
           .\vcpkg\vcpkg install yaml-cpp:x64-windows  nlohmann-json:x64-windows pugixml:x64-windows
           .\vcpkg\vcpkg integrate install
