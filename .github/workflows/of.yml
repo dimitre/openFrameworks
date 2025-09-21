@@ -37,23 +37,41 @@ jobs:
       run:
         shell: ${{ matrix.shell }} {0}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+
+      # - name: Install Git and other tools with Chocolatey
+      #   if: runner.os == 'Windows'
+      #   run: |
+      #     choco install git vscode
+
+      - name: Install vcpkg
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git
+          .\vcpkg\bootstrap-vcpkg.bat
+      - name: Install yaml-cpp with vcpkg
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          .\vcpkg\vcpkg install yaml-cpp:x64-windows  nlohmann-json:x64-windows pugixml:x64-windows
+          .\vcpkg\vcpkg integrate install
 
       - name: Cache Packages - Linux Apt
-        if: matrix.os == 'ubuntu-latest'
+        if: runner.os == 'Linux'
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
           packages: wget2 libyaml-cpp-dev nlohmann-json3-dev libpugixml-dev
           version: 1.0
 
       - name: Cache Packages - macOS Brew
-        if: matrix.os == 'macos-latest'
+        if: runner.os == 'macOS'
         uses: tecolicom/actions-use-homebrew-tools@v1.3
         with:
           tools: wget2 yaml-cpp fmt ccache nlohmann-json # fmt
 
       - uses: msys2/setup-msys2@v2.28.0
-        if: matrix.os == 'windows-latest' && matrix.platform == 'msys2'
+        if: runner.os == 'Windows' && matrix.platform == 'msys2'
         with: #toolchain:p
           pacboy: gcc:p make:p pkgconf:p wget2:p yaml-cpp:p pugixml:p nlohmann-json:p fmt:p openssl:p python:p assimp:p cairo:p curl:p freeglut:p FreeImage:p glew:p glfw:p glm:p libsndfile:p libusb:p libxml2:p mpg123:p openal:p opencv:p rtaudio:p uriparser:p utf8cpp:p
           # update: true
@@ -65,14 +83,14 @@ jobs:
           # make pkg-conf ?
           #
       - uses: msys2/setup-msys2@v2.28.0
-        if: matrix.os == 'windows-latest' && matrix.platform == 'vs'
+        if: runner.os == 'Windows' && matrix.platform == 'vs'
         with:
           pacboy: pkgconf:p
           install: >-
             base-devel
 
       - name: Test tools
-        if: matrix.os == 'windows-latest' && matrix.platform == 'msys2'
+        if: runner.os == 'Windows' && matrix.platform == 'msys2'
         run: |
           whereis gcc
           whereis g++
@@ -98,7 +116,7 @@ jobs:
       #     version: 1.0
 
       - name: ccache
-        uses: hendrikmuhs/ccache-action@v1.2.18
+        uses: hendrikmuhs/ccache-action@v1.2.19
         with:
           key: ${{ matrix.platform }}-${{ matrix.target }}
 
