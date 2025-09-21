@@ -81,14 +81,15 @@ if [[ "$OSTYPE" == "cygwin"* ]]; then
 
 elif [[ "$(uname -s)" == "Darwin" ]]; then
 	PLATFORM=macos
-	CORELIBS=( brotli cairo FreeImage freetype glew glfw glm json libpng pugixml rtAudio tess2 uriparser utfcpp zlib openssl curl pixman )
+	CORELIBS=( brotli FreeImage freetype glew glfw glm json libpng pugixml rtAudio tess2 uriparser utfcpp zlib openssl curl pixman )
 	# FIXME: TODO: add svgtiny to ofLibs and here
-	ADDONLIBS=( assimp libusb libxml2 opencv )
+	ADDONLIBS=( assimp cairo libusb libxml2 opencv )
 	ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
 
 	LIBADDONS=(
 		# "assimp:ofxAssimpModelLoader"
 		"assimp:ofxAssimp"
+		"cairo:ofxCairo"
 		"libusb:ofxKinect"
 		"libxml2:ofxSvg"
 		"opencv:ofxOpenCv"

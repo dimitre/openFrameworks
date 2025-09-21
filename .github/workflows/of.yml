@@ -21,13 +21,16 @@ jobs:
         include:
           - { os: ubuntu-latest, shell: bash }
           # - { os: macos-latest, shell: bash }
-          - {
-              os: windows-latest,
-              platform: msys2,
-              shell: msys2 -c 'export PATH=$PATH:/c/hostedtoolcache/windows/chalet-org/chalet/latest/windows-x64',
-            }
 
-          - { os: windows-latest, platform: vs, shell: powershell }
+          # - { os: windows-latest, platform: vs, shell: bash }
+
+          # - {
+          #     os: windows-latest,
+          #     platform: msys2,
+          #     shell: msys2 -c 'export PATH=$PATH:/c/hostedtoolcache/windows/chalet-org/chalet/latest/windows-x64',
+          #   }
+
+          - { os: windows-latest, platform: vs, shell: bash }
 
     runs-on: ${{ matrix.os }}
     defaults:

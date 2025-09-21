@@ -57,6 +57,7 @@ void ofCairoRenderer::setup(const of::filesystem::path & _filename, Type _type, 
 			type = PDF;
 		} else { // default to image
 			type = IMAGE;
+			cout << "IMAGE HERE OW" << endl;
 		}
 	}
 
@@ -88,9 +89,13 @@ void ofCairoRenderer::setup(const of::filesystem::path & _filename, Type _type, 
 		}
 		break;
 	case IMAGE:
+			cout << "IMAGE HERE OW" << endl;
+
 		imageBuffer.allocate(outputsize.width, outputsize.height, OF_PIXELS_BGRA);
 		imageBuffer.set(0);
+			cout << "antes " << endl;
 		surface = cairo_image_surface_create_for_data(imageBuffer.getData(), CAIRO_FORMAT_ARGB32, outputsize.width, outputsize.height, outputsize.width * 4);
+			cout << "depois " << endl;
 		break;
 	case FROM_FILE_EXTENSION:
 		ofLogFatalError("ofCairoRenderer") << "setup(): couldn't determine type from extension for filename: " << _filename << "!";
@@ -548,8 +553,8 @@ void ofCairoRenderer::draw(const ofPixels & raw, float x, float y, float z, floa
 			swapPixels[p * 4 + 2] = imgPix[p * 3 + 2];
 		}
 #endif
-		stride = cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, pix.getWidth());
-		image = cairo_image_surface_create_for_data(&swapPixels[0], CAIRO_FORMAT_RGB24, pix.getWidth(), pix.getHeight(), stride);
+		stride = cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, (int)pix.getWidth());
+		image = cairo_image_surface_create_for_data(&swapPixels[0], CAIRO_FORMAT_RGB24, (int)pix.getWidth(), (int)pix.getHeight(), stride);
 		break;
 	case OF_IMAGE_COLOR_ALPHA:
 #ifdef TARGET_LITTLE_ENDIAN

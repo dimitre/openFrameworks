@@ -8,8 +8,10 @@ meta:
 	# ADDON_DEFINES = OFXURL
 
 macos:
-	ADDON_LIBS = $(OF_ROOT)/libs/macos/lib/libcairo.a
+	# ADDON_LIBS = $(OF_ROOT)/libs/macos/lib/libcairo.a
 	ADDON_LIBS += $(OF_ROOT)/libs/macos/lib/libpixman-1.a
+	# ADDON_LIBS = ./libs/cairo/lib/libcairo.a
+	# ADDON_LIBS += libs/macos/lib/libpixman-1.a
 	# ADDON_LIBS += $(OF_ROOT)/libs/macos/lib/libpixman-arm-neon.a
 
 	# ADDON_LIBS = ../../../libs/macos/lib/libcurl.a
