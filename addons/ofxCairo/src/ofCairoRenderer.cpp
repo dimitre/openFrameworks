@@ -57,7 +57,6 @@ void ofCairoRenderer::setup(const of::filesystem::path & _filename, Type _type, 
 			type = PDF;
 		} else { // default to image
 			type = IMAGE;
-			cout << "IMAGE HERE OW" << endl;
 		}
 	}
 
@@ -89,13 +88,9 @@ void ofCairoRenderer::setup(const of::filesystem::path & _filename, Type _type, 
 		}
 		break;
 	case IMAGE:
-			cout << "IMAGE HERE OW" << endl;
-
 		imageBuffer.allocate(outputsize.width, outputsize.height, OF_PIXELS_BGRA);
 		imageBuffer.set(0);
-			cout << "antes " << endl;
 		surface = cairo_image_surface_create_for_data(imageBuffer.getData(), CAIRO_FORMAT_ARGB32, outputsize.width, outputsize.height, outputsize.width * 4);
-			cout << "depois " << endl;
 		break;
 	case FROM_FILE_EXTENSION:
 		ofLogFatalError("ofCairoRenderer") << "setup(): couldn't determine type from extension for filename: " << _filename << "!";
