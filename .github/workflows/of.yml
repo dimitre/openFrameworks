@@ -38,6 +38,25 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - name: ofgen compile
+        run: |
+          cd ofGen
+          ./compile.sh
+
+      # - name: ofgen install
+      #   run: |
+      #     cd ofGen
+      #     ./install.sh
+
+      - name: ofgen test windows
+        if: runner.os == 'Windows'
+        run: |
+          ofgen.exe colors
+
+      - name: ofgen test
+        if: runner.os != 'Windows'
+        run: |
+          ofgen colors
       # - name: Install Git and other tools with Chocolatey
       #   run: |
       #     choco install git vscode
@@ -150,20 +169,6 @@ jobs:
         if: runner.os == 'Windows'
         # shell: powershell
         run: ./libs/libs.sh
-
-      - name: ofgen compile
-        run: |
-          cd ofGen
-          ./compile.sh
-
-      # - name: ofgen install
-      #   run: |
-      #     cd ofGen
-      #     ./install.sh
-
-      - name: ofgen test
-        run: |
-          ofgen colors
 
       # - name: XCodebuild Core
       #   if: matrix.os == 'macos-latest'
