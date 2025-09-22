@@ -20,31 +20,26 @@ section() {
 #     # fi
 # }
 
-checkPackageApt() {
-    dpkg --status $1 &> /dev/null
-    if [ $? -eq 0 ]; then
-    echo "$1: Already installed"
-    else
-    echo "installing $1"
-    sudo apt-get install -y $1
-    fi
-}
-
-checkPackageBrew() {
-	if brew ls --versions $1 > /dev/null; then
-		echo $1 already installed
-    else
-    	echo installing $1
-    	brew install $1
-    fi
-}
-
 #CXX=c++
 #LINKEROPTIONS=""
 #COMPILECOMMAND=time $CXX -c src/*.cpp src/uuidxx/src/*.cpp `pkg-config --cflags yaml-cpp` -Isrc/uuidxx/src -I../libs/macos/include/ -Wfatal-errors -std=c++20 && \
 SUDO=''
 
+section "Which OS is this?"
+echo "$OSTYPE"
+
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+
+	checkPackageApt() {
+	    dpkg --status $1 &> /dev/null
+	    if [ $? -eq 0 ]; then
+	    echo "$1: Already installed"
+	    else
+	    echo "installing $1"
+	    sudo apt-get install -y $1
+	    fi
+	}
+
     checkPackageApt libyaml-cpp-dev
     checkPackageApt nlohmann-json3-dev
     checkPackageApt libpugixml-dev
@@ -53,6 +48,16 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
         # ...
 elif [[ "$OSTYPE" == "darwin"* ]]; then
+
+	checkPackageBrew() {
+		if brew ls --versions $1 > /dev/null; then
+			echo $1 already installed
+    else
+    	echo installing $1
+    	brew install $1
+    fi
+}
+
     checkPackageBrew pkg-config
 	checkPackageBrew yaml-cpp
 	checkPackageBrew nlohmann-json
