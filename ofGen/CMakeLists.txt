@@ -35,6 +35,12 @@ if(WIN32)
     CPMAddPackage("gh:zeux/pugixml@1.15")
 
     target_link_libraries(ofgen PRIVATE yaml-cpp nlohmann_json::nlohmann_json pugixml::pugixml)
+
+    target_include_directories(ofgen
+        PRIVATE
+        src
+        src/uuidxx/src
+    )
 else()
 
 
@@ -60,7 +66,7 @@ else()
         ${JSON_INCLUDE_DIRS}
         src
         src/uuidxx/src
-)
+    )
 
     # link_directories(${YAML_LIBRARY_DIRS})          # Adds -L… to the link command
 
@@ -75,14 +81,14 @@ else()
         ${YAML_LIBRARIES}
         ${PUGIXML_LIBRARIES}
         ${JSON_LIBRARIES}
-)
+    )
 
     target_compile_options(ofgen
     PRIVATE
         ${YAML_CFLAGS_OTHER}
         ${PUGIXML_CFLAGS_OTHER}
         ${JSON_CFLAGS_OTHER}
-)
+    )
 
 endif()
 
