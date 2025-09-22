@@ -124,7 +124,8 @@ if(WIN32)
     install(CODE [[
     set(INST_PREFIX "$<INSTALL_PREFIX>")
     set(PATH_TO_ADD "${INST_PREFIX}\\bin")
-    execute_process(COMMAND cmd /C "setx PATH \"$ENV{PATH};${PATH_TO_ADD}\""
+    execute_process(
+        COMMAND cmd /C setx PATH "\"$ENV{PATH};${PATH_TO_ADD}\""
       RESULT_VARIABLE rc
       ERROR_VARIABLE err)
     if(NOT rc EQUAL 0)
