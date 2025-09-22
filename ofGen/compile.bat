@@ -19,7 +19,7 @@ if errorlevel 1 (
     rem ---------------------------------------------------------
     echo Requesting administrator privileges...
     powershell -NoProfile -Command ^
-        "Start-Process -FilePath '%~f0' -Verb RunAs -ArgumentList @(%*)"
+        "Start-Process -FilePath '%~f0' -Verb RunAs
     exit /b
 )
 
