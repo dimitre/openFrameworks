@@ -9,7 +9,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 if(WIN32)
     # add dependencies
     include(cmake/CPM.cmake)
-    CPMAddPackage("gh:jbeder/yaml-cpp#yaml-cpp-0.8.0")
+    CPMAddPackage("gh:jbeder/yaml-cpp#0.8.0")
     CPMAddPackage("gh:nlohmann/json@v3.12.0")
     CPMAddPackage("gh:zeux/pugixml@v1.15")
 endif()
