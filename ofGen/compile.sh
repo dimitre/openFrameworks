@@ -25,8 +25,8 @@ section() {
 #COMPILECOMMAND=time $CXX -c src/*.cpp src/uuidxx/src/*.cpp `pkg-config --cflags yaml-cpp` -Isrc/uuidxx/src -I../libs/macos/include/ -Wfatal-errors -std=c++20 && \
 SUDO=''
 
-section "Which OS is this?"
-echo "$OSTYPE"
+section "Compiling ofGen, OSTYPE = ${OSYPE}"
+# echo "$OSTYPE"
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
@@ -75,8 +75,8 @@ elif [[ "$OSTYPE" == "cygwin"* ]]; then
     #LINKCOMMAND=time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src `pkg-config --libs yaml-cpp pugixml` -o ofgen
 
 else
-    section "Which OS is this?"
-    echo "$OSTYPE"
+    # section "Which OS is this?"
+    # echo "$OSTYPE"
 fi
 
 section "OFWorks, compiling ofgen"
@@ -86,10 +86,11 @@ section "OFWorks, compiling ofgen"
 # echo ${LINKCOMMAND}
 # ${LINKCOMMAND}
 
-mkdir build
+mkdir -p build
 cd build
 cmake ..
 cmake --build . --config Release
+cmake --install . --config Release
 ${SUDO} cmake --install . --config Release
 
 section "done"
