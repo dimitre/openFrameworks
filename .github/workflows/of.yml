@@ -28,8 +28,8 @@ jobs:
           #     shell: msys2 -c 'export PATH=$PATH:/c/hostedtoolcache/windows/chalet-org/chalet/latest/windows-x64',
           #   }
 
-          # - { os: windows-latest, platform: vs, shell: bash }
-          - { os: windows-latest, platform: vs, shell: powershell }
+          - { os: windows-latest, platform: vs, shell: bash }
+          # - { os: windows-latest, platform: vs, shell: powershell }
 
     runs-on: ${{ matrix.os }}
     defaults:
@@ -42,18 +42,18 @@ jobs:
       #   run: |
       #     choco install git vscode
       #
-      - name: Install pkgconfiglite via Chocolatey
-        if: runner.os == 'Windows'
-        shell: powershell
-        run: choco install pkgconfiglite -y
+      # - name: Install pkgconfiglite via Chocolatey
+      #   if: runner.os == 'Windows'
+      #   shell: powershell
+      #   run: choco install pkgconfiglite -y
 
-      - name: vcpkg build
-        uses: johnwason/vcpkg-action@v7
-        id: vcpkg
-        with:
-          pkgs: yaml-cpp nlohmann-json pugixml
-          triplet: x64-windows-release
-          token: ${{ github.token }}
+      # - name: vcpkg build
+      #   uses: johnwason/vcpkg-action@v7
+      #   id: vcpkg
+      #   with:
+      #     pkgs: yaml-cpp nlohmann-json pugixml
+      #     triplet: x64-windows-release
+      #     token: ${{ github.token }}
 
       # - name: Install vcpkg
       #   if: runner.os == 'Windows'
@@ -148,7 +148,7 @@ jobs:
 
       - name: Libs
         if: runner.os == 'Windows'
-        shell: powershell
+        # shell: powershell
         run: ./libs/libs.sh
 
       - name: ofgen compile
