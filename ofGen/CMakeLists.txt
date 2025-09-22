@@ -41,6 +41,7 @@ if(WIN32)
         src
         src/uuidxx/src
     )
+
 else()
 
 
@@ -109,3 +110,27 @@ install(TARGETS ofgen
 # message(STATUS "PUGIXML_LIBRARIES  : ${PUGIXML_LIBRARIES}")
 # message(STATUS "JSON_INCLUDE_DIRS  : ${JSON_INCLUDE_DIRS}")
 # message(STATUS "JSON_LIBRARIES    : ${JSON_LIBRARIES}")
+
+# future, test some installer
+# if(WIN32)
+#     set(CPACK_GENERATOR "NSIS")
+#     set(CPACK_NSIS_MODIFY_PATH "ON")          # <-- this does the heavy lifting
+#     set(CPACK_PACKAGE_NAME "ofgen")
+#     set(CPACK_PACKAGE_VERSION "0.5.7")
+#     # set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}/assets/icon.ico")
+# endif()
+#
+if(WIN32)
+    install(CODE [[
+    set(INST_PREFIX "$<INSTALL_PREFIX>")
+    set(PATH_TO_ADD "${INST_PREFIX}\\bin")
+    execute_process(COMMAND cmd /C "setx PATH \"$ENV{PATH};${PATH_TO_ADD}\""
+      RESULT_VARIABLE rc
+      ERROR_VARIABLE err)
+    if(NOT rc EQUAL 0)
+      message(WARNING "Failed to update PATH: ${err}")
+    else()
+      message(STATUS "Updated user PATH with ${PATH_TO_ADD}")
+    endif()
+  ]])
+endif()
