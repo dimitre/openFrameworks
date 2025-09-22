@@ -28,8 +28,8 @@ jobs:
           #     shell: msys2 -c 'export PATH=$PATH:/c/hostedtoolcache/windows/chalet-org/chalet/latest/windows-x64',
           #   }
 
-          - { os: windows-latest, platform: vs, shell: bash }
-          # - { os: windows-latest, platform: vs, shell: powershell }
+          # - { os: windows-latest, platform: vs, shell: bash }
+          - { os: windows-latest, platform: vs, shell: powershell }
 
     runs-on: ${{ matrix.os }}
     defaults:
