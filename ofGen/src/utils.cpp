@@ -114,7 +114,7 @@ void genConfig::import() {
 			while (std::getline(file, line)) {
 				// msg(line, 33);
 				// next line trims whitespace at the end.
-				line =  line.substr(0, line.find_last_not_of(" \f\n\r\t\v") + 1);
+				line = line.substr(0, line.find_last_not_of(" \f\n\r\t\v") + 1);
 				node["addons"].push_back(line);
 			}
 		}
@@ -165,16 +165,10 @@ bool genConfig::loadYML() {
 		if (templateNames.size() > 0) {
 			conf.templateNames = templateNames;
 		} else {
-		    // FIXME: this is an error in linux64 (no template with this name)
+			// FIXME: this is an error in linux64 (no template with this name)
 			// better idea is having a lookup table with platforms and default templates.
 			// and apply directly to ofgen import
-			alert("No templates found, ofgen will deduce from platform", 95);
 
-			// I'm removing this because it doesn't appear ok.
-			conf.templateNames.emplace_back(getPlatformString());
-			for (auto & t : conf.templateNames) {
-				alert(t, 95);
-			}
 		}
 
 		cout << endl;
@@ -183,13 +177,6 @@ bool genConfig::loadYML() {
 			alert("No templates selected, exiting", 95);
 			exit(0);
 		}
-
-		alert("Templates ");
-
-		cout << joinStrings(conf.templateNames, ", ") << endl;
-		// for (auto & t : conf.templateNames) {
-		// 	cout << t << endl;
-		// }
 
 		// FIXME: no lugar disso fazer mesmo um map<string, vector<string>> pra parsear todos de uma vez.
 		conf.frameworks = nodeToStrings("frameworks");
@@ -213,11 +200,10 @@ bool genConfig::loadYML() {
 		}
 
 		if (conf.platforms.size()) {
-		    alert("Platforms");
+			alert("Platforms");
 			cout << joinStrings(conf.platforms, ", ") << endl;
-
 		} else {
-		    alert("No Platforms Yet");
+			alert("No Platforms Yet");
 		}
 		cout << endl;
 	}

@@ -354,7 +354,7 @@ void ofProject::eraseTemplates() {
 }
 
 bool buildProject() {
-	// alert("buildProject", 92);
+	alert("======= buildProject", 31);
 	ofProject project;
 
 	bool hasYml = conf.loadYML();
@@ -370,17 +370,49 @@ bool buildProject() {
 		}
 
 		alert("No templates found, ofgen will deduce from platform", 95);
-#ifdef __linux__
-		conf.templateNames.emplace_back("zed");
-		conf.templateNames.emplace_back("make");
-#elif defined(__APPLE_CC__)
-		conf.templateNames.emplace_back("macos");
-		conf.templateNames.emplace_back("zed");
-		conf.templateNames.emplace_back("make");
-#elif defined(__MINGW32__) || defined(__MINGW64__)
-        conf.templateNames.emplace_back("vscode");
-		conf.templateNames.emplace_back("make");
-#endif
+
+// 		#ifdef __linux__
+// 				conf.templateNames.emplace_back("zed");
+// 				conf.templateNames.emplace_back("make");
+// #elif defined(__APPLE_CC__)
+// 				conf.templateNames.emplace_back("macos");
+// 				conf.templateNames.emplace_back("zed");
+// 				conf.templateNames.emplace_back("make");
+// #elif defined(__MINGW32__) || defined(__MINGW64__)
+//         conf.templateNames.emplace_back("vscode");
+// 				conf.templateNames.emplace_back("make");
+// #endif
+
+
+		// I'm removing this because it doesn't appear ok.
+		// FIXME: we need better this
+		//
+		// linux64 msys2 vs macos
+		std::map<std::string, std::vector<std::string>> platformTemplates {
+			{ "vs", { "vs" } },
+			// { "macos", { "macos", "make", "vscode" } },
+	        { "macos", { "macos" } },
+			{ "msys2", { "make", "vscode" } },
+			{ "linux64", { "make", "vscode" } },
+		};
+
+		std::string platform { getPlatformString() };
+		cout << "platform is " << platform << endl;
+		if (!empty(platform)) {
+		    conf.templateNames = platformTemplates[platform];
+		}
+		// conf.templateNames.emplace_back(getPlatformString());
+		// alert("Platforms", 95);
+		// for (auto & t : conf.templateNames) {
+		// 	alert("\t" + t, 92);
+		// }
+
+		alert("Templates ");
+		cout << joinStrings(conf.templateNames, ", ") << endl;
+
+
+		alert("======= end buildProject", 31);
+
 	}
 
 	if (!conf.isValidOfPath()) {
@@ -390,6 +422,10 @@ bool buildProject() {
 	} else {
 		alert("of path OK, proceeding");
 	}
+
+
+
+
 	// scanFolder()
 	// create templates, add to project
 	for (auto & t : conf.templateNames) {
