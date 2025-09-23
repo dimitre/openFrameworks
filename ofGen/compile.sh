@@ -90,7 +90,7 @@ mkdir -p build
 cd build
 cmake ..
 cmake --build . --config Release
-cmake --install . --config Release
+#cmake --install . --config Release
 ${SUDO} cmake --install . --config Release
 
 section "done"
