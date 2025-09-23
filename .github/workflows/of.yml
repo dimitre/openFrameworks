@@ -58,13 +58,13 @@ jobs:
       #     cd ofGen
       #     ./install.sh
 
-      - name: ofgen test windows
-        if: runner.os == 'Windows'
-        run: |
-          ofgen.exe colors
+      # - name: ofgen test windows
+      #   if: runner.os == 'Windows'
+      #   run: |
+      #     ofgen.exe colors
 
       - name: ofgen test
-        if: runner.os != 'Windows'
+        # if: runner.os != 'Windows'
         run: |
           ofgen colors
       # - name: Install Git and other tools with Chocolatey
