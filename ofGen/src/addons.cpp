@@ -389,7 +389,7 @@ bool buildProject() {
 		//
 		// linux64 msys2 vs macos
 		std::map<std::string, std::vector<std::string>> platformTemplates {
-			{ "vs", { "vs" } },
+			{ "vs", { "visualstudio" } },
 			// { "macos", { "macos", "make", "vscode" } },
 	        { "macos", { "macos" } },
 			{ "msys2", { "make", "vscode" } },
