@@ -10,18 +10,18 @@ rem -------------------------------------------------------------
 rem -------------------------------------------------------------
 rem 1.  Detect whether we already have admin rights
 rem -------------------------------------------------------------
->nul 2>&1 (
-    net session >nul
-)
-if errorlevel 1 (
+rem >nul 2>&1 (
+rem     net session >nul
+rem )
+rem if errorlevel 1 (
     rem ---------------------------------------------------------
     rem 2.  We are NOT admin – re‑launch ourselves as admin
     rem ---------------------------------------------------------
-    echo Requesting administrator privileges...
-    powershell -NoProfile -Command ^
-        "Start-Process -FilePath '%~f0' -Verb RunAs -ArgumentList @(%*)"
-    exit /b
-)
+rem     echo Requesting administrator privileges...
+rem		 powershell -NoProfile -Command ^
+rem         "Start-Process -FilePath '%~f0' -Verb RunAs -ArgumentList @(%*)"
+rem     exit /b
+rem )
 
 rem -------------------------------------------------------------
 rem 3.  Normal (admin) mode – do the real work
