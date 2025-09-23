@@ -170,6 +170,9 @@ bool genConfig::loadYML() {
 			// and apply directly to ofgen import
 			alert("No templates found, ofgen will deduce from platform", 95);
 			conf.templateNames.emplace_back(getPlatformString());
+			for (auto & t : conf.templateNames) {
+				alert(t, 95);
+			}
 		}
 
 		cout << endl;

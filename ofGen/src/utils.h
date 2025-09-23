@@ -18,7 +18,7 @@ using std::endl;
 // using std::vector;
 
 static inline std::string getPGVersion() {
-	return "ofGen v0.5.7";
+	return "ofGen v0.5.8";
 }
 
 inline std::string colorText(const std::string & s, int color) {
@@ -38,7 +38,7 @@ const std::string sign = colorText(R"(
 ▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
 ▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
 Project Generator for OFWorks (OpenFrameworks fork)
-                Prototype v0.5.7⚡️
+                Prototype v0.5.8⚡️
 )",
 							 91)
 
@@ -116,7 +116,6 @@ inline static std::string getPlatformString() {
 	// }
 // #elif defined(__WIN32__)
 #elif defined(_WIN32)
-
 	cout << "_WIN32" << endl;
 	#if defined(__MINGW32__) || defined(__MINGW64__)
 	return "msys2";
