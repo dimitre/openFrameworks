@@ -1,15 +1,17 @@
 #pragma once
 
-#ifdef __linux__
-	#include <sys/utsname.h>
-#endif
+#include <iostream> // cout
+static std::string version = "v0.6.0";
 
 #include <filesystem>
-#include <iostream> // cout
 #include <map>
 #include <vector>
 namespace fs = std::filesystem;
 #include <yaml-cpp/yaml.h>
+
+#ifdef __linux__
+	#include <sys/utsname.h>
+#endif
 
 // static constexpr std::string_view VERSION = "ofGen v0.4";
 using std::cout;
@@ -17,8 +19,9 @@ using std::endl;
 // using std::string;
 // using std::vector;
 
+
 static inline std::string getPGVersion() {
-	return "ofGen v0.5.8";
+	return "ofGen " + version;
 }
 
 inline std::string colorText(const std::string & s, int color) {
@@ -38,11 +41,10 @@ const std::string sign = colorText(R"(
 ▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
 ▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
 Project Generator for OFWorks (OpenFrameworks fork)
-                Prototype v0.5.8⚡️
-)",
-							 91)
+                Prototype )" + version, 91)
 
-	+ colorText(R"(                Report issues on
+	+ colorText(R"(
+                Report issues on
                 https://github.com/dimitre/ofworks/
 )",
 		92);
@@ -228,9 +230,9 @@ templates : zed,macos
 				// TODO: Additional sources here.
 			}
 			if (parametersMap.count("templates")) {
-				alert("WOW templates clear", 95);
-				cout << "inside conf, parseParameters() " << endl;
-				cout << this << endl;
+				// alert("WOW templates clear", 95);
+				// cout << "inside conf, parseParameters() " << endl;
+				// cout << this << endl;
 
 				templateNames.clear();
 				templateNames = ofSplitString(parametersMap["templates"], ",");

@@ -183,9 +183,11 @@ bool genConfig::loadYML() {
 		}
 
 		alert("Templates ");
-		for (auto & t : conf.templateNames) {
-			cout << t << endl;
-		}
+
+		cout << joinStrings(conf.templateNames, ", ") << endl;
+		// for (auto & t : conf.templateNames) {
+		// 	cout << t << endl;
+		// }
 
 		// FIXME: no lugar disso fazer mesmo um map<string, vector<string>> pra parsear todos de uma vez.
 		conf.frameworks = nodeToStrings("frameworks");
@@ -202,9 +204,18 @@ bool genConfig::loadYML() {
 
 		if (conf.addonsNames.size()) {
 			alert("Addons");
-			for (auto & a : conf.addonsNames) {
-				cout << a << endl;
-			}
+			// for (auto & a : conf.addonsNames) {
+			// 	cout << a << endl;
+			// }
+			cout << joinStrings(conf.addonsNames, ", ") << endl;
+		}
+
+		if (conf.platforms.size()) {
+		    alert("Platforms");
+			cout << joinStrings(conf.platforms, ", ") << endl;
+
+		} else {
+		    alert("No Platforms Yet");
 		}
 		cout << endl;
 	}
