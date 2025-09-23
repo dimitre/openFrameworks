@@ -208,8 +208,9 @@ jobs:
         run: |
           cd examples/templates/allAddonsExample
           # ofgen templates=chalet
-          ofgen
-          chalet buildrun
+          # ofgen
+          ofgen buildrun
+          # chalet buildrun
 
         # ofgen
         # make -j
