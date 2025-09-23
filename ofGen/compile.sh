@@ -25,7 +25,7 @@ section() {
 #COMPILECOMMAND=time $CXX -c src/*.cpp src/uuidxx/src/*.cpp `pkg-config --cflags yaml-cpp` -Isrc/uuidxx/src -I../libs/macos/include/ -Wfatal-errors -std=c++20 && \
 SUDO=''
 
-section "Compiling ofGen, OSTYPE = ${OSYPE}"
+section "Compiling ofGen, OSTYPE : ${OSYPE}"
 # echo "$OSTYPE"
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
@@ -74,7 +74,7 @@ elif [[ "$OSTYPE" == "cygwin"* ]]; then
     pacman -S --needed mingw-w64-x86_64-yaml-cpp mingw-w64-x86_64-pugixml mingw-w64-x86_64-nlohmann-json mingw-w64-x86_64-fmt mingw-w64-x86_64-toolchain
     #LINKCOMMAND=time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src `pkg-config --libs yaml-cpp pugixml` -o ofgen
 
-else
+# else
     # section "Which OS is this?"
     # echo "$OSTYPE"
 fi
