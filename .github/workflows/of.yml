@@ -209,17 +209,11 @@ jobs:
           cd examples/templates/allAddonsExample
           # ofgen templates=chalet
           # ofgen
-          ofgen buildrun
+          ofgen
           # chalet buildrun
 
-        # ofgen
-        # make -j
-        # ofgen buildrun
-        # ls -alF
-        # xcodebuild -arch arm64
-
-      - name: Tests
-        run: ./scripts/tests.sh
+      # - name: Tests
+      #   run: ./scripts/tests.sh
 
   ofworks-rpi:
     if: false

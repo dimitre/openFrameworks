@@ -107,7 +107,8 @@ public:
 		path = conf.ofPath / "scripts" / "templates" / name;
 		//FIXME - implement
 		openCommand = "open " + conf.projectName + ".xcodeproj";
-		buildCommand = "msbuild";
+		// buildCommand = "msbuild";
+		buildCommand = "powershell -c \"msbuild\"";
 		runCommand = "./bin/" + conf.projectName + ".exe";
 	}
 
