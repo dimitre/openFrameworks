@@ -207,10 +207,7 @@ jobs:
       - name: All Addons Example
         run: |
           cd examples/templates/allAddonsExample
-          # ofgen templates=chalet
-          # ofgen
-          ofgen
-          # chalet buildrun
+          ofgen buildrun
 
       # - name: Tests
       #   run: ./scripts/tests.sh
