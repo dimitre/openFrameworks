@@ -7,89 +7,89 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(ofgen
-    src/main.cpp
-    src/addons.cpp
-    src/templates.cpp
-    src/utils.cpp
-    src/uuidxx/src/uuidxx.cpp
+				src/main.cpp
+				src/addons.cpp
+				src/templates.cpp
+				src/utils.cpp
+				src/uuidxx/src/uuidxx.cpp
 )
 
 if(WIN32)
-    # add dependencies
-    include(cmake/CPM.cmake)
+	# add dependencies
+	include(cmake/CPM.cmake)
 
-    # CPMAddPackage(
-    #     NAME yaml-cpp
-    #     GITHUB_REPOSITORY jbeder/yaml-cpp
-    #     GIT_TAG 0.8.0                # the version you want
-    # )
+	# CPMAddPackage(
+	#     NAME yaml-cpp
+	#     GITHUB_REPOSITORY jbeder/yaml-cpp
+	#     GIT_TAG 0.8.0                # the version you want
+	# )
 
-    # CPMAddPackage(
-    #     NAME nlohmann_json
-    #     GITHUB_REPOSITORY nlohmann/json
-    #     GIT_TAG 3.12.0                # the version you want
-    # )
+	# CPMAddPackage(
+	#     NAME nlohmann_json
+	#     GITHUB_REPOSITORY nlohmann/json
+	#     GIT_TAG 3.12.0                # the version you want
+	# )
 
-    CPMAddPackage("gh:jbeder/yaml-cpp#0.8.0")
-    CPMAddPackage("gh:nlohmann/json@3.12.0")
-    CPMAddPackage("gh:zeux/pugixml@1.15")
+	CPMAddPackage("gh:jbeder/yaml-cpp#0.8.0")
+	CPMAddPackage("gh:nlohmann/json@3.12.0")
+	CPMAddPackage("gh:zeux/pugixml@1.15")
 
-    target_link_libraries(ofgen PRIVATE yaml-cpp nlohmann_json::nlohmann_json pugixml::pugixml)
+	target_link_libraries(ofgen PRIVATE yaml-cpp nlohmann_json::nlohmann_json pugixml::pugixml)
 
-    target_include_directories(ofgen
-        PRIVATE
-        src
-        src/uuidxx/src
-    )
+	target_include_directories(ofgen
+								PRIVATE
+								src
+								src/uuidxx/src
+				)
 
 else()
 
 
-    # Ensure pkg‑config is available
-    find_package(PkgConfig REQUIRED)
+	# Ensure pkg‑config is available
+	find_package(PkgConfig REQUIRED)
 
-    # ------------------------------------------------------------------
-    # Find third‑party libraries (pkg‑config is the simplest, but you
-    # can also swap to find_package() if you prefer)
-    # ------------------------------------------------------------------
-    pkg_check_modules(YAML REQUIRED yaml-cpp)
-    pkg_check_modules(PUGIXML REQUIRED pugixml)
-    pkg_check_modules(JSON REQUIRED nlohmann_json)
+	# ------------------------------------------------------------------
+	# Find third‑party libraries (pkg‑config is the simplest, but you
+	# can also swap to find_package() if you prefer)
+	# ------------------------------------------------------------------
+	pkg_check_modules(YAML REQUIRED yaml-cpp)
+	pkg_check_modules(PUGIXML REQUIRED pugixml)
+	pkg_check_modules(JSON REQUIRED nlohmann_json)
 
-    message(STATUS "YAML_LIBRARIES: ${YAML_LIBRARIES}")
-    message(STATUS "PUGIXML_LIBRARIES: ${PUGIXML_LIBRARIES}")
-    message(STATUS "JSON_LIBRARIES: ${JSON_LIBRARIES}")
+	message(STATUS "YAML_LIBRARIES: ${YAML_LIBRARIES}")
+	message(STATUS "PUGIXML_LIBRARIES: ${PUGIXML_LIBRARIES}")
+	message(STATUS "JSON_LIBRARIES: ${JSON_LIBRARIES}")
 
-    target_include_directories(ofgen
-    PRIVATE
-        ${YAML_INCLUDE_DIRS}
-        ${PUGIXML_INCLUDE_DIRS}
-        ${JSON_INCLUDE_DIRS}
-        src
-        src/uuidxx/src
-    )
+	target_include_directories(ofgen
+				PRIVATE
+								${YAML_INCLUDE_DIRS}
+								${PUGIXML_INCLUDE_DIRS}
+								${JSON_INCLUDE_DIRS}
+								src
+								src/uuidxx/src
+				)
 
-    # link_directories(${YAML_LIBRARY_DIRS})          # Adds -L… to the link command
+	# link_directories(${YAML_LIBRARY_DIRS})          # Adds -L… to the link command
 
-    target_link_directories(
-       ofgen PRIVATE
-       ${YAML_LIBRARY_DIRS}   # expands to /opt/homebrew/Cellar/yaml-cpp/0.8.0/lib
-       ${PUGIXML_LIBRARY_DIRS}   # expands to /opt/homebrew/Cellar/yaml-cpp/0.8.0/lib
-   )
+	target_link_directories(
+							ofgen PRIVATE
+							${YAML_LIBRARY_DIRS}   # expands to /opt/homebrew/Cellar/yaml-cpp/0.8.0/lib
+							${PUGIXML_LIBRARY_DIRS}   # expands to /opt/homebrew/Cellar/yaml-cpp/0.8.0/lib
+			)
 
-    target_link_libraries(ofgen
-    PRIVATE
-        ${YAML_LIBRARIES}
-        ${PUGIXML_LIBRARIES}
-        ${JSON_LIBRARIES}
-    )
+	target_link_libraries(ofgen
+				PRIVATE
+								${YAML_LIBRARIES}
+								${PUGIXML_LIBRARIES}
+								${JSON_LIBRARIES}
+				)
 
-    target_compile_options(ofgen
-    PRIVATE
-        ${YAML_CFLAGS_OTHER}
-        ${PUGIXML_CFLAGS_OTHER}
-        ${JSON_CFLAGS_OTHER}
-    )
+	target_compile_options(ofgen
+				PRIVATE
+								${YAML_CFLAGS_OTHER}
+								${PUGIXML_CFLAGS_OTHER}
+								${JSON_CFLAGS_OTHER}
+				)
 
 endif()
 
@@ -99,7 +99,7 @@ endif()
 # Optional: export a target for downstream CMake projects
 # ------------------------------------------------------------------
 install(TARGETS ofgen
-        RUNTIME DESTINATION bin
+								RUNTIME DESTINATION bin
 )
 
 # message(STATUS "YAML_INCLUDE_DIRS: ${YAML_INCLUDE_DIRS}")
@@ -121,17 +121,17 @@ install(TARGETS ofgen
 # endif()
 #
 if(WIN32)
-    install(CODE [[
-    set(INST_PREFIX "$<INSTALL_PREFIX>")
-    set(PATH_TO_ADD "${INST_PREFIX}\\bin")
-    execute_process(
-        COMMAND cmd /C setx PATH "\"$ENV{PATH};${PATH_TO_ADD}\""
-      RESULT_VARIABLE rc
-      ERROR_VARIABLE err)
-    if(NOT rc EQUAL 0)
-      message(WARNING "Failed to update PATH: ${err}")
-    else()
-      message(STATUS "Updated user PATH with ${PATH_TO_ADD}")
-    endif()
-  ]])
+	install(CODE [[
+				set(INST_PREFIX "${CMAKE_INSTALL_PREFIX}")
+				set(PATH_TO_ADD "${INST_PREFIX}\\bin")
+				execute_process(
+								COMMAND cmd /C setx PATH "\"$ENV{PATH};${PATH_TO_ADD}\""
+						RESULT_VARIABLE rc
+						ERROR_VARIABLE err)
+				if(NOT rc EQUAL 0)
+						message(WARNING "Failed to update PATH: ${err}")
+				else()
+						message(STATUS "Updated user PATH with ${PATH_TO_ADD}")
+				endif()
+		]])
 endif()
