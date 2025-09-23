@@ -38,13 +38,15 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: ofgen test windows
+      - name: ofgen compile windows
         if: runner.os == 'Windows'
+        shell: pwsh
         run: |
           cd ofGen
           .\compile.bat
 
       - name: ofgen compile
+
         if: runner.os != 'Windows'
         run: |
           cd ofGen
