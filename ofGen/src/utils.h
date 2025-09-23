@@ -118,7 +118,7 @@ inline static std::string getPlatformString() {
 	// }
 // #elif defined(__WIN32__)
 #elif defined(_WIN32)
-	cout << "_WIN32" << endl;
+	// cout << "_WIN32" << endl;
 	#if defined(__MINGW32__) || defined(__MINGW64__)
 	return "msys2";
 	#else

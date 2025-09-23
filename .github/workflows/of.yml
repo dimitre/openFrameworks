@@ -38,6 +38,12 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - name: ofgen CMAKE cache
+        uses: actions/cache@v4
+        with:
+          path: "ofGen/build"
+          key: ofgen-cmake-${{ matrix.platform }}
+
       - name: ofgen compile windows
         if: runner.os == 'Windows'
         shell: pwsh
@@ -201,7 +207,8 @@ jobs:
       - name: All Addons Example
         run: |
           cd examples/templates/allAddonsExample
-          ofgen templates=chalet
+          # ofgen templates=chalet
+          ofgen
           chalet buildrun
 
         # ofgen

@@ -169,6 +169,8 @@ bool genConfig::loadYML() {
 			// better idea is having a lookup table with platforms and default templates.
 			// and apply directly to ofgen import
 			alert("No templates found, ofgen will deduce from platform", 95);
+
+			// I'm removing this because it doesn't appear ok.
 			conf.templateNames.emplace_back(getPlatformString());
 			for (auto & t : conf.templateNames) {
 				alert(t, 95);
