@@ -38,9 +38,24 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      # Preparation for ofgen
+
       - name: Add msbuild to PATH
         if: runner.os == 'Windows'
         uses: microsoft/setup-msbuild@v2
+
+      - name: Cache Packages - Linux Apt
+        if: runner.os == 'Linux'
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: wget2 libyaml-cpp-dev nlohmann-json3-dev libpugixml-dev
+          version: 1.0
+
+      - name: Cache Packages - macOS Brew
+        if: runner.os == 'macOS'
+        uses: tecolicom/actions-use-homebrew-tools@v1.3
+        with:
+          tools: wget2 yaml-cpp fmt nlohmann-json # fmt ccache
 
       - name: ofgen CMAKE cache
         uses: actions/cache@v4
@@ -106,19 +121,6 @@ jobs:
       #   run: |
       #     .\vcpkg\vcpkg install yaml-cpp:x64-windows  nlohmann-json:x64-windows pugixml:x64-windows
       #     .\vcpkg\vcpkg integrate install
-
-      - name: Cache Packages - Linux Apt
-        if: runner.os == 'Linux'
-        uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: wget2 libyaml-cpp-dev nlohmann-json3-dev libpugixml-dev
-          version: 1.0
-
-      - name: Cache Packages - macOS Brew
-        if: runner.os == 'macOS'
-        uses: tecolicom/actions-use-homebrew-tools@v1.3
-        with:
-          tools: wget2 yaml-cpp fmt nlohmann-json # fmt ccache
 
       - uses: msys2/setup-msys2@v2.28.0
         if: runner.os == 'Windows' && matrix.platform == 'msys2'
