@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+
+set -euo pipefail
 cd "$(dirname "$0")"
 
 COLOR='\033[0;32m'
