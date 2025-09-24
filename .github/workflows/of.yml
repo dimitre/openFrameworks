@@ -221,7 +221,9 @@ jobs:
         shell: powershell
         run: |
           cd examples/templates/allAddonsExample
-          ofgen buildrun
+          # ofgen buildrun
+          ofgen
+          msbuild
 
       # - name: Tests
       #   run: ./scripts/tests.sh
