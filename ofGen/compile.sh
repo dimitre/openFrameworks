@@ -27,7 +27,8 @@ section() {
 #COMPILECOMMAND=time $CXX -c src/*.cpp src/uuidxx/src/*.cpp `pkg-config --cflags yaml-cpp` -Isrc/uuidxx/src -I../libs/macos/include/ -Wfatal-errors -std=c++20 && \
 SUDO=''
 
-section "Compiling ofGen, OSTYPE : ${OSYPE}"
+section "Compiling ofGen"
+# , OSTYPE : ${OSYPE}"
 # echo "$OSTYPE"
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
