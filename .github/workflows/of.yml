@@ -204,7 +204,17 @@ jobs:
       # make -j
       #
       #
+      #
+
       - name: All Addons Example
+        if: runner.os != 'Windows'
+        run: |
+          cd examples/templates/allAddonsExample
+          ofgen buildrun
+
+      - name: All Addons Example
+        if: runner.os == 'Windows'
+        shell: powershell
         run: |
           cd examples/templates/allAddonsExample
           ofgen buildrun
