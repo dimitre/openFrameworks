@@ -77,9 +77,9 @@ if [[ "$OSTYPE" == "cygwin"* ]]; then
 
 elif [[ "$(uname -s)" == "Darwin" ]]; then
 	PLATFORM=macos
-	CORELIBS=( libtiff libjpeg brotli curl FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib  )
+	CORELIBS=( libtiff libjpeg brotli FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib  )
 	# FIXME: TODO: add svgtiny to ofLibs and here
-	ADDONLIBS=( assimp cairo libusb opencv openssl )
+	ADDONLIBS=( assimp cairo libusb opencv openssl curl )
 	ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
 
 	LIBADDONS=(
@@ -90,16 +90,34 @@ elif [[ "$(uname -s)" == "Darwin" ]]; then
 		# "libxml2:ofxSvg"
 		"opencv:ofxOpenCv"
 		"openssl:ofxURL"
+		"curl:ofxURL"
 		# "svgtiny:ofxSvg"
 	)
 
 elif [[ "$(uname -s)" == "Linux" ]]; then
-	GSTREAMER_VERSION=1.0
 	# libxml2-dev
-	sudo apt-get -y install libcairo2-dev make libgtk2.0-dev nlohmann-json3-dev libssl3 libcurl4 brotli libcurl4-openssl-dev libjack-jackd2-0 libjack-jackd2-dev freeglut3-dev libasound2-dev libxmu-dev libxxf86vm-dev libgl1-mesa-dev libraw1394-dev libudev-dev libdrm-dev libglew-dev libopenal-dev libsndfile1-dev libfreeimage-dev libcairo2-dev libfreetype6-dev libssl-dev libpulse-dev libusb-1.0-0-dev libopencv-dev libassimp-dev librtaudio-dev liburiparser-dev libpugixml-dev libgtk2.0-0 libxcursor-dev libxi-dev libxinerama-dev libglfw3-dev libgstreamer${GSTREAMER_VERSION}-dev libgstreamer-plugins-base${GSTREAMER_VERSION}-dev gstreamer${GSTREAMER_VERSION}-pulseaudio gstreamer${GSTREAMER_VERSION}-x gstreamer${GSTREAMER_VERSION}-plugins-bad gstreamer${GSTREAMER_VERSION}-alsa gstreamer${GSTREAMER_VERSION}-plugins-base gstreamer${GSTREAMER_VERSION}-plugins-good gstreamer1.0-libav
+	# sudo apt-get -y install libcairo2-dev make libgtk2.0-dev nlohmann-json3-dev libssl3 libcurl4 brotli libcurl4-openssl-dev libjack-jackd2-0 libjack-jackd2-dev freeglut3-dev libasound2-dev libxmu-dev libxxf86vm-dev libgl1-mesa-dev libraw1394-dev libudev-dev libdrm-dev libglew-dev libopenal-dev libsndfile1-dev libfreeimage-dev libcairo2-dev libfreetype6-dev libssl-dev libpulse-dev libusb-1.0-0-dev libopencv-dev libassimp-dev librtaudio-dev liburiparser-dev libpugixml-dev libgtk2.0-0 libxcursor-dev libxi-dev libxinerama-dev libglfw3-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-pulseaudio gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav
+	# CORELIBS=( kissfft glm tess2 utfcpp )
+	# ADDONLIBS=(	)
 
+	sudo apt-get -y install libcairo2-dev make libgtk2.0-dev libssl3 libssl-dev libcurl4 libcurl4-openssl-dev libjack-jackd2-0 libjack-jackd2-dev freeglut3-dev libasound2-dev libxmu-dev libxxf86vm-dev libgl1-mesa-dev libraw1394-dev libudev-dev libdrm-dev libopenal-dev libsndfile1-dev libpulse-dev librtaudio-dev libgtk2.0-0 libxcursor-dev libxi-dev libxinerama-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-pulseaudio gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav libglew-dev
 	CORELIBS=( kissfft glm tess2 utfcpp )
-	ADDONLIBS=(	)
+	CORELIBS=( libtiff libjpeg brotli FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib  )
+
+	ADDONLIBS=(	assimp libusb opencv )
+	LIBADDONS=(
+		# "assimp:ofxAssimpModelLoader"
+		"assimp:ofxAssimp"
+		# "cairo:ofxCairo"
+		"libusb:ofxKinect"
+		# "libxml2:ofxSvg"
+		"opencv:ofxOpenCv"
+		# "openssl:ofxURL"
+		# "curl:ofxURL"
+		# "svgtiny:ofxSvg"
+	)
+
+
 	ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
 	section Linux
 	uname -m
@@ -113,8 +131,9 @@ fi
 
 if [[ $1 == 'vs' ]]; then
     PLATFORM=$1
-   	CORELIBS=( brotli curl FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib )
+   	CORELIBS=( brotli FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib )
 	# FIXME: TODO: add svgtiny to ofLibs and here
+	# TODO: curl, openssl
 	ADDONLIBS=( assimp cairo libusb opencv )
 	ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
 
@@ -123,9 +142,7 @@ if [[ $1 == 'vs' ]]; then
 		"assimp:ofxAssimp"
 		"cairo:ofxCairo"
 		"libusb:ofxKinect"
-		# "libxml2:ofxSvg"
 		"opencv:ofxOpenCv"
-		# "svgtiny:ofxSvg"
 	)
 fi
 # PLATFORM="${PLATFORM:-macos}"
