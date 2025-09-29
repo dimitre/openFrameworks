@@ -47,7 +47,7 @@ done
 # if [[ "$OSTYPE" == "msys"* ]]; then
 # This is MSYS / MING Windows
 
-echo "ostype = ${OSTYPE}"
+# echo "ostype = ${OSTYPE}"
 
 if [[ "$OSTYPE" == "cygwin"* ]]; then
 	PLATFORM=msys2
@@ -75,15 +75,11 @@ if [[ "$OSTYPE" == "cygwin"* ]]; then
 	# FIXME VOLTAR
 	# executa "${PACMANPARAMS}"
 
-
-
-
-
 elif [[ "$(uname -s)" == "Darwin" ]]; then
 	PLATFORM=macos
-	CORELIBS=( brotli FreeImage freetype glew glfw glm json libpng pugixml rtAudio tess2 uriparser utfcpp zlib openssl curl pixman )
+	CORELIBS=( libtiff libjpeg brotli curl FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib  )
 	# FIXME: TODO: add svgtiny to ofLibs and here
-	ADDONLIBS=( assimp cairo libusb libxml2 opencv )
+	ADDONLIBS=( assimp cairo libusb opencv openssl )
 	ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
 
 	LIBADDONS=(
@@ -91,14 +87,16 @@ elif [[ "$(uname -s)" == "Darwin" ]]; then
 		"assimp:ofxAssimp"
 		"cairo:ofxCairo"
 		"libusb:ofxKinect"
-		"libxml2:ofxSvg"
+		# "libxml2:ofxSvg"
 		"opencv:ofxOpenCv"
+		"openssl:ofxURL"
 		# "svgtiny:ofxSvg"
 	)
 
 elif [[ "$(uname -s)" == "Linux" ]]; then
 	GSTREAMER_VERSION=1.0
-	sudo apt-get -y install libcairo2-dev make libgtk2.0-dev nlohmann-json3-dev libssl3 libcurl4 brotli libcurl4-openssl-dev libjack-jackd2-0 libjack-jackd2-dev freeglut3-dev libasound2-dev libxmu-dev libxxf86vm-dev libgl1-mesa-dev libraw1394-dev libudev-dev libdrm-dev libglew-dev libopenal-dev libsndfile1-dev libfreeimage-dev libcairo2-dev libfreetype6-dev libssl-dev libpulse-dev libusb-1.0-0-dev libopencv-dev libassimp-dev librtaudio-dev liburiparser-dev libpugixml-dev libgtk2.0-0 libxcursor-dev libxi-dev libxinerama-dev libglfw3-dev libxml2-dev libgstreamer${GSTREAMER_VERSION}-dev libgstreamer-plugins-base${GSTREAMER_VERSION}-dev gstreamer${GSTREAMER_VERSION}-pulseaudio gstreamer${GSTREAMER_VERSION}-x gstreamer${GSTREAMER_VERSION}-plugins-bad gstreamer${GSTREAMER_VERSION}-alsa gstreamer${GSTREAMER_VERSION}-plugins-base gstreamer${GSTREAMER_VERSION}-plugins-good gstreamer1.0-libav
+	# libxml2-dev
+	sudo apt-get -y install libcairo2-dev make libgtk2.0-dev nlohmann-json3-dev libssl3 libcurl4 brotli libcurl4-openssl-dev libjack-jackd2-0 libjack-jackd2-dev freeglut3-dev libasound2-dev libxmu-dev libxxf86vm-dev libgl1-mesa-dev libraw1394-dev libudev-dev libdrm-dev libglew-dev libopenal-dev libsndfile1-dev libfreeimage-dev libcairo2-dev libfreetype6-dev libssl-dev libpulse-dev libusb-1.0-0-dev libopencv-dev libassimp-dev librtaudio-dev liburiparser-dev libpugixml-dev libgtk2.0-0 libxcursor-dev libxi-dev libxinerama-dev libglfw3-dev libgstreamer${GSTREAMER_VERSION}-dev libgstreamer-plugins-base${GSTREAMER_VERSION}-dev gstreamer${GSTREAMER_VERSION}-pulseaudio gstreamer${GSTREAMER_VERSION}-x gstreamer${GSTREAMER_VERSION}-plugins-bad gstreamer${GSTREAMER_VERSION}-alsa gstreamer${GSTREAMER_VERSION}-plugins-base gstreamer${GSTREAMER_VERSION}-plugins-good gstreamer1.0-libav
 
 	CORELIBS=( kissfft glm tess2 utfcpp )
 	ADDONLIBS=(	)
@@ -113,6 +111,23 @@ elif [[ "$(uname -s)" == "Linux" ]]; then
 	fi
 fi
 
+if [[ $1 == 'vs' ]]; then
+    PLATFORM=$1
+   	CORELIBS=( brotli curl FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib )
+	# FIXME: TODO: add svgtiny to ofLibs and here
+	ADDONLIBS=( assimp cairo libusb opencv )
+	ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
+
+	LIBADDONS=(
+		# "assimp:ofxAssimpModelLoader"
+		"assimp:ofxAssimp"
+		"cairo:ofxCairo"
+		"libusb:ofxKinect"
+		# "libxml2:ofxSvg"
+		"opencv:ofxOpenCv"
+		# "svgtiny:ofxSvg"
+	)
+fi
 # PLATFORM="${PLATFORM:-macos}"
 
 
@@ -128,11 +143,8 @@ fi
 # echo ${machine}
 # exit
 
-
 LIBS_FOLDER=./${PLATFORM}
-
-DOWNLOAD="./_download_${VERSION}"
-
+DOWNLOAD="./_download_${VERSION}_${PLATFORM}"
 
 # echo ${DOWNLOAD}
 
@@ -168,9 +180,6 @@ checkLib() {
 # fi
 # }
 
-
-
-
 # exit 1
 
 getlink() {
@@ -189,7 +198,6 @@ getlink() {
 
 		executa "wget2 --clobber=off ${PARAMS} -P ${DOWNLOAD}"
 	fi
-
 }
 
 unzipCore() {
