@@ -1,5 +1,5 @@
 name: OF
-version: "0.3.3"
+version: "0.3.4"
 variables:
   generator: manual
   addons: "ofxMicroUI,ofxTools,ofxMidi,ofxMicroUIMidiController,ofxScenes,ofxSvg,ofxCurve,ofxVideoWriter,ofxAssimp"
@@ -46,6 +46,7 @@ abstracts:*:
       - ${var:ofPath}/libs/openFrameworks/**
       # - ${var:ofPath}/libs/openFrameworks
       - ${var:ofPath}/libs/{${var:platform}}/include
+      - ${var:ofPath}/libs/{${var:platform}}/include/**
 
     # includeDirs[:macos]:
     # libDirs[:macos]: ${var:ofPath}/libs/fmod/lib/osx
@@ -102,9 +103,13 @@ targets:
         # - ${externalBuild:OF}
         # - ${var:ofPath}/libs/openFrameworksCompiled/lib/${var:platform}/libopenFrameworks.a
       staticLinks[:linux]:
-        - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
+        # Original
+        # - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
+        # - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
+        # - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
+
+        #libpng, libbrotlienc, libjpeg
+        - ${var:ofPath}/libs/${var:platform}/lib/{libbrotlicommon,libbrotlidec,libFreeImage,libfreetype,libglew,libglfw3,libglm,libkissfft-float,libpng16,libpugixml,libtess2,libtiff,libtiffxx,libturbojpeg,liburiparser,libz}.a
 
       staticLinks[:macos]:
         - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
@@ -119,7 +124,14 @@ targets:
         - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
         - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
         - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
+
+        #new
+        - ${var:ofPath}/libs/${var:platform}/lib/libbrotlienc.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
         - ${var:ofPath}/libs/${var:platform}/lib/libz.a
+        - /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/liblzma.5.tbd
 
       includeDirs:
         - ${var:ofPath}/libs/openFrameworks/**

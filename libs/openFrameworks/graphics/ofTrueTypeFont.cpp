@@ -3,7 +3,8 @@
 #include "ofPixels.h"
 #include "ofPath.h"
 
-#include <freetype2/ft2build.h>
+// #include <freetype2/ft2build.h>
+#include <ft2build.h>
 //#include <algorithm>
 #include <numeric>
 
@@ -298,7 +299,7 @@ void initWindows(){
 	char value_data_char[2048];
 	string fontsDir = ofGetEnv("windir");
 	fontsDir += "\\Fonts\\";
-	
+
 	for (DWORD i = 0; i < value_count; ++i)
 	{
 			DWORD name_len = 2048;
@@ -689,7 +690,7 @@ ofTrueTypeFont::glyph ofTrueTypeFont::loadGlyph(uint32_t utf8) const{
 
 //-----------------------------------------------------------
 bool ofTrueTypeFont::load(const of::filesystem::path & filename, int fontSize, bool antialiased, bool fullCharacterSet, bool makeContours, float simplifyAmt, int dpi) {
-	
+
 	ofTrueTypeFontSettings settings(filename,fontSize);
 	settings.antialiased = antialiased;
 	settings.contours = makeContours;
@@ -1021,8 +1022,8 @@ void ofTrueTypeFont::drawChar(uint32_t c, float x, float y, bool vFlipped) const
 	stringQuads.addIndex(firstIndex+2);
 	stringQuads.addIndex(firstIndex+3);
 	stringQuads.addIndex(firstIndex);
-	
-	
+
+
 }
 
 //-----------------------------------------------------------
@@ -1191,11 +1192,11 @@ ofRectangle ofTrueTypeFont::getStringBoundingBox(const string& c, float x, float
 	// Calculate bounding box by iterating over glyph properties
 	// Meaning of props can be deduced from illustration at top of:
 	// https://www.freetype.org/freetype2/docs/tutorial/step2.html
-	// 
+	//
 	// We deliberately not generate a mesh and iterate over its
 	// vertices, as this would not correctly return spacing for
 	// blank characters.
-	
+
 	float w = 0;
 	iterateString( c, x, y, vflip, [&]( uint32_t c, glm::vec2 pos ){
 		auto props = getGlyphProperties( c );
@@ -1304,22 +1305,22 @@ ofTexture ofTrueTypeFont::getStringTexture(const string& str, bool vflip) const{
 		try{
 			if (c != '\n') {
 				auto g = loadGlyph(c);
-				
+
 				if (c == '\t'){
 					auto temp = loadGlyph(' ');
 					glyphs.push_back(temp);
 				}else{
 					glyphs.push_back(g);
 				}
-				 
+
 				int x = pos.x + g.props.xmin;
 				int y = pos.y;
 				glyphPositions.emplace_back(x, y);
-				
+
 				if(c == '\t')lineWidth += g.props.advance + getGlyphProperties(' ').advance * spaceSize * TAB_WIDTH;
 				else if(c == ' ')lineWidth += g.props.advance + getGlyphProperties(' ').advance * spaceSize;
 				else if(isValidGlyph(c))lineWidth += g.props.advance + getGlyphProperties(' ').advance * (letterSpacing - 1.f);
-				
+
 				width = max(width, lineWidth);
 				y += g.props.ymax;
 				height = max(height, y + getLineHeight());

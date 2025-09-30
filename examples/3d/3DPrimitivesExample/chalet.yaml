@@ -1,7 +1,7 @@
 name: OF
-version: 0.3.3
+version: 0.3.4
 variables:
-  generator: ofGen v0.5.6
+  generator: ofGen v0.6.2
   addons: ProjectSourceFiles_3DPrimitivesExample
   platform: macos
   ofPath: ../../..
@@ -23,6 +23,7 @@ abstracts:*:
     includeDirs:
       - ${var:ofPath}/libs/openFrameworks/**
       - ${var:ofPath}/libs/{${var:platform}}/include
+      - ${var:ofPath}/libs/{${var:platform}}/include/**
     appleFrameworks:
       - Accelerate
       - AGL
@@ -52,9 +53,7 @@ targets:
       staticLinks:
         - OF
       staticLinks[:linux]:
-        - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
+        - ${var:ofPath}/libs/${var:platform}/lib/{libbrotlicommon,libbrotlidec,libFreeImage,libfreetype,libglew,libglfw3,libglm,libkissfft-float,libpng16,libpugixml,libtess2,libtiff,libtiffxx,libturbojpeg,liburiparser,libz}.a
       staticLinks[:macos]:
         - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
         - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
@@ -68,6 +67,12 @@ targets:
         - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
         - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
         - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libbrotlienc.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libz.a
+        - /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/liblzma.5.tbd
       includeDirs:
         - ${var:ofPath}/libs/openFrameworks/**
         - ${var:ofPath}/libs/openFrameworks
