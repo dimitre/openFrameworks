@@ -85,7 +85,7 @@ targets:
         - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
 
       exclude[:linux]:
-        - ${var:ofPath}/libs/openFrameworks/video/{ofDirectShowPlayer,ofDirectShowGrabber,ofMediuaFoundationPlayer}.cpp
+        - ${var:ofPath}/libs/openFrameworks/video/{ofDirectShowPlayer,ofDirectShowGrabber,ofMediaFoundationPlayer}.cpp
         - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
   empty:
     kind: executable
