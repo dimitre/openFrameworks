@@ -47,6 +47,9 @@ targets:
       exclude[:macos]:
         - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils,ofMediaFoundationPlayer,ofDirectShowGrabber,ofDirectShowPlayer}.cpp
         - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
+      exclude[:linux]:
+        - ${var:ofPath}/libs/openFrameworks/video/{ofDirectShowPlayer,ofDirectShowGrabber,ofMediaFoundationPlayer}.cpp
+        - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
   3DPrimitivesExample:
     kind: executable
     settings:Cxx:
@@ -72,7 +75,7 @@ targets:
         - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
         - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
         - ${var:ofPath}/libs/${var:platform}/lib/libz.a
-        - /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/liblzma.5.tbd
+        - ${var:ofPath}/libs/${var:platform}/lib/liblzma.a
       includeDirs:
         - ${var:ofPath}/libs/openFrameworks/**
         - ${var:ofPath}/libs/openFrameworks

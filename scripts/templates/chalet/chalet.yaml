@@ -135,7 +135,9 @@ targets:
         - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
         - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
         - ${var:ofPath}/libs/${var:platform}/lib/libz.a
-        - /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/liblzma.5.tbd
+        - ${var:ofPath}/libs/${var:platform}/lib/liblzma.a
+
+        # - /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/liblzma.5.tbd
 
       includeDirs:
         - ${var:ofPath}/libs/openFrameworks/**
