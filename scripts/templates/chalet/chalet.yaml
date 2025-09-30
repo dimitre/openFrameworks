@@ -42,11 +42,17 @@ abstracts:*:
     # compileOptions[toolchain:apple-llvm]:
     compileOptions[:macos]:
       - -fobjc-arc
+    compileOptions[:linux]:
+      - -pthread -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0
     includeDirs:
       - ${var:ofPath}/libs/openFrameworks/**
       # - ${var:ofPath}/libs/openFrameworks
       - ${var:ofPath}/libs/{${var:platform}}/include
       - ${var:ofPath}/libs/{${var:platform}}/include/**
+    includeDirs[:linux]:
+      - /usr/include
+      - /usr/include/**
+      - /usr/lib/**/include
 
     # includeDirs[:macos]:
     # libDirs[:macos]: ${var:ofPath}/libs/fmod/lib/osx
