@@ -27,4 +27,9 @@
 
 include $(OF_SHARED_MAKEFILES_PATH)/config.linux.common.mk
 
-PLATFORM_LDFLAGS += -fuse-ld=gold
+#PLATFORM_LDFLAGS += -fuse-ld=gold
+ifneq (, $(shell command -v mold))
+	PLATFORM_LDFLAGS += -fuse-ld=mold
+else ifneq (, $(shell command -v gold))
+	PLATFORM_LDFLAGS += -fuse-ld=gold
+endif

@@ -30,6 +30,7 @@ OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libz.a
 
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libtiff.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libturbojpeg.a
+OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/liblzma.a
 
 //-rw-r--r--@ 1 d  staff  30497712 Jun  5 14:02 libcurl.a
 //-rw-r--r--@ 1 d  staff  14408152 Jun  5 14:02 libcrypto.a
