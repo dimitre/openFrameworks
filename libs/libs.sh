@@ -101,7 +101,8 @@ elif [[ "$(uname -s)" == "Linux" ]]; then
 	# ADDONLIBS=(	)
 
 	sudo apt-get -y install libcairo2-dev make libgtk2.0-dev libssl3 libssl-dev libcurl4 libcurl4-openssl-dev libjack-jackd2-0 libjack-jackd2-dev freeglut3-dev libasound2-dev libxmu-dev libxxf86vm-dev libgl1-mesa-dev libraw1394-dev libudev-dev libdrm-dev libopenal-dev libsndfile1-dev libpulse-dev libgtk2.0-0 libxcursor-dev libxi-dev libxinerama-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-pulseaudio gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav
-	CORELIBS=( kissfft libtiff libjpeg brotli FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib  )
+	# Fixme. Brotli will have to be re-added when issues are fixed # brotli
+	CORELIBS=( kissfft libtiff libjpeg FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib  )
 
 	ADDONLIBS=(	assimp libusb opencv )
 	LIBADDONS=(
