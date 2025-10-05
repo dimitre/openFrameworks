@@ -28,8 +28,14 @@
 include $(OF_SHARED_MAKEFILES_PATH)/config.linux.common.mk
 
 #PLATFORM_LDFLAGS += -fuse-ld=gold
-ifneq (, $(shell command -v mold))
-	PLATFORM_LDFLAGS += -fuse-ld=mold
-else ifneq (, $(shell command -v gold))
-	PLATFORM_LDFLAGS += -fuse-ld=gold
-endif
+# ifneq (, $(shell command -v mold))
+# 	PLATFORM_LDFLAGS += -fuse-ld=mold
+# else ifneq (, $(shell command -v gold))
+# 	PLATFORM_LDFLAGS += -fuse-ld=gold
+# endif
+
+
+LINKERS := mold lld ld
+PLATFORM_LDFLAGS += $(firstword $(foreach l,$(LINKERS),\
+                      $(shell command -v $$l >/dev/null 2>&1 && \
+                                echo -fuse-ld=$$l)))
