@@ -113,9 +113,9 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 
 	glfwDefaultWindowHints();
 	
-#ifdef TARGET_LINUX
-	glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
-#endif
+//#ifdef TARGET_LINUX
+//	glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
+//#endif
 
 	
 	glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, settings.highResolutionCapable);
