@@ -740,10 +740,10 @@ void ofTemplateMacos::load() {
 				{ { "emptyExample", conf.projectName } } });
 		}
 
-		copyTemplateFiles.push_back({
-			path / "emptyExample.xcodeproj/project.xcworkspace",
-			conf.projectPath / (conf.projectName + ".xcodeproj/project.xcworkspace"),
-		});
+		// copyTemplateFiles.push_back({
+		// 	path / "emptyExample.xcodeproj/project.xcworkspace",
+		// 	conf.projectPath / (conf.projectName + ".xcodeproj/project.xcworkspace"),
+		// });
 	} else {
 
 		// MARK:- IOS sector;

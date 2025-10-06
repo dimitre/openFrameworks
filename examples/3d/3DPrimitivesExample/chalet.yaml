@@ -1,7 +1,7 @@
 name: OF
 version: 0.3.4
 variables:
-  generator: ofGen v0.6.2
+  generator: ofGen v0.6.3
   addons: ProjectSourceFiles_3DPrimitivesExample
   platform: macos
   ofPath: ../../..
@@ -24,6 +24,11 @@ abstracts:*:
       - ${var:ofPath}/libs/openFrameworks/**
       - ${var:ofPath}/libs/{${var:platform}}/include
       - ${var:ofPath}/libs/{${var:platform}}/include/**
+    includeDirs[:linux]:
+      - /usr/include/gstreamer-1.0
+      - /usr/include/glib-2.0
+      - /usr/lib/x86_64-linux-gnu/glib-2.0/include
+      - /usr/include/x86_64-linux-gnu
     appleFrameworks:
       - Accelerate
       - AGL
@@ -55,8 +60,54 @@ targets:
     settings:Cxx:
       staticLinks:
         - OF
+      links[:linux]:
+        - gstapp-1.0
+        - gstvideo-1.0
+        - gstbase-1.0
+        - gstreamer-1.0
+        - udev
+        - sndfile
+        - openal
+        - ssl
+        - crypto
+        - curl
+        - pulse-simple
+        - pulse
+        - pthread
+        - asound
+        - GL
+        - GLU
+        - gtk-x11-2.0
+        - gdk-x11-2.0
+        - pangocairo-1.0
+        - atk-1.0
+        - cairo
+        - gdk_pixbuf-2.0
+        - gio-2.0
+        - pangoft2-1.0
+        - pango-1.0
+        - gobject-2.0
+        - glib-2.0
+        - harfbuzz
+        - fontconfig
+        - freetype
+        - mpg123
       staticLinks[:linux]:
-        - ${var:ofPath}/libs/${var:platform}/lib/{libbrotlicommon,libbrotlidec,libFreeImage,libfreetype,libglew,libglfw3,libglm,libkissfft-float,libpng16,libpugixml,libtess2,libtiff,libtiffxx,libturbojpeg,liburiparser,libz}.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libpng16.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
+        - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
+        - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libz.a
       staticLinks[:macos]:
         - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
         - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
@@ -80,6 +131,8 @@ targets:
         - ${var:ofPath}/libs/openFrameworks/**
         - ${var:ofPath}/libs/openFrameworks
         - src
+      linkerOptions[:linux]:
+        - -pthread
     files:
       include:
         - src/main.cpp
