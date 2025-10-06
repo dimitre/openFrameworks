@@ -485,5 +485,8 @@ PLATFORM_LIBRARY_SEARCH_PATHS =
 ################################################################################
 #PLATFORM_CXX=
 
+$(info 📚 PLATFORM_PKG_CONFIG_LIBRARIES = $(PLATFORM_PKG_CONFIG_LIBRARIES))
+
+
 afterplatform: after
 	@echo
