@@ -32,7 +32,7 @@ ifneq (, $(shell command -v mold))
 else ifneq (, $(shell command -v lld))
 	PLATFORM_LDFLAGS += -fuse-ld=lld
 else ifneq (, $(shell command -v ld))
-	PLATFORM_LDFLAGS += -fuse-ld=ld
+	PLATFORM_LDFLAGS += -fuse-ld=bfd
 else ifneq (, $(shell command -v gold))
 	PLATFORM_LDFLAGS += -fuse-ld=gold
 endif
