@@ -121,8 +121,8 @@ targets:
         # - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
         # - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
 
-        #libpng, libbrotlienc, libjpeg
-        - ${var:ofPath}/libs/${var:platform}/lib/{libbrotlicommon,libbrotlidec,libFreeImage,libfreetype,libglew,libglfw3,libglm,libkissfft-float,libpng16,libpugixml,libtess2,libtiff,libtiffxx,libturbojpeg,liburiparser,libz}.a
+        #libpng, libbrotlienc, libjpeg libbrotlicommon,libbrotlidec
+        - ${var:ofPath}/libs/${var:platform}/lib/{libFreeImage,libfreetype,libglew,libglfw3,libglm,libkissfft-float,libpng16,libpugixml,libtess2,libtiff,libtiffxx,libturbojpeg,liburiparser,libz}.a
 
       staticLinks[:macos]:
         - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
