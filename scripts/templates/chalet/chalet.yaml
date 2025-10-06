@@ -115,6 +115,39 @@ targets:
         # - ${externalBuild:OF}/libOF.a
         # - ${externalBuild:OF}
         # - ${var:ofPath}/libs/openFrameworksCompiled/lib/${var:platform}/libopenFrameworks.a
+      links[:linux]:
+        - lgstapp-1.0
+        - lgstvideo-1.0
+        - lgstbase-1.0
+        - lgstreamer-1.0
+        - ludev
+        - lsndfile
+        - lopenal
+        - lssl
+        - lcrypto
+        - lcurl
+        - lpulse-simple
+        - lpulse
+        - pthread
+        - lasound
+        - lGL
+        - lGLU
+        - lgtk-x11-2.0
+        - lgdk-x11-2.0
+        - lpangocairo-1.0
+        - latk-1.0
+        - lcairo
+        - lgdk_pixbuf-2.0
+        - lgio-2.0
+        - lpangoft2-1.0
+        - lpango-1.0
+        - lgobject-2.0
+        - lglib-2.0
+        - lharfbuzz
+        - lfontconfig
+        - lfreetype
+        - lmpg123
+
       staticLinks[:linux]:
         # Original
         # - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
