@@ -153,7 +153,7 @@ targets:
         - ${var:ofPath}/libs/openFrameworks
       linkerOptions[:linux]:
         - -pthread
-        - -lgsreamer-1.0
+        - -lgstreamer-1.0
         - -lgobject-2.0
         - -lglib-2.0
     files:
