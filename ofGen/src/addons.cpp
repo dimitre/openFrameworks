@@ -17,8 +17,8 @@ void scanFolder(const fs::path & path,
 	alert("	add includes: " + path.string(), 34);
 
 	for (auto it = fs::recursive_directory_iterator(path);
-		 it != fs::recursive_directory_iterator();
-		 ++it) {
+		it != fs::recursive_directory_iterator();
+		++it) {
 		auto f = it->path();
 		// cout << f << endl;
 
@@ -371,18 +371,17 @@ bool buildProject() {
 
 		alert("No templates found, ofgen will deduce from platform", 95);
 
-// 		#ifdef __linux__
-// 				conf.templateNames.emplace_back("zed");
-// 				conf.templateNames.emplace_back("make");
-// #elif defined(__APPLE_CC__)
-// 				conf.templateNames.emplace_back("macos");
-// 				conf.templateNames.emplace_back("zed");
-// 				conf.templateNames.emplace_back("make");
-// #elif defined(__MINGW32__) || defined(__MINGW64__)
-//         conf.templateNames.emplace_back("vscode");
-// 				conf.templateNames.emplace_back("make");
-// #endif
-
+		// 		#ifdef __linux__
+		// 				conf.templateNames.emplace_back("zed");
+		// 				conf.templateNames.emplace_back("make");
+		// #elif defined(__APPLE_CC__)
+		// 				conf.templateNames.emplace_back("macos");
+		// 				conf.templateNames.emplace_back("zed");
+		// 				conf.templateNames.emplace_back("make");
+		// #elif defined(__MINGW32__) || defined(__MINGW64__)
+		//         conf.templateNames.emplace_back("vscode");
+		// 				conf.templateNames.emplace_back("make");
+		// #endif
 
 		// I'm removing this because it doesn't appear ok.
 		// FIXME: we need better this
@@ -391,7 +390,7 @@ bool buildProject() {
 		std::map<std::string, std::vector<std::string>> platformTemplates {
 			{ "vs", { "visualstudio" } },
 			// { "macos", { "macos", "make", "vscode" } },
-	        { "macos", { "macos" } },
+			{ "macos", { "macos" } },
 			{ "msys2", { "make", "vscode" } },
 			{ "linux64", { "make", "vscode" } },
 		};
@@ -399,7 +398,11 @@ bool buildProject() {
 		std::string platform { getPlatformString() };
 		cout << "platform is " << platform << endl;
 		if (!empty(platform)) {
-		    conf.templateNames = platformTemplates[platform];
+			if (empty(conf.templateNames)) {
+				conf.templateNames = platformTemplates[platform];
+			} else {
+
+			}
 		}
 		// conf.templateNames.emplace_back(getPlatformString());
 		// alert("Platforms", 95);
@@ -410,9 +413,7 @@ bool buildProject() {
 		alert("Templates ");
 		cout << joinStrings(conf.templateNames, ", ") << endl;
 
-
 		alert("======= end buildProject", 31);
-
 	}
 
 	if (!conf.isValidOfPath()) {
@@ -422,9 +423,6 @@ bool buildProject() {
 	} else {
 		alert("of path OK, proceeding");
 	}
-
-
-
 
 	// scanFolder()
 	// create templates, add to project

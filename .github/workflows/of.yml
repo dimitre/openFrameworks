@@ -17,20 +17,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # os: [macos-latest, ubuntu-latest, windows-latest]
-        # os: [windows-latest]
         include:
           - { os: ubuntu-latest, platform: linux64, shell: bash }
           - { os: macos-latest, platform: macos, shell: bash }
-
-          # - {
-          #     os: windows-latest,
-          #     platform: msys2,
-          #     shell: msys2 -c 'export PATH=$PATH:/c/hostedtoolcache/windows/chalet-org/chalet/latest/windows-x64',
-          #   }
-
           - { os: windows-latest, platform: vs, shell: bash }
           # - { os: windows-latest, platform: vs, shell: powershell }
+          - {
+              os: windows-latest,
+              platform: msys2,
+              shell: msys2 -c 'export PATH=$PATH:/c/hostedtoolcache/windows/chalet-org/chalet/latest/windows-x64',
+            }
 
     runs-on: ${{ matrix.os }}
     defaults:
@@ -228,6 +224,13 @@ jobs:
         run: |
           cd examples/templates/allAddonsExample
           ofgen buildrun
+
+      - name: All Addons Example Chalet
+        # if: runner.os != 'Windows'
+        run: |
+          cd examples/templates/allAddonsExample
+          ofgen templates=chalet
+          chalet buildrun
 
       - name: All Addons Example
         if: runner.os == 'Windows'

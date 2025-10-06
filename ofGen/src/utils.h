@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream> // cout
-static std::string version = "v0.6.2";
+static std::string version = "v0.6.3";
 
 #include <filesystem>
 #include <map>
@@ -20,7 +20,7 @@ using std::endl;
 // using std::vector;
 
 
-static inline std::string getPGVersion() {
+static inline std::string getVersion() {
 	return "ofGen " + version;
 }
 

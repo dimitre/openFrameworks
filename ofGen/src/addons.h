@@ -35,8 +35,10 @@ public:
 
 	// All files scanned
 	std::map<std::string, std::vector<fs::path>> filesMap;
+
 	// All exclusion filter paths to be tested
 	std::map<std::string, std::vector<fs::path>> exclusionsMap;
+
 	// Remaining files after filtering.
 	std::map<std::string, std::vector<fs::path>> filteredMap;
 

@@ -1,7 +1,7 @@
 name: OF
-version: 0.3.3
+version: 0.3.4
 variables:
-  generator: ofGen v0.5.6
+  generator: ofGen v0.6.3
   addons: ProjectSourceFiles_ofxAssimpExample,ofxAssimp,ofxGui
   platform: macos
   ofPath: ../../..
@@ -23,6 +23,12 @@ abstracts:*:
     includeDirs:
       - ${var:ofPath}/libs/openFrameworks/**
       - ${var:ofPath}/libs/{${var:platform}}/include
+      - ${var:ofPath}/libs/{${var:platform}}/include/**
+    includeDirs[:linux]:
+      - /usr/include/gstreamer-1.0
+      - /usr/include/glib-2.0
+      - /usr/lib/x86_64-linux-gnu/glib-2.0/include
+      - /usr/include/x86_64-linux-gnu
     appleFrameworks:
       - Accelerate
       - AGL
@@ -46,16 +52,63 @@ targets:
       exclude[:macos]:
         - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils,ofMediaFoundationPlayer,ofDirectShowGrabber,ofDirectShowPlayer}.cpp
         - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
+      exclude[:linux]:
+        - ${var:ofPath}/libs/openFrameworks/video/{ofDirectShowPlayer,ofDirectShowGrabber,ofMediaFoundationPlayer}.cpp
+        - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
   ofxAssimpExample:
     kind: executable
     settings:Cxx:
       staticLinks:
         - OF
         - ../../../addons/ofxAssimp/libs/assimp/lib/macos/libassimp.a
+      links[:linux]:
+        - gstapp-1.0
+        - gstvideo-1.0
+        - gstbase-1.0
+        - gstreamer-1.0
+        - udev
+        - sndfile
+        - openal
+        - ssl
+        - crypto
+        - curl
+        - pulse-simple
+        - pulse
+        - pthread
+        - asound
+        - GL
+        - GLU
+        - gtk-x11-2.0
+        - gdk-x11-2.0
+        - pangocairo-1.0
+        - atk-1.0
+        - cairo
+        - gdk_pixbuf-2.0
+        - gio-2.0
+        - pangoft2-1.0
+        - pango-1.0
+        - gobject-2.0
+        - glib-2.0
+        - harfbuzz
+        - fontconfig
+        - freetype
+        - mpg123
       staticLinks[:linux]:
+        - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
         - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
         - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libpng16.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
+        - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
+        - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libz.a
       staticLinks[:macos]:
         - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
         - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
@@ -69,6 +122,12 @@ targets:
         - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
         - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
         - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libbrotlienc.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
+        - ${var:ofPath}/libs/${var:platform}/lib/libz.a
+        - ${var:ofPath}/libs/${var:platform}/lib/liblzma.a
       includeDirs:
         - ${var:ofPath}/libs/openFrameworks/**
         - ${var:ofPath}/libs/openFrameworks
@@ -82,6 +141,8 @@ targets:
         - ../../../addons/ofxAssimp/src
         - ../../../addons/ofxAssimp/src/Source
         - ../../../addons/ofxGui/src
+      linkerOptions[:linux]:
+        - -pthread
     files:
       include:
         - src/main.cpp

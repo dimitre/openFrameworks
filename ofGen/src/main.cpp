@@ -9,7 +9,15 @@ int main(const int argc, const char * argv[]) {
 	conf.parseParameters(argc, argv);
 
 	bool build = true;
+
+	if (!fs::exists("src") && !fs::exists("of.yml") && !fs::exists("addons.make") && !fs::exists("../../../.ofroot")) {
+		alert("no src folder found, no of.yml file or addons.make found and no OF installed in default path ../../..", 95);
+		build = false;
+		conf.help();
+	}
+
 	if (!empty(conf.singleParameter)) {
+		alert("this is single parameter " + conf.singleParameter, 96);
 		build = false;
 
 		// First parameters without bulding project.
@@ -43,8 +51,7 @@ int main(const int argc, const char * argv[]) {
 			buildProject();
 			cout << conf.buildCommand << endl;
 			exit(1);
-		}
-		else if (conf.singleParameter == "cleantemplates") {
+		} else if (conf.singleParameter == "cleantemplates") {
 			// project.eraseTemplates();
 		}
 
@@ -53,17 +60,19 @@ int main(const int argc, const char * argv[]) {
 			exit(1);
 		}
 	} else {
-		buildProject();
-		auto t2 = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<double> ms_double = t2 - t1;
-		std::cout << "" << ms_double.count() << " seconds" << std::endl;
+		if (build) {
+			buildProject();
+			auto t2 = std::chrono::high_resolution_clock::now();
+			std::chrono::duration<double> ms_double = t2 - t1;
+			std::cout << "" << ms_double.count() << " seconds" << std::endl;
+		}
 	}
 	// if (build) {
 	// 	build = buildProject();
 	// }
 
 	std::cout << std::endl;
-	alert(getPGVersion(), 92);
+	alert(getVersion(), 92);
 
 	// if (build) {
 	// 	auto t2 = std::chrono::high_resolution_clock::now();
