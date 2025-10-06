@@ -47,7 +47,12 @@ abstracts:*:
       # - ${var:ofPath}/libs/openFrameworks
       - ${var:ofPath}/libs/{${var:platform}}/include
       - ${var:ofPath}/libs/{${var:platform}}/include/**
-    # includeDirs[:linux]:
+    includeDirs[:linux]:
+      - /usr/include/gstreamer-1.0
+      - /usr/include/glib-2.0
+      - /usr/lib/x86_64-linux-gnu/glib-2.0/include
+      - /usr/include/x86_64-linux-gnu
+
     # - /usr/include
     # - /usr/include/**
     # - /usr/lib/**/include
