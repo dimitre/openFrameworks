@@ -47,10 +47,10 @@ abstracts:*:
       # - ${var:ofPath}/libs/openFrameworks
       - ${var:ofPath}/libs/{${var:platform}}/include
       - ${var:ofPath}/libs/{${var:platform}}/include/**
-    includeDirs[:linux]:
-      - /usr/include
-      - /usr/include/**
-      - /usr/lib/**/include
+    # includeDirs[:linux]:
+    # - /usr/include
+    # - /usr/include/**
+    # - /usr/lib/**/include
 
     # includeDirs[:macos]:
     # libDirs[:macos]: ${var:ofPath}/libs/fmod/lib/osx
