@@ -132,7 +132,7 @@ fi
 
 if [[ $1 == 'vs' ]]; then
     PLATFORM=$1
-   	CORELIBS=( brotli FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib )
+   	CORELIBS=( yaml brotli FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib )
 	# FIXME: TODO: add svgtiny to ofLibs and here
 	# TODO: curl, openssl
 	ADDONLIBS=( assimp cairo libusb opencv )
