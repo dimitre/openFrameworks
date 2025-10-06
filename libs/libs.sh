@@ -77,7 +77,7 @@ if [[ "$OSTYPE" == "cygwin"* ]]; then
 
 elif [[ "$(uname -s)" == "Darwin" ]]; then
 	PLATFORM=macos
-	CORELIBS=( lzma libtiff libjpeg brotli FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib  )
+	CORELIBS=( yaml-cpp lzma libtiff libjpeg brotli FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib  )
 	# FIXME: TODO: add svgtiny to ofLibs and here
 	ADDONLIBS=( assimp cairo libusb opencv openssl curl )
 	ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
