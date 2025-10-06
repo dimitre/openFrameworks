@@ -94,7 +94,8 @@ elif [[ "$(uname -s)" == "Darwin" ]]; then
 		# "svgtiny:ofxSvg"
 	)
 
-elif [[ "$(uname -s)" == "Linux" ]]; then
+
+elif [[ "$(uname -s)" == "Linux" ]]; then # UBUNTU
 	# libxml2-dev
 	# sudo apt-get -y install libcairo2-dev make libgtk2.0-dev nlohmann-json3-dev libssl3 libcurl4 brotli libcurl4-openssl-dev libjack-jackd2-0 libjack-jackd2-dev freeglut3-dev libasound2-dev libxmu-dev libxxf86vm-dev libgl1-mesa-dev libraw1394-dev libudev-dev libdrm-dev libglew-dev libopenal-dev libsndfile1-dev libfreeimage-dev libcairo2-dev libfreetype6-dev libssl-dev libpulse-dev libusb-1.0-0-dev libopencv-dev libassimp-dev librtaudio-dev liburiparser-dev libpugixml-dev libgtk2.0-0 libxcursor-dev libxi-dev libxinerama-dev libglfw3-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-pulseaudio gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav
 	# CORELIBS=( kissfft glm tess2 utfcpp )
