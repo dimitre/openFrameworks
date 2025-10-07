@@ -48,8 +48,8 @@ abstracts:*:
     # compileOptions[toolchain:apple-llvm]:
     compileOptions[:macos]:
       - -fobjc-arc
-    # compileOptions[toolchain:msvc]:
-    #   - /D_CRT_NO_VA_START_VALIDATION
+    compileOptions[toolchain:msvc]:
+      - /D_CRT_NO_VA_START_VALIDATION
     # - /Uassert
     includeDirs:
       - ${var:ofPath}/libs/openFrameworks/**
