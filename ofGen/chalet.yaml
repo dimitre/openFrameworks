@@ -1,10 +1,7 @@
 name: ofgen
 version: "0.1"
 # variables:
-# generator: ofGen v0.5.6
-# addons: ProjectSourceFiles_AtlasTrack,ofxMicroUI,ofxVideoWriter,ofxNetwork,ofxOsc,ofxOpenCv
 # platform: vs
-# ofPath: ../../..
 abstracts:*:
     language: C++
     language[toolchain:apple-llvm]: Objective-C++
@@ -14,12 +11,6 @@ abstracts:*:
         runtimeTypeInformation: true
         threads: true
         exceptions: true
-        # defines:
-        # - __MACOSX_CORE__
-        # defines[:debug]:
-        # - DEBUG
-        # compileOptions[:macos]:
-        # - -fobjc-arc
         includeDirs:
             - src
             - src/uuidxx
@@ -46,7 +37,7 @@ targets:
             includeDirs[:linux]:
                 - ../libs/linux64/include/
             defines:
-                - YAML_CPP_NO_DLL
+                # - YAML_CPP_NO_DLL
                 - YAML_CPP_STATIC_DEFINE
 
         files:
@@ -56,27 +47,3 @@ targets:
             exclude:
                 - cmake
                 - .zed
-        # runWorkingDirectory: bin
-# distribution:
-#   ofgen:
-#     kind: bundle
-#     buildTargets: "*"
-#     exclude:
-#       - data/.gitkeep
-#     macosBundle:
-#       type: app
-#       # icon: ${var:ofPath}/libs/openFrameworksCompiled/project/macos/of.icns
-#       infoPropertyList:
-#         CFBundleDevelopmentRegion: en-US
-#         CFBundleDisplayName: ${name}
-#         CFBundleExecutable: ${mainExecutable}
-#         CFBundleIconFile: ${icon}
-#         CFBundleIdentifier: com.developer.application
-#         CFBundleInfoDictionaryVersion: 6.0
-#         CFBundleName: ${bundleName}
-#         CFBundlePackageType: APPL
-#         CFBundleShortVersionString: 1.0.0
-#         CFBundleVersion: 1.0.0
-#         CFBundleSignature: ????
-#         LSMinimumSystemVersion: 10.8
-#         NSHighResolutionCapable: true
