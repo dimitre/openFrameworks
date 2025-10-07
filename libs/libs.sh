@@ -216,7 +216,8 @@ checkLib() {
 # exit 1
 
 getlink() {
-	if [[ "$OSTYPE" == "cygwin"* ]]; then
+    if [[ "$OSTYPE" == "cygwin"* || "$OSTYPE" == "msys"* ]]; then
+
 		for LIBNAME in ${ALLLIBS[@]}
 		do
 			# github uses redirect, so it is needed -L parameter in curl.
