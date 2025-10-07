@@ -40,7 +40,7 @@ abstracts:*:
       - NDEBUG
       - _ASSERT_NO_CRT
       # FIXME: Remove when possible; trying to fix utf8cpp errors in msvc now.
-      - assert(x)=((void)0)
+      - assert(x)
 
     defines[:macos]:
       - __MACOSX_CORE__
