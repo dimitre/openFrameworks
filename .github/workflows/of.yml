@@ -212,7 +212,7 @@ jobs:
       #   run: |
       #     cd examples/templates/emptyExample
       #     ofgen templates=chalet
-      #     chalet buildrun
+      #     chalet build
       # ofgen
       # make -j
       #
@@ -230,7 +230,7 @@ jobs:
         run: |
           cd examples/templates/allAddonsExample
           ofgen templates=chalet
-          chalet buildrun
+          chalet build
 
       - name: All Addons Example
         if: runner.os == 'Windows'
