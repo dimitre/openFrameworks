@@ -64,11 +64,11 @@ jobs:
         with:
           tools: wget2 yaml-cpp fmt nlohmann-json pugixml # fmt ccache
 
-      - name: ofgen CMAKE cache
-        uses: actions/cache@v4
-        with:
-          path: "ofGen/build"
-          key: ofgen-cmake-${{ matrix.platform }}
+      # - name: ofgen CMAKE cache
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: "ofGen/build"
+      #     key: ofgen-cmake-${{ matrix.platform }}
 
       - name: ofgen compile windows
         if: runner.os == 'Windows'
