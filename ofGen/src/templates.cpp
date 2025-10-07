@@ -972,6 +972,7 @@ void ofTemplateVSCode::load() {
 		// 	}
 		// }
 
+		// FIXME: This seems like an error. unused f
 		for (auto & f : a->filteredMap["includes"]) {
 			workspace.addPath(a->path);
 		}
@@ -1086,14 +1087,14 @@ void ofTemplateChalet::load() {
 	// 	projectYaml["abstracts:*"]["appleFrameworks"].push_back(f);
 	// }
 
-	for (auto & a : conf.addons) {
+	// for (auto & a : conf.addons) {
 		// for (auto & l : a->filteredMap["libs"]) {
 		// 	string libPath { "${var:ofPath}/addons/" + a->name + '/' + l.string() };
 		// 	projectYaml["targets"]["empty"]["settings:Cxx"]["staticLinks"].push_back(libPath);
 		// }
 		// for (auto & f : a->filteredMap["includes"]) {
 		// }
-	}
+	// }
 }
 
 void ofTemplateChalet::addAddon(ofAddon * a) {

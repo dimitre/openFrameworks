@@ -148,7 +148,7 @@ std::string ofPathToString(const fs::path & path);
 // 	return res;
 // }
 
-static void divider() {
+static inline void divider() {
 	// cout << colorText(colorText("-----------------------------------------------------------", 5), 92) << endl;
 	std::cout << std::endl;
 	std::cout << colorText("-----------------------------------------------------------", 90) << std::endl;

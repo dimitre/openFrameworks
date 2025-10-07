@@ -157,7 +157,7 @@ void ofAddon::loadFiles() {
 			alert("		" + f.string(), 35);
 
 			if (fs::exists(f / "lib")) {
-				for (const std::string p : conf.platforms) {
+				for (const auto & p : conf.platforms) {
 					fs::path folder { f / "lib" / p };
 					if (!fs::exists(folder)) {
 						alert("		folder don't exist " + folder.string(), 96);
@@ -215,10 +215,10 @@ void ofAddon::loadAddonConfig() {
 	}
 
 	// FIXME: transformar para textToString, fazer os replaces todos de uma vez só.
-	int lineNum = 0;
+	// int lineNum = 0;
 
 	for (auto & originalLine : textToVector(addonConfig)) {
-		lineNum++;
+		// lineNum++;
 		string line = originalLine;
 
 		line = ofTrim(line);
@@ -252,17 +252,18 @@ void ofAddon::loadAddonConfig() {
 
 		if (consider) {
 			if (line.find("=") != string::npos) {
-				bool addToValue = false;
+			// FIXME: remove. limpa variable faz o papel de addToValue.
+				// bool addToValue = false;
 				vector<string> varValue;
 				bool limpa = false;
 				if (line.find("+=") != string::npos) {
-					addToValue = true;
+					// addToValue = true;
 					// FIXME: maybe not needed. a simple split is ok.
 					// varValue = splitStringOnceByLeft(line, "+=");
 					varValue = ofSplitString(line, "+=");
 				} else {
 					limpa = true;
-					addToValue = false;
+					// addToValue = false;
 					// varValue = splitStringOnceByLeft(line, "=");
 					varValue = ofSplitString(line, "=");
 				}
