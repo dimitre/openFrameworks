@@ -1,4 +1,4 @@
-#!/bin/bash
+# #!/usr/bin/env bash
 set -e
 # set -euo pipefail
 cd "$(dirname "$0")"
@@ -127,4 +127,3 @@ section "done"
 # # time include-what-you-use -c src/*.cpp -Wfatal-errors -std=c++17
 # time include-what-you-use -fuse-ld=lld *.o -o ofgen && time ./ofgen
 # CXX=time ccache c++
-# #!/usr/bin/env bash
