@@ -133,6 +133,15 @@ enum ofTargetPlatform{
 		#define _CRT_SECURE_NO_WARNINGS
 		#define _WINSOCK_DEPRECATED_NO_WARNINGS
 
+
+// Temporary fix for utf8cpp problems in 2025
+#ifdef _MSC_VER
+	#ifdef assert
+		#undef assert
+	#endif
+	#define assert(x) ((void)0)
+#endif
+
 		#include <stdint.h>
 		#include <functional>
 		#pragma warning(disable : 4068)		// unknown pragmas
