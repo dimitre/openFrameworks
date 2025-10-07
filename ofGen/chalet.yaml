@@ -6,57 +6,58 @@ version: "0.1"
 # platform: vs
 # ofPath: ../../..
 abstracts:*:
-  language: C++
-  language[toolchain:apple-llvm]: Objective-C++
-  settings:Cxx:
-    cppStandard: c++20
-    warningsPreset: minimal
-    runtimeTypeInformation: true
-    threads: true
-    exceptions: true
-    # defines:
-    # - __MACOSX_CORE__
-    # defines[:debug]:
-    # - DEBUG
-    # compileOptions[:macos]:
-    # - -fobjc-arc
-    includeDirs:
-      - src
-      - src/uuidxx
-targets:
-  ofgen:
-    kind: executable
+    language: C++
+    language[toolchain:apple-llvm]: Objective-C++
     settings:Cxx:
-      staticLinks[:windows]:
-        - ../libs/vs/lib/pugixml.lib
-        - ../libs/vs/lib/yaml-cpp.lib
-      staticLinks[:macos]:
-        - ../libs/macos/lib/libpugixml.a
-        - ../libs/macos/lib/libyaml-cpp.a
-      staticLinks[:linux]:
-        - ../libs/linux64/lib/libpugixml.a
-        - ../libs/linux64/lib/libyaml-cpp.a
-      includeDirs:
-        - src
-        - src/uuidxx/src
-      includeDirs[:windows]:
-        - ../libs/vs/include/
-      includeDirs[:macos]:
-        - ../libs/macos/include/
-      includeDirs[:linux]:
-        - ../libs/linux64/include/
-      defines:
+        cppStandard: c++20
+        warningsPreset: minimal
+        runtimeTypeInformation: true
+        threads: true
+        exceptions: true
         # defines:
-        - YAML_CPP_NO_DLL
+        # - __MACOSX_CORE__
+        # defines[:debug]:
+        # - DEBUG
+        # compileOptions[:macos]:
+        # - -fobjc-arc
+        includeDirs:
+            - src
+            - src/uuidxx
+targets:
+    ofgen:
+        kind: executable
+        settings:Cxx:
+            staticLinks[:windows]:
+                - ../libs/vs/lib/pugixml.lib
+                - ../libs/vs/lib/yaml-cpp.lib
+            staticLinks[:macos]:
+                - ../libs/macos/lib/libpugixml.a
+                - ../libs/macos/lib/libyaml-cpp.a
+            staticLinks[:linux]:
+                - ../libs/linux64/lib/libpugixml.a
+                - ../libs/linux64/lib/libyaml-cpp.a
+            includeDirs:
+                - src
+                - src/uuidxx/src
+            includeDirs[:windows]:
+                - ../libs/vs/include/
+            includeDirs[:macos]:
+                - ../libs/macos/include/
+            includeDirs[:linux]:
+                - ../libs/linux64/include/
+            defines:
+                # defines:
+                - YAML_CPP_NO_DLL
+                - YAML_CPP_STATIC_DEFINE
 
-    files:
-      include:
-        - src/*.cpp
-        - src/uuidxx/src/*.cpp
-      exclude:
-        - cmake
-        - .zed
-    # runWorkingDirectory: bin
+        files:
+            include:
+                - src/*.cpp
+                - src/uuidxx/src/*.cpp
+            exclude:
+                - cmake
+                - .zed
+        # runWorkingDirectory: bin
 # distribution:
 #   ofgen:
 #     kind: bundle
