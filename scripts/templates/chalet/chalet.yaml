@@ -35,7 +35,9 @@ abstracts:*:
     runtimeTypeInformation: true
     threads: true
     exceptions: true
-    defines:
+    defines[toolchain:msvc]:
+      - _CRT_SECURE_NO_WARNINGS
+    defines[:macos]:
       - __MACOSX_CORE__
     defines[:debug]:
       - DEBUG
