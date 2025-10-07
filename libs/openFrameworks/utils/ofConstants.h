@@ -1,12 +1,12 @@
 #pragma once
 
-// Temporary fix for utf8cpp problems in 2025
-#ifdef _MSC_VER
-	// Must come before any includes to prevent assert macro conflicts
-	#ifndef assert
-		#define assert(x) ((void)0)
-	#endif
-#endif
+//// Temporary fix for utf8cpp problems in 2025
+//#ifdef _MSC_VER
+//	// Must come before any includes to prevent assert macro conflicts
+//	#ifndef assert
+//		#define assert(x) ((void)0)
+//	#endif
+//#endif
 
 #define OF_TUNINGFORK
 
@@ -312,7 +312,7 @@ typedef TESSindex ofIndexType;
 	  #elif defined(TARGET_EMSCRIPTEN)
 		#define OF_SOUND_PLAYER_EMSCRIPTEN
 	  #elif !defined(TARGET_ANDROID) && !defined(TARGET_OF_MAC)
-		#define OF_SOUND_PLAYER_FMOD
+//		#define OF_SOUND_PLAYER_FMOD
 	  #endif
 	#endif
 #endif
