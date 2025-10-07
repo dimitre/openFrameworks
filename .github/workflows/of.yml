@@ -18,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # - { os: ubuntu-latest, platform: linux64, shell: bash }
+          - { os: ubuntu-latest, platform: linux64, shell: bash }
           - { os: macos-latest, platform: macos, shell: bash }
           # - { os: windows-latest, platform: vs, shell: bash }
           - { os: windows-latest, platform: vs, shell: powershell }
@@ -34,6 +34,11 @@ jobs:
         shell: ${{ matrix.shell }} {0}
     steps:
       - uses: actions/checkout@v5
+
+      # - name: ccache
+      #   uses: hendrikmuhs/ccache-action@v1.2.19
+      #   with:
+      #     key: ${{ matrix.platform }}-${{ matrix.target }}
 
       - uses: msys2/setup-msys2@v2.28.0
         if: runner.os == 'Windows' && matrix.platform == 'msys2'
@@ -125,22 +130,6 @@ jobs:
         shell: bash
         run: ls -alFR ./libs/
 
-      # - name: Libs
-      #   if: runner.os != 'Windows'
-      #   run: ./libs/libs.sh
-      # - name: Libs
-      #   if: runner.os == 'Windows'
-      #   # shell: powershell
-      #   run: ./libs/libs.sh
-      - name: ofgen compile windows chalet
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          cd ofGen
-          chalet bundle
-          (Resolve-Path .\dist).Path | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-        # echo ".\dist" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-
       # - name: ofgen compile windows cmake
       #   if: runner.os == 'Windows'
       #   shell: pwsh
@@ -155,151 +144,38 @@ jobs:
           cd ofGen
           ./compile.sh
 
+      - name: ofgen compile windows chalet
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          cd ofGen
+          chalet bundle
+          (Resolve-Path .\dist).Path | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
       - name: ofgen test
         run: |
           ofgen colors
 
-      # - name: ofgen install
-      #   run: |
-      #     cd ofGen
-      #     ./install.sh
-
-      # - name: ofgen test windows
-      #   if: runner.os == 'Windows'
-      #   run: |
-      #     ofgen.exe colors
-
-      # - name: Install Git and other tools with Chocolatey
-      #   run: |
-      #     choco install git vscode
-      #
-      # - name: Install pkgconfiglite via Chocolatey
-      #   if: runner.os == 'Windows'
-      #   shell: powershell
-      #   run: choco install pkgconfiglite -y
-
-      # - name: vcpkg build
-      #   uses: johnwason/vcpkg-action@v7
-      #   id: vcpkg
-      #   with:
-      #     pkgs: yaml-cpp nlohmann-json pugixml
-      #     triplet: x64-windows-release
-      #     token: ${{ github.token }}
-
-      # - name: Install vcpkg
-      #   if: runner.os == 'Windows'
-      #   # shell: powershell
-      #   run: |
-      #     git clone https://github.com/microsoft/vcpkg.git
-      #     .\vcpkg\bootstrap-vcpkg.bat
-      # - name: Install packages
-      #   if: runner.os == 'Windows'
-      #   # shell: powershell
-      #   run: |
-      #     .\vcpkg\vcpkg install yaml-cpp:x64-windows  nlohmann-json:x64-windows pugixml:x64-windows
-      #     .\vcpkg\vcpkg integrate install
-
-      # - name: Install Packages - Apt
-      #   if: matrix.os == 'ubuntu-latest'
-      #   uses: awalsh128/cache-apt-pkgs-action@latest
-      #   with:
-      #     packages: libssl3 libcurl4 brotli libcurl4-openssl-dev nlohmann-json3-dev libyaml-cpp-dev wget2 make libjack-jackd2-0 libjack-jackd2-dev freeglut3-dev libasound2-dev libxmu-dev libxxf86vm-dev g++ libgl1-mesa-dev libglu1-mesa-dev libraw1394-dev libudev-dev libdrm-dev libglew-dev libopenal-dev libsndfile1-dev libfreeimage-dev libcairo2-dev libfreetype6-dev libpulse-dev libusb-1.0-0-dev libgtk2.0-dev libopencv-dev libassimp-dev librtaudio-dev gdb libglfw3-dev liburiparser-dev libpugixml-dev libgconf-2-4 libgtk2.0-0 libpoco-dev libxcursor-dev libxi-dev libxinerama-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-libav gstreamer1.0-pulseaudio gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good
-      #     version: 1.0
-
-      # - name: ccache
-      #   uses: hendrikmuhs/ccache-action@v1.2.19
-      #   with:
-      #     key: ${{ matrix.platform }}-${{ matrix.target }}
-
-      # - name: XCodebuild Core
-      #   if: matrix.os == 'macos-latest'
-      #   run: |
-      #     cd libs/openFrameworksCompiled/project/macos
-      #     xcodebuild -arch arm64
-      # - name: Make OF Core
-      #   run: |
-      #     cd libs/openFrameworksCompiled/project/
-      #     make -j Debug
-      # - name: Empty Example
-      #   run: |
-      #     cd examples/templates/emptyExample
-      #     ofgen templates=chalet
-      #     chalet build
-      # ofgen
-      # make -j
-      #
-      #
-      #
-
-      - name: All Addons Example
-        if: runner.os != 'Windows'
-        run: |
-          cd examples/templates/allAddonsExample
-          ofgen buildrun
-
       - name: All Addons Example Chalet
-        # if: runner.os != 'Windows'
         run: |
           cd examples/templates/allAddonsExample
           ofgen templates=chalet
           chalet build
 
-      - name: All Addons Example
-        if: runner.os == 'Windows'
-        shell: powershell
-        run: |
-          cd examples/templates/allAddonsExample
-          # ofgen buildrun
-          ofgen
-          msbuild
+      # - name: All Addons Example
+      #   if: runner.os != 'Windows'
+      #   run: |
+      #     cd examples/templates/allAddonsExample
+      #     ofgen buildrun
+
+      # - name: All Addons Example
+      #   if: runner.os == 'Windows'
+      #   shell: powershell
+      #   run: |
+      #     cd examples/templates/allAddonsExample
+      #     # ofgen buildrun
+      #     ofgen
+      #     msbuild
 
       # - name: Tests
       #   run: ./scripts/tests.sh
-
-  ofworks-rpi:
-    if: false
-    strategy:
-      matrix:
-        # os: [ubuntu-latest]
-        include:
-          - {
-              platform: rpi-aarch64,
-              os: ubuntu-latest,
-              prefix: aarch64-linux-gnu,
-              toolchain: aarch64-linux-gnu-gcc,
-            }
-        # os: [ubuntu-latest]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: RPI - apt multistrap
-        uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: multistrap gcc-${{matrix.prefix}} g++-${{matrix.prefix}}
-          version: 1.0
-
-      - name: RPI - multistrap
-        if: matrix.platform == 'rpi-aarch64' || matrix.platform == 'rpi-armv6l'
-        shell: bash
-        run: |
-          mkdir -p raspbian/etc/apt/apt.conf.d/
-          echo 'Acquire::AllowInsecureRepositories "true";' | sudo tee raspbian/etc/apt/apt.conf.d/90insecure
-          multistrap -a arm64 -d raspbian -f ./scripts/rpi/multistrap.conf
-
-      - name: ccache
-        uses: hendrikmuhs/ccache-action@v1.2.18
-        with:
-          key: ${{ runner.os }}-${{ matrix.platform }}-ccache
-
-  # test:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Install Packages - Apt
-  #       uses: awalsh128/cache-apt-pkgs-action@latest
-  #       with:
-  #         packages: libcairo2-dev
-  #         version: 1.0
-
-  #     - name: test
-  #       run: |
-  #         pkg-config --libs --cflags cairo
