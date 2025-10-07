@@ -42,3 +42,23 @@ targets:
       exclude:
         - cmake
         - .zed
+distribution:
+  ofgen:
+    kind: bundle
+    buildTargets: "*"
+    # linuxDesktopEntry:
+    #   - template: platform/linux/app.desktop
+    #   - icon: platform/linux/app-logo.png
+    #   - copyToApplications: true
+    # windows:
+    #   - includeRuntimeDlls: false
+    # - ${externalBuild:${name}}/*
+# "distribution": {
+#    "MyApp": {
+#       "kind": "bundle",
+#       "buildTargets": [
+#           "shared-lib",
+#           "my-executable"
+#       ]
+#    }
+# }

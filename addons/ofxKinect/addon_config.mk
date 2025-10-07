@@ -54,5 +54,6 @@ linuxaarch64:
 macos:
 	ADDON_SOURCES_EXCLUDE = libs/libfreenect/platform/%
 	ADDON_INCLUDES_EXCLUDE = libs/libfreenect/platform/%
+	ADDON_FRAMEWORKS = Security
 
 ios:
