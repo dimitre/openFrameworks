@@ -49,7 +49,22 @@ done
 
 # echo "ostype = ${OSTYPE}"
 
-if [[ "$OSTYPE" == "cygwin"* ]]; then
+if [[ "$OSTYPE" == "msys"* ]]; then
+    PLATFORM=vs
+   	CORELIBS=( yaml-cpp brotli FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib )
+	# FIXME: TODO: add svgtiny to ofLibs and here
+	# TODO: curl, openssl
+	ADDONLIBS=( assimp cairo libusb opencv )
+	ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
+
+	LIBADDONS=(
+		# "assimp:ofxAssimpModelLoader"
+		"assimp:ofxAssimp"
+		"cairo:ofxCairo"
+		"libusb:ofxKinect"
+		"opencv:ofxOpenCv"
+	)
+elif [[ "$OSTYPE" == "cygwin"* ]]; then
 	PLATFORM=msys2
 	CORELIBS=( tess2 kissfft videoInput )
 	# CORELIBS=( brotli cairo FreeImage freetype glew glfw glm json libpng pugixml rtAudio tess2 uriparser utfcpp zlib openssl curl pixman )
