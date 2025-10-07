@@ -46,7 +46,6 @@ targets:
             includeDirs[:linux]:
                 - ../libs/linux64/include/
             defines:
-                # defines:
                 - YAML_CPP_NO_DLL
                 - YAML_CPP_STATIC_DEFINE
 
