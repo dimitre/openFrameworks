@@ -46,6 +46,7 @@ abstracts:*:
       - -fobjc-arc
     compileOptions[toolchain:msvc]:
       - /D_CRT_NO_VA_START_VALIDATION
+      - /Uassert
     includeDirs:
       - ${var:ofPath}/libs/openFrameworks/**
       # - ${var:ofPath}/libs/openFrameworks
