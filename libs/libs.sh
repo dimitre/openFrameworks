@@ -51,7 +51,7 @@ done
 
 if [[ "$OSTYPE" == "msys"* ]]; then
     PLATFORM=vs
-   	CORELIBS=( yaml-cpp brotli FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib )
+   	CORELIBS=( videoInput yaml-cpp brotli FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib )
 	# FIXME: TODO: add svgtiny to ofLibs and here
 	# TODO: curl, openssl
 	ADDONLIBS=( assimp cairo libusb opencv )
