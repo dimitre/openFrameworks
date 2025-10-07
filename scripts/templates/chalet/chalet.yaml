@@ -39,6 +39,8 @@ abstracts:*:
       - _CRT_SECURE_NO_WARNINGS
       - NDEBUG
       - _ASSERT_NO_CRT
+      - UNICODE
+      - _UNICODE
     # FIXME: Remove when possible; trying to fix utf8cpp errors in msvc now.
 
     defines[:macos]:

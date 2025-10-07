@@ -138,7 +138,8 @@ enum ofTargetPlatform{
 	#define __WINDOWS_MM__ // rtMidi?
 	#if (_MSC_VER)       // microsoft visual studio
 		//TODO: Fix this in the code instead of disabling the warnings
-		#define _CRT_SECURE_NO_WARNINGS
+// FIXME: Removed now, included in chalet project (include in msvc later)
+//		#define _CRT_SECURE_NO_WARNINGS
 		#define _WINSOCK_DEPRECATED_NO_WARNINGS
 
 
