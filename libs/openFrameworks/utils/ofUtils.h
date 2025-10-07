@@ -1,9 +1,9 @@
 #pragma once
 
+#include <utf8cpp/utf8.h>
+
 // MARK: TARGET_MINGW test
 #include "ofConstants.h"
-
-#include <utf8cpp/utf8.h>
 
 //#include <algorithm>
 #include <bitset> // For ofToBinary.
