@@ -36,7 +36,7 @@ abstracts:*:
     threads: true
     exceptions: true
     defines[toolchain:msvc]:
-      # - _CRT_SECURE_NO_WARNINGS
+      - _CRT_SECURE_NO_WARNINGS
       - NDEBUG
       - _ASSERT_NO_CRT
     # FIXME: Remove when possible; trying to fix utf8cpp errors in msvc now.
