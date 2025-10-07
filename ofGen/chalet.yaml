@@ -25,6 +25,8 @@ abstracts:*:
       - src/uuidxx
 targets:
   ofgen:
+    defines:
+      - YAML_CPP_NO_DLL
     kind: executable
     settings:Cxx:
       staticLinks[:windows]:
