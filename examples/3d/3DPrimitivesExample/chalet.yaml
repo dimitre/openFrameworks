@@ -1,7 +1,7 @@
 name: OF
 version: 0.3.4
 variables:
-  generator: ofGen v0.6.3
+  generator: ofGen v0.6.5
   addons: ProjectSourceFiles_3DPrimitivesExample
   platform: macos
   ofPath: ../../..
@@ -20,6 +20,8 @@ abstracts:*:
       - DEBUG
     compileOptions[:macos]:
       - -fobjc-arc
+    compileOptions[toolchain:msvc]:
+      - /D_CRT_NO_VA_START_VALIDATION
     includeDirs:
       - ${var:ofPath}/libs/openFrameworks/**
       - ${var:ofPath}/libs/{${var:platform}}/include

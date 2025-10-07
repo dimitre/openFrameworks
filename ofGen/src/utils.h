@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream> // cout
-static std::string version = "v0.6.4";
+static std::string version = "v0.6.5";
 
 #include <filesystem>
 #include <map>
