@@ -18,15 +18,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { os: ubuntu-latest, platform: linux64, shell: bash }
+          # - { os: ubuntu-latest, platform: linux64, shell: bash }
           - { os: macos-latest, platform: macos, shell: bash }
-          - { os: windows-latest, platform: vs, shell: bash }
-          # - { os: windows-latest, platform: vs, shell: powershell }
-          - {
-              os: windows-latest,
-              platform: msys2,
-              shell: msys2 -c 'export PATH=$PATH:/c/hostedtoolcache/windows/chalet-org/chalet/latest/windows-x64',
-            }
+          # - { os: windows-latest, platform: vs, shell: bash }
+          - { os: windows-latest, platform: vs, shell: powershell }
+          # - {
+          #     os: windows-latest,
+          #     platform: msys2,
+          #     shell: msys2 -c 'export PATH=$PATH:/c/hostedtoolcache/windows/chalet-org/chalet/latest/windows-x64',
+          #   }
 
     runs-on: ${{ matrix.os }}
     defaults:
@@ -37,9 +37,9 @@ jobs:
 
       # Preparation for ofgen
 
-      - name: Add msbuild to PATH
-        if: runner.os == 'Windows'
-        uses: microsoft/setup-msbuild@v2
+      # - name: Add msbuild to PATH
+      #   if: runner.os == 'Windows'
+      #   uses: microsoft/setup-msbuild@v2
 
       - name: Cache Packages - Linux Apt
         if: runner.os == 'Linux'
@@ -62,8 +62,19 @@ jobs:
         if: runner.os == 'macOS'
         uses: tecolicom/actions-use-homebrew-tools@v1.3
         with:
-          tools: wget2 yaml-cpp fmt nlohmann-json pugixml # fmt ccache
+          tools: cmake wget2 yaml-cpp fmt nlohmann-json pugixml # fmt ccache
 
+      - name: Install Chalet
+        uses: jaxxstorm/action-install-gh-release@v2.1.0
+        with:
+          repo: chalet-org/chalet
+          cache: enable
+          extension: .zip
+          prerelease: "false"
+
+      - name: Chalet Test / Version
+        run: |
+          chalet --version
       # - name: ofgen CMAKE cache
       #   uses: actions/cache@v4
       #   with:
@@ -79,11 +90,14 @@ jobs:
           echo "C:\Program Files (x86)\ofgen\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: ofgen compile
-
         if: runner.os != 'Windows'
         run: |
           cd ofGen
           ./compile.sh
+
+      - name: ofgen test
+        run: |
+          ofgen colors
 
       # - name: ofgen install
       #   run: |
@@ -95,10 +109,6 @@ jobs:
       #   run: |
       #     ofgen.exe colors
 
-      - name: ofgen test
-        # if: runner.os != 'Windows'
-        run: |
-          ofgen colors
       # - name: Install Git and other tools with Chocolatey
       #   run: |
       #     choco install git vscode
@@ -177,18 +187,6 @@ jobs:
       #   uses: hendrikmuhs/ccache-action@v1.2.19
       #   with:
       #     key: ${{ matrix.platform }}-${{ matrix.target }}
-
-      - name: Install Chalet
-        uses: jaxxstorm/action-install-gh-release@v2.1.0
-        with:
-          repo: chalet-org/chalet
-          cache: enable
-          extension: .zip
-          prerelease: "false"
-
-      - name: Chalet Test / Version
-        run: |
-          chalet --version
 
       - name: Libs
         if: runner.os != 'Windows'
