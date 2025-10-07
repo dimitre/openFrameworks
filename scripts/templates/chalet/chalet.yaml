@@ -37,6 +37,8 @@ abstracts:*:
     exceptions: true
     defines[toolchain:msvc]:
       - _CRT_SECURE_NO_WARNINGS
+      - NDEBUG
+      - _ASSERT_NO_CRT
     defines[:macos]:
       - __MACOSX_CORE__
     defines[:debug]:
