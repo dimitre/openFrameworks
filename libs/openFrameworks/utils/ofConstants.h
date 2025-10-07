@@ -1,5 +1,13 @@
 #pragma once
 
+// Temporary fix for utf8cpp problems in 2025
+#ifdef _MSC_VER
+	// Must come before any includes to prevent assert macro conflicts
+	#ifndef assert
+		#define assert(x) ((void)0)
+	#endif
+#endif
+
 #define OF_TUNINGFORK
 
 // version: ------------------------
@@ -133,14 +141,6 @@ enum ofTargetPlatform{
 		#define _CRT_SECURE_NO_WARNINGS
 		#define _WINSOCK_DEPRECATED_NO_WARNINGS
 
-
-// Temporary fix for utf8cpp problems in 2025
-#ifdef _MSC_VER
-	#ifdef assert
-		#undef assert
-	#endif
-	#define assert(x) ((void)0)
-#endif
 
 		#include <stdint.h>
 		#include <functional>

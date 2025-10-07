@@ -35,12 +35,11 @@ abstracts:*:
     runtimeTypeInformation: true
     threads: true
     exceptions: true
-    defines[toolchain:msvc]:
-      - _CRT_SECURE_NO_WARNINGS
-      - NDEBUG
-      - _ASSERT_NO_CRT
-      # FIXME: Remove when possible; trying to fix utf8cpp errors in msvc now.
-      - assert(x)
+    # defines[toolchain:msvc]:
+    #   - _CRT_SECURE_NO_WARNINGS
+    #   - NDEBUG
+    #   - _ASSERT_NO_CRT
+    # FIXME: Remove when possible; trying to fix utf8cpp errors in msvc now.
 
     defines[:macos]:
       - __MACOSX_CORE__
@@ -49,9 +48,9 @@ abstracts:*:
     # compileOptions[toolchain:apple-llvm]:
     compileOptions[:macos]:
       - -fobjc-arc
-    compileOptions[toolchain:msvc]:
-      - /D_CRT_NO_VA_START_VALIDATION
-      # - /Uassert
+    # compileOptions[toolchain:msvc]:
+    #   - /D_CRT_NO_VA_START_VALIDATION
+    # - /Uassert
     includeDirs:
       - ${var:ofPath}/libs/openFrameworks/**
       # - ${var:ofPath}/libs/openFrameworks
