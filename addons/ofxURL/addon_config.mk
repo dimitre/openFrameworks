@@ -11,6 +11,6 @@ macos:
 	ADDON_FRAMEWORKS = Foundation SystemConfiguration
 	# ADDON_LIBS += $(OF_ROOT)/libs/macos/lib/libcurl.a
 	# ADDON_LIBS += $(OF_ROOT)/libs/macos/lib/libcrypto.a
-	ADDON_LIBS = ../../../libs/macos/lib/libcurl.a
-	ADDON_LIBS += ../../../libs/macos/lib/libcrypto.a
-	ADDON_LIBS += ../../../libs/macos/lib/libssl.a
+	# ADDON_LIBS = ../../../libs/macos/lib/libcurl.a
+	# ADDON_LIBS += ../../../libs/macos/lib/libcrypto.a
+	# ADDON_LIBS += ../../../libs/macos/lib/libssl.a
