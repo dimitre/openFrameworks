@@ -3,6 +3,15 @@
 // MARK: TARGET_MINGW test
 #include "ofConstants.h"
 
+// Undefine assert before including utf8cpp
+#ifdef assert
+#undef assert
+#endif
+
+// Define it as no-op
+#define assert(x) ((void)0)
+
+
 #include <utf8cpp/utf8.h>
 
 //#include <algorithm>
