@@ -1,49 +1,44 @@
 name: ofgen
-version: "0.1"
-# variables:
-# platform: vs
+version: 0.1.1
 abstracts:*:
-    language: C++
-    language[toolchain:apple-llvm]: Objective-C++
-    settings:Cxx:
-        cppStandard: c++20
-        warningsPreset: minimal
-        runtimeTypeInformation: true
-        threads: true
-        exceptions: true
-        includeDirs:
-            - src
-            - src/uuidxx
+  language: C++
+  # language[toolchain:apple-llvm]: Objective-C++
+  settings:Cxx:
+    cppStandard: c++20
+    warningsPreset: minimal
+    runtimeTypeInformation: true
+    threads: true
+    exceptions: true
 targets:
-    ofgen:
-        kind: executable
-        settings:Cxx:
-            includeDirs:
-                - src
-                - src/uuidxx/src
-            includeDirs[:windows]:
-                - ../libs/vs/include/
-            includeDirs[:macos]:
-                - ../libs/macos/include/
-            includeDirs[:linux]:
-                - ../libs/linux64/include/
-            defines:
-                # - YAML_CPP_NO_DLL
-                - YAML_CPP_STATIC_DEFINE
-            staticLinks[:windows]:
-                - ../libs/vs/lib/pugixml.lib
-                - ../libs/vs/lib/yaml-cpp.lib
-            staticLinks[:macos]:
-                - ../libs/macos/lib/libpugixml.a
-                - ../libs/macos/lib/libyaml-cpp.a
-            staticLinks[:linux]:
-                - ../libs/linux64/lib/libpugixml.a
-                - ../libs/linux64/lib/libyaml-cpp.a
+  ofgen:
+    kind: executable
+    settings:Cxx:
+      includeDirs:
+        - src
+        - src/uuidxx/src
+      includeDirs[:windows]:
+        - ../libs/vs/include/
+      includeDirs[:macos]:
+        - ../libs/macos/include/
+      includeDirs[:linux]:
+        - ../libs/linux64/include/
+      defines:
+        # - YAML_CPP_NO_DLL
+        - YAML_CPP_STATIC_DEFINE
+      staticLinks[:windows]:
+        - ../libs/vs/lib/pugixml.lib
+        - ../libs/vs/lib/yaml-cpp.lib
+      staticLinks[:macos]:
+        - ../libs/macos/lib/libpugixml.a
+        - ../libs/macos/lib/libyaml-cpp.a
+      staticLinks[:linux]:
+        - ../libs/linux64/lib/libpugixml.a
+        - ../libs/linux64/lib/libyaml-cpp.a
 
-        files:
-            include:
-                - src/*.cpp
-                - src/uuidxx/src/*.cpp
-            exclude:
-                - cmake
-                - .zed
+    files:
+      include:
+        - src/*.cpp
+        - src/uuidxx/src/*.cpp
+      exclude:
+        - cmake
+        - .zed
