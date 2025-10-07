@@ -36,7 +36,7 @@ abstracts:*:
     threads: true
     exceptions: true
     defines[toolchain:msvc]:
-      - _CRT_SECURE_NO_WARNINGS
+      # - _CRT_SECURE_NO_WARNINGS
       - NDEBUG
       - _ASSERT_NO_CRT
     # FIXME: Remove when possible; trying to fix utf8cpp errors in msvc now.
@@ -105,6 +105,11 @@ targets:
       exclude[:linux]:
         - ${var:ofPath}/libs/openFrameworks/video/{ofDirectShowPlayer,ofDirectShowGrabber,ofMediaFoundationPlayer}.cpp
         - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
+
+      exclude[:windows]:
+        # - ${var:ofPath}/libs/openFrameworks/video/{ofDirectShowPlayer,ofDirectShowGrabber,ofMediaFoundationPlayer}.cpp
+        - ${var:ofPath}/libs/openFrameworks/sound/{ofFmodSoundPlayer}.cpp
+
   empty:
     kind: executable
     # importPackages: [of-static]
