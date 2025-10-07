@@ -18,15 +18,6 @@ targets:
     ofgen:
         kind: executable
         settings:Cxx:
-            staticLinks[:windows]:
-                - ../libs/vs/lib/pugixml.lib
-                - ../libs/vs/lib/yaml-cpp.lib
-            staticLinks[:macos]:
-                - ../libs/macos/lib/libpugixml.a
-                - ../libs/macos/lib/libyaml-cpp.a
-            staticLinks[:linux]:
-                - ../libs/linux64/lib/libpugixml.a
-                - ../libs/linux64/lib/libyaml-cpp.a
             includeDirs:
                 - src
                 - src/uuidxx/src
@@ -39,6 +30,15 @@ targets:
             defines:
                 # - YAML_CPP_NO_DLL
                 - YAML_CPP_STATIC_DEFINE
+            staticLinks[:windows]:
+                - ../libs/vs/lib/pugixml.lib
+                - ../libs/vs/lib/yaml-cpp.lib
+            staticLinks[:macos]:
+                - ../libs/macos/lib/libpugixml.a
+                - ../libs/macos/lib/libyaml-cpp.a
+            staticLinks[:linux]:
+                - ../libs/linux64/lib/libpugixml.a
+                - ../libs/linux64/lib/libyaml-cpp.a
 
         files:
             include:
