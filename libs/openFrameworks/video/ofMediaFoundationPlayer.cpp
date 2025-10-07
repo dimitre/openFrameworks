@@ -1294,7 +1294,7 @@ void ofMediaFoundationPlayer::handleMEEvent(DWORD aevent) {
 //                    fsettings.height = mHeight;
 //                    fsettings.numSamples = 0;
 					
-					ofFboSettings fsettings {;
+					ofFboSettings fsettings {
 						.internalformat = ofGetGLInternalFormatFromPixelFormat(mPixFormat),
 						.useDepth = false,
 						.useStencil = false,
