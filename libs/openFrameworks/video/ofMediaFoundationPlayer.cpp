@@ -1286,13 +1286,24 @@ void ofMediaFoundationPlayer::handleMEEvent(DWORD aevent) {
                     mMeTexture->allocate(mPixFormat, getWidth(), getHeight());
                     mMeTexture->create(m_d3dFormat);
 
-                    ofFbo::Settings fsettings;
-                    fsettings.internalformat = ofGetGLInternalFormatFromPixelFormat(mPixFormat);
-                    fsettings.useDepth = false;
-                    fsettings.useStencil = false;
-                    fsettings.width = mWidth;
-                    fsettings.height = mHeight;
-                    fsettings.numSamples = 0;
+//                    ofFbo::Settings fsettings;
+//                    fsettings.internalformat = ofGetGLInternalFormatFromPixelFormat(mPixFormat);
+//                    fsettings.useDepth = false;
+//                    fsettings.useStencil = false;
+//                    fsettings.width = mWidth;
+//                    fsettings.height = mHeight;
+//                    fsettings.numSamples = 0;
+					
+					ofFboSettings fsettings {;
+						.internalformat = ofGetGLInternalFormatFromPixelFormat(mPixFormat),
+						.useDepth = false,
+						.useStencil = false,
+						.width = mWidth,
+						.height = mHeight,
+						.numSamples = 0
+					};
+
+					
                     mFbo.allocate(fsettings);
                     mFbo.begin(); {
                         ofClear(0, 0, 0, 255);
