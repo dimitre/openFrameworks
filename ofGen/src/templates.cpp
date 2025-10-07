@@ -1088,12 +1088,12 @@ void ofTemplateChalet::load() {
 	// }
 
 	// for (auto & a : conf.addons) {
-		// for (auto & l : a->filteredMap["libs"]) {
-		// 	string libPath { "${var:ofPath}/addons/" + a->name + '/' + l.string() };
-		// 	projectYaml["targets"]["empty"]["settings:Cxx"]["staticLinks"].push_back(libPath);
-		// }
-		// for (auto & f : a->filteredMap["includes"]) {
-		// }
+	// for (auto & l : a->filteredMap["libs"]) {
+	// 	string libPath { "${var:ofPath}/addons/" + a->name + '/' + l.string() };
+	// 	projectYaml["targets"]["empty"]["settings:Cxx"]["staticLinks"].push_back(libPath);
+	// }
+	// for (auto & f : a->filteredMap["includes"]) {
+	// }
 	// }
 }
 
@@ -1107,29 +1107,37 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 	// projectYaml["variables"] << YAML::Value << getVersion();
 
 	for (auto & f : a->filteredMap["sources"]) {
-		fs::path p { a->path / f };
-		projectYaml["targets"]["empty"]["files"]["include"].push_back(p.string());
-
+		// fs::path p { a->path / f };
+		// projectYaml["targets"]["empty"]["files"]["include"].push_back(p.string());
+		std::string path { "${var:ofPath}/addons/" + a->name + "/" + f.string() };
+		projectYaml["targets"]["empty"]["files"]["include"].push_back(path);
 	}
 	// for (auto & f : a->filteredMap["headers"]) {
 	// }
 
 	for (auto & f : a->filteredMap["includes"]) {
-		fs::path p { a->path / f };
-		projectYaml["targets"]["empty"]["settings:Cxx"]["includeDirs"].push_back(p.string());
+		// alert ("a->path " + a->path.string(), 95);
+		// alert ("f " +f.string(), 95);
+		// fs::path p { a->path / f };
+		// projectYaml["targets"]["empty"]["settings:Cxx"]["includeDirs"].push_back(p.string());
+
+		std::string path { "${var:ofPath}/addons/" + a->name + "/" + f.string() };
+		projectYaml["targets"]["empty"]["settings:Cxx"]["includeDirs"].push_back(path);
 	}
 
 	for (auto & f : a->filteredMap["libs"]) {
 		fs::path p { a->path / f };
 		// string libPath { "${var:ofPath}/addons/" + a->name + '/' + f.string() };
-		string libPath { p.string() };
-		projectYaml["targets"]["empty"]["settings:Cxx"]["staticLinks"].push_back(libPath);
+		// string libPath { p.string() };
+		std::string path { "${var:ofPath}/addons/" + a->name + "/" + f.string() };
+
+		projectYaml["targets"]["empty"]["settings:Cxx"]["staticLinks"].push_back(path);
 	}
 
 	if (a->addonProperties.count("ADDON_FRAMEWORKS")) {
 		for (const auto & f : a->addonProperties["ADDON_FRAMEWORKS"]) {
 			for (const auto & s : ofSplitString(f, " ")) {
-			    // alert("     appleFramework " + s, 95);
+				// alert("     appleFramework " + s, 95);
 				alert("	└─ appleFramework " + s, 94);
 				projectYaml["abstracts:*"]["settings:Cxx"]["appleFrameworks"].push_back(s);
 			}
@@ -1150,23 +1158,22 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 	// };
 }
 
-
 void ofTemplateChalet::save() {
-    // Change key "empty" to project name in targets
-    {
-        auto targets = projectYaml["targets"];
-        YAML::Node emptyNode = targets["empty"];
-        targets[conf.projectName] = emptyNode;
-        targets.remove("empty");
-    }
+	// Change key "empty" to project name in targets
+	{
+		auto targets = projectYaml["targets"];
+		YAML::Node emptyNode = targets["empty"];
+		targets[conf.projectName] = emptyNode;
+		targets.remove("empty");
+	}
 
-    // Change key "empty" to project name in distribution
-    {
-        auto distribution = projectYaml["distribution"];
-        YAML::Node emptyNode = distribution["empty"];
-        distribution[conf.projectName] = emptyNode;
-        distribution.remove("empty");
-    }
+	// Change key "empty" to project name in distribution
+	{
+		auto distribution = projectYaml["distribution"];
+		YAML::Node emptyNode = distribution["empty"];
+		distribution[conf.projectName] = emptyNode;
+		distribution.remove("empty");
+	}
 
 	alert("ofTemplateChalet::save()", 92);
 

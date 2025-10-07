@@ -35,6 +35,42 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - uses: msys2/setup-msys2@v2.28.0
+        if: runner.os == 'Windows' && matrix.platform == 'msys2'
+        with: #toolchain:p
+          pacboy: gcc:p make:p pkgconf:p wget2:p yaml-cpp:p pugixml:p nlohmann-json:p fmt:p openssl:p python:p assimp:p cairo:p curl:p freeglut:p FreeImage:p glew:p glfw:p glm:p libsndfile:p libusb:p libxml2:p mpg123:p openal:p opencv:p rtaudio:p uriparser:p utf8cpp:p
+          # update: true
+          install: >-
+            git
+            unzip
+            ccache
+            base-devel
+          # make pkg-conf ?
+          #
+      # - uses: msys2/setup-msys2@v2.28.0
+      #   if: runner.os == 'Windows' && matrix.platform == 'vs'
+      #   with:
+      #     pacboy: pkgconf:p
+      #     install: >-
+      #       base-devel
+      - name: Test tools
+        if: runner.os == 'Windows' && matrix.platform == 'msys2'
+        run: |
+          whereis gcc
+          whereis g++
+          whereis c++
+          whereis find
+          whereis ar
+          whereis pkgconf
+          whereis ld
+          ls /mingw64/bin/pkgconf
+          ls /mingw64/bin/gcc
+          ls /mingw64/bin/g++
+          ls /mingw64/bin/c++
+          ls /mingw64/bin/ld
+        # whereis lld
+        # ls /mingw64/bin/lld
+        # ls /usr/bin/lld
       # Preparation for ofgen
 
       # - name: Add msbuild to PATH
@@ -80,6 +116,23 @@ jobs:
       #   with:
       #     path: "ofGen/build"
       #     key: ofgen-cmake-${{ matrix.platform }}
+
+      - name: Libs
+        shell: bash
+        run: ./libs/libs.sh
+
+      - name: LS Libs
+        shell: bash
+        run: ls -alFR ./libs/
+
+      # - name: Libs
+      #   if: runner.os != 'Windows'
+      #   run: ./libs/libs.sh
+
+      # - name: Libs
+      #   if: runner.os == 'Windows'
+      #   # shell: powershell
+      #   run: ./libs/libs.sh
 
       - name: ofgen compile windows
         if: runner.os == 'Windows'
@@ -139,43 +192,6 @@ jobs:
       #     .\vcpkg\vcpkg install yaml-cpp:x64-windows  nlohmann-json:x64-windows pugixml:x64-windows
       #     .\vcpkg\vcpkg integrate install
 
-      - uses: msys2/setup-msys2@v2.28.0
-        if: runner.os == 'Windows' && matrix.platform == 'msys2'
-        with: #toolchain:p
-          pacboy: gcc:p make:p pkgconf:p wget2:p yaml-cpp:p pugixml:p nlohmann-json:p fmt:p openssl:p python:p assimp:p cairo:p curl:p freeglut:p FreeImage:p glew:p glfw:p glm:p libsndfile:p libusb:p libxml2:p mpg123:p openal:p opencv:p rtaudio:p uriparser:p utf8cpp:p
-          # update: true
-          install: >-
-            git
-            unzip
-            ccache
-            base-devel
-          # make pkg-conf ?
-          #
-      # - uses: msys2/setup-msys2@v2.28.0
-      #   if: runner.os == 'Windows' && matrix.platform == 'vs'
-      #   with:
-      #     pacboy: pkgconf:p
-      #     install: >-
-      #       base-devel
-      - name: Test tools
-        if: runner.os == 'Windows' && matrix.platform == 'msys2'
-        run: |
-          whereis gcc
-          whereis g++
-          whereis c++
-          whereis find
-          whereis ar
-          whereis pkgconf
-          whereis ld
-          ls /mingw64/bin/pkgconf
-          ls /mingw64/bin/gcc
-          ls /mingw64/bin/g++
-          ls /mingw64/bin/c++
-          ls /mingw64/bin/ld
-        # whereis lld
-        # ls /mingw64/bin/lld
-        # ls /usr/bin/lld
-
       # - name: Install Packages - Apt
       #   if: matrix.os == 'ubuntu-latest'
       #   uses: awalsh128/cache-apt-pkgs-action@latest
@@ -187,15 +203,6 @@ jobs:
       #   uses: hendrikmuhs/ccache-action@v1.2.19
       #   with:
       #     key: ${{ matrix.platform }}-${{ matrix.target }}
-
-      - name: Libs
-        if: runner.os != 'Windows'
-        run: ./libs/libs.sh
-
-      - name: Libs
-        if: runner.os == 'Windows'
-        # shell: powershell
-        run: ./libs/libs.sh
 
       # - name: XCodebuild Core
       #   if: matrix.os == 'macos-latest'
