@@ -79,7 +79,8 @@ abstracts:*:
       - /usr/include/pango-1.0
       - /usr/include/harfbuzz
 
-      - /usr/include/gtk-4.0
+      - /usr/include/gtk-2.0
+      # - /usr/include/gtk-4.0
 
       # not sure if needed
       - /usr/include/{freetype2,libpng16,glib-2.0,libmount,blkid,fribidi,pixman-1,gdk-pixbuf-2.0,webp,graphene-1.0}
@@ -130,9 +131,9 @@ targets:
       staticLinks:
         - OF
       links[:linux]:
-        # - gtk+-2.0
-        - gtk4
-        - graphene-1.0
+        - gtk+-2.0
+        # - gtk4
+        # - graphene-1.0
 
         - gstapp-1.0
         - gstvideo-1.0
