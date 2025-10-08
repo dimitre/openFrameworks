@@ -135,7 +135,7 @@ targets:
       staticLinks:
         - OF
       links[:linux]:
-        - gtk+-2.0
+        # - gtk+-2.0
         # - gtk4
         # - graphene-1.0
 
