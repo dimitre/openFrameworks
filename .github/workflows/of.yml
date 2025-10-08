@@ -156,11 +156,12 @@ jobs:
         run: |
           ofgen colors
 
-      - name: emptyExample Chalet
-        run: |
-          cd examples/templates/emptyExample
-          ofgen templates=chalet
-          chalet build
+      # Not working, no bin folder
+      # - name: emptyExample Chalet
+      #   run: |
+      #     cd examples/templates/emptyExample
+      #     ofgen templates=chalet
+      #     chalet build
 
       - name: 3DPrimitivesExample Chalet
         run: |
