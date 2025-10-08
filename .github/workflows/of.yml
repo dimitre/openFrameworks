@@ -103,7 +103,7 @@ jobs:
         if: runner.os == 'macOS'
         uses: tecolicom/actions-use-homebrew-tools@v1.3
         with:
-          tools: cmake wget2 yaml-cpp fmt nlohmann-json pugixml # fmt ccache
+          tools: wget2 yaml-cpp fmt nlohmann-json pugixml # fmt ccache
 
       - name: Install Chalet
         uses: jaxxstorm/action-install-gh-release@v2.1.0

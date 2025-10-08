@@ -71,25 +71,25 @@ else()
 
 	# link_directories(${YAML_LIBRARY_DIRS})          # Adds -L… to the link command
 
-	target_link_directories(
-							ofgen PRIVATE
-							${YAML_LIBRARY_DIRS}   # expands to /opt/homebrew/Cellar/yaml-cpp/0.8.0/lib
-							${PUGIXML_LIBRARY_DIRS}   # expands to /opt/homebrew/Cellar/yaml-cpp/0.8.0/lib
-			)
+	target_link_directories(ofgen
+		PRIVATE
+			${YAML_LIBRARY_DIRS}   # expands to /opt/homebrew/Cellar/yaml-cpp/0.8.0/lib
+			${PUGIXML_LIBRARY_DIRS}   # expands to /opt/homebrew/Cellar/yaml-cpp/0.8.0/lib
+	)
 
 	target_link_libraries(ofgen
-				PRIVATE
-								${YAML_LIBRARIES}
-								${PUGIXML_LIBRARIES}
-								${JSON_LIBRARIES}
-				)
+		PRIVATE
+			${YAML_LIBRARIES}
+			${PUGIXML_LIBRARIES}
+			${JSON_LIBRARIES}
+	)
 
 	target_compile_options(ofgen
-				PRIVATE
-								${YAML_CFLAGS_OTHER}
-								${PUGIXML_CFLAGS_OTHER}
-								${JSON_CFLAGS_OTHER}
-				)
+		PRIVATE
+			${YAML_CFLAGS_OTHER}
+			${PUGIXML_CFLAGS_OTHER}
+			${JSON_CFLAGS_OTHER}
+	)
 
 endif()
 
