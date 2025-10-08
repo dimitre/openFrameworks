@@ -35,24 +35,25 @@ abstracts:*:
     runtimeTypeInformation: true
     threads: true
     exceptions: true
+    defines[:debug]:
+      - DEBUG
+
+    defines[:linux]:
+      - OF_USING_GTK
+      - OF_USING_STD_FS=1
+    # compileOptions[toolchain:apple-llvm]:
+    defines[:macos]:
+      - __MACOSX_CORE__
+    compileOptions[:macos]:
+      - -fobjc-arc
+
     defines[toolchain:msvc]:
       - _CRT_SECURE_NO_WARNINGS
       - NDEBUG
       - _ASSERT_NO_CRT
       - UNICODE
       - _UNICODE
-    # FIXME: Remove when possible; trying to fix utf8cpp errors in msvc now.
 
-    defines[:macos]:
-      - __MACOSX_CORE__
-    defines[:debug]:
-      - DEBUG
-    defines[:linux]:
-      - OF_USING_GTK
-      - OF_USING_STD_FS=1
-    # compileOptions[toolchain:apple-llvm]:
-    compileOptions[:macos]:
-      - -fobjc-arc
     compileOptions[toolchain:msvc]:
       - /D_CRT_NO_VA_START_VALIDATION
     # - /Uassert
@@ -67,10 +68,7 @@ abstracts:*:
       - /usr/lib/x86_64-linux-gnu/glib-2.0/include
       - /usr/include/x86_64-linux-gnu
       - /usr/include/gtk-2.0
-
-    # - /usr/include
-    # - /usr/include/**
-    # - /usr/lib/**/include
+      - /usr/include/cairo
 
     # includeDirs[:macos]:
     # libDirs[:macos]: ${var:ofPath}/libs/fmod/lib/osx
@@ -124,18 +122,6 @@ targets:
     settings:Cxx:
       staticLinks:
         - OF
-
-        # - ${var:ofPath}/libs/openFrameworksCompiled/lib/${var:platform}/libopenFrameworks.a
-        # - ${var:ofPath}/libs/openFrameworksCompiled/lib/${var:platform}/openFrameworks.a
-        # - ${var:ofPath}/addons/ofxAssimp/libs/assimp/lib/${var:platform}/libassimp.a
-        # [66/66] Archiving /Users/z/Dmtr/ofworks/apps/apps2025/Empty/build/arm64-apple-darwin_Release/ext.OFLib/libOF.a
-
-        # - build/arm64-apple-darwin_Release/${ar:OF}
-        # - ${externalBuild:OF}/${ar:OF}
-        # - ${externalBuild:OF}${ar:OF}
-        # - ${externalBuild:OF}/libOF.a
-        # - ${externalBuild:OF}
-        # - ${var:ofPath}/libs/openFrameworksCompiled/lib/${var:platform}/libopenFrameworks.a
       links[:linux]:
         - gtk+-2.0
         - gstapp-1.0
