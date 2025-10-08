@@ -130,7 +130,8 @@ targets:
       staticLinks:
         - OF
       links[:linux]:
-        - gtk+-2.0
+        # - gtk+-2.0
+        - gtk4
         - gstapp-1.0
         - gstvideo-1.0
         - gstbase-1.0
