@@ -179,6 +179,7 @@ targets:
         - fontconfig
         - freetype
         - mpg123
+        - glfw
 
       staticLinks[:linux]:
         # Original
@@ -187,10 +188,11 @@ targets:
         # - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
 
         #libpng, libbrotlienc, libjpeg libbrotlicommon,libbrotlidec
+        # - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
+
         - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
         - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
         - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
         - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
         # - ${var:ofPath}/libs/${var:platform}/lib/libjpeg.a
         - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
