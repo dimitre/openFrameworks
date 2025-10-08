@@ -42,13 +42,10 @@ jobs:
         run: |
 
           brew uninstall --ignore-dependencies cmake || true
-          # make sure we pick up the image copy
-          which cmake
+          brew cleanup -s cmake
+          brew install --force-bottle cmake
+          # quick sanity check
           cmake --version
-          # brew uninstall cmake --ignore-dependencies || true
-          # # brew install cmake@3.30
-          # brew install cmake
-          # brew link cmake
 
       - uses: actions/checkout@v5
 
