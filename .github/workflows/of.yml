@@ -156,6 +156,30 @@ jobs:
         run: |
           ofgen colors
 
+      - name: emptyExample Chalet
+        run: |
+          cd examples/templates/emptyExample
+          ofgen templates=chalet
+          chalet build
+
+      - name: 3DPrimitivesExample Chalet
+        run: |
+          cd examples/3d/3DPrimitivesExample
+          ofgen templates=chalet
+          chalet build
+
+      - name: ofxAssimpExample Chalet
+        run: |
+          cd examples/3d/ofxAssimpExample
+          ofgen templates=chalet
+          chalet build
+
+      - name: opencvExample Chalet
+        run: |
+          cd examples/computer_vision/opencvExample
+          ofgen templates=chalet
+          chalet build
+
       - name: All Addons Example Chalet
         run: |
           cd examples/templates/allAddonsExample
