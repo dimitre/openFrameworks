@@ -23,7 +23,7 @@ jobs:
           - { os: macos-latest, platform: macos, shell: bash }
 
           # failing on chalet not creating folder, so commenting out for later
-          # - { os: windows-latest, platform: vs, shell: powershell }
+          - { os: windows-latest, platform: vs, shell: powershell }
 
           # - { os: windows-latest, platform: vs, shell: bash }
           # - {
