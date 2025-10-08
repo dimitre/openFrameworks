@@ -58,23 +58,31 @@ abstracts:*:
     compileOptions[toolchain:msvc]:
       - /D_CRT_NO_VA_START_VALIDATION
     # - /Uassert
+
     includeDirs:
       - ${var:ofPath}/libs/openFrameworks/**
       # - ${var:ofPath}/libs/openFrameworks
       - ${var:ofPath}/libs/{${var:platform}}/include
       - ${var:ofPath}/libs/{${var:platform}}/include/**
+
+    compileOptions[:linux+architecture:x86_64]:
+      - -msse2
+      - -msse
+      - -mfpmath=sse
+
     includeDirs[:linux]:
       - /usr/include/gstreamer-1.0
       - /usr/include/glib-2.0
       - /usr/lib/x86_64-linux-gnu/glib-2.0/include
       - /usr/include/x86_64-linux-gnu
-      - /usr/include/gtk-2.0
       - /usr/include/cairo
       - /usr/include/pango-1.0
       - /usr/include/harfbuzz
 
+      - /usr/include/gtk-4.0
+
       # not sure if needed
-      - /usr/include/{freetype2,libpng16,glib-2.0}
+      - /usr/include/{freetype2,libpng16,glib-2.0,libmount,blkid,fribidi,pixman-1,gdk-pixbuf-2.0,webp,graphene-1.0}
 
     appleFrameworks:
       - Accelerate
