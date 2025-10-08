@@ -84,6 +84,7 @@ abstracts:*:
 
       - /usr/include/gtk-2.0
       - /usr/lib/x86_64-linux-gnu/{gtk-2.0,glib-2.0}/include
+      - /usr/include/atk-1.0/atk/
 
       # - /usr/include/gtk-4.0
       # - /usr/lib/x86_64-linux-gnu/graphene-1.0/include
