@@ -138,6 +138,14 @@ targets:
         # - gtk+-2.0
         # - gtk4
         # - graphene-1.0
+        - Xrandr
+        - Xxf86vm
+        - Xi
+        - Xcursor
+        - Xinerama
+        - glut # -lglut (freeglut is only used for one legacy function,
+          #           but OF links it anyway)
+        - dl # -ldl
 
         - gstapp-1.0
         - gstvideo-1.0

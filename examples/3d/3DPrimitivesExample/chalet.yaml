@@ -14,29 +14,42 @@ abstracts:*:
     runtimeTypeInformation: true
     threads: true
     exceptions: true
+    defines[:debug]:
+      - DEBUG
+    defines[:linux]:
+      - OF_USING_GTK
+    defines[:macos]:
+      - __MACOSX_CORE__
+    compileOptions[:macos]:
+      - -fobjc-arc
     defines[toolchain:msvc]:
       - _CRT_SECURE_NO_WARNINGS
       - NDEBUG
       - _ASSERT_NO_CRT
       - UNICODE
       - _UNICODE
-    defines[:macos]:
-      - __MACOSX_CORE__
-    defines[:debug]:
-      - DEBUG
-    compileOptions[:macos]:
-      - -fobjc-arc
     compileOptions[toolchain:msvc]:
       - /D_CRT_NO_VA_START_VALIDATION
     includeDirs:
       - ${var:ofPath}/libs/openFrameworks/**
       - ${var:ofPath}/libs/{${var:platform}}/include
       - ${var:ofPath}/libs/{${var:platform}}/include/**
+    compileOptions[:linux+architecture:x86_64]:
+      - -msse2
+      - -msse
+      - -mfpmath=sse
     includeDirs[:linux]:
       - /usr/include/gstreamer-1.0
       - /usr/include/glib-2.0
       - /usr/lib/x86_64-linux-gnu/glib-2.0/include
       - /usr/include/x86_64-linux-gnu
+      - /usr/include/cairo
+      - /usr/include/pango-1.0
+      - /usr/include/harfbuzz
+      - /usr/include/{freetype2,libpng16,glib-2.0,libmount,blkid,fribidi,pixman-1,gdk-pixbuf-2.0,webp,graphene-1.0}
+      - /usr/include/gtk-2.0
+      - /usr/lib/x86_64-linux-gnu/{gtk-2.0,glib-2.0}/include
+      - /usr/include/atk-1.0
     appleFrameworks:
       - Accelerate
       - AGL
@@ -63,14 +76,10 @@ targets:
       exclude[:linux]:
         - ${var:ofPath}/libs/openFrameworks/video/{ofDirectShowPlayer,ofDirectShowGrabber,ofMediaFoundationPlayer}.cpp
         - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
+        - ${var:ofPath}/libs/openFrameworks/app/ofAppGlutWindow.cpp
       exclude[:windows]:
         - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils}.cpp
-        - ${var:ofPath}/libs/openFrameworks/sound/{ofFmodSoundPlayer}.cpp
-  mkdir_helper:
-    kind: script
-    scriptType: shell
-    file: cmd
-    arguments: [/c, mkdir, "${buildDir}\\obj.${targetName}\\src"]
+        - ${var:ofPath}/libs/openFrameworks/sound/ofFmodSoundPlayer.cpp
   3DPrimitivesExample:
     kind: executable
     settings:Cxx:
