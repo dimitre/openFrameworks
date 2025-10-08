@@ -113,12 +113,6 @@ targets:
         # - ${var:ofPath}/libs/openFrameworks/video/{ofDirectShowPlayer,ofDirectShowGrabber,ofMediaFoundationPlayer}.cpp
         - ${var:ofPath}/libs/openFrameworks/sound/{ofFmodSoundPlayer}.cpp
 
-  mkdir_helper:
-    kind: script
-    # condition: "[:windows]"
-    scriptType: shell
-    file: cmd # Windows
-    arguments: ["/c", "mkdir", "${buildDir}\\obj.${targetName}\\src"]
   empty:
     kind: executable
     # importPackages: [of-static]
