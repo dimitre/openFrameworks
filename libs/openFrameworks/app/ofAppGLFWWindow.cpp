@@ -116,8 +116,10 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 // copied from here: https://github.com/sofa-framework/SofaGLFW/pull/174/files
 // Wayland is not fully supported in GLFW
 // this will force using X11 on wayland (XWayland)
+#pragma message("__linux__ is " __linux__)
    #if defined(__linux__)
-		glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_WAYLAND);
+//		glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_WAYLAND);
+	glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
 		#pragma message("WOOOOWWWW WOW")
    #endif
 
