@@ -113,7 +113,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew uninstall cmake --ignore-dependencies || true
-          brew install cmake@3.31
+          brew install cmake@3.30
           # brew reinstall cmake
 
       - name: Install Chalet
