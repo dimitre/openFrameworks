@@ -179,10 +179,19 @@ jobs:
       #     ofgen templates=chalet
       #     chalet build
 
-      - name: 3DPrimitivesExample Chalet
+      - name: 3DPrimitivesExample Chalet Gen
         run: |
           cd examples/3d/3DPrimitivesExample
           ofgen templates=chalet
+
+      - name: 3DPrimitivesExample Chalet Cat
+        run: |
+          cd examples/3d/3DPrimitivesExample
+          cat chalet.yaml
+
+      - name: 3DPrimitivesExample Chalet Build
+        run: |
+          cd examples/3d/3DPrimitivesExample
           chalet build
 
       - name: ofxAssimpExample Chalet
