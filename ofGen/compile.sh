@@ -33,15 +33,11 @@ section "Compiling ofGen"
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
-	checkPackageApt() {
-	    dpkg --status $1 &> /dev/null
-	    if [ $? -eq 0 ]; then
-	    echo "$1: Already installed"
-	    else
-	    echo "installing $1"
-	    sudo apt-get install -y $1
-	    fi
-	}
+    checkPackageApt() {
+        dpkg --status "$1" &>/dev/null && echo "$1: already installed" \
+            || { echo "installing $1"; sudo apt-get install -y "$1"; }
+    }
+
 
     checkPackageApt libyaml-cpp-dev
     checkPackageApt nlohmann-json3-dev
