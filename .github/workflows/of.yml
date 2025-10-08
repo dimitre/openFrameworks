@@ -192,6 +192,12 @@ jobs:
           cd examples/3d/3DPrimitivesExample
           cat chalet.yaml
 
+      - name: 3DPrimitivesExample MKDIR
+        shell: bash
+        if: runner.os == 'Windows'
+        run: |
+          mkdir -p build/x86_64-pc-windows-msvc_Release/obj.3DPrimitivesExample/src
+
       - name: 3DPrimitivesExample Chalet Build
         run: |
           cd examples/3d/3DPrimitivesExample
