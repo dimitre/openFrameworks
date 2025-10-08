@@ -37,6 +37,14 @@ jobs:
       run:
         shell: ${{ matrix.shell }} {0}
     steps:
+      - name: macOS fix CMAKE Brew
+        if: runner.os == 'macOS'
+        run: |
+          brew uninstall cmake --ignore-dependencies || true
+          # brew install cmake@3.30
+          brew install cmake
+          brew link cmake
+
       - uses: actions/checkout@v5
 
       # - name: ccache
@@ -108,13 +116,6 @@ jobs:
         uses: tecolicom/actions-use-homebrew-tools@v1.3
         with:
           tools: wget2 yaml-cpp fmt nlohmann-json pugixml # fmt ccache
-
-      - name: macOS fix CMAKE Brew
-        if: runner.os == 'macOS'
-        run: |
-          brew uninstall cmake --ignore-dependencies || true
-          brew install cmake@3.30
-          # brew reinstall cmake
 
       - name: Install Chalet
         uses: jaxxstorm/action-install-gh-release@v2.1.0
