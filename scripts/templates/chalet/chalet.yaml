@@ -136,6 +136,7 @@ targets:
         # - ${externalBuild:OF}
         # - ${var:ofPath}/libs/openFrameworksCompiled/lib/${var:platform}/libopenFrameworks.a
       links[:linux]:
+        - gtk+-2.0
         - gstapp-1.0
         - gstvideo-1.0
         - gstbase-1.0
