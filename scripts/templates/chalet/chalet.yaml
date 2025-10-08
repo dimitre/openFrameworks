@@ -47,6 +47,9 @@ abstracts:*:
       - __MACOSX_CORE__
     defines[:debug]:
       - DEBUG
+    defines[:linux]:
+      - OF_USING_GTK
+      - OF_USING_STD_FS=1
     # compileOptions[toolchain:apple-llvm]:
     compileOptions[:macos]:
       - -fobjc-arc
@@ -107,11 +110,11 @@ targets:
       exclude[:linux]:
         - ${var:ofPath}/libs/openFrameworks/video/{ofDirectShowPlayer,ofDirectShowGrabber,ofMediaFoundationPlayer}.cpp
         - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
-
+        - ${var:ofPath}/libs/openFrameworks/app/ofAppGlutWindow.cpp
       exclude[:windows]:
         - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils}.cpp
         # - ${var:ofPath}/libs/openFrameworks/video/{ofDirectShowPlayer,ofDirectShowGrabber,ofMediaFoundationPlayer}.cpp
-        - ${var:ofPath}/libs/openFrameworks/sound/{ofFmodSoundPlayer}.cpp
+        - ${var:ofPath}/libs/openFrameworks/sound/ofFmodSoundPlayer.cpp
 
   empty:
     kind: executable
