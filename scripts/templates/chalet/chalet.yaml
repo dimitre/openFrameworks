@@ -40,10 +40,11 @@ abstracts:*:
 
     defines[:linux]:
       - OF_USING_GTK
-      - OF_USING_STD_FS=1
-    # compileOptions[toolchain:apple-llvm]:
+      # - OF_USING_STD_FS=1
+
     defines[:macos]:
       - __MACOSX_CORE__
+    # compileOptions[toolchain:apple-llvm]:
     compileOptions[:macos]:
       - -fobjc-arc
 
@@ -69,14 +70,8 @@ abstracts:*:
       - /usr/include/x86_64-linux-gnu
       - /usr/include/gtk-2.0
       - /usr/include/cairo
+      - /usr/include/pango-1.0
 
-    # includeDirs[:macos]:
-    # libDirs[:macos]: ${var:ofPath}/libs/fmod/lib/osx
-    # links[:macos]: fmod
-    # staticLinks[:macos]:
-    # - ${var:ofPath}/libs/macos/lib/**.a
-    # - ${var:ofPath}/libs/macos/lib/{tess}.a
-    # - ${var:ofPath}/libs/macos/lib/{libbrotlienc,libfreetype,libpixman-1,librtaudio,libz,libFreeImage,libcairo,libglew,libpng,libssl,libbrotlicommon,libcrypto,libglfw3,libpng16,libtess2,libbrotlidec,libcurl,libglm,libpugixml,liburiparser}.a
     appleFrameworks:
       - Accelerate
       - AGL
