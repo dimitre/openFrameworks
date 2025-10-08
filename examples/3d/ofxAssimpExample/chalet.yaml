@@ -1,7 +1,7 @@
 name: OF
 version: 0.3.4
 variables:
-  generator: ofGen v0.6.3
+  generator: ofGen v0.6.5
   addons: ProjectSourceFiles_ofxAssimpExample,ofxAssimp,ofxGui
   platform: macos
   ofPath: ../../..
@@ -14,12 +14,20 @@ abstracts:*:
     runtimeTypeInformation: true
     threads: true
     exceptions: true
-    defines:
+    defines[toolchain:msvc]:
+      - _CRT_SECURE_NO_WARNINGS
+      - NDEBUG
+      - _ASSERT_NO_CRT
+      - UNICODE
+      - _UNICODE
+    defines[:macos]:
       - __MACOSX_CORE__
     defines[:debug]:
       - DEBUG
     compileOptions[:macos]:
       - -fobjc-arc
+    compileOptions[toolchain:msvc]:
+      - /D_CRT_NO_VA_START_VALIDATION
     includeDirs:
       - ${var:ofPath}/libs/openFrameworks/**
       - ${var:ofPath}/libs/{${var:platform}}/include
@@ -55,12 +63,15 @@ targets:
       exclude[:linux]:
         - ${var:ofPath}/libs/openFrameworks/video/{ofDirectShowPlayer,ofDirectShowGrabber,ofMediaFoundationPlayer}.cpp
         - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
+      exclude[:windows]:
+        - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils}.cpp
+        - ${var:ofPath}/libs/openFrameworks/sound/{ofFmodSoundPlayer}.cpp
   ofxAssimpExample:
     kind: executable
     settings:Cxx:
       staticLinks:
         - OF
-        - ../../../addons/ofxAssimp/libs/assimp/lib/macos/libassimp.a
+        - ${var:ofPath}/addons/ofxAssimp/libs/assimp/lib/libassimp.a
       links[:linux]:
         - gstapp-1.0
         - gstvideo-1.0
@@ -132,45 +143,48 @@ targets:
         - ${var:ofPath}/libs/openFrameworks/**
         - ${var:ofPath}/libs/openFrameworks
         - src
-        - ../../../addons/ofxAssimp/libs/assimp/include
-        - ../../../addons/ofxAssimp/libs/assimp/include/assimp
-        - ../../../addons/ofxAssimp/libs/assimp/include/assimp/Compiler
-        - ../../../addons/ofxAssimp/libs/assimp/include/assimp/port
-        - ../../../addons/ofxAssimp/libs/assimp/include/assimp/port/AndroidJNI
-        - ../../../addons/ofxAssimp/libs/assimp/lib/macos
-        - ../../../addons/ofxAssimp/src
-        - ../../../addons/ofxAssimp/src/Source
-        - ../../../addons/ofxGui/src
+        - ${var:ofPath}/addons/ofxAssimp/libs
+        - ${var:ofPath}/addons/ofxAssimp/libs/assimp
+        - ${var:ofPath}/addons/ofxAssimp/libs/assimp/include
+        - ${var:ofPath}/addons/ofxAssimp/libs/assimp/include/assimp
+        - ${var:ofPath}/addons/ofxAssimp/libs/assimp/include/assimp/Compiler
+        - ${var:ofPath}/addons/ofxAssimp/libs/assimp/lib
+        - ${var:ofPath}/addons/ofxAssimp/libs/assimp/lib/cmake
+        - ${var:ofPath}/addons/ofxAssimp/libs/assimp/lib/cmake/assimp-6.0
+        - ${var:ofPath}/addons/ofxAssimp/libs/assimp/lib/pkgconfig
+        - ${var:ofPath}/addons/ofxAssimp/src
+        - ${var:ofPath}/addons/ofxAssimp/src/Source
+        - ${var:ofPath}/addons/ofxGui/src
       linkerOptions[:linux]:
         - -pthread
     files:
       include:
         - src/main.cpp
         - src/ofApp.cpp
-        - ../../../addons/ofxAssimp/src/Source/ofxAssimpSrcAnimKeyCollection.cpp
-        - ../../../addons/ofxAssimp/src/Source/ofxAssimpSrcBone.cpp
-        - ../../../addons/ofxAssimp/src/Source/ofxAssimpSrcMesh.cpp
-        - ../../../addons/ofxAssimp/src/Source/ofxAssimpSrcNode.cpp
-        - ../../../addons/ofxAssimp/src/Source/ofxAssimpSrcScene.cpp
-        - ../../../addons/ofxAssimp/src/ofxAssimpAnimation.cpp
-        - ../../../addons/ofxAssimp/src/ofxAssimpAnimationMixer.cpp
-        - ../../../addons/ofxAssimp/src/ofxAssimpBone.cpp
-        - ../../../addons/ofxAssimp/src/ofxAssimpBounds.cpp
-        - ../../../addons/ofxAssimp/src/ofxAssimpMesh.cpp
-        - ../../../addons/ofxAssimp/src/ofxAssimpNode.cpp
-        - ../../../addons/ofxAssimp/src/ofxAssimpScene.cpp
-        - ../../../addons/ofxAssimp/src/ofxAssimpSkeleton.cpp
-        - ../../../addons/ofxAssimp/src/ofxAssimpTexture.cpp
-        - ../../../addons/ofxGui/src/ofxBaseGui.cpp
-        - ../../../addons/ofxGui/src/ofxButton.cpp
-        - ../../../addons/ofxGui/src/ofxColorPicker.cpp
-        - ../../../addons/ofxGui/src/ofxGuiGroup.cpp
-        - ../../../addons/ofxGui/src/ofxInputField.cpp
-        - ../../../addons/ofxGui/src/ofxLabel.cpp
-        - ../../../addons/ofxGui/src/ofxPanel.cpp
-        - ../../../addons/ofxGui/src/ofxSlider.cpp
-        - ../../../addons/ofxGui/src/ofxSliderGroup.cpp
-        - ../../../addons/ofxGui/src/ofxToggle.cpp
+        - ${var:ofPath}/addons/ofxAssimp/src/Source/ofxAssimpSrcAnimKeyCollection.cpp
+        - ${var:ofPath}/addons/ofxAssimp/src/Source/ofxAssimpSrcBone.cpp
+        - ${var:ofPath}/addons/ofxAssimp/src/Source/ofxAssimpSrcMesh.cpp
+        - ${var:ofPath}/addons/ofxAssimp/src/Source/ofxAssimpSrcNode.cpp
+        - ${var:ofPath}/addons/ofxAssimp/src/Source/ofxAssimpSrcScene.cpp
+        - ${var:ofPath}/addons/ofxAssimp/src/ofxAssimpAnimation.cpp
+        - ${var:ofPath}/addons/ofxAssimp/src/ofxAssimpAnimationMixer.cpp
+        - ${var:ofPath}/addons/ofxAssimp/src/ofxAssimpBone.cpp
+        - ${var:ofPath}/addons/ofxAssimp/src/ofxAssimpBounds.cpp
+        - ${var:ofPath}/addons/ofxAssimp/src/ofxAssimpMesh.cpp
+        - ${var:ofPath}/addons/ofxAssimp/src/ofxAssimpNode.cpp
+        - ${var:ofPath}/addons/ofxAssimp/src/ofxAssimpScene.cpp
+        - ${var:ofPath}/addons/ofxAssimp/src/ofxAssimpSkeleton.cpp
+        - ${var:ofPath}/addons/ofxAssimp/src/ofxAssimpTexture.cpp
+        - ${var:ofPath}/addons/ofxGui/src/ofxBaseGui.cpp
+        - ${var:ofPath}/addons/ofxGui/src/ofxButton.cpp
+        - ${var:ofPath}/addons/ofxGui/src/ofxColorPicker.cpp
+        - ${var:ofPath}/addons/ofxGui/src/ofxGuiGroup.cpp
+        - ${var:ofPath}/addons/ofxGui/src/ofxInputField.cpp
+        - ${var:ofPath}/addons/ofxGui/src/ofxLabel.cpp
+        - ${var:ofPath}/addons/ofxGui/src/ofxPanel.cpp
+        - ${var:ofPath}/addons/ofxGui/src/ofxSlider.cpp
+        - ${var:ofPath}/addons/ofxGui/src/ofxSliderGroup.cpp
+        - ${var:ofPath}/addons/ofxGui/src/ofxToggle.cpp
       exclude:
         - .DS_Store
         - .settings
