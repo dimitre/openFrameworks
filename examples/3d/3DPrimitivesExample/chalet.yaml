@@ -14,7 +14,13 @@ abstracts:*:
     runtimeTypeInformation: true
     threads: true
     exceptions: true
-    defines:
+    defines[toolchain:msvc]:
+      - _CRT_SECURE_NO_WARNINGS
+      - NDEBUG
+      - _ASSERT_NO_CRT
+      - UNICODE
+      - _UNICODE
+    defines[:macos]:
       - __MACOSX_CORE__
     defines[:debug]:
       - DEBUG
@@ -57,6 +63,14 @@ targets:
       exclude[:linux]:
         - ${var:ofPath}/libs/openFrameworks/video/{ofDirectShowPlayer,ofDirectShowGrabber,ofMediaFoundationPlayer}.cpp
         - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
+      exclude[:windows]:
+        - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils}.cpp
+        - ${var:ofPath}/libs/openFrameworks/sound/{ofFmodSoundPlayer}.cpp
+  mkdir_helper:
+    kind: script
+    scriptType: shell
+    file: cmd
+    arguments: [/c, mkdir, "${buildDir}\\obj.${targetName}\\src"]
   3DPrimitivesExample:
     kind: executable
     settings:Cxx:
