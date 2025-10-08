@@ -113,9 +113,12 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 
 	glfwDefaultWindowHints();
 	
-//#ifdef TARGET_LINUX
-//	glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
-//#endif
+// copied from here: https://github.com/sofa-framework/SofaGLFW/pull/174/files
+// Wayland is not fully supported in GLFW
+// this will force using X11 on wayland (XWayland)
+   #if defined(__linux__)
+	   glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
+   #endif
 
 	
 	glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, settings.highResolutionCapable);

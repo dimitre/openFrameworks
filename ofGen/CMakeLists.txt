@@ -34,7 +34,8 @@ if(WIN32)
 	CPMAddPackage("gh:nlohmann/json@3.12.0")
 	CPMAddPackage("gh:zeux/pugixml@1.15")
 
-	target_link_libraries(ofgen PRIVATE yaml-cpp nlohmann_json::nlohmann_json pugixml::pugixml)
+	target_link_libraries(ofgen PRIVATE
+		yaml-cpp nlohmann_json::nlohmann_json pugixml::pugixml)
 
 	target_include_directories(ofgen
 								PRIVATE
@@ -69,12 +70,12 @@ else()
 								src/uuidxx/src
 				)
 
-	# link_directories(${YAML_LIBRARY_DIRS})          # Adds -L… to the link command
+	# link_directories(${YAML_LIBRARY_DIRS})     # Adds -L… to the link command
 
 	target_link_directories(ofgen
 		PRIVATE
-			${YAML_LIBRARY_DIRS}   # expands to /opt/homebrew/Cellar/yaml-cpp/0.8.0/lib
-			${PUGIXML_LIBRARY_DIRS}   # expands to /opt/homebrew/Cellar/yaml-cpp/0.8.0/lib
+			${YAML_LIBRARY_DIRS}
+			${PUGIXML_LIBRARY_DIRS}
 	)
 
 	target_link_libraries(ofgen
@@ -114,8 +115,9 @@ install(TARGETS ofgen
 # future, test some installer
 # if(WIN32)
 #     set(CPACK_GENERATOR "NSIS")
-#     set(CPACK_NSIS_MODIFY_PATH "ON")          # <-- this does the heavy lifting
+#     set(CPACK_NSIS_MODIFY_PATH "ON") # <-- this does the heavy lifting
 #     set(CPACK_PACKAGE_NAME "ofgen")
+#
 #     set(CPACK_PACKAGE_VERSION "0.5.7")
 #     # set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}/assets/icon.ico")
 # endif()
