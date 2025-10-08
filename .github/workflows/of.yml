@@ -142,7 +142,9 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           cd ofGen
-          ./compile.sh
+          chalet bundle
+          # FIXME: script nao ta rolando no github actions
+          # ./compile.sh
 
       - name: ofgen compile windows chalet
         if: runner.os == 'Windows'
