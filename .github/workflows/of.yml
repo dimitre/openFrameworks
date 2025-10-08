@@ -42,11 +42,11 @@ jobs:
       - name: macOS fix CMAKE Brew
         if: runner.os == 'macOS'
         run: |
-          brew uninstall --ignore-dependencies cmake || true
-          brew cleanup -s cmake
+          # brew uninstall --ignore-dependencies cmake || true
+          # brew cleanup -s cmake
           brew update
           brew upgrade cmake
-          # brew install --force-bottle cmake
+          brew install --force-bottle cmake
           # quick sanity check
           cmake --version
 
