@@ -18,9 +18,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # completing ok, so commenting out.
-          - { os: ubuntu-latest, platform: linux64, shell: bash }
-          - { os: macos-latest, platform: macos, shell: bash }
+          # ubuntu and macos completing good, so removed from here now.
+          # - { os: ubuntu-latest, platform: linux64, shell: bash }
+          # - { os: macos-latest, platform: macos, shell: bash }
 
           # failing on chalet not creating folder, so commenting out for later
           - { os: windows-latest, platform: vs, shell: powershell }
