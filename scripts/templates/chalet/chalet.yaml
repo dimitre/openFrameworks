@@ -72,13 +72,13 @@ abstracts:*:
 
     compileOptions[toolchain:msvc]:
       - /D_CRT_NO_VA_START_VALIDATION
-      # - /MT
-
-    compileOptions[toolchain:msvc+configuration:release]:
       - /MT
 
-    compileOptions[toolchain:msvc+configuration:debug]:
-      - /MTd
+    # compileOptions[toolchain:msvc+configuration:release]:
+    #   - /MT
+
+    # compileOptions[toolchain:msvc+configuration:debug]:
+    #   - /MTd
 
     includeDirs:
       - ${var:ofPath}/libs/openFrameworks/**
