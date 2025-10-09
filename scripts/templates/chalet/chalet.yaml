@@ -156,14 +156,14 @@ abstracts:*:
 
     defines[:windows]:
       - FREEIMAGE_LIB
-      # - URI_STATIC
+      - URI_STATIC
       # FIXME: remove this from core, and put back here
       # - GLEW_STATIC
 
     links[:windows]:
       - winmm # timeBeginPeriod / timeEndPeriod
       - opengl32 # classic OpenGL 1.x entry-points
-      - uriparser # URI parsing
+      # - uriparser # URI parsing
       # - glew32 # GLEW extension loader
       # - FreeImage
 
@@ -185,7 +185,7 @@ abstracts:*:
       - ${var:ofPath}/libs/${var:platform}/lib/pugixml.lib
       # - ${var:ofPath}/libs/${var:platform}/lib/rtaudio.lib
       - ${var:ofPath}/libs/${var:platform}/lib/tess2.lib
-      # - ${var:ofPath}/libs/${var:platform}/lib/uriparser.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/uriparser.lib
       - ${var:ofPath}/libs/${var:platform}/lib/videoInput.lib
       # - ${var:ofPath}/libs/${var:platform}/lib/yaml-cpp.lib
       - ${var:ofPath}/libs/${var:platform}/lib/zs.lib
@@ -244,7 +244,7 @@ targets:
     kind: staticLibrary
     settings:Cxx:
       defines[:windows]:
-        # - URI_STATIC
+        - URI_STATIC
         - FREEIMAGE_LIB
         - JPEG_STATIC
         - TIFF_STATIC
