@@ -57,6 +57,14 @@ abstracts:*:
       - _ASSERT_NO_CRT
       - UNICODE
       - _UNICODE
+      # - URI_STATIC
+      - URI_STATIC_BUILD
+      - FREEIMAGE_LIB
+      - JPEG_STATIC
+      - TIFF_STATIC
+      - ZLIB_CONST
+      # FIXME: remove this from core, and put back here
+      # - GLEW_STATIC
 
     linkerOptions[toolchain:msvc]:
       - /NODEFAULTLIB:libcmt
@@ -160,8 +168,6 @@ abstracts:*:
     # defines[:windows]:
     #   - FREEIMAGE_LIB
     #   - URI_STATIC
-    # FIXME: remove this from core, and put back here
-    # - GLEW_STATIC
 
     links[:windows]:
       - winmm # timeBeginPeriod / timeEndPeriod
@@ -173,7 +179,7 @@ abstracts:*:
     staticLinks[:windows]:
       # - ${var:ofPath}/libs/${var:platform}/lib/jpeg-static.lib
       - ${var:ofPath}/libs/${var:platform}/lib/turbojpeg-static.lib
-      - ${var:ofPath}/libs/${var:platform}/lib/tiff.lib
+      # - ${var:ofPath}/libs/${var:platform}/lib/tiff.lib
       # - ${var:ofPath}/libs/${var:platform}/lib/tiffxx.lib
 
       - ${var:ofPath}/libs/${var:platform}/lib/brotlicommon.lib
@@ -245,15 +251,6 @@ targets:
   #   location: ${var:ofPath}
   OF:
     kind: staticLibrary
-    settings:Cxx:
-      defines[:windows]:
-        # - URI_STATIC
-        - URI_STATIC_BUILD
-        - FREEIMAGE_LIB
-        - JPEG_STATIC
-        - TIFF_STATIC
-        - ZLIB_CONST
-        # - GLEW_STATIC
     files:
       include:
         - ${var:ofPath}/libs/openFrameworks/{3d,communication,events,gl,graphics,math,sound,types,utils,video}/*.cpp
