@@ -107,33 +107,7 @@ targets:
   #   location: ${var:ofPath}
   OF:
     kind: staticLibrary
-    files:
-      include:
-        - ${var:ofPath}/libs/openFrameworks/{3d,communication,events,gl,graphics,math,sound,types,utils,video}/*.cpp
-        - ${var:ofPath}/libs/openFrameworks/app/{ofBaseApp,ofMainLoop,ofAppRunner,ofAppGLFWWindow}.cpp
-      include[:macos]:
-        - ${var:ofPath}/libs/openFrameworks/**.{mm,m}
-
-      exclude[:macos]:
-        - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils,ofMediaFoundationPlayer,ofDirectShowGrabber,ofDirectShowPlayer}.cpp
-        - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
-
-      exclude[:linux]:
-        - ${var:ofPath}/libs/openFrameworks/video/{ofDirectShowPlayer,ofDirectShowGrabber,ofMediaFoundationPlayer}.cpp
-        - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
-        - ${var:ofPath}/libs/openFrameworks/app/ofAppGlutWindow.cpp
-      exclude[:windows]:
-        - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils}.cpp
-        # - ${var:ofPath}/libs/openFrameworks/video/{ofDirectShowPlayer,ofDirectShowGrabber,ofMediaFoundationPlayer}.cpp
-        - ${var:ofPath}/libs/openFrameworks/sound/ofFmodSoundPlayer.cpp
-
-  empty:
-    kind: executable
-    # importPackages: [of-static]
-
     settings:Cxx:
-      staticLinks:
-        - OF
       links[:linux]:
         # - gtk+-2.0
         # - gtk4
@@ -227,11 +201,38 @@ targets:
         - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
         - ${var:ofPath}/libs/${var:platform}/lib/libz.a
         - ${var:ofPath}/libs/${var:platform}/lib/liblzma.a
+    files:
+      include:
+        - ${var:ofPath}/libs/openFrameworks/{3d,communication,events,gl,graphics,math,sound,types,utils,video}/*.cpp
+        - ${var:ofPath}/libs/openFrameworks/app/{ofBaseApp,ofMainLoop,ofAppRunner,ofAppGLFWWindow}.cpp
+      include[:macos]:
+        - ${var:ofPath}/libs/openFrameworks/**.{mm,m}
+
+      exclude[:macos]:
+        - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils,ofMediaFoundationPlayer,ofDirectShowGrabber,ofDirectShowPlayer}.cpp
+        - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
+
+      exclude[:linux]:
+        - ${var:ofPath}/libs/openFrameworks/video/{ofDirectShowPlayer,ofDirectShowGrabber,ofMediaFoundationPlayer}.cpp
+        - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
+        - ${var:ofPath}/libs/openFrameworks/app/ofAppGlutWindow.cpp
+      exclude[:windows]:
+        - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils}.cpp
+        # - ${var:ofPath}/libs/openFrameworks/video/{ofDirectShowPlayer,ofDirectShowGrabber,ofMediaFoundationPlayer}.cpp
+        - ${var:ofPath}/libs/openFrameworks/sound/ofFmodSoundPlayer.cpp
+
+  empty:
+    kind: executable
+    # importPackages: [of-static]
+
+    settings:Cxx:
+      staticLinks:
+        - OF
 
         # - /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/liblzma.5.tbd
 
       includeDirs:
-        - ${var:ofPath}/libs/openFrameworks/**
+        # - ${var:ofPath}/libs/openFrameworks/**
         - ${var:ofPath}/libs/openFrameworks
       linkerOptions[:linux]:
         - -pthread
