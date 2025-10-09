@@ -13,6 +13,7 @@ targets:
   ofgen:
     kind: executable
     settings:Cxx:
+      staticRuntimeLibrary: true
       compileOptions[toolchain:msvc]:
         - /MT
       includeDirs:
