@@ -237,7 +237,10 @@ targets:
   #   location: ${var:ofPath}
   OF:
     kind: staticLibrary
-
+    defines[:windows]:
+      - URI_STATIC
+      - FREEIMAGE_LIB
+      # - GLEW_STATIC
     files:
       include:
         - ${var:ofPath}/libs/openFrameworks/{3d,communication,events,gl,graphics,math,sound,types,utils,video}/*.cpp
