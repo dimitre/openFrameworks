@@ -161,7 +161,9 @@ abstracts:*:
       - mpg123
 
     staticLinks[:windows]:
-      - ${var:ofPath}/libs/${var:platform}/lib/{brotlicommon,brotlidec,brotlienc}.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/brotlicommon.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/brotlidec.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/brotlienc.lib
       - ${var:ofPath}/libs/${var:platform}/lib/FreeImage.lib
       - ${var:ofPath}/libs/${var:platform}/lib/freetype.lib
       - ${var:ofPath}/libs/${var:platform}/lib/glew.lib
