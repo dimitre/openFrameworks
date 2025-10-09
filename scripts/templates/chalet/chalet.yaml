@@ -241,6 +241,8 @@ targets:
       defines[:windows]:
         - URI_STATIC
         - FREEIMAGE_LIB
+        - JPEG_STATIC
+        - TIFF_STATIC
         # - GLEW_STATIC
     files:
       include:
