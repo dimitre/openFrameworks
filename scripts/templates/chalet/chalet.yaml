@@ -58,6 +58,9 @@ abstracts:*:
       - UNICODE
       - _UNICODE
 
+    linkerOptions[toolchain:msvc]:
+      - /NODEFAULTLIB:libcmt
+
     compileOptions[toolchain:msvc]:
       - /D_CRT_NO_VA_START_VALIDATION
     # - /Uassert
