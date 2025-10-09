@@ -101,106 +101,108 @@ abstracts:*:
       - OpenGL
       - QuartzCore
       # - CoreMIDI
+      #
+    links[:linux]:
+      - glfw
+
+      # - gtk+-2.0
+      # - gtk4
+      # - graphene-1.0
+      - Xrandr
+      - Xxf86vm
+      - Xi
+      - Xcursor
+      - Xinerama
+      - glut # -lglut (freeglut is only used for one legacy function,
+        #           but OF links it anyway)
+      - dl # -ldl
+
+      - gstapp-1.0
+      - gstvideo-1.0
+      - gstbase-1.0
+      - gstreamer-1.0
+      - udev
+      - sndfile
+      - openal
+      - ssl
+      - crypto
+      - curl
+      - pulse-simple
+      - pulse
+      - pthread
+      - asound
+      - GL
+      - GLU
+      - gtk-x11-2.0
+      - gdk-x11-2.0
+      - pangocairo-1.0
+      - atk-1.0
+      # move aside soon
+      - cairo
+      - gdk_pixbuf-2.0
+      - gio-2.0
+      - pangoft2-1.0
+      - pango-1.0
+      - gobject-2.0
+      - glib-2.0
+      - harfbuzz
+      - fontconfig
+      - freetype
+      - mpg123
+
+    staticLinks[:linux]:
+      # Original
+      # - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
+
+      #libpng, libbrotlienc, libjpeg libbrotlicommon,libbrotlidec
+      # - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
+
+      - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libjpeg.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libpng16.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
+      - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
+      - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libz.a
+
+    staticLinks[:macos]:
+      - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libpng16.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libbrotlidec.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libbrotlicommon.a
+      - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
+      - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
+
+      #new
+      - ${var:ofPath}/libs/${var:platform}/lib/libbrotlienc.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libz.a
+      - ${var:ofPath}/libs/${var:platform}/lib/liblzma.a
 targets:
   # OFLib:
   #   kind: chaletProject
   #   location: ${var:ofPath}
   OF:
     kind: staticLibrary
-    settings:Cxx:
-      links[:linux]:
-        # - gtk+-2.0
-        # - gtk4
-        # - graphene-1.0
-        - Xrandr
-        - Xxf86vm
-        - Xi
-        - Xcursor
-        - Xinerama
-        - glut # -lglut (freeglut is only used for one legacy function,
-          #           but OF links it anyway)
-        - dl # -ldl
 
-        - gstapp-1.0
-        - gstvideo-1.0
-        - gstbase-1.0
-        - gstreamer-1.0
-        - udev
-        - sndfile
-        - openal
-        - ssl
-        - crypto
-        - curl
-        - pulse-simple
-        - pulse
-        - pthread
-        - asound
-        - GL
-        - GLU
-        - gtk-x11-2.0
-        - gdk-x11-2.0
-        - pangocairo-1.0
-        - atk-1.0
-        # move aside soon
-        - cairo
-        - gdk_pixbuf-2.0
-        - gio-2.0
-        - pangoft2-1.0
-        - pango-1.0
-        - gobject-2.0
-        - glib-2.0
-        - harfbuzz
-        - fontconfig
-        - freetype
-        - mpg123
-        - glfw
-
-      staticLinks[:linux]:
-        # Original
-        # - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
-        # - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
-        # - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
-
-        #libpng, libbrotlienc, libjpeg libbrotlicommon,libbrotlidec
-        # - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
-
-        - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
-        # - ${var:ofPath}/libs/${var:platform}/lib/libjpeg.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libpng16.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
-        - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
-        - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libz.a
-
-      staticLinks[:macos]:
-        - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libpng16.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libbrotlidec.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libbrotlicommon.a
-        - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
-        - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
-
-        #new
-        - ${var:ofPath}/libs/${var:platform}/lib/libbrotlienc.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libz.a
-        - ${var:ofPath}/libs/${var:platform}/lib/liblzma.a
     files:
       include:
         - ${var:ofPath}/libs/openFrameworks/{3d,communication,events,gl,graphics,math,sound,types,utils,video}/*.cpp
