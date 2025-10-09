@@ -71,6 +71,7 @@ abstracts:*:
       - /NODEFAULTLIB:MSVCRT # Changed from libcmt
       - /FORCE:MULTIPLE
 
+    staticRuntimeLibrary: true
     compileOptions[toolchain:msvc]:
       - /D_CRT_NO_VA_START_VALIDATION
       - /MT
