@@ -68,6 +68,7 @@ abstracts:*:
 
     linkerOptions[toolchain:msvc]:
       - /NODEFAULTLIB:libcmt
+      - /FORCE:MULTIPLE
 
     compileOptions[toolchain:msvc]:
       - /D_CRT_NO_VA_START_VALIDATION
