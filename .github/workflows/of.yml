@@ -196,25 +196,25 @@ jobs:
       - name: 3DPrimitivesExample Chalet Build
         run: |
           cd examples/3d/3DPrimitivesExample
-          chalet build
+          chalet build --show-commands
 
-      # - name: ofxAssimpExample Chalet
-      #   run: |
-      #     cd examples/3d/ofxAssimpExample
-      #     ofgen templates=chalet
-      #     chalet build
+      - name: ofxAssimpExample Chalet
+        run: |
+          cd examples/3d/ofxAssimpExample
+          ofgen templates=chalet
+          chalet build --show-commands
 
-      # - name: opencvExample Chalet
-      #   run: |
-      #     cd examples/computer_vision/opencvExample
-      #     ofgen templates=chalet
-      #     chalet build
+      - name: opencvExample Chalet
+        run: |
+          cd examples/computer_vision/opencvExample
+          ofgen templates=chalet
+          chalet build --show-commands
 
       - name: All Addons Example Chalet
         run: |
           cd examples/templates/allAddonsExample
           ofgen templates=chalet
-          chalet build
+          chalet build --show-commands
 
       # - name: All Addons Example
       #   if: runner.os != 'Windows'
