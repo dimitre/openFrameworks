@@ -160,7 +160,7 @@ abstracts:*:
       # - glew32 # GLEW extension loader
       # - uriparser # URI parsing
       # - FreeImage
-      #
+
     staticLinks[:windows]:
       - ${var:ofPath}/libs/${var:platform}/lib/brotlicommon.lib
       - ${var:ofPath}/libs/${var:platform}/lib/brotlidec.lib
