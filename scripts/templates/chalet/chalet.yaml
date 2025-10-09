@@ -106,7 +106,7 @@ abstracts:*:
       # - CoreMIDI
       #
     links[:linux]:
-      # - glfw
+      - glfw
 
       # - gtk+-2.0
       # - gtk4
@@ -160,7 +160,7 @@ abstracts:*:
       # - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
 
       #libpng, libbrotlienc, libjpeg libbrotlicommon,libbrotlidec
-      - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
 
       - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
       - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
