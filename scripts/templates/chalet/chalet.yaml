@@ -157,7 +157,8 @@ abstracts:*:
     defines[:windows]:
       - URI_STATIC
       - FREEIMAGE_LIB
-      - GLEW_STATIC
+      # FIXME: remove this from core, and put back here
+      # - GLEW_STATIC
 
     links[:windows]:
       - winmm # timeBeginPeriod / timeEndPeriod
