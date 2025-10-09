@@ -247,7 +247,8 @@ targets:
     kind: staticLibrary
     settings:Cxx:
       defines[:windows]:
-        - URI_STATIC # <--  add this back
+        # - URI_STATIC
+        - URI_STATIC_BUILD
         - FREEIMAGE_LIB
         - JPEG_STATIC
         - TIFF_STATIC
