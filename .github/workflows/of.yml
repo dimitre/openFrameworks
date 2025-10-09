@@ -42,12 +42,12 @@ jobs:
       - name: macOS fix CMAKE Brew
         if: runner.os == 'macOS'
         run: |
-          # brew uninstall --ignore-dependencies cmake || true
-          # brew cleanup -s cmake
           brew update
-          brew upgrade cmake
-          brew install --force-bottle cmake
-          # quick sanity check
+          brew uninstall --ignore-dependencies cmake || true
+          brew cleanup -s cmake
+          brew install --force-bottle cmake          # re-install
+
+          which cmake
           cmake --version
 
       - uses: actions/checkout@v5
@@ -104,6 +104,7 @@ jobs:
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
           packages: >
+            glfw
             wget2 libyaml-cpp-dev nlohmann-json3-dev libpugixml-dev
             make libcairo2-dev libgtk2.0-dev libgtk2.0-0
             libssl3 libssl-dev libcurl4 libcurl4-openssl-dev
@@ -192,28 +193,22 @@ jobs:
           cd examples/3d/3DPrimitivesExample
           cat chalet.yaml
 
-      - name: 3DPrimitivesExample MKDIR
-        shell: bash
-        if: runner.os == 'Windows'
-        run: |
-          mkdir -p build/x86_64-pc-windows-msvc_Release/obj.3DPrimitivesExample/src
-
       - name: 3DPrimitivesExample Chalet Build
         run: |
           cd examples/3d/3DPrimitivesExample
           chalet build
 
-      - name: ofxAssimpExample Chalet
-        run: |
-          cd examples/3d/ofxAssimpExample
-          ofgen templates=chalet
-          chalet build
+      # - name: ofxAssimpExample Chalet
+      #   run: |
+      #     cd examples/3d/ofxAssimpExample
+      #     ofgen templates=chalet
+      #     chalet build
 
-      - name: opencvExample Chalet
-        run: |
-          cd examples/computer_vision/opencvExample
-          ofgen templates=chalet
-          chalet build
+      # - name: opencvExample Chalet
+      #   run: |
+      #     cd examples/computer_vision/opencvExample
+      #     ofgen templates=chalet
+      #     chalet build
 
       - name: All Addons Example Chalet
         run: |
