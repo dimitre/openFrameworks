@@ -154,11 +154,11 @@ abstracts:*:
       - freetype
       - mpg123
 
-    defines[:windows]:
-      - FREEIMAGE_LIB
-      - URI_STATIC
-      # FIXME: remove this from core, and put back here
-      # - GLEW_STATIC
+    # defines[:windows]:
+    #   - FREEIMAGE_LIB
+    #   - URI_STATIC
+    # FIXME: remove this from core, and put back here
+    # - GLEW_STATIC
 
     links[:windows]:
       - winmm # timeBeginPeriod / timeEndPeriod
@@ -170,7 +170,7 @@ abstracts:*:
     staticLinks[:windows]:
       # - ${var:ofPath}/libs/${var:platform}/lib/jpeg-static.lib
       - ${var:ofPath}/libs/${var:platform}/lib/turbojpeg-static.lib
-      # - ${var:ofPath}/libs/${var:platform}/lib/tiff.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/tiff.lib
       # - ${var:ofPath}/libs/${var:platform}/lib/tiffxx.lib
 
       - ${var:ofPath}/libs/${var:platform}/lib/brotlicommon.lib
@@ -244,10 +244,11 @@ targets:
     kind: staticLibrary
     settings:Cxx:
       defines[:windows]:
-        - URI_STATIC
+        - URI_STATIC # <--  add this back
         - FREEIMAGE_LIB
         - JPEG_STATIC
         - TIFF_STATIC
+        - ZLIB_CONST
         # - GLEW_STATIC
     files:
       include:
