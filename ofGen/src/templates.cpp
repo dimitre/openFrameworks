@@ -1110,7 +1110,8 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 		// fs::path p { a->path / f };
 		// projectYaml["targets"]["empty"]["files"]["include"].push_back(p.string());
 		std::string folder = a->isProject ? "" : "${var:ofPath}/addons/" + a->name + "/";
-		std::string path { folder + f.string() };
+		// std::string path { folder + f.string() };
+		std::string path { folder + f.generic_string() };
 		projectYaml["targets"]["empty"]["files"]["include"].push_back(path);
 	}
 	// for (auto & f : a->filteredMap["headers"]) {
