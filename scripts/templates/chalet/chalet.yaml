@@ -154,6 +154,11 @@ abstracts:*:
       - freetype
       - mpg123
 
+    defines[:windows]:
+      - URI_STATIC
+      - FREEIMAGE_LIB
+      - GLEW_STATIC
+
     links[:windows]:
       - winmm # timeBeginPeriod / timeEndPeriod
       - opengl32 # classic OpenGL 1.x entry-points
