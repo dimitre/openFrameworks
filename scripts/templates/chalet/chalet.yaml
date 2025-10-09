@@ -105,6 +105,13 @@ abstracts:*:
       - QuartzCore
       # - CoreMIDI
       #
+    links[:windows]:
+      - winmm # timeBeginPeriod / timeEndPeriod
+      - opengl32 # classic OpenGL 1.x entry-points
+      # - glew32 # GLEW extension loader
+      # - uriparser # URI parsing
+      # - FreeImage
+
     links[:linux]:
       - glfw
 
