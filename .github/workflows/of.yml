@@ -104,7 +104,7 @@ jobs:
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
           packages: >
-            glfw
+            libglfw3-dev
             wget2 libyaml-cpp-dev nlohmann-json3-dev libpugixml-dev
             make libcairo2-dev libgtk2.0-dev libgtk2.0-0
             libssl3 libssl-dev libcurl4 libcurl4-openssl-dev
