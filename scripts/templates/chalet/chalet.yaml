@@ -163,15 +163,15 @@ abstracts:*:
     links[:windows]:
       - winmm # timeBeginPeriod / timeEndPeriod
       - opengl32 # classic OpenGL 1.x entry-points
+      - uriparser # URI parsing
       # - glew32 # GLEW extension loader
-      # - uriparser # URI parsing
       # - FreeImage
 
     staticLinks[:windows]:
       # - ${var:ofPath}/libs/${var:platform}/lib/jpeg-static.lib
       - ${var:ofPath}/libs/${var:platform}/lib/turbojpeg-static.lib
-      - ${var:ofPath}/libs/${var:platform}/lib/tiff.lib
-      - ${var:ofPath}/libs/${var:platform}/lib/tiffxx.lib
+      # - ${var:ofPath}/libs/${var:platform}/lib/tiff.lib
+      # - ${var:ofPath}/libs/${var:platform}/lib/tiffxx.lib
 
       - ${var:ofPath}/libs/${var:platform}/lib/brotlicommon.lib
       - ${var:ofPath}/libs/${var:platform}/lib/brotlidec.lib
@@ -185,7 +185,7 @@ abstracts:*:
       - ${var:ofPath}/libs/${var:platform}/lib/pugixml.lib
       # - ${var:ofPath}/libs/${var:platform}/lib/rtaudio.lib
       - ${var:ofPath}/libs/${var:platform}/lib/tess2.lib
-      - ${var:ofPath}/libs/${var:platform}/lib/uriparser.lib
+      # - ${var:ofPath}/libs/${var:platform}/lib/uriparser.lib
       - ${var:ofPath}/libs/${var:platform}/lib/videoInput.lib
       # - ${var:ofPath}/libs/${var:platform}/lib/yaml-cpp.lib
       - ${var:ofPath}/libs/${var:platform}/lib/zs.lib
