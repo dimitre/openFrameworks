@@ -85,12 +85,12 @@ abstracts:*:
       # not sure if needed
       - /usr/include/{freetype2,libpng16,glib-2.0,libmount,blkid,fribidi,pixman-1,gdk-pixbuf-2.0,webp,graphene-1.0}
 
-      # - /usr/include/gtk-2.0
-      # - /usr/lib/x86_64-linux-gnu/{gtk-2.0,glib-2.0}/include
-      # - /usr/include/atk-1.0
+      - /usr/include/gtk-2.0
+      - /usr/lib/x86_64-linux-gnu/{gtk-2.0,glib-2.0}/include
+      - /usr/include/atk-1.0
 
-      - /usr/include/gtk-4.0
-      - /usr/lib/x86_64-linux-gnu/graphene-1.0/include
+      # - /usr/include/gtk-4.0
+      # - /usr/lib/x86_64-linux-gnu/graphene-1.0/include
 
     appleFrameworks:
       - Accelerate
