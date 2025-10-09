@@ -13,6 +13,8 @@ targets:
   ofgen:
     kind: executable
     settings:Cxx:
+      compileOptions[toolchain:msvc]:
+        - /MT
       includeDirs:
         - src
         - src/uuidxx/src
