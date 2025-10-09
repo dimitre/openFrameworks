@@ -160,6 +160,22 @@ abstracts:*:
       - freetype
       - mpg123
 
+    staticLinks[:windows]:
+      - ${var:ofPath}/libs/${var:platform}/lib/{brotlicommon,brotlidec,brotlienc}.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/FreeImage.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/freetype.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/glew.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/glfw3.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/glm.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/libpng16_static.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/pugixml.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/rtaudio.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/tess2.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/uriparser.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/videoInput.lib
+      # - ${var:ofPath}/libs/${var:platform}/lib/yaml-cpp.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/zs.lib
+
     staticLinks[:linux]:
       # Original
       # - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
