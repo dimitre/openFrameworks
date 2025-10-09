@@ -105,12 +105,6 @@ abstracts:*:
       - QuartzCore
       # - CoreMIDI
       #
-    links[:windows]:
-      - winmm # timeBeginPeriod / timeEndPeriod
-      - opengl32 # classic OpenGL 1.x entry-points
-      # - glew32 # GLEW extension loader
-      # - uriparser # URI parsing
-      # - FreeImage
 
     links[:linux]:
       - glfw
@@ -160,6 +154,13 @@ abstracts:*:
       - freetype
       - mpg123
 
+    links[:windows]:
+      - winmm # timeBeginPeriod / timeEndPeriod
+      - opengl32 # classic OpenGL 1.x entry-points
+      # - glew32 # GLEW extension loader
+      # - uriparser # URI parsing
+      # - FreeImage
+      #
     staticLinks[:windows]:
       - ${var:ofPath}/libs/${var:platform}/lib/brotlicommon.lib
       - ${var:ofPath}/libs/${var:platform}/lib/brotlidec.lib
@@ -171,7 +172,7 @@ abstracts:*:
       - ${var:ofPath}/libs/${var:platform}/lib/glm.lib
       - ${var:ofPath}/libs/${var:platform}/lib/libpng16_static.lib
       - ${var:ofPath}/libs/${var:platform}/lib/pugixml.lib
-      - ${var:ofPath}/libs/${var:platform}/lib/rtaudio.lib
+      # - ${var:ofPath}/libs/${var:platform}/lib/rtaudio.lib
       - ${var:ofPath}/libs/${var:platform}/lib/tess2.lib
       - ${var:ofPath}/libs/${var:platform}/lib/uriparser.lib
       - ${var:ofPath}/libs/${var:platform}/lib/videoInput.lib
