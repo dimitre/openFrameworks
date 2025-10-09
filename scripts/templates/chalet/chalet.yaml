@@ -155,8 +155,8 @@ abstracts:*:
       - mpg123
 
     defines[:windows]:
-      - URI_STATIC
       - FREEIMAGE_LIB
+      # - URI_STATIC
       # FIXME: remove this from core, and put back here
       # - GLEW_STATIC
 
