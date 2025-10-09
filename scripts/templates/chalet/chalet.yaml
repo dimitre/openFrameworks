@@ -67,12 +67,18 @@ abstracts:*:
       # - GLEW_STATIC
 
     linkerOptions[toolchain:msvc]:
-      - /NODEFAULTLIB:libcmt
+      # - /NODEFAULTLIB:libcmt
       - /FORCE:MULTIPLE
 
     compileOptions[toolchain:msvc]:
       - /D_CRT_NO_VA_START_VALIDATION
-    # - /Uassert
+      # - /MT
+
+    compileOptions[toolchain:msvc+configuration:release]:
+      - /MT
+
+    compileOptions[toolchain:msvc+configuration:debug]:
+      - /MTd
 
     includeDirs:
       - ${var:ofPath}/libs/openFrameworks/**
