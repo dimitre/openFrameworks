@@ -193,7 +193,7 @@ abstracts:*:
     staticLinks[:windows]:
       # - ${var:ofPath}/libs/${var:platform}/lib/jpeg-static.lib
       - ${var:ofPath}/libs/${var:platform}/lib/turbojpeg-static.lib
-      # - ${var:ofPath}/libs/${var:platform}/lib/tiff.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/tiff.lib
       # - ${var:ofPath}/libs/${var:platform}/lib/tiffxx.lib
 
       - ${var:ofPath}/libs/${var:platform}/lib/brotlicommon.lib
