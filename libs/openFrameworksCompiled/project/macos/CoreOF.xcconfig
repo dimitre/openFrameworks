@@ -21,7 +21,8 @@ OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libfreetype.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libglew.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libglfw3.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libglm.a
-OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libpng16.a
+OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libpng.a
+//OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libpng18.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libpugixml.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/librtaudio.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libtess2.a
@@ -43,7 +44,7 @@ OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/liblzma.a
 //-rw-r--r--@ 1 d  staff   1461848 Apr  7 17:06 libglm.a
 //-rw-r--r--@ 1 d  staff   1454736 Apr  7 17:06 libbrotlienc.a
 //-rw-r--r--@ 1 d  staff    658312 May  3 19:38 libglfw3.a
-//-rw-r--r--@ 1 d  staff    598048 Jun 15 14:16 libpng16.a
+//-rw-r--r--@ 1 d  staff    598048 Jun 15 14:16 libpng16.a (agora é 18)
 //-rw-r--r--@ 1 d  staff    510880 Apr  7 18:01 libpugixml.a
 //-rw-r--r--@ 1 d  staff    267952 Apr  7 17:06 libbrotlicommon.a
 //-rw-r--r--@ 1 d  staff    254968 Apr  7 17:10 liburiparser.a
@@ -51,7 +52,7 @@ OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/liblzma.a
 //-rw-r--r--@ 1 d  staff    225464 Apr  7 17:10 libz.a
 //-rw-r--r--@ 1 d  staff    102768 Apr  7 17:06 libbrotlidec.a
 //-rw-r--r--@ 1 d  staff     88376 Apr  7 18:01 libtess2.a
-//lrwxr-xr-x@ 1 d  staff        10 Jul 14 18:38 libpng.a -> libpng16.a
+//lrwxr-xr-x@ 1 d  staff        10 Jul 14 18:38 libpng.a -> libpng18.a
 
 //OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libssl.a
 //OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libcurl.a
