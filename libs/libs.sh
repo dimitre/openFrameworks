@@ -181,6 +181,15 @@ fi
 LIBS_FOLDER=./${PLATFORM}
 DOWNLOAD="./_download_${VERSION}_${PLATFORM}"
 
+# wipe folder to re-download libs.
+if [ -d "${DOWNLOAD}" ]; then
+    echo "Removing Previously Downloaded Libraries"
+    rm -rf ${DOWNLOAD}
+fi
+echo "Creating Download Folder ${DOWNLOAD}"
+mkdir ${DOWNLOAD}
+
+
 # echo ${DOWNLOAD}
 
 checkLib() {
