@@ -69,7 +69,7 @@ abstracts:*:
     linkerOptions[toolchain:msvc]:
       # - /NODEFAULTLIB:libcmt
       - /NODEFAULTLIB:MSVCRT # Changed from libcmt
-      - /FORCE:MULTIPLE
+      # - /FORCE:MULTIPLE
 
     staticRuntimeLibrary: true
     compileOptions[toolchain:msvc]:
