@@ -133,10 +133,16 @@ void ofAddon::showFiles() {
 void ofAddon::loadFiles() {
 	alert("	loadFiles " + path.string(), 34);
 
-	for (auto & l : addonProperties["ADDON_LIBS"]) {
-		alert("WOW addon libs " + l, 35);
-		filesMap["libs"].emplace_back(l);
+	for (auto & p : addonProperties["ADDON_LIBS"]) {
+		alert("-> addon libs " + p, 35);
+		filesMap["libs"].emplace_back(p);
 	}
+
+	for (auto & p : addonProperties["ADDON_INCLUDES"]) {
+	    alert("-> addon includes " + p, 35);
+	    filesMap["includes"].emplace_back(p);
+	}
+
 
 	scanFolder(path / "src", filesMap, true);
 
