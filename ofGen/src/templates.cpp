@@ -1118,6 +1118,7 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 	// }
 
 	for (auto & f : a->filteredMap["includes"]) {
+	    alert ("filteredMap includes f: " +f.string(), 95);
 		// alert ("a->path " + a->path.string(), 95);
 		// alert ("f " +f.string(), 95);
 		// fs::path p { a->path / f };
