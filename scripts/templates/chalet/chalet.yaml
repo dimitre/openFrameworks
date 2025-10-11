@@ -66,10 +66,10 @@ abstracts:*:
       # FIXME: remove this from core, and put back here
       # - GLEW_STATIC
 
-    linkerOptions[toolchain:msvc]:
-      # - /NODEFAULTLIB:libcmt
-      - /NODEFAULTLIB:MSVCRT # Changed from libcmt
-      - /FORCE:MULTIPLE
+    # linkerOptions[toolchain:msvc]:
+    # - /NODEFAULTLIB:libcmt
+    # - /NODEFAULTLIB:MSVCRT # Changed from libcmt
+    # - /FORCE:MULTIPLE
 
     staticRuntimeLibrary: true
     compileOptions[toolchain:msvc]:
