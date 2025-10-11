@@ -73,7 +73,7 @@ abstracts:*:
 
     staticRuntimeLibrary: true
     compileOptions[toolchain:msvc]:
-      - /D_CRT_NO_VA_START_VALIDATION
+      # - /D_CRT_NO_VA_START_VALIDATION
       - /MT
 
     # compileOptions[toolchain:msvc+configuration:release]:
