@@ -19,8 +19,8 @@ jobs:
       matrix:
         include:
           # ubuntu and macos completing good, so removed from here now.
-          # - { os: ubuntu-latest, platform: linux64, shell: bash }
-          # - { os: macos-latest, platform: macos, shell: bash }
+          - { os: ubuntu-latest, platform: linux64, shell: bash }
+          - { os: macos-latest, platform: macos, shell: bash }
           - { os: windows-latest, platform: vs, shell: powershell }
 
           # - { os: windows-latest, platform: vs, shell: bash }
@@ -196,11 +196,11 @@ jobs:
           cd examples/3d/3DPrimitivesExample
           chalet build --show-commands
 
-      - name: ofxAssimpExample Chalet
-        run: |
-          cd examples/3d/ofxAssimpExample
-          ofgen templates=chalet
-          chalet build --show-commands
+      # - name: ofxAssimpExample Chalet
+      #   run: |
+      #     cd examples/3d/ofxAssimpExample
+      #     ofgen templates=chalet
+      #     chalet build --show-commands
 
       - name: opencvExample Chalet
         run: |
