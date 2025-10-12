@@ -72,29 +72,13 @@ linuxarmv6l:
 	ADDON_SOURCES_EXCLUDE = libs/oscpack/src/ip/win32/%
 	ADDON_INCLUDES_EXCLUDE = libs/oscpack/src/ip/win32
 
-linuxarmv7l:
-	ADDON_SOURCES_EXCLUDE = libs/oscpack/src/ip/win32/%
-	ADDON_INCLUDES_EXCLUDE = libs/oscpack/src/ip/win32
-
 linuxaarch64:
-	ADDON_SOURCES_EXCLUDE = libs/oscpack/src/ip/win32/%
-	ADDON_INCLUDES_EXCLUDE = libs/oscpack/src/ip/win32
-
-linux:
 	ADDON_SOURCES_EXCLUDE = libs/oscpack/src/ip/win32/%
 	ADDON_INCLUDES_EXCLUDE = libs/oscpack/src/ip/win32
 
 linux64:
 	ADDON_SOURCES_EXCLUDE = libs/oscpack/src/ip/win32/%
 	ADDON_INCLUDES_EXCLUDE = libs/oscpack/src/ip/win32
-
-osx:
-	ADDON_SOURCES_EXCLUDE = libs/oscpack/src/ip/win32/%
-	ADDON_INCLUDES_EXCLUDE = libs/oscpack/src/ip/win32
-
-# android:
-# 	ADDON_SOURCES_EXCLUDE = libs/oscpack/src/ip/win32/%
-# 	ADDON_INCLUDES_EXCLUDE = libs/oscpack/src/ip/win32
 
 emscripten:
 	ADDON_SOURCES_EXCLUDE = libs/oscpack/src/ip/win32/%
@@ -120,5 +104,3 @@ vs:
 	ADDON_SOURCES_EXCLUDE = libs/oscpack/src/ip/posix/%
 	ADDON_INCLUDES_EXCLUDE = libs/oscpack/src/ip/posix
 	ADDON_DEFINES = OSC_HOST_LITTLE_ENDIAN
-
-	

@@ -254,7 +254,11 @@ void ofAddon::loadAddonConfig() {
 
 		// alert (">> currentParseState " + currentParseState, 93);
 		// FIXME: consider other Platforms soon.
-		bool consider = currentParseState == "common:" || currentParseState == "macos:" || currentParseState == "osx:";
+		bool consider =
+		currentParseState == "common:" ||
+		// currentParseState == "macos:" ||
+		// currentParseState == "osx:";
+		currentParseState == conf.platforms[0];
 
 		if (consider) {
 			if (line.find("=") != string::npos) {
