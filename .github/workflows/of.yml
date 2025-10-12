@@ -19,8 +19,8 @@ jobs:
       matrix:
         include:
           # ubuntu and macos completing good, so removed from here now.
-          - { os: ubuntu-latest, platform: linux64, shell: bash }
-          - { os: macos-latest, platform: macos, shell: bash }
+          # - { os: ubuntu-latest, platform: linux64, shell: bash }
+          # - { os: macos-latest, platform: macos, shell: bash }
           - { os: windows-latest, platform: vs, shell: powershell }
 
           # - { os: windows-latest, platform: vs, shell: bash }
@@ -181,20 +181,20 @@ jobs:
       #     ofgen templates=chalet
       #     chalet build
 
-      - name: 3DPrimitivesExample Chalet Gen
-        run: |
-          cd examples/3d/3DPrimitivesExample
-          ofgen templates=chalet
+      # - name: 3DPrimitivesExample Chalet Gen
+      #   run: |
+      #     cd examples/3d/3DPrimitivesExample
+      #     ofgen templates=chalet
 
-      - name: 3DPrimitivesExample Chalet Cat
-        run: |
-          cd examples/3d/3DPrimitivesExample
-          cat chalet.yaml
+      # - name: 3DPrimitivesExample Chalet Cat
+      #   run: |
+      #     cd examples/3d/3DPrimitivesExample
+      #     cat chalet.yaml
 
-      - name: 3DPrimitivesExample Chalet Build
-        run: |
-          cd examples/3d/3DPrimitivesExample
-          chalet build --show-commands
+      # - name: 3DPrimitivesExample Chalet Build
+      #   run: |
+      #     cd examples/3d/3DPrimitivesExample
+      #     chalet build --show-commands
 
       # - name: ofxAssimpExample Chalet
       #   run: |
@@ -202,11 +202,11 @@ jobs:
       #     ofgen templates=chalet
       #     chalet build --show-commands
 
-      - name: opencvExample Chalet
-        run: |
-          cd examples/computer_vision/opencvExample
-          ofgen templates=chalet
-          chalet build --show-commands
+      # - name: opencvExample Chalet
+      #   run: |
+      #     cd examples/computer_vision/opencvExample
+      #     ofgen templates=chalet
+      #     chalet build --show-commands
 
       - name: All Addons Example Chalet
         run: |
