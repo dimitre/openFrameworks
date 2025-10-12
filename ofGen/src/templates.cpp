@@ -1087,7 +1087,6 @@ void ofTemplateChalet::load() {
 	}
 
 
-	conf.defines.
 	// for (auto & f : conf.frameworks) {
 	// 	projectYaml["abstracts:*"]["appleFrameworks"].push_back(f);
 	// }
