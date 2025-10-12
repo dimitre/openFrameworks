@@ -132,18 +132,18 @@ FN_INTERNAL int upload_firmware(fnusb_dev* dev, char * filename) {
 	 * /usr/share/libfreenect
      * ./../Resources/ ( for OS X )
 	 */
-    
+
     //need to add a forward slash
     char fw_filename[1024];
     sprintf(fw_filename, "/%s", filename);
-    
+
     int filenamelen = strlen(fw_filename);
 	int i;
 	int searchpathcount;
 	FILE* fw = NULL;
-    
+
 	for(i = 0, searchpathcount = 6; !fw && i < searchpathcount; i++) {
-		char* fwfile;
+		char* fwfile = NULL;
 		int needs_free = 0;
 		switch(i) {
 			case 0: {
@@ -208,26 +208,26 @@ FN_INTERNAL int upload_firmware(fnusb_dev* dev, char * filename) {
 		FN_ERROR("upload_firmware: failed to find firmware file.\n");
 		return -errno;
 	}
-    
+
     // get the number of bytes of the file
     fseek(fw , 0, SEEK_END);
     int fw_num_bytes = ftell(fw);
     rewind(fw);
-    
+
     if( fw_num_bytes <= 0 ){
 		FN_ERROR("upload_firmware: failed to find file with any data.\n");
 		return -errno;
     }
-    
+
     unsigned char * fw_bytes = (unsigned char *)malloc(fw_num_bytes);
     int numRead = fread(fw_bytes, 1, fw_num_bytes, fw);
     fw_num_bytes = numRead; // just in case
 
     int retVal = upload_firmware_from_memory(dev, fw_bytes, fw_num_bytes);
-    
+
     fclose(fw);
     fw = NULL;
-    
+
     return retVal;
 }
 
@@ -239,17 +239,17 @@ FN_INTERNAL int upload_firmware_from_memory(fnusb_dev* dev, unsigned char * fw_f
 
 	int res;
 	int transferred;
-    
+
 	firmware_header fwheader;
 	int read = 0;
     int bytesLeft = fw_size_in_btyes;
     unsigned char * readPtr = &fw_from_mem[0];
-    
+
 	if (fw_size_in_btyes < sizeof(firmware_header)) {
 		FN_ERROR("upload_firmware: firmware image too small, has no header?\n");
 		return -errno;
 	}
-    
+
     memcpy(&fwheader, readPtr, sizeof(firmware_header));
 
 	// The file is serialized as little endian.
@@ -268,7 +268,7 @@ FN_INTERNAL int upload_firmware_from_memory(fnusb_dev* dev, unsigned char * fw_f
 	FN_INFO("\tsize         0x%08x\n", fwheader.size);
 	FN_INFO("\tentry point  0x%08x\n", fwheader.entry_addr);
 
-    
+
     uint32_t addr = fwheader.base_addr;
 	unsigned char page[0x4000];
     int readIndex = 0;
@@ -276,7 +276,7 @@ FN_INTERNAL int upload_firmware_from_memory(fnusb_dev* dev, unsigned char * fw_f
 	do {
 
 		read = (0x4000 > fwheader.size - total_bytes_sent) ? fwheader.size - total_bytes_sent : 0x4000;
-        
+
         // sanity check
         if( read > bytesLeft ){
             read = bytesLeft;
@@ -284,11 +284,11 @@ FN_INTERNAL int upload_firmware_from_memory(fnusb_dev* dev, unsigned char * fw_f
         if (read <= 0) {
             break;
         }
-        
+
         memcpy(page, &readPtr[readIndex], read);
         readIndex += read;
         bytesLeft -= read;
-        
+
 		bootcmd.tag = fn_le32(dev->parent->audio_tag);
 		bootcmd.bytes = fn_le32(read);
 		bootcmd.cmd = fn_le32(0x03);

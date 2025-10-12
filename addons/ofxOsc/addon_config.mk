@@ -104,3 +104,5 @@ vs:
 	ADDON_SOURCES_EXCLUDE = libs/oscpack/src/ip/posix/%
 	ADDON_INCLUDES_EXCLUDE = libs/oscpack/src/ip/posix
 	ADDON_DEFINES = OSC_HOST_LITTLE_ENDIAN
+	# if needed...
+	#ADDON_DEFINES += _WINSOCK_DEPRECATED_NO_WARNINGS
