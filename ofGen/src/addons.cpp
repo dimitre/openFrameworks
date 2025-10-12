@@ -139,10 +139,9 @@ void ofAddon::loadFiles() {
 	}
 
 	for (auto & p : addonProperties["ADDON_INCLUDES"]) {
-	    alert("-> addon includes " + p, 35);
-	    filesMap["includes"].emplace_back(p);
+		alert("-> addon includes " + p, 35);
+		filesMap["includes"].emplace_back(p);
 	}
-
 
 	scanFolder(path / "src", filesMap, true);
 
@@ -254,27 +253,20 @@ void ofAddon::loadAddonConfig() {
 
 		// alert (">> currentParseState " + currentParseState, 93);
 		// FIXME: consider other Platforms soon.
-		bool consider =
-		currentParseState == "common:" ||
-		// currentParseState == "macos:" ||
-		// currentParseState == "osx:";
-		currentParseState == conf.platforms[0];
-
+		bool consider = currentParseState == "common:" ||
+			// currentParseState == "macos:" ||
+			// currentParseState == "osx:";
+			currentParseState == conf.platforms[0] + ":";
 		if (consider) {
+			// FIXME: Remove
+			// alert("currentParseState " + currentParseState, 95);
 			if (line.find("=") != string::npos) {
-			// FIXME: remove. limpa variable faz o papel de addToValue.
-				// bool addToValue = false;
 				vector<string> varValue;
 				bool limpa = false;
 				if (line.find("+=") != string::npos) {
-					// addToValue = true;
-					// FIXME: maybe not needed. a simple split is ok.
-					// varValue = splitStringOnceByLeft(line, "+=");
 					varValue = ofSplitString(line, "+=");
 				} else {
 					limpa = true;
-					// addToValue = false;
-					// varValue = splitStringOnceByLeft(line, "=");
 					varValue = ofSplitString(line, "=");
 				}
 
@@ -287,6 +279,9 @@ void ofAddon::loadAddonConfig() {
 				}
 				if (value != "") {
 					addonProperties[variable].emplace_back(value);
+					// FIXME: Remove
+					// alert("---- variable " + variable, 92);
+					// alert("---- value " + value, 92);
 				}
 			}
 		}
@@ -412,7 +407,6 @@ bool buildProject() {
 			if (empty(conf.templateNames)) {
 				conf.templateNames = platformTemplates[platform];
 			} else {
-
 			}
 		}
 		// conf.templateNames.emplace_back(getPlatformString());

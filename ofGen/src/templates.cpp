@@ -1072,7 +1072,7 @@ void ofTemplateChalet::load() {
 	alert("ofTemplateChalet::load()", 92);
 
 	fs::path projectFrom { path / "chalet.yaml" };
-	alert(projectFrom.string(), 35);
+	// alert(projectFrom.string(), 35);
 
 	std::vector<std::string> addonsNames;
 	for (auto & a : conf.addons) {
@@ -1098,7 +1098,7 @@ void ofTemplateChalet::load() {
 }
 
 void ofTemplateChalet::addAddon(ofAddon * a) {
-	alert("ofTemplateChalet::addAddon() " + a->name, 92);
+	// alert(" ofTemplateChalet::addAddon() " + a->name, 91);
 
 	// auto out = projectYaml["variables"];
 	projectYaml["variables"]["generator"] = getVersion();
@@ -1118,7 +1118,7 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 	// }
 
 	for (auto & f : a->filteredMap["includes"]) {
-	    alert ("filteredMap includes f: " +f.string(), 95);
+	    // alert ("filteredMap includes f: " +f.string(), 95);
 		// alert ("a->path " + a->path.string(), 95);
 		// alert ("f " +f.string(), 95);
 		// fs::path p { a->path / f };
@@ -1182,7 +1182,7 @@ void ofTemplateChalet::save() {
 	alert("ofTemplateChalet::save()", 92);
 
 	fs::path projectTo { conf.projectPath / "chalet.yaml" };
-	alert(projectTo.string(), 35);
+	// alert(projectTo.string(), 35);
 	std::ofstream saveFile(projectTo.string());
 	// std::string comment = "generator " + getVersion();
 	// saveFile << YAML::Comment(comment) << projectYaml;
