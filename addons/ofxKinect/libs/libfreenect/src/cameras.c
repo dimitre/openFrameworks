@@ -507,9 +507,9 @@ static void convert_bayer_to_rgb(uint8_t *raw_buf, uint8_t *proc_buf, freenect_f
 
 	uint8_t *dst = proc_buf; // pointer to destination
 
-	uint8_t *prevLine;        // pointer to previous, current and next line
-	uint8_t *curLine;         // of the source bayer pattern
-	uint8_t *nextLine;
+	uint8_t *prevLine = NULL;        // pointer to previous, current and next line
+	uint8_t *curLine = NULL;         // of the source bayer pattern
+	uint8_t *nextLine = NULL;
 
 	// storing horizontal values in hVals:
 	// previous << 16, current << 8, next
