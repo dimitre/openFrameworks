@@ -190,6 +190,8 @@ abstracts:*:
       - mfuuid # Add this - Media Foundation UUIDs
       - d3d11 # Add this - Direct3D 11
       - dxgi # Add this - DirectX Graphics Infrastructure
+
+      - Ws2_32 # ofxNetwork. I can move only there later
       # - uriparser # URI parsing
       # - glew32 # GLEW extension loader
       # - FreeImage
