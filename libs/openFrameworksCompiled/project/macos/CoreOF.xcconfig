@@ -12,6 +12,10 @@ HEADER_OF_LIBS = $(OF_PATH)/libs/macos/include/**
 OF_CORE_LIBS = $(OF_PATH)/libs/openFrameworksCompiled/lib/macos/openFrameworks.a
 OF_CORE_LIBS[config=Debug] = $(OF_PATH)/libs/openFrameworksCompiled/lib/macos/openFrameworksDebug.a
 
+OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libtiff.a
+OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libpng.a
+
+
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libFreeImage.a
 // Brotli is needed by freetype.
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libbrotlicommon.a
@@ -21,7 +25,6 @@ OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libfreetype.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libglew.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libglfw3.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libglm.a
-OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libpng.a
 //OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libpng18.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libpugixml.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/librtaudio.a
@@ -29,7 +32,6 @@ OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libtess2.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/liburiparser.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libz.a
 
-OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libtiff.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libturbojpeg.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/liblzma.a
 

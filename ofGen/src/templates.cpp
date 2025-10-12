@@ -1083,9 +1083,8 @@ void ofTemplateChalet::load() {
 	projectYaml["variables"]["platform"] = getPlatformString();
 	projectYaml["variables"]["addons"] = joinStrings(addonsNames, ",");
 	for (auto & d : conf.defines) {
-	    projectYaml["abstracts:*"]["settings:Cxx"]["defines"].push_back(d);
+		projectYaml["abstracts:*"]["settings:Cxx"]["defines"].push_back(d);
 	}
-
 
 	// for (auto & f : conf.frameworks) {
 	// 	projectYaml["abstracts:*"]["appleFrameworks"].push_back(f);
@@ -1103,18 +1102,10 @@ void ofTemplateChalet::load() {
 
 void ofTemplateChalet::addAddon(ofAddon * a) {
 	// alert(" ofTemplateChalet::addAddon() " + a->name, 91);
-
-	// auto out = projectYaml["variables"];
 	projectYaml["variables"]["generator"] = getVersion();
-	// projectYaml["variables"].push_back(std::pair<string,string> ("generator", "version"));
-	// projectYaml["variables"] << YAML::Key << "generator";
-	// projectYaml["variables"] << YAML::Value << getVersion();
 
 	for (auto & f : a->filteredMap["sources"]) {
-		// fs::path p { a->path / f };
-		// projectYaml["targets"]["empty"]["files"]["include"].push_back(p.string());
 		std::string folder = a->isProject ? "" : "${var:ofPath}/addons/" + a->name + "/";
-		// std::string path { folder + f.string() };
 		std::string path { folder + f.generic_string() };
 		projectYaml["targets"]["empty"]["files"]["include"].push_back(path);
 	}
@@ -1122,23 +1113,17 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 	// }
 
 	for (auto & f : a->filteredMap["includes"]) {
-	    // alert ("filteredMap includes f: " +f.string(), 95);
-		// alert ("a->path " + a->path.string(), 95);
-		// alert ("f " +f.string(), 95);
-		// fs::path p { a->path / f };
-		// projectYaml["targets"]["empty"]["settings:Cxx"]["includeDirs"].push_back(p.string());
-
 		std::string folder = a->isProject ? "" : "${var:ofPath}/addons/" + a->name + "/";
 		std::string path { folder + f.string() };
+
+		projectYaml["abstracts:*"]["settings:Cxx"]["includeDirs"].push_back(path);
+
 		projectYaml["targets"]["empty"]["settings:Cxx"]["includeDirs"].push_back(path);
 	}
 
 	for (auto & f : a->filteredMap["libs"]) {
 		fs::path p { a->path / f };
-		// string libPath { "${var:ofPath}/addons/" + a->name + '/' + f.string() };
-		// string libPath { p.string() };
 		std::string path { "${var:ofPath}/addons/" + a->name + "/" + f.string() };
-
 		projectYaml["targets"]["empty"]["settings:Cxx"]["staticLinks"].push_back(path);
 	}
 
@@ -1157,13 +1142,22 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 		alert("	└─ appleFramework " + f.string(), 94);
 		projectYaml["abstracts:*"]["settings:Cxx"]["appleFrameworks"].push_back(f.string());
 	}
-	// FIXME: handle cflags etc.
-	// const std::map<std::string, std::string> addonToXCode {
-	// 	{ "ADDON_CFLAGS", "OTHER_CFLAGS" },
-	// 	{ "ADDON_CPPFLAGS", "OTHER_CPLUSPLUSFLAGS" },
-	// 	{ "ADDON_LDFLAGS", "OTHER_LDFLAGS" },
-	// 	{ "ADDON_DEFINES", "GCC_PREPROCESSOR_DEFINITIONS" },
-	// };
+
+
+	// FIXME: TODO: handle cflags etc.
+	const std::map<std::string, std::string> addonToChalet {
+		{ "ADDON_DEFINES", "defines" },
+		{ "ADDON_CFLAGS", "OTHER_CFLAGS" },
+		{ "ADDON_CPPFLAGS", "OTHER_CPLUSPLUSFLAGS" },
+		{ "ADDON_LDFLAGS", "OTHER_LDFLAGS" },
+	};
+
+	for (auto & p : a->addonProperties["ADDON_DEFINES"]) {
+		// MARK: defines key
+		projectYaml["targets"]["empty"]["settings:Cxx"]["defines"].push_back(p);
+	}
+
+
 }
 
 void ofTemplateChalet::save() {
