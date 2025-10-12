@@ -140,7 +140,8 @@ enum ofTargetPlatform{
 		//TODO: Fix this in the code instead of disabling the warnings
 // FIXME: Removed now, included in chalet project (include in msvc later)
 //		#define _CRT_SECURE_NO_WARNINGS
-		#define _WINSOCK_DEPRECATED_NO_WARNINGS
+// Removed and moved to ofxOsc
+//		#define _WINSOCK_DEPRECATED_NO_WARNINGS
 
 
 		#include <stdint.h>
