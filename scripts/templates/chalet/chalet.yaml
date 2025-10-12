@@ -63,6 +63,8 @@ abstracts:*:
       - JPEG_STATIC
       - TIFF_STATIC
       - ZLIB_CONST
+      # only for libfreenect, ofxKinect. if it works it can be moved there.
+      - strdup=_strdup
       # FIXME: remove this from core, and put back here
       # - GLEW_STATIC
 
