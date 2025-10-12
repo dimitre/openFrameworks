@@ -143,6 +143,13 @@ void ofAddon::loadFiles() {
 		filesMap["includes"].emplace_back(p);
 	}
 
+	// test 12 oct.
+	for (auto & p : addonProperties["ADDON_DEFINES"]) {
+		alert("-> addon defines " + p, 35);
+		conf.defines.emplace_back(p);
+	}
+
+
 	scanFolder(path / "src", filesMap, true);
 
 	// get addon libs, it can be none, one or multiple

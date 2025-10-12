@@ -1082,7 +1082,12 @@ void ofTemplateChalet::load() {
 	projectYaml = YAML::LoadFile(projectFrom.string());
 	projectYaml["variables"]["platform"] = getPlatformString();
 	projectYaml["variables"]["addons"] = joinStrings(addonsNames, ",");
+	for (auto & d : conf.defines) {
+	    projectYaml["abstracts:*"]["settings:Cxx"]["defines"].push_back(d);
+	}
 
+
+	conf.defines.
 	// for (auto & f : conf.frameworks) {
 	// 	projectYaml["abstracts:*"]["appleFrameworks"].push_back(f);
 	// }

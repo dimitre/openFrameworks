@@ -35,6 +35,8 @@ abstracts:*:
     runtimeTypeInformation: true
     threads: true
     exceptions: true
+    defines:
+      - OF
     defines[:debug]:
       - DEBUG
 
