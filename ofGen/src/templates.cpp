@@ -1122,8 +1122,11 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 	}
 
 	for (auto & f : a->filteredMap["libs"]) {
-		fs::path p { a->path / f };
-		std::string path { "${var:ofPath}/addons/" + a->name + "/" + f.string() };
+		// fs::path p { a->path / f };
+		// std::string path { "${var:ofPath}/addons/" + a->name + "/" + f.string() };
+
+		std::string folder = a->isProject ? "" : "${var:ofPath}/addons/" + a->name + "/";
+		std::string path { folder + f.string() };
 		projectYaml["targets"]["empty"]["settings:Cxx"]["staticLinks"].push_back(path);
 	}
 
@@ -1149,7 +1152,7 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 		{ "ADDON_DEFINES", "defines" },
 		{ "ADDON_CFLAGS", "OTHER_CFLAGS" },
 		{ "ADDON_CPPFLAGS", "OTHER_CPLUSPLUSFLAGS" },
-		{ "ADDON_LDFLAGS", "OTHER_LDFLAGS" },
+		{ "ADDON_LDFLAGS", "linkerOptions" },
 	};
 
 	for (auto & p : a->addonProperties["ADDON_DEFINES"]) {

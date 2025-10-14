@@ -2,7 +2,15 @@
 #include "utils.h"
 #include <chrono>
 
+#if defined(_WIN32)
+	#include <windows.h>
+#endif
+
 int main(const int argc, const char * argv[]) {
+#if defined(_WIN32)
+	SetConsoleOutputCP(CP_UTF8); // 65001
+#endif
+
 	auto t1 = std::chrono::high_resolution_clock::now();
 
 	std::cout << sign << std::endl; // HEADER
