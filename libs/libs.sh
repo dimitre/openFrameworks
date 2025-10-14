@@ -8,16 +8,16 @@ COLOR3='\033[0;95m'
 NC='\033[0m' # No Color
 
 section() {
-	printf "⚡️ ${COLOR}$@ ${NC}\r\n"
+	printf "⚡️ ${COLOR}$@${NC}\n"
 }
 sectionOK() {
-	printf "💾 ${COLOR}$@ ${NC}\r\n"
+	printf "💾 ${COLOR}$@${NC}\n"
 }
 executa2() {
-	printf "✅ ${COLOR2}$@ ${NC}\r\n"
+	printf "✅ ${COLOR2}$@${NC}\n"
 }
 executa() { #echoes and execute. dry run is "executa2"
-	printf "✅ ${COLOR2}$@ ${NC}\r\n"
+	printf "✅ ${COLOR2}$@${NC}\n"
 	$@
 }
 
@@ -286,3 +286,5 @@ getlink
 unzipCore
 unzipAddons
 sectionOK Install ofLibs done
+
+trap 'printf "${NC}"' EXIT
