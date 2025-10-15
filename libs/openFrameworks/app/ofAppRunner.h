@@ -4,7 +4,12 @@
 #include "ofWindowSettings.h"
 
 // FIXME: temporario
-#include "ofFileUtils.h"
+//#include "ofFileUtils.h"
+
+#ifdef TARGET_OSX
+	#include <mach-o/dyld.h>       /* _NSGetExecutablePath */
+	#include <limits.h>        /* PATH_MAX */
+#endif
 
 
 class ofRectangle;
@@ -100,8 +105,7 @@ public:
 };
 
 
-
-
+// MARK: - ofCore
 struct ofCoreInternal {
 private:
 	// ofAppRunner
@@ -119,41 +123,123 @@ public:
 
 	ofClock clock;
 
+	// std::shared_ptr<ofMainLoop> mainLoop { std::make_shared<ofMainLoop>() };
+	// ofFileUtils
+	//	bool isInit() { return initialized; }
+	
+	fs::path getAppPath(){
+		#if defined(TARGET_LINUX) || defined(TARGET_ANDROID)
+			char buff[FILENAME_MAX];
+			ssize_t size = readlink("/proc/self/exe", buff, sizeof(buff) - 1);
+			if (size == -1){
+//				ofLogError("ofFilePath") << "getCurrentExePath(): readlink failed with error " << errno;
+				std::cerr << "getAppPath(): readlink failed with error " << errno;
+			}
+			else{
+				buff[size] = '\0';
+				return buff;
+			}
+		#elif defined(TARGET_OSX)
+			char path[FILENAME_MAX];
+			uint32_t size = sizeof(path);
+			if(_NSGetExecutablePath(path, &size) != 0){
+				std::cerr << "getAppPath(): path buffer too small, need size " <<  size;
+//				ofLogError("ofFilePath") << "getCurrentExePath(): path buffer too small, need size " <<  size;
+			} else {
+				return path;
+			}
+		#elif defined(TARGET_WIN32)
+			vector<char> executablePath(MAX_PATH);
+			DWORD result = ::GetModuleFileNameA(nullptr, &executablePath[0], static_cast<DWORD>(executablePath.size()));
+			if (result == 0) {
+//				ofLogError("ofFilePath") << "getCurrentExePath(): couldn't get path, GetModuleFileNameA failed";
+				std::cerr << "getAppPath(): couldn't get path, GetModuleFileNameA failed";
+			} else {
+				return string(executablePath.begin(), executablePath.begin() + result);
+			}
+		#endif
+		return {};
+	}
+	
 	//--------------------------------------------------
-	fs::path defaultDataPath(){
-	#if defined TARGET_OSX
-		try {
-			return fs::canonical(ofFilePath::getCurrentExeDirFS() / "../../../data/");
-		} catch(...) {
-			return ofFilePath::getCurrentExeDirFS() / "../../../data/";
+//	fs::path defaultDataPath(){
+//#if defined TARGET_OSX
+//		try {
+//			return fs::canonical(getAppPath() / "../../../../data/");
+//		} catch(...) {
+//			return getAppPath() / "../../../../data/";
+//		}
+//#elif defined TARGET_ANDROID
+//		return { "sdcard/" };
+//#else
+//		try {
+//			return fs::canonical(getAppPath() / "data/").make_preferred();
+//		} catch(...) {
+//			return (getAppPath() / "data/");
+//		}
+//#endif
+//	}
+
+	fs::path appPath; // exePath
+//	bool isMacOSBundle = false;
+	fs::path appFolder; // exeDir
+	std::string appName;
+//	fs::path dataFolder; // defaultDataPath
+	
+	fs::path dataPath;
+	fs::path defaultWorkingDirectory;
+	bool enableDataPath = true;
+	
+	bool isInsideAppBundle(const fs::path& appPath) {
+		for (fs::path p = fs::weakly_canonical(appPath); p != p.root_path(); p = p.parent_path()) {
+			if (p.extension() == ".app" && fs::is_directory(p / "Contents"))
+				return true;
 		}
-	#elif defined TARGET_ANDROID
-		return string("sdcard/");
-	#else
-		try {
-			return fs::canonical(ofFilePath::getCurrentExeDirFS() / "data/").make_preferred();
-		} catch(...) {
-			return (ofFilePath::getCurrentExeDirFS() / "data/");
-		}
-	#endif
+		return false;
 	}
 
-	of::filesystem::path dataPath;
-	of::filesystem::path defaultWorkingDirectory;
-	bool enableDataPath = true;
-	// std::shared_ptr<ofMainLoop> mainLoop { std::make_shared<ofMainLoop>() };
-
-	// ofFileUtils
-
-//	bool isInit() { return initialized; }
 
 	void init() {
 		if (initialized) return;
 		initialized = true;
 		exiting = false;
+		
+		
+		appPath = getAppPath();
+		appName = appPath.stem().string();
+//		cout << "ofCore init appPath = " << appPath << endl;
+		appFolder = appPath.parent_path();
+#if defined(TARGET_OSX)
+		bool isMacOSBundle = isInsideAppBundle(appPath);
+		if (isMacOSBundle) {
+//			cout << "YES isMacOSBundle " << endl;
+			appFolder = appPath.parent_path().parent_path().parent_path().parent_path();
+		} else {
+//			cout << "NO isMacOSBundle " << endl;
+		}
+#endif
+//		dataFolder = appFolder / "data";
+		
+		dataPath = appFolder / "data";
+		
+		// Not anymore
+//		fs::current_path(dataPath);
+//		cout << "ofCore changing CWD to dataPath " << dataPath << endl;
+		
+//		cout << "ofCore fs::current_path() " << fs::current_path() << endl;
+//		cout << "ofCore dataFolder " << dataFolder << endl;
 
+		
+		
 		defaultWorkingDirectory = fs::absolute(fs::current_path());
-		dataPath = defaultDataPath();
+		
+		
+		// FIXME: REMOVE
+		//		dataPath = defaultDataPath();
+//		cout << "ofCore appName = " << appName << endl;
+//		cout << "ofCore current path " << fs::current_path() << endl;
+//		cout << "ofCore defaultWorkingDirectory " << defaultWorkingDirectory << endl;
+//		cout << "ofCore dataPath " << dataPath << endl;
 	}
 
 

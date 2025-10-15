@@ -102,7 +102,6 @@ void ofSoundShutdown();
 #endif
 
 void ofInit() {
-
 	ofCore.init();
 	ofCore.shutdownFunctions = {
 //		ofURLFileLoaderShutdown,

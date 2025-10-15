@@ -519,7 +519,7 @@ bool ofFile::openStream(Mode _mode, bool _binary){
 //------------------------------------------------------------------------------------------------------------
 bool ofFile::open(const fs::path & _path, Mode _mode, bool binary){
 	close();
-	myFile = ofToDataPathFS(_path);
+	myFile = ofToDataPath(_path);
 	return openStream(_mode, binary);
 }
 
@@ -889,7 +889,7 @@ bool ofFile::copyTo(const fs::path & _path, bool bRelativeToData, bool overwrite
 
 	//bRelativeToData is handled here for the destination path - so we pass false to static functions below
 	if(bRelativeToData){
-		path = ofToDataPathFS(path);
+		path = ofToDataPath(path);
 	}
 
 	if(ofFile::doesFileExist(path, false)){
@@ -939,7 +939,7 @@ bool ofFile::moveTo(const fs::path& _path, bool bRelativeToData, bool overwrite)
 	}
 
 	if(bRelativeToData){
-		path = ofToDataPathFS(path);
+		path = ofToDataPath(path);
 	}
 	if(ofFile::doesFileExist(path, false)){
 
@@ -1125,14 +1125,14 @@ ofDirectory::ofDirectory(const fs::path & path){
 
 //------------------------------------------------------------------------------------------------------------
 void ofDirectory::open(const fs::path & path){
-	originalDirectory = ofFilePath::getPathForDirectoryFS(path);
+	originalDirectory = ofFilePath::getPathForDirectory(path);
 	files.clear();
-	myDir = ofToDataPathFS(originalDirectory);
+	myDir = ofToDataPath(originalDirectory);
 }
 
 //------------------------------------------------------------------------------------------------------------
 void ofDirectory::openFromCWD(const fs::path & path){
-	originalDirectory = ofFilePath::getPathForDirectoryFS(path);
+	originalDirectory = ofFilePath::getPathForDirectory(path);
 	files.clear();
 	myDir = originalDirectory;
 }
@@ -1174,18 +1174,12 @@ std::string ofDirectory::path() const {
 }
 
 //------------------------------------------------------------------------------------------------------------
-fs::path ofDirectory::getAbsolutePathFS() const {
+fs::path ofDirectory::getAbsolutePath() const {
 	try {
-		return fs::canonical(fs::absolute(myDir));
+		return fs::canonical(myDir);
 	} catch(...) {
 		return fs::absolute(myDir);
 	}
-}
-
-// MARK: - near future FS
-//------------------------------------------------------------------------------------------------------------
-std::string ofDirectory::getAbsolutePath() const {
-	return ofPathToString(ofDirectory::getAbsolutePathFS());
 }
 
 //------------------------------------------------------------------------------------------------------------
@@ -1257,7 +1251,7 @@ bool ofDirectory::copyTo(const fs::path & _path, bool bRelativeToData, bool over
 	}
 
 	if(bRelativeToData){
-		path = ofToDataPathFS(path, bRelativeToData);
+		path = ofToDataPath(path, bRelativeToData);
 	}
 
 	if(ofDirectory::doesDirectoryExist(path, false)){
@@ -1561,7 +1555,7 @@ bool ofDirectory::createDirectory(const fs::path& _dirPath, bool bRelativeToData
 	auto dirPath = _dirPath;
 
 	if(bRelativeToData){
-		dirPath = ofToDataPathFS(dirPath);
+		dirPath = ofToDataPath(dirPath);
 	}
 
 	// on OSX,fs::create_directories seems to return false *if* the path has folders that already exist
@@ -1595,7 +1589,7 @@ bool ofDirectory::doesDirectoryExist(const fs::path& _dirPath, bool bRelativeToD
 	auto dirPath = _dirPath;
 	try {
 		if (bRelativeToData) {
-			dirPath = ofToDataPathFS(dirPath);
+			dirPath = ofToDataPath(dirPath);
 		}
 		return fs::exists(dirPath) && fs::is_directory(dirPath);
 	}
@@ -1609,7 +1603,7 @@ bool ofDirectory::doesDirectoryExist(const fs::path& _dirPath, bool bRelativeToD
 bool ofDirectory::isDirectoryEmpty(const fs::path& _dirPath, bool bRelativeToData){
 	auto dirPath = _dirPath;
 	if(bRelativeToData){
-		dirPath = ofToDataPathFS(dirPath);
+		dirPath = ofToDataPath(dirPath);
 	}
 
 	if(!dirPath.empty() && fs::exists(dirPath) && fs::is_directory(dirPath)){
@@ -1724,7 +1718,7 @@ std::string ofFilePath::removeExt(const fs::path & _filename){
 }
 
 //------------------------------------------------------------------------------------------------------------
-fs::path ofFilePath::getPathForDirectoryFS(const fs::path & path){
+fs::path ofFilePath::getPathForDirectory(const fs::path & path){
 	// if a trailing slash is missing from a path, this will clean it up
 	// if it's a windows-style "\" path it will add a "\"
 	// if it's a unix-style "/" path it will add a "/"
@@ -1741,14 +1735,6 @@ fs::path ofFilePath::getPathForDirectoryFS(const fs::path & path){
 	}
 #endif
 }
-
-
-//------------------------------------------------------------------------------------------------------------
-// FIXME: Deprecate this seems over complicated and not useful anymore, using filesystem
-string ofFilePath::getPathForDirectory(const fs::path & path){
-	return ofPathToString(ofFilePath::getPathForDirectoryFS(path));
-}
-
 
 //------------------------------------------------------------------------------------------------------------
 // FIXME: - re-avail
@@ -1794,22 +1780,16 @@ bool ofFilePath::createEnclosingDirectory(const fs::path& filePath, bool bRelati
 }
 
 //------------------------------------------------------------------------------------------------------------
-// MARK: - near future FS
-fs::path ofFilePath::getAbsolutePathFS(const fs::path & path, bool bRelativeToData){
+fs::path ofFilePath::getAbsolutePath(const fs::path & path, bool bRelativeToData){
 	if(bRelativeToData){
 		return ofToDataPath(path, true);
 	}else{
 		try{
-			return fs::canonical(fs::absolute(path));
+			return fs::canonical(path);
 		}catch(...){
 			return fs::absolute(path);
 		}
 	}
-}
-
-//------------------------------------------------------------------------------------------------------------
-std::string ofFilePath::getAbsolutePath(const fs::path& path, bool bRelativeToData){
-	return ofPathToString(ofFilePath::getAbsolutePathFS(path, bRelativeToData));
 }
 
 //------------------------------------------------------------------------------------------------------------
@@ -1830,7 +1810,7 @@ std::string ofFilePath::join(const fs::path& path1, const fs::path& path2){
 }
 
 //------------------------------------------------------------------------------------------------------------
-fs::path ofFilePath::getCurrentExePathFS(){
+fs::path ofFilePath::getCurrentExePath(){
 	#if defined(TARGET_LINUX) || defined(TARGET_ANDROID)
 		char buff[FILENAME_MAX];
 		ssize_t size = readlink("/proc/self/exe", buff, sizeof(buff) - 1);
@@ -1857,22 +1837,14 @@ fs::path ofFilePath::getCurrentExePathFS(){
 			return string(executablePath.begin(), executablePath.begin() + result);
 		}
 	#endif
-	return "";
+	return {};
 }
 
-//------------------------------------------------------------------------------------------------------------
-std::string ofFilePath::getCurrentExePath(){
-	return ofPathToString(getCurrentExePathFS());
-}
+
 
 //------------------------------------------------------------------------------------------------------------
-fs::path ofFilePath::getCurrentExeDirFS(){
-	return ofFilePath::getCurrentExePathFS().parent_path() / "";
-}
-
-//------------------------------------------------------------------------------------------------------------
-std::string ofFilePath::getCurrentExeDir(){
-	return ofPathToString(getCurrentExeDirFS());
+fs::path ofFilePath::getCurrentExeDir(){
+	return ofFilePath::getCurrentExePath().parent_path() / "";
 }
 
 //------------------------------------------------------------------------------------------------------------
@@ -1908,6 +1880,7 @@ void ofDisableDataPath(){
 
 //--------------------------------------------------
 bool ofRestoreWorkingDirectoryToDefault(){
+	cout << "OW NOOOO" << endl;
 	try{
 		fs::current_path(ofCore.defaultWorkingDirectory);
 		return true;
@@ -1922,8 +1895,12 @@ void ofSetDataPathRoot(const fs::path& newRoot){
 //	dataPathRoot() = newRoot;
 }
 
+fs::path ofToDataPath(const fs::path & path, bool makeAbsolute){
+	return ofCore.dataPath / path;
+};
+
 //--------------------------------------------------
-fs::path ofToDataPathFS(const fs::path & path, bool makeAbsolute){
+fs::path ofToDataPath2(const fs::path & path, bool makeAbsolute){
 	if (makeAbsolute && path.is_absolute()) {
 		return path;
 	}
@@ -1997,7 +1974,7 @@ fs::path ofToDataPathFS(const fs::path & path, bool makeAbsolute){
 	if(makeAbsolute){
 		// then we return the absolute form of the path
 		try {
-			auto outpath = fs::canonical(fs::absolute(outputPath)).make_preferred();
+			auto outpath = fs::canonical(outputPath).make_preferred();
 			if(fs::is_directory(outpath) && hasTrailingSlash){
 				return ofFilePath::addTrailingSlash(outpath);
 			}else{
@@ -2011,11 +1988,6 @@ fs::path ofToDataPathFS(const fs::path & path, bool makeAbsolute){
 		// or output the relative path
 		return outputPath;
 	}
-}
-
-//--------------------------------------------------
-std::string ofToDataPath(const fs::path & path, bool makeAbsolute){
-	return ofPathToString(ofToDataPathFS(path, makeAbsolute));
 }
 
 //--------------------------------------------------

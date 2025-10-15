@@ -230,8 +230,9 @@ abstracts:*:
       - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
       # - ${var:ofPath}/libs/${var:platform}/lib/libjpeg.a
       - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libpng.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libpng.a
       # - ${var:ofPath}/libs/${var:platform}/lib/libpng16.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libpng18.a
       - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
       - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
       - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
@@ -245,8 +246,6 @@ abstracts:*:
       - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
       - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
       - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libpng18.a
       - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
       - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
       - ${var:ofPath}/libs/${var:platform}/lib/libbrotlidec.a
@@ -255,9 +254,11 @@ abstracts:*:
       - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
       - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
 
-      #new
-      - ${var:ofPath}/libs/${var:platform}/lib/libbrotlienc.a
+      # FREEIMAGE
+      - ${var:ofPath}/libs/${var:platform}/lib/libpng18.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
       - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libbrotlienc.a
       # - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
       # - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
       - ${var:ofPath}/libs/${var:platform}/lib/libz.a

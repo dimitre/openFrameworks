@@ -236,13 +236,13 @@ static bool loadImage(ofPixels_<PixelType> & pix, const of::filesystem::path & _
 
 //	ofFile file(_fileName);
 //	if (!file.exists()) {
-	if (!of::filesystem::exists(ofToDataPathFS(_fileName))) {
+	if (!of::filesystem::exists(ofToDataPath(_fileName))) {
 		ofLogError("loadImage") << "File not found: " << _fileName;
 		return false;
 	}
 
 //	std::uint64_t fileSize = file.getSize();
-	auto fileSize = fs::file_size(ofToDataPathFS(_fileName));
+	auto fileSize = fs::file_size(ofToDataPath(_fileName));
 //	std::uint64_t fileSize = file.getSize();
 	if (fileSize == 0) {
 		ofLogError("loadImage") << "File is empty: " << _fileName;
@@ -275,7 +275,7 @@ static bool loadImage(ofPixels_<PixelType> & pix, const of::filesystem::path & _
 		if (!FreeImage_FIFSupportsReading(fif)) {
 			std::cerr << "Error: FreeImage does not support reading this format." << std::endl;
 		}
-		auto fileName = ofToDataPathFS(_fileName);
+		auto fileName = ofToDataPath(_fileName);
 
 
 #ifdef OF_OS_WINDOWS
@@ -457,7 +457,7 @@ static bool saveImage(const ofPixels_<PixelType> & _pix, const of::filesystem::p
 	// MARK: test
 //	ofFilePath::createEnclosingDirectory(_fileName);
 	
-	auto fileName = ofToDataPathFS(_fileName);
+	auto fileName = ofToDataPath(_fileName);
 	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
 #ifdef OF_OS_WINDOWS
 	fif = FreeImage_GetFileTypeU(fileName.c_str(), 0);

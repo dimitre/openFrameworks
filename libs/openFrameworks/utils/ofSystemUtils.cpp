@@ -321,7 +321,7 @@ static int CALLBACK loadDialogBrowseCallback(
 	std::string defaultPath = *(std::string *)lpData;
 	if (defaultPath != "" && uMsg == BFFM_INITIALIZED) {
 		wchar_t wideCharacterBuffer[MAX_PATH];
-		wcscpy(wideCharacterBuffer, ofToDataPathFS(defaultPath).c_str());
+		wcscpy(wideCharacterBuffer, ofToDataPath(defaultPath).c_str());
 		SendMessage(hwnd, BFFM_SETSELECTION, 1, (LPARAM)wideCharacterBuffer);
 	}
 
@@ -401,9 +401,9 @@ ofFileDialogResult ofSystemLoadDialog(std::string windowTitle, bool bFolderSelec
 		//the title if specified
 		wchar_t szTitle[MAX_PATH];
 		if (defaultPath != "") {
-			wcscpy(szDir, ofToDataPathFS(defaultPath).c_str());
+			wcscpy(szDir, ofToDataPath(defaultPath).c_str());
 			ofn.lpstrInitialDir = szDir;
-			// auto d = convertWideToNarrow(ofToDataPathFS(defaultPath).c_str());
+			// auto d = convertWideToNarrow(ofToDataPath(defaultPath).c_str());
 			// ofn.lpstrInitialDir = d.c_str();
 		}
 
