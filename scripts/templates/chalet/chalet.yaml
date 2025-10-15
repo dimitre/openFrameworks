@@ -317,7 +317,8 @@ targets:
         - compile_flags.txt
         # - ${var:ofPath}/addons/{${var:addons}}/src/ios
 
-    copyFilesOnRun[:macos]: bin/data
+    # copyFilesOnRun[:macos]: bin/data
+    copyFilesOnRun: bin/data
 
 distribution:
   empty:
