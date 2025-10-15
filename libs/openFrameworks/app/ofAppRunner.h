@@ -209,6 +209,8 @@ public:
 		appName = appPath.stem().string();
 //		cout << "ofCore init appPath = " << appPath << endl;
 		appFolder = appPath.parent_path();
+		
+
 #if defined(TARGET_OSX)
 		bool isMacOSBundle = isInsideAppBundle(appPath);
 		if (isMacOSBundle) {
@@ -218,9 +220,14 @@ public:
 //			cout << "NO isMacOSBundle " << endl;
 		}
 #endif
-//		dataFolder = appFolder / "data";
-		
 		dataPath = appFolder / "data";
+
+		cout << "ofCore appPath " << appPath << endl;
+		cout << "ofCore appName " << appName << endl;
+		cout << "ofCore appFolder " << appFolder << endl;
+		cout << "ofCore dataPath " << dataPath << endl;
+
+		
 		
 		// Not anymore
 //		fs::current_path(dataPath);
