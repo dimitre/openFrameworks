@@ -235,8 +235,8 @@ abstracts:*:
       - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
       - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
       - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
       - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
       - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
       - ${var:ofPath}/libs/${var:platform}/lib/libz.a
@@ -258,8 +258,8 @@ abstracts:*:
       #new
       - ${var:ofPath}/libs/${var:platform}/lib/libbrotlienc.a
       - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
       - ${var:ofPath}/libs/${var:platform}/lib/libz.a
       - ${var:ofPath}/libs/${var:platform}/lib/liblzma.a
 targets:
@@ -290,6 +290,8 @@ targets:
 
   empty:
     kind: executable
+    runWorkingDirectory: ${cwd}/bin
+
     # importPackages: [of-static]
 
     settings:Cxx:
