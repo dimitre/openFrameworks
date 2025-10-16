@@ -336,7 +336,7 @@ public:
 	///
 	/// \param path directory path
 	/// \returns cleaned path + trailing slash (if needed)
-	[[deprecated ("Use FS")]]
+//	[[deprecated ("Use FS")]]
 	static of::filesystem::path getPathForDirectory(const of::filesystem::path & path);
 
 	/// Get the absolute, full path for a given path,
@@ -348,7 +348,7 @@ public:
 	/// "../../"
 	/// \returns absolute path
 	// FIXME: - Deprecate
-	[[deprecated("Use FS")]]
+//	[[deprecated("Use FS")]]
 	static of::filesystem::path getAbsolutePath(const of::filesystem::path & path, bool bRelativeToData = true);
 
 	/// Check if a path is an absolute (aka a full path),
@@ -887,7 +887,7 @@ public:
 	///
 	/// \return current path as an absolute path
 	// MARK: - Deprecate
-	[[deprecated("Use FS")]]
+//	[[deprecated("Use FS")]]
 	of::filesystem::path getAbsolutePath() const;
 
 	/// Check if the current path is readable.
