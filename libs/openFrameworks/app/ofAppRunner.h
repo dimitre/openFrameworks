@@ -236,13 +236,11 @@ public:
 #endif
 		dataPath = appFolder / "data";
 
-		cout << "ofCore appPath " << appPath << endl;
-		cout << "ofCore appName " << appName << endl;
-		cout << "ofCore appFolder " << appFolder << endl;
-		cout << "ofCore dataPath " << dataPath << endl;
+//		cout << "ofCore appPath " << appPath << endl;
+//		cout << "ofCore appName " << appName << endl;
+//		cout << "ofCore appFolder " << appFolder << endl;
+//		cout << "ofCore dataPath " << dataPath << endl;
 
-		
-		
 		// Not anymore
 //		fs::current_path(dataPath);
 //		cout << "ofCore changing CWD to dataPath " << dataPath << endl;

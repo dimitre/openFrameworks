@@ -118,7 +118,7 @@ abstracts:*:
 
     appleFrameworks:
       - Accelerate
-      - AGL
+      # - AGL
       - ApplicationServices
       - AVFoundation
       - IOKit
