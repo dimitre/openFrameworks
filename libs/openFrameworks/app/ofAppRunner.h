@@ -12,6 +12,11 @@
 #endif
 
 
+#include <string>
+#ifdef _WIN32
+#include <windows.h>   // GetModuleFileNameA, MAX_PATH
+#endif
+
 class ofRectangle;
 class ofAppBaseWindow;
 class ofAppGLFWWindow;
@@ -149,14 +154,23 @@ public:
 				return path;
 			}
 		#elif defined(TARGET_WIN32)
-			vector<char> executablePath(MAX_PATH);
-			DWORD result = ::GetModuleFileNameA(nullptr, &executablePath[0], static_cast<DWORD>(executablePath.size()));
-			if (result == 0) {
-//				ofLogError("ofFilePath") << "getCurrentExePath(): couldn't get path, GetModuleFileNameA failed";
-				std::cerr << "getAppPath(): couldn't get path, GetModuleFileNameA failed";
-			} else {
-				return string(executablePath.begin(), executablePath.begin() + result);
-			}
+			std::wstring buf;
+			buf.resize(MAX_PATH);
+			DWORD len = ::GetModuleFileNameW(nullptr, &buf[0],
+											 static_cast<DWORD>(buf.size()));
+			buf.resize(len);
+			return fs::path(std::move(buf));
+
+		//			vector<char> executablePath(MAX_PATH);
+//			char executablePath[FILENAME_MAX];
+//
+//			DWORD result = ::GetModuleFileNameA(nullptr, &executablePath[0], static_cast<DWORD>(executablePath.size()));
+//			if (result == 0) {
+////				ofLogError("ofFilePath") << "getCurrentExePath(): couldn't get path, GetModuleFileNameA failed";
+//				std::cerr << "getAppPath(): couldn't get path, GetModuleFileNameA failed";
+//			} else {
+//				return (executablePath.begin(), executablePath.begin() + result);
+//			}
 		#endif
 		return {};
 	}
