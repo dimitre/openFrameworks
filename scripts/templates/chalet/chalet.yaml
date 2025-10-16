@@ -259,7 +259,7 @@ abstracts:*:
       - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
       - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
       - ${var:ofPath}/libs/${var:platform}/lib/libbrotlienc.a
-      # - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
       # - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
       - ${var:ofPath}/libs/${var:platform}/lib/libz.a
       - ${var:ofPath}/libs/${var:platform}/lib/liblzma.a
