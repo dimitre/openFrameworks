@@ -12,7 +12,7 @@ HEADER_OF_LIBS = $(OF_PATH)/libs/macos/include/**
 OF_CORE_LIBS = $(OF_PATH)/libs/openFrameworksCompiled/lib/macos/openFrameworks.a
 OF_CORE_LIBS[config=Debug] = $(OF_PATH)/libs/openFrameworksCompiled/lib/macos/openFrameworksDebug.a
 
-//OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libtiff.a
+OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libtiff.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libpng.a
 
 
