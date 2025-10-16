@@ -35,31 +35,31 @@ bool SrcScene::load(std::string aPathToFile, int assimpOptimizeFlags){
 
 //------------------------------------------
 bool SrcScene::load(ofBuffer & buffer, int assimpOptimizeFlags, const char * extension){
-	
+
 	ofLogVerbose("ofxAssimp::SrcScene") << "load(): loading from memory buffer \"." << extension << "\"";
-	
+
 	if(scene.get() != nullptr){
 		clear();
 		// we reset the shared_ptr explicitly here, to force the old
 		// aiScene to be deleted **before** a new aiScene is created.
 		scene.reset();
 	}
-	
+
 	ImportSettings tsettings;
 	tsettings.assimpOptimizeFlags = assimpOptimizeFlags;
-	
+
 	// sets various properties & flags to a default preference
 	unsigned int flags = initImportProperties(assimpOptimizeFlags,tsettings);
-	
+
 	// 	//enable assimp logging based on ofGetLogLevel
 	//	if( ofGetLogLevel() < OF_LOG_NOTICE ){
 	//		auto logLevel = Assimp::DefaultLogger::LogSeverity::VERBOSE;
 	//		Assimp::DefaultLogger::create(ASSIMP_DEFAULT_LOG_NAME, logLevel, aiDefaultLogStream_DEBUGGER | aiDefaultLogStream_STDOUT );
 	//	}
-	
+
 	// loads scene from memory buffer - note this will not work for multipart files (obj, md3, etc)
 	const aiScene * scenePtr = importer.ReadFileFromMemory(buffer.getData(), buffer.size(), flags, extension);
-	
+
 	// this is funky but the scenePtr is managed by assimp and so we can't put it in our shared_ptr without disabling the deleter with: [](const aiScene*){}
 	scene = shared_ptr<const aiScene>(scenePtr,[](const aiScene*){});
 	bool bOk = processScene(tsettings);
@@ -73,30 +73,30 @@ bool SrcScene::load( const ImportSettings& asettings ) {
 		ofLogVerbose("ofxAssimp::SrcScene") << "load(): model does not exist: \"" << asettings.filePath << "\"";
 		return false;
 	}
-	
+
 	ofLogVerbose("ofxAssimp::SrcScene") << "load(): loading \"" << mFile.getFileName() << "\" from \"" << mFile.getEnclosingDirectory() << "\"";
-	
+
 	if(scene.get() != nullptr){
 		clear();
 		// we reset the shared_ptr explicitly here, to force the old
 		// aiScene to be deleted **before** a new aiScene is created.
 		scene.reset();
 	}
-	
+
 	// sets various properties & flags to a default preference
 	unsigned int flags = initImportProperties(asettings.assimpOptimizeFlags, asettings);
 	// loads scene from file
-	std::string path = mFile.getAbsolutePath();
+	auto path = mFile.getAbsolutePath();
 	const aiScene * scenePtr = importer.ReadFile(path.c_str(), flags);
-	
+
 	if(!scenePtr || scenePtr->mFlags & AI_SCENE_FLAGS_INCOMPLETE ) {
 		ofLogError("ofxAssimp::SrcScene") << "load: " << importer.GetErrorString();
 		return false;
 	}
-	
+
 	//this is funky but the scenePtr is managed by assimp and so we can't put it in our shared_ptr without disabling the deleter with: [](const aiScene*){}
 	scene = shared_ptr<const aiScene>(scenePtr,[](const aiScene*){});
-	
+
 	bool bOk = processScene(asettings);
 	return bOk;
 }
@@ -110,11 +110,11 @@ unsigned int SrcScene::initImportProperties(int assimpOptimizeFlags, const Impor
 	// we just want a single bone without extra added nodes.
 	// this is apparent in FBX Mixamo models, among others.
 	importer.SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
-	
+
 	unsigned int flags = assimpOptimizeFlags;
-	
+
 	if( flags <= OFX_ASSIMP_OPTIMIZE_HIGH ){
-		
+
 		if( flags == OFX_ASSIMP_OPTIMIZE_NONE ){
 			flags = 0;
 		}else if( flags == OFX_ASSIMP_OPTIMIZE_DEFAULT || flags == OFX_ASSIMP_OPTIMIZE_HIGH ){
@@ -132,7 +132,7 @@ unsigned int SrcScene::initImportProperties(int assimpOptimizeFlags, const Impor
 			aiProcess_FindInstances                 |  \
 			aiProcess_OptimizeMeshes;
 		}
-		
+
 		if( flags == OFX_ASSIMP_OPTIMIZE_HIGH ){
 			flags |= aiProcess_OptimizeGraph |  \
 			aiProcess_FindInstances |  \
@@ -141,11 +141,11 @@ unsigned int SrcScene::initImportProperties(int assimpOptimizeFlags, const Impor
 		if( asettings.fixInfacingNormals ) {
 			flags |= aiProcess_FixInfacingNormals;
 		}
-		
+
 		if( asettings.aiFlags > 0 ) {
 			flags |= asettings.aiFlags;
 		}
-		
+
 		// we need the armature data to help with bone parsing
 		flags |= aiProcess_PopulateArmatureData;
 		// this fixes things for OF both tex uvs and model not flipped in z
@@ -153,7 +153,7 @@ unsigned int SrcScene::initImportProperties(int assimpOptimizeFlags, const Impor
 			flags |= aiProcess_ConvertToLeftHanded;
 		}
 	}
-	
+
 	return flags;
 }
 
@@ -172,9 +172,9 @@ void SrcScene::clear(){
 		scene.reset();
 		importer.FreeScene();
 	}
-	
+
 	ofLogVerbose("ofxAssimp::SrcScene") << "clear(): deleting GL resources";
-	
+
 	// clear out everything.
 	mSrcMeshes.clear();
 	mAnimations.clear();
@@ -186,31 +186,31 @@ void SrcScene::clear(){
 //-------------------------------------------
 bool SrcScene::processScene(const ImportSettings& asettings) {
 	mSettings = asettings;
-	
+
 	if(scene){
 		processNodes();
 		processAnimations();
-		
+
 		if(mAnimations.size() > 0)
 			ofLogVerbose("ofxAssimp::SrcScene") << "load(): scene has " << mAnimations.size() << "animations";
 		else {
 			ofLogVerbose("ofxAssimp::SrcScene") << "load(): no animations";
 		}
-		
+
 		return true;
 	}else{
 		ofLogError("ofxAssimp::SrcScene") << "load(): " + (std::string)importer.GetErrorString();
 		clear();
 		return false;
 	}
-	
+
 	return false;
 }
 
 //-------------------------------------------
 void SrcScene::printAllNodeNames( aiNode* anode, int alevel ) {
 	if( !anode ) return;
-	
+
 	std::stringstream ss;
 	for( int i = 0; i < alevel; i++ ) {
 		ss << "  ";
@@ -226,7 +226,7 @@ void SrcScene::printAllNodeNames( aiNode* anode, int alevel ) {
 		}
 	}
 	ofLogNotice(ss.str());
-	
+
 	alevel++;
 	for (unsigned int i = 0; i < anode->mNumChildren; ++i){
 		printAllNodeNames( anode->mChildren[i], alevel );
@@ -240,7 +240,7 @@ void SrcScene::processNodes() {
 	mSrcMeshes.clear();
 	mSrcMeshes.assign( scene->mNumMeshes, shared_ptr<ofxAssimp::SrcMesh>() );
 	processMeshes(scene->mRootNode, shared_ptr<SrcNode>());
-	
+
 	std::unordered_map<std::string, aiBone*> boneMap;
 	for (unsigned int i = 0; i < scene->mNumMeshes; ++i){
 		ofLogVerbose("ofxAssimp::SrcScene") << "getAiBoneForAiNode(): loading mesh " << i;
@@ -256,8 +256,8 @@ void SrcScene::processNodes() {
 			}
 		}
 	}
-	
-	
+
+
 	for (unsigned int i = 0; i < scene->mRootNode->mNumChildren; i++ ){
 		processNodesRecursive(scene->mRootNode->mChildren[i], shared_ptr<SrcNode>(), boneMap );
 	}
@@ -266,7 +266,7 @@ void SrcScene::processNodes() {
 //-------------------------------------------
 void SrcScene::processNodesRecursive(aiNode* anode, std::shared_ptr<SrcNode> aParentNode, std::unordered_map<std::string, aiBone*>& aBoneMap ) {
 	if( !anode ) return;
-	
+
 	std::shared_ptr<SrcNode> sNode;
 	if( isBone(anode, aBoneMap) || isArmature(anode, aBoneMap) ) {
 //	if( aiBone* tAiBone = getAiBoneForAiNode(anode) ) {
@@ -280,7 +280,7 @@ void SrcScene::processNodesRecursive(aiNode* anode, std::shared_ptr<SrcNode> aPa
 		}
 		sNode = sBone;
 	} else {
-		
+
 		std::string sname = anode->mName.data;
 		bool bExclude = false;
 		for( auto& es : mSettings.excludeNodesContainingStrings ) {
@@ -294,7 +294,7 @@ void SrcScene::processNodesRecursive(aiNode* anode, std::shared_ptr<SrcNode> aPa
 			sNode->setAiNode(anode);
 		}
 	}
-	
+
 	if(sNode) {
 		if( aParentNode ) {
 			aParentNode->addChild(sNode);
@@ -304,7 +304,7 @@ void SrcScene::processNodesRecursive(aiNode* anode, std::shared_ptr<SrcNode> aPa
 		}
 		processMeshes(anode, sNode);
 	}
-	
+
 	for (unsigned int i = 0; i < anode->mNumChildren; i++ ){
 		processNodesRecursive(anode->mChildren[i], sNode, aBoneMap );
 	}
@@ -313,10 +313,10 @@ void SrcScene::processNodesRecursive(aiNode* anode, std::shared_ptr<SrcNode> aPa
 //-------------------------------------------
 void SrcScene::processMeshes(aiNode* anode, std::shared_ptr<SrcNode> aSrcNode) {
 	// the meshes are per node it seems
-	
+
 //	mSrcNodes.reserve(anode->mNumMeshes);
 	mSrcMeshes.reserve(anode->mNumMeshes);
-	
+
 	for(unsigned int i = 0; i < anode->mNumMeshes; i++) {
 		unsigned int meshIndex = anode->mMeshes[i];
 		if( meshIndex >= mSrcMeshes.size() ) {
@@ -347,7 +347,7 @@ bool SrcScene::isBone( aiNode* aAiNode, const std::unordered_map<std::string, ai
 		return true;
 	}
 	return false;
-	
+
 //	if(isRootBone( aAiNode )) {
 //		return true;
 //	}
@@ -364,7 +364,7 @@ bool SrcScene::isArmature( aiNode* aAiNode, const std::unordered_map<std::string
 		}
 	}
 	return false;
-	
+
 //	for (unsigned int i = 0; i < scene->mNumMeshes; ++i){
 //		// current mesh we are introspecting
 //		aiMesh* mesh = scene->mMeshes[i];
@@ -399,15 +399,15 @@ bool SrcScene::isRootBone( aiNode* aAiNode, std::unordered_map<std::string, aiBo
 		}
 		temp = temp->mParent;
 	}
-	
+
 	return !bHasBoneParent;
-	
+
 //	return false;
 }
 
 //-------------------------------------------
 aiBone* SrcScene::getAiBoneForAiNode( aiNode* aAiNode, std::unordered_map<std::string, aiBone*>& aBoneMap ) {
-	
+
 	std::string bstr = std::string(aAiNode->mName.C_Str());
 	if( aBoneMap.count(bstr) > 0) {
 		return aBoneMap[bstr];
@@ -458,7 +458,7 @@ void SrcScene::processAnimations() {
 		mAnimations.clear();
 		return;
 	}
-	
+
 	mAnimations.reserve(scene->mNumAnimations);
 	for (unsigned int i = 0; i < scene->mNumAnimations; i++) {
 		aiAnimation* animation = scene->mAnimations[i];
@@ -493,16 +493,16 @@ void SrcScene::processKeyframes(std::shared_ptr<ofxAssimp::SrcNode> aSrcNode, ai
 	ofxAssimp::SrcAnimKeyCollection& keyCollection = aSrcNode->getKeyCollection(aAnimIndex);
 	keyCollection.clear();
 	keyCollection.setup( aNodeAnim, anim.getDurationInTicks() );
-	
+
 //	ofLogNotice("ofxAssimp::SrcScene processKeyframes: ") << aSrcNode->getName() << " node anim: " << aNodeAnim->mNodeName.data << " node anim num pos keyframes: " << aNodeAnim->mNumPositionKeys << " scale: " << aNodeAnim->mNumScalingKeys << " rot: " << aNodeAnim->mNumRotationKeys;
-	
+
 	double startTime = 0.0; // seconds
 	double endTime = anim.getDurationInTicks();// seconds;
-	
+
 	keyCollection.positionKeys = keyCollection.getAnimVectorKeysForTime(startTime, endTime, aNodeAnim->mNumPositionKeys, aNodeAnim->mPositionKeys );
 	keyCollection.scaleKeys = keyCollection.getAnimVectorKeysForTime(startTime, endTime, aNodeAnim->mNumScalingKeys, aNodeAnim->mScalingKeys );
 	keyCollection.rotationKeys = keyCollection.getAnimRotationKeysForTime(startTime, endTime, aNodeAnim->mNumRotationKeys, aNodeAnim->mRotationKeys );
-	
+
 }
 
 #ifndef TARGET_WIN32
@@ -512,9 +512,9 @@ const char *aiTextureTypeToString(enum aiTextureType in)__attribute__((weak));
 
 //-------------------------------------------
 static GLint getGLFormatFromAiFormat(const char * aiFormat){
-	
+
 	std::string formatStr(aiFormat);
-	
+
 	if( formatStr.size() >= 8 ){
 		if( formatStr.substr(0, 4) == "rgba" ){
 			if(formatStr.substr(4,4) == "8888"){
@@ -526,16 +526,16 @@ static GLint getGLFormatFromAiFormat(const char * aiFormat){
 			ofLogError("ofxAssimp::SrcScene : getGLFormatFromAiFormat") << " can't parse format " << formatStr;
 		}
 	}
-	
+
 	ofLogWarning("ofxAssimp::SrcScene : getGLFormatFromAiFormat") << " can't parse format " << formatStr << " returning GL_RGB";
 	return GL_RGB;
 }
 
 //-------------------------------------------
 void SrcScene::loadGLResources(std::shared_ptr<ofxAssimp::SrcMesh> aSrcMesh, aiMesh* amesh){
-	
+
 	ofLogVerbose("ofxAssimp::SrcScene") << "loadGLResources(): starting";
-	
+
 	// we do this as we have textures and vbos and in mesh and we don't want to copy them
 	// create OpenGL buffers and populate them based on each meshes pertinant info.
 	if( amesh ) {
@@ -545,7 +545,7 @@ void SrcScene::loadGLResources(std::shared_ptr<ofxAssimp::SrcMesh> aSrcMesh, aiM
 				aSrcMesh->material = std::make_shared<ofMaterial>();
 			}
 		}
-		
+
 		// Handle material info
 		aiMaterial* mtl = scene->mMaterials[amesh->mMaterialIndex];
 		aiColor4D tcolor;
@@ -554,28 +554,28 @@ void SrcScene::loadGLResources(std::shared_ptr<ofxAssimp::SrcMesh> aSrcMesh, aiM
 				auto col = ofxAssimp::Utils::aiColorToOfColor(tcolor);
 				aSrcMesh->material->setDiffuseColor(col);
 			}
-			
+
 			if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_SPECULAR, &tcolor)){
 				auto col = ofxAssimp::Utils::aiColorToOfColor(tcolor);
 				aSrcMesh->material->setSpecularColor(col);
 			}
-			
+
 			if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_AMBIENT, &tcolor)){
 				auto col = ofxAssimp::Utils::aiColorToOfColor(tcolor);
 				aSrcMesh->material->setAmbientColor(col);
 			}
-			
+
 			if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_EMISSIVE, &tcolor)){
 				auto col = ofxAssimp::Utils::aiColorToOfColor(tcolor);
 				ofLogVerbose("ofxAssimp::SrcScene") << "setting emissive color: " << col;
 				aSrcMesh->material->setEmissiveColor(col);
 			}
-			
+
 			float shininess;
 			if(AI_SUCCESS == aiGetMaterialFloat(mtl, AI_MATKEY_SHININESS, &shininess)){
 				aSrcMesh->material->setShininess(shininess);
 			}
-			
+
 			int blendMode;
 			if(AI_SUCCESS == aiGetMaterialInteger(mtl, AI_MATKEY_BLEND_FUNC, &blendMode)){
 				if(blendMode==aiBlendMode_Default){
@@ -584,19 +584,19 @@ void SrcScene::loadGLResources(std::shared_ptr<ofxAssimp::SrcMesh> aSrcMesh, aiM
 					aSrcMesh->blendMode=OF_BLENDMODE_ADD;
 				}
 			}
-			
+
 			float metallic = 0.f;
 			if( AI_SUCCESS == aiGetMaterialFloat(mtl, AI_MATKEY_METALLIC_FACTOR, &metallic) ) {
 				ofLogVerbose("ofxAssimp::SrcScene") << " setting metallic value: " << metallic;
 				aSrcMesh->material->setMetallic(metallic);
 			}
-			
+
 			float roughness = 0.f;
 			if( AI_SUCCESS == aiGetMaterialFloat(mtl, AI_MATKEY_ROUGHNESS_FACTOR, &roughness) ) {
 				ofLogVerbose("ofxAssimp::SrcScene") << " setting roughness value: " << roughness;
 				aSrcMesh->material->setRoughness(roughness);
 			}
-			
+
 			float clearcoatFactor = 0.f;
 			if( AI_SUCCESS == aiGetMaterialFloat(mtl, AI_MATKEY_CLEARCOAT_FACTOR, &clearcoatFactor) ) {
 				ofLogVerbose("ofxAssimp::SrcScene") << " setting clearcoat value: " << clearcoatFactor;
@@ -607,14 +607,14 @@ void SrcScene::loadGLResources(std::shared_ptr<ofxAssimp::SrcMesh> aSrcMesh, aiM
 					aSrcMesh->material->setClearCoatEnabled(false);
 				}
 			}
-			
+
 			float clearcoatRoughFactor = 0.f;
 			if( AI_SUCCESS == aiGetMaterialFloat(mtl, AI_MATKEY_CLEARCOAT_ROUGHNESS_FACTOR, &clearcoatRoughFactor) ) {
 				ofLogVerbose("ofxAssimp::SrcScene") << " setting clearcoat roughness value: " << clearcoatRoughFactor;
 				aSrcMesh->material->setClearCoatRoughness(clearcoatRoughFactor);
 			}
 		}
-		
+
 		// Culling
 		unsigned int max = 1;
 		int two_sided=0;
@@ -625,23 +625,23 @@ void SrcScene::loadGLResources(std::shared_ptr<ofxAssimp::SrcMesh> aSrcMesh, aiM
 			aSrcMesh->twoSided = false;
 			ofLogVerbose("ofxAssimp::SrcScene") <<" loadGLResources: mesh is one sided";
 		}
-		
+
 		// Load Textures
 		int texIndex = 0;
 		aiString texPath;
-		
+
 		bool bWasUsingArb = ofGetUsingArbTex();
 		if( mSettings.importAsTex2d) {
 			ofDisableArbTex();
 		}
-		
+
 		//this gets the wrapping in u and v coodinates
 		//we don't support different wrapping in OF so just read u
 		aiTextureMapMode texMapMode[2];
 		if( mSettings.importTextures ) {
 			for(int d = 0; d <= AI_TEXTURE_TYPE_MAX; d++){
 				if(AI_SUCCESS == mtl->GetTexture((aiTextureType)d, texIndex, &texPath, NULL, NULL, NULL, NULL, &texMapMode[0])){
-					
+
 					// getTextureTypeAsString(const ofMaterialTextureType & aMaterialTextureType)
 					auto matType = ofxAssimp::Texture::ofTextureTypeForAiType( (aiTextureType)d );
 					auto texTypeString = ofMaterial::getTextureTypeAsString(matType);
@@ -649,36 +649,36 @@ void SrcScene::loadGLResources(std::shared_ptr<ofxAssimp::SrcMesh> aSrcMesh, aiM
 					if( aiTextureTypeToString ){
 						ofLogVerbose("ofxAssimp::SrcScene") << "loadGLResource(): loading " <<  aiTextureTypeToString((aiTextureType)d) << " image from \"" << texPath.data << "\"";
 					}
-					
+
 					if( matType == OF_MATERIAL_TEXTURE_NONE ) {
 						ofLogWarning("ofxAssimp::SrcScene") << "unable to detect texture type: " << texPath.data;
 						continue;
 					}
-					
+
 					bool bWrap = (texMapMode[0]==aiTextureMapMode_Wrap);
-					
+
 					std::string texPathStr = texPath.C_Str();
-					
+
 					//deal with Blender putting "//" in front of local file paths
 					if( texPathStr.size() > 2 && texPathStr.substr(0, 2) == "//" ){
 						texPathStr = texPathStr.substr(2, texPathStr.size()-2);
 					}
-					
+
 					//glb embedded texture file starts with *0
 					bool bTryEmbed = false;
 					if( texPathStr.size() >= 2 && texPathStr[0] == '*'){
 						bTryEmbed = true;
 					}
-					
+
 					//stuff for embedded textures
 					auto ogPath = texPathStr;
 					bool bHasEmbeddedTexture = false;
-					
+
 					auto modelFolder = ofFilePath::getEnclosingDirectory( mFile.path() );
 					auto relTexPath = ofFilePath::getEnclosingDirectory(texPathStr,false);
 					auto realPath = modelFolder / of::filesystem::path{ texPathStr };
-					
-					
+
+
 #ifndef TARGET_LINUX_ARM
 					if(bTryEmbed || ofFile::doesFileExist(realPath) == false) {
 						auto embeddedTexture = scene->GetEmbeddedTexture(ogPath.c_str());
@@ -691,37 +691,37 @@ void SrcScene::loadGLResources(std::shared_ptr<ofxAssimp::SrcMesh> aSrcMesh, aiM
 						}
 					}
 #endif
-					
-					
-					
+
+
+
 					bool bTextureAlreadyExists = false;
 //					if(mAssimpTextures.count(realPath)){
 					if(mTextureCacheMap.count(realPath)) {
 						bTextureAlreadyExists = true;
 					}
-					
+
 					if(bTextureAlreadyExists) {
 						ofLogVerbose("ofxAssimp::SrcScene") << "loadGLResource(): texture already loaded: \""
 						<< mFile.getFileName() + "\" from \"" << realPath.string() << "\"" << " adding texture as " << texTypeString;
 					} else {
 						shared_ptr<ofTexture> texture = std::make_shared<ofTexture>();
 //						auto assimpTexture = std::make_shared<ofxAssimp::Texture>();
-						
+
 						if( bHasEmbeddedTexture ){
 #ifndef TARGET_LINUX_ARM
 							auto embeddedTexture = scene->GetEmbeddedTexture(ogPath.c_str());
-							
+
 							//compressed texture
 							if( embeddedTexture->mHeight == 0 && embeddedTexture->mWidth > 0){
 								ofImage tmp;
 								ofBuffer buffer;
 								buffer.set((char *)embeddedTexture->pcData, embeddedTexture->mWidth);
-								
+
 								tmp.setUseTexture(false);
 								tmp.load(buffer);
-								
+
 								ofLogVerbose("ofxAssimp::SrcScene") << "loadGLResource() texture size is " << tmp.getWidth() << "x" << tmp.getHeight();
-								
+
 //								assimpTexture->getTextureRef().loadData(tmp.getPixels());
 								texture->loadData(tmp.getPixels());
 							}else{
@@ -735,7 +735,7 @@ void SrcScene::loadGLResources(std::shared_ptr<ofxAssimp::SrcMesh> aSrcMesh, aiM
 //							ofLoadImage(assimpTexture->getTextureRef(), realPath );
 							ofLoadImage(*texture, realPath);
 						}
-						
+
 						if(texture && texture->isAllocated()){
 							mTextureCacheMap[realPath] = texture;
 							ofLogVerbose("ofxAssimp::SrcScene") << "loadGLResource(): texture " << texTypeString << " loaded, dimensions: " << texture->getWidth() << "x" << texture->getHeight();
@@ -744,8 +744,8 @@ void SrcScene::loadGLResources(std::shared_ptr<ofxAssimp::SrcMesh> aSrcMesh, aiM
 							<< mFile.getFileName() + "\" from \"" << realPath.string() << "\"";
 						}
 					}
-					
-					
+
+
 					if(mTextureCacheMap.count(realPath) > 0) {
 						// create a key using the type of texture and the path
 						std::string assimpTexKey = texTypeString+"_"+realPath.string();
@@ -759,7 +759,7 @@ void SrcScene::loadGLResources(std::shared_ptr<ofxAssimp::SrcMesh> aSrcMesh, aiM
 							assimpTexture->setTexture(mTextureCacheMap[realPath]);
 							mAssimpTextures[assimpTexKey] = assimpTexture;
 						}
-						
+
 						if( assimpTexture ) {
 							ofLogVerbose("ofxAssimp::SrcScene") << "adding texture type: " << texTypeString << " to mesh: " << aSrcMesh->getName();
 							aSrcMesh->addTexture( assimpTexture );
@@ -768,12 +768,12 @@ void SrcScene::loadGLResources(std::shared_ptr<ofxAssimp::SrcMesh> aSrcMesh, aiM
 				}
 			}
 		}
-		
+
 		if( bWasUsingArb ) {
 			ofEnableArbTex();
 		}
-		
-		
+
+
 		int usage;
 		if(mAnimations.size()){
 #ifndef TARGET_OPENGLES
@@ -788,18 +788,18 @@ void SrcScene::loadGLResources(std::shared_ptr<ofxAssimp::SrcMesh> aSrcMesh, aiM
 		}else{
 			usage = GL_STATIC_DRAW;
 		}
-		
+
 		aSrcMesh->usage = usage;
-		
+
 		ofMesh tempMesh;
 		if( aSrcMesh->hasTexture() ) {
 			ofxAssimp::Utils::aiMeshToOfMesh(amesh, tempMesh, !mSettings.convertToLeftHanded, &aSrcMesh->getTexture() );
 		} else {
 			ofxAssimp::Utils::aiMeshToOfMesh(amesh, tempMesh, !mSettings.convertToLeftHanded, nullptr);
 		}
-		
+
 		aSrcMesh->calculateLocalBounds(tempMesh);
-		
+
 		aSrcMesh->vbo->setVertexData(&amesh->mVertices[0].x,3,amesh->mNumVertices,usage,sizeof(aiVector3D));
 		if(amesh->HasVertexColors(0)){
 			aSrcMesh->vbo->setColorData(&amesh->mColors[0][0].r,amesh->mNumVertices,GL_STATIC_DRAW,sizeof(aiColor4D));
@@ -810,7 +810,7 @@ void SrcScene::loadGLResources(std::shared_ptr<ofxAssimp::SrcMesh> aSrcMesh, aiM
 		if (tempMesh.hasTexCoords()){
 			aSrcMesh->vbo->setTexCoordData(&tempMesh.getTexCoords()[0].x, amesh->mNumVertices,GL_STATIC_DRAW,sizeof(glm::vec2));
 		}
-		
+
 		aSrcMesh->indices.resize(amesh->mNumFaces * 3);
 		int j=0;
 		for (unsigned int x = 0; x < amesh->mNumFaces; ++x){
