@@ -394,7 +394,7 @@ public:
 	/// are *not* in the data folder and want the direct path without relative
 	/// "../../"
 	///\returns enclosing directory
-	static std::string getEnclosingDirectory(const of::filesystem::path & filePath, bool bRelativeToData = true);
+	static fs::path getEnclosingDirectory(const of::filesystem::path & filePath, bool bRelativeToData = true);
 
 	/// Create the enclosing parent directory of a path, ie.
 	/// "images" is the enclosing directory of "duck.jpg" = "images/duck.jpg".
@@ -601,15 +601,15 @@ public:
 	/// directory.
 	///
 	/// \returns current path's enclosing directory
-	// MARK: - near future FS
-	std::string getEnclosingDirectory() const;
+	// MARK: - remove
+	fs::path getEnclosingDirectory() const;
 
 	/// \biref Get the absolute, full path of the file,
 	/// ie. "images" -> "/Users/mickey/of/apps/myApps/Donald/bin/data/images".
 	///
 	/// \returns current path as an absolute path
-	// MARK: - near future FS
-	std::string getAbsolutePath() const;
+	// MARK: - remove
+	fs::path getAbsolutePath() const;
 
 	/// Check if the current path is readable.
 	///

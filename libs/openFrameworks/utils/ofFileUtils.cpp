@@ -641,14 +641,12 @@ string ofFile::getBaseName() const {
 }
 
 //------------------------------------------------------------------------------------------------------------
-// MARK: - near future FS
-std::string ofFile::getEnclosingDirectory() const {
+fs::path ofFile::getEnclosingDirectory() const {
 	return ofFilePath::getEnclosingDirectory(path());
 }
 
 //------------------------------------------------------------------------------------------------------------
-// MARK: - near future FS
-std::string ofFile::getAbsolutePath() const {
+fs::path ofFile::getAbsolutePath() const {
 	return ofFilePath::getAbsolutePath(path());
 }
 
@@ -1764,9 +1762,8 @@ string ofFilePath::getBaseName(const fs::path & filePath){
 }
 
 //------------------------------------------------------------------------------------------------------------
-// MARK: - near future FS
 //fs::path ofFilePath::getEnclosingDirectoryFS(const fs::path & _filePath, bool bRelativeToData){
-std::string ofFilePath::getEnclosingDirectory(const fs::path & _filePath, bool bRelativeToData){
+fs::path ofFilePath::getEnclosingDirectory(const fs::path & _filePath, bool bRelativeToData){
 	auto fp = _filePath;
 	if(bRelativeToData){
 		fp = ofToDataPath(fp);
