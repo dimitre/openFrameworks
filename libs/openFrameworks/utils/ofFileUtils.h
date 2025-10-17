@@ -1234,7 +1234,6 @@ void ofDisableDataPath();
 /// \returns the new path, unless paths were disabled with ofDisableDataPath().
 
 of::filesystem::path ofToDataPath(const of::filesystem::path & path, bool absolute=false);
-of::filesystem::path ofToDataPath2(const of::filesystem::path & path, bool absolute=false);
 
 //std::string ofToDataPath(const of::filesystem::path & path, bool absolute = false);
 
