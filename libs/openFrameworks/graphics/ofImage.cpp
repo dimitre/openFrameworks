@@ -234,9 +234,8 @@ static bool loadImage(ofPixels_<PixelType> & pix, const of::filesystem::path & _
 	}
 #endif
 
-//	ofFile file(_fileName);
-//	if (!file.exists()) {
-	if (!of::filesystem::exists(ofToDataPath(_fileName))) {
+	if (!fs::exists(ofToDataPath(_fileName))) {
+		cout << "OWW" << ofToDataPath(_fileName) << endl;
 		ofLogError("loadImage") << "File not found: " << _fileName;
 		return false;
 	}

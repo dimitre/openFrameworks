@@ -60,6 +60,8 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     checkPackageBrew pkg-config
 	checkPackageBrew yaml-cpp
 	checkPackageBrew nlohmann-json
+	checkPackageBrew pugixml
+
 	SUDO=sudo
 	#LINKCOMMAND=time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src ../libs/macos/lib/libpugixml** `pkg-config --libs yaml-cpp` -o ofgen
 

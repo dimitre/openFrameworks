@@ -117,7 +117,10 @@ private:
 	bool initialized = false;
 
 public:
-	ofCoreInternal() {};
+	ofCoreInternal() {
+		// FIXME: Remove
+		cout << ">>> REMOVE : ofCoreInternal initialization " << this << endl;
+	};
 	~ofCoreInternal() {};
 
 	bool exiting = false;
