@@ -1,28 +1,9 @@
 name: OF
-version: "0.3.4"
+version: "0.12.1"
 variables:
   generator: manual
-  addons: "ofxMicroUI,ofxTools,ofxMidi,ofxMicroUIMidiController,ofxScenes,ofxSvg,ofxCurve,ofxVideoWriter,ofxAssimp"
   platform: macos
   ofPath: ../../..
-# externalDependencies:
-#   ofLib:
-#     kind: local
-#     path: ${var:ofPath}
-# package:
-#   of-static:
-#     # kind: staticLibrary
-#     files:
-#       include:
-#         - ${var:ofPath}/libs/openFrameworks/{3d,communication,events,gl,graphics,math,sound,types,utils,video}/*.cpp
-#         - ${var:ofPath}/libs/openFrameworks/app/{ofBaseApp,ofMainLoop,ofAppRunner,ofAppGLFWWindow}.cpp
-#       include[:macos]:
-#         - ${var:ofPath}/libs/openFrameworks/**.{mm,m}
-
-#       exclude[:macos]:
-#         - ${var:ofPath}/libs/openFrameworks/video/ofDirectShowPlayer.cpp
-#         - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils,ofMediaFoundationPlayer,ofDirectShowGrabber}.cpp
-#         - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
 
 abstracts:*:
   language: C++
@@ -47,9 +28,8 @@ abstracts:*:
       - OF_USING_GTK
       # - OF_USING_STD_FS=1
 
-    defines[:macos]:
-      - __MACOSX_CORE__
-    # compileOptions[toolchain:apple-llvm]:
+    defines[:macos]: #[toolchain:apple-llvm]:
+      - __MACOSX_CORE__ # only needed in ofxMidi
     compileOptions[:macos]:
       - -fobjc-arc
 
@@ -71,7 +51,6 @@ abstracts:*:
       # - GLEW_STATIC
 
     linkerOptions[toolchain:msvc]:
-      # - /NODEFAULTLIB:libcmt
       - /NODEFAULTLIB:MSVCRT # Changed from libcmt
       - /FORCE:MULTIPLE
 
@@ -80,15 +59,8 @@ abstracts:*:
       - /D_CRT_NO_VA_START_VALIDATION
       - /MT
 
-    # compileOptions[toolchain:msvc+configuration:release]:
-    #   - /MT
-
-    # compileOptions[toolchain:msvc+configuration:debug]:
-    #   - /MTd
-
     includeDirs:
       - ${var:ofPath}/libs/openFrameworks/**
-      # - ${var:ofPath}/libs/openFrameworks
       - ${var:ofPath}/libs/{${var:platform}}/include
       - ${var:ofPath}/libs/{${var:platform}}/include/**
 
@@ -118,7 +90,6 @@ abstracts:*:
 
     appleFrameworks:
       - Accelerate
-      # - AGL
       - ApplicationServices
       - AVFoundation
       - IOKit
@@ -127,24 +98,17 @@ abstracts:*:
       - CoreMedia
       - OpenGL
       - QuartzCore
-      # - CoreMIDI
-      #
 
     links[:linux]:
       - glfw
-
-      # - gtk+-2.0
-      # - gtk4
-      # - graphene-1.0
       - Xrandr
       - Xxf86vm
       - Xi
       - Xcursor
       - Xinerama
-      - glut # -lglut (freeglut is only used for one legacy function,
-        #           but OF links it anyway)
-      - dl # -ldl
-
+      # -lglut (freeglut is only used for one legacy function, but OF links it anyway)
+      - glut
+      - dl
       - gstapp-1.0
       - gstvideo-1.0
       - gstbase-1.0
@@ -178,10 +142,6 @@ abstracts:*:
       - freetype
       - mpg123
 
-    # defines[:windows]:
-    #   - FREEIMAGE_LIB
-    #   - URI_STATIC
-
     links[:windows]:
       - winmm # timeBeginPeriod / timeEndPeriod
       - opengl32 # classic OpenGL 1.x entry-points
@@ -190,7 +150,6 @@ abstracts:*:
       - mfuuid # Add this - Media Foundation UUIDs
       - d3d11 # Add this - Direct3D 11
       - dxgi # Add this - DirectX Graphics Infrastructure
-
       - Ws2_32 # ofxNetwork. I can move only there later
       # - uriparser # URI parsing
       # - glew32 # GLEW extension loader
@@ -286,24 +245,16 @@ targets:
         - ${var:ofPath}/libs/openFrameworks/app/ofAppGlutWindow.cpp
       exclude[:windows]:
         - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils}.cpp
-        # - ${var:ofPath}/libs/openFrameworks/video/{ofDirectShowPlayer,ofDirectShowGrabber,ofMediaFoundationPlayer}.cpp
         - ${var:ofPath}/libs/openFrameworks/sound/ofFmodSoundPlayer.cpp
 
   empty:
     kind: executable
     runWorkingDirectory: "bin"
-    # runWorkingDirectory: ${cwd}/bin
-
-    # importPackages: [of-static]
 
     settings:Cxx:
       staticLinks:
         - OF
-
-        # - /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/liblzma.5.tbd
-
       includeDirs:
-        # - ${var:ofPath}/libs/openFrameworks/**
         - ${var:ofPath}/libs/openFrameworks
     files:
       include:
@@ -317,7 +268,6 @@ targets:
         - compile_flags.txt
         # - ${var:ofPath}/addons/{${var:addons}}/src/ios
 
-    # copyFilesOnRun[:macos]: bin/data
     copyFilesOnRun: bin/data
 
 distribution:

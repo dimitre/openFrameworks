@@ -1,7 +1,7 @@
 name: OF
 version: 0.3.4
 variables:
-  generator: ofGen v0.6.5
+  generator: ofGen v0.7.2
   addons: ProjectSourceFiles_ofxAssimpExample,ofxAssimp,ofxGui
   platform: macos
   ofPath: ../../..
@@ -14,32 +14,72 @@ abstracts:*:
     runtimeTypeInformation: true
     threads: true
     exceptions: true
+    defines:
+      - OF
+    defines[:debug]:
+      - DEBUG
+    linkerOptions[:linux]:
+      - -pthread
+    defines[:linux]:
+      - OF_USING_GTK
+    defines[:macos]:
+      - __MACOSX_CORE__
+    compileOptions[:macos]:
+      - -fobjc-arc
     defines[toolchain:msvc]:
       - _CRT_SECURE_NO_WARNINGS
       - NDEBUG
       - _ASSERT_NO_CRT
       - UNICODE
       - _UNICODE
-    defines[:macos]:
-      - __MACOSX_CORE__
-    defines[:debug]:
-      - DEBUG
-    compileOptions[:macos]:
-      - -fobjc-arc
+      - URI_STATIC_BUILD
+      - FREEIMAGE_LIB
+      - JPEG_STATIC
+      - TIFF_STATIC
+      - ZLIB_CONST
+      - strdup=_strdup
+    linkerOptions[toolchain:msvc]:
+      - /NODEFAULTLIB:MSVCRT
+      - /FORCE:MULTIPLE
+    staticRuntimeLibrary: true
     compileOptions[toolchain:msvc]:
       - /D_CRT_NO_VA_START_VALIDATION
+      - /MT
     includeDirs:
       - ${var:ofPath}/libs/openFrameworks/**
       - ${var:ofPath}/libs/{${var:platform}}/include
       - ${var:ofPath}/libs/{${var:platform}}/include/**
+      - src
+      - ${var:ofPath}/addons/ofxAssimp/libs
+      - ${var:ofPath}/addons/ofxAssimp/libs/assimp
+      - ${var:ofPath}/addons/ofxAssimp/libs/assimp/include
+      - ${var:ofPath}/addons/ofxAssimp/libs/assimp/include/assimp
+      - ${var:ofPath}/addons/ofxAssimp/libs/assimp/include/assimp/Compiler
+      - ${var:ofPath}/addons/ofxAssimp/libs/assimp/lib
+      - ${var:ofPath}/addons/ofxAssimp/libs/assimp/lib/cmake
+      - ${var:ofPath}/addons/ofxAssimp/libs/assimp/lib/cmake/assimp-6.0
+      - ${var:ofPath}/addons/ofxAssimp/libs/assimp/lib/pkgconfig
+      - ${var:ofPath}/addons/ofxAssimp/src
+      - ${var:ofPath}/addons/ofxAssimp/src/Source
+      - ${var:ofPath}/addons/ofxGui/src
+    compileOptions[:linux+architecture:x86_64]:
+      - -msse2
+      - -msse
+      - -mfpmath=sse
     includeDirs[:linux]:
       - /usr/include/gstreamer-1.0
       - /usr/include/glib-2.0
       - /usr/lib/x86_64-linux-gnu/glib-2.0/include
       - /usr/include/x86_64-linux-gnu
+      - /usr/include/cairo
+      - /usr/include/pango-1.0
+      - /usr/include/harfbuzz
+      - /usr/include/{freetype2,libpng16,glib-2.0,libmount,blkid,fribidi,pixman-1,gdk-pixbuf-2.0,webp,graphene-1.0}
+      - /usr/include/gtk-2.0
+      - /usr/lib/x86_64-linux-gnu/{gtk-2.0,glib-2.0}/include
+      - /usr/include/atk-1.0
     appleFrameworks:
       - Accelerate
-      - AGL
       - ApplicationServices
       - AVFoundation
       - IOKit
@@ -48,6 +88,104 @@ abstracts:*:
       - CoreMedia
       - OpenGL
       - QuartzCore
+    links[:linux]:
+      - glfw
+      - Xrandr
+      - Xxf86vm
+      - Xi
+      - Xcursor
+      - Xinerama
+      - glut
+      - dl
+      - gstapp-1.0
+      - gstvideo-1.0
+      - gstbase-1.0
+      - gstreamer-1.0
+      - udev
+      - sndfile
+      - openal
+      - ssl
+      - crypto
+      - curl
+      - pulse-simple
+      - pulse
+      - pthread
+      - asound
+      - GL
+      - GLU
+      - gtk-x11-2.0
+      - gdk-x11-2.0
+      - pangocairo-1.0
+      - atk-1.0
+      - cairo
+      - gdk_pixbuf-2.0
+      - gio-2.0
+      - pangoft2-1.0
+      - pango-1.0
+      - gobject-2.0
+      - glib-2.0
+      - harfbuzz
+      - fontconfig
+      - freetype
+      - mpg123
+    links[:windows]:
+      - winmm
+      - opengl32
+      - mfplat
+      - mfreadwrite
+      - mfuuid
+      - d3d11
+      - dxgi
+      - Ws2_32
+    staticLinks[:windows]:
+      - ${var:ofPath}/libs/${var:platform}/lib/FreeImage.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/tiff.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/turbojpeg-static.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/zs.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/brotlicommon.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/brotlidec.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/brotlienc.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/freetype.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/glew.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/glfw3.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/glm.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/libpng18_static.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/pugixml.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/tess2.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/uriparser.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/videoInput.lib
+    staticLinks[:linux]:
+      - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libpng.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
+      - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
+      - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libz.a
+    staticLinks[:macos]:
+      - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libbrotlidec.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libbrotlicommon.a
+      - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
+      - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libpng18.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libbrotlienc.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libz.a
+      - ${var:ofPath}/libs/${var:platform}/lib/liblzma.a
 targets:
   OF:
     kind: staticLibrary
@@ -63,84 +201,18 @@ targets:
       exclude[:linux]:
         - ${var:ofPath}/libs/openFrameworks/video/{ofDirectShowPlayer,ofDirectShowGrabber,ofMediaFoundationPlayer}.cpp
         - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
+        - ${var:ofPath}/libs/openFrameworks/app/ofAppGlutWindow.cpp
       exclude[:windows]:
         - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils}.cpp
-        - ${var:ofPath}/libs/openFrameworks/sound/{ofFmodSoundPlayer}.cpp
+        - ${var:ofPath}/libs/openFrameworks/sound/ofFmodSoundPlayer.cpp
   ofxAssimpExample:
     kind: executable
+    runWorkingDirectory: bin
     settings:Cxx:
       staticLinks:
         - OF
         - ${var:ofPath}/addons/ofxAssimp/libs/assimp/lib/libassimp.a
-      links[:linux]:
-        - gstapp-1.0
-        - gstvideo-1.0
-        - gstbase-1.0
-        - gstreamer-1.0
-        - udev
-        - sndfile
-        - openal
-        - ssl
-        - crypto
-        - curl
-        - pulse-simple
-        - pulse
-        - pthread
-        - asound
-        - GL
-        - GLU
-        - gtk-x11-2.0
-        - gdk-x11-2.0
-        - pangocairo-1.0
-        - atk-1.0
-        - cairo
-        - gdk_pixbuf-2.0
-        - gio-2.0
-        - pangoft2-1.0
-        - pango-1.0
-        - gobject-2.0
-        - glib-2.0
-        - harfbuzz
-        - fontconfig
-        - freetype
-        - mpg123
-      staticLinks[:linux]:
-        - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libpng16.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
-        - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
-        - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libz.a
-      staticLinks[:macos]:
-        - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libpng16.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libbrotlidec.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libbrotlicommon.a
-        - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
-        - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libbrotlienc.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
-        - ${var:ofPath}/libs/${var:platform}/lib/libz.a
-        - ${var:ofPath}/libs/${var:platform}/lib/liblzma.a
       includeDirs:
-        - ${var:ofPath}/libs/openFrameworks/**
         - ${var:ofPath}/libs/openFrameworks
         - src
         - ${var:ofPath}/addons/ofxAssimp/libs
@@ -155,8 +227,6 @@ targets:
         - ${var:ofPath}/addons/ofxAssimp/src
         - ${var:ofPath}/addons/ofxAssimp/src/Source
         - ${var:ofPath}/addons/ofxGui/src
-      linkerOptions[:linux]:
-        - -pthread
     files:
       include:
         - src/main.cpp
@@ -192,8 +262,7 @@ targets:
         - .clangd
         - .zed
         - compile_flags.txt
-    copyFilesOnRun[:macos]: bin/data
-    runWorkingDirectory: bin
+    copyFilesOnRun: bin/data
 distribution:
   ofxAssimpExample:
     kind: bundle
