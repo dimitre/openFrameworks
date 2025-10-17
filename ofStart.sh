@@ -5,7 +5,7 @@ set -e
 ./libs/libs.sh
 cd ofGen
 ./compile.sh
-cd ../examples/demos/flechilas
+cd ../examples/demos/flechilhas
 ofgen buildrun
 
 echo "All good!"
