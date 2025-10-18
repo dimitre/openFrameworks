@@ -1,6 +1,42 @@
 [
   {
-    "label": "Build and Run Release",
+    "label": "chalet buildrun",
+    "command": "chalet buildrun",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "hide": "never",
+    "shell": "system",
+    "show_summary": true
+    // "show_output": true
+  },
+
+  {
+    "label": "ofgen templates=chalet",
+    "command": "ofgen templates=chalet",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "hide": "never",
+    "shell": "system",
+    "show_summary": true
+    // "show_output": true
+  },
+
+  {
+    "label": "ofgen templates=chalet buildrun",
+    "command": "ofgen templates=chalet buildrun",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "hide": "never",
+    "shell": "system",
+    "show_summary": true
+    // "show_output": true
+  },
+
+  {
+    "label": "make Build and Run Release",
     "command": "time make -j && make RunRelease",
     "use_new_terminal": false,
     "allow_concurrent_runs": false,
@@ -11,7 +47,7 @@
     // "show_output": true
   },
   {
-    "label": "Build Release",
+    "label": "make Build Release",
     "command": "time make",
     "args": ["-j", "-s"],
     "use_new_terminal": false,
@@ -23,7 +59,7 @@
     // "show_output": true
   },
   {
-    "label": "Run Release",
+    "label": "make Run Release",
     "command": "make",
     "args": ["RunRelease"],
     "use_new_terminal": false,
@@ -36,7 +72,7 @@
   },
 
   {
-    "label": "Clean",
+    "label": "make Clean",
     "command": "make",
     "args": ["clean"],
     "use_new_terminal": false,
@@ -49,7 +85,7 @@
   },
 
   {
-    "label": "Build and Run Debug",
+    "label": "make Build and Run Debug",
     "command": "make -j && make RunDebug",
     "use_new_terminal": false,
     "allow_concurrent_runs": false,
@@ -60,7 +96,7 @@
     // "show_output": true
   },
   {
-    "label": "Build Debug",
+    "label": "make Build Debug",
     "command": "make",
     "args": ["-j", "Debug"],
     "use_new_terminal": false,

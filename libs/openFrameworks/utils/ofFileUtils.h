@@ -574,8 +574,8 @@ public:
 	/// Get the current path.
 	///
 	/// \returns current path
-	std::string path() const;
-	of::filesystem::path pathFS() const;
+//	std::string path() const;
+	of::filesystem::path path() const;
 
 	/// Get the current path without its extension,
 	/// ie. "duck.jpg" ->"duck".

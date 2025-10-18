@@ -609,14 +609,14 @@ bool ofFile::exists() const {
 }
 
 //------------------------------------------------------------------------------------------------------------
-fs::path ofFile::pathFS() const {
+fs::path ofFile::path() const {
 	return myFile;
 }
 
 //------------------------------------------------------------------------------------------------------------
-std::string ofFile::path() const {
-	return ofPathToString(pathFS());
-}
+//std::string ofFile::path() const {
+//	return ofPathToString(pathFS());
+//}
 
 //------------------------------------------------------------------------------------------------------------
 // FIXME: Deprecate
@@ -1762,7 +1762,6 @@ string ofFilePath::getBaseName(const fs::path & filePath){
 }
 
 //------------------------------------------------------------------------------------------------------------
-//fs::path ofFilePath::getEnclosingDirectoryFS(const fs::path & _filePath, bool bRelativeToData){
 fs::path ofFilePath::getEnclosingDirectory(const fs::path & _filePath, bool bRelativeToData){
 	auto fp = _filePath;
 	if(bRelativeToData){
