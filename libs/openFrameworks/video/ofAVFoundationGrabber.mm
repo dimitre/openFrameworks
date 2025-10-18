@@ -45,7 +45,7 @@
 		if (@available(macOS 14.0, *)) {
 //			std::cout << "OSXVideoGrabber inside wow" << std::endl;
 
-			if (&AVCaptureDeviceTypeExternal != nil) {
+			if (AVCaptureDeviceTypeExternal != nil) {
 				[deviceTypes addObject:AVCaptureDeviceTypeExternal];
 				[deviceTypes addObject:AVCaptureDeviceTypeContinuityCamera];
 			}
@@ -298,7 +298,7 @@
 		NSMutableArray *deviceTypes = [NSMutableArray arrayWithObject:AVCaptureDeviceTypeBuiltInWideAngleCamera];
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 140000
 		if (@available(macOS 14.0, *)) {
-			if (&AVCaptureDeviceTypeExternal != nil) {
+			if (AVCaptureDeviceTypeExternal != nil) {
 				[deviceTypes addObject:AVCaptureDeviceTypeExternal];
 				[deviceTypes addObject:AVCaptureDeviceTypeContinuityCamera];
 			}
