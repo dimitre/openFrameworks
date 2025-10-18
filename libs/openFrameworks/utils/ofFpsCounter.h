@@ -37,10 +37,10 @@ private:
 	double targetFPS = 60.0;
 
 	using space = std::chrono::duration<long long, std::nano>;
-	std::chrono::time_point<std::chrono::steady_clock> now = std::chrono::steady_clock::now();
-	std::chrono::time_point<std::chrono::steady_clock> then = std::chrono::steady_clock::now();
 	space lastFrameTime;
 	space diff;
+	std::chrono::time_point<std::chrono::steady_clock> now = std::chrono::steady_clock::now();
+	std::chrono::time_point<std::chrono::steady_clock> then = std::chrono::steady_clock::now();
 	double filteredTime = 0.0;
 	double filterAlpha = 0.9;
 	std::deque<std::chrono::time_point<std::chrono::steady_clock>> timestamps;

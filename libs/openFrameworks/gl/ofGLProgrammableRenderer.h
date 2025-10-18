@@ -404,7 +404,8 @@ private:
 	GLuint defaultFramebufferId;		///< default GL_FRAMEBUFFER_BINDING, windowing frameworks might want to set this to their MSAA framebuffer, defaults to 0
     GLuint currentFramebufferId;		///< the framebuffer id currently bound to the GL_FRAMEBUFFER target
 	
-	uint64_t beginDefaultShaderFrame;
+	// UNUSED / commented out;
+//	uint64_t beginDefaultShaderFrame;
 	
 	
 	

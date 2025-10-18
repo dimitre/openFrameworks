@@ -1,10 +1,10 @@
 name: OF
-version: 0.3.4
+version: 0.12.1
 variables:
   generator: ofGen v0.7.2
-  addons: ProjectSourceFiles_ofxAssimpExample,ofxAssimp,ofxGui
   platform: macos
   ofPath: ../../..
+  addons: ProjectSourceFiles_ofxAssimpExample,ofxAssimp,ofxGui
 abstracts:*:
   language: C++
   language[toolchain:apple-llvm]: Objective-C++
@@ -179,11 +179,11 @@ abstracts:*:
       - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
       - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
       - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libpng18.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libpng.a
       - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libbrotlienc.a
       - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libbrotlienc.a
       - ${var:ofPath}/libs/${var:platform}/lib/libz.a
       - ${var:ofPath}/libs/${var:platform}/lib/liblzma.a
 targets:
