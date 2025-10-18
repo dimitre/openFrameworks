@@ -1,6 +1,10 @@
 #!/bin/bash
 cd "$(dirname "$0")"
 
+wipeDownloads=true
+wipeAddonLibs=true
+wipeLibs=true
+
 COLOR='\033[0;32m'
 COLOR2='\033[0;34m'
 COLOR3='\033[0;95m'
@@ -179,13 +183,19 @@ fi
 # exit
 
 LIBS_FOLDER=./${PLATFORM}
+
+if [[ "$wipeLibs" == true && -d ${LIBS_FOLDER} ]]; then
+    executa rm -rf ${LIBS_FOLDER}
+fi
+
 DOWNLOAD="./_download_${VERSION}_${PLATFORM}"
 
 # wipe folder to re-download libs.
-if [ -d "${DOWNLOAD}" ]; then
+if [[ "$wipeDownloads" == true && -d "${DOWNLOAD}" ]]; then
     echo "Removing Previously Downloaded Libraries"
     rm -rf ${DOWNLOAD}
 fi
+
 echo "Creating Download Folder ${DOWNLOAD}"
 mkdir ${DOWNLOAD}
 
@@ -259,8 +269,8 @@ unzipCore() {
 	executa "rm -rf ${LIBS_FOLDER}/LICENSES"
 
 	# remover no futuro
-	executa "mv ${LIBS_FOLDER}/lib/${PLATFORM}/* ${LIBS_FOLDER}/lib/"
-	executa "rm -rf ${LIBS_FOLDER}/lib/${PLATFORM}"
+	# executa "mv ${LIBS_FOLDER}/lib/${PLATFORM}/* ${LIBS_FOLDER}/lib/"
+	# executa "rm -rf ${LIBS_FOLDER}/lib/${PLATFORM}"
 }
 
 
@@ -270,6 +280,10 @@ unzipAddons() {
 		lib=${libaddon%%:*}
 		addon=${libaddon#*:}
 		OUTFOLDER=${OF_FOLDER}/addons/${addon}/libs/${lib}
+		wipeAddonLibs=true
+        if [ "$wipeAddonLibs" == true ]; then
+            executa "rm -rf ${OUTFOLDER}"
+        fi
 		executa "mkdir -p ${OUTFOLDER}"
 		executa "unzip -qq -o -d ${OUTFOLDER} ${DOWNLOAD}/oflib_${lib}_${PLATFORM}.zip"
 	done
