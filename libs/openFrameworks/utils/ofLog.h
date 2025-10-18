@@ -11,26 +11,26 @@
 /// \param args A variable argument list.
 /// \returns A string representation of the argument list.
 ///
-template <typename... Args>
+//template <typename... Args>
 //__attribute__((__format__ (__printf__, 2, 0)))
-std::string ofVAArgsToString(const char * format, Args &&... args) {
-	char buf[256];
-	size_t n = std::snprintf(buf, sizeof(buf), format, std::forward<Args>(args)...);
-
-	//	std::string str = format;
-	//	size_t n = std::snprintf(buf, sizeof(buf), str, std::forward<Args>(args)...);
-
-	// Static buffer large enough?
-	if (n < sizeof(buf)) {
-		return { buf, n };
-	}
-
-	// Static buffer too small
-	std::string s(n + 1, 0);
-	std::snprintf(const_cast<char *>(s.data()), s.size(), format, std::forward<Args>(args)...);
-
-	return s;
-}
+//std::string ofVAArgsToString(const char * format, Args &&... args) {
+//	char buf[256];
+//	size_t n = std::snprintf(buf, sizeof(buf), format, std::forward<Args>(args)...);
+//
+//	//	std::string str = format;
+//	//	size_t n = std::snprintf(buf, sizeof(buf), str, std::forward<Args>(args)...);
+//
+//	// Static buffer large enough?
+//	if (n < sizeof(buf)) {
+//		return { buf, n };
+//	}
+//
+//	// Static buffer too small
+//	std::string s(n + 1, 0);
+//	std::snprintf(const_cast<char *>(s.data()), s.size(), format, std::forward<Args>(args)...);
+//
+//	return s;
+//}
 
 /// \file
 /// ofLog provides an interface for writing text output from your app.
@@ -459,9 +459,9 @@ class ofLog{
 		///
 		/// \param level The ofLogLevel for this log message.
 		/// \param format The printf-style format string.
-		template <typename ... Args>
-		ofLog(ofLogLevel level, const char* format, Args&& ... args)
-			: ofLog(level, ofVAArgsToString(format, args...)){}
+//		template <typename ... Args>
+//		ofLog(ofLogLevel level, const char* format, Args&& ... args)
+//			: ofLog(level, ofVAArgsToString(format, args...)){}
 		/// \}
 	
 		//--------------------------------------------------
@@ -586,9 +586,9 @@ class ofLogVerbose : public ofLog{
 		/// \brief Create a verbose log message.
 		/// \param module The target module.
 		/// \param format The printf-style format string.
-		template <typename ... Args>
-		ofLogVerbose(const std::string & module, const char* format, Args&& ... args)
-			: ofLogVerbose(module, ofVAArgsToString(format, args...)){}
+//		template <typename ... Args>
+//		ofLogVerbose(const std::string & module, const char* format, Args&& ... args)
+//			: ofLogVerbose(module, ofVAArgsToString(format, args...)){}
 };
 
 /// \brief Derived log class for easy notice logging.
@@ -608,9 +608,9 @@ class ofLogNotice : public ofLog{
 		/// \brief Create a notice log message.
 		/// \param module The target module.
 		/// \param format The printf-style format string.
-		template <typename ... Args>
-		ofLogNotice(const std::string & module, const char* format, Args&& ... args)
-			: ofLogNotice(module, ofVAArgsToString(format, args...)){}
+//		template <typename ... Args>
+//		ofLogNotice(const std::string & module, const char* format, Args&& ... args)
+//			: ofLogNotice(module, ofVAArgsToString(format, args...)){}
 };
 
 /// \brief Derived log class for easy warning logging.
@@ -629,9 +629,9 @@ class ofLogWarning : public ofLog{
 	/// \brief Create a verbose log message.
 	/// \param module The target module.
 	/// \param format The printf-style format string.
-		template <typename ... Args>
-		ofLogWarning(const std::string & module, const char* format, Args&& ... args)
-			: ofLogWarning(module, ofVAArgsToString(format, args...)){}
+//		template <typename ... Args>
+//		ofLogWarning(const std::string & module, const char* format, Args&& ... args)
+//			: ofLogWarning(module, ofVAArgsToString(format, args...)){}
 };
 
 /// \brief Derived log class for easy error logging.
@@ -651,9 +651,9 @@ class ofLogError : public ofLog{
 		/// \brief Create a error log message.
 		/// \param module The target module.
 		/// \param format The printf-style format string.
-		template <typename ... Args>
-		ofLogError(const std::string & module, const char* format, Args&& ... args)
-			: ofLogError(module, ofVAArgsToString(format, args...)){}
+//		template <typename ... Args>
+//		ofLogError(const std::string & module, const char* format, Args&& ... args)
+//			: ofLogError(module, ofVAArgsToString(format, args...)){}
 };
 
 /// \brief Derived log class for easy fatal error logging.
@@ -673,9 +673,9 @@ class ofLogFatalError : public ofLog{
 		/// \brief Create a fatal error log message.
 		/// \param module The target module.
 		/// \param format The printf-style format string.
-		template <typename ... Args>
-		ofLogFatalError(const std::string & module, const char* format, Args&& ... args)
-			: ofLogFatalError(module, ofVAArgsToString(format, args...)){}
+//		template <typename ... Args>
+//		ofLogFatalError(const std::string & module, const char* format, Args&& ... args)
+//			: ofLogFatalError(module, ofVAArgsToString(format, args...)){}
 };
 
 
@@ -704,10 +704,10 @@ public:
 	/// \param level The log level.
 	/// \param module The target module.
 	/// \param format The printf-style format string.
-	template <typename ... Args>
-	void log(ofLogLevel level, const std::string & module, const char* format, Args&& ... args){
-		log(level, module, ofVAArgsToString(format, args...));
-	}
+//	template <typename ... Args>
+//	void log(ofLogLevel level, const std::string & module, const char* format, Args&& ... args){
+//		log(level, module, ofVAArgsToString(format, args...));
+//	}
 };
 
 /// \brief A logger channel that logs its messages to the console.

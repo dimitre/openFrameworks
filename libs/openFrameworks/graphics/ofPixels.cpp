@@ -1345,7 +1345,7 @@ bool ofPixels_<PixelType>::resizeTo(ofPixels_<PixelType>& dst, ofInterpolationMe
 	size_t srcHeight     = getHeight();
 	size_t dstWidth	  = dst.getWidth();
 	size_t dstHeight	  = dst.getHeight();
-	size_t bytesPerPixel = getBytesPerPixel();
+//	size_t bytesPerPixel = getBytesPerPixel();
 
 
 	PixelType * dstPixels = dst.getData();

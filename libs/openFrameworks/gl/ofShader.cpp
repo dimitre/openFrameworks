@@ -594,7 +594,9 @@ void ofShader::checkShaderInfoLog(GLuint shader, GLenum type, ofLogLevel logLeve
         ofBuffer infoBuffer;
         infoBuffer.allocate(infoLength);
         glGetShaderInfoLog(shader, infoLength, &infoLength, infoBuffer.getData());
-        ofLog(logLevel, "ofShader: %s shader reports:\n%s", nameForType(type).c_str(), infoBuffer.getText().c_str());
+		
+		// FIXME: fmt here.
+//        ofLog(logLevel, "ofShader: %s shader reports:\n%s", nameForType(type).c_str(), infoBuffer.getText().c_str());
 #if (!defined(TARGET_LINUX) || defined(GCC_HAS_REGEX))
         if (shaders.find(type) != shaders.end()) {
             // The following regexp should match shader compiler error messages by Nvidia and ATI.
