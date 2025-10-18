@@ -25,8 +25,8 @@ class ofAppBaseWindow {
 public:
 
 	ofAppBaseWindow(){}
-//	virtual ~ofAppBaseWindow(){}
-	~ofAppBaseWindow(){}
+	virtual ~ofAppBaseWindow(){}
+//	~ofAppBaseWindow(){}
 
 	virtual void setup(const ofWindowSettings & settings)=0;
 	virtual void update()=0;

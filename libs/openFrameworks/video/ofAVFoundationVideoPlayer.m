@@ -223,6 +223,9 @@ static const void *PlayerRateContext = &ItemStatusContext;
 				return;
 			}
 			
+			// FIXME: SOON. Everything ASYNC here.
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 			NSArray * videoTracks = [asset tracksWithMediaType:AVMediaTypeVideo];
 			if(!self->bStream && [videoTracks count] == 0) {
 				NSLog(@"no video tracks found.");
