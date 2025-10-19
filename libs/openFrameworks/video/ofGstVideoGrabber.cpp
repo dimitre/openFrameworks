@@ -212,7 +212,7 @@ static void get_supported_framerates (ofGstVideoFormat &video_format, GstStructu
 		video_format.framerates.push_back(framerate);
 		// FIXME: fmt
 		// ofLog(OF_LOG_VERBOSE,"%d/%d ", framerate.numerator,
-						framerate.denominator);
+						// framerate.denominator);
 	}else if (GST_VALUE_HOLDS_LIST (framerates)){
 		int num_framerates = gst_value_list_get_size (framerates);
 		for (int i = 0; i < num_framerates; i++){
@@ -222,7 +222,7 @@ static void get_supported_framerates (ofGstVideoFormat &video_format, GstStructu
 			video_format.framerates.push_back(framerate);
 			// FIXME: fmt
 			// ofLog(OF_LOG_VERBOSE,"%d/%d ", framerate.numerator,
-							framerate.denominator);
+							// framerate.denominator);
 		}
 	}else if (GST_VALUE_HOLDS_FRACTION_RANGE (framerates)){
 		int           numerator_min, denominator_min, numerator_max, denominator_max;
