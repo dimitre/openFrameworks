@@ -120,7 +120,7 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
    #if defined(__linux__)
 //		glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_WAYLAND);
 	glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
-		#pragma message("WOOOOWWWW WOW")
+//		#pragma message("WOOOOWWWW WOW")
    #endif
 
 	
@@ -207,7 +207,7 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 
 	allMonitors.update();
 //	cout << "ofAppGLFWWindow allMonitors size " << allMonitors.rects.size();
-	if (allMonitors.rects.size() > settings.monitor) {
+	if ((int)allMonitors.rects.size() > settings.monitor) {
 		monitorIndex = settings.monitor;
 	} else {
 		if (settings.showOnlyInSelectedMonitor) {
@@ -229,7 +229,7 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 	if (settings.fullscreenDisplays.size()) {
 		for (auto & d : settings.fullscreenDisplays) {
 //			cout << "GLFWWindow fullscreenDisplays " << d << " : " << allMonitors.rects.size() << endl;
-			if (d < allMonitors.rects.size()) {
+			if (d < (int)allMonitors.rects.size()) {
 //				cout << "glfw ok opening " << endl;
 				displayOK = true;
 //				cout << "mon size: " << allMonitors.rects[d] << endl;

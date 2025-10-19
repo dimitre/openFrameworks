@@ -258,7 +258,7 @@ public:
 		std::string str { "" };
 		for (auto & i : monitors) {
 			str += ofToString(i) + " ";
-			if (i < rects.size()) {
+			if (i < (int)rects.size()) {
 				if (first) {
 					first = false;
 					r = rects[i];
