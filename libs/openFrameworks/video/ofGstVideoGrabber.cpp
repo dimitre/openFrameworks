@@ -161,7 +161,9 @@ static void get_video_devices (ofGstCamData & cam_data)
 			ofLogNotice("ofGstVideoGrabber") << "detected v4l2 device: " << v2cap.card;
 			ofLogNotice("ofGstVideoGrabber") << "driver: " << v2cap.driver << ", version: " << v2cap.version;
 			/* g_print ("Bus info: %s\n", v2cap.bus_info); */ /* Doesn't seem anything useful */
-			ofLogNotice("ofGstVideoGrabber","Capabilities: 0x%08X", v2cap.capabilities);
+
+			// FIXME: fmt
+			// ofLogNotice("ofGstVideoGrabber","Capabilities: 0x%08X", v2cap.capabilities);
 			/* Only consider this device, if
 			 * 1. it has 'Video Capture' capability and
 			 * 2. if it also has the 'Device Capabilities' then the actual device has
@@ -590,7 +592,7 @@ static void get_device_data (ofGstDevice &webcam_device, int desired_framerate, 
 
 		// FIXME: fmt
 		// ofLog(OF_LOG_ERROR, "ofGstUtils: error getting device data; module %s reported: %s",
-			  gst_element_get_name(GST_MESSAGE_SRC (msg)), err->message);
+			  // gst_element_get_name(GST_MESSAGE_SRC (msg)), err->message);
 
 		g_error_free(err);
 		g_free(debug);
