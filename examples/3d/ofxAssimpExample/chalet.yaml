@@ -1,7 +1,7 @@
 name: OF
 version: 0.12.1
 variables:
-  generator: ofGen v0.7.2
+  generator: ofGen v0.7.3
   platform: macos
   ofPath: ../../..
   addons: ProjectSourceFiles_ofxAssimpExample,ofxAssimp,ofxGui
@@ -207,7 +207,7 @@ targets:
         - ${var:ofPath}/libs/openFrameworks/sound/ofFmodSoundPlayer.cpp
   ofxAssimpExample:
     kind: executable
-    runWorkingDirectory: bin
+    runWorkingDirectory: ${cwd}/bin
     settings:Cxx:
       staticLinks:
         - OF
@@ -262,7 +262,6 @@ targets:
         - .clangd
         - .zed
         - compile_flags.txt
-    copyFilesOnRun: bin/data
 distribution:
   ofxAssimpExample:
     kind: bundle

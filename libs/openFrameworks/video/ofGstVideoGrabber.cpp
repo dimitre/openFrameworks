@@ -530,7 +530,8 @@ static void get_supported_video_formats (ofGstDevice &webcam_device, GstCaps &ca
 				cur_height /= 2;
 			}
 		}else{
-			ofLog(OF_LOG_ERROR, "unknown GValue type %s, for resolution width", G_VALUE_TYPE_NAME (width));
+		    // FIXME: convert to fmt.
+			// ofLog(OF_LOG_ERROR, "unknown GValue type %s, for resolution width", G_VALUE_TYPE_NAME (width));
 		}
 	}
 }
@@ -544,7 +545,8 @@ static void get_device_data (ofGstDevice &webcam_device, int desired_framerate, 
 	GstElement * pipeline = gst_parse_launch (pipeline_desc.c_str(), &err);
 	if ((pipeline == NULL) || (err != NULL)){
 		if (err){
-			ofLog(OF_LOG_ERROR, "ofGstUtils: error getting device data: %s", err->message);
+		    // FIXME: fmt
+			// ofLog(OF_LOG_ERROR, "ofGstUtils: error getting device data: %s", err->message);
 			g_error_free (err);
 		}else{
 			ofLog(OF_LOG_ERROR, "ofGstUtils: error getting device data, cannot get pipeline");
@@ -570,7 +572,8 @@ static void get_device_data (ofGstDevice &webcam_device, int desired_framerate, 
 		char       *name;
 		g_object_get (G_OBJECT (src), "device-name", &name, (void*)NULL);
 
-		ofLog(OF_LOG_VERBOSE, "Device: %s (%s)\n", name==NULL?"":name, webcam_device.video_device.c_str());
+		// FIXME: fmt
+		// ofLog(OF_LOG_VERBOSE, "Device: %s (%s)\n", name==NULL?"":name, webcam_device.video_device.c_str());
 		GstPad     *pad  = gst_element_get_static_pad (src, "src");
 		GstCaps    *caps = gst_pad_get_allowed_caps (pad);
 		gst_object_unref (pad);
@@ -583,7 +586,8 @@ static void get_device_data (ofGstDevice &webcam_device, int desired_framerate, 
 		gchar *debug;
 		gst_message_parse_error(msg, &err, &debug);
 
-		ofLog(OF_LOG_ERROR, "ofGstUtils: error getting device data; module %s reported: %s",
+		// FIXME: fmt
+		// ofLog(OF_LOG_ERROR, "ofGstUtils: error getting device data; module %s reported: %s",
 			  gst_element_get_name(GST_MESSAGE_SRC (msg)), err->message);
 
 		g_error_free(err);
@@ -652,7 +656,7 @@ vector<ofVideoDevice> ofGstVideoGrabber::listDevices() const {
 	vector<ofVideoDevice> devices(camData.webcam_devices.size());
 	for(unsigned i=0; i<camData.webcam_devices.size(); i++){
 		devices[i].id = i;
-        devices[i].bAvailable = true; 
+        devices[i].bAvailable = true;
 		devices[i].deviceName = camData.webcam_devices[i].product_name;
 		devices[i].hardwareName = camData.webcam_devices[i].video_device;
 		devices[i].serialID = camData.webcam_devices[i].serial_id;

@@ -231,6 +231,7 @@ targets:
   #   location: ${var:ofPath}
   OF:
     kind: staticLibrary
+    # outputDir: ${var:ofPath}
     files:
       include:
         - ${var:ofPath}/libs/openFrameworks/{3d,communication,events,gl,graphics,math,sound,types,utils,video}/*.cpp
@@ -252,7 +253,8 @@ targets:
 
   empty:
     kind: executable
-    runWorkingDirectory: "bin"
+    runWorkingDirectory: ${cwd}/bin
+    # copyFilesOnRun: bin/data
 
     settings:Cxx:
       staticLinks:
@@ -270,8 +272,6 @@ targets:
         - .zed
         - compile_flags.txt
         # - ${var:ofPath}/addons/{${var:addons}}/src/ios
-
-    copyFilesOnRun: bin/data
 
 distribution:
   empty:
