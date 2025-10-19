@@ -22,8 +22,8 @@ class ofxCvShortImage : public ofxCvImage {
     ofxCvShortImage();
     ofxCvShortImage( const ofxCvShortImage& mom );
     // virtual void  allocate( int w, int h );                                //in base class
-    virtual void  clear();
-    virtual void  flagImageChanged();
+    virtual void  clear() override;
+    virtual void  flagImageChanged() override;
 
 	//virtual float getWidth();                                               //in base class
 	//virtual float getHeight();                                              //in base class    
@@ -42,18 +42,18 @@ class ofxCvShortImage : public ofxCvImage {
 
     // Set Pixel Data
     //
-    virtual void  set( float value );
-    // virtual void  operator -= ( float value );                             //in base class 
+    virtual void  set( float value ) override;
+    // virtual void  operator -= ( float value );                             //in base class
     // virtual void  operator += ( float value );                             //in base class     
 	      
-    virtual void  setFromPixels( const unsigned char* _pixels, int w, int h);
-    virtual void  setRoiFromPixels( const unsigned char* _pixels, int w, int h);
+    virtual void  setFromPixels( const unsigned char* _pixels, int w, int h) override;
+    virtual void  setRoiFromPixels( const unsigned char* _pixels, int w, int h) override;
     virtual void  operator = ( unsigned char* _pixels );
-    virtual void  operator = ( const ofxCvGrayscaleImage& mom );
-    virtual void  operator = ( const ofxCvColorImage& mom );
-    virtual void  operator = ( const ofxCvFloatImage& mom );
-    virtual void  operator = ( const ofxCvShortImage& mom );
-    virtual void  operator = ( const IplImage* mom );        
+    virtual void  operator = ( const ofxCvGrayscaleImage& mom ) override;
+    virtual void  operator = ( const ofxCvColorImage& mom ) override;
+    virtual void  operator = ( const ofxCvFloatImage& mom ) override;
+    virtual void  operator = ( const ofxCvShortImage& mom ) override;
+    virtual void  operator = ( const IplImage* mom ) override;
     
     // virtual void  operator -= ( ofxCvImage& mom );                         //in base class 
     // virtual void  operator += ( ofxCvImage& mom );                         //in base class     
@@ -82,8 +82,8 @@ class ofxCvShortImage : public ofxCvImage {
 
     // Image Filter Operations
     //
-    virtual void  contrastStretch();
-    virtual void  convertToRange( float min, float max );    
+    virtual void  contrastStretch() override;
+    virtual void  convertToRange( float min, float max ) override;
     // virtual void  erode( );                                                 //in base class
     // virtual void  dilate( );                                                //in base class
     // virtual void  blur( int value=3 );                                      //in base class
@@ -93,8 +93,8 @@ class ofxCvShortImage : public ofxCvImage {
 
     // Image Transformation Operations
     //
-    virtual void  resize( int w, int h );
-    virtual void  scaleIntoMe( ofxCvImage& mom, int interpolationMethod = CV_INTER_NN);
+    virtual void  resize( int w, int h ) override;
+    virtual void  scaleIntoMe( ofxCvImage& mom, int interpolationMethod = CV_INTER_NN) override;
     // virtual void  mirror( bool bFlipVertically, bool bFlipHorizontally );   //in base class
     // virtual void  translate( float x, float y );                            //in base class
     // virtual void  rotate( float angle, float centerX, float centerY );      //in base class
@@ -122,13 +122,13 @@ class ofxCvShortImage : public ofxCvImage {
 
   protected:
 
-    void allocatePixels(int w, int h);
-    void allocateTexture();
+    void allocatePixels(int w, int h) override;
+    void allocateTexture() override;
     void init();
     virtual void convertShortToGray( IplImage* floatImg, IplImage* grayImg );
     virtual void convertGrayToShort( IplImage* grayImg, IplImage* floatImg );
-    virtual IplImage*  getCv8BitsImage();
-    virtual IplImage*  getCv8BitsRoiImage();
+    virtual IplImage*  getCv8BitsImage() override;
+    virtual IplImage*  getCv8BitsRoiImage() override;
     
     IplImage*  cvGrayscaleImage;    // internal helper grayscale, allocated on demand
     bool cvGrayscaleDirty;
