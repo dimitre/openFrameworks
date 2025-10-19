@@ -210,7 +210,8 @@ static void get_supported_framerates (ofGstVideoFormat &video_format, GstStructu
 		framerate.numerator   = gst_value_get_fraction_numerator (framerates);
 		framerate.denominator = gst_value_get_fraction_denominator (framerates);
 		video_format.framerates.push_back(framerate);
-		ofLog(OF_LOG_VERBOSE,"%d/%d ", framerate.numerator,
+		// FIXME: fmt
+		// ofLog(OF_LOG_VERBOSE,"%d/%d ", framerate.numerator,
 						framerate.denominator);
 	}else if (GST_VALUE_HOLDS_LIST (framerates)){
 		int num_framerates = gst_value_list_get_size (framerates);
@@ -219,7 +220,8 @@ static void get_supported_framerates (ofGstVideoFormat &video_format, GstStructu
 			framerate.numerator   = gst_value_get_fraction_numerator (value);
 			framerate.denominator = gst_value_get_fraction_denominator (value);
 			video_format.framerates.push_back(framerate);
-			ofLog(OF_LOG_VERBOSE,"%d/%d ", framerate.numerator,
+			// FIXME: fmt
+			// ofLog(OF_LOG_VERBOSE,"%d/%d ", framerate.numerator,
 							framerate.denominator);
 		}
 	}else if (GST_VALUE_HOLDS_FRACTION_RANGE (framerates)){
