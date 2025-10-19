@@ -212,7 +212,7 @@ public:
 	///
 	/// \param xPct Horizontal position as a percentage (0 - 1).
 	/// \param yPct Vertical position as a percentage (0 - 1).
-	virtual void setAnchorPercent(float xPct, float yPct) {};
+	virtual void setAnchorPercent(float xPct, float yPct) = 0;
 
 	/// \brief Set the anchor point the item is drawn around in pixels.
 	///
@@ -221,10 +221,10 @@ public:
 	///
 	/// \param x Horizontal texture position in pixels.
 	/// \param y Vertical texture position in pixels.
-	virtual void setAnchorPoint(float x, float y) {};
+	virtual void setAnchorPoint(float x, float y) = 0;
 
 	/// \brief Reset the anchor point to (0, 0).
-	virtual void resetAnchor() {};
+	virtual void resetAnchor() = 0;
 };
 
 /// \class ofBaseUpdates

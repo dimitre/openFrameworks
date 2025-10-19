@@ -19,8 +19,9 @@ public:
 	void setSrcBone( std::shared_ptr<ofxAssimp::SrcBone> aSrcBone );
 	
 	void cacheGlobalBoneMat(glm::mat4& aInvMat);
-	virtual void draw(float aAxisSize=30.0f);
-	
+//	virtual void draw(float aAxisSize=30.0f);
+	void draw() override;
+
 	std::shared_ptr<ofxAssimp::SrcBone> getSrcBone() { return mSrcBone; }
 	
 	aiMatrix4x4& getAiOffsetMatrix() { return mOffsetMatrix;}

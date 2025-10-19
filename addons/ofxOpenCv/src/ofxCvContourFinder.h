@@ -25,8 +25,8 @@ public:
 	ofxCvContourFinder();
 	virtual  ~ofxCvContourFinder();
 	
-	virtual float getWidth() const { return _width; };    //set after first findContours call
-	virtual float getHeight() const { return _height; };  //set after first findContours call
+	virtual float getWidth() const override { return _width; };    //set after first findContours call
+	virtual float getHeight() const override { return _height; };  //set after first findContours call
 		
 	virtual int  findContours( ofxCvGrayscaleImage& input,
 								int minArea, int maxArea,
@@ -37,13 +37,13 @@ public:
 								// along a straight line, for example...
 
 	virtual void draw() const { draw(0,0, _width, _height); };
-	virtual void draw( float x, float y ) const { draw(x,y, _width, _height); };
-	virtual void draw( float x, float y, float w, float h ) const;
-	virtual void draw(const glm::vec2 & point) const;
-	virtual void draw(const ofRectangle & rect) const;
-	virtual void setAnchorPercent(float xPct, float yPct);
-	virtual void setAnchorPoint(float x, float y);
-	virtual void resetAnchor();      
+	virtual void draw( float x, float y ) const override { draw(x,y, _width, _height); };
+	virtual void draw( float x, float y, float w, float h ) const override;
+	virtual void draw(const glm::vec2 & point) const override;
+	virtual void draw(const ofRectangle & rect) const override;
+	virtual void setAnchorPercent(float xPct, float yPct) override;
+	virtual void setAnchorPoint(float x, float y) override;
+	virtual void resetAnchor() override ;
 		//virtual ofxCvBlob  getBlob(int num);
 
 

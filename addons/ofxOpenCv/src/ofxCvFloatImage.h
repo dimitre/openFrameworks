@@ -30,13 +30,13 @@ class ofxCvFloatImage : public ofxCvImage {
     ofxCvFloatImage();
     ofxCvFloatImage( const ofxCvFloatImage& mom );
     // virtual void  allocate( int w, int h );                                //in base class
-    virtual void  clear();
+    virtual void  clear() override;
 	// virtual float getWidth();                                              //in base class
 	// virtual float getHeight();                                             //in base class    
     // virtual void  setUseTexture( bool bUse );                              //in base class
     // virtual ofTexture&  getTextureReference();                             //in base class
-    virtual void flagImageChanged();
-    virtual void  setNativeScale( float _scaleMin, float _scaleMax ); 
+    virtual void flagImageChanged() override;
+    virtual void  setNativeScale( float _scaleMin, float _scaleMax );
     virtual float  getNativeScaleMin() {return scaleMin;}; 
     virtual float  getNativeScaleMax() {return scaleMax;}; 
 
@@ -53,28 +53,28 @@ class ofxCvFloatImage : public ofxCvImage {
 
     // Set Pixel Data
     //
-    virtual void  set( float value );
-    // virtual void  operator -= ( float value );                             //in base class 
+    virtual void  set( float value ) override;
+    // virtual void  operator -= ( float value );                             //in base class
     // virtual void  operator += ( float value );                             //in base class     
     virtual void  operator *= ( float scalar );
 	virtual void  operator /= ( float scalar );
 	      
-    virtual void  setFromPixels( const unsigned char* _pixels, int w, int h);
+    virtual void  setFromPixels( const unsigned char* _pixels, int w, int h) override;
     virtual void  setFromPixels( float * _pixels, int w, int h );  //no scaling
-    virtual void  setRoiFromPixels( const unsigned char* _pixels, int w, int h);
+    virtual void  setRoiFromPixels( const unsigned char* _pixels, int w, int h) override;
     virtual void  setRoiFromPixels( float * _pixels, int w, int h );  //no scaling
     virtual void  operator = ( unsigned char* _pixels );
     virtual void  operator = ( float* _pixels );  //no scaling
-    virtual void  operator = ( const ofxCvGrayscaleImage& mom );
-    virtual void  operator = ( const ofxCvColorImage& mom );
-    virtual void  operator = ( const ofxCvFloatImage& mom );
-    virtual void  operator = ( const ofxCvShortImage& mom );
-    virtual void  operator = ( const IplImage* mom );     
+    virtual void  operator = ( const ofxCvGrayscaleImage& mom ) override;
+    virtual void  operator = ( const ofxCvColorImage& mom ) override;
+    virtual void  operator = ( const ofxCvFloatImage& mom ) override;
+    virtual void  operator = ( const ofxCvShortImage& mom ) override;
+    virtual void  operator = ( const IplImage* mom ) override;
     
     // virtual void  operator -= ( ofxCvImage& mom );                         //in base class 
     // virtual void  operator += ( ofxCvImage& mom );                         //in base class     
-    virtual void  operator *= ( ofxCvImage& mom );
-    virtual void  operator &= ( ofxCvImage& mom );  //bit-wise at the moment
+    virtual void  operator *= ( ofxCvImage& mom ) override;
+    virtual void  operator &= ( ofxCvImage& mom ) override;  //bit-wise at the moment
 
 	void  addWeighted( ofxCvGrayscaleImage& mom, float f );
 	
@@ -103,8 +103,8 @@ class ofxCvFloatImage : public ofxCvImage {
 
     // Image Filter Operations
     //
-    virtual void  contrastStretch();
-    virtual void  convertToRange( float min, float max );    
+    virtual void  contrastStretch() override;
+    virtual void  convertToRange( float min, float max ) override;
     // virtual void  erode( );                                                 //in base class
     // virtual void  dilate( );                                                //in base class
     // virtual void  blur( int value=3 );                                      //in base class
@@ -114,8 +114,8 @@ class ofxCvFloatImage : public ofxCvImage {
 
     // Image Transformation Operations
     //
-    virtual void  resize( int w, int h );
-    virtual void  scaleIntoMe( ofxCvImage& mom, int interpolationMethod = CV_INTER_NN);
+    virtual void  resize( int w, int h ) override;
+    virtual void  scaleIntoMe( ofxCvImage& mom, int interpolationMethod = CV_INTER_NN) override;
     // virtual void  mirror( bool bFlipVertically, bool bFlipHorizontally );   //in base class
     // virtual void  translate( float x, float y );                            //in base class
     // virtual void  rotate( float angle, float centerX, float centerY );      //in base class
@@ -140,13 +140,13 @@ class ofxCvFloatImage : public ofxCvImage {
     
 
   protected:
-    void allocateTexture();
-    void allocatePixels(int w, int h);
+    void allocateTexture() override;
+    void allocatePixels(int w, int h) override;
     void init();
     virtual void convertFloatToGray( IplImage* floatImg, IplImage* grayImg );
     virtual void convertGrayToFloat( IplImage* grayImg, IplImage* floatImg );
-    virtual IplImage* getCv8BitsImage();
-    virtual IplImage* getCv8BitsRoiImage();
+    virtual IplImage* getCv8BitsImage() override;
+    virtual IplImage* getCv8BitsRoiImage() override;
     
     ofFloatPixels floatPixels;             // not width stepped for getPixelsAsFloats()
 

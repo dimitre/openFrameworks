@@ -12,7 +12,10 @@ abstracts:*:
     cppStandard: c++20
     # compileOptions[:macos]:
     # - -Wfatal-errors
+    # minimal extra pedantic strict strictPedantic
     warningsPreset: minimal
+    # warnings: [fatal-errors]
+    # treatWarningsAsErrors: true
     runtimeTypeInformation: true
     threads: true
     exceptions: true

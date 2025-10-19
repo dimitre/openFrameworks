@@ -21,7 +21,7 @@ class ofxCvColorImage : public ofxCvImage {
     ofxCvColorImage();
     ofxCvColorImage( const ofxCvColorImage& mom );
     // virtual void  allocate( int w, int h );                                //in base class
-    virtual void  clear();
+    virtual void clear() override;
 	//virtual float getWidth();                                               //in base class
 	//virtual float getHeight();                                              //in base class    
     // virtual void  setUseTexture( bool bUse );                              //in base class    
@@ -40,20 +40,20 @@ class ofxCvColorImage : public ofxCvImage {
 
     // Set Pixel Data
     //
-    virtual void  set( float value );
+    virtual void  set( float value ) override;
     virtual void  set( int valueR, int valueG, int valueB);
-    virtual void  operator -= ( float value );
-    virtual void  operator += ( float value ); 
+    virtual void  operator -= ( float value ) override;
+    virtual void  operator += ( float value ) override;
         
-    virtual void  setFromPixels( const unsigned char * _pixels, int w, int h );
-    virtual void  setRoiFromPixels( const unsigned char * _pixels, int w, int h );
+    virtual void  setFromPixels( const unsigned char * _pixels, int w, int h ) override;
+    virtual void  setRoiFromPixels( const unsigned char * _pixels, int w, int h ) override;
     virtual void  setFromGrayscalePlanarImages( ofxCvGrayscaleImage& red, ofxCvGrayscaleImage& green, ofxCvGrayscaleImage& blue );
     virtual void  operator = ( const ofPixels & _pixels );
-    virtual void  operator = ( const ofxCvGrayscaleImage& mom );
-    virtual void  operator = ( const ofxCvColorImage& mom );
-    virtual void  operator = ( const ofxCvFloatImage& mom );
-    virtual void  operator = ( const ofxCvShortImage& mom );
-    virtual void  operator = ( const IplImage* mom );    
+    virtual void  operator = ( const ofxCvGrayscaleImage& mom ) override;
+    virtual void  operator = ( const ofxCvColorImage& mom ) override;
+    virtual void  operator = ( const ofxCvFloatImage& mom ) override;
+    virtual void  operator = ( const ofxCvShortImage& mom ) override;
+    virtual void  operator = ( const IplImage* mom ) override;
     
     // virtual void  operator -= ( ofxCvImage& mom );                         //in base class 
     // virtual void  operator += ( ofxCvImage& mom );                         //in base class 
@@ -83,8 +83,8 @@ class ofxCvColorImage : public ofxCvImage {
 
     // Image Filter Operations
     //
-    virtual void  contrastStretch();    // not yet implemented for this type
-    virtual void  convertToRange( float min, float max );   
+    virtual void  contrastStretch() override;    // not yet implemented for this type
+    virtual void  convertToRange( float min, float max ) override;
     // virtual void  erode( );                                                //in base class
     // virtual void  dilate( );                                               //in base class
     // virtual void  blur( int value=3 );                                     //in base class
@@ -94,8 +94,8 @@ class ofxCvColorImage : public ofxCvImage {
 
     // Image Transformation Operations
     //
-    virtual void  resize( int w, int h );
-    virtual void  scaleIntoMe( ofxCvImage& mom, int interpolationMethod = CV_INTER_NN);
+    virtual void  resize( int w, int h ) override;
+    virtual void  scaleIntoMe( ofxCvImage& mom, int interpolationMethod = CV_INTER_NN) override;
     virtual void  convertRgbToHsv();
     virtual void  convertHsvToRgb();
     // virtual void  mirror( bool bFlipVertically, bool bFlipHorizontally );   //in base class
@@ -122,8 +122,8 @@ class ofxCvColorImage : public ofxCvImage {
 
 
   protected:
-    void allocateTexture();
-    void allocatePixels(int w, int h);
+    void allocateTexture() override;
+    void allocatePixels(int w, int h) override;
     void init();
     IplImage*  cvGrayscaleImage;    // internal helper grayscale, allocated on demand
       

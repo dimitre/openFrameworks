@@ -7,8 +7,12 @@
 #include "ofxAssimpSrcNode.h"
 
 namespace ofxAssimp {
-class SrcBone : public ofxAssimp::SrcNode {
+class SrcBone final : public ofxAssimp::SrcNode {
 public:
+	
+	virtual ~SrcBone() = default;
+	
+	
 	NodeType getType() override { return OFX_ASSIMP_BONE; }
 	
 	void setAiBone(aiBone* aAiBone, aiNode* aAiNode);

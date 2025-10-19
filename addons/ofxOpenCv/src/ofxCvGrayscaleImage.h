@@ -43,18 +43,18 @@ class ofxCvGrayscaleImage : public ofxCvImage {
     
     // Set Pixel Data
     //
-    virtual void  set( float value );
-    // virtual void  operator -= ( float value );                              //in base class 
+    virtual void  set( float value ) override;
+    // virtual void  operator -= ( float value );                              //in base class
     // virtual void  operator += ( float value );                              //in base class
     
-    virtual void  setFromPixels( const unsigned char* _pixels, int w, int h );
-    virtual void  setRoiFromPixels( const unsigned char* _pixels, int w, int h );
+    virtual void  setFromPixels( const unsigned char* _pixels, int w, int h ) override;
+    virtual void  setRoiFromPixels( const unsigned char* _pixels, int w, int h ) override;
     virtual void  operator = ( const ofPixels & _pixels );
-    virtual void  operator = ( const ofxCvGrayscaleImage& mom );
-    virtual void  operator = ( const ofxCvColorImage& mom );
-    virtual void  operator = ( const ofxCvFloatImage& mom );
-    virtual void  operator = ( const ofxCvShortImage& mom );
-    virtual void  operator = ( const IplImage* mom );    
+    virtual void  operator = ( const ofxCvGrayscaleImage& mom ) override;
+    virtual void  operator = ( const ofxCvColorImage& mom ) override;
+    virtual void  operator = ( const ofxCvFloatImage& mom ) override;
+    virtual void  operator = ( const ofxCvShortImage& mom ) override;
+    virtual void  operator = ( const IplImage* mom ) override;
 
     // virtual void  operator -= ( ofxCvImage& mom );                          //in base class 
     // virtual void  operator += ( ofxCvImage& mom );                          //in base class 
@@ -86,8 +86,8 @@ class ofxCvGrayscaleImage : public ofxCvImage {
 
     // Image Filter Operations
     //
-    virtual void  contrastStretch();
-    virtual void  convertToRange( float min, float max );
+    virtual void  contrastStretch() override;
+    virtual void  convertToRange( float min, float max ) override;
     virtual void  threshold( int value, bool invert=false);
     virtual void  adaptiveThreshold( int blockSize, int offset=0,
                                      bool invert=false, bool gauss=false);
@@ -103,8 +103,8 @@ class ofxCvGrayscaleImage : public ofxCvImage {
 
     // Image Transformation Operations
     //
-    virtual void  resize( int w, int h );
-    virtual void  scaleIntoMe( ofxCvImage& mom, int interpolationMethod=CV_INTER_NN);
+    virtual void  resize( int w, int h ) override;
+    virtual void  scaleIntoMe( ofxCvImage& mom, int interpolationMethod=CV_INTER_NN) override;
     // virtual void  mirror( bool bFlipVertically, bool bFlipHorizontally );   //in base class
     // virtual void  translate( float x, float y );                            //in base class
     // virtual void  rotate( float angle, float centerX, float centerY );      //in base class
@@ -152,7 +152,7 @@ class ofxCvGrayscaleImage : public ofxCvImage {
 	CvMat*		briConLutMatrix;
 	
     void init();
-    void allocateTexture();
-    void allocatePixels(int w, int h);
+    void allocateTexture() override;
+    void allocatePixels(int w, int h) override;
     
 };

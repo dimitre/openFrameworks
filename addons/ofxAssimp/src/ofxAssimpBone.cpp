@@ -32,7 +32,8 @@ void Bone::cacheGlobalBoneMat(glm::mat4& aInvMat) {
 }
 
 //--------------------------------------------------------------
-void Bone::draw(float aAxisSize) {
+void Bone::draw() {
+	float aAxisSize = 30.0f;
 	_initRenderMesh();
 	
 	// TODO: Cache this length and position
@@ -93,7 +94,8 @@ void Bone::_initRenderMesh() {
 		ofMesh tempMesh;
 		tempMesh.setMode( OF_PRIMITIVE_LINES );
 		
-		float cheight = 0.85f;
+		// UNUSED
+//		float cheight = 0.85f;
 		float cradius = 0.15f;
 		
 		float sx = 0.15f;

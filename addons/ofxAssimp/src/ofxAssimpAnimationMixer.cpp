@@ -134,7 +134,8 @@ void AnimationMixer::update(float aElapsedTimef) {
 		}
 	}
 	
-	bool bFinishedTransition = false;
+	// Unused
+//	bool bFinishedTransition = false;
 	if(isTransitioning()) {
 //		ofLogNotice("AnimationMixer::update") << " total weights: " << getTotalClipWeights() << " | " << ofGetFrameNum();
 		mTransitionPercent += (tdelta / mTransitionDuration);
@@ -149,7 +150,7 @@ void AnimationMixer::update(float aElapsedTimef) {
 					}
 				}
 			}
-			bFinishedTransition = true;
+//			bFinishedTransition = true;
 		}
 	}
 	if(mAnimationClips.size() ) {

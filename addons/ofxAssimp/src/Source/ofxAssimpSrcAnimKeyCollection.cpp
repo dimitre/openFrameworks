@@ -109,7 +109,7 @@ std::vector<AnimVectorKey> SrcAnimKeyCollection::getAnimVectorKeysForTime(const 
 		return rkeys;
 	}
 	
-	double currTime = aStartTime;
+//	double currTime = aStartTime;
 	for( unsigned int i = 0; i < aNumKeys; i++ ) {
 		auto& key1 = aAiKeys[i];
 		auto v1 = ofxAssimp::Utils::aiVecToOfVec(key1.mValue);
@@ -138,7 +138,7 @@ std::vector<AnimRotationKey> SrcAnimKeyCollection::getAnimRotationKeysForTime(co
 		rkeys.push_back( vkey );
 		return rkeys;
 	}
-	double currTime = aStartTime;
+//	double currTime = aStartTime;
 	for( unsigned int i = 0; i < aNumKeys; i++ ) {
 		auto& key1 = aAiKeys[i];
 		auto v1 = ofxAssimp::Utils::aiQuatToOfQuat(key1.mValue);

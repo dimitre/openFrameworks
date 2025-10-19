@@ -17,6 +17,7 @@ public:
 	
 	virtual NodeType getType() { return OFX_ASSIMP_NODE; }
 	
+	virtual void draw() {};
 	virtual void update() {};
 	virtual void update( const std::shared_ptr<ofxAssimp::AnimationMixer>& aAnimMixer );
 	

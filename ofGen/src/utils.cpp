@@ -161,16 +161,18 @@ bool genConfig::loadYML() {
 
 		conf.addonsNames = nodeToStrings("addons");
 
-		auto templateNames = nodeToStrings("templates");
-		if (templateNames.size() > 0) {
-			conf.templateNames = templateNames;
+		if (empty(conf.templateNames)) {
+			auto templateNames = nodeToStrings("templates");
+			if (templateNames.size() > 0) {
+				conf.templateNames = templateNames;
+			} else {
+				// FIXME: this is an error in linux64 (no template with this name)
+				// better idea is having a lookup table with platforms and default templates.
+				// and apply directly to ofgen import
+			}
 		} else {
-			// FIXME: this is an error in linux64 (no template with this name)
-			// better idea is having a lookup table with platforms and default templates.
-			// and apply directly to ofgen import
-
+            alert ("using templates from command line parameter");
 		}
-
 		cout << endl;
 
 		if (!conf.templateNames.size()) {

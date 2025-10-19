@@ -950,7 +950,8 @@ void Scene::drawBones() {
 //--------------------------------------------------------------
 void Scene::drawBones(float aAxisSize) {
 	for( auto& bone : mBones ) {
-		bone->draw(aAxisSize);
+		bone->draw();
+//		bone->draw(aAxisSize);
 	}
 }
 

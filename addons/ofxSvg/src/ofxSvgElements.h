@@ -26,6 +26,8 @@ class ofxSvgElement : public ofNode {
 	friend class ofxSvgGroup;
 public:
 	
+	virtual void draw() const override {};
+
 	/// \brief Get the ofxSvgType as a string.
 	/// \param ofxSvgType atype.
 	/// \return std::string as readable type.
