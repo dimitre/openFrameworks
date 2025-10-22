@@ -12,17 +12,21 @@
 namespace ofxAssimp {
 class Node : public ofNode {
 public:
+    // Node() {};
+    // virtual ~Node() = default;
+
 	void setSrcNode( std::shared_ptr<ofxAssimp::SrcNode> aSrcNode );
 	virtual std::string getName();
-	
+
 	virtual NodeType getType() { return OFX_ASSIMP_NODE; }
-	
+
+	// virtual void draw() override {};
 	virtual void draw() {};
 	virtual void update() {};
 	virtual void update( const std::shared_ptr<ofxAssimp::AnimationMixer>& aAnimMixer );
-	
+
 	virtual void drawNodes();
-	
+
 	bool hasAnimationMixer();
 	/// \brief Set animation mixer on node propogates down children (recursive).
 	/// \param amixer AnimationMixer to set on the node.
@@ -32,29 +36,29 @@ public:
 	/// \brief Get the animation mixer on the node.
 	/// \return AnimationMixer as a shared ptr.
 	std::shared_ptr<ofxAssimp::AnimationMixer> getAnimationMixer() {return mAnimMixer;}
-	
+
 	bool areAnimationsEnabled() const;
 	void setAnimationsEnabled(bool aBEnable, bool aBRecursively=true);
-	
+
 	bool isEnabled() const;
 	void setEnabled( bool aBEnable, bool aBRecursively=true);
-	
+
 	void setParentNode( std::shared_ptr<ofxAssimp::Node> anode );
 	bool hasParentNode();
 	std::shared_ptr<ofxAssimp::Node> getParentNode();
-	
+
 	void clearChildren();
 	void addChild( std::shared_ptr<ofxAssimp::Node> akiddo );
 	int getNumChildren();
 	std::vector< std::shared_ptr<ofxAssimp::Node> >& getChildren();
-	
+
 	virtual std::string getAsString( int aLevel=0 );
 	/// \brief Get a node for path.
 	/// \param aPath path in heirarchy to the desired node.\nUse direct path, ie. 'root:someNode:myNode' or recursively using asterik ie. '*:myNode'.
 	/// \param bStrict if true, name must match. If not, apath search name is contained in node string.
 	/// \return ofxAssimp::Node as shared_ptr. Valid ptr if found.
 	std::shared_ptr<ofxAssimp::Node> getNode( const std::string& aPath, bool bStrict );
-		
+
 	/// \brief Get a node cast as template type. ie. getNodeAsType<ofxAssimp::Bone>('root:someNode:myNode', true);
 	/// \param aPath path in heirarchy to the desired node.\nUse direct path, ie. 'root:someNode:myNode' or recursively using asterik ie. '*:myNode'.
 	/// \param bStrict if true, name must match. If not, apath search name is contained in node string.
@@ -102,7 +106,7 @@ public:
 		}
 		return tReturnNodes;
 	}
-	
+
 protected:
 	void _getNodeForNameRecursive( std::vector<std::string>& aNamesToFind,
 								   std::shared_ptr<ofxAssimp::Node>& aTarget,
@@ -110,16 +114,16 @@ protected:
 	void _getNodesForTypeRecursive( int atype, const std::string& aNameToContain,
 								  std::vector< std::shared_ptr<ofxAssimp::Node> >& aFoundElements,
 								  std::vector< std::shared_ptr<ofxAssimp::Node> >& aElements );
-	
+
 	std::string mName = "";
 	std::shared_ptr<ofxAssimp::SrcNode> mSrcNode;
 	std::vector< std::shared_ptr<ofxAssimp::Node> > mKids;
 	std::shared_ptr<ofxAssimp::Node> mParentNode;
-	
+
 	std::shared_ptr<ofxAssimp::AnimationMixer> mAnimMixer;
-	
+
 	bool mBAnimationsEnabled = true;
 	bool mBEnabled = true;
-	
+
 };
 }

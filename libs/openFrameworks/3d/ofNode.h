@@ -17,6 +17,7 @@ public:
 
 	ofNode();
 	virtual ~ofNode();
+	
 	ofNode(const ofNode & node);
 	ofNode(ofNode && node);
 	ofNode & operator=(const ofNode & node);
@@ -507,9 +508,8 @@ public:
 	/// \note do NOT override this.
 	/// It transforms the node to its position+orientation+scale
 	/// and calls the virtual 'customDraw' method above which you CAN override.
-	virtual void draw() const;
-//	virtual void draw();
-//	virtual void draw() const final;
+	virtual void drawNode() const;
+	virtual void draw();
 
 	/// \}
 

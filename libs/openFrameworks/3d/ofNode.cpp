@@ -672,8 +672,13 @@ void ofNode::resetTransform() {
     setScale({1.f,1.f,1.f});
 }
 
+
 //----------------------------------------
-void ofNode::draw()  const{
+void ofNode::draw() {
+}
+
+//----------------------------------------
+void ofNode::drawNode()  const{
 	ofGetCurrentRenderer()->draw(*this);
 }
 

@@ -375,6 +375,7 @@ int ofGetWidth();
 int ofGetHeight();
 int ofGetWindowWidth();
 int ofGetWindowHeight();
+glm::ivec2 ofGetFramebufferSize();
 
 std::string ofGetClipboardString();
 void ofSetClipboardString(const std::string & str);

@@ -36,6 +36,9 @@ class ofLight : public ofNode {
 public:
 	ofLight();
 	
+//	using ofNode::drawNode as draw;
+	void draw() override;
+	
 	void setup();
 	void enable();
 	void disable();
@@ -116,12 +119,12 @@ protected:
 	ofShadow shadow;
 	
 private:
-	void customDraw(const ofBaseRenderer * renderer) const;
+	void customDraw(const ofBaseRenderer * renderer) const override;
 	std::shared_ptr<Data> data;
 	// update opengl light
 	// this method overrides ofNode to catch the changes and update glLightv(GL_POSITION)
-	virtual void onPositionChanged();
-	virtual void onOrientationChanged();
+	virtual void onPositionChanged() override;
+	virtual void onOrientationChanged() override;
 	
 };
 

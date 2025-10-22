@@ -403,6 +403,11 @@ int ofGetWindowHeight() {
 }
 
 //--------------------------------------------------
+glm::ivec2 ofGetFramebufferSize() {
+	return ofCore.getCurrentWindow()->getFramebufferSize();
+}
+
+//--------------------------------------------------
 std::string ofGetClipboardString() {
 	return ofCore.getCurrentWindow()->getClipboardString();
 }

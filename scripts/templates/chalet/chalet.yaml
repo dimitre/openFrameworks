@@ -6,6 +6,7 @@ variables:
   ofPath: ../../..
 
 abstracts:*:
+  # $embed("${var:ofPath}/libs/openFrameworksCompiled/project/chalet/of-common.yaml")
   language: C++
   language[toolchain:apple-llvm]: Objective-C++
   settings:Cxx:
@@ -231,7 +232,11 @@ targets:
   #   location: ${var:ofPath}
   OF:
     kind: staticLibrary
-    # outputDir: ${var:ofPath}
+    # outputDirectory: ${var:ofPath}
+
+    # outputDirectory: ${var:ofPath}/_build
+    # outputDir: ${var:ofPath}/_build
+    # location: ${var:ofPath}
     files:
       include:
         - ${var:ofPath}/libs/openFrameworks/{3d,communication,events,gl,graphics,math,sound,types,utils,video}/*.cpp
@@ -254,6 +259,7 @@ targets:
   empty:
     kind: executable
     runWorkingDirectory: ${cwd}/bin
+    # externalConfiguration: ${var:ofPath}/libs/openFrameworksCompiled/project/chalet/configuration.yaml
     # copyFilesOnRun: bin/data
 
     settings:Cxx:

@@ -59,7 +59,7 @@ bool Scene::load( const ImportSettings& asettings ) {
 //------------------------------------------
 bool Scene::setup( std::shared_ptr<ofxAssimp::SrcScene> ascene ) {
 	clear();
-	
+
 	mSrcScene = ascene;
 	bProcessedSceneSuccessfully = processScene();
 	return bProcessedSceneSuccessfully;
@@ -92,34 +92,34 @@ bool Scene::processScene() {
 				getCurrentAnimation().play();
 			}
 		}
-		
+
 		if( mSrcScene->getImportSettings().transformRootNode && mSrcScene->getAiScene() && mSrcScene->getAiScene()->mRootNode ) {
 			ofxAssimp::Utils::setOfNodeFromAiMatrix( mSrcScene->getAiScene()->mRootNode->mTransformation, this );
 		}
-		
+
 		std::shared_ptr<ofxAssimp::Node> tempParent;
 		auto sceneSrcNodes = mSrcScene->getRootNodes();
 		for( auto sceneSrcNode : sceneSrcNodes ) {
 			processSceneNodesRecursive(sceneSrcNode, tempParent);
 		}
-		
-		
+
+
 		auto numberOfBones = getNumBones();
 //		now associate the meshes with the bones
 		for( auto& modelMesh : mMeshes ) {
 			ofLogVerbose("ofxAssimp::Scene") << "mesh: " << modelMesh->getName() << " indices: " << modelMesh->getNumIndices() << " vbo: " << modelMesh->vbo->getNumVertices();
-			
+
 			auto* mesh = modelMesh->getAiMesh();
-			
+
 			if(mAnimations.size() > 0 || numberOfBones > 0 ){
 				modelMesh->animatedVertices.resize(mesh->mNumVertices);
 				if(mesh->HasNormals()){
 					modelMesh->animatedNormals.resize(mesh->mNumVertices);
 				}
 			}
-			
-			
-			
+
+
+
 			for(unsigned int a = 0; a < mesh->mNumBones; ++a) {
 				aiBone* bone = mesh->mBones[a];
 				if( !bone ) {
@@ -132,7 +132,7 @@ bool Scene::processScene() {
 					ofLogError("ofxAssimp::Scene") << "unable to find scene node for bone!" << bone->mName.data;
 					continue;
 				}
-				
+
 				for( auto modelBone : mBones ) {
 					if( modelBone->getSrcBone()->getAiNode() == boneNode ) {
 						modelMesh->mBones.emplace_back(modelBone);
@@ -141,9 +141,9 @@ bool Scene::processScene() {
 				}
 			}
 		}
-		
+
 		ofLogVerbose("ofxAssimp::Scene") << "scene scale: " << getScale() << " global Scale: " << getGlobalScale();
-		
+
 		update();
 		calculateDimensions();
 
@@ -161,7 +161,7 @@ bool Scene::processScene() {
 //-------------------------------------------
 void Scene::processSceneNodesRecursive( std::shared_ptr<ofxAssimp::SrcNode> aSrcNode, std::shared_ptr<ofxAssimp::Node> aParentNode ) {
 	if( !aSrcNode ) return;
-	
+
 	shared_ptr<ofxAssimp::Node> newNode;
 	auto nodeType = aSrcNode->getType();
 	if( nodeType == ofxAssimp::NodeType::OFX_ASSIMP_MESH ) {
@@ -171,9 +171,9 @@ void Scene::processSceneNodesRecursive( std::shared_ptr<ofxAssimp::SrcNode> aSrc
 		mMeshes.push_back(tmesh);
 		newNode = tmesh;
 	} else if( nodeType == ofxAssimp::NodeType::OFX_ASSIMP_BONE ) {
-		
+
 		auto srcBone = std::dynamic_pointer_cast<ofxAssimp::SrcBone>(aSrcNode);
-		
+
 		std::shared_ptr<ofxAssimp::Bone> tbone;
 		if( srcBone->bRoot ) {
 			auto skel = make_shared<ofxAssimp::Skeleton>();
@@ -190,7 +190,7 @@ void Scene::processSceneNodesRecursive( std::shared_ptr<ofxAssimp::SrcNode> aSrc
 		mNullNodes.push_back(tnode);
 		newNode = tnode;
 	}
-	
+
 	if( newNode ) {
 		if( aParentNode ) {
 			aParentNode->addChild( newNode );
@@ -204,7 +204,7 @@ void Scene::processSceneNodesRecursive( std::shared_ptr<ofxAssimp::SrcNode> aSrc
 		newNode->setSrcNode( aSrcNode );
 //		mAllNodes.push_back( newNode );
 	}
-	
+
 	for( unsigned int i = 0; i < aSrcNode->getNumChildren(); i++ ) {
 		processSceneNodesRecursive( aSrcNode->getChildren()[i], newNode );
 	}
@@ -221,23 +221,23 @@ std::string Scene::getHierarchyAsString() {
 
 //-------------------------------------------
 void Scene::clear(){
-	
+
 	if( bLoadedSrcScene && mSrcScene ){
 		mSrcScene->clear();
 		mSrcScene.reset();
 	}
 	bLoadedSrcScene = false;
 	bProcessedSceneSuccessfully = false;
-	
+
 	ofLogVerbose("ofxAssimp::Scene") << "clear(): deleting GL resources";
-	
+
 	if( mSrcNode ) {
 		mSrcNode.reset();
 	}
 	if(mParentNode) {
 		mParentNode.reset();
 	}
-	
+
 	// clear out everything.
 	mMeshes.clear();
 	mBones.clear();
@@ -245,18 +245,18 @@ void Scene::clear(){
 	mKids.clear();
 	mAnimations.clear();
 	mSkeletons.clear();
-	
+
 	setOrientation({0.f, 0.f, 0.f});
 	setPosition(0.f, 0.f, 0.f);
 	//	lights.clear();
-	
+
 	setScale(1.f, 1.f, 1.f);
 	//	bNormalizeScale = true;
 	bUsingMaterials = true;
 	bUsingNormals = true;
 	bUsingTextures = true;
 	bUsingColors = true;
-	
+
 	removeAnimationMixer();
 }
 
@@ -289,11 +289,11 @@ void Scene::centerAndScaleToViewRect( float ax, float ay, float awidth, float ah
 void Scene::centerAndScaleToViewRect( float ax, float ay, float awidth, float aheight, float aNormalizeFactor ) {
 	calculateDimensions();
 	normalizeFactor = aNormalizeFactor;
-	
+
 	normalizedScale = mSceneBoundsLocal.max.x-mSceneBoundsLocal.min.x;
 	normalizedScale = std::max(double(mSceneBoundsLocal.max.y - mSceneBoundsLocal.min.y), normalizedScale);
 	normalizedScale = std::max(double(mSceneBoundsLocal.max.z - mSceneBoundsLocal.min.z), normalizedScale);
-	
+
 	if (fabs(normalizedScale) < std::numeric_limits<float>::epsilon()){
 		ofLogWarning("ofxAssimp::Scene") << "Error calculating normalized scale of scene" << std::endl;
 		normalizedScale = 1.0;
@@ -303,12 +303,12 @@ void Scene::centerAndScaleToViewRect( float ax, float ay, float awidth, float ah
 		}
 		normalizedScale *= normalizeFactor;
 	}
-	
+
 	setScale( normalizedScale );
-	
+
 	float sceneHeight = mSceneBoundsLocal.getHeight() * normalizedScale;
 	setPosition(0.f, -sceneHeight * 0.5f, 0.f);
-	
+
 }
 
 //-------------------------------------------
@@ -316,7 +316,7 @@ void Scene::calculateDimensions(){
 	if(!mSrcScene) return;
 	ofLogVerbose("ofxAssimp::Scene") << "calculateDimensions(): inited scene with "
 	<< mSrcScene->getAiScene()->mNumMeshes << " meshes & " << mSrcScene->getAiScene()->mNumAnimations << " animations";
-	
+
 	mBSceneBoundsDirty = true;
 	auto globalInvMat = glm::inverse(getGlobalTransformMatrix());
 	mSceneBoundsLocal.clear();
@@ -345,7 +345,7 @@ void Scene::lateUpdate() {
 	if(!hasAnimations() && !mBSceneDirty) {
 		return;
 	}
-	
+
 	mBSceneBoundsDirty = true;
 	auto globalInvMat = glm::inverse(getGlobalTransformMatrix());
 	for( auto& bone : mBones ) {
@@ -383,33 +383,33 @@ void Scene::updateMeshesFromBones() {
 	if (!hasAnimations() && !mBSceneDirty){
 		return;
 	}
-	
+
 	// update mesh position for the animation
 	for(size_t i = 0; i < mMeshes.size(); ++i) {
-		
+
 		if( !mMeshes[i]->isEnabled() ) {
 			continue;
 		}
-		
+
 		// current mesh we are introspecting
 		const aiMesh* mesh = mMeshes[i]->getAiMesh();
 		if( mesh == nullptr ) {
 			continue;
 		}
-		
+
 		mMeshes[i]->animatedVertices.assign(mMeshes[i]->animatedVertices.size(), aiVector3D(0.f));
 		if(mMeshes[i]->hasNormals()) {
 			mMeshes[i]->animatedNormals.assign(mMeshes[i]->animatedNormals.size(), aiVector3D(0.f));
 		}
-		
-		
+
+
 		//-------------
 		// loop through all vertex weights of all bones
 		//		for(unsigned int a = 0; a < mesh->mNumBones; ++a) {
 		for( unsigned int a = 0; a < mMeshes[i]->mBones.size(); ++a) {
 			mMeshes[i]->hasChanged = true;
 			mMeshes[i]->validCache = false;
-			
+
 			const aiBone* bone = mesh->mBones[a];
 			//			const aiMatrix4x4& posTrafo = boneMatrices[a];
 			//			if( a >= mMeshes[i]->mBones.size() ) {
@@ -422,18 +422,18 @@ void Scene::updateMeshesFromBones() {
 				ofLogError("Update Bones: ") << mesh->mNumBones << " sbone is NULL: " << mesh->mBones[a]->mName.data;
 				continue;
 			}
-			
+
 			aiBone* tabone = sbone->getSrcBone()->getAiBone();
-			
+
 			if( !tabone) {
 				ofLogError("Update Bones: ") << mesh->mNumBones << " bone is NULL: " << mesh->mBones[a]->mName.data;
 				continue;
 			}
-			
+
 			const aiMatrix4x4& posTrafo = sbone->getAiCachedGlobalBoneMat();
 			for(unsigned int b = 0; b < bone->mNumWeights; ++b) {
 				const aiVertexWeight& weight = bone->mWeights[b];
-				
+
 				size_t vertexId = weight.mVertexId;
 				const aiVector3D& srcPos = mesh->mVertices[vertexId];
 				mMeshes[i]->animatedVertices[vertexId] += weight.mWeight * (posTrafo * srcPos);
@@ -444,7 +444,7 @@ void Scene::updateMeshesFromBones() {
 				for(unsigned int b = 0; b < bone->mNumWeights; ++b) {
 					const aiVertexWeight& weight = bone->mWeights[b];
 					size_t vertexId = weight.mVertexId;
-					
+
 					const aiVector3D& srcNorm = mesh->mNormals[vertexId];
 					mMeshes[i]->animatedNormals[vertexId] += weight.mWeight * (normTrafo * srcNorm);
 				}
@@ -462,7 +462,7 @@ void Scene::updateGLResources(){
 				ofLogError( mMeshes[i]->getName() ) << " modelMeshes[i]->animatedPos.size(): " << mMeshes[i]->animatedVertices.size() << " num verts: " <<mesh->mNumVertices ;
 				continue;
 			}
-			
+
 			if(hasAnimations() || mBSceneDirty ){
 				mMeshes[i]->vbo->updateVertexData(&mMeshes[i]->animatedVertices[0].x,mesh->mNumVertices);
 				if(mesh->HasNormals()){
@@ -596,7 +596,7 @@ bool Scene::addAnimation( int aSrcAnimIndex, const std::string& aNewAnimName, fl
 		ofLogWarning("ofxAssimp::Scene::addAnimation") << " aSrcAnimIndex out of range!!";
 		return false;
 	}
-	auto& canim = mAnimations[aSrcAnimIndex];
+	// auto& canim = mAnimations[aSrcAnimIndex];
 	//	ofxAssimp::Animation nanim = mAnimations[aSrcAnimIndex];
 	auto nanim = std::make_shared<ofxAssimp::Animation>( *mAnimations[aSrcAnimIndex] );
 	nanim->setup(aStartTick, aEndTick);
@@ -847,25 +847,25 @@ void Scene::_drawMesh( const shared_ptr<ofxAssimp::Mesh>& amesh, ofPolyRenderMod
 		// we are not enabled, dont draw
 		return;
 	}
-	
+
 	if(!bWithinLoop) {
 		#ifndef TARGET_OPENGLES
 		glPolygonMode(GL_FRONT_AND_BACK, ofGetGLPolyMode(aRenderType));
 		#endif
 	}
-	
+
 	amesh->transformGL();
-	
+
 	if(bUsingTextures && !bUsingMaterials){
 		if(amesh->hasTexture()) {
 			amesh->getTexture().bind();
 		}
 	}
-	
+
 	if(bUsingMaterials && amesh->material ){
 		amesh->material->begin();
 	}
-	
+
 //	this was broken / backwards
 	if(!amesh->twoSided && mCullType >= 0) {
 		glEnable(GL_CULL_FACE);
@@ -875,10 +875,10 @@ void Scene::_drawMesh( const shared_ptr<ofxAssimp::Mesh>& amesh, ofPolyRenderMod
 	else {
 		glDisable(GL_CULL_FACE);
 	}
-	
-	
+
+
 	ofEnableBlendMode(amesh->blendMode);
-	
+
 #ifndef TARGET_OPENGLES
 	amesh->vbo->drawElements(GL_TRIANGLES,(int)amesh->getNumIndices());
 #else
@@ -896,23 +896,23 @@ void Scene::_drawMesh( const shared_ptr<ofxAssimp::Mesh>& amesh, ofPolyRenderMod
 			break;
 	}
 #endif
-	
+
 	if(bUsingTextures && !bUsingMaterials){
 		if(amesh->hasTexture()) {
 			amesh->getTexture().unbind();
 		}
 	}
-	
+
 	if(!amesh->twoSided) {
 		glDisable(GL_CULL_FACE);
 	}
-	
+
 	if(bUsingMaterials && amesh->material){
 		amesh->material->end();
 	}
-	
+
 	amesh->restoreTransformGL();
-	
+
 	#ifndef TARGET_OPENGLES
 	//set the drawing mode back to FILL if its drawn the model with a different mode.
 	if(!bWithinLoop && aRenderType != OF_MESH_FILL ){
@@ -970,7 +970,7 @@ void Scene::draw(ofPolyRenderMode renderType) {
 	if(!mSrcScene) {
 		return;
 	}
-	
+
 	ofPushStyle();
 
 #ifndef TARGET_OPENGLES
@@ -992,7 +992,7 @@ void Scene::draw(ofPolyRenderMode renderType) {
 		glPolygonMode(GL_FRONT_AND_BACK, ofGetGLPolyMode(OF_MESH_FILL));
 	}
 #endif
-	
+
 	ofPopStyle();
 }
 

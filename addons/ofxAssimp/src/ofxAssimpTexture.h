@@ -14,33 +14,33 @@ namespace ofxAssimp {
 class Texture {
 public:
 	static std::unordered_map< int, ofMaterialTextureType > sAiTexTypeToOfTexTypeMap;
-	
+
 	//	void setup(const ofTexture & texture, const of::filesystem::path & texturePath, bool bTexRepeat = true);
 	void setTexture( std::shared_ptr<ofTexture> atexture );
 	void setup(const of::filesystem::path & texturePath, bool bTexRepeat = true);
-	
+
 	ofTexture & getTextureRef();
 	of::filesystem::path getTexturePath();
 	bool hasTexture();
-	
+
 	void setAiTextureType(aiTextureType aTexType);
 	aiTextureType getAiTextureType() const;
 	std::string getAiTextureTypeAsString() const;
-	
+
 	ofMaterialTextureType getOfTextureType();
 	std::string getOfTextureTypeAsString();
-	
+
 	static ofMaterialTextureType ofTextureTypeForAiType(aiTextureType aTexType);
 	static aiTextureType aiTextureTypeForOfType(ofMaterialTextureType aTexType);
-	
+
 private:
 	static void _initTextureTypeMap();
-	
+
 	std::shared_ptr<ofTexture> texture;
 //	ofTexture texture;
 	of::filesystem::path texturePath;
 	aiTextureType textureType = aiTextureType_NONE;
 	std::string mTexTypeStr;
-	ofMaterialTextureType mOfTexType = OF_MATERIAL_TEXTURE_DIFFUSE;
+	// ofMaterialTextureType mOfTexType = OF_MATERIAL_TEXTURE_DIFFUSE;
 };
 }
