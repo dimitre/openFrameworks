@@ -12,7 +12,9 @@ public:
 
 	ofVideoGrabber();
 	virtual ~ofVideoGrabber();
-
+	
+	void getDevicesInfo() const;
+	
 	std::vector<ofVideoDevice> listDevices() const;
 	bool				isFrameNew() const;
 	void				update();

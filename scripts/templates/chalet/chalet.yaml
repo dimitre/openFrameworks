@@ -259,8 +259,8 @@ targets:
   empty:
     kind: executable
     runWorkingDirectory: ${cwd}/bin
+    copyFilesOnRun: bin/data
     # externalConfiguration: ${var:ofPath}/libs/openFrameworksCompiled/project/chalet/configuration.yaml
-    # copyFilesOnRun: bin/data
 
     settings:Cxx:
       staticLinks:

@@ -65,6 +65,8 @@
 #pragma clang diagnostic pop
 	}
 	
+	
+	
 	if([devices count] > 1) {
 		devices = [devices sortedArrayUsingComparator:^NSComparisonResult(AVCaptureDevice *d1, AVCaptureDevice *d2) {
 			return [d1.localizedName compare:d2.localizedName];
@@ -289,6 +291,67 @@
 
 -(CGImageRef)getCurrentFrame{
 	return currentFrame;
+}
+
+-(void)getDevicesInfo{
+	std::string output;
+	std::vector <std::string> deviceNames;
+	NSArray * devices;
+	if (@available(macOS 10.15, *)) {
+		NSMutableArray *deviceTypes = [NSMutableArray arrayWithObject:AVCaptureDeviceTypeBuiltInWideAngleCamera];
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 140000
+		if (@available(macOS 14.0, *)) {
+			if (AVCaptureDeviceTypeExternal != nil) {
+				[deviceTypes addObject:AVCaptureDeviceTypeExternal];
+				[deviceTypes addObject:AVCaptureDeviceTypeContinuityCamera];
+			}
+		}
+#endif
+		AVCaptureDeviceDiscoverySession *session = [AVCaptureDeviceDiscoverySession
+			discoverySessionWithDeviceTypes:deviceTypes
+			mediaType:AVMediaTypeVideo
+			position:AVCaptureDevicePositionUnspecified];
+		devices = [session devices];
+	} else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+		devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+#pragma clang diagnostic pop
+	}
+
+	
+	int i=0;
+	for (AVCaptureDevice * captureDevice in devices){
+		deviceNames.emplace_back([captureDevice.localizedName UTF8String]);
+		ofLogNotice() << "Device: " << i << ": " << deviceNames.back();
+		i++;
+		NSLog(@"modelID %@", captureDevice.modelID);
+		NSLog(@"uniqueID %@", captureDevice.uniqueID);
+		NSLog(@"manufacturer %@", captureDevice.manufacturer);
+		
+		for ( AVCaptureDeviceFormat * format in [device formats] ) {
+			CMFormatDescriptionRef desc = format.formatDescription;
+			CMVideoDimensions dimensions = CMVideoFormatDescriptionGetDimensions(desc);
+			
+			int tw = dimensions.width;
+			int th = dimensions.height;
+			glm::vec2 formatDimension(tw, th);
+			cout << "	format: " << tw << " x " << th << endl;
+			
+			NSArray * supportedFrameRates = format.videoSupportedFrameRateRanges;
+
+			
+			for(AVFrameRateRange * range in supportedFrameRates){
+				cout << "		" << range.minFrameRate << endl;
+				cout << "		" << range.maxFrameRate << endl;
+//				cout << range.maxFrameRate << endl;
+			}
+			
+		}
+		//XAXA
+	}
+	return deviceNames;
+	
 }
 
 -(std::vector <std::string>)listDevices{
@@ -576,6 +639,10 @@ bool ofAVFoundationGrabber::isFrameNew() const{
 void ofAVFoundationGrabber::updatePixelsCB(){
 	//TODO: does this need a mutex? or some thread protection?
 	bHavePixelsChanged = true;
+}
+
+void ofAVFoundationGrabber::getDevicesInfo() const{
+	[grabber getDevicesInfo];
 }
 
 std::vector <ofVideoDevice> ofAVFoundationGrabber::listDevices() const{

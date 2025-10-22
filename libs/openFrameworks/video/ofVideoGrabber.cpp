@@ -199,6 +199,16 @@ vector<ofVideoDevice> ofVideoGrabber::listDevices() const{
 }
 
 //--------------------------------------------------------------------
+void ofVideoGrabber::getDevicesInfo() const {
+	cout << "ofVideoGrabber::getDevicesInfo()" << endl;
+	if(!grabber){
+		ofVideoGrabber * mutThis = const_cast<ofVideoGrabber*>(this);
+		mutThis->setGrabber(std::make_shared<OF_VID_GRABBER_TYPE>());
+	}
+	return grabber->getDevicesInfo();
+}
+
+//--------------------------------------------------------------------
 void ofVideoGrabber::setVerbose(bool bTalkToMe){
 	if(grabber){
 		grabber->setVerbose(bTalkToMe);

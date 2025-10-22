@@ -50,6 +50,10 @@ class ofAVFoundationGrabber;
 -(void)setDevice:(int)_device;
 -(void)eraseGrabberPtr;
 
+// FIXME: Dmtr. think of a better API
+-(void)getDevicesInfo;
+
+
 -(CGImageRef)getCurrentFrame;
 
 @end
@@ -65,6 +69,7 @@ class ofAVFoundationGrabber : virtual public ofBaseVideoGrabber{
 		ofAVFoundationGrabber();
 		~ofAVFoundationGrabber();
 
+	void getDevicesInfo() const;
 		void setDeviceID(int deviceID);
 		void setDesiredFrameRate(int capRate);
 		bool setPixelFormat(ofPixelFormat PixelFormat);

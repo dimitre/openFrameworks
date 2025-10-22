@@ -124,6 +124,8 @@ public:
 	/// \brief Destroy the ofBaseVideoGrabber
 	virtual ~ofBaseVideoGrabber();
 
+	virtual void getDevicesInfo() const {};
+
 	// needs implementing
 	/// \brief Get a list of available video grabber devices.
 	///
