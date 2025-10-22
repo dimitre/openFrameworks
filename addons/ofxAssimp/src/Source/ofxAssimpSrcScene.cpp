@@ -87,7 +87,8 @@ bool SrcScene::load( const ImportSettings& asettings ) {
 	unsigned int flags = initImportProperties(asettings.assimpOptimizeFlags, asettings);
 	// loads scene from file
 	auto path = mFile.getAbsolutePath();
-	const aiScene * scenePtr = importer.ReadFile(path.c_str(), flags);
+	// const aiScene * scenePtr = importer.ReadFile(path.c_str(), flags);
+	const aiScene * scenePtr = importer.ReadFile(path.string(), flags);
 
 	if(!scenePtr || scenePtr->mFlags & AI_SCENE_FLAGS_INCOMPLETE ) {
 		ofLogError("ofxAssimp::SrcScene") << "load: " << importer.GetErrorString();
