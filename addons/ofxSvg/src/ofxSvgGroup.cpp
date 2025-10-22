@@ -6,9 +6,9 @@ using std::shared_ptr;
 using std::string;
 
 //--------------------------------------------------------------
-void ofxSvgGroup::draw() const {
+void ofxSvgGroup::draw() {
 	if( !isVisible() ) return;
-	
+
     std::size_t numElements = mChildren.size();
 	cout << numElements << endl;
 	for( std::size_t i = 0; i < numElements; i++ ) {
@@ -30,11 +30,11 @@ vector< shared_ptr<ofxSvgElement> >& ofxSvgGroup::getChildren() {
 //--------------------------------------------------------------
 vector< shared_ptr<ofxSvgElement> > ofxSvgGroup::getAllElements(bool aBIncludeGroups) {
     vector< shared_ptr<ofxSvgElement> > retElements;
-    
+
     for( auto ele : mChildren ) {
         _getAllElementsRecursive( retElements, ele, aBIncludeGroups );
     }
-    
+
     return retElements;
 }
 
@@ -93,20 +93,20 @@ std::vector< std::shared_ptr<ofxSvgPath> > ofxSvgGroup::getAllElementsWithPath()
 			rpaths.push_back(std::dynamic_pointer_cast<ofxSvgEllipse>(kid));
 		}
 	}
-	
+
 	return rpaths;
 }
 
 //--------------------------------------------------------------
 shared_ptr<ofxSvgElement> ofxSvgGroup::getElement( std::string aPath, bool bStrict ) {
-    
+
     vector< std::string > tsearches;
     if( ofIsStringInString( aPath, ":" ) ) {
         tsearches = ofSplitString( aPath, ":" );
     } else {
         tsearches.push_back( aPath );
     }
-    
+
     shared_ptr<ofxSvgElement> temp;
 	_getElementForNameRecursive( tsearches, temp, mChildren, bStrict );
     return temp;
@@ -149,14 +149,14 @@ std::vector< std::shared_ptr<ofxSvgElement> > ofxSvgGroup::getChildrenForName( c
 
 //--------------------------------------------------------------
 void ofxSvgGroup::_getElementForNameRecursive( vector<string>& aNamesToFind, shared_ptr<ofxSvgElement>& aTarget, vector< shared_ptr<ofxSvgElement> >& aElements, bool bStrict ) {
-	
+
 	if( aNamesToFind.size() < 1 ) {
 		return;
 	}
 	if(aTarget) {
 		return;
 	}
-	
+
 	bool bKeepGoing = false;
 	std::string nameToFind = aNamesToFind[0];
 	if( aNamesToFind.size() > 1 ) {
@@ -176,9 +176,9 @@ void ofxSvgGroup::_getElementForNameRecursive( vector<string>& aNamesToFind, sha
 			if( ofIsStringInString( aElements[i]->getName(), nameToFind )) {
 				bFound = true;
 			}
-			
+
 			if (!bFound && aElements[i]->getType() == OFXSVG_TYPE_TEXT) {
-				
+
 				if (aElements[i]->getName() == "No Name") {
 					// the ids for text block in illustrator are weird,
 					// so try to grab the name from the text contents //
@@ -193,7 +193,7 @@ void ofxSvgGroup::_getElementForNameRecursive( vector<string>& aNamesToFind, sha
 				}
 			}
 		}
-		
+
 		if( bFound && !bKeepGoing ) {
 			if( !bKeepGoing && aNamesToFind.size() > 0 ) {
 				aNamesToFind.erase( aNamesToFind.begin() );
@@ -209,7 +209,7 @@ void ofxSvgGroup::_getElementForNameRecursive( vector<string>& aNamesToFind, sha
 				}
 			}
 		}
-		
+
 		if( bKeepGoing ) {
 			if( bFound ) {
 //				std::cout << "Group::_getElementForNameRecursive: SETTING TARGET: " << aElements[i]->getName() << " keep going: " << bKeepGoing << std::endl;
@@ -273,7 +273,7 @@ bool ofxSvgGroup::remove( std::shared_ptr<ofxSvgElement> aelement ) {
 //	if( aelements.size() < 1 ) {
 //		return false;
 //	}
-//	
+//
 //	bool bAllRemoved = true;
 //	for( auto& aele : aelements ) {
 //		if( !aele ) {
@@ -291,7 +291,7 @@ bool ofxSvgGroup::remove( std::shared_ptr<ofxSvgElement> aelement ) {
 
 //--------------------------------------------------------------
 void ofxSvgGroup::_removeElementRecursive( shared_ptr<ofxSvgElement> aTarget, vector< shared_ptr<ofxSvgElement> >& aElements, bool& aBSuccessful ) {
-	
+
 	for( std::size_t i = 0; i < aElements.size(); i++ ) {
 		bool bFound = false;
 		if( aTarget == aElements[i] ) {
@@ -312,19 +312,19 @@ void ofxSvgGroup::_removeElementRecursive( shared_ptr<ofxSvgElement> aTarget, ve
 
 //--------------------------------------------------------------
 string ofxSvgGroup::toString(int nlevel) {
-    
+
     string tstr = "";
     for( int k = 0; k < nlevel; k++ ) {
         tstr += "   ";
     }
     tstr += getTypeAsString() + " - " + getName() + "\n";
-    
+
     if( mChildren.size() ) {
         for( std::size_t i = 0; i < mChildren.size(); i++ ) {
             tstr += mChildren[i]->toString( nlevel+1);
         }
     }
-    
+
     return tstr;
 }
 
@@ -344,11 +344,3 @@ void ofxSvgGroup::enableColors() {
         ele->setUseColors(true);
     }
 }
-
-
-
-
-
-
-
-
