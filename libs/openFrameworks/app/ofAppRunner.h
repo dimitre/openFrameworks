@@ -119,7 +119,7 @@ private:
 public:
 	ofCoreInternal() {
 		// FIXME: Remove
-		cout << ">>> REMOVE : ofCoreInternal initialization " << this << endl;
+//		cout << ">>> REMOVE : ofCoreInternal initialization " << this << endl;
 	};
 	~ofCoreInternal() {};
 
