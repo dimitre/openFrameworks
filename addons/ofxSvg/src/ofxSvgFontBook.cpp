@@ -217,7 +217,9 @@ bool ofxSvgFontBook::loadFont(const of::filesystem::path& aDirectory, ofxSvgCssC
 }
 
 //--------------------------------------------------------------
-bool ofxSvgFontBook::_recursiveFontDirSearch(const string& afile, const string& aFontFamToLookFor, fs::path & fontpath,
+bool ofxSvgFontBook::_recursiveFontDirSearch(const fs::path & afile,
+											 const string& aFontFamToLookFor,
+											 fs::path & fontpath,
 											 const std::vector<std::string>& aAddNames,
 											 const std::vector<std::string>& aExcludeNames,
 											 int aNumRecursions) {

@@ -66,7 +66,7 @@ protected:
     static Font defaultBookFont;
     static std::string mFontDirectory;
     static std::map< std::string, Font > fonts;
-    static bool _recursiveFontDirSearch(const std::string& afile, const std::string& aFontFamToLookFor,
+    static bool _recursiveFontDirSearch(const fs::path& afile, const std::string& aFontFamToLookFor,
 										fs::path & fontpath,
                                         const std::vector<std::string>& aAddNames,
                                         const std::vector<std::string>& aExcludeNames,
