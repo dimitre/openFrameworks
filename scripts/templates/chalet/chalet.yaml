@@ -125,7 +125,7 @@ abstracts:*:
       - asound
 
       - sndfile
-      # - openal
+      - openal
       # - pulse-simple
       # - pulse
       - pthread
@@ -259,7 +259,7 @@ targets:
         - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
         - ${var:ofPath}/libs/openFrameworks/app/ofAppGlutWindow.cpp
 
-        - ${var:ofPath}/libs/openFrameworks/sound/{ofOpenALSoundPlayer}.cpp
+        # - ${var:ofPath}/libs/openFrameworks/sound/{ofOpenALSoundPlayer}.cpp
       exclude[:windows]:
         - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils}.cpp
         - ${var:ofPath}/libs/openFrameworks/sound/ofFmodSoundPlayer.cpp

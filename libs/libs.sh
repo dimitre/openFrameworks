@@ -123,14 +123,18 @@ elif [[ "$(uname -s)" == "Linux" ]]; then # UBUNTU
 	if [[ -z "$CI" ]]; then
 	    #libgtk2.0-dev libgtk2.0-0
 					# libraw1394-dev # firewire support, legacy
-					# ibpulse-dev gstreamer1.0-pulseaudio libjack-jackd2-0 libjack-jackd2-dev
-					# libopenal-dev
+					# libpulse-dev gstreamer1.0-pulseaudio libjack-jackd2-0 libjack-jackd2-dev
+					#
 					# libdrm-dev
+					#
+					# libraw1394-dev libdrm-dev libopenal-dev libpulse-dev gstreamer1.0-pulseaudio libjack-jackd2-0 libjack-jackd2-dev
 		sudo apt-get -y install make \
 		libssl3 libcairo2-dev libssl-dev libcurl4 libcurl4-openssl-dev \
 		libasound2-dev libsndfile1-dev \
+		libopenal-dev \
 		freeglut3-dev libxmu-dev libxxf86vm-dev libgl1-mesa-dev libudev-dev libxcursor-dev libxi-dev libxinerama-dev \
-		libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev  gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav
+		libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
+		gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav
 	fi
 	# Fixme. Brotli will have to be re-added when issues are fixed # brotli
 	CORELIBS=( yaml-cpp kissfft libtiff libjpeg FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib  )
