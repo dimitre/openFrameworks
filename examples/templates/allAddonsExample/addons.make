@@ -6,5 +6,5 @@ ofxOpenCv
 ofxOsc
 ofxThreadedImageLoader
 ofxXmlSettings
-ofxURL
+#ofxURL
 ofxSvg

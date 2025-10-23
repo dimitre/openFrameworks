@@ -8,7 +8,7 @@
 #include "ofxThreadedImageLoader.h"
 #include "ofxKinect.h"
 #include "ofxGui.h"
-#include "ofxURL.h"
+// #include "ofxURL.h"
 #include "ofxSvg.h"
 
 #include "ofMain.h"
