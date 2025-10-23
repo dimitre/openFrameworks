@@ -84,8 +84,9 @@ abstracts:*:
       - /usr/include/pango-1.0
       - /usr/include/harfbuzz
 
+      - /usr/include/glib-2.0 # included by gstreamer-1.0
+
       # - /usr/include/{glib-2.0,libmount,blkid,fribidi,pixman-1,gdk-pixbuf-2.0,webp,graphene-1.0}
-      # - /usr/include/glib-2.0
       # - /usr/lib/x86_64-linux-gnu/glib-2.0/include
 
       # - /usr/include/gtk-2.0
