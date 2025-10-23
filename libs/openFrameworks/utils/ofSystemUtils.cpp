@@ -322,8 +322,8 @@ void ofSystemAlertDialog(std::string errorMessage) {
 	zenity += escapeShell(errorMessage);
 	zenity += '"';
 
-	int ret = std::system(zenity.c_str());   // 0 = OK pressed
-	return (ret == 0) ? "OK" : "";
+	std::system(zenity.c_str());   // 0 = OK pressed
+//	return (ret == 0) ? "OK" : "";
 	#endif
 #endif
 
