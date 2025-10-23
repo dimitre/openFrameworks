@@ -673,12 +673,12 @@ void ofNode::resetTransform() {
 }
 
 
-//----------------------------------------
-void ofNode::draw() {
-}
+////----------------------------------------
+//void ofNode::draw() {
+//}
 
 //----------------------------------------
-void ofNode::drawNode()  const{
+void ofNode::draw()  const{
 	ofGetCurrentRenderer()->draw(*this);
 }
 

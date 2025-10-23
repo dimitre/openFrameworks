@@ -23,9 +23,9 @@ using std::vector;
 
 static ofFloatColor globalAmbient(0.2f, 0.2f, 0.2f, 1.0f);
 
-void ofLight::draw() {
-	ofNode::drawNode();
-}
+//void ofLight::draw() {
+//	ofNode::drawNode();
+//}
 
 //----------------------------------------
 void ofEnableLighting() {

@@ -508,8 +508,8 @@ public:
 	/// \note do NOT override this.
 	/// It transforms the node to its position+orientation+scale
 	/// and calls the virtual 'customDraw' method above which you CAN override.
-	virtual void drawNode() const;
-	virtual void draw();
+//	virtual void drawNode() const;
+	virtual void draw() const;
 
 	/// \}
 

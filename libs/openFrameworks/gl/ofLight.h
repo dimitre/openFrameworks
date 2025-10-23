@@ -37,7 +37,7 @@ public:
 	ofLight();
 	
 //	using ofNode::drawNode as draw;
-	void draw() override;
+//	void draw() override;
 	
 	void setup();
 	void enable();
