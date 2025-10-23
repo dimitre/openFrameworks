@@ -1,6 +1,7 @@
 #include "ofApp.h"
 
 void ofApp::setup() {
+	ofSetCircleResolution(120);
 }
 
 void ofApp::update(){
