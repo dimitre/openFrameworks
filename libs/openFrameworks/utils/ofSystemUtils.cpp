@@ -495,9 +495,9 @@ ofFileDialogResult ofSystemLoadDialog(std::string windowTitle, bool bFolderSelec
 		return r;
 	};
 
-	if (!title.empty()) {
+	if (!windowTitle.empty()) {
 		zenity += " --title=\"";
-		zenity += escapeShell(title);
+		zenity += escapeShell(windowTitle);
 		zenity += '"';
 	}
 	if (bFolderSelection) zenity += " --directory";
