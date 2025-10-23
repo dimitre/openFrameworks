@@ -93,7 +93,7 @@ bool ofxSvgFontBook::loadFont(const of::filesystem::path& aDirectory, ofxSvgCssC
 //                string _filename, int _fontSize, bool _bAntiAliased, bool _bFullCharacterSet, bool _makeContours, float _simplifyAmt, int _dpi
 		// first let's see if the fonts are provided. Some system fonts are .dfont that have several of the faces
 		// in them, but OF isn't setup to parse them, so we need each bold, regular, italic, etc to be a .ttf font //
-		string tfontPath = tfont.fontFamily;
+		fs::path tfontPath = tfont.fontFamily;
 		if (bHasFontDirectory) {
 			std::stringstream fs;
 			bool bf = true;
