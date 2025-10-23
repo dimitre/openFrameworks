@@ -319,7 +319,7 @@ void ofSystemAlertDialog(std::string errorMessage) {
 	};
 
 	zenity += " --text=\"";
-	zenity += escapeShell(message);
+	zenity += escapeShell(errorMessage);
 	zenity += '"';
 
 	int ret = std::system(zenity.c_str());   // 0 = OK pressed
