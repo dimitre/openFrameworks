@@ -75,20 +75,22 @@ abstracts:*:
 
     includeDirs[:linux]:
       - /usr/include/gstreamer-1.0
-      - /usr/include/glib-2.0
-      - /usr/lib/x86_64-linux-gnu/glib-2.0/include
       - /usr/include/x86_64-linux-gnu
+
+      # not sure if needed
+      - /usr/include/{freetype2,libpng16}
+
       - /usr/include/cairo
       - /usr/include/pango-1.0
       - /usr/include/harfbuzz
 
-      # not sure if needed
-      - /usr/include/{freetype2,libpng16}
-      - /usr/include/{glib-2.0,libmount,blkid,fribidi,pixman-1,gdk-pixbuf-2.0,webp,graphene-1.0}
+      # - /usr/include/{glib-2.0,libmount,blkid,fribidi,pixman-1,gdk-pixbuf-2.0,webp,graphene-1.0}
+      # - /usr/include/glib-2.0
+      # - /usr/lib/x86_64-linux-gnu/glib-2.0/include
 
-      - /usr/include/gtk-2.0
-      - /usr/lib/x86_64-linux-gnu/{gtk-2.0,glib-2.0}/include
-      - /usr/include/atk-1.0
+      # - /usr/include/gtk-2.0
+      # - /usr/lib/x86_64-linux-gnu/{gtk-2.0,glib-2.0}/include
+      # - /usr/include/atk-1.0
 
       # - /usr/include/gtk-4.0
       # - /usr/lib/x86_64-linux-gnu/graphene-1.0/include
@@ -118,12 +120,8 @@ abstracts:*:
       - gstvideo-1.0
       - gstbase-1.0
       - gstreamer-1.0
-      - udev # ofxkinect only
-      - ssl
-      - crypto
-      - curl
-      - asound
 
+      - asound
       - sndfile
       - openal
       # - pulse-simple
@@ -132,10 +130,10 @@ abstracts:*:
       - GL
       - GLU
 
-      - gtk-x11-2.0
-      - gdk-x11-2.0
-      - atk-1.0
-      - gdk_pixbuf-2.0
+      # - gtk-x11-2.0
+      # - gdk-x11-2.0
+      # - atk-1.0
+      # - gdk_pixbuf-2.0
       # move aside soon
 
       - harfbuzz
@@ -152,6 +150,11 @@ abstracts:*:
       - pangocairo-1.0
       - pangoft2-1.0
       - pango-1.0
+
+      - udev # ofxkinect only
+      - ssl
+      - crypto
+      - curl
 
     links[:windows]:
       - winmm # timeBeginPeriod / timeEndPeriod
