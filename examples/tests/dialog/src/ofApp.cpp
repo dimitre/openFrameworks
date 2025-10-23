@@ -8,6 +8,9 @@ void ofApp::update(){
 }
 
 void ofApp::draw(){
+	float x = ofNoise(ofGetElapsedTimef() * 0.2, 2) * 600;
+	float y = ofNoise(ofGetElapsedTimef() * 0.3, 3) * 600;
+	ofDrawEllipse(x, y, 300, 300);
 
 }
 
