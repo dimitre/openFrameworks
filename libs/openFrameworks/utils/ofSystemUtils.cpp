@@ -473,13 +473,40 @@ ofFileDialogResult ofSystemLoadDialog(std::string windowTitle, bool bFolderSelec
 	//----------------------------------------------------------------------------------------
 	//------------------------------------------------------------------------------   linux
 	//----------------------------------------------------------------------------------------
-#if defined(TARGET_LINUX) && defined(OF_USING_GTK)
+#if defined(TARGET_LINUX)
+#if defined(OF_USING_GTK)
 	auto locale = std::locale();
 	if (bFolderSelection)
 		results.filePath = gtkFileDialog(GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, windowTitle, ofToDataPath(defaultPath).c_str());
 	else
 		results.filePath = gtkFileDialog(GTK_FILE_CHOOSER_ACTION_OPEN, windowTitle, ofToDataPath(defaultPath).c_str());
 	resetLocale(locale);
+#else
+	
+	std::string zenity = "zenity --file-selection";
+
+	auto escapeShell = [](const std::string& s) -> std::string {
+		std::string r;
+		r.reserve(s.size() * 2);
+		for (char c : s) {
+			if (c == '"' || c == '\\' || c == '$' || c == '`') r += '\\';
+			r += c;
+		}
+		return r;
+	};
+
+	if (!title.empty()) {
+		zenity += " --title=\"";
+		zenity += escapeShell(title);
+		zenity += '"';
+	}
+	if (bFolderSelection) zenity += " --directory";
+
+	results.filePath = ofSystem(zenity);
+
+#endif
+	
+	
 #endif
 	//----------------------------------------------------------------------------------------
 	//----------------------------------------------------------------------------------------

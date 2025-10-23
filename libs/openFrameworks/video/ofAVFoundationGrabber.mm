@@ -350,7 +350,7 @@
 		}
 		//XAXA
 	}
-	return deviceNames;
+//	return deviceNames;
 	
 }
 
