@@ -287,18 +287,44 @@ void ofSystemAlertDialog(std::string errorMessage) {
 	}
 #endif
 
-#if defined(TARGET_LINUX) && defined(OF_USING_GTK)
-	auto locale = std::locale();
-	initGTK();
-	TextDialogData dialogData;
-	dialogData.text = errorMessage;
-	dialogData.done = false;
-	g_main_context_invoke(g_main_loop_get_context(ofGstUtils::getGstMainLoop()), &alert_dialog_gtk, &dialogData);
-	if (!dialogData.done) {
-		std::unique_lock<std::mutex> lock(dialogData.mutex);
-		dialogData.condition.wait(lock);
-	}
-	resetLocale(locale);
+#if defined(TARGET_LINUX)
+	#if defined(OF_USING_GTK)
+		auto locale = std::locale();
+		initGTK();
+		TextDialogData dialogData;
+		dialogData.text = errorMessage;
+		dialogData.done = false;
+		g_main_context_invoke(g_main_loop_get_context(ofGstUtils::getGstMainLoop()), &alert_dialog_gtk, &dialogData);
+		if (!dialogData.done) {
+			std::unique_lock<std::mutex> lock(dialogData.mutex);
+			dialogData.condition.wait(lock);
+		}
+		resetLocale(locale);
+	#else
+	std::string zenity = "zenity --";
+	zenity += "error";
+//	switch (level) {
+//		case OF_SYSTEM_ALERT_ERROR:   zenity += "error";   break;
+//		case OF_SYSTEM_ALERT_WARNING: zenity += "warning"; break;
+//		default:                      zenity += "info";    break;
+//	}
+
+	auto escapeShell = [](const std::string& s) -> std::string {
+		std::string r;  r.reserve(s.size() * 2);
+		for (char c : s) {
+			if (c == '"' || c == '\\' || c == '$' || c == '`') r += '\\';
+			r += c;
+		}
+		return r;
+	};
+
+	zenity += " --text=\"";
+	zenity += escapeShell(message);
+	zenity += '"';
+
+	int ret = std::system(zenity.c_str());   // 0 = OK pressed
+	return (ret == 0) ? "OK" : "";
+	#endif
 #endif
 
 #ifdef TARGET_ANDROID
