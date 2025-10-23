@@ -5,7 +5,7 @@
 #include "ofxOsc.h"
 #include "ofxXmlSettings.h"
 #include "ofxAssimp.h"
-#include "ofxThreadedImageLoader.h"
+// #include "ofxThreadedImageLoader.h"
 #include "ofxKinect.h"
 #include "ofxGui.h"
 // #include "ofxURL.h"
@@ -43,7 +43,7 @@ class ofApp : public ofBaseApp{
 		ofxOscSender osc_sender;
 		ofxXmlSettings settings;
 		ofxAssimp::Scene betterModelLoader;
-		ofxThreadedImageLoader threadedLoader;
+		// ofxThreadedImageLoader threadedLoader;
 		ofxKinect kinect;
 		ofxPanel gui;
 		ofxSvg svg;
