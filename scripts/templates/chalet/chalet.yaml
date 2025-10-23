@@ -28,8 +28,8 @@ abstracts:*:
     linkerOptions[:linux]:
       - -pthread
 
-    # defines[:linux]:
-    # - OF_USING_GTK
+    defines[:linux]:
+      - OF_USING_GTK
     # - OF_USING_STD_FS=1
 
     defines[:macos]: #[toolchain:apple-llvm]:
