@@ -118,34 +118,39 @@ abstracts:*:
       - gstvideo-1.0
       - gstbase-1.0
       - gstreamer-1.0
-      - udev
-      - sndfile
-      - openal
+      - udev # ofxkinect only
       - ssl
       - crypto
       - curl
-      - pulse-simple
-      - pulse
-      - pthread
       - asound
+
+      - sndfile
+      # - openal
+      # - pulse-simple
+      # - pulse
+      - pthread
       - GL
       - GLU
-      - gtk-x11-2.0
-      - gdk-x11-2.0
-      - pangocairo-1.0
+      # - gtk-x11-2.0
+      # - gdk-x11-2.0
       - atk-1.0
       # move aside soon
-      - cairo
+
       - gdk_pixbuf-2.0
-      - gio-2.0
-      - pangoft2-1.0
-      - pango-1.0
-      - gobject-2.0
-      - glib-2.0
       - harfbuzz
       - fontconfig
       - freetype
       - mpg123
+
+      # GTK Related
+      # - glib-2.0
+      # - gobject-2.0
+      # - gio-2.0
+
+      - cairo
+      - pangocairo-1.0
+      - pangoft2-1.0
+      - pango-1.0
 
     links[:windows]:
       - winmm # timeBeginPeriod / timeEndPeriod
