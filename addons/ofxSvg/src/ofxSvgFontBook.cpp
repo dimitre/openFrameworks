@@ -106,7 +106,7 @@ bool ofxSvgFontBook::loadFont(const of::filesystem::path& aDirectory, ofxSvgCssC
 			}
 			
 			ofLogVerbose("ofxSvgFontBook") << __FUNCTION__ << " : " << fs.str() << " : starting off searching directory : " << fontsDirectory;
-			string tNewFontPath = "";
+			fs::path tNewFontPath;
 
 			std::vector<std::string> subStrs;
 			std::vector<std::string> excludeStrs;
@@ -217,7 +217,7 @@ bool ofxSvgFontBook::loadFont(const of::filesystem::path& aDirectory, ofxSvgCssC
 }
 
 //--------------------------------------------------------------
-bool ofxSvgFontBook::_recursiveFontDirSearch(const string& afile, const string& aFontFamToLookFor, string& fontpath,
+bool ofxSvgFontBook::_recursiveFontDirSearch(const string& afile, const string& aFontFamToLookFor, fs::path & fontpath,
 											 const std::vector<std::string>& aAddNames,
 											 const std::vector<std::string>& aExcludeNames,
 											 int aNumRecursions) {

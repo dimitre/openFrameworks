@@ -67,7 +67,7 @@ protected:
     static std::string mFontDirectory;
     static std::map< std::string, Font > fonts;
     static bool _recursiveFontDirSearch(const std::string& afile, const std::string& aFontFamToLookFor,
-										std::string& fontpath,
+										fs::path & fontpath,
                                         const std::vector<std::string>& aAddNames,
                                         const std::vector<std::string>& aExcludeNames,
 										int aNumRecursions);
