@@ -48,9 +48,9 @@ bool ofxSvgFontBook::loadFont(const of::filesystem::path& aDirectory, ofxSvgCssC
 	if (tfont.sizes.count(fontSize) == 0) {
 		bool bHasFontDirectory = false;
 	//    cout << "checking directory: " << fdirectory+"/fonts/" << endl;
-		std::string fontsDirectory = "";// = ofToDataPath("", true);
+		fs::path fontsDirectory { "" };// = ofToDataPath("", true);
 		if( !aDirectory.empty() ) {
-			fontsDirectory = aDirectory.string();
+			fontsDirectory = aDirectory;
 		}
 		
 		if( !ofFile::doesFileExist(fontsDirectory)) {
