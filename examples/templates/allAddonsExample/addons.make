@@ -4,7 +4,7 @@ ofxKinect
 ofxNetwork
 ofxOpenCv
 ofxOsc
-ofxThreadedImageLoader
 ofxXmlSettings
-#ofxURL
 ofxSvg
+#ofxURL
+#ofxThreadedImageLoader
