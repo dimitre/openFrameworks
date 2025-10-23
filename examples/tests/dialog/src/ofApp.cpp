@@ -19,6 +19,7 @@ void ofApp::keyPressed(int key){
 		auto res { ofSystemLoadDialog("titulo da janela", true, "~/Desktop") };
 		if (res.bSuccess) {
 			cout << res.fileName << endl;
+			cout << res.filePath << endl;
 		} else {
 			cout << "FAIL" << endl;
 		}
@@ -28,6 +29,7 @@ void ofApp::keyPressed(int key){
 		auto res { ofSystemLoadDialog("titulo da janela", false, "~/Desktop") };
 		if (res.bSuccess) {
 			cout << res.fileName << endl;
+			cout << res.filePath << endl;
 		} else {
 			cout << "FAIL" << endl;
 		}
