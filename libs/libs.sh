@@ -53,9 +53,10 @@ done
 
 # echo "ostype = ${OSTYPE}"
 
+# VS - Visual Studio
 if [[ "$OSTYPE" == "msys"* ]]; then
     PLATFORM=vs
-   	CORELIBS=( libjpeg libtiff videoInput yaml-cpp brotli FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib )
+   	CORELIBS=( mango libjpeg libtiff videoInput yaml-cpp brotli FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib )
 	# FIXME: TODO: add svgtiny to ofLibs and here
 	# TODO: curl, openssl
 	ADDONLIBS=( assimp cairo libusb opencv )
@@ -68,6 +69,8 @@ if [[ "$OSTYPE" == "msys"* ]]; then
 		"libusb:ofxKinect"
 		"opencv:ofxOpenCv"
 	)
+
+# Windows MSYS2
 elif [[ "$OSTYPE" == "cygwin"* ]]; then
 	PLATFORM=msys2
 	CORELIBS=( tess2 kissfft videoInput )
@@ -94,9 +97,10 @@ elif [[ "$OSTYPE" == "cygwin"* ]]; then
 	# FIXME VOLTAR
 	# executa "${PACMANPARAMS}"
 
+# macOS
 elif [[ "$(uname -s)" == "Darwin" ]]; then
 	PLATFORM=macos
-	CORELIBS=( yaml-cpp lzma libtiff libjpeg brotli FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib  )
+	CORELIBS=( mango yaml-cpp lzma libtiff libjpeg brotli FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib  )
 	# FIXME: TODO: add svgtiny to ofLibs and here
 	ADDONLIBS=( assimp cairo libusb opencv openssl curl )
 	ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
@@ -137,7 +141,7 @@ elif [[ "$(uname -s)" == "Linux" ]]; then # UBUNTU
 		gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav
 	fi
 	# Fixme. Brotli will have to be re-added when issues are fixed # brotli
-	CORELIBS=( yaml-cpp kissfft libtiff libjpeg FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib  )
+	CORELIBS=( mango yaml-cpp kissfft libtiff libjpeg FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib  )
 
 	ADDONLIBS=(	assimp libusb opencv )
 	LIBADDONS=(
@@ -164,6 +168,8 @@ elif [[ "$(uname -s)" == "Linux" ]]; then # UBUNTU
 	fi
 fi
 
+
+# FIXME: Remove, convert to function
 if [[ $1 == 'vs' ]]; then
     PLATFORM=$1
    	CORELIBS=( yaml-cpp brotli FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib )
