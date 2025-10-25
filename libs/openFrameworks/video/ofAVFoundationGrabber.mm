@@ -329,7 +329,7 @@
 		NSLog(@"uniqueID %@", captureDevice.uniqueID);
 		NSLog(@"manufacturer %@", captureDevice.manufacturer);
 		
-		for ( AVCaptureDeviceFormat * format in [device formats] ) {
+		for ( AVCaptureDeviceFormat * format in [captureDevice formats] ) {
 			CMFormatDescriptionRef desc = format.formatDescription;
 			CMVideoDimensions dimensions = CMVideoFormatDescriptionGetDimensions(desc);
 			

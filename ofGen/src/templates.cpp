@@ -1082,8 +1082,10 @@ void ofTemplateChalet::load() {
 	projectYaml = YAML::LoadFile(projectFrom.string());
 	projectYaml["variables"]["platform"] = getPlatformString();
 	projectYaml["variables"]["addons"] = joinStrings(addonsNames, ",");
+
 	for (auto & d : conf.defines) {
-		projectYaml["abstracts:*"]["settings:Cxx"]["defines"].push_back(d);
+		// projectYaml["abstracts:*"]["settings:Cxx"]["defines"].push_back(d);
+		projectYaml["targets"]["empty"]["settings:Cxx"]["defines"].push_back(d);
 	}
 
 	// for (auto & f : conf.frameworks) {
@@ -1116,8 +1118,7 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 		std::string folder = a->isProject ? "" : "${var:ofPath}/addons/" + a->name + "/";
 		std::string path { folder + f.string() };
 
-		projectYaml["abstracts:*"]["settings:Cxx"]["includeDirs"].push_back(path);
-
+		// projectYaml["abstracts:*"]["settings:Cxx"]["includeDirs"].push_back(path);
 		projectYaml["targets"]["empty"]["settings:Cxx"]["includeDirs"].push_back(path);
 	}
 
@@ -1135,7 +1136,9 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 			for (const auto & s : ofSplitString(f, " ")) {
 				// alert("     appleFramework " + s, 95);
 				alert("	└─ appleFramework " + s, 94);
-				projectYaml["abstracts:*"]["settings:Cxx"]["appleFrameworks"].push_back(s);
+				// projectYaml["abstracts:*"]["settings:Cxx"]["appleFrameworks"].push_back(s);
+				projectYaml["targets"]["empty"]["settings:Cxx"]["appleFrameworks"].push_back(s);
+
 			}
 		}
 	}
@@ -1143,7 +1146,7 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 	for (const fs::path & f : a->filteredMap["frameworks"]) {
 		// addFramework(a->path / f);
 		alert("	└─ appleFramework " + f.string(), 94);
-		projectYaml["abstracts:*"]["settings:Cxx"]["appleFrameworks"].push_back(f.string());
+		projectYaml["targets"]["empty"]["settings:Cxx"]["appleFrameworks"].push_back(f.string());
 	}
 
 
@@ -1155,10 +1158,10 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 		{ "ADDON_LDFLAGS", "linkerOptions" },
 	};
 
-	for (auto & p : a->addonProperties["ADDON_DEFINES"]) {
-		// MARK: defines key
-		projectYaml["targets"]["empty"]["settings:Cxx"]["defines"].push_back(p);
-	}
+	// I'm now removing this one. it was handled already by conf.defines in general addon loading. ofAddon::loadFiles populating conf.defines
+	// for (auto & p : a->addonProperties["ADDON_DEFINES"]) {
+	// 	projectYaml["targets"]["empty"]["settings:Cxx"]["defines"].push_back(p);
+	// }
 
 
 }

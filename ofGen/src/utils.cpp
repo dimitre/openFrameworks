@@ -161,6 +161,26 @@ bool genConfig::loadYML() {
 
 		conf.addonsNames = nodeToStrings("addons");
 
+		if (config["addonsSources"]) {
+			for (auto c : config["addonsSources"]) {
+				auto name { c["name"].as<std::string>() };
+				auto repo { c["repository"].as<std::string>() };
+				if (fs::exists(ofPath / "addons" / name)) {
+					// FIXME: Check if it exists
+					// Transform to a unique set...
+					//
+					if (std::find(conf.addonsNames.begin(), conf.addonsNames.end(), name) == conf.addonsNames.end()) {
+						conf.addonsNames.emplace_back(name);
+					} else {
+						cout << "addon already added" << endl;
+					}
+					cout << name << endl;
+					cout << repo << endl;
+					cout << "------" << endl;
+				}
+			}
+		}
+
 		if (empty(conf.templateNames)) {
 			auto templateNames = nodeToStrings("templates");
 			if (templateNames.size() > 0) {
@@ -171,7 +191,7 @@ bool genConfig::loadYML() {
 				// and apply directly to ofgen import
 			}
 		} else {
-            alert ("using templates from command line parameter");
+			alert("using templates from command line parameter");
 		}
 		cout << endl;
 

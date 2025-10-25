@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream> // cout
-static std::string version = "v0.7.3";
+static std::string version = "v0.7.4";
 
 #include <filesystem>
 #include <map>
@@ -181,6 +181,7 @@ struct genConfig {
 	std::vector<std::string> platforms { getPlatformString() };
 
 	std::vector<std::string> addonsNames;
+	// std::set<std::string> addonsNames; //unordered_set
 
 	std::vector<std::string> frameworks;
 	std::vector<std::string> defines;
