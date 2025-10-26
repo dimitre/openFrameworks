@@ -1,6 +1,11 @@
 #!/bin/bash
 cd "$(dirname "$0")"
 
+VERSION=v0.12.3
+OF_FOLDER=..
+# PLATFORM=macos
+#rpi-aarch64.zip
+
 wipeDownloads=true
 wipeAddonLibs=true
 wipeLibs=true
@@ -26,10 +31,6 @@ executa() { #echoes and execute. dry run is "executa2"
 }
 
 
-VERSION=v0.12.1
-OF_FOLDER=..
-# PLATFORM=macos
-#rpi-aarch64.zip
 
 for i in "$@"; do
 	case $i in
@@ -100,20 +101,22 @@ elif [[ "$OSTYPE" == "cygwin"* ]]; then
 # macOS
 elif [[ "$(uname -s)" == "Darwin" ]]; then
 	PLATFORM=macos
-	CORELIBS=( mango yaml-cpp lzma libtiff libjpeg brotli FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib  )
+	# lzma libtiff libjpeg  pixman FreeImage
+	CORELIBS=( libpng fmt mango yaml-cpp brotli freetype glew glfw glm json pugixml rtAudio tess2 uriparser utfcpp zlib-ng  )
 	# FIXME: TODO: add svgtiny to ofLibs and here
-	ADDONLIBS=( assimp cairo libusb opencv openssl curl )
+	# ADDONLIBS=( assimp cairo libusb opencv openssl curl )
+	ADDONLIBS=( assimp opencv libusb ) # cairo openssl curl
 	ALLLIBS="${CORELIBS[@]} ${ADDONLIBS[@]}"
 
 	LIBADDONS=(
 		# "assimp:ofxAssimpModelLoader"
 		"assimp:ofxAssimp"
-		"cairo:ofxCairo"
+		# "cairo:ofxCairo"
 		"libusb:ofxKinect"
 		# "libxml2:ofxSvg"
 		"opencv:ofxOpenCv"
-		"openssl:ofxURL"
-		"curl:ofxURL"
+		# "openssl:ofxURL"
+		# "curl:ofxURL"
 		# "svgtiny:ofxSvg"
 	)
 
@@ -261,13 +264,13 @@ getlink() {
 		for LIBNAME in ${ALLLIBS[@]}
 		do
 			# github uses redirect, so it is needed -L parameter in curl.
-			executa "curl -L -o ${DOWNLOAD}/oflib_${LIBNAME}_${PLATFORM}.zip https://github.com/dimitre/ofLibs/releases/download/${VERSION}/oflib_${LIBNAME}_${PLATFORM}.zip"
+			executa "curl -L -o ${DOWNLOAD}/ofLibs_${LIBNAME}_${PLATFORM}.zip https://github.com/dimitre/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
 		done
 	else
 
 		for LIBNAME in ${ALLLIBS[@]}
 		do
-			PARAMS+=" "https://github.com/dimitre/ofLibs/releases/download/${VERSION}/oflib_${LIBNAME}_${PLATFORM}.zip
+			PARAMS+=" "https://github.com/dimitre/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip
 		done
 
 		executa "wget2 --clobber=off ${PARAMS} -P ${DOWNLOAD}"
@@ -277,7 +280,7 @@ getlink() {
 unzipCore() {
 	for LIBNAME in ${CORELIBS[@]}
 	do
-		filename="${DOWNLOAD}/oflib_${LIBNAME}_${PLATFORM}.zip"
+		filename="${DOWNLOAD}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
 		# executa unzip -o ${filename} -d ${LIBS_FOLDER}
 		# -q = quiet -qq = quieter
 		executa "unzip -qq -o ${filename} -d ${LIBS_FOLDER}"
@@ -304,7 +307,7 @@ unzipAddons() {
             executa "rm -rf ${OUTFOLDER}"
         fi
 		executa "mkdir -p ${OUTFOLDER}"
-		executa "unzip -qq -o -d ${OUTFOLDER} ${DOWNLOAD}/oflib_${lib}_${PLATFORM}.zip"
+		executa "unzip -qq -o -d ${OUTFOLDER} ${DOWNLOAD}/ofLibs_${lib}_${PLATFORM}.zip"
 	done
 }
 

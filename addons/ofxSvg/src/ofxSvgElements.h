@@ -26,7 +26,8 @@ class ofxSvgElement : public ofNode {
 	friend class ofxSvgGroup;
 public:
 
-	virtual void draw() override {};
+	// virtual void draw() override {};
+	// virtual void draw() {};
 
 	/// \brief Get the ofxSvgType as a string.
 	/// \param ofxSvgType atype.

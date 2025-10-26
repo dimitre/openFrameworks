@@ -172,17 +172,27 @@ abstracts:*:
 
     staticLinks[:windows]:
       # - ${var:ofPath}/libs/${var:platform}/lib/jpeg-static.lib
-      - ${var:ofPath}/libs/${var:platform}/lib/FreeImage.lib
-      - ${var:ofPath}/libs/${var:platform}/lib/tiff.lib
+      # - ${var:ofPath}/libs/${var:platform}/lib/FreeImage.lib
+      # - ${var:ofPath}/libs/${var:platform}/lib/tiff.lib
+      # - ${var:ofPath}/libs/${var:platform}/lib/turbojpeg-static.lib
+
+      - ${var:ofPath}/libs/${var:platform}/lib/mango.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/bz2_static.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/deflatestatic.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/liblcms2.a
+      - ${var:ofPath}/libs/${var:platform}/lib/lz4.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/zstd_static.lib
+
+      - ${var:ofPath}/libs/${var:platform}/lib/fmt.lib
+
       # - ${var:ofPath}/libs/${var:platform}/lib/tiffxx.lib
       # - removed tiff.lib
-      - ${var:ofPath}/libs/${var:platform}/lib/turbojpeg-static.lib
       - ${var:ofPath}/libs/${var:platform}/lib/zs.lib
 
+      - ${var:ofPath}/libs/${var:platform}/lib/freetype.lib
       - ${var:ofPath}/libs/${var:platform}/lib/brotlicommon.lib
       - ${var:ofPath}/libs/${var:platform}/lib/brotlidec.lib
       - ${var:ofPath}/libs/${var:platform}/lib/brotlienc.lib
-      - ${var:ofPath}/libs/${var:platform}/lib/freetype.lib
       - ${var:ofPath}/libs/${var:platform}/lib/glew.lib
       - ${var:ofPath}/libs/${var:platform}/lib/glfw3.lib
       - ${var:ofPath}/libs/${var:platform}/lib/glm.lib
@@ -198,21 +208,28 @@ abstracts:*:
       #libpng, libbrotlienc, libjpeg libbrotlicommon,libbrotlidec
       # - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
 
-      - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
+      # # - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libjpeg.a
+
+      - ${var:ofPath}/libs/${var:platform}/lib/libfmt.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libmango.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libbz2_static.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libdeflate.a
+      - ${var:ofPath}/libs/${var:platform}/lib/liblcms2.a
+      - ${var:ofPath}/libs/${var:platform}/lib/liblz4.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libzstd.a
+
       - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
       - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
       - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
-      # - ${var:ofPath}/libs/${var:platform}/lib/libjpeg.a
       - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
       - ${var:ofPath}/libs/${var:platform}/lib/libpng.a
-      # - ${var:ofPath}/libs/${var:platform}/lib/libpng16.a
-      # - ${var:ofPath}/libs/${var:platform}/lib/libpng18.a
       - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
       - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
       - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
-      # - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
       - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
       - ${var:ofPath}/libs/${var:platform}/lib/libz.a
 
@@ -221,22 +238,32 @@ abstracts:*:
       - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
       - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
       - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libbrotlidec.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libbrotlicommon.a
       - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
       - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
       - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
 
-      # FREEIMAGE
-      - ${var:ofPath}/libs/${var:platform}/lib/libpng.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
-      # - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
+      # All Freetype deps
+      - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libbrotlidec.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libbrotlicommon.a
       - ${var:ofPath}/libs/${var:platform}/lib/libbrotlienc.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libpng.a
       - ${var:ofPath}/libs/${var:platform}/lib/libz.a
-      - ${var:ofPath}/libs/${var:platform}/lib/liblzma.a
+
+      - ${var:ofPath}/libs/${var:platform}/lib/libfmt.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libmango.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libbz2_static.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libdeflate.a
+      - ${var:ofPath}/libs/${var:platform}/lib/liblcms2.a
+      - ${var:ofPath}/libs/${var:platform}/lib/liblz4.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libzstd.a
+
+      # FREEIMAGE
+      # - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/liblzma.a
 targets:
   # OFLib:
   #   kind: chaletProject
