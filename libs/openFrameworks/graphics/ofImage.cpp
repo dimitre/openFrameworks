@@ -3,9 +3,9 @@
 #include "ofPixels.h"
 //#include "ofFileUtils.h"
 
-#ifdef OFXURL
-#include "ofURLFileLoader.h"
-#endif
+//#ifdef OFXURL
+//#include "ofURLFileLoader.h"
+//#endif
 
 #if defined(TARGET_ANDROID)
 #include "ofxAndroidUtils.h"
@@ -348,12 +348,12 @@ static bool loadImage(ofPixels_<PixelType> & pix, const of::filesystem::path & _
 //	std::string scheme(uri.scheme.first, uri.scheme.afterLast);
 //	uriFreeUriMembersA(&uri);
 
-#ifdef OFXURL
-	if(scheme == "http" || scheme == "https"){
-		return ofLoadImage(pix, ofLoadURL(ofPathToString(_fileName)).data);
-
-	}
-#endif
+//#ifdef OFXURL
+//	if(scheme == "http" || scheme == "https"){
+//		return ofLoadImage(pix, ofLoadURL(ofPathToString(_fileName)).data);
+//
+//	}
+//#endif
 
 	//-----------------------------
 
