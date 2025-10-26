@@ -302,15 +302,13 @@ static bool loadImage(ofPixels_<PixelType> & pix, const of::filesystem::path & _
 			 }
 		 }
 		 return true;
-		 
 	 } catch (const std::exception& e) {
 		 ofLogError("ofImage") << "loadImage(): Exception loading \"" << _fileName << "\": " << e.what();
-		 return false;
 	 } catch (...) {
 		 ofLogError("ofImage") << "loadImage(): Unknown exception loading \"" << _fileName << "\"";
-		 return false;
 	 }
-	
+	return false;
+
 //
 ////	ofInitFreeImage();
 //	
@@ -323,21 +321,7 @@ static bool loadImage(ofPixels_<PixelType> & pix, const of::filesystem::path & _
 //#endif
 //	}
 //
-//	
-//	ImageDecodeOptions options;
-//	options.simd = true;
-//	options.multithread = true;
-//	Bitmap bitmap(ofToDataPath(_fileName), options);
-//
-//	if (!decoder.isValid()) {
-//		ofLogError("ofImage") << "Mango: could not open " << _fileName;
-//		return false;
-//	}
-//
-//	// Copy the data
-//	memcpy(pix.getData(), bitmap.image, bitmap.width * bitmap.height * 4);
-//
-//	return true;
+
 
 	//	cout << bitmap.width << endl;
 //	auto uriStr = ofPathToString(_fileName);
@@ -388,36 +372,9 @@ template<typename PixelType>
 static bool loadImage(ofPixels_<PixelType> & pix,
 					  const ofBuffer & buffer,
 					  const ofImageLoadSettings &settings) {
-//		try {
-//			// 1. Let Mango parse the memory blob
-//			mango::ConstMemory mem(
-//				reinterpret_cast<const uint8_t*>(buffer.getData()),
-//				buffer.size());
-//			
-//			ImageDecoder decoder(mem);
-//			return decoder.isValid();
-//			
-//			
-//			
-//			ImageDecoder decoder(mem);
-//
-//			Bitmap bmp(mango::Format(32, mango::Format::UNORM,
-//											mango::Format::BGRA, 8, 8, 8, 8));
-//			decoder.decode(bmp);
-//
-//			// 3. Copy to ofPixels (greyscale example)
-//			const int w = static_cast<int>(bmp.width());
-//			const int h = static_cast<int>(bmp.height());
-//			pix.allocate(w, h, OF_IMAGE_GRAYSCALE);
-//			std::memcpy(pix.getData(), bmp.address(0, 0), w * h);
-//			return true;
-//		}
-//		catch (const std::exception& e)
-//		{
-//			ofLogError("ofImage") << "loadImage(): Mango exception: " << e.what();
-//			return false;
-//		}
-//	}
+	// FIXME: Implement this.
+	return false;
+
 	
 //	ofInitFreeImage();
 //	bool bLoaded = false;
@@ -760,6 +717,9 @@ bool ofSaveImage(const ofShortPixels & pix, const of::filesystem::path& fileName
 //----------------------------------------------------------------
 template<typename PixelType>
 static bool saveImage(const ofPixels_<PixelType> & _pix, ofBuffer & buffer, ofImageFormat format, ofImageQualityType qualityLevel) {
+	
+	// FIXME: Implement this
+	return false;
 	// thanks to alvaro casinelli for the implementation
 
 //	ofInitFreeImage();
