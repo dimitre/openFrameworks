@@ -144,7 +144,8 @@ elif [[ "$(uname -s)" == "Linux" ]]; then # UBUNTU
 		gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav
 	fi
 	# Fixme. Brotli will have to be re-added when issues are fixed # brotli
-	CORELIBS=( mango yaml-cpp kissfft libtiff libjpeg FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib-ng  )
+	# libtiff libjpeg FreeImage pixman
+	CORELIBS=( mango yaml-cpp kissfft freetype glew glfw glm json libpng pugixml rtAudio tess2 uriparser utfcpp zlib-ng  )
 
 	ADDONLIBS=(	assimp libusb opencv )
 	LIBADDONS=(
