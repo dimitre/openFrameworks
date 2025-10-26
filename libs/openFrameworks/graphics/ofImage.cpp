@@ -15,9 +15,9 @@
 
 //#include <FreeImage.h>
 
-#include <mango/mango.hpp>
+//#include <mango/mango.hpp>
 //#include <mango/opengl/opengl.hpp>
-#include <mango/core/memory.hpp>   // ConstMemory lives here
+//#include <mango/core/memory.hpp>   // ConstMemory lives here
 #include <mango/image/image.hpp>   // ImageDecoder etc.
 
 
