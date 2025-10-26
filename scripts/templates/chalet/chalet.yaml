@@ -218,7 +218,9 @@ abstracts:*:
       - ${var:ofPath}/libs/${var:platform}/lib/libmango.a
       - ${var:ofPath}/libs/${var:platform}/lib/libbz2_static.a
       - ${var:ofPath}/libs/${var:platform}/lib/libdeflate.a
-      - ${var:ofPath}/libs/${var:platform}/lib/liblcms2.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/liblcms2.a
+      # FIXME: try to solve this on meson and not here. ok for now
+      - ${var:ofPath}/libs/${var:platform}/lib/x86_64-linux-gnu/liblcms2.a
       - ${var:ofPath}/libs/${var:platform}/lib/liblz4.a
       - ${var:ofPath}/libs/${var:platform}/lib/libzstd.a
 
