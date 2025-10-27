@@ -57,7 +57,8 @@ done
 # VS - Visual Studio
 if [[ "$OSTYPE" == "msys"* ]]; then
     PLATFORM=vs
-   	CORELIBS=( mango libjpeg libtiff videoInput yaml-cpp brotli FreeImage freetype glew glfw glm json libpng pixman pugixml rtAudio tess2 uriparser utfcpp zlib-ng )
+    #libjpeg libtiff FreeImage pixman
+   	CORELIBS=( mango videoInput yaml-cpp brotli freetype brotli glew glfw glm json libpng pugixml rtAudio tess2 uriparser utfcpp zlib-ng )
 	# FIXME: TODO: add svgtiny to ofLibs and here
 	# TODO: curl, openssl
 	ADDONLIBS=( assimp cairo libusb opencv )
@@ -66,7 +67,7 @@ if [[ "$OSTYPE" == "msys"* ]]; then
 	LIBADDONS=(
 		# "assimp:ofxAssimpModelLoader"
 		"assimp:ofxAssimp"
-		"cairo:ofxCairo"
+		# "cairo:ofxCairo"
 		"libusb:ofxKinect"
 		"opencv:ofxOpenCv"
 	)
