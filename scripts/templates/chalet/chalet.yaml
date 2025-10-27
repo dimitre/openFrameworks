@@ -301,7 +301,7 @@ targets:
   empty:
     kind: executable
     runWorkingDirectory: ${cwd}/bin
-    copyFilesOnRun: bin/data
+    # copyFilesOnRun: bin/data
     # externalConfiguration: ${var:ofPath}/libs/openFrameworksCompiled/project/chalet/configuration.yaml
 
     settings:Cxx:

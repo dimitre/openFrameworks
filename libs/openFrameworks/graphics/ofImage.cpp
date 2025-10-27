@@ -118,12 +118,12 @@ void ofInitFreeImage(bool deinit=false){
 //	if(sizeof(PixelType)==1 &&
 //		(FreeImage_GetColorType(bmp) == FIC_PALETTE || FreeImage_GetBPP(bmp) < 8
 //		||  imgType!=FIT_BITMAP)) {
-//		
+//
 //		bool bDownsampling = false;
 //		if( (int)imgType > (int)FIT_BITMAP && FreeImage_GetBPP(bmp) > 8 ) {
 //			bDownsampling = true;
 //		}
-//		
+//
 //		if(imgType == FIT_UINT16) {
 //			ofLogVerbose("ofImage :: putBmpIntoPixels : downsampling grayscale image to 8 bits");
 //			bmpConverted = FreeImage_ConvertTo8Bits(bmp);
@@ -180,7 +180,7 @@ void ofInitFreeImage(bool deinit=false){
 //            if(channels==4) pixFormat=OF_PIXELS_RGBA;
 //        }
 //    }
-//    
+//
 //	// ofPixels are top left, FIBITMAP is bottom left
 //	FreeImage_FlipVertical(bmp);
 //
@@ -214,7 +214,7 @@ template<typename PixelType>
 static mango::image::Format getMangoFormat(const ofPixels_<PixelType> & pix) {
 	int numChannels = pix.getNumChannels();
 	int bitsPerChannel = sizeof(PixelType) * 8;
-	
+
 	// Determine format based on number of channels
 	mango::image::Format::Type type;
 	if (std::is_floating_point<PixelType>::value) {
@@ -224,7 +224,7 @@ static mango::image::Format getMangoFormat(const ofPixels_<PixelType> & pix) {
 	} else {
 		type = mango::image::Format::SNORM;
 	}
-	
+
 	// Create format based on channel count
 	switch(numChannels) {
 		case 1:
@@ -244,7 +244,7 @@ static mango::image::Format getMangoFormat(const ofPixels_<PixelType> & pix) {
 
 template<typename PixelType>
 static bool loadImage(ofPixels_<PixelType> & pix, const of::filesystem::path & _fileName, const ofImageLoadSettings & settings){
-	
+
 	fs::path fileImage { ofToDataPath(_fileName) };
 	if (!fs::exists(fileImage)) {
 		ofLogError("loadImage") << "File not found: " << _fileName;
@@ -257,35 +257,31 @@ static bool loadImage(ofPixels_<PixelType> & pix, const of::filesystem::path & _
 	}
 
 	try {
-		 // Determine desired number of channels from settings (if available)
-		 // Default to 0 which means auto-detect from image
-		 int requestedChannels = 0;
-		 
 		 // Check if settings specify a particular format
 		 // You may need to adjust this based on your ofImageLoadSettings structure
 		 // For now, we'll auto-detect from the image
-		 
+
 		 // Load image with default format first to get dimensions and format info
 		mango::image::Bitmap bitmap(fileImage.string());
-		 
+
 		 if (!bitmap.width || !bitmap.height) {
 			 ofLogError("ofImage") << "loadImage(): Failed to load image from " << _fileName;
 			 return false;
 		 }
-		 
+
 		 // Calculate number of channels from the loaded bitmap
 		 int numChannels = bitmap.format.bits / (sizeof(PixelType) * 8);
-		 
+
 		 // Clamp to valid range
 		 if (numChannels < 1) numChannels = 1;
 		 if (numChannels > 4) numChannels = 4;
-		 
+
 		 // Allocate ofPixels with detected dimensions and channels
 		 pix.allocate(bitmap.width, bitmap.height, numChannels);
-		 
+
 		 // Copy pixel data
 		 const size_t bytesPerRow = bitmap.width * numChannels * sizeof(PixelType);
-		 
+
 		 if (bitmap.stride == bytesPerRow) {
 			 // Direct memory copy if stride matches
 			 const size_t totalBytes = bitmap.height * bytesPerRow;
@@ -294,7 +290,7 @@ static bool loadImage(ofPixels_<PixelType> & pix, const of::filesystem::path & _
 			 // Row-by-row copy if stride differs
 			 PixelType* dstPtr = pix.getData();
 			 const uint8_t* srcPtr = static_cast<const uint8_t*>(bitmap.image);
-			 
+
 			 for (int y = 0; y < bitmap.height; ++y) {
 				 std::memcpy(dstPtr, srcPtr, bytesPerRow);
 				 dstPtr += bitmap.width * numChannels;
@@ -311,7 +307,7 @@ static bool loadImage(ofPixels_<PixelType> & pix, const of::filesystem::path & _
 
 //
 ////	ofInitFreeImage();
-//	
+//
 //
 //	auto filenameString = _fileName.string();
 //	if (filenameString.rfind("http", 0) == 0) { // pos=0 limits the search to the prefix
@@ -375,7 +371,7 @@ static bool loadImage(ofPixels_<PixelType> & pix,
 	// FIXME: Implement this.
 	return false;
 
-	
+
 //	ofInitFreeImage();
 //	bool bLoaded = false;
 //	FIBITMAP* bmp = nullptr;
@@ -513,38 +509,38 @@ static bool saveImage(const ofPixels_<PixelType> & _pix, const of::filesystem::p
 	try {
 		auto fileImage { ofToDataPath(_fileName) };
 		cout << "saveImage xxx " << _fileName << endl;
-		
+
 		 std::string filename = fileImage.string();
-		 
+
 		 // Get pixel data info
 		 int width = _pix.getWidth();
 		 int height = _pix.getHeight();
 		 int numChannels = _pix.getNumChannels();
-		 
+
 		 if (width == 0 || height == 0) {
 			 ofLogError("ofImage") << "saveImage(): Invalid image dimensions";
 			 return false;
 		 }
-		 
+
 		 // Create Mango format from ofPixels
 		 mango::image::Format format = getMangoFormat(_pix);
-		 
+
 		 // Calculate stride (bytes per row)
 		 size_t stride = width * numChannels * sizeof(PixelType);
-		 
+
 		 // Create a Surface wrapping the ofPixels data
 		 mango::image::Surface surface(width, height, format, stride, const_cast<PixelType*>(_pix.getData()));
-		 
+
 		 // Determine file extension to choose encoder
 		 std::string ext = _fileName.extension().string();
 		 std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-		 
+
 		 // Prepare encoding options
 		 mango::image::ImageEncodeOptions options;
-		 
+
 		 // Set quality based on ofImageQualityType
 		 float quality = 0.85f; // default
-		 
+
 		 switch(qualityLevel) {
 			 case OF_IMAGE_QUALITY_BEST:
 				 quality = 1.0f;
@@ -562,31 +558,31 @@ static bool saveImage(const ofPixels_<PixelType> & _pix, const of::filesystem::p
 				 quality = 0.25f;
 				 break;
 		 }
-		 
+
 		 options.quality = quality;
-		 
+
 		 // Get the image encoder for the file format
 		 std::string extension = ext.substr(1); // remove the dot
 		 mango::image::ImageEncoder encoder(extension);
-		 
+
 		 if (!encoder.isEncoder()) {
 			 ofLogError("ofImage") << "saveImage(): No encoder found for format \"" << extension << "\"";
 			 return false;
 		 }
-		 
+
 		 // Create a file output stream
 		 mango::filesystem::OutputFileStream fileStream(filename);
-		 
+
 		 // Encode the image to the stream
 		 mango::image::ImageEncodeStatus status = encoder.encode(fileStream, surface, options);
-		 
+
 		 if (!status.success) {
 			 ofLogError("ofImage") << "saveImage(): Failed to encode image: " << status.info;
 			 return false;
 		 }
-		 
+
 		 return true;
-		 
+
 	 } catch (const std::exception& e) {
 		 ofLogError("ofImage") << "saveImage(): Exception saving \"" << _fileName << "\": " << e.what();
 		 return false;
@@ -602,7 +598,7 @@ static bool saveImage(const ofPixels_<PixelType> & _pix, const of::filesystem::p
 //
 //	// MARK: test
 ////	ofFilePath::createEnclosingDirectory(_fileName);
-//	
+//
 //	auto fileName = ofToDataPath(_fileName);
 //	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
 //#ifdef OF_OS_WINDOWS
@@ -717,7 +713,7 @@ bool ofSaveImage(const ofShortPixels & pix, const of::filesystem::path& fileName
 //----------------------------------------------------------------
 template<typename PixelType>
 static bool saveImage(const ofPixels_<PixelType> & _pix, ofBuffer & buffer, ofImageFormat format, ofImageQualityType qualityLevel) {
-	
+
 	// FIXME: Implement this
 	return false;
 	// thanks to alvaro casinelli for the implementation
@@ -1446,7 +1442,7 @@ void ofImage_<PixelType>::changeTypeOfPixels(ofPixels_<PixelType> &pix, ofImageT
 //	}
 //
 //    putBmpIntoPixels(convertedBmp, pix, false);
-//    
+//
 //    // if we started with BGRA or BGR pixels make sure we end up with similar
 //    if( pix.getNumChannels() >= 3 && ( oldPixFormat == OF_PIXELS_BGR || oldPixFormat == OF_PIXELS_BGRA ) ){
 //        ofPixelFormat fixedFormat = pix.getPixelFormat();

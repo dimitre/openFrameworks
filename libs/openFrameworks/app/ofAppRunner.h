@@ -118,7 +118,7 @@ private:
 
 public:
 	ofCoreInternal() {
-		// FIXME: Remove
+// FIXME: Remove
 //		cout << ">>> REMOVE : ofCoreInternal initialization " << this << endl;
 	};
 	~ofCoreInternal() {};
@@ -140,7 +140,6 @@ public:
 			char buff[FILENAME_MAX];
 			ssize_t size = readlink("/proc/self/exe", buff, sizeof(buff) - 1);
 			if (size == -1){
-//				ofLogError("ofFilePath") << "getCurrentExePath(): readlink failed with error " << errno;
 				std::cerr << "getAppPath(): readlink failed with error " << errno;
 			}
 			else{
@@ -152,7 +151,6 @@ public:
 			uint32_t size = sizeof(path);
 			if(_NSGetExecutablePath(path, &size) != 0){
 				std::cerr << "getAppPath(): path buffer too small, need size " <<  size;
-//				ofLogError("ofFilePath") << "getCurrentExePath(): path buffer too small, need size " <<  size;
 			} else {
 				return path;
 			}
@@ -163,46 +161,15 @@ public:
 											 static_cast<DWORD>(buf.size()));
 			buf.resize(len);
 			return fs::path(std::move(buf));
-
-		//			vector<char> executablePath(MAX_PATH);
-//			char executablePath[FILENAME_MAX];
-//
-//			DWORD result = ::GetModuleFileNameA(nullptr, &executablePath[0], static_cast<DWORD>(executablePath.size()));
-//			if (result == 0) {
-////				ofLogError("ofFilePath") << "getCurrentExePath(): couldn't get path, GetModuleFileNameA failed";
-//				std::cerr << "getAppPath(): couldn't get path, GetModuleFileNameA failed";
-//			} else {
-//				return (executablePath.begin(), executablePath.begin() + result);
-//			}
 		#endif
 		return {};
 	}
 	
-	//--------------------------------------------------
-//	fs::path defaultDataPath(){
-//#if defined TARGET_OSX
-//		try {
-//			return fs::canonical(getAppPath() / "../../../../data/");
-//		} catch(...) {
-//			return getAppPath() / "../../../../data/";
-//		}
-//#elif defined TARGET_ANDROID
-//		return { "sdcard/" };
-//#else
-//		try {
-//			return fs::canonical(getAppPath() / "data/").make_preferred();
-//		} catch(...) {
-//			return (getAppPath() / "data/");
-//		}
-//#endif
-//	}
-
 	fs::path appPath; // exePath
-//	bool isMacOSBundle = false;
 	fs::path appFolder; // exeDir
 	std::string appName;
-//	fs::path dataFolder; // defaultDataPath
-	
+
+	//	fs::path dataFolder; // defaultDataPath
 	fs::path dataPath;
 	fs::path defaultWorkingDirectory;
 	bool enableDataPath = true;
@@ -226,7 +193,6 @@ public:
 		appName = appPath.stem().string();
 //		cout << "ofCore init appPath = " << appPath << endl;
 		appFolder = appPath.parent_path();
-		
 
 #if defined(TARGET_OSX)
 		bool isMacOSBundle = isInsideAppBundle(appPath);
@@ -237,33 +203,21 @@ public:
 //			cout << "NO isMacOSBundle " << endl;
 		}
 #endif
+		
+		// Detect if it is build by Chalet (
+		if (appFolder.parent_path().stem() == "build") {
+			std::string appFolderNameString { appFolder.stem().string() };
+			if (std::count(appFolderNameString.begin(), appFolderNameString.end(),
+						   '-') == 2) {
+				appFolder = appFolder.parent_path().parent_path() / "bin" ;
+//				cout << "DATA " << fs::absolute(appFolder) << endl;
+			}
+		}
+
 		dataPath = appFolder / "data";
 
-//		cout << "ofCore appPath " << appPath << endl;
-//		cout << "ofCore appName " << appName << endl;
-//		cout << "ofCore appFolder " << appFolder << endl;
-//		cout << "ofCore dataPath " << dataPath << endl;
-
-		// Not anymore
-//		fs::current_path(dataPath);
-//		cout << "ofCore changing CWD to dataPath " << dataPath << endl;
-		
-//		cout << "ofCore fs::current_path() " << fs::current_path() << endl;
-//		cout << "ofCore dataFolder " << dataFolder << endl;
-
-		
-		
 		defaultWorkingDirectory = fs::absolute(fs::current_path());
-		
-		
-		// FIXME: REMOVE
-		//		dataPath = defaultDataPath();
-//		cout << "ofCore appName = " << appName << endl;
-//		cout << "ofCore current path " << fs::current_path() << endl;
-//		cout << "ofCore defaultWorkingDirectory " << defaultWorkingDirectory << endl;
-//		cout << "ofCore dataPath " << dataPath << endl;
 	}
-
 
 	std::shared_ptr<ofAppBaseWindow> getCurrentWindow(){
 //		if (mainLoop) //mainLoop is always present. is it?
@@ -278,11 +232,6 @@ public:
 
 	void exit() {
 		if(!initialized) return;
-
-		// controlled destruction of the mainLoop before
-		// any other deinitialization
-		// mainLoop.exit();
-//		mainLoop.exit();
 		initialized = false;
 		exiting = true;
 
@@ -290,13 +239,10 @@ public:
 		for (const auto & func : shutdownFunctions) {
 			func();
 		}
-
 	}
 };
 
 extern ofCoreInternal ofCore;
-
-
 
 
 
