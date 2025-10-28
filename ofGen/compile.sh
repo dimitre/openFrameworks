@@ -50,12 +50,20 @@ section "Compiling ofgen"
 mkdir -p build
 cd build
 
-cmake .. \
-    -G Ninja \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DYAMLCPP_ROOT=../../libs/${PLATFORM} \
-    -DPUGIXML_ROOT=../../libs/${PLATFORM} \
-    -DNLOHMANN_JSON_ROOT=../../libs/${PLATFORM}
+run_cmake() {
+    cmake .. \
+        -G Ninja \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DYAMLCPP_ROOT=../../libs/${PLATFORM} \
+        -DPUGIXML_ROOT=../../libs/${PLATFORM} \
+        -DNLOHMANN_JSON_ROOT=../../libs/${PLATFORM}
+}
+
+if ! run_cmake; then
+    echo "CMake failed, cleaning build directory and retrying..."
+    rm -rf build
+    run_cmake
+fi
 
 cmake --build . --config Release
 
