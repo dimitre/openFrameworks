@@ -200,6 +200,8 @@ checkLib() {
             if [[ "${PLATFORM}" == "macos" ]]; then
                 echo "$lib not found, installing via brew"
                 executa brew install "$lib"
+            else if [[ "${PLATFORM}" == "vs" ]]; then
+                echo "$lib will not be installed, vs platform"
             else
                 echo "$lib not found, installing via apt"
                 executa ${SUDO_CMD} apt-get install -y "$lib"
