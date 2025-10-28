@@ -6,6 +6,6 @@ set -e
 cd ofGen
 ./compile.sh
 cd ../examples/demos/flechilhas
-ofgen buildrun
+ofgen templates=chalet buildrun
 
 cd ../../..
