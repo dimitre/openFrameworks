@@ -208,7 +208,6 @@ abstracts:*:
 
     staticLinks[:linux]:
       #libpng, libbrotlienc, libjpeg libbrotlicommon,libbrotlidec
-      # - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
 
       # - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
       # - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
@@ -216,6 +215,7 @@ abstracts:*:
       # - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
       # - ${var:ofPath}/libs/${var:platform}/lib/libjpeg.a
 
+      - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
       - ${var:ofPath}/libs/${var:platform}/lib/libfmt.a
       - ${var:ofPath}/libs/${var:platform}/lib/libmango.a
       - ${var:ofPath}/libs/${var:platform}/lib/libbz2_static.a
