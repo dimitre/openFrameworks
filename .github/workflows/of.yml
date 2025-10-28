@@ -102,26 +102,29 @@ jobs:
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
           packages: >
-            libglfw3-dev
-            wget2 libyaml-cpp-dev nlohmann-json3-dev libpugixml-dev
-            make libcairo2-dev libgtk2.0-dev libgtk2.0-0
-            libssl3 libssl-dev libcurl4 libcurl4-openssl-dev
+            wget2
             libjack-jackd2-0 libjack-jackd2-dev libasound2-dev
             freeglut3-dev libxmu-dev libxxf86vm-dev libopenal-dev libsndfile1-dev libpulse-dev
-            libgl1-mesa-dev libraw1394-dev libudev-dev libdrm-dev
+            libgl1-mesa-dev libudev-dev libdrm-dev
             libxcursor-dev libxi-dev libxinerama-dev
             libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-pulseaudio
             gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa
             gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav
+          # libglfw3-dev
+          # libyaml-cpp-dev nlohmann-json3-dev libpugixml-dev
+          # make libcairo2-dev libgtk2.0-dev libgtk2.0-0
+          # libssl3 libssl-dev libcurl4 libcurl4-openssl-dev
           version: 1.0
 
       - name: Cache Packages - macOS Brew
         if: runner.os == 'macOS'
         uses: tecolicom/actions-use-homebrew-tools@v1.3
         with:
-          tools: wget2 yaml-cpp fmt nlohmann-json pugixml # fmt ccache
+          tools: wget2
+        # yaml-cpp fmt nlohmann-json pugixml # fmt ccache
 
       - name: Install Chalet
+        if: matrix.platform == 'vs'
         uses: jaxxstorm/action-install-gh-release@v2.1.0
         with:
           repo: chalet-org/chalet
@@ -130,6 +133,7 @@ jobs:
           prerelease: "false"
 
       - name: Chalet Test / Version
+        if: matrix.platform == 'vs'
         run: |
           chalet --version
       # - name: ofgen CMAKE cache
