@@ -81,7 +81,7 @@ abstracts:*:
       - /usr/include/{freetype2,libpng16}
 
       # - /usr/include/cairo
-      - /usr/include/pango-1.0
+      # - /usr/include/pango-1.0
       - /usr/include/harfbuzz
 
       - /usr/include/glib-2.0 # included by gstreamer-1.0
@@ -108,7 +108,7 @@ abstracts:*:
       - QuartzCore
 
     links[:linux]:
-      - glfw
+      # - glfw
       - Xrandr
       - Xxf86vm
       - Xi
@@ -147,10 +147,10 @@ abstracts:*:
       # - gobject-2.0
       # - gio-2.0
 
-      - cairo
-      - pangocairo-1.0
-      - pangoft2-1.0
-      - pango-1.0
+      # - cairo
+      # - pangocairo-1.0
+      # - pangoft2-1.0
+      # - pango-1.0
 
       - udev # ofxkinect only
       - ssl
