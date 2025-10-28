@@ -80,7 +80,7 @@ abstracts:*:
       # not sure if needed
       - /usr/include/{freetype2,libpng16}
 
-      - /usr/include/cairo
+      # - /usr/include/cairo
       - /usr/include/pango-1.0
       - /usr/include/harfbuzz
 
