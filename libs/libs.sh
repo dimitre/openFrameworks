@@ -5,7 +5,8 @@ set -eu
 VERSION=v0.12.3
 OF_FOLDER=..
 
-wipeDownloads=true
+# wipeDownloads=true
+wipeDownloads=false
 wipeAddonLibs=true
 wipeLibs=true
 
@@ -30,6 +31,12 @@ executa() {
     printf "✅ ${COLOR2}%s${NC}\n" "$*"
     "$@"
 }
+
+alert() {
+	printf "⚠️ ${COLOR2}%s${NC}\n" "$*"
+}
+
+sectionOK "OpenFrameworks install ofLibs"
 
 # Determine if we need sudo
 if command -v sudo &> /dev/null; then
@@ -94,61 +101,71 @@ else
         echo "Unsupported OS: $OSTYPE"
         exit 1
     fi
-    section "Detected platform: $PLATFORM"
+    section "Platform: $PLATFORM"
+
 fi
 
 # ============================================
 # Platform-Specific Configuration
 # ============================================
+
+ADDONLIBS=( assimp opencv libusb )
+LIBADDONS=(
+    "assimp:ofxAssimp"
+    "libusb:ofxKinect"
+    "opencv:ofxOpenCv"
+)
+
+    # msys2)
+    #     CORELIBS=( tess2 kissfft videoInput )
+
+    #     # Install MSYS2 packages
+    #     PACMANLIBS="toolchain openssl python assimp cairo curl freeglut FreeImage glew glfw glm libsndfile libusb libxml2 mpg123 nlohmann-json openal opencv pugixml rtaudio uriparser utf8cpp"
+    #     PACMANPARAMS="pacman -Syyuw --noconfirm"
+    #     for LIBNAME in ${PACMANLIBS}; do
+    #         PACMANPARAMS+=" mingw-w64-x86_64-${LIBNAME}"
+    #     done
+    #     # executa ${PACMANPARAMS}
+    #     ;;
+
+CORELIBS=( mango yaml-cpp brotli freetype glew glfw glm json libpng pugixml rtAudio tess2 uriparser utfcpp zlib-ng )
+
+
 case "$PLATFORM" in
     vs)
-        CORELIBS=( mango videoInput yaml-cpp brotli freetype glew glfw glm json libpng pugixml rtAudio tess2 uriparser utfcpp zlib-ng )
-        ADDONLIBS=( assimp cairo libusb opencv )
-        LIBADDONS=(
-            "assimp:ofxAssimp"
-            "libusb:ofxKinect"
-            "opencv:ofxOpenCv"
-        )
-        ;;
+    	CORELIBS+=( videoInput )
 
-    msys2)
-        CORELIBS=( tess2 kissfft videoInput )
-        ADDONLIBS=()
-        LIBADDONS=()
-
-        # Install MSYS2 packages
-        PACMANLIBS="toolchain openssl python assimp cairo curl freeglut FreeImage glew glfw glm libsndfile libusb libxml2 mpg123 nlohmann-json openal opencv pugixml rtaudio uriparser utf8cpp"
-        PACMANPARAMS="pacman -Syyuw --noconfirm"
-        for LIBNAME in ${PACMANLIBS}; do
-            PACMANPARAMS+=" mingw-w64-x86_64-${LIBNAME}"
-        done
-        # executa ${PACMANPARAMS}
         ;;
 
     macos)
-        CORELIBS=( libpng fmt mango yaml-cpp brotli freetype glew glfw glm json pugixml rtAudio tess2 uriparser utfcpp zlib-ng )
-        ADDONLIBS=( assimp opencv libusb )
-        LIBADDONS=(
-            "assimp:ofxAssimp"
-            "libusb:ofxKinect"
-            "opencv:ofxOpenCv"
-        )
+    	if command -v brew &> /dev/null; then
+     		if ! command -v wget2 &> /dev/null; then
+       			# section "no wget2"
+       			brew install wget2
+
+      		else
+       			section "wget2 already installed"
+      		fi
+      		if ! command -v cmake &> /dev/null; then
+     			brew install cmake
+        	else
+      			section "cmake already installed"
+       		fi
+       	else
+        	alert "Brew not installed, won't install wget2"
+       	fi
+
         ;;
 
     linux64|rpi-aarch64|rpi-armv6l)
-        CORELIBS=( mango yaml-cpp kissfft freetype glew glfw glm json libpng pugixml rtAudio tess2 uriparser utfcpp zlib-ng )
-        ADDONLIBS=( assimp libusb opencv )
-        LIBADDONS=(
-            "assimp:ofxAssimp"
-            "libusb:ofxKinect"
-            "opencv:ofxOpenCv"
-        )
+
+   		CORELIBS+=( kissfft )
 
         # Install system dependencies (skip in CI)
         if [[ -z "${CI:-}" ]]; then
             section "Installing system dependencies"
             ${SUDO_CMD} apt-get -y install \
-            	wget2 \
+            	wget2 cmake \
                 libfontconfig1-dev \
                 libxrandr-dev \
                 freeglut3-dev libxmu-dev libxxf86vm-dev libgl1-mesa-dev libudev-dev \
@@ -171,9 +188,8 @@ esac
 # Build combined library list
 ALLLIBS=("${CORELIBS[@]}" "${ADDONLIBS[@]}")
 
-section "Platform: $PLATFORM"
-section "Core libs: ${#CORELIBS[@]}"
-section "Addon libs: ${#ADDONLIBS[@]}"
+# section "Core libs: ${#CORELIBS[@]}"
+# section "Addon libs: ${#ADDONLIBS[@]}"
 
 # ============================================
 # Setup Directories
@@ -197,24 +213,24 @@ mkdir -p "${DOWNLOAD}"
 # ============================================
 # Helper Functions
 # ============================================
-checkLib() {
-    for lib in "$@"; do
-        section "Check $lib"
-        if ! command -v "$lib" &>/dev/null; then
-            if [[ "${PLATFORM}" == "macos" ]]; then
-                echo "$lib not found, installing via brew"
-                executa brew install "$lib"
-            elif [[ "${PLATFORM}" == "vs" ]]; then
-                echo "$lib will not be installed, vs platform"
-            else
-                echo "$lib not found, installing via apt"
-                executa ${SUDO_CMD} apt-get install -y "$lib"
-            fi
-        else
-            echo "$lib ok"
-        fi
-    done
-}
+# checkLib() {
+#     for lib in "$@"; do
+#         section "Check $lib"
+#         if ! command -v "$lib" &>/dev/null; then
+#             if [[ "${PLATFORM}" == "macos" ]]; then
+#                 echo "$lib not found, installing via brew"
+#                 executa brew install "$lib"
+#             elif [[ "${PLATFORM}" == "vs" ]]; then
+#                 echo "$lib will not be installed, vs platform"
+#             else
+#                 echo "$lib not found, installing via apt"
+#                 executa ${SUDO_CMD} apt-get install -y "$lib"
+#             fi
+#         else
+#             echo "$lib ok"
+#         fi
+#     done
+# }
 
 getlink() {
     if command -v wget2 &>/dev/null; then
@@ -224,12 +240,16 @@ getlink() {
             PARAMS+=" https://github.com/dimitre/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
         done
         section "Downloading with wget2 (parallel downloads)"
-        wget2 --clobber=off ${PARAMS} -P "${DOWNLOAD}"
+        #--clobber=off (skips download if file exists at all)
+        wget2 -N --no-verbose --progress=bar:force ${PARAMS} -P "${DOWNLOAD}"
+
     else
         # Fallback to curl - sequential downloads
         section "Downloading with curl (sequential)"
         for LIBNAME in "${ALLLIBS[@]}"; do
-            executa curl -L -o "${DOWNLOAD}/ofLibs_${LIBNAME}_${PLATFORM}.zip" "https://github.com/dimitre/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
+         	local filepath="${DOWNLOAD}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
+            executa curl -L -z "${filepath}" -o "${filepath}" \
+            "https://github.com/dimitre/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
         done
     fi
 }
@@ -261,9 +281,8 @@ unzipAddons() {
 # ============================================
 # Main Execution
 # ============================================
-sectionOK "OpenFrameworks install ofLibs"
 
-checkLib wget2
+# checkLib wget2
 executa mkdir -p "${DOWNLOAD}"
 getlink
 unzipCore
