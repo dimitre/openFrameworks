@@ -249,14 +249,15 @@ jobs:
       - name: Empty Example Chalet
         run: |
           cd examples/templates/emptyExample
-          ofgen templates=chalet
-          chalet build --show-commands
+          ofgen build
+          # chalet build --show-commands
 
       - name: All Addons Example Chalet
         run: |
           cd examples/templates/allAddonsExample
-          ofgen templates=chalet
-          chalet build --show-commands
+          ofgen build
+          # ofgen templates=chalet
+          # chalet build --show-commands
 
       # - name: All Addons Example
       #   if: runner.os != 'Windows'

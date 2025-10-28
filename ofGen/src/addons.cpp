@@ -385,10 +385,11 @@ bool buildProject() {
 
 		std::map<std::string, std::vector<std::string>> platformTemplates {
 			// { "vs", { "visualstudio" } },
-	        { "vs", { "chalet" } },
-			{ "macos", { "macos" } },
-			{ "msys2", { "make", "vscode" } },
-			{ "linux64", { "make", "vscode" } },
+	        { "vs", { "chalet", "zed" } },
+			{ "macos", { "macos", "chalet", "zed" } },
+			// { "msys2", { "make", "vscode" } },
+			// { "linux64", { "make", "vscode" } },
+           	{ "linux64", { "chalet", "zed" } },
 		};
 
 		std::string platform { getPlatformString() };
