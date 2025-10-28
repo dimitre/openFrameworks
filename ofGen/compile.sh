@@ -51,10 +51,11 @@ mkdir -p build
 cd build
 
 cmake .. \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DYAMLCPP_ROOT=../../libs/${PLATFORM} \
-  -DPUGIXML_ROOT=../../libs/${PLATFORM} \
-  -DNLOHMANN_JSON_ROOT=../../libs/${PLATFORM}
+    -G Ninja \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DYAMLCPP_ROOT=../../libs/${PLATFORM} \
+    -DPUGIXML_ROOT=../../libs/${PLATFORM} \
+    -DNLOHMANN_JSON_ROOT=../../libs/${PLATFORM}
 
 cmake --build . --config Release
 
