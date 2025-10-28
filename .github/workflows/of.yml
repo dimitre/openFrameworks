@@ -20,15 +20,8 @@ jobs:
         include:
           # ubuntu and macos completing good, so removed from here now.
           - { os: ubuntu-latest, platform: linux64, shell: bash }
-          - { os: macos-latest, platform: macos, shell: bash }
-          - { os: windows-latest, platform: vs, shell: powershell }
-
-          # - { os: windows-latest, platform: vs, shell: bash }
-          # - {
-          #     os: windows-latest,
-          #     platform: msys2,
-          #     shell: msys2 -c 'export PATH=$PATH:/c/hostedtoolcache/windows/chalet-org/chalet/latest/windows-x64',
-          #   }
+          # - { os: macos-latest, platform: macos, shell: bash }
+          # - { os: windows-latest, platform: vs, shell: powershell }
 
     runs-on: ${{ matrix.os }}
     defaults:
