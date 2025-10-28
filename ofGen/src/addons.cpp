@@ -411,6 +411,11 @@ bool buildProject() {
 		return false;
 	} else {
 		alert("of path OK, proceeding");
+
+		if (!fs::exists("bin")) {
+		    alert("bin folder not found, creating");
+		    fs::create_directory("bin");
+		}
 	}
 
 	// scanFolder()
