@@ -31,6 +31,13 @@ executa() {
     "$@"
 }
 
+# Determine if we need sudo
+if command -v sudo &> /dev/null; then
+  SUDO_CMD="sudo"
+else
+  SUDO_CMD=""
+fi
+
 # Parse command line arguments
 PLATFORM="${PLATFORM:-}"
 while [[ $# -gt 0 ]]; do
@@ -140,7 +147,7 @@ case "$PLATFORM" in
         # Install system dependencies (skip in CI)
         if [[ -z "${CI:-}" ]]; then
             section "Installing system dependencies"
-            sudo apt-get -y install make \
+            ${SUDO_CMD} apt-get -y install make \
                 libssl3 libcairo2-dev libssl-dev libcurl4 libcurl4-openssl-dev \
                 libasound2-dev libsndfile1-dev libopenal-dev \
                 freeglut3-dev libxmu-dev libxxf86vm-dev libgl1-mesa-dev libudev-dev \
@@ -195,7 +202,7 @@ checkLib() {
                 executa brew install "$lib"
             else
                 echo "$lib not found, installing via apt"
-                executa sudo apt-get install -y "$lib"
+                executa ${SUDO_CMD} apt-get install -y "$lib"
             fi
         else
             echo "$lib ok"
