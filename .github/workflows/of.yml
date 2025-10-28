@@ -20,8 +20,8 @@ jobs:
         include:
           # ubuntu and macos completing good, so removed from here now.
           - { os: ubuntu-latest, platform: linux64, shell: bash }
-          # - { os: macos-latest, platform: macos, shell: bash }
-          # - { os: windows-latest, platform: vs, shell: powershell }
+          - { os: macos-latest, platform: macos, shell: bash }
+          - { os: windows-latest, platform: vs, shell: powershell }
 
     runs-on: ${{ matrix.os }}
     defaults:
@@ -97,6 +97,7 @@ jobs:
           packages: >
             wget2
             libfontconfig1-dev
+            libxrandr-dev
             libjack-jackd2-0 libjack-jackd2-dev libasound2-dev
             freeglut3-dev libxmu-dev libxxf86vm-dev libopenal-dev libsndfile1-dev libpulse-dev
             libgl1-mesa-dev libudev-dev libdrm-dev
