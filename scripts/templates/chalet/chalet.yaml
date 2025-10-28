@@ -1,348 +1,349 @@
 name: OF
 version: "0.12.1"
 variables:
-    generator: manual
-    platform: macos
-    ofPath: ../../..
+  generator: manual
+  platform: macos
+  ofPath: ../../..
 
 abstracts:*:
-    # $embed("${var:ofPath}/libs/openFrameworksCompiled/project/chalet/of-common.yaml")
-    language: C++
-    language[toolchain:apple-llvm]: Objective-C++
-    settings:Cxx:
-        cppStandard: c++20
-        # compileOptions[:macos]:
-        # - -Wfatal-errors
-        # minimal extra pedantic strict strictPedantic
-        warningsPreset: minimal
-        # warnings: [fatal-errors]
-        # treatWarningsAsErrors: true
-        runtimeTypeInformation: true
-        threads: true
-        exceptions: true
-        defines:
-            - OF
-        defines[:debug]:
-            - DEBUG
+  # $embed("${var:ofPath}/libs/openFrameworksCompiled/project/chalet/of-common.yaml")
+  language: C++
+  language[toolchain:apple-llvm]: Objective-C++
+  settings:Cxx:
+    cppStandard: c++20
+    # compileOptions[:macos]:
+    # - -Wfatal-errors
+    # minimal extra pedantic strict strictPedantic
+    warningsPreset: minimal
+    # warnings: [fatal-errors]
+    # treatWarningsAsErrors: true
+    runtimeTypeInformation: true
+    threads: true
+    exceptions: true
+    defines:
+      - OF
+    defines[:debug]:
+      - DEBUG
 
-        linkerOptions[:linux]:
-            - -pthread
+    linkerOptions[:linux]:
+      - -pthread
 
-        # defines[:linux]:
-        # - OF_USING_GTK
-        # - OF_USING_STD_FS=1
+    # defines[:linux]:
+    # - OF_USING_GTK
+    # - OF_USING_STD_FS=1
 
-        # defines[:macos]: #[toolchain:apple-llvm]:
-        # - __MACOSX_CORE__ # only needed in ofxMidi
-        compileOptions[:macos]:
-            - -fobjc-arc
+    # defines[:macos]: #[toolchain:apple-llvm]:
+    # - __MACOSX_CORE__ # only needed in ofxMidi
+    compileOptions[:macos]:
+      - -fobjc-arc
 
-        defines[toolchain:msvc]:
-            - _CRT_SECURE_NO_WARNINGS
-            - NDEBUG
-            - _ASSERT_NO_CRT
-            - UNICODE
-            - _UNICODE
-            # - URI_STATIC
-            - URI_STATIC_BUILD
-            - FREEIMAGE_LIB
-            - JPEG_STATIC
-            - TIFF_STATIC
-            - ZLIB_CONST
-            # only for libfreenect, ofxKinect. if it works it can be moved there.
-            - strdup=_strdup
-            # FIXME: remove this from core, and put back here
-            # - GLEW_STATIC
+    defines[toolchain:msvc]:
+      - _CRT_SECURE_NO_WARNINGS
+      - NDEBUG
+      - _ASSERT_NO_CRT
+      - UNICODE
+      - _UNICODE
+      # - URI_STATIC
+      - URI_STATIC_BUILD
+      - FREEIMAGE_LIB
+      - JPEG_STATIC
+      - TIFF_STATIC
+      - ZLIB_CONST
+      # only for libfreenect, ofxKinect. if it works it can be moved there.
+      - strdup=_strdup
+      # FIXME: remove this from core, and put back here
+      # - GLEW_STATIC
 
-        linkerOptions[toolchain:msvc]:
-            - /NODEFAULTLIB:MSVCRT # Changed from libcmt
-            - /FORCE:MULTIPLE
+    linkerOptions[toolchain:msvc]:
+      - /NODEFAULTLIB:MSVCRT # Changed from libcmt
+      - /FORCE:MULTIPLE
 
-        staticRuntimeLibrary: true
-        compileOptions[toolchain:msvc]:
-            - /D_CRT_NO_VA_START_VALIDATION
-            - /MT
+    staticRuntimeLibrary: true
+    compileOptions[toolchain:msvc]:
+      - /D_CRT_NO_VA_START_VALIDATION
+      - /MT
 
-        includeDirs:
-            - ${var:ofPath}/libs/openFrameworks/**
-            - ${var:ofPath}/libs/{${var:platform}}/include
-            - ${var:ofPath}/libs/{${var:platform}}/include/**
+    includeDirs:
+      - ${var:ofPath}/libs/openFrameworks/**
+      - ${var:ofPath}/libs/{${var:platform}}/include
+      - ${var:ofPath}/libs/{${var:platform}}/include/**
 
-        compileOptions[:linux+architecture:x86_64]:
-            - -msse2
-            - -msse
-            - -mfpmath=sse
+    compileOptions[:linux+architecture:x86_64]:
+      - -msse2
+      - -msse
+      - -mfpmath=sse
 
-        includeDirs[:linux]:
-            - /usr/include/gstreamer-1.0
-            - /usr/include/x86_64-linux-gnu
+    includeDirs[:linux]:
+      - /usr/include/gstreamer-1.0
+      - /usr/include/x86_64-linux-gnu
 
-            # not sure if needed
-            # - /usr/include/{freetype2,libpng16}
+      # not sure if needed
+      # - /usr/include/{freetype2,libpng16}
 
-            # - /usr/include/cairo
-            # - /usr/include/pango-1.0
-            # - /usr/include/harfbuzz
+      # - /usr/include/cairo
+      # - /usr/include/pango-1.0
+      # - /usr/include/harfbuzz
 
-            - /usr/include/glib-2.0 # included by gstreamer-1.0
+      - /usr/include/glib-2.0 # included by gstreamer-1.0
 
-            # - /usr/include/{glib-2.0,libmount,blkid,fribidi,pixman-1,gdk-pixbuf-2.0,webp,graphene-1.0}
-            - /usr/lib/x86_64-linux-gnu/glib-2.0/include
+      # - /usr/include/{glib-2.0,libmount,blkid,fribidi,pixman-1,gdk-pixbuf-2.0,webp,graphene-1.0}
+      - /usr/lib/x86_64-linux-gnu/glib-2.0/include
 
-            # - /usr/include/gtk-2.0
-            # - /usr/lib/x86_64-linux-gnu/{gtk-2.0,glib-2.0}/include
-            # - /usr/include/atk-1.0
+      # - /usr/include/gtk-2.0
+      # - /usr/lib/x86_64-linux-gnu/{gtk-2.0,glib-2.0}/include
+      # - /usr/include/atk-1.0
 
-            # - /usr/include/gtk-4.0
-            # - /usr/lib/x86_64-linux-gnu/graphene-1.0/include
+      # - /usr/include/gtk-4.0
+      # - /usr/lib/x86_64-linux-gnu/graphene-1.0/include
 
-        appleFrameworks:
-            - Accelerate
-            - ApplicationServices
-            - AVFoundation
-            - IOKit
-            - Cocoa
-            - CoreAudio
-            - CoreMedia
-            - OpenGL
-            - QuartzCore
+    appleFrameworks:
+      - Accelerate
+      - ApplicationServices
+      - AVFoundation
+      - IOKit
+      - Cocoa
+      - CoreAudio
+      - CoreMedia
+      - OpenGL
+      - QuartzCore
 
-        links[:linux]:
-            # - glfw
-            - Xrandr
-            - Xxf86vm
-            - Xi
-            - Xcursor
-            - Xinerama
-            # -lglut (freeglut is only used for one legacy function, but OF links it anyway)
-            - glut
-            - dl
-            - gstapp-1.0
-            - gstvideo-1.0
-            - gstbase-1.0
-            - gstreamer-1.0
+    links[:linux]:
+      # - glfw
+      - fontconfig
+      - Xrandr
+      - Xxf86vm
+      - Xi
+      - Xcursor
+      - Xinerama
+      # -lglut (freeglut is only used for one legacy function, but OF links it anyway)
+      - glut
+      - dl
+      - gstapp-1.0
+      - gstvideo-1.0
+      - gstbase-1.0
+      - gstreamer-1.0
 
-            - asound
-            - sndfile
-            - openal
-            # - pulse-simple
-            # - pulse
-            - pthread
-            - GL
-            - GLU
+      - asound
+      - sndfile
+      - openal
+      # - pulse-simple
+      # - pulse
+      - pthread
+      - GL
+      - GLU
 
-            # - gtk-x11-2.0
-            # - gdk-x11-2.0
-            # - atk-1.0
-            # - gdk_pixbuf-2.0
-            # move aside soon
+      # - gtk-x11-2.0
+      # - gdk-x11-2.0
+      # - atk-1.0
+      # - gdk_pixbuf-2.0
+      # move aside soon
 
-            # - harfbuzz
-            # - fontconfig
-            # - freetype
-            - mpg123
+      # - harfbuzz
+      # - fontconfig
+      # - freetype
+      - mpg123
 
-            # GTK Related
-            # - glib-2.0
-            # - gobject-2.0
-            # - gio-2.0
+      # GTK Related
+      # - glib-2.0
+      # - gobject-2.0
+      # - gio-2.0
 
-            # - cairo
-            # - pangocairo-1.0
-            # - pangoft2-1.0
-            # - pango-1.0
+      # - cairo
+      # - pangocairo-1.0
+      # - pangoft2-1.0
+      # - pango-1.0
 
-            - udev # ofxkinect only
+      - udev # ofxkinect only
 
-            # FIXME: Move to ofxURL addon
-            # - ssl
-            # - crypto
-            # - curl
+      # FIXME: Move to ofxURL addon
+      # - ssl
+      # - crypto
+      # - curl
 
-        links[:windows]:
-            - winmm # timeBeginPeriod / timeEndPeriod
-            - opengl32 # classic OpenGL 1.x entry-points
-            - mfplat # Add this - Media Foundation Platform
-            - mfreadwrite # Add this - Media Foundation Read/Write
-            - mfuuid # Add this - Media Foundation UUIDs
-            - d3d11 # Add this - Direct3D 11
-            - dxgi # Add this - DirectX Graphics Infrastructure
-            - Ws2_32 # ofxNetwork. I can move only there later
-            # - uriparser # URI parsing
-            # - glew32 # GLEW extension loader
-            # - FreeImage
+    links[:windows]:
+      - winmm # timeBeginPeriod / timeEndPeriod
+      - opengl32 # classic OpenGL 1.x entry-points
+      - mfplat # Add this - Media Foundation Platform
+      - mfreadwrite # Add this - Media Foundation Read/Write
+      - mfuuid # Add this - Media Foundation UUIDs
+      - d3d11 # Add this - Direct3D 11
+      - dxgi # Add this - DirectX Graphics Infrastructure
+      - Ws2_32 # ofxNetwork. I can move only there later
+      # - uriparser # URI parsing
+      # - glew32 # GLEW extension loader
+      # - FreeImage
 
-        staticLinks[:windows]:
-            # - ${var:ofPath}/libs/${var:platform}/lib/jpeg-static.lib
-            # - ${var:ofPath}/libs/${var:platform}/lib/FreeImage.lib
-            # - ${var:ofPath}/libs/${var:platform}/lib/tiff.lib
-            # - ${var:ofPath}/libs/${var:platform}/lib/turbojpeg-static.lib
+    staticLinks[:windows]:
+      # - ${var:ofPath}/libs/${var:platform}/lib/jpeg-static.lib
+      # - ${var:ofPath}/libs/${var:platform}/lib/FreeImage.lib
+      # - ${var:ofPath}/libs/${var:platform}/lib/tiff.lib
+      # - ${var:ofPath}/libs/${var:platform}/lib/turbojpeg-static.lib
 
-            - ${var:ofPath}/libs/${var:platform}/lib/mango.lib
-            - ${var:ofPath}/libs/${var:platform}/lib/bz2_static.lib
-            - ${var:ofPath}/libs/${var:platform}/lib/deflatestatic.lib
-            - ${var:ofPath}/libs/${var:platform}/lib/liblcms2.lib
-            - ${var:ofPath}/libs/${var:platform}/lib/lz4.lib
-            - ${var:ofPath}/libs/${var:platform}/lib/zstd_static.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/mango.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/bz2_static.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/deflatestatic.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/liblcms2.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/lz4.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/zstd_static.lib
 
-            - ${var:ofPath}/libs/${var:platform}/lib/fmt.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/fmt.lib
 
-            # - ${var:ofPath}/libs/${var:platform}/lib/tiffxx.lib
-            # - removed tiff.lib
-            - ${var:ofPath}/libs/${var:platform}/lib/zlibstatic.lib
+      # - ${var:ofPath}/libs/${var:platform}/lib/tiffxx.lib
+      # - removed tiff.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/zlibstatic.lib
 
-            - ${var:ofPath}/libs/${var:platform}/lib/freetype.lib
-            - ${var:ofPath}/libs/${var:platform}/lib/brotlicommon.lib
-            - ${var:ofPath}/libs/${var:platform}/lib/brotlidec.lib
-            - ${var:ofPath}/libs/${var:platform}/lib/brotlienc.lib
-            - ${var:ofPath}/libs/${var:platform}/lib/glew.lib
-            - ${var:ofPath}/libs/${var:platform}/lib/glfw3.lib
-            - ${var:ofPath}/libs/${var:platform}/lib/glm.lib
-            - ${var:ofPath}/libs/${var:platform}/lib/libpng18_static.lib
-            - ${var:ofPath}/libs/${var:platform}/lib/pugixml.lib
-            # - ${var:ofPath}/libs/${var:platform}/lib/rtaudio.lib
-            - ${var:ofPath}/libs/${var:platform}/lib/tess2.lib
-            - ${var:ofPath}/libs/${var:platform}/lib/uriparser.lib
-            - ${var:ofPath}/libs/${var:platform}/lib/videoInput.lib
-            # - ${var:ofPath}/libs/${var:platform}/lib/yaml-cpp.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/freetype.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/brotlicommon.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/brotlidec.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/brotlienc.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/glew.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/glfw3.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/glm.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/libpng18_static.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/pugixml.lib
+      # - ${var:ofPath}/libs/${var:platform}/lib/rtaudio.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/tess2.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/uriparser.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/videoInput.lib
+      # - ${var:ofPath}/libs/${var:platform}/lib/yaml-cpp.lib
 
-        staticLinks[:linux]:
-            #libpng, libbrotlienc, libjpeg libbrotlicommon,libbrotlidec
+    staticLinks[:linux]:
+      #libpng, libbrotlienc, libjpeg libbrotlicommon,libbrotlidec
 
-            # - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
-            # - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
-            # # - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
-            # - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
-            # - ${var:ofPath}/libs/${var:platform}/lib/libjpeg.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
+      # # - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libjpeg.a
 
-            - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libfmt.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libmango.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libbz2_static.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libdeflate.a
-            # - ${var:ofPath}/libs/${var:platform}/lib/liblcms2.a
-            # FIXME: try to solve this on meson and not here. ok for now
-            - ${var:ofPath}/libs/${var:platform}/lib/x86_64-linux-gnu/liblcms2.a
-            - ${var:ofPath}/libs/${var:platform}/lib/liblz4.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libzstd.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libfmt.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libmango.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libbz2_static.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libdeflate.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/liblcms2.a
+      # FIXME: try to solve this on meson and not here. ok for now
+      - ${var:ofPath}/libs/${var:platform}/lib/x86_64-linux-gnu/liblcms2.a
+      - ${var:ofPath}/libs/${var:platform}/lib/liblz4.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libzstd.a
 
-            - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libpng.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
-            - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
-            - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libz.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libpng.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
+      - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
+      - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libz.a
 
-        staticLinks[:macos]:
-            - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
-            - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
-            - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
+    staticLinks[:macos]:
+      - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
+      - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
+      - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
 
-            # All Freetype deps
-            - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libbrotlidec.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libbrotlicommon.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libbrotlienc.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libpng.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libz.a
+      # All Freetype deps
+      - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libbrotlidec.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libbrotlicommon.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libbrotlienc.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libpng.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libz.a
 
-            - ${var:ofPath}/libs/${var:platform}/lib/libfmt.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libmango.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libbz2_static.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libdeflate.a
-            - ${var:ofPath}/libs/${var:platform}/lib/liblcms2.a
-            - ${var:ofPath}/libs/${var:platform}/lib/liblz4.a
-            - ${var:ofPath}/libs/${var:platform}/lib/libzstd.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libfmt.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libmango.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libbz2_static.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libdeflate.a
+      - ${var:ofPath}/libs/${var:platform}/lib/liblcms2.a
+      - ${var:ofPath}/libs/${var:platform}/lib/liblz4.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libzstd.a
 
-            # FREEIMAGE
-            # - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
-            # - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
-            # - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
-            # - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
-            # - ${var:ofPath}/libs/${var:platform}/lib/liblzma.a
+      # FREEIMAGE
+      # - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/liblzma.a
 targets:
-    # OFLib:
-    #   kind: chaletProject
-    #   location: ${var:ofPath}
-    OF:
-        kind: staticLibrary
-        # outputDirectory: ${var:ofPath}
+  # OFLib:
+  #   kind: chaletProject
+  #   location: ${var:ofPath}
+  OF:
+    kind: staticLibrary
+    # outputDirectory: ${var:ofPath}
 
-        # outputDirectory: ${var:ofPath}/_build
-        # outputDir: ${var:ofPath}/_build
-        # location: ${var:ofPath}
-        files:
-            include:
-                - ${var:ofPath}/libs/openFrameworks/{3d,communication,events,gl,graphics,math,sound,types,utils,video}/*.cpp
-                - ${var:ofPath}/libs/openFrameworks/app/{ofBaseApp,ofMainLoop,ofAppRunner,ofAppGLFWWindow}.cpp
-            include[:macos]:
-                - ${var:ofPath}/libs/openFrameworks/**.{mm,m}
+    # outputDirectory: ${var:ofPath}/_build
+    # outputDir: ${var:ofPath}/_build
+    # location: ${var:ofPath}
+    files:
+      include:
+        - ${var:ofPath}/libs/openFrameworks/{3d,communication,events,gl,graphics,math,sound,types,utils,video}/*.cpp
+        - ${var:ofPath}/libs/openFrameworks/app/{ofBaseApp,ofMainLoop,ofAppRunner,ofAppGLFWWindow}.cpp
+      include[:macos]:
+        - ${var:ofPath}/libs/openFrameworks/**.{mm,m}
 
-            exclude[:macos]:
-                - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils,ofMediaFoundationPlayer,ofDirectShowGrabber,ofDirectShowPlayer}.cpp
-                - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
+      exclude[:macos]:
+        - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils,ofMediaFoundationPlayer,ofDirectShowGrabber,ofDirectShowPlayer}.cpp
+        - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
 
-            exclude[:linux]:
-                - ${var:ofPath}/libs/openFrameworks/video/{ofDirectShowPlayer,ofDirectShowGrabber,ofMediaFoundationPlayer}.cpp
-                - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
-                - ${var:ofPath}/libs/openFrameworks/app/ofAppGlutWindow.cpp
+      exclude[:linux]:
+        - ${var:ofPath}/libs/openFrameworks/video/{ofDirectShowPlayer,ofDirectShowGrabber,ofMediaFoundationPlayer}.cpp
+        - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
+        - ${var:ofPath}/libs/openFrameworks/app/ofAppGlutWindow.cpp
 
-                # - ${var:ofPath}/libs/openFrameworks/sound/{ofOpenALSoundPlayer}.cpp
-            exclude[:windows]:
-                - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils}.cpp
-                - ${var:ofPath}/libs/openFrameworks/sound/ofFmodSoundPlayer.cpp
+        # - ${var:ofPath}/libs/openFrameworks/sound/{ofOpenALSoundPlayer}.cpp
+      exclude[:windows]:
+        - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils}.cpp
+        - ${var:ofPath}/libs/openFrameworks/sound/ofFmodSoundPlayer.cpp
 
-    empty:
-        kind: executable
-        runWorkingDirectory: ${cwd}/bin
-        # copyFilesOnRun: bin/data
-        # externalConfiguration: ${var:ofPath}/libs/openFrameworksCompiled/project/chalet/configuration.yaml
+  empty:
+    kind: executable
+    runWorkingDirectory: ${cwd}/bin
+    # copyFilesOnRun: bin/data
+    # externalConfiguration: ${var:ofPath}/libs/openFrameworksCompiled/project/chalet/configuration.yaml
 
-        settings:Cxx:
-            staticLinks:
-                - OF
-            includeDirs:
-                - ${var:ofPath}/libs/openFrameworks
-        files:
-            include:
+    settings:Cxx:
+      staticLinks:
+        - OF
+      includeDirs:
+        - ${var:ofPath}/libs/openFrameworks
+    files:
+      include:
 
-            exclude:
-                - .DS_Store
-                - .settings
-                - .vscode
-                - .clangd
-                - .zed
-                - compile_flags.txt
-                # - ${var:ofPath}/addons/{${var:addons}}/src/ios
+      exclude:
+        - .DS_Store
+        - .settings
+        - .vscode
+        - .clangd
+        - .zed
+        - compile_flags.txt
+        # - ${var:ofPath}/addons/{${var:addons}}/src/ios
 
 distribution:
-    empty:
-        kind: bundle
-        buildTargets: "*"
-        exclude:
-            - data/.gitkeep
-        macosBundle:
-            type: app
-            icon: ${var:ofPath}/libs/openFrameworksCompiled/project/macos/of.icns
-            infoPropertyList:
-                CFBundleDevelopmentRegion: en-US
-                CFBundleDisplayName: ${name}
-                CFBundleExecutable: ${mainExecutable}
-                CFBundleIconFile: ${icon}
-                CFBundleIdentifier: com.developer.application
-                CFBundleInfoDictionaryVersion: "6.0"
-                CFBundleName: ${bundleName}
-                CFBundlePackageType: APPL
-                CFBundleShortVersionString: "1.0.0"
-                CFBundleVersion: "1.0.0"
-                CFBundleSignature: "????"
-                LSMinimumSystemVersion: "10.8"
-                NSHighResolutionCapable: true
+  empty:
+    kind: bundle
+    buildTargets: "*"
+    exclude:
+      - data/.gitkeep
+    macosBundle:
+      type: app
+      icon: ${var:ofPath}/libs/openFrameworksCompiled/project/macos/of.icns
+      infoPropertyList:
+        CFBundleDevelopmentRegion: en-US
+        CFBundleDisplayName: ${name}
+        CFBundleExecutable: ${mainExecutable}
+        CFBundleIconFile: ${icon}
+        CFBundleIdentifier: com.developer.application
+        CFBundleInfoDictionaryVersion: "6.0"
+        CFBundleName: ${bundleName}
+        CFBundlePackageType: APPL
+        CFBundleShortVersionString: "1.0.0"
+        CFBundleVersion: "1.0.0"
+        CFBundleSignature: "????"
+        LSMinimumSystemVersion: "10.8"
+        NSHighResolutionCapable: true
