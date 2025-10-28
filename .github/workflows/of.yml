@@ -124,7 +124,7 @@ jobs:
         # yaml-cpp fmt nlohmann-json pugixml # fmt ccache
 
       - name: Install Chalet
-        if: matrix.platform == 'vs'
+        # if: matrix.platform == 'vs'
         uses: jaxxstorm/action-install-gh-release@v2.1.0
         with:
           repo: chalet-org/chalet
@@ -133,7 +133,7 @@ jobs:
           prerelease: "false"
 
       - name: Chalet Test / Version
-        if: matrix.platform == 'vs'
+        # if: matrix.platform == 'vs'
         run: |
           chalet --version
       # - name: ofgen CMAKE cache
