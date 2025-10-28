@@ -96,6 +96,7 @@ jobs:
         with:
           packages: >
             wget2
+            fontconfig
             libjack-jackd2-0 libjack-jackd2-dev libasound2-dev
             freeglut3-dev libxmu-dev libxxf86vm-dev libopenal-dev libsndfile1-dev libpulse-dev
             libgl1-mesa-dev libudev-dev libdrm-dev
@@ -103,8 +104,6 @@ jobs:
             libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-pulseaudio
             gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa
             gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav
-
-            fontconfig
           # libglfw3-dev
           # libyaml-cpp-dev nlohmann-json3-dev libpugixml-dev
           # make libcairo2-dev libgtk2.0-dev libgtk2.0-0
