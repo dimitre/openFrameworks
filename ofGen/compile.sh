@@ -59,35 +59,58 @@ run_cmake() {
         -DNLOHMANN_JSON_ROOT=../../libs/${PLATFORM}
 }
 
-if ! run_cmake; then
-    echo "CMake failed, cleaning build directory and retrying..."
-    cd ..
-    rm -rf build
-    run_cmake
-fi
 
-cmake --build . --config Release
+if command -v cmake &> /dev/null; then
+	if ! run_cmake; then
+	    echo "CMake failed, cleaning build directory and retrying..."
+	    cd ..
+	    rm -rf build
+	    run_cmake
+	fi
 
-# Determine if we need sudo
-if command -v sudo &> /dev/null; then
-  INSTALL_CMD="sudo cmake"
+	cmake --build . --config Release
+
+	# Determine if we need sudo
+	if command -v sudo &> /dev/null; then
+	  INSTALL_CMD="sudo cmake"
+	else
+	  INSTALL_CMD="cmake"
+	fi
+
+	# Auto-install in CI, ask in interactive mode
+	if [[ "${CI:-false}" == "true" ]]; then
+	  section "CI detected, auto-installing..."
+	  ${INSTALL_CMD} --install . --config Release
+	else
+	  read -p "Install ofgen to system? (y/n) " -n 1 -r
+	  echo
+	  if [[ $REPLY =~ ^[Yy]$ ]]; then
+	    ${INSTALL_CMD} --install . --config Release
+	    section "ofWorks ofgen Installation complete"
+	  else
+	    section "Skipping installation. Binary available at: build/ofgen"
+	  fi
+	fi
 else
-  INSTALL_CMD="cmake"
-fi
+	# cmake not found. lets go for the alternative.
+	if command -v chalet &> /dev/null; then
+		chalet bundle &&
+		if [[ -d "./dist" ]]; then
+            DIST_PATH=$(cygpath -w "$(pwd)/dist")
+            powershell.exe -ExecutionPolicy Bypass -Command "
+                \$dist = '$DIST_PATH'
+                \$userPath = [Environment]::GetEnvironmentVariable('Path','User')
+                if (\$userPath -split [IO.Path]::PathSeparator -notcontains \$dist) {
+                    [Environment]::SetEnvironmentVariable('Path', \$userPath + [IO.Path]::PathSeparator + \$dist, 'User')
+                }
+            "
+            section "Added to Windows PATH"
+        fi
 
-# Auto-install in CI, ask in interactive mode
-if [[ "${CI:-false}" == "true" ]]; then
-  section "CI detected, auto-installing..."
-  ${INSTALL_CMD} --install . --config Release
-else
-  read -p "Install ofgen to system? (y/n) " -n 1 -r
-  echo
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    ${INSTALL_CMD} --install . --config Release
-    section "ofWorks ofgen Installation complete"
-  else
-    section "Skipping installation. Binary available at: build/ofgen"
-  fi
+	else
+		printf "No Cmake or Chalet found"
+	fi
+
 fi
 
 # section "done"
