@@ -1,6 +1,6 @@
 [
   {
-    "label": "chalet buildrun",
+    "label": "▶️ Run (chalet buildrun)",
     "command": "chalet buildrun",
     "use_new_terminal": false,
     "allow_concurrent_runs": false,
@@ -12,7 +12,7 @@
   },
 
   {
-    "label": "ofgen templates=chalet",
+    "label": "💾 Gen (ofgen templates=chalet)",
     "command": "ofgen templates=chalet",
     "use_new_terminal": false,
     "allow_concurrent_runs": false,
@@ -24,7 +24,19 @@
   },
 
   {
-    "label": "ofgen templates=chalet buildrun",
+    "label": "🫧 Clean (chalet clean --all)",
+    "command": "chalet clean --all",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "reveal": "always
+    "hide": "never",
+    "shell": "system",
+    "show_summary": true
+    // "show_output": true
+  },
+
+  {
+    "label": "💾 ▶️ Gen Run (ofgen templates=chalet buildrun)",
     "command": "ofgen templates=chalet buildrun",
     "use_new_terminal": false,
     "allow_concurrent_runs": false,
