@@ -20,8 +20,8 @@ jobs:
         include:
           # ubuntu and macos completing good, so removed from here now.
           - { os: ubuntu-latest, platform: linux64, shell: bash }
-          - { os: macos-latest, platform: macos, shell: bash }
-          - { os: windows-latest, platform: vs, shell: powershell }
+          # - { os: macos-latest, platform: macos, shell: bash }
+          # - { os: windows-latest, platform: vs, shell: powershell }
 
     runs-on: ${{ matrix.os }}
     defaults:
@@ -141,9 +141,9 @@ jobs:
         shell: bash
         run: ./libs/libs.sh
 
-      - name: LS Libs
-        shell: bash
-        run: ls -alFR ./libs/
+      # - name: LS Libs
+      #   shell: bash
+      #   run: ls -alFR ./libs/
 
       # - name: ofgen compile windows cmake
       #   if: runner.os == 'Windows'
@@ -206,6 +206,12 @@ jobs:
       #     cd examples/computer_vision/opencvExample
       #     ofgen templates=chalet
       #     chalet build --show-commands
+
+      - name: Empty Example Chalet
+        run: |
+          cd examples/templates/emptyExample
+          ofgen templates=chalet
+          chalet build --show-commands
 
       - name: All Addons Example Chalet
         run: |
