@@ -28,7 +28,7 @@
     "command": "chalet clean --all",
     "use_new_terminal": false,
     "allow_concurrent_runs": false,
-    "reveal": "always
+    "reveal": "always",
     "hide": "never",
     "shell": "system",
     "show_summary": true
