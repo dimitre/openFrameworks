@@ -19,7 +19,6 @@ using std::endl;
 // using std::string;
 // using std::vector;
 
-
 static inline std::string getVersion() {
 	return "ofGen " + version;
 }
@@ -41,7 +40,8 @@ const std::string sign = colorText(R"(
 ▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
 ▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
 Project Generator for OFWorks (OpenFrameworks fork)
-                Prototype )" + version, 91)
+                Prototype )" + version,
+							 91)
 
 	+ colorText(R"(
                 Report issues on
@@ -292,7 +292,11 @@ ofGen templates=zed,macos,make addons=ofxMidi,ofxOpencv ofpath=../../.. path=/Vo
 	// void open();
 	void open() {
 		if (!empty(openCommand)) {
-			system(openCommand.c_str());
+			int result = std::system(openCommand.c_str());
+			if (result != 0) {
+				std::cerr << "Warning: Failed to execute command: " << openCommand
+						  << " (exit code: " << result << ")" << std::endl;
+			}
 		}
 	}
 
@@ -370,20 +374,19 @@ inline void replace_all(
 	s.swap(buf);
 }
 
+inline std::string joinStrings(const std::vector<std::string> & vec, const std::string & delimiter) {
+	std::string result = "";
+	if (vec.empty()) {
+		return result;
+	}
 
-inline std::string joinStrings(const std::vector<std::string>& vec, const std::string& delimiter) {
-   std::string result = "";
-   if (vec.empty()) {
-       return result;
-   }
+	// Append the first element
+	result += vec[0];
 
-   // Append the first element
-   result += vec[0];
-
-   // Append remaining elements with the delimiter
-   for (size_t i = 1; i < vec.size(); ++i) {
-       result += delimiter;
-       result += vec[i];
-   }
-   return result;
+	// Append remaining elements with the delimiter
+	for (size_t i = 1; i < vec.size(); ++i) {
+		result += delimiter;
+		result += vec[i];
+	}
+	return result;
 }
