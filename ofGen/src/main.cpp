@@ -19,13 +19,14 @@ int main(const int argc, const char * argv[]) {
 	bool build = true;
 
 	if (!fs::exists("src") && !fs::exists("of.yml") && !fs::exists("addons.make") && !fs::exists("../../../.ofroot")) {
-		alert("no src folder found, no of.yml file or addons.make found and no OF installed in default path ../../..", 95);
+		alert("⚠️ Not an ofWorks project folder, no action taken", 95);
+		alert ("no src folder found, no of.yml file or addons.make found and no OF installed in default path ../../..");
 		build = false;
 		conf.help();
 	}
 
 	if (!empty(conf.singleParameter)) {
-		alert("this is single parameter " + conf.singleParameter, 96);
+		alert("single parameter: " + conf.singleParameter);
 		build = false;
 
 		// First parameters without bulding project.

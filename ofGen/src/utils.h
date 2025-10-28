@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream> // cout
-static std::string version = "v0.7.5";
+static std::string version = "v0.7.6";
 
 #include <filesystem>
 #include <map>
@@ -33,21 +33,21 @@ inline void alert(std::string msg, int color = 2) {
 	std::cout << colorText(msg, color) << std::endl;
 }
 
-// DIAM FONT
 const std::string sign = colorText(R"(
- ▗▄▖ ▗▄▄▄▖ ▗▄▄▖▗▄▄▄▖▗▖  ▗▖
-▐▌ ▐▌▐▌   ▐▌   ▐▌   ▐▛▚▖▐▌
-▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
-▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
-Project Generator for OFWorks (OpenFrameworks fork)
-                Prototype )" + version,
-							 91)
+ ░░░  ▒▒▒▒  ▓▓▓  ████ █   █
+░   ░ ▒    ▓     █    ██  █
+░   ░ ▒▒▒  ▓  ▓▓ ███  █ █ █
+░   ░ ▒    ▓   ▓ █    █  ██
+ ░░░  ▒     ▓▓▓  ████ █   █)", 32) // 91
+    + R"(
+Project Generator for ofWorks (OpenFrameworks fork)
+                 Prototype )" + version
 
 	+ colorText(R"(
-                Report issues on
-                https://github.com/dimitre/ofworks/
+                 Report issues or suggestions on
+                 https://github.com/dimitre/ofworks/
 )",
-		92);
+		34); // 92
 
 // )";
 
@@ -280,6 +280,7 @@ templates : zed,macos
 
 	void help() {
 		cout << R"(
+help:
 ofGen without parameters will try to create a project on current folder.
 and look for OF installation three folders up, like
 cd of/apps/myApps/Transcend; ./ofGen
@@ -390,3 +391,50 @@ inline std::string joinStrings(const std::vector<std::string> & vec, const std::
 	}
 	return result;
 }
+
+
+
+// ██████ █████ ░░░  ▒  ▒ ▒ ▓    ███  TM
+// █    █ █     ░  ░ ▒  ▒ ▒ ▓    █  █
+// █    █ ████  ░░░  ▒  ▒ ▒ ▓    █  █
+// █    █ █     ░  ░ ▒  ▒ ▒ ▓    █  █
+// ██████ █     ░░░  ▒▒▒▒ ▒ ▓▓▓▓ ███
+// DIAM FONT
+
+// // ORIGINAL STYLE
+//  ▗▄▖ ▗▄▄▄▖ ▗▄▄▖▗▄▄▄▖▗▖  ▗▖
+// ▐▌ ▐▌▐▌   ▐▌   ▐▌   ▐▛▚▖▐▌
+// ▐▌ ▐▌▐▛▀▀▘▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌
+// ▝▚▄▞▘▐▌   ▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌
+//
+
+//    ____  ___________________   __
+//   / __ \/ ____/ ____/ ____/ | / /
+//  / / / / /_  / / __/ __/ /  |/ /
+// / /_/ / __/ / /_/ / /___/ /|  /
+// \____/_/    \____/_____/_/ |_/
+
+
+//  ░░░░░░  ▒▒▒▒▒▒▒  ▓▓▓▓▓▓  ███████ ███    ██
+// ░░    ░░ ▒▒      ▓▓       ██      ████   ██
+// ░░    ░░ ▒▒▒▒▒   ▓▓   ▓▓▓ █████   ██ ██  ██
+// ░░    ░░ ▒▒      ▓▓    ▓▓ ██      ██  ██ ██
+//  ░░░░░░  ▒▒       ▓▓▓▓▓▓  ███████ ██   ████
+
+// ░░░░░░░ ▒▒▒▒▒▒ ▓▓▓▓▓▓▓ ██████ ███    ██
+// ░░   ░░ ▒▒     ▓▓      ██     ████   ██
+// ░░   ░░ ▒▒▒▒▒  ▓▓  ▓▓▓ █████  ██ ██  ██
+// ░░   ░░ ▒▒     ▓▓   ▓▓ ██     ██  ██ ██
+// ░░░░░░░ ▒▒     ▓▓▓▓▓▓▓ ██████ ██   ████
+
+// ░░░░░ ▒▒▒▒ ▓▓▓▓▓ ████ ██   █
+// ░   ░ ▒    ▓     █    ███  █
+// ░   ░ ▒▒▒  ▓  ▓▓ ███  █ █  █
+// ░   ░ ▒    ▓   ▓ █    █  █ █
+// ░░░░░ ▒    ▓▓▓▓▓ ████ █   ██
+
+//  ░░░  ▒▒▒▒  ▓▓▓  ████ █   █
+// ░   ░ ▒    ▓     █    ██  █
+// ░   ░ ▒▒▒  ▓  ▓▓ ███  █ █ █
+// ░   ░ ▒    ▓   ▓ █    █  ██
+//  ░░░  ▒     ▓▓▓  ████ █   █
