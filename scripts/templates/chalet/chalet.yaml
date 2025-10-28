@@ -153,9 +153,11 @@ abstracts:*:
       # - pango-1.0
 
       - udev # ofxkinect only
-      - ssl
-      - crypto
-      - curl
+
+      # FIXME: Move to ofxURL addon
+      # - ssl
+      # - crypto
+      # - curl
 
     links[:windows]:
       - winmm # timeBeginPeriod / timeEndPeriod
