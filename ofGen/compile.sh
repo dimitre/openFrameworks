@@ -47,10 +47,10 @@ if [[ ! -d "../libs/${PLATFORM}" ]]; then
 fi
 
 section "Compiling ofgen"
-mkdir -p build
-cd build
 
 run_cmake() {
+	mkdir -p build
+	cd build
     cmake .. \
         -G Ninja \
         -DCMAKE_BUILD_TYPE=Release \
@@ -61,6 +61,7 @@ run_cmake() {
 
 if ! run_cmake; then
     echo "CMake failed, cleaning build directory and retrying..."
+    cd ..
     rm -rf build
     run_cmake
 fi
