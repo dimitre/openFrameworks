@@ -20,8 +20,14 @@ jobs:
         include:
           # ubuntu and macos completing good, so removed from here now.
           - { os: ubuntu-latest, platform: linux64, shell: bash }
-          # - { os: macos-latest, platform: macos, shell: bash }
-          # - { os: windows-latest, platform: vs, shell: powershell }
+          - { os: macos-latest, platform: macos, shell: bash }
+          - { os: windows-latest, platform: vs, shell: powershell }
+          - {
+              platform: rpi-aarch64,
+              os: ubuntu-latest,
+              prefix: aarch64-linux-gnu,
+              toolchain: aarch64-linux-gnu-gcc,
+            }
 
     runs-on: ${{ matrix.os }}
     defaults:
@@ -42,6 +48,30 @@ jobs:
       #     cmake --version
 
       - uses: actions/checkout@v5
+
+      - name: RPI - Apt Cache Cross Compile
+        if: matrix.platform == 'rpi-aarch64' || matrix.platform == 'rpi-armv6l'
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: multistrap gcc-${{ matrix.prefix }} g++-${{ matrix.prefix }}
+          version: 1.0
+
+      # FIXME: Test if it works OK
+      - name: RPI - Cache Multistrap
+        if: inputs.multistrap && (matrix.platform == 'rpi-aarch64' || matrix.platform == 'rpi-armv6l')
+        uses: actions/cache@v4
+        with:
+          path: raspbian
+          # key: ${{ matrix.prefix }}-rpicache
+          # I'll now keep just one key, so all actions benefits to the same cache package
+          key: rpi-multistrap-cache
+
+      - name: RPI - multistrap
+        if: inputs.multistrap && (matrix.platform == 'rpi-aarch64' || matrix.platform == 'rpi-armv6l')
+        run: |
+          mkdir -p raspbian/etc/apt/apt.conf.d/
+          echo 'Acquire::AllowInsecureRepositories "true";' | sudo tee raspbian/etc/apt/apt.conf.d/90insecure
+          multistrap -a arm64 -d raspbian -f ../multistrap.conf
 
       # - name: ccache
       #   uses: hendrikmuhs/ccache-action@v1.2.19
@@ -66,7 +96,7 @@ jobs:
       #     pacboy: pkgconf:p
       #     install: >-
       #       base-devel
-      - name: Test tools
+      - name: Test MSYS2 tools
         if: runner.os == 'Windows' && matrix.platform == 'msys2'
         run: |
           whereis gcc
@@ -165,9 +195,10 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          cd ofGen
-          chalet bundle
-          (Resolve-Path .\dist).Path | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          ./compile.ps1
+          # cd ofGen
+          # chalet bundle
+          # (Resolve-Path .\dist).Path | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: ofgen test
         run: |
@@ -206,6 +237,14 @@ jobs:
       #     cd examples/computer_vision/opencvExample
       #     ofgen templates=chalet
       #     chalet build --show-commands
+
+      - name: Empty Example Chalet RPI
+        if: matrix.platform == 'rpi-aarch64'
+        run: |
+          cd examples/templates/emptyExample
+          ofgen templates=chalet
+          chalet configure --toolchain ${{ matrix.toolchain }} #-a auto
+          chalet build --show-commands
 
       - name: Empty Example Chalet
         run: |
