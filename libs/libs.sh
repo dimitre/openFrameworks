@@ -148,7 +148,8 @@ case "$PLATFORM" in
         if [[ -z "${CI:-}" ]]; then
             section "Installing system dependencies"
             ${SUDO_CMD} apt-get -y install \
-                fontconfig wget2 \
+            	wget2 \
+                libfontconfig1-dev \
                 freeglut3-dev libxmu-dev libxxf86vm-dev libgl1-mesa-dev libudev-dev \
                 libxcursor-dev libxi-dev libxinerama-dev \
                 libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
