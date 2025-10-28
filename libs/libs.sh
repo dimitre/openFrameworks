@@ -193,11 +193,11 @@ case "$PLATFORM" in
 
         if ! command -v chalet &> /dev/null; then
             if [[ ${PLATFORM} == 'linux64' ]]; then
-                curl -L -o https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet_${CHALETVERSION}_amd64.deb
+                curl -L -O https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet_${CHALETVERSION}_amd64.deb
                 sudo dpkg -i chalet*.deb
             else
                 # there is arm only also.
-                curl -L -o https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet_${CHALETVERSION}_arm64.deb
+                curl -L -O https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet_${CHALETVERSION}_arm64.deb
                 sudo dpkg -i chalet*.deb
             fi
 		else
