@@ -22,12 +22,12 @@ jobs:
           - { os: ubuntu-latest, platform: linux64, shell: bash }
           - { os: macos-latest, platform: macos, shell: bash }
           - { os: windows-latest, platform: vs, shell: powershell }
-          - {
-              platform: rpi-aarch64,
-              os: ubuntu-latest,
-              prefix: aarch64-linux-gnu,
-              toolchain: aarch64-linux-gnu-gcc,
-            }
+          # - {
+          #     platform: rpi-aarch64,
+          #     os: ubuntu-latest,
+          #     prefix: aarch64-linux-gnu,
+          #     toolchain: aarch64-linux-gnu-gcc,
+          #   }
 
     runs-on: ${{ matrix.os }}
     defaults:
@@ -195,8 +195,8 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
+          cd ofGen
           ./compile.ps1
-          # cd ofGen
           # chalet bundle
           # (Resolve-Path .\dist).Path | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 

@@ -84,7 +84,7 @@ else
   echo
   if [[ $REPLY =~ ^[Yy]$ ]]; then
     ${INSTALL_CMD} --install . --config Release
-    section "ofWorks ofGen Installation complete"
+    section "ofWorks ofgen Installation complete"
   else
     section "Skipping installation. Binary available at: build/ofgen"
   fi
