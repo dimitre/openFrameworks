@@ -4,11 +4,13 @@ set -eu
 
 VERSION=v0.12.3
 OF_FOLDER=..
+CHALETVERSION=0.8.13
 
 # wipeDownloads=true
 wipeDownloads=false
 wipeAddonLibs=true
 wipeLibs=true
+
 
 COLOR='\033[0;32m'
 COLOR2='\033[0;34m'
@@ -16,7 +18,8 @@ COLOR3='\033[0;95m'
 NC='\033[0m' # No Color
 
 section() {
-    printf "⚡️ ${COLOR}%s${NC}\n" "$*"
+    # printf "⚡️ ${COLOR}%s${NC}\n" "$*"
+    printf "${COLOR}%s${NC}\n" "$*"
 }
 
 sectionOK() {
@@ -105,6 +108,26 @@ else
 
 fi
 
+
+# ============================================
+# Setup Directories
+# ============================================
+LIBS_FOLDER="./${PLATFORM}"
+
+if [[ "$wipeLibs" == true && -d "${LIBS_FOLDER}" ]]; then
+    executa rm -rf "${LIBS_FOLDER}"
+fi
+
+DOWNLOAD="./_download_${VERSION}_${PLATFORM}"
+
+if [[ "$wipeDownloads" == true && -d "${DOWNLOAD}" ]]; then
+    echo "Removing Previously Downloaded Libraries"
+    rm -rf "${DOWNLOAD}"
+fi
+
+echo "Creating Download Folder ${DOWNLOAD}"
+mkdir -p "${DOWNLOAD}"
+
 # ============================================
 # Platform-Specific Configuration
 # ============================================
@@ -142,10 +165,17 @@ case "$PLATFORM" in
      		if ! command -v wget2 &> /dev/null; then
        			# section "no wget2"
        			brew install wget2
-
       		else
        			section "wget2 already installed"
       		fi
+
+     		if ! command -v chalet &> /dev/null; then
+		        brew tap chalet-org/chalet
+		        brew install --cask chalet
+			else
+				section "chalet already installed"
+      		fi
+
       		if ! command -v cmake &> /dev/null; then
      			brew install cmake
         	else
@@ -160,6 +190,19 @@ case "$PLATFORM" in
     linux64|rpi-aarch64|rpi-armv6l)
 
    		CORELIBS+=( kissfft )
+
+        if ! command -v chalet &> /dev/null; then
+            if [[ ${PLATFORM} == 'linux64' ]]; then
+                curl -L -o https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet_${CHALETVERSION}_amd64.deb
+                sudo dpkg -i chalet*.deb
+            else
+                # there is arm only also.
+                curl -L -o https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet_${CHALETVERSION}_arm64.deb
+                sudo dpkg -i chalet*.deb
+            fi
+		else
+			section "chalet already installed"
+        fi
 
         # Install system dependencies (skip in CI)
         if [[ -z "${CI:-}" ]]; then
@@ -191,24 +234,7 @@ ALLLIBS=("${CORELIBS[@]}" "${ADDONLIBS[@]}")
 # section "Core libs: ${#CORELIBS[@]}"
 # section "Addon libs: ${#ADDONLIBS[@]}"
 
-# ============================================
-# Setup Directories
-# ============================================
-LIBS_FOLDER="./${PLATFORM}"
 
-if [[ "$wipeLibs" == true && -d "${LIBS_FOLDER}" ]]; then
-    executa rm -rf "${LIBS_FOLDER}"
-fi
-
-DOWNLOAD="./_download_${VERSION}_${PLATFORM}"
-
-if [[ "$wipeDownloads" == true && -d "${DOWNLOAD}" ]]; then
-    echo "Removing Previously Downloaded Libraries"
-    rm -rf "${DOWNLOAD}"
-fi
-
-echo "Creating Download Folder ${DOWNLOAD}"
-mkdir -p "${DOWNLOAD}"
 
 # ============================================
 # Helper Functions
