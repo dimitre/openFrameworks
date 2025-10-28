@@ -37,16 +37,16 @@ jobs:
     steps:
       # FIXME: Remove in near future, when runners have 4.1.2 at least
       # cmake 4.1.1 is doomed. 4.1.2 works
-      - name: macOS fix CMAKE Brew
-        if: runner.os == 'macOS'
-        run: |
-          brew update
-          brew uninstall --ignore-dependencies cmake || true
-          brew cleanup -s cmake
-          brew install --force-bottle cmake          # re-install
+      # - name: macOS fix CMAKE Brew
+      #   if: runner.os == 'macOS'
+      #   run: |
+      #     brew update
+      #     brew uninstall --ignore-dependencies cmake || true
+      #     brew cleanup -s cmake
+      #     brew install --force-bottle cmake          # re-install
 
-          which cmake
-          cmake --version
+      #     which cmake
+      #     cmake --version
 
       - uses: actions/checkout@v5
 
