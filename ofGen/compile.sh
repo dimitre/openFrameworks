@@ -25,75 +25,68 @@ section() {
 #CXX=c++
 #LINKEROPTIONS=""
 #COMPILECOMMAND=time $CXX -c src/*.cpp src/uuidxx/src/*.cpp `pkg-config --cflags yaml-cpp` -Isrc/uuidxx/src -I../libs/macos/include/ -Wfatal-errors -std=c++20 && \
-SUDO=''
+# SUDO=''
 
 section "Compiling ofGen"
 # , OSTYPE : ${OSYPE}"
 # echo "$OSTYPE"
 
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-
-    checkPackageApt() {
-        dpkg --status "$1" &>/dev/null && echo "$1: already installed" \
-            || { echo "installing $1"; sudo apt-get install -y "$1"; }
-    }
-
-
-    checkPackageApt libyaml-cpp-dev
-    checkPackageApt nlohmann-json3-dev
-    checkPackageApt libpugixml-dev
-    SUDO=sudo
-    #LINKCOMMAND=time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src `pkg-config --libs yaml-cpp pugixml` -o ofgen
-
-        # ...
-elif [[ "$OSTYPE" == "darwin"* ]]; then
-
-	checkPackageBrew() {
-		if brew ls --versions $1 > /dev/null; then
-			echo $1 already installed
-    else
-    	echo installing $1
-    	brew install $1
-    fi
-}
-
-    checkPackageBrew pkg-config
-	checkPackageBrew yaml-cpp
-	checkPackageBrew nlohmann-json
-	checkPackageBrew pugixml
-
-	SUDO=sudo
-	#LINKCOMMAND=time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src ../libs/macos/lib/libpugixml** `pkg-config --libs yaml-cpp` -o ofgen
-
-# elif [[ "$OSTYPE" == "msys"* ]]; then
+# Auto-detect platform
+if [[ "$OSTYPE" == "msys"* ]]; then
+    PLATFORM=vs
 elif [[ "$OSTYPE" == "cygwin"* ]]; then
-    # checkPackageMSYS yaml-cpp
-    # checkPackageMSYS pugixml
-    # checkPackageMSYS nlohmann-json
-    # checkPackageMSYS fmt
-    # checkPackageMSYS toolchain
-    pacman -S --needed mingw-w64-x86_64-yaml-cpp mingw-w64-x86_64-pugixml mingw-w64-x86_64-nlohmann-json mingw-w64-x86_64-fmt mingw-w64-x86_64-toolchain
-    #LINKCOMMAND=time $CXX $LINKEROPTIONS *.o -Isrc/uuidxx/src `pkg-config --libs yaml-cpp pugixml` -o ofgen
+    PLATFORM=msys2
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    PLATFORM=macos
+elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    # Detect Linux variant
+    ARCH="$(uname -m)"
 
-# else
-    # section "Which OS is this?"
-    # echo "$OSTYPE"
+    if [[ "$ARCH" == "x86_64" ]]; then
+        PLATFORM=linux64
+    elif [[ "$ARCH" == "aarch64" ]] && [[ -f /etc/rpi-issue ]]; then
+        PLATFORM=rpi-aarch64
+    elif [[ "$ARCH" == "armv6l" ]] || [[ "$ARCH" == "armv7l" ]]; then
+        # Check if it's actually a Raspberry Pi
+        if [[ -f /proc/device-tree/model ]] && grep -q "Raspberry Pi" /proc/device-tree/model; then
+            PLATFORM=rpi-armv6l
+        else
+            echo "Unsupported ARM architecture: $ARCH (not a Raspberry Pi?)"
+            exit 1
+        fi
+    else
+        echo "Unsupported Linux architecture: $ARCH"
+        exit 1
+    fi
+else
+    echo "Unsupported OS: $OSTYPE"
+    exit 1
 fi
+section "Detected platform: $PLATFORM"
 
-section "OFWorks, compiling ofgen"
 
-# echo ${COMPILECOMMAND}
-# ${COMPILECOMMAND}
-# echo ${LINKCOMMAND}
-# ${LINKCOMMAND}
-
+section "ofWorks, compiling ofgen"
 mkdir -p build
 cd build
-cmake ..
+cmake .. \
+  -DYAMLCPP_ROOT=../../libs/${PLATFORM} \
+  -DPUGIXML_ROOT=../../libs/${PLATFORM} \
+  -DNLOHMANN_JSON_ROOT=../../libs/${PLATFORM}
 cmake --build . --config Release
-#cmake --install . --config Release
-${SUDO} cmake --install . --config Release
 
+# Ask before installing
+read -p "Install ofgen to system? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+  if command -v sudo &> /dev/null; then
+    sudo cmake --install . --config Release
+  else
+    cmake --install . --config Release
+  fi
+  section "Installation complete"
+else
+  section "Skipping installation. Binary available at: build/ofgen"
+fi
 section "done"
 
 # if [[ -z $GITHUB_REPOSITORY ]]; then
