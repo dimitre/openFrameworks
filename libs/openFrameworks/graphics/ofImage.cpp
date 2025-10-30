@@ -8,7 +8,7 @@
 //#endif
 
 #if defined(TARGET_ANDROID)
-#include "ofxAndroidUtils.h"
+	#include "ofxAndroidUtils.h"
 #endif
 
 //#include <uriparser/Uri.h>
@@ -18,29 +18,26 @@
 //#include <mango/mango.hpp>
 //#include <mango/opengl/opengl.hpp>
 //#include <mango/core/memory.hpp>   // ConstMemory lives here
-#include <mango/image/image.hpp>   // ImageDecoder etc.
-
+#include <mango/image/image.hpp> // ImageDecoder etc.
 
 using namespace mango;
 //using namespace mango::math;
 using namespace mango::image;
 
-
-
 //----------------------------------------------------------
 // static variable for freeImage initialization:
-void ofInitFreeImage(bool deinit=false){
+void ofInitFreeImage(bool deinit = false) {
 	// need a new bool to avoid c++ "deinitialization order fiasco":
 	// http://www.parashift.com/c++-faq-lite/ctors.html#faq-10.15
-//	static bool	* bFreeImageInited = new bool(false);
-//	if(!*bFreeImageInited && !deinit){
-//		FreeImage_Initialise();
-//		*bFreeImageInited = true;
-//	}
-//	if(*bFreeImageInited && deinit){
-//		FreeImage_DeInitialise();
-//		*bFreeImageInited = false;
-//	}
+	//	static bool	* bFreeImageInited = new bool(false);
+	//	if(!*bFreeImageInited && !deinit){
+	//		FreeImage_Initialise();
+	//		*bFreeImageInited = true;
+	//	}
+	//	if(*bFreeImageInited && deinit){
+	//		FreeImage_DeInitialise();
+	//		*bFreeImageInited = false;
+	//	}
 }
 //
 //template <typename T>
@@ -210,7 +207,7 @@ void ofInitFreeImage(bool deinit=false){
 //	return option;
 //}
 
-template<typename PixelType>
+template <typename PixelType>
 static mango::image::Format getMangoFormat(const ofPixels_<PixelType> & pix) {
 	int numChannels = pix.getNumChannels();
 	int bitsPerChannel = sizeof(PixelType) * 8;
@@ -226,24 +223,22 @@ static mango::image::Format getMangoFormat(const ofPixels_<PixelType> & pix) {
 	}
 
 	// Create format based on channel count
-	switch(numChannels) {
-		case 1:
-			return mango::image::Format(bitsPerChannel, type, mango::image::Format::R, bitsPerChannel);
-		case 2:
-			return mango::image::Format(bitsPerChannel * 2, type, mango::image::Format::RG, bitsPerChannel, bitsPerChannel);
-		case 3:
-			return mango::image::Format(bitsPerChannel * 3, type, mango::image::Format::RGB, bitsPerChannel, bitsPerChannel, bitsPerChannel);
-		case 4:
-			return mango::image::Format(bitsPerChannel * 4, type, mango::image::Format::RGBA, bitsPerChannel, bitsPerChannel, bitsPerChannel, bitsPerChannel);
-		default:
-			return mango::image::Format(bitsPerChannel, type, mango::image::Format::R, bitsPerChannel);
+	switch (numChannels) {
+	case 1:
+		return mango::image::Format(bitsPerChannel, type, mango::image::Format::R, bitsPerChannel);
+	case 2:
+		return mango::image::Format(bitsPerChannel * 2, type, mango::image::Format::RG, bitsPerChannel, bitsPerChannel);
+	case 3:
+		return mango::image::Format(bitsPerChannel * 3, type, mango::image::Format::RGB, bitsPerChannel, bitsPerChannel, bitsPerChannel);
+	case 4:
+		return mango::image::Format(bitsPerChannel * 4, type, mango::image::Format::RGBA, bitsPerChannel, bitsPerChannel, bitsPerChannel, bitsPerChannel);
+	default:
+		return mango::image::Format(bitsPerChannel, type, mango::image::Format::R, bitsPerChannel);
 	}
 }
 
-
-
-template<typename PixelType>
-static bool loadImage(ofPixels_<PixelType> & pix, const of::filesystem::path & _fileName, const ofImageLoadSettings & settings){
+template <typename PixelType>
+static bool loadImage(ofPixels_<PixelType> & pix, const of::filesystem::path & _fileName, const ofImageLoadSettings & settings) {
 
 	fs::path fileImage { ofToDataPath(_fileName) };
 	if (!fs::exists(fileImage)) {
@@ -257,167 +252,165 @@ static bool loadImage(ofPixels_<PixelType> & pix, const of::filesystem::path & _
 	}
 
 	try {
-		 // Check if settings specify a particular format
-		 // You may need to adjust this based on your ofImageLoadSettings structure
-		 // For now, we'll auto-detect from the image
+		// Check if settings specify a particular format
+		// You may need to adjust this based on your ofImageLoadSettings structure
+		// For now, we'll auto-detect from the image
 
-		 // Load image with default format first to get dimensions and format info
+		// Load image with default format first to get dimensions and format info
 		mango::image::Bitmap bitmap(fileImage.string());
 
-		 if (!bitmap.width || !bitmap.height) {
-			 ofLogError("ofImage") << "loadImage(): Failed to load image from " << _fileName;
-			 return false;
-		 }
+		if (!bitmap.width || !bitmap.height) {
+			ofLogError("ofImage") << "loadImage(): Failed to load image from " << _fileName;
+			return false;
+		}
 
-		 // Calculate number of channels from the loaded bitmap
-		 int numChannels = bitmap.format.bits / (sizeof(PixelType) * 8);
+		// Calculate number of channels from the loaded bitmap
+		int numChannels = bitmap.format.bits / (sizeof(PixelType) * 8);
 
-		 // Clamp to valid range
-		 if (numChannels < 1) numChannels = 1;
-		 if (numChannels > 4) numChannels = 4;
+		// Clamp to valid range
+		if (numChannels < 1) numChannels = 1;
+		if (numChannels > 4) numChannels = 4;
 
-		 // Allocate ofPixels with detected dimensions and channels
-		 pix.allocate(bitmap.width, bitmap.height, numChannels);
+		// Allocate ofPixels with detected dimensions and channels
+		pix.allocate(bitmap.width, bitmap.height, numChannels);
 
-		 // Copy pixel data
-		 const size_t bytesPerRow = bitmap.width * numChannels * sizeof(PixelType);
+		// Copy pixel data
+		const size_t bytesPerRow = bitmap.width * numChannels * sizeof(PixelType);
 
-		 if (bitmap.stride == bytesPerRow) {
-			 // Direct memory copy if stride matches
-			 const size_t totalBytes = bitmap.height * bytesPerRow;
-			 std::memcpy(pix.getData(), bitmap.image, totalBytes);
-		 } else {
-			 // Row-by-row copy if stride differs
-			 PixelType* dstPtr = pix.getData();
-			 const uint8_t* srcPtr = static_cast<const uint8_t*>(bitmap.image);
+		if (bitmap.stride == bytesPerRow) {
+			// Direct memory copy if stride matches
+			const size_t totalBytes = bitmap.height * bytesPerRow;
+			std::memcpy(pix.getData(), bitmap.image, totalBytes);
+		} else {
+			// Row-by-row copy if stride differs
+			PixelType * dstPtr = pix.getData();
+			const uint8_t * srcPtr = static_cast<const uint8_t *>(bitmap.image);
 
-			 for (int y = 0; y < bitmap.height; ++y) {
-				 std::memcpy(dstPtr, srcPtr, bytesPerRow);
-				 dstPtr += bitmap.width * numChannels;
-				 srcPtr += bitmap.stride;
-			 }
-		 }
-		 return true;
-	 } catch (const std::exception& e) {
-		 ofLogError("ofImage") << "loadImage(): Exception loading \"" << _fileName << "\": " << e.what();
-	 } catch (...) {
-		 ofLogError("ofImage") << "loadImage(): Unknown exception loading \"" << _fileName << "\"";
-	 }
+			for (int y = 0; y < bitmap.height; ++y) {
+				std::memcpy(dstPtr, srcPtr, bytesPerRow);
+				dstPtr += bitmap.width * numChannels;
+				srcPtr += bitmap.stride;
+			}
+		}
+		return true;
+	} catch (const std::exception & e) {
+		ofLogError("ofImage") << "loadImage(): Exception loading \"" << _fileName << "\": " << e.what();
+	} catch (...) {
+		ofLogError("ofImage") << "loadImage(): Unknown exception loading \"" << _fileName << "\"";
+	}
 	return false;
 
-//
-////	ofInitFreeImage();
-//
-//
-//	auto filenameString = _fileName.string();
-//	if (filenameString.rfind("http", 0) == 0) { // pos=0 limits the search to the prefix
-//	  // s starts with prefix
-//#ifdef OFXURL
-//		return ofLoadImage(pix, ofLoadURL(ofPathToString(_fileName)).data);
-//#endif
-//	}
-//
-
+	//
+	////	ofInitFreeImage();
+	//
+	//
+	//	auto filenameString = _fileName.string();
+	//	if (filenameString.rfind("http", 0) == 0) { // pos=0 limits the search to the prefix
+	//	  // s starts with prefix
+	//#ifdef OFXURL
+	//		return ofLoadImage(pix, ofLoadURL(ofPathToString(_fileName)).data);
+	//#endif
+	//	}
+	//
 
 	//	cout << bitmap.width << endl;
-//	auto uriStr = ofPathToString(_fileName);
-//	auto fileNameString = ofPathToString(_fileName);
-//	UriUriA uri;
-//	UriParserStateA state;
-//	state.uri = &uri;
-//	auto uriChar = uriStr.c_str();
-//
-//	if(uriParseUriA(&state, uriChar)!=URI_SUCCESS){
-//		const int bytesNeeded = 8 + 3 * strlen(uriChar) + 1;
-//		std::vector<char> absUri(bytesNeeded);
-//	#ifdef TARGET_WIN32
-//		uriWindowsFilenameToUriStringA(uriChar, absUri.data());
-//	#else
-//		uriUnixFilenameToUriStringA(uriChar, absUri.data());
-//	#endif
-//		if(uriParseUriA(&state, absUri.data())!=URI_SUCCESS){
-//			ofLogError("ofImage") << "loadImage(): malformed uri when loading image from uri " << _fileName;
-//			uriFreeUriMembersA(&uri);
-//			return false;
-//		}
-//	}
-//	std::string scheme(uri.scheme.first, uri.scheme.afterLast);
-//	uriFreeUriMembersA(&uri);
+	//	auto uriStr = ofPathToString(_fileName);
+	//	auto fileNameString = ofPathToString(_fileName);
+	//	UriUriA uri;
+	//	UriParserStateA state;
+	//	state.uri = &uri;
+	//	auto uriChar = uriStr.c_str();
+	//
+	//	if(uriParseUriA(&state, uriChar)!=URI_SUCCESS){
+	//		const int bytesNeeded = 8 + 3 * strlen(uriChar) + 1;
+	//		std::vector<char> absUri(bytesNeeded);
+	//	#ifdef TARGET_WIN32
+	//		uriWindowsFilenameToUriStringA(uriChar, absUri.data());
+	//	#else
+	//		uriUnixFilenameToUriStringA(uriChar, absUri.data());
+	//	#endif
+	//		if(uriParseUriA(&state, absUri.data())!=URI_SUCCESS){
+	//			ofLogError("ofImage") << "loadImage(): malformed uri when loading image from uri " << _fileName;
+	//			uriFreeUriMembersA(&uri);
+	//			return false;
+	//		}
+	//	}
+	//	std::string scheme(uri.scheme.first, uri.scheme.afterLast);
+	//	uriFreeUriMembersA(&uri);
 
-//#ifdef OFXURL
-//	if(scheme == "http" || scheme == "https"){
-//		return ofLoadImage(pix, ofLoadURL(ofPathToString(_fileName)).data);
-//
-//	}
-//#endif
+	//#ifdef OFXURL
+	//	if(scheme == "http" || scheme == "https"){
+	//		return ofLoadImage(pix, ofLoadURL(ofPathToString(_fileName)).data);
+	//
+	//	}
+	//#endif
 
 	//-----------------------------
 
-//	if ( bLoaded ){
-//		putBmpIntoPixels(bmp,pix);
-//	}
-//
-//	if (bmp != nullptr){
-//		FreeImage_Unload(bmp);
-//	}
-//
-//	return bLoaded;
+	//	if ( bLoaded ){
+	//		putBmpIntoPixels(bmp,pix);
+	//	}
+	//
+	//	if (bmp != nullptr){
+	//		FreeImage_Unload(bmp);
+	//	}
+	//
+	//	return bLoaded;
 }
 
-template<typename PixelType>
+template <typename PixelType>
 static bool loadImage(ofPixels_<PixelType> & pix,
-					  const ofBuffer & buffer,
-					  const ofImageLoadSettings &settings) {
+	const ofBuffer & buffer,
+	const ofImageLoadSettings & settings) {
 	// FIXME: Implement this.
 	return false;
 
-
-//	ofInitFreeImage();
-//	bool bLoaded = false;
-//	FIBITMAP* bmp = nullptr;
-//	FIMEMORY* hmem = nullptr;
-//
-//	hmem = FreeImage_OpenMemory((unsigned char*) buffer.getData(), buffer.size());
-//	if (hmem == nullptr){
-//		ofLogError("ofImage") << "loadImage(): couldn't load image from ofBuffer, opening FreeImage memory failed";
-//		return false;
-//	}
-//
-//	//get the file type!
-//	FREE_IMAGE_FORMAT fif = FreeImage_GetFileTypeFromMemory(hmem);
-//	if( fif == -1 ){
-//		ofLogError("ofImage") << "loadImage(): couldn't load image from ofBuffer, unable to guess image format from memory";
-//		FreeImage_CloseMemory(hmem);
-//		return false;
-//	}
-//
-//
-//	//make the image!!
-//	int option = 0;
-//	if(fif == FIF_JPEG) {
-//		option = getJpegOptionFromImageLoadSetting(settings);
-//	}
-//	bmp = FreeImage_LoadFromMemory(fif, hmem, option | settings.freeImageFlags);
-//
-//	if( bmp != nullptr ){
-//		bLoaded = true;
-//	}
-//
-//	//-----------------------------
-//
-//	if (bLoaded){
-//		putBmpIntoPixels(bmp,pix);
-//	}
-//
-//	if (bmp != nullptr){
-//		FreeImage_Unload(bmp);
-//	}
-//
-//	if( hmem != nullptr ){
-//		FreeImage_CloseMemory(hmem);
-//	}
-//
-//	return bLoaded;
+	//	ofInitFreeImage();
+	//	bool bLoaded = false;
+	//	FIBITMAP* bmp = nullptr;
+	//	FIMEMORY* hmem = nullptr;
+	//
+	//	hmem = FreeImage_OpenMemory((unsigned char*) buffer.getData(), buffer.size());
+	//	if (hmem == nullptr){
+	//		ofLogError("ofImage") << "loadImage(): couldn't load image from ofBuffer, opening FreeImage memory failed";
+	//		return false;
+	//	}
+	//
+	//	//get the file type!
+	//	FREE_IMAGE_FORMAT fif = FreeImage_GetFileTypeFromMemory(hmem);
+	//	if( fif == -1 ){
+	//		ofLogError("ofImage") << "loadImage(): couldn't load image from ofBuffer, unable to guess image format from memory";
+	//		FreeImage_CloseMemory(hmem);
+	//		return false;
+	//	}
+	//
+	//
+	//	//make the image!!
+	//	int option = 0;
+	//	if(fif == FIF_JPEG) {
+	//		option = getJpegOptionFromImageLoadSetting(settings);
+	//	}
+	//	bmp = FreeImage_LoadFromMemory(fif, hmem, option | settings.freeImageFlags);
+	//
+	//	if( bmp != nullptr ){
+	//		bLoaded = true;
+	//	}
+	//
+	//	//-----------------------------
+	//
+	//	if (bLoaded){
+	//		putBmpIntoPixels(bmp,pix);
+	//	}
+	//
+	//	if (bmp != nullptr){
+	//		FreeImage_Unload(bmp);
+	//	}
+	//
+	//	if( hmem != nullptr ){
+	//		FreeImage_CloseMemory(hmem);
+	//	}
+	//
+	//	return bLoaded;
 }
 
 //----------------------------------------------------------------
@@ -451,29 +444,29 @@ bool ofLoadImage(ofFloatPixels & pix, const ofBuffer & buffer, const ofImageLoad
 }
 
 //----------------------------------------------------------------
-bool ofLoadImage(ofTexture & tex, const of::filesystem::path & path, const ofImageLoadSettings & settings ) {
-	return ofLoadImage( tex, path, false, settings );
+bool ofLoadImage(ofTexture & tex, const of::filesystem::path & path, const ofImageLoadSettings & settings) {
+	return ofLoadImage(tex, path, false, settings);
 }
 
 //----------------------------------------------------------------
-bool ofLoadImage(ofTexture & tex, const of::filesystem::path& path, bool bFlipInY, const ofImageLoadSettings &settings){
+bool ofLoadImage(ofTexture & tex, const of::filesystem::path & path, bool bFlipInY, const ofImageLoadSettings & settings) {
 	bool loaded = false;
 	auto ext = ofGetExtensionLower(path);
 
 	bool hdr = (ext == ".hdr" || ext == ".exr");
-	if( hdr ) {
+	if (hdr) {
 		ofFloatPixels pixels;
 		loaded = ofLoadImage(pixels, path, settings);
-		if(loaded){
-			#if defined(TARGET_OPENGLES)
+		if (loaded) {
+#if defined(TARGET_OPENGLES)
 			// GL_RGB32F, GL_RGBA32F and GL_RGB16F is not supported in Emscripten opengl es, so we need to set to GL_RGBA16F or GL_RGBA32F. But GL_RGBA32F is not supported via opengl es on most mobile devices as of right now.
-			if(pixels.getNumChannels() != 4 ) {
+			if (pixels.getNumChannels() != 4) {
 				// set alpha to 1.
 				ofLogVerbose("ofLoadImage") << "changing number of loaded pixel channels from " << pixels.getNumChannels() << " to 4 for more broad support on OpenGL ES.";
-				pixels.setImageType( OF_IMAGE_COLOR_ALPHA );
+				pixels.setImageType(OF_IMAGE_COLOR_ALPHA);
 			}
-			#endif
-			if(bFlipInY) {
+#endif
+			if (bFlipInY) {
 				pixels.mirror(true, false);
 			}
 			tex.loadData(pixels);
@@ -481,8 +474,8 @@ bool ofLoadImage(ofTexture & tex, const of::filesystem::path& path, bool bFlipIn
 	} else {
 		ofPixels pixels;
 		loaded = ofLoadImage(pixels, path, settings);
-		if(loaded){
-			if(bFlipInY) {
+		if (loaded) {
+			if (bFlipInY) {
 				pixels.mirror(true, false);
 			}
 			tex.allocate(pixels.getWidth(), pixels.getHeight(), ofGetGLInternalFormat(pixels));
@@ -493,10 +486,10 @@ bool ofLoadImage(ofTexture & tex, const of::filesystem::path& path, bool bFlipIn
 }
 
 //----------------------------------------------------------------
-bool ofLoadImage(ofTexture & tex, const ofBuffer & buffer, const ofImageLoadSettings &settings){
+bool ofLoadImage(ofTexture & tex, const ofBuffer & buffer, const ofImageLoadSettings & settings) {
 	ofPixels pixels;
 	bool loaded = ofLoadImage(pixels, buffer, settings);
-	if(loaded){
+	if (loaded) {
 		tex.allocate(pixels.getWidth(), pixels.getHeight(), ofGetGLInternalFormat(pixels));
 		tex.loadData(pixels);
 	}
@@ -504,332 +497,330 @@ bool ofLoadImage(ofTexture & tex, const ofBuffer & buffer, const ofImageLoadSett
 }
 
 //----------------------------------------------------------------
-template<typename PixelType>
+template <typename PixelType>
 static bool saveImage(const ofPixels_<PixelType> & _pix, const of::filesystem::path & _fileName, ofImageQualityType qualityLevel) {
 	try {
 		auto fileImage { ofToDataPath(_fileName) };
-		cout << "saveImage xxx " << _fileName << endl;
 
-		 std::string filename = fileImage.string();
+		std::string filename = fileImage.string();
 
-		 // Get pixel data info
-		 int width = _pix.getWidth();
-		 int height = _pix.getHeight();
-		 int numChannels = _pix.getNumChannels();
+		// Get pixel data info
+		int width = _pix.getWidth();
+		int height = _pix.getHeight();
+		int numChannels = _pix.getNumChannels();
 
-		 if (width == 0 || height == 0) {
-			 ofLogError("ofImage") << "saveImage(): Invalid image dimensions";
-			 return false;
-		 }
+		if (width == 0 || height == 0) {
+			ofLogError("ofImage") << "saveImage(): Invalid image dimensions";
+			return false;
+		}
 
-		 // Create Mango format from ofPixels
-		 mango::image::Format format = getMangoFormat(_pix);
+		// Create Mango format from ofPixels
+		mango::image::Format format = getMangoFormat(_pix);
 
-		 // Calculate stride (bytes per row)
-		 size_t stride = width * numChannels * sizeof(PixelType);
+		// Calculate stride (bytes per row)
+		size_t stride = width * numChannels * sizeof(PixelType);
 
-		 // Create a Surface wrapping the ofPixels data
-		 mango::image::Surface surface(width, height, format, stride, const_cast<PixelType*>(_pix.getData()));
+		// Create a Surface wrapping the ofPixels data
+		mango::image::Surface surface(width, height, format, stride, const_cast<PixelType *>(_pix.getData()));
 
-		 // Determine file extension to choose encoder
-		 std::string ext = _fileName.extension().string();
-		 std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+		// Determine file extension to choose encoder
+		std::string ext = _fileName.extension().string();
+		std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
 
-		 // Prepare encoding options
-		 mango::image::ImageEncodeOptions options;
+		// Prepare encoding options
+		mango::image::ImageEncodeOptions options;
 
-		 // Set quality based on ofImageQualityType
-		 float quality = 0.85f; // default
+		// Set quality based on ofImageQualityType
+		float quality = 0.85f; // default
 
-		 switch(qualityLevel) {
-			 case OF_IMAGE_QUALITY_BEST:
-				 quality = 1.0f;
-				 break;
-			 case OF_IMAGE_QUALITY_HIGH:
-				 quality = 0.9f;
-				 break;
-			 case OF_IMAGE_QUALITY_MEDIUM:
-				 quality = 0.75f;
-				 break;
-			 case OF_IMAGE_QUALITY_LOW:
-				 quality = 0.5f;
-				 break;
-			 case OF_IMAGE_QUALITY_WORST:
-				 quality = 0.25f;
-				 break;
-		 }
+		switch (qualityLevel) {
+		case OF_IMAGE_QUALITY_BEST:
+			quality = 1.0f;
+			break;
+		case OF_IMAGE_QUALITY_HIGH:
+			quality = 0.9f;
+			break;
+		case OF_IMAGE_QUALITY_MEDIUM:
+			quality = 0.75f;
+			break;
+		case OF_IMAGE_QUALITY_LOW:
+			quality = 0.5f;
+			break;
+		case OF_IMAGE_QUALITY_WORST:
+			quality = 0.25f;
+			break;
+		}
 
-		 options.quality = quality;
+		options.quality = quality;
 
-		 // Get the image encoder for the file format
-		 std::string extension = ext.substr(1); // remove the dot
-		 mango::image::ImageEncoder encoder(extension);
+		// Get the image encoder for the file format
+		std::string extension = ext.substr(1); // remove the dot
+		mango::image::ImageEncoder encoder(extension);
 
-		 if (!encoder.isEncoder()) {
-			 ofLogError("ofImage") << "saveImage(): No encoder found for format \"" << extension << "\"";
-			 return false;
-		 }
+		if (!encoder.isEncoder()) {
+			ofLogError("ofImage") << "saveImage(): No encoder found for format \"" << extension << "\"";
+			return false;
+		}
 
-		 // Create a file output stream
-		 mango::filesystem::OutputFileStream fileStream(filename);
+		// Create a file output stream
+		mango::filesystem::OutputFileStream fileStream(filename);
 
-		 // Encode the image to the stream
-		 mango::image::ImageEncodeStatus status = encoder.encode(fileStream, surface, options);
+		// Encode the image to the stream
+		mango::image::ImageEncodeStatus status = encoder.encode(fileStream, surface, options);
 
-		 if (!status.success) {
-			 ofLogError("ofImage") << "saveImage(): Failed to encode image: " << status.info;
-			 return false;
-		 }
+		if (!status.success) {
+			ofLogError("ofImage") << "saveImage(): Failed to encode image: " << status.info;
+			return false;
+		}
 
-		 return true;
+		return true;
 
-	 } catch (const std::exception& e) {
-		 ofLogError("ofImage") << "saveImage(): Exception saving \"" << _fileName << "\": " << e.what();
-		 return false;
-	 } catch (...) {
-		 ofLogError("ofImage") << "saveImage(): Unknown exception saving \"" << _fileName << "\"";
-		 return false;
-	 }
-//	ofInitFreeImage();
-//	if (_pix.isAllocated() == false){
-//		ofLogError("ofImage") << "saveImage(): couldn't save " << _fileName << ", pixels are not allocated";
-//		return false;
-//	}
-//
-//	// MARK: test
-////	ofFilePath::createEnclosingDirectory(_fileName);
-//
-//	auto fileName = ofToDataPath(_fileName);
-//	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
-//#ifdef OF_OS_WINDOWS
-//	fif = FreeImage_GetFileTypeU(fileName.c_str(), 0);
-//#else
-//	fif = FreeImage_GetFileType(fileName.c_str(), 0);
-//#endif
-//	if(fif == FIF_UNKNOWN) {
-//		// or guess via filename
-//#ifdef OF_OS_WINDOWS
-//		fif = FreeImage_GetFIFFromFilenameU(_fileName.extension().c_str());
-//#else
-//		fif = FreeImage_GetFIFFromFilename(_fileName.extension().c_str());
-//#endif
-//	}
-//	if(fif==FIF_JPEG && (_pix.getNumChannels()==4 || _pix.getBitsPerChannel() > 8)){
-//		ofPixels pix3 = _pix;
-//        if( pix3.getPixelFormat() == OF_PIXELS_BGRA ){
-//            pix3.swapRgb();
-//        }
-//		pix3.setNumChannels(3);
-//		return saveImage(pix3, _fileName, qualityLevel);
-//	}
-//
-//	FIBITMAP * bmp = nullptr;
-//	#ifdef TARGET_LITTLE_ENDIAN
-//	if(sizeof(PixelType) == 1 && (_pix.getPixelFormat()==OF_PIXELS_RGB || _pix.getPixelFormat()==OF_PIXELS_RGBA)) {	// Make a local copy.
-//		ofPixels_<PixelType> pix = _pix;
-//		pix.swapRgb();
-//		bmp	= getBmpFromPixels(pix);
-//	}else{
-//	#endif
-//
-//		bmp	= getBmpFromPixels(_pix);
-//
-//
-//	#ifdef TARGET_LITTLE_ENDIAN
-//	}
-//	#endif
-//
-//	bool retValue = false;
-//	if((fif != FIF_UNKNOWN) && FreeImage_FIFSupportsReading(fif)) {
-//		if(fif == FIF_JPEG) {
-//			int quality = JPEG_QUALITYSUPERB;
-//			switch(qualityLevel) {
-//				case OF_IMAGE_QUALITY_WORST: quality = JPEG_QUALITYBAD; break;
-//				case OF_IMAGE_QUALITY_LOW: quality = JPEG_QUALITYAVERAGE; break;
-//				case OF_IMAGE_QUALITY_MEDIUM: quality = JPEG_QUALITYNORMAL; break;
-//				case OF_IMAGE_QUALITY_HIGH: quality = JPEG_QUALITYGOOD; break;
-//				case OF_IMAGE_QUALITY_BEST: quality = JPEG_QUALITYSUPERB; break;
-//			}
-//#ifdef OF_OS_WINDOWS
-//			retValue = FreeImage_SaveU(fif, bmp, fileName.c_str(), quality);
-//#else
-//			retValue = FreeImage_Save(fif, bmp, fileName.c_str(), quality);
-//#endif
-//		} else {
-//			if(qualityLevel != OF_IMAGE_QUALITY_BEST) {
-//				ofLogWarning("ofImage") << "saveImage(): ofImageCompressionType only applies to JPEGs,"
-//					<< " ignoring value for "<< _fileName;
-//			}
-//
-//			if (fif == FIF_GIF) {
-//				FIBITMAP* convertedBmp;
-//				if(_pix.getImageType() == OF_IMAGE_COLOR_ALPHA) {
-//					// this just converts the image to grayscale so it can save something
-//					convertedBmp = FreeImage_ConvertTo8Bits(bmp);
-//				} else {
-//					// this will create a 256-color palette from the image
-//					convertedBmp = FreeImage_ColorQuantize(bmp, FIQ_NNQUANT);
-//				}
-//#ifdef OF_OS_WINDOWS
-//				retValue = FreeImage_SaveU(fif, convertedBmp, fileName.c_str());
-//#else
-//				retValue = FreeImage_Save(fif, convertedBmp, fileName.c_str());
-//#endif
-//				if (convertedBmp != nullptr){
-//					FreeImage_Unload(convertedBmp);
-//				}
-//			} else {
-//#ifdef OF_OS_WINDOWS
-//				retValue = FreeImage_SaveU(fif, bmp, fileName.c_str());
-//#else
-//				retValue = FreeImage_Save(fif, bmp, fileName.c_str());
-//#endif
-//			}
-//		}
-//	}
-//
-//	if (bmp != nullptr){
-//		FreeImage_Unload(bmp);
-//	}
-//
-//	return retValue;
+	} catch (const std::exception & e) {
+		ofLogError("ofImage") << "saveImage(): Exception saving \"" << _fileName << "\": " << e.what();
+		return false;
+	} catch (...) {
+		ofLogError("ofImage") << "saveImage(): Unknown exception saving \"" << _fileName << "\"";
+		return false;
+	}
+	//	ofInitFreeImage();
+	//	if (_pix.isAllocated() == false){
+	//		ofLogError("ofImage") << "saveImage(): couldn't save " << _fileName << ", pixels are not allocated";
+	//		return false;
+	//	}
+	//
+	//	// MARK: test
+	////	ofFilePath::createEnclosingDirectory(_fileName);
+	//
+	//	auto fileName = ofToDataPath(_fileName);
+	//	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
+	//#ifdef OF_OS_WINDOWS
+	//	fif = FreeImage_GetFileTypeU(fileName.c_str(), 0);
+	//#else
+	//	fif = FreeImage_GetFileType(fileName.c_str(), 0);
+	//#endif
+	//	if(fif == FIF_UNKNOWN) {
+	//		// or guess via filename
+	//#ifdef OF_OS_WINDOWS
+	//		fif = FreeImage_GetFIFFromFilenameU(_fileName.extension().c_str());
+	//#else
+	//		fif = FreeImage_GetFIFFromFilename(_fileName.extension().c_str());
+	//#endif
+	//	}
+	//	if(fif==FIF_JPEG && (_pix.getNumChannels()==4 || _pix.getBitsPerChannel() > 8)){
+	//		ofPixels pix3 = _pix;
+	//        if( pix3.getPixelFormat() == OF_PIXELS_BGRA ){
+	//            pix3.swapRgb();
+	//        }
+	//		pix3.setNumChannels(3);
+	//		return saveImage(pix3, _fileName, qualityLevel);
+	//	}
+	//
+	//	FIBITMAP * bmp = nullptr;
+	//	#ifdef TARGET_LITTLE_ENDIAN
+	//	if(sizeof(PixelType) == 1 && (_pix.getPixelFormat()==OF_PIXELS_RGB || _pix.getPixelFormat()==OF_PIXELS_RGBA)) {	// Make a local copy.
+	//		ofPixels_<PixelType> pix = _pix;
+	//		pix.swapRgb();
+	//		bmp	= getBmpFromPixels(pix);
+	//	}else{
+	//	#endif
+	//
+	//		bmp	= getBmpFromPixels(_pix);
+	//
+	//
+	//	#ifdef TARGET_LITTLE_ENDIAN
+	//	}
+	//	#endif
+	//
+	//	bool retValue = false;
+	//	if((fif != FIF_UNKNOWN) && FreeImage_FIFSupportsReading(fif)) {
+	//		if(fif == FIF_JPEG) {
+	//			int quality = JPEG_QUALITYSUPERB;
+	//			switch(qualityLevel) {
+	//				case OF_IMAGE_QUALITY_WORST: quality = JPEG_QUALITYBAD; break;
+	//				case OF_IMAGE_QUALITY_LOW: quality = JPEG_QUALITYAVERAGE; break;
+	//				case OF_IMAGE_QUALITY_MEDIUM: quality = JPEG_QUALITYNORMAL; break;
+	//				case OF_IMAGE_QUALITY_HIGH: quality = JPEG_QUALITYGOOD; break;
+	//				case OF_IMAGE_QUALITY_BEST: quality = JPEG_QUALITYSUPERB; break;
+	//			}
+	//#ifdef OF_OS_WINDOWS
+	//			retValue = FreeImage_SaveU(fif, bmp, fileName.c_str(), quality);
+	//#else
+	//			retValue = FreeImage_Save(fif, bmp, fileName.c_str(), quality);
+	//#endif
+	//		} else {
+	//			if(qualityLevel != OF_IMAGE_QUALITY_BEST) {
+	//				ofLogWarning("ofImage") << "saveImage(): ofImageCompressionType only applies to JPEGs,"
+	//					<< " ignoring value for "<< _fileName;
+	//			}
+	//
+	//			if (fif == FIF_GIF) {
+	//				FIBITMAP* convertedBmp;
+	//				if(_pix.getImageType() == OF_IMAGE_COLOR_ALPHA) {
+	//					// this just converts the image to grayscale so it can save something
+	//					convertedBmp = FreeImage_ConvertTo8Bits(bmp);
+	//				} else {
+	//					// this will create a 256-color palette from the image
+	//					convertedBmp = FreeImage_ColorQuantize(bmp, FIQ_NNQUANT);
+	//				}
+	//#ifdef OF_OS_WINDOWS
+	//				retValue = FreeImage_SaveU(fif, convertedBmp, fileName.c_str());
+	//#else
+	//				retValue = FreeImage_Save(fif, convertedBmp, fileName.c_str());
+	//#endif
+	//				if (convertedBmp != nullptr){
+	//					FreeImage_Unload(convertedBmp);
+	//				}
+	//			} else {
+	//#ifdef OF_OS_WINDOWS
+	//				retValue = FreeImage_SaveU(fif, bmp, fileName.c_str());
+	//#else
+	//				retValue = FreeImage_Save(fif, bmp, fileName.c_str());
+	//#endif
+	//			}
+	//		}
+	//	}
+	//
+	//	if (bmp != nullptr){
+	//		FreeImage_Unload(bmp);
+	//	}
+	//
+	//	return retValue;
 }
 
 //----------------------------------------------------------------
-bool ofSaveImage(const ofPixels & pix, const of::filesystem::path& fileName, ofImageQualityType qualityLevel){
-	return saveImage(pix,fileName,qualityLevel);
+bool ofSaveImage(const ofPixels & pix, const of::filesystem::path & fileName, ofImageQualityType qualityLevel) {
+	return saveImage(pix, fileName, qualityLevel);
 }
 
 //----------------------------------------------------------------
-bool ofSaveImage(const ofFloatPixels & pix, const of::filesystem::path& fileName, ofImageQualityType qualityLevel) {
-	return saveImage(pix,fileName,qualityLevel);
+bool ofSaveImage(const ofFloatPixels & pix, const of::filesystem::path & fileName, ofImageQualityType qualityLevel) {
+	return saveImage(pix, fileName, qualityLevel);
 }
 
 //----------------------------------------------------------------
-bool ofSaveImage(const ofShortPixels & pix, const of::filesystem::path& fileName, ofImageQualityType qualityLevel) {
-	return saveImage(pix,fileName,qualityLevel);
+bool ofSaveImage(const ofShortPixels & pix, const of::filesystem::path & fileName, ofImageQualityType qualityLevel) {
+	return saveImage(pix, fileName, qualityLevel);
 }
 
 //----------------------------------------------------------------
-template<typename PixelType>
+template <typename PixelType>
 static bool saveImage(const ofPixels_<PixelType> & _pix, ofBuffer & buffer, ofImageFormat format, ofImageQualityType qualityLevel) {
 
 	// FIXME: Implement this
 	return false;
 	// thanks to alvaro casinelli for the implementation
 
-//	ofInitFreeImage();
-//
-//	if (_pix.isAllocated() == false){
-//		ofLogError("ofImage") << "saveImage(): couldn't save to ofBuffer, pixels are not allocated";
-//		return false;
-//	}
-//
-//	if(format==OF_IMAGE_FORMAT_JPEG && (_pix.getNumChannels()==4 || _pix.getBitsPerChannel() > 8)){
-//		ofPixels pix3 = _pix;
-//        if( pix3.getPixelFormat() == OF_PIXELS_BGRA ){
-//            pix3.swapRgb();
-//        }
-//		pix3.setNumChannels(3);
-//		return saveImage(pix3,buffer,format,qualityLevel);
-//	}
-//
-//
-//	FIBITMAP * bmp = nullptr;
-//	#ifdef TARGET_LITTLE_ENDIAN
-//	if(sizeof(PixelType) == 1 && (_pix.getPixelFormat()==OF_PIXELS_RGB || _pix.getPixelFormat()==OF_PIXELS_RGBA)) {	// Make a local copy.
-//		ofPixels_<PixelType> pix = _pix;
-//		pix.swapRgb();
-//		bmp	= getBmpFromPixels(pix);
-//	}else{
-//	#endif
-//
-//		bmp	= getBmpFromPixels(_pix);
-//
-//
-//	#ifdef TARGET_LITTLE_ENDIAN
-//	}
-//	#endif
-//
-//	if (bmp)  // bitmap successfully created
-//	{
-//		bool returnValue;
-//		// (b) open a memory stream to compress the image onto mem_buffer:
-//		//
-//		FIMEMORY *hmem = FreeImage_OpenMemory();
-//		// (c) encode and save the image to the memory (on dib FIBITMAP image):
-//		//
-//		if(FREE_IMAGE_FORMAT(format) == FIF_JPEG) {
-//			int quality = JPEG_QUALITYSUPERB;
-//			switch(qualityLevel) {
-//				case OF_IMAGE_QUALITY_WORST: quality = JPEG_QUALITYBAD; break;
-//				case OF_IMAGE_QUALITY_LOW: quality = JPEG_QUALITYAVERAGE; break;
-//				case OF_IMAGE_QUALITY_MEDIUM: quality = JPEG_QUALITYNORMAL; break;
-//				case OF_IMAGE_QUALITY_HIGH: quality = JPEG_QUALITYGOOD; break;
-//				case OF_IMAGE_QUALITY_BEST: quality = JPEG_QUALITYSUPERB; break;
-//			}
-//			returnValue = FreeImage_SaveToMemory(FIF_JPEG, bmp, hmem, quality);
-//		}else{
-//			returnValue = FreeImage_SaveToMemory((FREE_IMAGE_FORMAT)format, bmp, hmem);
-//		}
-//
-//		/*
-//
-//		NOTE: at this point, hmem contains the entire data in memory stored in fif format. the
-//		amount of space used by the memory is equal to file_size:
-//		long file_size = FreeImage_TellMemory(hmem);
-//		but can also be retrieved by FreeImage_AcquireMemory that retrieves both the
-//		length of the buffer, and the buffer memory address.
-//		*/
-//		#ifdef TARGET_WIN32
-//		   DWORD size_in_bytes = 0;
-//		#else
-//		   std::uint32_t size_in_bytes = 0;
-//		#endif
-//		// Save compressed data on mem_buffer
-//		// note: FreeImage_AquireMemory allocates space for aux_mem_buffer):
-//		//
-//		unsigned char *mem_buffer = nullptr;
-//		if (!FreeImage_AcquireMemory(hmem, &mem_buffer, &size_in_bytes)){
-//			ofLogError("ofImage") << "saveImage(): couldn't save to ofBuffer, aquiring compressed image from memory failed";
-//			return false;
-//		}
-//
-//		/*
-//		  Now, before closing the memory stream, copy the content of mem_buffer
-//		  to an auxiliary buffer
-//		*/
-//
-//		buffer.set((char*)mem_buffer,size_in_bytes);
-//
-//		// Finally, close the FIBITMAP object, or we will get a memory leak:
-//		FreeImage_Unload(bmp);
-//
-//		// Close the memory stream (otherwise we may get a memory leak).
-//		FreeImage_CloseMemory(hmem);
-//		return returnValue;
-//	}else{
-//		return false;
-//	}
+	//	ofInitFreeImage();
+	//
+	//	if (_pix.isAllocated() == false){
+	//		ofLogError("ofImage") << "saveImage(): couldn't save to ofBuffer, pixels are not allocated";
+	//		return false;
+	//	}
+	//
+	//	if(format==OF_IMAGE_FORMAT_JPEG && (_pix.getNumChannels()==4 || _pix.getBitsPerChannel() > 8)){
+	//		ofPixels pix3 = _pix;
+	//        if( pix3.getPixelFormat() == OF_PIXELS_BGRA ){
+	//            pix3.swapRgb();
+	//        }
+	//		pix3.setNumChannels(3);
+	//		return saveImage(pix3,buffer,format,qualityLevel);
+	//	}
+	//
+	//
+	//	FIBITMAP * bmp = nullptr;
+	//	#ifdef TARGET_LITTLE_ENDIAN
+	//	if(sizeof(PixelType) == 1 && (_pix.getPixelFormat()==OF_PIXELS_RGB || _pix.getPixelFormat()==OF_PIXELS_RGBA)) {	// Make a local copy.
+	//		ofPixels_<PixelType> pix = _pix;
+	//		pix.swapRgb();
+	//		bmp	= getBmpFromPixels(pix);
+	//	}else{
+	//	#endif
+	//
+	//		bmp	= getBmpFromPixels(_pix);
+	//
+	//
+	//	#ifdef TARGET_LITTLE_ENDIAN
+	//	}
+	//	#endif
+	//
+	//	if (bmp)  // bitmap successfully created
+	//	{
+	//		bool returnValue;
+	//		// (b) open a memory stream to compress the image onto mem_buffer:
+	//		//
+	//		FIMEMORY *hmem = FreeImage_OpenMemory();
+	//		// (c) encode and save the image to the memory (on dib FIBITMAP image):
+	//		//
+	//		if(FREE_IMAGE_FORMAT(format) == FIF_JPEG) {
+	//			int quality = JPEG_QUALITYSUPERB;
+	//			switch(qualityLevel) {
+	//				case OF_IMAGE_QUALITY_WORST: quality = JPEG_QUALITYBAD; break;
+	//				case OF_IMAGE_QUALITY_LOW: quality = JPEG_QUALITYAVERAGE; break;
+	//				case OF_IMAGE_QUALITY_MEDIUM: quality = JPEG_QUALITYNORMAL; break;
+	//				case OF_IMAGE_QUALITY_HIGH: quality = JPEG_QUALITYGOOD; break;
+	//				case OF_IMAGE_QUALITY_BEST: quality = JPEG_QUALITYSUPERB; break;
+	//			}
+	//			returnValue = FreeImage_SaveToMemory(FIF_JPEG, bmp, hmem, quality);
+	//		}else{
+	//			returnValue = FreeImage_SaveToMemory((FREE_IMAGE_FORMAT)format, bmp, hmem);
+	//		}
+	//
+	//		/*
+	//
+	//		NOTE: at this point, hmem contains the entire data in memory stored in fif format. the
+	//		amount of space used by the memory is equal to file_size:
+	//		long file_size = FreeImage_TellMemory(hmem);
+	//		but can also be retrieved by FreeImage_AcquireMemory that retrieves both the
+	//		length of the buffer, and the buffer memory address.
+	//		*/
+	//		#ifdef TARGET_WIN32
+	//		   DWORD size_in_bytes = 0;
+	//		#else
+	//		   std::uint32_t size_in_bytes = 0;
+	//		#endif
+	//		// Save compressed data on mem_buffer
+	//		// note: FreeImage_AquireMemory allocates space for aux_mem_buffer):
+	//		//
+	//		unsigned char *mem_buffer = nullptr;
+	//		if (!FreeImage_AcquireMemory(hmem, &mem_buffer, &size_in_bytes)){
+	//			ofLogError("ofImage") << "saveImage(): couldn't save to ofBuffer, aquiring compressed image from memory failed";
+	//			return false;
+	//		}
+	//
+	//		/*
+	//		  Now, before closing the memory stream, copy the content of mem_buffer
+	//		  to an auxiliary buffer
+	//		*/
+	//
+	//		buffer.set((char*)mem_buffer,size_in_bytes);
+	//
+	//		// Finally, close the FIBITMAP object, or we will get a memory leak:
+	//		FreeImage_Unload(bmp);
+	//
+	//		// Close the memory stream (otherwise we may get a memory leak).
+	//		FreeImage_CloseMemory(hmem);
+	//		return returnValue;
+	//	}else{
+	//		return false;
+	//	}
 }
 
 //----------------------------------------------------------------
 bool ofSaveImage(const ofPixels & pix, ofBuffer & buffer, ofImageFormat format, ofImageQualityType qualityLevel) {
-	return saveImage(pix,buffer,format,qualityLevel);
+	return saveImage(pix, buffer, format, qualityLevel);
 }
 
 bool ofSaveImage(const ofFloatPixels & pix, ofBuffer & buffer, ofImageFormat format, ofImageQualityType qualityLevel) {
-	return saveImage(pix,buffer,format,qualityLevel);
+	return saveImage(pix, buffer, format, qualityLevel);
 }
 
 bool ofSaveImage(const ofShortPixels & pix, ofBuffer & buffer, ofImageFormat format, ofImageQualityType qualityLevel) {
-	return saveImage(pix,buffer,format,qualityLevel);
+	return saveImage(pix, buffer, format, qualityLevel);
 }
-
 
 //----------------------------------------------------
 // freeImage based stuff:
-void ofCloseFreeImage(){
+void ofCloseFreeImage() {
 	ofInitFreeImage(true);
 }
 
@@ -837,122 +828,120 @@ void ofCloseFreeImage(){
 //  implementation
 
 //----------------------------------------------------------
-template<typename PixelType>
-ofImage_<PixelType>::ofImage_(){
+template <typename PixelType>
+ofImage_<PixelType>::ofImage_() {
 
-	width						= 0;
-	height						= 0;
-	bpp							= 0;
-	type						= OF_IMAGE_UNDEFINED;
-	bUseTexture					= true;		// the default is, yes, use a texture
+	width = 0;
+	height = 0;
+	bpp = 0;
+	type = OF_IMAGE_UNDEFINED;
+	bUseTexture = true; // the default is, yes, use a texture
 
 	//----------------------- init free image if necessary
 	ofInitFreeImage();
 }
 
 //----------------------------------------------------------
-template<typename PixelType>
-ofImage_<PixelType>::ofImage_(const ofPixels_<PixelType> & pix){
-	width						= 0;
-	height						= 0;
-	bpp							= 0;
-	type						= OF_IMAGE_UNDEFINED;
-	bUseTexture					= true;		// the default is, yes, use a texture
+template <typename PixelType>
+ofImage_<PixelType>::ofImage_(const ofPixels_<PixelType> & pix) {
+	width = 0;
+	height = 0;
+	bpp = 0;
+	type = OF_IMAGE_UNDEFINED;
+	bUseTexture = true; // the default is, yes, use a texture
 
 	//----------------------- init free image if necessary
 	ofInitFreeImage();
-
 
 	setFromPixels(pix);
 }
 
-template<typename PixelType>
-ofImage_<PixelType>::ofImage_(const of::filesystem::path & fileName, const ofImageLoadSettings &settings){
-	width						= 0;
-	height						= 0;
-	bpp							= 0;
-	type						= OF_IMAGE_UNDEFINED;
-	bUseTexture					= true;		// the default is, yes, use a texture
+template <typename PixelType>
+ofImage_<PixelType>::ofImage_(const of::filesystem::path & fileName, const ofImageLoadSettings & settings) {
+	width = 0;
+	height = 0;
+	bpp = 0;
+	type = OF_IMAGE_UNDEFINED;
+	bUseTexture = true; // the default is, yes, use a texture
 
 	//----------------------- init free image if necessary
 	ofInitFreeImage();
-
 
 	load(fileName, settings);
 }
 
 //----------------------------------------------------------
-template<typename PixelType>
-ofImage_<PixelType>& ofImage_<PixelType>::operator=(const ofImage_<PixelType>& mom) {
-	if(&mom==this) return *this;
+template <typename PixelType>
+ofImage_<PixelType> & ofImage_<PixelType>::operator=(const ofImage_<PixelType> & mom) {
+	if (&mom == this) return *this;
 	clone(mom);
 
-	#if defined(TARGET_ANDROID)
-	ofAddListener(ofxAndroidEvents().unloadGL,this,&ofImage_<PixelType>::unloadTexture);
-	ofAddListener(ofxAndroidEvents().reloadGL,this,&ofImage_<PixelType>::update);
-	#endif
+#if defined(TARGET_ANDROID)
+	ofAddListener(ofxAndroidEvents().unloadGL, this, &ofImage_<PixelType>::unloadTexture);
+	ofAddListener(ofxAndroidEvents().reloadGL, this, &ofImage_<PixelType>::update);
+#endif
 	return *this;
 }
 
 //----------------------------------------------------------
-template<typename PixelType>
-ofImage_<PixelType>::ofImage_(const ofImage_<PixelType>& mom) {
+template <typename PixelType>
+ofImage_<PixelType>::ofImage_(const ofImage_<PixelType> & mom) {
 	clear();
 	clone(mom);
 
-	#if defined(TARGET_ANDROID)
-	ofAddListener(ofxAndroidEvents().unloadGL,this,&ofImage_<PixelType>::unloadTexture);
-	ofAddListener(ofxAndroidEvents().reloadGL,this,&ofImage_<PixelType>::update);
-	#endif
+#if defined(TARGET_ANDROID)
+	ofAddListener(ofxAndroidEvents().unloadGL, this, &ofImage_<PixelType>::unloadTexture);
+	ofAddListener(ofxAndroidEvents().reloadGL, this, &ofImage_<PixelType>::update);
+#endif
 }
 
 //----------------------------------------------------------
-template<typename PixelType>
-ofImage_<PixelType>::ofImage_(ofImage_<PixelType>&& mom){
-    pixels      = std::move(mom.pixels);
-    tex         = std::move(mom.tex);
+template <typename PixelType>
+ofImage_<PixelType>::ofImage_(ofImage_<PixelType> && mom) {
+	pixels = std::move(mom.pixels);
+	tex = std::move(mom.tex);
 
-    bUseTexture = mom.bUseTexture;
-    width       = mom.width;
-    height      = mom.height;
-    bpp         = mom.bpp;
-    type        = mom.type;
+	bUseTexture = mom.bUseTexture;
+	width = mom.width;
+	height = mom.height;
+	bpp = mom.bpp;
+	type = mom.type;
 
-    mom.clear(); //clear remaining flags and sizes from the mom
+	mom.clear(); //clear remaining flags and sizes from the mom
 
-    #if defined(TARGET_ANDROID)
-    ofAddListener(ofxAndroidEvents().unloadGL,this,&ofImage_<PixelType>::unloadTexture);
-    ofAddListener(ofxAndroidEvents().reloadGL,this,&ofImage_<PixelType>::update);
-    #endif
+#if defined(TARGET_ANDROID)
+	ofAddListener(ofxAndroidEvents().unloadGL, this, &ofImage_<PixelType>::unloadTexture);
+	ofAddListener(ofxAndroidEvents().reloadGL, this, &ofImage_<PixelType>::update);
+#endif
 }
 
 //----------------------------------------------------------
-template<typename PixelType>
-ofImage_<PixelType>& ofImage_<PixelType>::operator=(ofImage_<PixelType>&& mom){
-    if(&mom==this) return *this;
+template <typename PixelType>
+ofImage_<PixelType> & ofImage_<PixelType>::operator=(ofImage_<PixelType> && mom) {
+	if (&mom == this) return *this;
 
-    pixels      = std::move(mom.pixels);
-    tex         = std::move(mom.tex);
+	pixels = std::move(mom.pixels);
+	tex = std::move(mom.tex);
 
-    bUseTexture = mom.bUseTexture;
-    width       = mom.width;
-    height      = mom.height;
-    bpp         = mom.bpp;
-    type        = mom.type;
+	bUseTexture = mom.bUseTexture;
+	width = mom.width;
+	height = mom.height;
+	bpp = mom.bpp;
+	type = mom.type;
 
-    mom.clear(); //clear remaining flags and sizes from the mom
+	mom.clear(); //clear remaining flags and sizes from the mom
 
-    #if defined(TARGET_ANDROID)
-    ofAddListener(ofxAndroidEvents().unloadGL,this,&ofImage_<PixelType>::unloadTexture);
-    ofAddListener(ofxAndroidEvents().reloadGL,this,&ofImage_<PixelType>::update);
-    #endif
+#if defined(TARGET_ANDROID)
+	ofAddListener(ofxAndroidEvents().unloadGL, this, &ofImage_<PixelType>::unloadTexture);
+	ofAddListener(ofxAndroidEvents().reloadGL, this, &ofImage_<PixelType>::update);
+#endif
 
-    return *this;
+	return *this;
 }
 
 //----------------------------------------------------------
-template<typename PixelType>
-ofImage_<PixelType>::~ofImage_(){
+template <typename PixelType>
+ofImage_<PixelType>::~ofImage_() {
 	clear();
 }
 
@@ -963,12 +952,12 @@ ofImage_<PixelType>::~ofImage_(){
 //}
 
 //----------------------------------------------------------
-template<typename PixelType>
-bool ofImage_<PixelType>::load(const of::filesystem::path & fileName, const ofImageLoadSettings & settings){
-	#if defined(TARGET_ANDROID)
-	ofAddListener(ofxAndroidEvents().unloadGL,this,&ofImage_<PixelType>::unloadTexture);
-	ofAddListener(ofxAndroidEvents().reloadGL,this,&ofImage_<PixelType>::update);
-	#endif
+template <typename PixelType>
+bool ofImage_<PixelType>::load(const of::filesystem::path & fileName, const ofImageLoadSettings & settings) {
+#if defined(TARGET_ANDROID)
+	ofAddListener(ofxAndroidEvents().unloadGL, this, &ofImage_<PixelType>::unloadTexture);
+	ofAddListener(ofxAndroidEvents().reloadGL, this, &ofImage_<PixelType>::update);
+#endif
 	bool bLoadedOk = ofLoadImage(pixels, fileName, settings);
 	if (!bLoadedOk) {
 		ofLogError("ofImage") << "loadImage(): couldn't load image from " << fileName;
@@ -986,12 +975,12 @@ bool ofImage_<PixelType>::load(const of::filesystem::path & fileName, const ofIm
 //}
 
 //----------------------------------------------------------
-template<typename PixelType>
-bool ofImage_<PixelType>::load(const ofBuffer & buffer, const ofImageLoadSettings &settings){
-	#if defined(TARGET_ANDROID)
-	ofAddListener(ofxAndroidEvents().unloadGL,this,&ofImage_<PixelType>::unloadTexture);
-	ofAddListener(ofxAndroidEvents().reloadGL,this,&ofImage_<PixelType>::update);
-	#endif
+template <typename PixelType>
+bool ofImage_<PixelType>::load(const ofBuffer & buffer, const ofImageLoadSettings & settings) {
+#if defined(TARGET_ANDROID)
+	ofAddListener(ofxAndroidEvents().unloadGL, this, &ofImage_<PixelType>::unloadTexture);
+	ofAddListener(ofxAndroidEvents().reloadGL, this, &ofImage_<PixelType>::update);
+#endif
 	bool bLoadedOk = ofLoadImage(pixels, buffer, settings);
 	if (!bLoadedOk) {
 		ofLogError("ofImage") << "loadImage(): couldn't load image from ofBuffer";
@@ -1009,13 +998,13 @@ bool ofImage_<PixelType>::load(const ofBuffer & buffer, const ofImageLoadSetting
 //}
 
 //----------------------------------------------------------
-template<typename PixelType>
-bool ofImage_<PixelType>::save(const of::filesystem::path& fileName, ofImageQualityType qualityLevel) const {
+template <typename PixelType>
+bool ofImage_<PixelType>::save(const of::filesystem::path & fileName, ofImageQualityType qualityLevel) const {
 	return ofSaveImage(pixels, fileName, qualityLevel);
 }
 
 //----------------------------------------------------------
-template<typename PixelType>
+template <typename PixelType>
 bool ofImage_<PixelType>::save(ofBuffer & buffer, ofImageFormat imageFormat, ofImageQualityType qualityLevel) const {
 	return ofSaveImage(pixels, buffer, imageFormat, qualityLevel);
 }
@@ -1042,208 +1031,206 @@ bool ofImage_<PixelType>::save(ofBuffer & buffer, ofImageFormat imageFormat, ofI
 // to be able to set anchor points outside the image
 
 //----------------------------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::setAnchorPercent(float xPct, float yPct){
-    if (bUseTexture)tex.setAnchorPercent(xPct, yPct);
+template <typename PixelType>
+void ofImage_<PixelType>::setAnchorPercent(float xPct, float yPct) {
+	if (bUseTexture) tex.setAnchorPercent(xPct, yPct);
 }
 
 //----------------------------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::setAnchorPoint(float x, float y){
-    if (bUseTexture)tex.setAnchorPoint(x, y);
+template <typename PixelType>
+void ofImage_<PixelType>::setAnchorPoint(float x, float y) {
+	if (bUseTexture) tex.setAnchorPoint(x, y);
 }
 
 //----------------------------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::resetAnchor(){
-   	if (bUseTexture)tex.resetAnchor();
+template <typename PixelType>
+void ofImage_<PixelType>::resetAnchor() {
+	if (bUseTexture) tex.resetAnchor();
 }
 
 //------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::draw(float x, float y) const{
-	draw(x,y,0,getWidth(),getHeight());
+template <typename PixelType>
+void ofImage_<PixelType>::draw(float x, float y) const {
+	draw(x, y, 0, getWidth(), getHeight());
 }
 
 //------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::draw(float x, float y, float z) const{
-	draw(x,y,z,getWidth(),getHeight());
-}
-
-
-//------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::draw(const glm::vec3 & pos) const{
-	draw(pos.x,pos.y,pos.z,getWidth(),getHeight());
+template <typename PixelType>
+void ofImage_<PixelType>::draw(float x, float y, float z) const {
+	draw(x, y, z, getWidth(), getHeight());
 }
 
 //------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::draw(float x, float y, float w, float h) const{
-	draw(x,y,0,w,h);
+template <typename PixelType>
+void ofImage_<PixelType>::draw(const glm::vec3 & pos) const {
+	draw(pos.x, pos.y, pos.z, getWidth(), getHeight());
 }
 
 //------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::draw(float x, float y, float z, float w, float h) const{
-	drawSubsection(x,y,z,w,h,0,0,getWidth(),getHeight());
-}
-
-
-//------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::draw(const glm::vec3 & pos, float w, float h) const{
-	draw(pos.x,pos.y,pos.z,w,h);
+template <typename PixelType>
+void ofImage_<PixelType>::draw(float x, float y, float w, float h) const {
+	draw(x, y, 0, w, h);
 }
 
 //------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::drawSubsection(float x, float y, float w, float h, float sx, float sy) const{
-	drawSubsection(x,y,0,w,h,sx,sy,w,h);
+template <typename PixelType>
+void ofImage_<PixelType>::draw(float x, float y, float z, float w, float h) const {
+	drawSubsection(x, y, z, w, h, 0, 0, getWidth(), getHeight());
 }
 
 //------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::drawSubsection(float x, float y, float w, float h, float sx, float sy, float _sw, float _sh) const{
-	drawSubsection(x,y,0,w,h,sx,sy,_sw,_sh);
+template <typename PixelType>
+void ofImage_<PixelType>::draw(const glm::vec3 & pos, float w, float h) const {
+	draw(pos.x, pos.y, pos.z, w, h);
 }
 
 //------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::drawSubsection(float x, float y, float z, float w, float h, float sx, float sy) const{
-	drawSubsection(x,y,z,w,h,sx,sy,w,h);
+template <typename PixelType>
+void ofImage_<PixelType>::drawSubsection(float x, float y, float w, float h, float sx, float sy) const {
+	drawSubsection(x, y, 0, w, h, sx, sy, w, h);
 }
 
 //------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::drawSubsection(float x, float y, float z, float w, float h, float sx, float sy, float sw, float sh) const{
-	ofGetCurrentRenderer()->draw(*this,x,y,z,w,h,sx,sy,sw,sh);
+template <typename PixelType>
+void ofImage_<PixelType>::drawSubsection(float x, float y, float w, float h, float sx, float sy, float _sw, float _sh) const {
+	drawSubsection(x, y, 0, w, h, sx, sy, _sw, _sh);
 }
 
 //------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::allocate(int w, int h, ofImageType newType){
+template <typename PixelType>
+void ofImage_<PixelType>::drawSubsection(float x, float y, float z, float w, float h, float sx, float sy) const {
+	drawSubsection(x, y, z, w, h, sx, sy, w, h);
+}
 
-	if (width == w && height == h && newType == type){
+//------------------------------------
+template <typename PixelType>
+void ofImage_<PixelType>::drawSubsection(float x, float y, float z, float w, float h, float sx, float sy, float sw, float sh) const {
+	ofGetCurrentRenderer()->draw(*this, x, y, z, w, h, sx, sy, sw, sh);
+}
+
+//------------------------------------
+template <typename PixelType>
+void ofImage_<PixelType>::allocate(int w, int h, ofImageType newType) {
+
+	if (width == w && height == h && newType == type) {
 		return;
 	}
 #if defined(TARGET_ANDROID)
-	ofAddListener(ofxAndroidEvents().unloadGL,this,&ofImage_<PixelType>::unloadTexture);
-	ofAddListener(ofxAndroidEvents().reloadGL,this,&ofImage_<PixelType>::update);
+	ofAddListener(ofxAndroidEvents().unloadGL, this, &ofImage_<PixelType>::unloadTexture);
+	ofAddListener(ofxAndroidEvents().reloadGL, this, &ofImage_<PixelType>::update);
 #endif
 	pixels.allocate(w, h, newType);
 
 	// take care of texture allocation --
-	if (pixels.isAllocated() && bUseTexture){
+	if (pixels.isAllocated() && bUseTexture) {
 		tex.allocate(pixels);
 	}
 
-	width	= pixels.getWidth();
-	height	= pixels.getHeight();
-	bpp		= pixels.getBitsPerPixel();
-	type	= pixels.getImageType();
+	width = pixels.getWidth();
+	height = pixels.getHeight();
+	bpp = pixels.getBitsPerPixel();
+	type = pixels.getImageType();
 }
 
 //------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::clear(){
+template <typename PixelType>
+void ofImage_<PixelType>::clear() {
 #if defined(TARGET_ANDROID)
-	ofRemoveListener(ofxAndroidEvents().unloadGL,this,&ofImage_<PixelType>::unloadTexture);
-	ofRemoveListener(ofxAndroidEvents().reloadGL,this,&ofImage_<PixelType>::update);
+	ofRemoveListener(ofxAndroidEvents().unloadGL, this, &ofImage_<PixelType>::unloadTexture);
+	ofRemoveListener(ofxAndroidEvents().reloadGL, this, &ofImage_<PixelType>::update);
 #endif
 	pixels.clear();
-	if(bUseTexture)	tex.clear();
+	if (bUseTexture) tex.clear();
 
-	width					= 0;
-	height					= 0;
-	bpp						= 0;
-	type 					= OF_IMAGE_UNDEFINED;
-	bUseTexture 			= true;		// the default is, yes, use a texture
+	width = 0;
+	height = 0;
+	bpp = 0;
+	type = OF_IMAGE_UNDEFINED;
+	bUseTexture = true; // the default is, yes, use a texture
 }
 
 //------------------------------------
-template<typename PixelType>
-ofPixels_<PixelType> &  ofImage_<PixelType>::getPixels(){
+template <typename PixelType>
+ofPixels_<PixelType> & ofImage_<PixelType>::getPixels() {
 	return pixels;
 }
 
 //------------------------------------
-template<typename PixelType>
-const ofPixels_<PixelType> & ofImage_<PixelType>::getPixels() const{
+template <typename PixelType>
+const ofPixels_<PixelType> & ofImage_<PixelType>::getPixels() const {
 	return pixels;
 }
 
 //----------------------------------------------------------
-template<typename PixelType>
-ofImage_<PixelType>::operator ofPixels_<PixelType>&(){
+template <typename PixelType>
+ofImage_<PixelType>::operator ofPixels_<PixelType> &() {
 	return pixels;
 }
 
 //------------------------------------
-template<typename PixelType>
-ofTexture & ofImage_<PixelType>::getTexture(){
+template <typename PixelType>
+ofTexture & ofImage_<PixelType>::getTexture() {
 	return tex;
 }
 
 //------------------------------------
-template<typename PixelType>
-const ofTexture & ofImage_<PixelType>::getTexture() const{
+template <typename PixelType>
+const ofTexture & ofImage_<PixelType>::getTexture() const {
 	return tex;
 }
 
 //----------------------------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::bind(int textureLocation) const{
+template <typename PixelType>
+void ofImage_<PixelType>::bind(int textureLocation) const {
 	if (bUseTexture && tex.isAllocated())
 		tex.bind(textureLocation);
 }
 
 //----------------------------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::unbind(int textureLocation) const{
+template <typename PixelType>
+void ofImage_<PixelType>::unbind(int textureLocation) const {
 	if (bUseTexture && tex.isAllocated())
 		tex.unbind(textureLocation);
 }
 
 //------------------------------------
-template<typename PixelType>
+template <typename PixelType>
 ofColor_<PixelType> ofImage_<PixelType>::getColor(int x, int y) const {
 	return pixels.getColor(x, y);
 }
 
 //------------------------------------
-template<typename PixelType>
+template <typename PixelType>
 ofColor_<PixelType> ofImage_<PixelType>::getColor(int index) const {
 	return pixels.getColor(index);
 }
 
 //------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::setColor(int x, int y, const ofColor_<PixelType>& color) {
+template <typename PixelType>
+void ofImage_<PixelType>::setColor(int x, int y, const ofColor_<PixelType> & color) {
 	pixels.setColor(x, y, color);
 }
 
 //------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::setColor(int index, const ofColor_<PixelType>& color) {
+template <typename PixelType>
+void ofImage_<PixelType>::setColor(int index, const ofColor_<PixelType> & color) {
 	pixels.setColor(index, color);
 }
 
 //------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::setColor(const ofColor_<PixelType>& color) {
+template <typename PixelType>
+void ofImage_<PixelType>::setColor(const ofColor_<PixelType> & color) {
 	pixels.setColor(color);
 }
 
 //------------------------------------
-template<typename PixelType>
-void  ofImage_<PixelType>::setFromPixels(const PixelType * newPixels, int w, int h, ofImageType newType, bool bOrderIsRGB){
+template <typename PixelType>
+void ofImage_<PixelType>::setFromPixels(const PixelType * newPixels, int w, int h, ofImageType newType, bool bOrderIsRGB) {
 
 	allocate(w, h, newType);
-	pixels.setFromPixels(newPixels,w,h,newType);
+	pixels.setFromPixels(newPixels, w, h, newType);
 
-	if (!bOrderIsRGB && sizeof(PixelType) == 1){
+	if (!bOrderIsRGB && sizeof(PixelType) == 1) {
 		pixels.swapRgb();
 	}
 
@@ -1251,244 +1238,235 @@ void  ofImage_<PixelType>::setFromPixels(const PixelType * newPixels, int w, int
 }
 
 //------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::setFromPixels(const ofPixels_<PixelType> & pixels){
-	setFromPixels(pixels.getData(),pixels.getWidth(),pixels.getHeight(),pixels.getImageType());
+template <typename PixelType>
+void ofImage_<PixelType>::setFromPixels(const ofPixels_<PixelType> & pixels) {
+	setFromPixels(pixels.getData(), pixels.getWidth(), pixels.getHeight(), pixels.getImageType());
 }
 
 //------------------------------------
-template<typename PixelType>
-ofImage_<PixelType> & ofImage_<PixelType>::operator=(ofPixels_<PixelType> & pixels){
+template <typename PixelType>
+ofImage_<PixelType> & ofImage_<PixelType>::operator=(ofPixels_<PixelType> & pixels) {
 	setFromPixels(pixels);
 	return *this;
 }
 
 //------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::update(){
+template <typename PixelType>
+void ofImage_<PixelType>::update() {
 	width = pixels.getWidth();
 	height = pixels.getHeight();
 	bpp = pixels.getBitsPerPixel();
 	type = pixels.getImageType();
-	if (pixels.isAllocated() && bUseTexture){
+	if (pixels.isAllocated() && bUseTexture) {
 		int glInternalFormat = ofGetGLInternalFormat(pixels);
-		if(!tex.isAllocated() || tex.getWidth() != width || tex.getHeight() != height || tex.getTextureData().glInternalFormat != glInternalFormat){
+		if (!tex.isAllocated() || tex.getWidth() != width || tex.getHeight() != height || tex.getTextureData().glInternalFormat != glInternalFormat) {
 			tex.allocate(pixels);
-		}else{
+		} else {
 			tex.loadData(pixels);
 		}
 	}
 }
 
 //------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::setUseTexture(bool bUse){
+template <typename PixelType>
+void ofImage_<PixelType>::setUseTexture(bool bUse) {
 	bUseTexture = bUse;
 }
 
 //------------------------------------
-template<typename PixelType>
-bool ofImage_<PixelType>::isUsingTexture() const{
+template <typename PixelType>
+bool ofImage_<PixelType>::isUsingTexture() const {
 	return bUseTexture;
 }
 
 //------------------------------------
-template<>
-void ofImage_<unsigned char>::grabScreen(int x, int y, int w, int h){
+template <>
+void ofImage_<unsigned char>::grabScreen(int x, int y, int w, int h) {
 	std::shared_ptr<ofBaseGLRenderer> renderer = ofGetGLRenderer();
-	if(renderer){
-		renderer->saveScreen(x,y,w,h,pixels);
+	if (renderer) {
+		renderer->saveScreen(x, y, w, h, pixels);
 		update();
 	}
 }
 
 //------------------------------------
-template<typename PixelType>
-void ofGrabScreen(ofPixels_<PixelType> & pixels, int x, int y, int w, int h){
+template <typename PixelType>
+void ofGrabScreen(ofPixels_<PixelType> & pixels, int x, int y, int w, int h) {
 	ofPixels p;
 	std::shared_ptr<ofBaseGLRenderer> renderer = ofGetGLRenderer();
-	if(renderer){
-		renderer->saveScreen(x,y,w,h,p);
+	if (renderer) {
+		renderer->saveScreen(x, y, w, h, p);
 		pixels = p;
 	}
 }
 
 //------------------------------------
-template<>
-void ofGrabScreen(ofPixels & p, int x, int y, int w, int h){
+template <>
+void ofGrabScreen(ofPixels & p, int x, int y, int w, int h) {
 	std::shared_ptr<ofBaseGLRenderer> renderer = ofGetGLRenderer();
-	if(renderer){
-		renderer->saveScreen(x,y,w,h,p);
+	if (renderer) {
+		renderer->saveScreen(x, y, w, h, p);
 	}
 }
 
 //------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::grabScreen(int x, int y, int w, int h){
-	ofGrabScreen(pixels,x,y,w,h);
+template <typename PixelType>
+void ofImage_<PixelType>::grabScreen(int x, int y, int w, int h) {
+	ofGrabScreen(pixels, x, y, w, h);
 	update();
 }
 
 //------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::setImageType(ofImageType newType){
+template <typename PixelType>
+void ofImage_<PixelType>::setImageType(ofImageType newType) {
 	changeTypeOfPixels(pixels, newType);
 	update();
 }
 
 //------------------------------------
-template<typename PixelType>
-ofImageType ofImage_<PixelType>::getImageType() const{
+template <typename PixelType>
+ofImageType ofImage_<PixelType>::getImageType() const {
 	return type;
 }
 
 //------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::resize(int newWidth, int newHeight){
-	if(newWidth == width && newHeight == height) return;
+template <typename PixelType>
+void ofImage_<PixelType>::resize(int newWidth, int newHeight) {
+	if (newWidth == width && newHeight == height) return;
 
 	resizePixels(pixels, newWidth, newHeight);
 	update();
 }
 
-
 //------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::crop(int x, int y, int w, int h){
-	w = glm::clamp(w,1,int(getWidth()));
-	h = glm::clamp(h,1,int(getHeight()));
+template <typename PixelType>
+void ofImage_<PixelType>::crop(int x, int y, int w, int h) {
+	w = glm::clamp(w, 1, int(getWidth()));
+	h = glm::clamp(h, 1, int(getHeight()));
 
-	pixels.crop(x,y,w,h);
+	pixels.crop(x, y, w, h);
 	update();
 }
 
 //------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::cropFrom(const ofImage_<PixelType> & otherImage, int x, int y, int w, int h){
-	w = glm::clamp(w,1,int(otherImage.getWidth()));
-	h = glm::clamp(h,1,int(otherImage.getHeight()));
+template <typename PixelType>
+void ofImage_<PixelType>::cropFrom(const ofImage_<PixelType> & otherImage, int x, int y, int w, int h) {
+	w = glm::clamp(w, 1, int(otherImage.getWidth()));
+	h = glm::clamp(h, 1, int(otherImage.getHeight()));
 
 	otherImage.pixels.cropTo(pixels, x, y, w, h);
 	update();
 }
 
 //------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::rotate90(int nRotations){
+template <typename PixelType>
+void ofImage_<PixelType>::rotate90(int nRotations) {
 	pixels.rotate90(nRotations);
 	update();
 }
 
 //------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::mirror(bool vertical, bool horizontal){
+template <typename PixelType>
+void ofImage_<PixelType>::mirror(bool vertical, bool horizontal) {
 	pixels.mirror(vertical, horizontal);
 	update();
 }
-
-
-
-
-
 
 //----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 // freeImage based code & utilities:
 
-
 //----------------------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::resizePixels(ofPixels_<PixelType> &pix, int newWidth, int newHeight){
+template <typename PixelType>
+void ofImage_<PixelType>::resizePixels(ofPixels_<PixelType> & pix, int newWidth, int newHeight) {
 
-//	FIBITMAP * bmp					= getBmpFromPixels(pix);
-//	FIBITMAP * convertedBmp			= nullptr;
-//
-//	convertedBmp = FreeImage_Rescale(bmp, newWidth, newHeight, FILTER_BICUBIC);
-//    putBmpIntoPixels(convertedBmp, pix, false, true);
-//
-//	if (bmp != nullptr)				FreeImage_Unload(bmp);
-//	if (convertedBmp != nullptr)		FreeImage_Unload(convertedBmp);
+	//	FIBITMAP * bmp					= getBmpFromPixels(pix);
+	//	FIBITMAP * convertedBmp			= nullptr;
+	//
+	//	convertedBmp = FreeImage_Rescale(bmp, newWidth, newHeight, FILTER_BICUBIC);
+	//    putBmpIntoPixels(convertedBmp, pix, false, true);
+	//
+	//	if (bmp != nullptr)				FreeImage_Unload(bmp);
+	//	if (convertedBmp != nullptr)		FreeImage_Unload(convertedBmp);
 }
 
 //----------------------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::changeTypeOfPixels(ofPixels_<PixelType> &pix, ofImageType newType){
-//	int oldType = pix.getImageType();
-//
-//	if (oldType == newType) {
-//		return; // no need to reallocate
-//	}
-//
-//	FIBITMAP * bmp = getBmpFromPixels(pix);
-//	FIBITMAP * convertedBmp = nullptr;
-//
-//    ofPixelFormat oldPixFormat = pix.getPixelFormat();
-//
-//	switch (newType){
-//		case OF_IMAGE_GRAYSCALE:
-//			convertedBmp = FreeImage_ConvertToGreyscale(bmp);
-//			break;
-//		case OF_IMAGE_COLOR:
-//			convertedBmp = FreeImage_ConvertTo24Bits(bmp);
-//			break;
-//		case OF_IMAGE_COLOR_ALPHA:
-//			convertedBmp = FreeImage_ConvertTo32Bits(bmp);
-//			break;
-//		default:
-//			ofLogError("ofImage") << "changeTypeOfPixels(): unknown image type: "
-//				<< ofToString(newType);
-//			break;
-//	}
-//
-//    putBmpIntoPixels(convertedBmp, pix, false);
-//
-//    // if we started with BGRA or BGR pixels make sure we end up with similar
-//    if( pix.getNumChannels() >= 3 && ( oldPixFormat == OF_PIXELS_BGR || oldPixFormat == OF_PIXELS_BGRA ) ){
-//        ofPixelFormat fixedFormat = pix.getPixelFormat();
-//        if( fixedFormat == OF_PIXELS_RGBA ){
-//            fixedFormat = OF_PIXELS_BGRA;
-//        }else if( fixedFormat == OF_PIXELS_RGB ){
-//            fixedFormat = OF_PIXELS_BGR;
-//        }
-//        pix.setFromPixels(pix.getData(),pix.getWidth(),pix.getHeight(), fixedFormat);
-//    }
-//
-//	if (bmp != nullptr) {
-//		FreeImage_Unload(bmp);
-//	}
-//	if (convertedBmp != nullptr) {
-//		FreeImage_Unload(convertedBmp);
-//	}
+template <typename PixelType>
+void ofImage_<PixelType>::changeTypeOfPixels(ofPixels_<PixelType> & pix, ofImageType newType) {
+	//	int oldType = pix.getImageType();
+	//
+	//	if (oldType == newType) {
+	//		return; // no need to reallocate
+	//	}
+	//
+	//	FIBITMAP * bmp = getBmpFromPixels(pix);
+	//	FIBITMAP * convertedBmp = nullptr;
+	//
+	//    ofPixelFormat oldPixFormat = pix.getPixelFormat();
+	//
+	//	switch (newType){
+	//		case OF_IMAGE_GRAYSCALE:
+	//			convertedBmp = FreeImage_ConvertToGreyscale(bmp);
+	//			break;
+	//		case OF_IMAGE_COLOR:
+	//			convertedBmp = FreeImage_ConvertTo24Bits(bmp);
+	//			break;
+	//		case OF_IMAGE_COLOR_ALPHA:
+	//			convertedBmp = FreeImage_ConvertTo32Bits(bmp);
+	//			break;
+	//		default:
+	//			ofLogError("ofImage") << "changeTypeOfPixels(): unknown image type: "
+	//				<< ofToString(newType);
+	//			break;
+	//	}
+	//
+	//    putBmpIntoPixels(convertedBmp, pix, false);
+	//
+	//    // if we started with BGRA or BGR pixels make sure we end up with similar
+	//    if( pix.getNumChannels() >= 3 && ( oldPixFormat == OF_PIXELS_BGR || oldPixFormat == OF_PIXELS_BGRA ) ){
+	//        ofPixelFormat fixedFormat = pix.getPixelFormat();
+	//        if( fixedFormat == OF_PIXELS_RGBA ){
+	//            fixedFormat = OF_PIXELS_BGRA;
+	//        }else if( fixedFormat == OF_PIXELS_RGB ){
+	//            fixedFormat = OF_PIXELS_BGR;
+	//        }
+	//        pix.setFromPixels(pix.getData(),pix.getWidth(),pix.getHeight(), fixedFormat);
+	//    }
+	//
+	//	if (bmp != nullptr) {
+	//		FreeImage_Unload(bmp);
+	//	}
+	//	if (convertedBmp != nullptr) {
+	//		FreeImage_Unload(convertedBmp);
+	//	}
 }
-
 
 //----------------------------------------------------------
-template<typename PixelType>
-void ofImage_<PixelType>::unloadTexture(){
+template <typename PixelType>
+void ofImage_<PixelType>::unloadTexture() {
 	tex.clear();
 }
 
 //----------------------------------------------------------
-template<typename PixelType>
-float ofImage_<PixelType>::getHeight() const{
+template <typename PixelType>
+float ofImage_<PixelType>::getHeight() const {
 	return height;
 }
 
 //----------------------------------------------------------
-template<typename PixelType>
-float ofImage_<PixelType>::getWidth() const{
+template <typename PixelType>
+float ofImage_<PixelType>::getWidth() const {
 	return width;
 }
 
 //----------------------------------------------------------
 // Sosolimited: texture compression
 // call this function before you call loadImage()
-template<typename PixelType>
-void ofImage_<PixelType>::setCompression(ofTexCompression compression)
-{
-	if(bUseTexture){
-		tex.setCompression( compression );
+template <typename PixelType>
+void ofImage_<PixelType>::setCompression(ofTexCompression compression) {
+	if (bUseTexture) {
+		tex.setCompression(compression);
 	}
 }
 
@@ -1496,20 +1474,20 @@ template class ofImage_<unsigned char>;
 template class ofImage_<float>;
 template class ofImage_<unsigned short>;
 
-template<>
-std::string ofToString(const ofImageType & imgType){
-	switch(imgType) {
-		case OF_IMAGE_GRAYSCALE:
-			return "OF_IMAGE_GRAYSCALE";
+template <>
+std::string ofToString(const ofImageType & imgType) {
+	switch (imgType) {
+	case OF_IMAGE_GRAYSCALE:
+		return "OF_IMAGE_GRAYSCALE";
 		break;
-		case OF_IMAGE_COLOR:
-			return "OF_IMAGE_COLOR";
+	case OF_IMAGE_COLOR:
+		return "OF_IMAGE_COLOR";
 		break;
-		case  OF_IMAGE_COLOR_ALPHA:
-			return "OF_IMAGE_COLOR_ALPHA";
+	case OF_IMAGE_COLOR_ALPHA:
+		return "OF_IMAGE_COLOR_ALPHA";
 		break;
-		case OF_IMAGE_UNDEFINED:
-			return "OF_IMAGE_UNDEFINED";
+	case OF_IMAGE_UNDEFINED:
+		return "OF_IMAGE_UNDEFINED";
 		break;
 	}
 	return "OF_IMAGE_UNDEFINED";
