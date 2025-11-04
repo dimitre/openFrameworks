@@ -45,10 +45,13 @@ abstracts:*:
       - _UNICODE
       # - URI_STATIC
       - URI_STATIC_BUILD
-      - FREEIMAGE_LIB
-      - JPEG_STATIC
-      - TIFF_STATIC
-      - ZLIB_CONST
+
+      # FIXME: Remove this and test on Windows.
+      # - FREEIMAGE_LIB
+      # - JPEG_STATIC
+      # - TIFF_STATIC
+      # - ZLIB_CONST
+
       # only for libfreenect, ofxKinect. if it works it can be moved there.
       - strdup=_strdup
       # FIXME: remove this from core, and put back here
@@ -56,11 +59,13 @@ abstracts:*:
 
     linkerOptions[toolchain:msvc]:
       - /NODEFAULTLIB:MSVCRT # Changed from libcmt
-      - /FORCE:MULTIPLE
+      # now removed. no freetype anymore
+      # - /FORCE:MULTIPLE
 
     staticRuntimeLibrary: true
     compileOptions[toolchain:msvc]:
-      - /D_CRT_NO_VA_START_VALIDATION
+      # FIXME: Test removing this
+      # - /D_CRT_NO_VA_START_VALIDATION
       - /MT
 
     includeDirs:
@@ -192,13 +197,14 @@ abstracts:*:
       - ${var:ofPath}/libs/${var:platform}/lib/zlibstatic.lib
 
       - ${var:ofPath}/libs/${var:platform}/lib/freetype.lib
-      - ${var:ofPath}/libs/${var:platform}/lib/brotlicommon.lib
-      - ${var:ofPath}/libs/${var:platform}/lib/brotlidec.lib
-      - ${var:ofPath}/libs/${var:platform}/lib/brotlienc.lib
+      # - ${var:ofPath}/libs/${var:platform}/lib/brotlicommon.lib
+      # - ${var:ofPath}/libs/${var:platform}/lib/brotlidec.lib
+      # - ${var:ofPath}/libs/${var:platform}/lib/brotlienc.lib
+      # - ${var:ofPath}/libs/${var:platform}/lib/libpng18_static.lib
+
       - ${var:ofPath}/libs/${var:platform}/lib/glew.lib
       - ${var:ofPath}/libs/${var:platform}/lib/glfw3.lib
       - ${var:ofPath}/libs/${var:platform}/lib/glm.lib
-      - ${var:ofPath}/libs/${var:platform}/lib/libpng18_static.lib
       - ${var:ofPath}/libs/${var:platform}/lib/pugixml.lib
       # - ${var:ofPath}/libs/${var:platform}/lib/rtaudio.lib
       - ${var:ofPath}/libs/${var:platform}/lib/tess2.lib
@@ -227,10 +233,11 @@ abstracts:*:
       - ${var:ofPath}/libs/${var:platform}/lib/libzstd.a
 
       - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libpng.a
+
       - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
       - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
       - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libpng.a
       - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
       - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
       - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
@@ -248,10 +255,10 @@ abstracts:*:
 
       # All Freetype deps
       - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libbrotlidec.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libbrotlicommon.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libbrotlienc.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libpng.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libbrotlidec.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libbrotlicommon.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libbrotlienc.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libpng.a
       - ${var:ofPath}/libs/${var:platform}/lib/libz.a
 
       - ${var:ofPath}/libs/${var:platform}/lib/libfmt.a
