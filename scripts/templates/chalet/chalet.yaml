@@ -286,6 +286,15 @@ targets:
       include[:macos]:
         - ${var:ofPath}/libs/openFrameworks/**.{mm,m}
 
+      exclude:
+        - .cache
+        - .DS_Store
+        - .settings
+        - .vscode
+        - .clangd
+        - .zed
+        - compile_flags.txt
+
       exclude[:macos]:
         - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils,ofMediaFoundationPlayer,ofDirectShowGrabber,ofDirectShowPlayer}.cpp
         - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp

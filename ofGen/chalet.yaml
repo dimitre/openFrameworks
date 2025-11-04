@@ -1,9 +1,9 @@
 name: ofgen
 version: 0.1.1
-allowedArchitectures:
-  - x86_64-pc-windows-msvc
-  - i686-pc-windows-msvc
-  - arm64-apple-darwin
+# allowedArchitectures:
+#   - x86_64-pc-windows-msvc
+#   - i686-pc-windows-msvc
+#   - arm64-apple-darwin
 abstracts:*:
   language: C++
   # language[toolchain:apple-llvm]: Objective-C++
