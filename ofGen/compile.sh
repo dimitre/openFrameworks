@@ -19,9 +19,9 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
 	ARCH="$(uname -m)"
 	if [[ "$ARCH" == "x86_64" ]]; then
-			PLATFORM=linux64
+		PLATFORM=linux64
 	elif [[ "$ARCH" == "aarch64" ]] && [[ -f /etc/rpi-issue ]]; then
-			PLATFORM=rpi-aarch64
+		PLATFORM=rpi-aarch64
 	elif [[ "$ARCH" == "armv6l" ]] || [[ "$ARCH" == "armv7l" ]]; then
 		if [[ -f /proc/device-tree/model ]] && grep -q "Raspberry Pi" /proc/device-tree/model; then
 			PLATFORM=rpi-armv6l
@@ -57,12 +57,6 @@ run_cmake() {
 		-DPUGIXML_ROOT=../../libs/${PLATFORM} \
 		-DNLOHMANN_JSON_ROOT=../../libs/${PLATFORM}
 }
-# -G Ninja \
-
-clear_input_buffer() {
-	# Flush any buffered input
-	while read -r -t 0.001 -n 1; do :; done 2>/dev/null
-}
 
 if command -v cmake &> /dev/null; then
 	if ! run_cmake; then
@@ -71,7 +65,6 @@ if command -v cmake &> /dev/null; then
 		rm -rf build
 		run_cmake
 	fi
-
 	cmake --build . --config Release
 
 	# Determine if we need sudo
@@ -86,8 +79,9 @@ if command -v cmake &> /dev/null; then
 		section "CI detected, auto-installing..."
 		${INSTALL_CMD} --install . --config Release
 	else
-		clear_input_buffer
-		read -p "Install ofgen to system? (y/n) " -n 1 -r
+		# Clear any buffered input, then prompt
+		read -t 0.01 -n 10000 discard 2>/dev/null || true
+		read -p "Install ofgen to system? (y/n) " -n 1 -r REPLY </dev/tty
 		echo
 		if [[ $REPLY =~ ^[Yy]$ ]]; then
 			${INSTALL_CMD} --install . --config Release
@@ -111,11 +105,7 @@ else
 			"
 			section "Added to Windows PATH"
 		fi
-
 	else
 		printf "No Cmake or Chalet found"
 	fi
-
 fi
-
-# section "done"
