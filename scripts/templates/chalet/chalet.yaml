@@ -287,7 +287,7 @@ targets:
         - ${var:ofPath}/libs/openFrameworks/**.{mm,m}
 
       exclude:
-        - **/.cache/*
+        - .cache
         - .DS_Store
         - .settings
         - .vscode
