@@ -277,6 +277,14 @@ getlink() {
                 "https://github.com/dimitre/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip" \
                 -P "${DOWNLOAD}"
         done
+    elif command -v powershell.exe &>/dev/null; then
+        # Fallback to PowerShell on Windows
+        section "Downloading with PowerShell (sequential)"
+        for LIBNAME in "${ALLLIBS[@]}"; do
+            local filepath="${DOWNLOAD}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
+            local url="https://github.com/dimitre/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
+            executa powershell.exe -Command "Invoke-WebRequest -Uri '${url}' -OutFile '${filepath}'"
+        done
     else
         # Fallback to curl - sequential downloads
         section "Downloading with curl (sequential)"
