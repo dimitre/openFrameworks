@@ -273,10 +273,15 @@ getlink() {
         # Fallback to curl - sequential downloads
         section "Downloading with curl (sequential)"
         for LIBNAME in "${ALLLIBS[@]}"; do
-         	local filepath="${DOWNLOAD}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
-            executa curl -L -z "${filepath}" -o "${filepath}" \
-            "https://github.com/dimitre/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
-        done
+            local filepath="${DOWNLOAD}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
+            # Only use -z if file exists, otherwise just download
+            if [[ -f "${filepath}" ]]; then
+                executa curl -L -z "${filepath}" -o "${filepath}" \
+                "https://github.com/dimitre/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
+            else
+                executa curl -L -o "${filepath}" \
+                "https://github.com/dimitre/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
+            fi        done
     fi
 }
 
