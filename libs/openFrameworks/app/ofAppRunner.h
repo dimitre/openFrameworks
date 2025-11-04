@@ -208,7 +208,7 @@ public:
 		if (appFolder.parent_path().stem() == "build") {
 			std::string appFolderNameString { appFolder.stem().string() };
 			if (std::count(appFolderNameString.begin(), appFolderNameString.end(),
-						   '-') == 2) {
+						   '-') >= 2) {
 				appFolder = appFolder.parent_path().parent_path() / "bin" ;
 //				cout << "DATA " << fs::absolute(appFolder) << endl;
 			}
