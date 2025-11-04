@@ -268,7 +268,15 @@ getlink() {
         section "Downloading with wget2 (parallel downloads)"
         #--clobber=off (skips download if file exists at all)
         wget2 -N --no-verbose --progress=bar:force ${PARAMS} -P "${DOWNLOAD}"
-
+    elif command -v wget &>/dev/null; then
+        # Fallback to wget - sequential downloads with timestamp checking
+        section "Downloading with wget (sequential)"
+        for LIBNAME in "${ALLLIBS[@]}"; do
+            local filepath="${DOWNLOAD}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
+            executa wget -N --no-verbose --show-progress \
+                "https://github.com/dimitre/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip" \
+                -P "${DOWNLOAD}"
+        done
     else
         # Fallback to curl - sequential downloads
         section "Downloading with curl (sequential)"
@@ -281,7 +289,8 @@ getlink() {
             else
                 executa curl -L -o "${filepath}" \
                 "https://github.com/dimitre/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
-            fi        done
+            fi
+        done
     fi
 }
 
