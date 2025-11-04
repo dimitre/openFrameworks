@@ -4,7 +4,7 @@ set -eu
 
 VERSION=v0.12.3
 OF_FOLDER=..
-CHALETVERSION=0.8.13
+CHALETVERSION=0.8.14
 
 # wipeDownloads=true
 wipeDownloads=false
