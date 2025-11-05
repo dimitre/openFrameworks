@@ -186,8 +186,8 @@ abstracts:*:
       - ${var:ofPath}/libs/${var:platform}/lib/mango.lib
       - ${var:ofPath}/libs/${var:platform}/lib/bz2_static.lib
       - ${var:ofPath}/libs/${var:platform}/lib/deflatestatic.lib
-      # - ${var:ofPath}/libs/${var:platform}/lib/liblcms2.lib
-      - ${var:ofPath}/libs/${var:platform}/lib/liblcms2.a
+      - ${var:ofPath}/libs/${var:platform}/lib/liblcms2.lib
+      # - ${var:ofPath}/libs/${var:platform}/lib/liblcms2.a
       - ${var:ofPath}/libs/${var:platform}/lib/lz4.lib
       - ${var:ofPath}/libs/${var:platform}/lib/zstd_static.lib
 
