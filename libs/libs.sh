@@ -151,7 +151,8 @@ LIBADDONS=(
     #     # executa ${PACMANPARAMS}
     #     ;;
 
-CORELIBS=( mango yaml-cpp brotli freetype glew glfw glm json libpng pugixml rtAudio tess2 uriparser utfcpp zlib-ng )
+# CORELIBS=( mango yaml-cpp brotli freetype glew glfw glm json libpng pugixml rtAudio tess2 uriparser utfcpp zlib-ng )
+CORELIBS=( mango yaml-cpp freetype glew glfw glm json pugixml rtAudio tess2 uriparser utfcpp zlib-ng )
 
 
 case "$PLATFORM" in

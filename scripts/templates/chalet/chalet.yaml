@@ -326,6 +326,7 @@ targets:
         - OF
       includeDirs:
         - ${var:ofPath}/libs/openFrameworks
+      # windowsApplicationIcon: platform/windows/app.ico
     files:
       include:
 
