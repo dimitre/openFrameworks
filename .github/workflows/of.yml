@@ -20,7 +20,7 @@ jobs:
         include:
           # ubuntu and macos completing good, so removed from here now.
           - { os: ubuntu-latest, platform: linux64, shell: bash }
-          - { os: macos-latest, platform: macos, shell: bash }
+          - { os: macos-26, platform: macos, shell: bash }
           - { os: windows-latest, platform: vs, shell: powershell }
           # - {
           #     platform: rpi-aarch64,
