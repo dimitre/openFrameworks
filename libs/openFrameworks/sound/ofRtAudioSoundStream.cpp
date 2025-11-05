@@ -8,6 +8,8 @@
 using std::vector;
 using std::shared_ptr;
 
+using namespace rt::audio;
+
 //------------------------------------------------------------------------------
 RtAudio::Api toRtAudio(ofSoundDevice::Api api){
 	switch (api) {

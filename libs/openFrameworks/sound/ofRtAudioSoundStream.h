@@ -5,7 +5,13 @@
 #include "ofSoundBuffer.h"
 
 typedef unsigned int RtAudioStreamStatus;
-class RtAudio;
+//class RtAudio;
+
+inline namespace rt {
+inline namespace audio {
+	class RtAudio;
+}
+}
 
 class ofRtAudioSoundStream : public ofBaseSoundStream {
 public:
@@ -34,7 +40,7 @@ public:
 
 private:
 	long unsigned long tickCount;
-	std::shared_ptr<RtAudio>	audio;
+	std::shared_ptr<rt::audio::RtAudio>	audio;
 
 	ofSoundBuffer inputBuffer;
 	ofSoundBuffer outputBuffer;

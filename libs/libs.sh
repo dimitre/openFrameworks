@@ -2,7 +2,7 @@
 cd "$(dirname "$0")"
 set -eu
 
-VERSION=v0.12.3
+VERSION=v0.12.4
 OF_FOLDER=..
 CHALETVERSION=0.8.14
 
