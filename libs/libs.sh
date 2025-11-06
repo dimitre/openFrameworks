@@ -4,7 +4,7 @@ set -eu
 
 VERSION=v0.12.4
 OF_FOLDER=..
-CHALETVERSION=0.8.14
+CHALETVERSION=0.8.15
 
 # wipeDownloads=true
 wipeDownloads=false
@@ -192,24 +192,13 @@ case "$PLATFORM" in
 
    		CORELIBS+=( kissfft )
 
-        if ! command -v chalet &> /dev/null; then
-            if [[ ${PLATFORM} == 'linux64' ]]; then
-                curl -L -O https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet_${CHALETVERSION}_amd64.deb &&
-                sudo dpkg -i chalet*.deb
-            else
-                # there is arm only also.
-                curl -L -O https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet_${CHALETVERSION}_arm64.deb &&
-                sudo dpkg -i chalet*.deb
-            fi
-		else
-			section "chalet already installed"
-        fi
+
 
         # Install system dependencies (skip in CI)
         if [[ -z "${CI:-}" ]]; then
             section "Installing system dependencies"
             ${SUDO_CMD} apt-get -y install \
-            	wget2 cmake \
+            	ninja-build wget2 cmake \
                 libfontconfig1-dev \
                 libxrandr-dev \
                 freeglut3-dev libxmu-dev libxxf86vm-dev libgl1-mesa-dev libudev-dev \
@@ -222,6 +211,19 @@ case "$PLATFORM" in
                 # libasound2-dev libsndfile1-dev libopenal-dev \
         fi
         ;;
+
+        if ! command -v chalet &> /dev/null; then
+            if [[ ${PLATFORM} == 'linux64' ]]; then
+                curl -L -O https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet_${CHALETVERSION}_amd64.deb &&
+                sudo dpkg -i chalet*.deb
+            else
+                # there is arm only also.
+                curl -L -O https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet_${CHALETVERSION}_arm64.deb &&
+                sudo dpkg -i chalet*.deb
+            fi
+		else
+			section "chalet already installed"
+        fi
 
     *)
         echo "Unknown platform: $PLATFORM"
