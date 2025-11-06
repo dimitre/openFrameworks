@@ -128,9 +128,10 @@ abstracts:*:
       - gstbase-1.0
       - gstreamer-1.0
 
-      - asound
-      - sndfile
-      - openal
+      # - asound
+      # - sndfile
+      # - openal
+
       # - pulse-simple
       # - pulse
       - pthread
