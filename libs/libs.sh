@@ -271,7 +271,8 @@ getlink() {
         done
         section "Downloading with wget2 (parallel downloads)"
         #--clobber=off (skips download if file exists at all)
-        wget2 -N --no-verbose --progress=bar:force ${PARAMS} -P "${DOWNLOAD}"
+        # --progress=bar:force
+        wget2 -N --no-verbose ${PARAMS} -P "${DOWNLOAD}"
     elif command -v wget &>/dev/null; then
         # Fallback to wget - sequential downloads with timestamp checking
         section "Downloading with wget (sequential)"
