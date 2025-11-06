@@ -20,9 +20,9 @@ targets:
       staticRuntimeLibrary: true
       compileOptions[toolchain:msvc]:
         - /MT
-      linkerOptions[toolchain:msvc]:
-        - /NODEFAULTLIB:msvcrt.lib
-        - /NODEFAULTLIB:msvcprt.lib
+      # linkerOptions[toolchain:msvc]:
+      #   - /NODEFAULTLIB:msvcrt.lib
+      #   - /NODEFAULTLIB:msvcprt.lib
       includeDirs:
         - src
         - src/uuidxx/src
