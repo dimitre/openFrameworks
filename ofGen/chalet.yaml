@@ -20,7 +20,7 @@ targets:
       staticRuntimeLibrary: true
       compileOptions[toolchain:msvc]:
         - /MT
-      linkOptions[toolchain:msvc]:
+      linkerOptions[toolchain:msvc]:
         - /NODEFAULTLIB:msvcrt.lib
         - /NODEFAULTLIB:msvcprt.lib
       includeDirs:
