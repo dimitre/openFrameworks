@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.18)
 project(ofgen LANGUAGES CXX)
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 # Use a modern C++20 build
 set(CMAKE_CXX_STANDARD 20)
