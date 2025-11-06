@@ -210,7 +210,6 @@ case "$PLATFORM" in
                 # libssl3 libcairo2-dev libssl-dev libcurl4 libcurl4-openssl-dev \
                 # libasound2-dev libsndfile1-dev libopenal-dev \
         fi
-        ;;
 
         if ! command -v chalet &> /dev/null; then
             if [[ ${PLATFORM} == 'linux64' ]]; then
@@ -224,6 +223,8 @@ case "$PLATFORM" in
 		else
 			section "chalet already installed"
         fi
+
+        ;;
 
     *)
         echo "Unknown platform: $PLATFORM"
