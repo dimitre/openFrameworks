@@ -130,7 +130,7 @@ abstracts:*:
 
       # - asound
       # - sndfile
-      # - openal
+      - openal
 
       # - pulse-simple
       # - pulse
