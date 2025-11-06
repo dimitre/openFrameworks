@@ -34,6 +34,8 @@ add_executable(ofgen
     src/uuidxx/src/uuidxx.cpp
 )
 
+target_compile_definitions(ofgen PRIVATE YAML_CPP_STATIC_DEFINE)
+
 target_include_directories(ofgen
     PRIVATE
         src
