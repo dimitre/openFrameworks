@@ -205,10 +205,11 @@ case "$PLATFORM" in
                 libxcursor-dev libxi-dev libxinerama-dev \
                 libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
                 gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa \
-                gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav
+                gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav \
+                libopenal-dev libsndfile1-dev
                 # make \
                 # libssl3 libcairo2-dev libssl-dev libcurl4 libcurl4-openssl-dev \
-                # libasound2-dev libsndfile1-dev libopenal-dev \
+                # libasound2-dev   \
         fi
 
         if ! command -v chalet &> /dev/null; then

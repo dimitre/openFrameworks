@@ -129,8 +129,8 @@ abstracts:*:
       - gstreamer-1.0
 
       # - asound
-      # - sndfile
       - openal
+      - sndfile
 
       # - pulse-simple
       # - pulse
