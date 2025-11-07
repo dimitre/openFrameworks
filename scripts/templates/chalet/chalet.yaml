@@ -1,4 +1,4 @@
-name: OF
+name: ofWorksProject
 version: "0.12.1"
 variables:
   generator: manual
@@ -281,7 +281,7 @@ targets:
   # OFLib:
   #   kind: chaletProject
   #   location: ${var:ofPath}
-  OF:
+  ofWorks:
     kind: staticLibrary
     # outputDirectory: ${var:ofPath}
 
@@ -325,7 +325,7 @@ targets:
 
     settings:Cxx:
       staticLinks:
-        - OF
+        - ofWorks
       includeDirs:
         - ${var:ofPath}/libs/openFrameworks
       # windowsApplicationIcon: platform/windows/app.ico
@@ -344,7 +344,7 @@ targets:
 distribution:
   empty:
     kind: bundle
-    buildTargets: "*"
+    buildTargets: empty
     exclude:
       - data/.gitkeep
     macosBundle:

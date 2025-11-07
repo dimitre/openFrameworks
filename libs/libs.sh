@@ -132,11 +132,13 @@ mkdir -p "${DOWNLOAD}"
 # Platform-Specific Configuration
 # ============================================
 
-ADDONLIBS=( assimp opencv libusb )
+ADDONLIBS=( assimp opencv libusb pixman cairo )
 LIBADDONS=(
     "assimp:ofxAssimp"
     "libusb:ofxKinect"
     "opencv:ofxOpenCv"
+    "cairo:ofxCairo"
+    "pixman:ofxCairo"
 )
 
     # msys2)

@@ -1080,8 +1080,11 @@ void ofTemplateChalet::load() {
 	}
 
 	projectYaml = YAML::LoadFile(projectFrom.string());
+
+    projectYaml["name"] = conf.projectName;
 	projectYaml["variables"]["platform"] = getPlatformString();
 	projectYaml["variables"]["addons"] = joinStrings(addonsNames, ",");
+	projectYaml["variables"]["generator"] = getVersion();
 
 	for (auto & d : conf.defines) {
 		// projectYaml["abstracts:*"]["settings:Cxx"]["defines"].push_back(d);
@@ -1104,7 +1107,6 @@ void ofTemplateChalet::load() {
 
 void ofTemplateChalet::addAddon(ofAddon * a) {
 	// alert(" ofTemplateChalet::addAddon() " + a->name, 91);
-	projectYaml["variables"]["generator"] = getVersion();
 
 	for (auto & f : a->filteredMap["sources"]) {
 		std::string folder = a->isProject ? "" : "${var:ofPath}/addons/" + a->name + "/";
@@ -1167,21 +1169,26 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 }
 
 void ofTemplateChalet::save() {
-	// Change key "empty" to project name in targets
-	{
-		auto targets = projectYaml["targets"];
-		YAML::Node emptyNode = targets["empty"];
-		targets[conf.projectName] = emptyNode;
-		targets.remove("empty");
-	}
 
-	// Change key "empty" to project name in distribution
-	{
-		auto distribution = projectYaml["distribution"];
-		YAML::Node emptyNode = distribution["empty"];
-		distribution[conf.projectName] = emptyNode;
-		distribution.remove("empty");
-	}
+    renameYamlKey(projectYaml["targets"], "empty", conf.projectName);
+    projectYaml["distribution"]["empty"]["buildTargets"] = conf.projectName;
+    renameYamlKey(projectYaml["distribution"], "empty", conf.projectName);
+
+	// Change key "empty" to project name in targets
+	// {
+	// 	auto targets = projectYaml["targets"];
+	// 	YAML::Node emptyNode = targets["empty"];
+	// 	targets[conf.projectName] = emptyNode;
+	// 	targets.remove("empty");
+	// }
+
+	// // Change key "empty" to project name in distribution
+	// {
+	// 	auto distribution = projectYaml["distribution"];
+	// 	YAML::Node emptyNode = distribution["empty"];
+	// 	distribution[conf.projectName] = emptyNode;
+	// 	distribution.remove("empty");
+	// }
 
 	alert("ofTemplateChalet::save()", 92);
 

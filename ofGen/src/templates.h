@@ -14,12 +14,9 @@ struct ofAddon;
 // Visual Studio 2019
 #include <pugixml.hpp>
 
-
-
 #include <nlohmann/json.hpp>
 using nlohmann::json;
 #include <fstream> //in utils
-
 
 std::string generateUUID(const std::string & input);
 
@@ -818,9 +815,7 @@ public:
 
 struct ofTemplateChalet : public ofTemplate {
 public:
-
-
-    YAML::Node projectYaml;
+	YAML::Node projectYaml;
 
 	ofTemplateChalet() {
 		name = "chalet";
@@ -833,4 +828,13 @@ public:
 	void load() override;
 	void save() override;
 	void addAddon(ofAddon * a) override;
+
+	void renameYamlKey(YAML::Node node, // ← Pass by value, not reference
+		const std::string & oldKey,
+		const std::string & newKey) {
+		if (node[oldKey]) {
+			node[newKey] = std::move(node[oldKey]); // Still modifies original data
+			node.remove(oldKey);
+		}
+	}
 };
