@@ -11,6 +11,7 @@ abstracts:*:
   language[toolchain:apple-llvm]: Objective-C++
   settings:Cxx:
     cppStandard: c++20
+
     # compileOptions[:macos]:
     # - -Wfatal-errors
     # minimal extra pedantic strict strictPedantic
@@ -36,6 +37,10 @@ abstracts:*:
     # - __MACOSX_CORE__ # only needed in ofxMidi
     compileOptions[:macos]:
       - -fobjc-arc
+      - -mmacosx-version-min=12.0 # Add this line
+
+    linkerOptions[:macos]:
+      - -mmacosx-version-min=12.0
 
     defines[toolchain:msvc]:
       - _CRT_SECURE_NO_WARNINGS

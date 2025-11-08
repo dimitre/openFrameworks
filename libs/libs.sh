@@ -39,7 +39,7 @@ alert() {
 	printf "⚠️ ${COLOR2}%s${NC}\n" "$*"
 }
 
-sectionOK "OpenFrameworks install ofLibs"
+sectionOK "ofWorks install ofLibs"
 
 # Determine if we need sudo
 if command -v sudo &> /dev/null; then

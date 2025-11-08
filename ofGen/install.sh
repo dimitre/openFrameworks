@@ -13,7 +13,7 @@ section() {
     printf "💿${COLOR} ${@} ${NC}\n\r"
 }
 
-section "OFWorks ofgen (command line tool for generating OF projects)"
+section "ofWorks ofgen (command line tool for generating OF projects)"
 echo This will install a symlink in /usr/local/bin/ so ofgen can be called from any directory.
 echo If you need to uninstall in the future you can use the $ofw/ofgen/uninstall.sh script
     echo It is recommended to install, so you can just invoke ofgen from your project folder

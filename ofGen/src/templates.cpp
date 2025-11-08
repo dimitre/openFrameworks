@@ -981,7 +981,7 @@ void ofTemplateVSCode::load() {
 
 void ofTemplateVSCode::save() {
 	alert("ofTemplateVSCode::save()", 92);
-	workspace.data["openFrameworksProjectGeneratorVersion"] = getVersion();
+	workspace.data["generator"] = getVersion();
 	workspace.save();
 	cppProperties.save();
 }
