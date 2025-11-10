@@ -110,11 +110,11 @@ inline static std::string getPlatformString() {
 		sysarch = "linux64";
 	}
 	else if (sysarch == "linuxaarch64") {
-	    sysarch = "rpi-aarch64"
+	    sysarch = "rpi-aarch64";
 	}
 	// untested
 	else if (sysarch == "linuxarmv6l") {
-	    sysarch = "rpi-armv6l"
+	    sysarch = "rpi-armv6l";
 	}
 
 	return sysarch;
