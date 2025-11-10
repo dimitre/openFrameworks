@@ -320,6 +320,7 @@ public:
 	/// \param path directory path
 	/// \returns path + slash
 	// MARK: - near future FS
+	// used only on ofFilePath::getEnclosingDirectory
 	static std::string addTrailingSlash(const of::filesystem::path & path);
 
 	/// Remove a path's trailing slash (if found),
@@ -337,6 +338,7 @@ public:
 	/// \param path directory path
 	/// \returns cleaned path + trailing slash (if needed)
 //	[[deprecated ("Use FS")]]
+	// used only on ofDirectory (open and openFromCWD)
 	static of::filesystem::path getPathForDirectory(const of::filesystem::path & path);
 
 	/// Get the absolute, full path for a given path,
@@ -349,6 +351,7 @@ public:
 	/// \returns absolute path
 	// FIXME: - Deprecate
 //	[[deprecated("Use FS")]]
+	// Spread in all core.
 	static of::filesystem::path getAbsolutePath(const of::filesystem::path & path, bool bRelativeToData = true);
 
 	/// Check if a path is an absolute (aka a full path),
@@ -370,7 +373,7 @@ public:
 	/// \returns filename
 	///
 	// FIXME: Deprecate / Remove this. Find instances in OF Core to remove
-	[[deprecated("use getFileName(const of::filesystem::path & filePath) or of::filesystem::path .filename()")]]
+	[[deprecated("use fs::path .filename()")]]
 	static std::string getFileName(const of::filesystem::path & filePath, bool bRelativeToData);
 
 	static std::string getFileName(const of::filesystem::path & filePath);

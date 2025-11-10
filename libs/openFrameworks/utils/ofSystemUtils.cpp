@@ -260,12 +260,12 @@ ofFileDialogResult::ofFileDialogResult() {
 }
 
 //------------------------------------------------------------------------------
-std::string ofFileDialogResult::getName() {
+fs::path ofFileDialogResult::getName() {
 	return fileName;
 }
 
 //------------------------------------------------------------------------------
-std::string ofFileDialogResult::getPath() {
+fs::path ofFileDialogResult::getPath() {
 	return filePath;
 }
 
@@ -540,7 +540,8 @@ ofFileDialogResult ofSystemLoadDialog(std::string windowTitle, bool bFolderSelec
 
 	if (!results.filePath.empty()) {
 		results.bSuccess = true;
-		results.fileName = ofFilePath::getFileName(results.filePath);
+//		results.fileName = ofFilePath::getFileName(results.filePath);
+		results.fileName = results.filePath.filename();
 	}
 
 	return results;
@@ -617,7 +618,8 @@ ofFileDialogResult ofSystemSaveDialog(std::string defaultName, std::string messa
 
 	if (!results.filePath.empty()) {
 		results.bSuccess = true;
-		results.fileName = ofFilePath::getFileName(results.filePath);
+//		results.fileName = ofFilePath::getFileName(results.filePath);
+		results.fileName = results.filePath.filename();
 	}
 
 	return results;

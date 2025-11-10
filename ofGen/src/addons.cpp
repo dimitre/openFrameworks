@@ -149,7 +149,6 @@ void ofAddon::loadFiles() {
 		conf.defines.emplace_back(p);
 	}
 
-
 	scanFolder(path / "src", filesMap, true);
 
 	// get addon libs, it can be none, one or multiple
@@ -385,11 +384,12 @@ bool buildProject() {
 
 		std::map<std::string, std::vector<std::string>> platformTemplates {
 			// { "vs", { "visualstudio" } },
-	        { "vs", { "chalet", "zed" } },
+			{ "vs", { "chalet", "zed" } },
 			{ "macos", { "macos", "chalet", "zed" } },
 			// { "msys2", { "make", "vscode" } },
 			// { "linux64", { "make", "vscode" } },
-           	{ "linux64", { "chalet", "zed" } },
+			{ "linux64", { "chalet", "zed" } },
+			{ "linuxaarch64", { "chalet", "zed" } },
 		};
 
 		std::string platform { getPlatformString() };
@@ -403,7 +403,6 @@ bool buildProject() {
 
 		alert("Templates ");
 		cout << joinStrings(conf.templateNames, ", ") << endl;
-
 	}
 
 	if (!conf.isValidOfPath()) {
@@ -414,8 +413,8 @@ bool buildProject() {
 		alert("of path OK, proceeding");
 
 		if (!fs::exists("bin")) {
-		    alert("bin folder not found, creating");
-		    fs::create_directory("bin");
+			alert("bin folder not found, creating");
+			fs::create_directory("bin");
 		}
 	}
 

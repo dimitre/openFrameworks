@@ -11,13 +11,13 @@ public:
 
 	/// \return the name of the selected file or directory, if set
 	/// currently returns only 1 file, this may change in the future
-	std::string getName();
+	fs::path getName();
 
 	/// \return the full path of the selected file or directory, if set
-	std::string getPath();
+	fs::path getPath();
 
-	std::string filePath = ""; ///< full path to selected file or directory
-	std::string fileName = ""; ///< selected file or directory name
+	fs::path filePath; ///< full path to selected file or directory
+	fs::path fileName; ///< selected file or directory name
 	bool bSuccess = false; ///< true if the dialog action was successful, aka file select not cancel
 };
 
