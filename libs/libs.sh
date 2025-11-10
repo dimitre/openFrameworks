@@ -153,7 +153,7 @@ LIBADDONS=(
     #     # executa ${PACMANPARAMS}
     #     ;;
 
-# CORELIBS=( mango yaml-cpp brotli freetype glew glfw glm json libpng pugixml rtAudio tess2 uriparser utfcpp zlib-ng )
+# REMOVED brotli freetype libpng
 CORELIBS=( mango yaml-cpp freetype glew glfw glm json pugixml rtAudio tess2 uriparser utfcpp zlib-ng )
 
 
