@@ -85,7 +85,7 @@ abstracts:*:
 
     includeDirs[:linux]:
       - /usr/include/gstreamer-1.0
-      - /usr/include/x86_64-linux-gnu
+      - /usr/include/glib-2.0 # included by gstreamer-1.0
 
       # not sure if needed
       # - /usr/include/{freetype2,libpng16}
@@ -94,17 +94,19 @@ abstracts:*:
       # - /usr/include/pango-1.0
       # - /usr/include/harfbuzz
 
-      - /usr/include/glib-2.0 # included by gstreamer-1.0
-
       # - /usr/include/{glib-2.0,libmount,blkid,fribidi,pixman-1,gdk-pixbuf-2.0,webp,graphene-1.0}
-      - /usr/lib/x86_64-linux-gnu/glib-2.0/include
 
       # - /usr/include/gtk-2.0
       # - /usr/lib/x86_64-linux-gnu/{gtk-2.0,glib-2.0}/include
       # - /usr/include/atk-1.0
 
-      # - /usr/include/gtk-4.0
-      # - /usr/lib/x86_64-linux-gnu/graphene-1.0/include
+    includeDirs[:linux+architecture:x86_64]:
+      - /usr/include/x86_64-linux-gnu
+      - /usr/lib/x86_64-linux-gnu/glib-2.0/include
+
+    includeDirs[:linux+architecture:aarch64-linux-gnu]:
+      - /usr/include/aarch64-linux-gnu
+      - /usr/lib/aarch64-linux-gnu/glib-2.0/include
 
     appleFrameworks:
       - Accelerate
