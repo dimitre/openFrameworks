@@ -1081,7 +1081,7 @@ void ofTemplateChalet::load() {
 
 	projectYaml = YAML::LoadFile(projectFrom.string());
 
-    projectYaml["name"] = conf.projectName;
+	projectYaml["name"] = conf.projectName;
 	projectYaml["variables"]["platform"] = getPlatformString();
 	projectYaml["variables"]["addons"] = joinStrings(addonsNames, ",");
 	projectYaml["variables"]["generator"] = getVersion();
@@ -1140,7 +1140,25 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 				alert("	└─ appleFramework " + s, 94);
 				// projectYaml["abstracts:*"]["settings:Cxx"]["appleFrameworks"].push_back(s);
 				projectYaml["targets"]["empty"]["settings:Cxx"]["appleFrameworks"].push_back(s);
+			}
+		}
+	}
 
+	// FIXME: TODO: handle cflags etc.
+	const std::map<std::string, std::string> addonToChalet {
+		{ "ADDON_CFLAGS", "compileOptions" },
+		{ "ADDON_CPPFLAGS", "compileOptions" },
+		{ "ADDON_LDFLAGS", "linkerOptions" },
+		{ "ADDON_DEFINES", "defines" },
+	};
+
+	for (auto & param : addonToChalet) {
+		if (a->addonProperties.count(param.first)) {
+			for (const auto & property : a->addonProperties[param.first]) {
+				for (const auto & s : ofSplitString(property, " ")) {
+					alert("	└─ " + param.second + " : " + s, 94);
+					projectYaml["targets"]["empty"]["settings:Cxx"][param.second].push_back(s);
+				}
 			}
 		}
 	}
@@ -1152,27 +1170,18 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 	}
 
 
-	// FIXME: TODO: handle cflags etc.
-	const std::map<std::string, std::string> addonToChalet {
-		{ "ADDON_DEFINES", "defines" },
-		{ "ADDON_CFLAGS", "OTHER_CFLAGS" },
-		{ "ADDON_CPPFLAGS", "OTHER_CPLUSPLUSFLAGS" },
-		{ "ADDON_LDFLAGS", "linkerOptions" },
-	};
 
 	// I'm now removing this one. it was handled already by conf.defines in general addon loading. ofAddon::loadFiles populating conf.defines
 	// for (auto & p : a->addonProperties["ADDON_DEFINES"]) {
 	// 	projectYaml["targets"]["empty"]["settings:Cxx"]["defines"].push_back(p);
 	// }
-
-
 }
 
 void ofTemplateChalet::save() {
 
-    renameYamlKey(projectYaml["targets"], "empty", conf.projectName);
-    projectYaml["distribution"]["empty"]["buildTargets"] = conf.projectName;
-    renameYamlKey(projectYaml["distribution"], "empty", conf.projectName);
+	renameYamlKey(projectYaml["targets"], "empty", conf.projectName);
+	projectYaml["distribution"]["empty"]["buildTargets"] = conf.projectName;
+	renameYamlKey(projectYaml["distribution"], "empty", conf.projectName);
 
 	// Change key "empty" to project name in targets
 	// {

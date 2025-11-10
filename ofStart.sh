@@ -7,7 +7,8 @@ git pull
 ./libs/libs.sh
 cd ofGen
 ./compile.sh
-cd ../examples/demos/flechilhas
+#cd ../examples/demos/flechilhas
+cd ../examples/demos/organicText
 ofgen templates=chalet buildrun
 
 cd ../../..
