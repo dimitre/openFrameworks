@@ -105,9 +105,18 @@ inline static std::string getPlatformString() {
 	struct utsname sysinfo;
 	uname(&sysinfo);
 	std::string sysarch { "linux" + std::string(sysinfo.machine) };
+	// FIXME: keept this way or change libs names?
 	if (sysarch == "linuxx86_64") {
 		sysarch = "linux64";
 	}
+	else if (sysarch == "linuxaarch64") {
+	    sysarch = "rpi-aarch64"
+	}
+	// untested
+	else if (sysarch == "linuxarmv6l") {
+	    sysarch = "rpi-armv6l"
+	}
+
 	return sysarch;
 
 	// if (
