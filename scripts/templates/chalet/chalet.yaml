@@ -310,12 +310,12 @@ targets:
 
       exclude[:macos]:
         - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils,ofMediaFoundationPlayer,ofDirectShowGrabber,ofDirectShowPlayer}.cpp
-        - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
+        - ${var:ofPath}/libs/openFrameworks/sound/ofMediaFoundationSoundPlayer.cpp
 
       exclude[:linux]:
         - ${var:ofPath}/libs/openFrameworks/video/{ofDirectShowPlayer,ofDirectShowGrabber,ofMediaFoundationPlayer}.cpp
-        - ${var:ofPath}/libs/openFrameworks/sound/{ofMediaFoundationSoundPlayer}.cpp
-        - ${var:ofPath}/libs/openFrameworks/app/ofAppGlutWindow.cpp
+        - ${var:ofPath}/libs/openFrameworks/sound/ofMediaFoundationSoundPlayer.cpp
+        # - ${var:ofPath}/libs/openFrameworks/app/ofAppGlutWindow.cpp
 
         # - ${var:ofPath}/libs/openFrameworks/sound/{ofOpenALSoundPlayer}.cpp
       exclude[:windows]:
