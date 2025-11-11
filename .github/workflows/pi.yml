@@ -296,7 +296,8 @@ jobs:
           # chalet configure --toolchain ${{ matrix.toolchain }} #-a auto
           chalet bundle
           zip flechilhas.* dist/*
-          gh release upload demo *.zip --clobber
+          ls *.zip
+          gh release upload demo flechilhas.zip --clobber
 
       # - name: Empty Example Chalet
       #   run: |
