@@ -141,7 +141,7 @@ jobs:
           # libyaml-cpp-dev nlohmann-json3-dev libpugixml-dev
           # make libcairo2-dev libgtk2.0-dev libgtk2.0-0
           # libssl3 libssl-dev libcurl4 libcurl4-openssl-dev
-          version: 1.0
+          version: 1.0-arm
 
       - name: Cache Packages - macOS Brew
         if: runner.os == 'macOS'
