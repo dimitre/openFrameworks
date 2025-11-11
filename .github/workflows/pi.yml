@@ -41,6 +41,7 @@ jobs:
 
           sudo apt install -y
           wget2
+          libmpg123-0
           libunwind-dev
           libgl1-mesa-dev libglu1-mesa-dev
           libfontconfig1-dev
