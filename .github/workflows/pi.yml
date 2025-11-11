@@ -134,11 +134,9 @@ jobs:
         # ls /mingw64/bin/lld
         # ls /usr/bin/lld
       # Preparation for ofgen
-
       # - name: Add msbuild to PATH
       #   if: runner.os == 'Windows'
       #   uses: microsoft/setup-msbuild@v2
-
       - name: Linux Apt
         if: runner.os == 'Linux'
         run: >
@@ -151,9 +149,9 @@ jobs:
           freeglut3-dev libxmu-dev libxxf86vm-dev libopenal-dev libsndfile1-dev libpulse-dev
           libgl1-mesa-dev libudev-dev libdrm-dev
           libxcursor-dev libxi-dev libxinerama-dev
-          libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-pulseaudio
-          gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa
-          gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav
+        # libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-pulseaudio
+        # gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa
+        # gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav
 
       # - name: Cache Packages - Linux Apt
       #   if: runner.os == 'Linux'
