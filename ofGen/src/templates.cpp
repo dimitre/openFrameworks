@@ -1086,12 +1086,23 @@ void ofTemplateChalet::load() {
 	projectYaml["variables"]["addons"] = joinStrings(addonsNames, ",");
 	projectYaml["variables"]["generator"] = getVersion();
 
+	if (fs::exists("icon") && fs::is_directory("icon")) {
+		for (auto const & i : fs::directory_iterator { "icon" }) {
+			if (i.path().extension() == ".ico") {
+				alert("icon found " + i.path().string(), 95);
+				projectYaml["targets"]["empty"]["settings:Cxx"]["windowsApplicationIcon"] = i.path().string();
+			} else if (i.path().extension() == ".png") {
+				alert("icon found " + i.path().string(), 95);
+				// projectYaml["distribution"]["empty"]["linuxDesktopEntry"]["icon"] = i.path().string();
+				projectYaml["distribution"]["empty"]["macosBundle"]["icon"] = i.path().string();
+			}
+		}
+	}
+
 	// FIXME: Test if ok to remove. it seems to be duplicated by addonToChalet
 	// for (auto & d : conf.defines) {
 	// 	projectYaml["targets"]["empty"]["settings:Cxx"]["defines"].push_back(d);
 	// }
-
-
 
 	// for (auto & f : conf.frameworks) {
 	// 	projectYaml["abstracts:*"]["appleFrameworks"].push_back(f);
@@ -1170,8 +1181,6 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 		alert("	└─ appleFramework " + f.string(), 94);
 		projectYaml["targets"]["empty"]["settings:Cxx"]["appleFrameworks"].push_back(f.string());
 	}
-
-
 
 	// I'm now removing this one. it was handled already by conf.defines in general addon loading. ofAddon::loadFiles populating conf.defines
 	// for (auto & p : a->addonProperties["ADDON_DEFINES"]) {

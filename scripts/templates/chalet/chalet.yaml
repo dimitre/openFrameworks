@@ -332,6 +332,9 @@ targets:
   empty:
     kind: executable
     runWorkingDirectory: ${cwd}/bin
+
+    #windowsApplicationIcon: icon/app.ico
+
     # copyFilesOnRun: bin/data
     # externalConfiguration: ${var:ofPath}/libs/openFrameworksCompiled/project/chalet/configuration.yaml
 
@@ -359,6 +362,11 @@ distribution:
     buildTargets: empty
     exclude:
       - data/.gitkeep
+    # linuxDesktopEntry:
+    # template: platform/linux/app.desktop
+    # icon: platform/linux/app-logo.png
+    # copyToApplications: true
+
     macosBundle:
       type: app
       icon: ${var:ofPath}/libs/openFrameworksCompiled/project/macos/of.icns
