@@ -46,6 +46,27 @@ jobs:
 
       #     which cmake
       #     cmake --version
+      - name: Install Chalet
+        # if: matrix.platform == 'vs'
+        uses: jaxxstorm/action-install-gh-release@v2.1.0
+        with:
+          repo: chalet-org/chalet
+          cache: disable
+          extension: .zip
+          prerelease: "false"
+
+      - name: LS
+        run: |
+          ls /usr/local/bin
+          # whereis chalet
+
+      - name: Chalet
+        run: |
+          chalet
+
+      - name: Chalet Test / Version
+        run: |
+          chalet --version
 
       - uses: actions/checkout@v5
 
@@ -149,27 +170,6 @@ jobs:
         with:
           tools: wget2
         # yaml-cpp fmt nlohmann-json pugixml # fmt ccache
-
-      - name: Install Chalet
-        # if: matrix.platform == 'vs'
-        uses: jaxxstorm/action-install-gh-release@v2.1.0
-        with:
-          repo: chalet-org/chalet
-          cache: enable
-          extension: .zip
-          prerelease: "false"
-
-      - name: LS
-        run: |
-          ls /usr/local/bin
-          whereis chalet
-      - name: Chalet
-        run: |
-          chalet
-
-      - name: Chalet Test / Version
-        run: |
-          chalet --version
 
       - name: Libs
         shell: bash
