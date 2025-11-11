@@ -145,7 +145,7 @@ jobs:
         with:
           packages: >
             wget2
-            libglu1-mesa-dev
+            libgl1-mesa-dev libglu1-mesa-dev
             libfontconfig1-dev
             libxrandr-dev
             libjack-jackd2-0 libjack-jackd2-dev libasound2-dev
