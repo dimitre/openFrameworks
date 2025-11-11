@@ -105,7 +105,7 @@ abstracts:*:
       - /usr/lib/x86_64-linux-gnu/glib-2.0/include
 
     # includeDirs[:linux+architecture:aarch64-linux-gnu]:
-    includeDirs[:linux+architecture:arm64]:
+    includeDirs[:linux+architecture:aarch64]:
       - /usr/include/aarch64-linux-gnu
       - /usr/lib/aarch64-linux-gnu/glib-2.0/include
 
