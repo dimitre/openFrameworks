@@ -86,7 +86,9 @@ else
 
         if [[ "$ARCH" == "x86_64" ]]; then
             PLATFORM=linux64
-        elif [[ "$ARCH" == "aarch64" ]] && [[ -f /etc/rpi-issue ]]; then
+        # commenting out this for now so I can use ubuntu-22-arm
+        # elif [[ "$ARCH" == "aarch64" ]] && [[ -f /etc/rpi-issue ]]; then
+        elif [[ "$ARCH" == "aarch64" ]]; then
             PLATFORM=rpi-aarch64
         elif [[ "$ARCH" == "armv6l" ]] || [[ "$ARCH" == "armv7l" ]]; then
             # Check if it's actually a Raspberry Pi
