@@ -293,10 +293,9 @@ jobs:
         run: |
           cd examples/demos/flechilhas
           ofgen templates=chalet
-          # chalet configure --toolchain ${{ matrix.toolchain }} #-a auto
           chalet bundle
-          zip flechilhas.* dist/*
-          ls *.zip
+          zip -r flechilhas.zip dist/*
+          ls -la flechilhas.zip
           gh release upload demo flechilhas.zip --clobber
 
       # - name: Empty Example Chalet
