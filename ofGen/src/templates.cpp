@@ -1086,10 +1086,12 @@ void ofTemplateChalet::load() {
 	projectYaml["variables"]["addons"] = joinStrings(addonsNames, ",");
 	projectYaml["variables"]["generator"] = getVersion();
 
-	for (auto & d : conf.defines) {
-		// projectYaml["abstracts:*"]["settings:Cxx"]["defines"].push_back(d);
-		projectYaml["targets"]["empty"]["settings:Cxx"]["defines"].push_back(d);
-	}
+	// FIXME: Test if ok to remove. it seems to be duplicated by addonToChalet
+	// for (auto & d : conf.defines) {
+	// 	projectYaml["targets"]["empty"]["settings:Cxx"]["defines"].push_back(d);
+	// }
+
+
 
 	// for (auto & f : conf.frameworks) {
 	// 	projectYaml["abstracts:*"]["appleFrameworks"].push_back(f);
