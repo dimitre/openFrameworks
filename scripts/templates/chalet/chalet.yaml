@@ -254,7 +254,7 @@ abstracts:*:
       - ${var:ofPath}/libs/${var:platform}/lib/libz.a
 
     staticLinks[:linux+architecture:aarch64]:
-      - ${var:ofPath}/libs/${var:platform}/lib/liblcms2.a
+      - ${var:ofPath}/libs/${var:platform}/lib/aarch64-linux-gnu/liblcms2.a
     staticLinks[:linux+architecture:x86_64]:
       - ${var:ofPath}/libs/${var:platform}/lib/x86_64-linux-gnu/liblcms2.a
 
