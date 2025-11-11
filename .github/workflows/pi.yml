@@ -139,27 +139,48 @@ jobs:
       #   if: runner.os == 'Windows'
       #   uses: microsoft/setup-msbuild@v2
 
-      - name: Cache Packages - Linux Apt
+      - name: Linux Apt
         if: runner.os == 'Linux'
-        uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: >
-            wget2
-            libgl1-mesa-dev libglu1-mesa-dev
-            libfontconfig1-dev
-            libxrandr-dev
-            libjack-jackd2-0 libjack-jackd2-dev libasound2-dev
-            freeglut3-dev libxmu-dev libxxf86vm-dev libopenal-dev libsndfile1-dev libpulse-dev
-            libgl1-mesa-dev libudev-dev libdrm-dev
-            libxcursor-dev libxi-dev libxinerama-dev
-            libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-pulseaudio
-            gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa
-            gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav
-          # libglfw3-dev
-          # libyaml-cpp-dev nlohmann-json3-dev libpugixml-dev
-          # make libcairo2-dev libgtk2.0-dev libgtk2.0-0
-          # libssl3 libssl-dev libcurl4 libcurl4-openssl-dev
-          version: 1.0-arm
+        run: >
+          wget2
+          libgl1-mesa-dev libglu1-mesa-dev
+          libfontconfig1-dev
+          libxrandr-dev
+          libjack-jackd2-0 libjack-jackd2-dev libasound2-dev
+          freeglut3-dev libxmu-dev libxxf86vm-dev libopenal-dev libsndfile1-dev libpulse-dev
+          libgl1-mesa-dev libudev-dev libdrm-dev
+          libxcursor-dev libxi-dev libxinerama-dev
+          libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-pulseaudio
+          gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa
+          gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav
+
+      # - name: Cache Packages - Linux Apt
+      #   if: runner.os == 'Linux'
+      #   uses: awalsh128/cache-apt-pkgs-action@latest
+      #   with:
+      #     packages: >
+
+      #       wget2
+      #       libgl1-mesa-dev libglu1-mesa-dev
+      #       libfontconfig1-dev
+      #       libxrandr-dev
+      #       libjack-jackd2-0 libjack-jackd2-dev libasound2-dev
+      #       freeglut3-dev libxmu-dev libxxf86vm-dev libopenal-dev libsndfile1-dev libpulse-dev
+      #       libgl1-mesa-dev libudev-dev libdrm-dev
+      #       libxcursor-dev libxi-dev libxinerama-dev
+      #       libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-pulseaudio
+      #       gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa
+      #       gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav
+      #     # libglfw3-dev
+      #     # libyaml-cpp-dev nlohmann-json3-dev libpugixml-dev
+      #     # make libcairo2-dev libgtk2.0-dev libgtk2.0-0
+      #     # libssl3 libssl-dev libcurl4 libcurl4-openssl-dev
+      #     version: 1.0-arm
+
+      - name: Verify GLU location
+        run: |
+          # This should succeed
+          find /usr/include -name "glu.h" 2>/dev/null || true
 
       - name: Cache Packages - macOS Brew
         if: runner.os == 'macOS'
