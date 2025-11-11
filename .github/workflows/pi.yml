@@ -32,7 +32,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     defaults:
       run:
-        shell: ${{ matrix.shell }} {0}
+        shell: bash
     steps:
       # FIXME: Remove in near future, when runners have 4.1.2 at least
       # cmake 4.1.1 is doomed. 4.1.2 works
