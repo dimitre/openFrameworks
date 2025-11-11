@@ -2,8 +2,11 @@ name: OF
 
 on:
   push:
-    # paths-ignore:
-#       - "examples/**"
+    paths-ignore:
+      # - "examples/**"
+      - ".github/workflows/pi.yml"
+      # FIXME: remove
+      - ".github/workflows/of.yml"
 
 # concurrency:
 #   group: ${{ github.workflow }}
