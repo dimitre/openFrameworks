@@ -39,6 +39,7 @@ jobs:
         run: >
           sudo apt install -y
           wget2
+          libunwind-dev
           libgl1-mesa-dev libglu1-mesa-dev
           libfontconfig1-dev
           libxrandr-dev
