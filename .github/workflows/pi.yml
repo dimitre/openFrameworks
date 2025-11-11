@@ -286,6 +286,10 @@ jobs:
 
       - name: DEMO RPI
         if: matrix.platform == 'rpi-aarch64'
+        env:
+          # GITHUB_TOKEN: ${{ github.TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
         run: |
           cd examples/demos/flechilhas
           ofgen templates=chalet
