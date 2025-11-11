@@ -145,7 +145,7 @@ abstracts:*:
       - pthread
       - GL
       - GLU
-      - mpg123
+      # - mpg123
 
       - udev # ofxkinect only
 
