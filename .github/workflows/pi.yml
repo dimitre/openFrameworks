@@ -46,34 +46,39 @@ jobs:
 
       #     which cmake
       #     cmake --version
-      - name: Install Chalet
-        # if: matrix.platform == 'vs'
-        uses: jaxxstorm/action-install-gh-release@v2.1.0
-        with:
-          repo: chalet-org/chalet
-          cache: disable
-          extension: .zip
-          prerelease: "false"
+      # - name: Install Chalet
+      #   # if: matrix.platform == 'vs'
+      #   uses: jaxxstorm/action-install-gh-release@v2.1.0
+      #   with:
+      #     repo: chalet-org/chalet
+      #     cache: disable
+      #     extension: .zip
+      #     prerelease: "false"
 
-      - name: LS
-        run: |
-          ls /usr/local/bin
-          # whereis chalet
+      # - name: LS
+      #   run: |
+      #     ls /usr/local/bin
+      #     # whereis chalet
 
-      - name: Chalet
-        run: |
-          chalet
+      # - name: Chalet
+      #   run: |
+      #     chalet
 
-      - name: Chalet Test / Version
-        run: |
-          chalet --version
+      # - name: Chalet Test / Version
+      #   run: |
+      #     chalet --version
 
       - uses: actions/checkout@v5
 
       - name: RPI - Compiler
-        if: matrix.platform == 'msys2' && runner.os == 'Linux'
+        if: matrix.platform == 'rpi-aarch64' && runner.os == 'Linux'
         run: |
           sudo apt install gcc g++ binutils
+
+      - name: ofStart
+        if: matrix.platform == 'rpi-aarch64' && runner.os == 'Linux'
+        run: |
+          ./ofStart.sh
 
       # - name: RPI - Apt Cache Cross Compile
       #   if: matrix.platform == 'rpi-aarch64' || matrix.platform == 'rpi-armv6l'
