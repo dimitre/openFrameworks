@@ -37,6 +37,8 @@ jobs:
       - name: Linux Apt
         if: runner.os == 'Linux'
         run: >
+          sudo apt-get update;
+
           sudo apt install -y
           wget2
           libunwind-dev
