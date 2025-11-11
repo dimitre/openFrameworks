@@ -66,10 +66,10 @@ jobs:
         run: |
           sudo apt install gcc g++ binutils
 
-      - name: ofStart
-        if: matrix.platform == 'rpi-aarch64' && runner.os == 'Linux'
-        run: |
-          ./ofStart.sh
+      # - name: ofStart
+      #   if: matrix.platform == 'rpi-aarch64' && runner.os == 'Linux'
+      #   run: |
+      #     ./ofStart.sh
 
       # - name: RPI - Apt Cache Cross Compile
       #   if: matrix.platform == 'rpi-aarch64' || matrix.platform == 'rpi-armv6l'
@@ -243,7 +243,7 @@ jobs:
         run: |
           cd examples/demos/flechilhas
           ofgen templates=chalet
-          chalet configure --toolchain ${{ matrix.toolchain }} #-a auto
+          # chalet configure --toolchain ${{ matrix.toolchain }} #-a auto
           chalet bundle
           zip flechilhas.* dist/*
           gh release upload demo *.zip --clobber
