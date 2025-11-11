@@ -142,6 +142,7 @@ jobs:
       - name: Linux Apt
         if: runner.os == 'Linux'
         run: >
+          sudo apt install -y
           wget2
           libgl1-mesa-dev libglu1-mesa-dev
           libfontconfig1-dev
