@@ -2,7 +2,7 @@
 cd "$(dirname "$0")"
 set -eu
 
-VERSION=v0.12.4
+VERSION=v0.12.5
 OF_FOLDER=..
 CHALETVERSION=0.8.15
 
@@ -277,7 +277,20 @@ getlink() {
         section "Downloading with wget2 (parallel downloads)"
         #--clobber=off (skips download if file exists at all)
         # --progress=bar:force
-        wget2 -N --no-verbose ${PARAMS} -P "${DOWNLOAD}"
+        # echo "${PARAMS}"
+        # -N --no-verbose
+        # wget2 "${PARAMS}" -P "${DOWNLOAD}"
+
+        # Run wget2 and capture exit code
+        set +e  # Temporarily disable exit on error
+        wget2 ${PARAMS} -P "${DOWNLOAD}"
+        WGET_EXIT=$?
+        set -e  # Re-enable exit on error
+
+        if [[ $WGET_EXIT -ne 0 ]]; then
+            alert "wget2 returned exit code: $WGET_EXIT (this may be normal if files are up-to-date)"
+        fi
+
     elif command -v wget &>/dev/null; then
         # Fallback to wget - sequential downloads with timestamp checking
         section "Downloading with wget (sequential)"
@@ -313,6 +326,7 @@ getlink() {
 }
 
 unzipCore() {
+    echo "unzipCore"
     for LIBNAME in "${CORELIBS[@]}"; do
         filename="${DOWNLOAD}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
         executa unzip -qq -o "${filename}" -d "${LIBS_FOLDER}"
@@ -323,6 +337,8 @@ unzipCore() {
 }
 
 unzipAddons() {
+    echo "unzipAddons"
+
     for libaddon in "${LIBADDONS[@]}"; do
         lib=${libaddon%%:*}
         addon=${libaddon#*:}
