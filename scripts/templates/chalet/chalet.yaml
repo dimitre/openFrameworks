@@ -21,8 +21,11 @@ abstracts:*:
     runtimeTypeInformation: true
     threads: true
     exceptions: true
-    defines:
-      - OF
+    # defines:
+    # - OF
+    defines[:macos]:
+      - GL_SILENCE_DEPRECATION
+      - GLES_SILENCE_DEPRECATION
     defines[:debug]:
       - DEBUG
 

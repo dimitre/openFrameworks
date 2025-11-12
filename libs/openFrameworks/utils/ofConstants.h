@@ -69,9 +69,6 @@ enum ofTargetPlatform{
 		#define TARGET_MINGW
 	#endif
 #elif defined( __APPLE_CC__)
-	#define GL_SILENCE_DEPRECATION
-	#define GLES_SILENCE_DEPRECATION
-	#define COREVIDEO_SILENCE_GL_DEPRECATION
 
     #define __ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES 0
 
