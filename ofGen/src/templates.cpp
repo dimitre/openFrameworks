@@ -1093,7 +1093,8 @@ void ofTemplateChalet::load() {
 				projectYaml["targets"]["empty"]["settings:Cxx"]["windowsApplicationIcon"] = i.path().string();
 			} else if (i.path().extension() == ".png") {
 				alert("icon found " + i.path().string(), 95);
-				// projectYaml["distribution"]["empty"]["linuxDesktopEntry"]["icon"] = i.path().string();
+				projectYaml["distribution"]["empty"]["linuxDesktopEntry"]["icon"] = i.path().string();
+				projectYaml["distribution"]["empty"]["linuxDesktopEntry"]["template"] = "platform/linux/app.desktop";
 				projectYaml["distribution"]["empty"]["macosBundle"]["icon"] = i.path().string();
 			}
 		}
