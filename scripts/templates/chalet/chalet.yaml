@@ -366,9 +366,9 @@ distribution:
     exclude:
       - data/.gitkeep
 
-    linuxDesktopEntry:
-      template: platform/linux/app.desktop
-      icon: platform/linux/app-logo.png
+    # linuxDesktopEntry:
+    # template: platform/linux/app.desktop
+    # icon: platform/linux/app-logo.png
     # copyToApplications: true
 
     macosBundle:
