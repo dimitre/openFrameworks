@@ -168,7 +168,9 @@ case "$PLATFORM" in
       	fi
 
        	if ! command -v wget2 &> /dev/null; then
- 			scoop install wget2
+       		if command -v scoop &> /dev/null; then
+      			scoop install wget2
+    		fi
     	fi
 
     	# if command -v winget &> /dev/null; then
