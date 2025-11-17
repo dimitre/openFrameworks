@@ -37,6 +37,10 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - name: Install zip
+        if: matrix.platform == 'vs'
+        run: choco install zip -y
+
       - name: Libs
         shell: bash
         run: ./libs/libs.sh
