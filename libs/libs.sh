@@ -204,6 +204,7 @@ case "$PLATFORM" in
             ${SUDO_CMD} apt-get -y install \
             	ninja-build wget2 cmake \
                 libfontconfig1-dev \
+                libglu1-mesa-dev \
                 libxrandr-dev \
                 freeglut3-dev libxmu-dev libxxf86vm-dev libgl1-mesa-dev libudev-dev \
                 libxcursor-dev libxi-dev libxinerama-dev \
