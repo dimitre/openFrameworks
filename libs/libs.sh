@@ -296,7 +296,12 @@ ALLLIBS=("${CORELIBS[@]}" "${ADDONLIBS[@]}")
 # }
 
 getlink() {
-    if command -v wget2 &>/dev/null; then
+	if command -v gh &>/dev/null; then
+		section "Downloading with GH (github command line)"
+		gh release download ${VERSION} -R dimitre/ofLibs --pattern "ofLibs_*_${PLATFORM}.zip" -D "${DOWNLOAD}"
+
+
+	elif command -v wget2 &>/dev/null; then
         # wget2 is available - use it for parallel downloads
         PARAMS=""
         for LIBNAME in "${ALLLIBS[@]}"; do

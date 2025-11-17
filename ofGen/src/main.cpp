@@ -7,23 +7,25 @@
 #endif
 
 int main(const int argc, const char * argv[]) {
-    auto t1 = std::chrono::high_resolution_clock::now();
+	auto t1 = std::chrono::high_resolution_clock::now();
 #if defined(_WIN32)
 	SetConsoleOutputCP(CP_UTF8); // 65001
 #endif
-    conf.parseParameters(argc, argv);
-    if (conf.singleParameter == "yaml-addons-ls") {
-        YAML::Node addonsList(YAML::NodeType::Sequence);
+	conf.parseParameters(argc, argv);
+	if (conf.singleParameter == "yaml-addons-ls") {
 
-   	    for (auto const & d : fs::directory_iterator { conf.ofPath / "addons" }) {
-            if (fs::is_directory(d.path())) {
-                addonsList.push_back(d.path().filename().string());
-            }
-        }
-        std::cout << addonsList << std::endl;
-        std::exit(0);
-    }
-
+		auto addonsFolder { conf.ofPath / "addons" };
+		if (fs::exists(addonsFolder)) {
+			YAML::Node addonsList(YAML::NodeType::Sequence);
+			for (auto const & d : fs::directory_iterator { addonsFolder }) {
+				if (fs::is_directory(d.path())) {
+					addonsList.push_back(d.path().filename().string());
+				}
+			}
+			std::cout << addonsList << std::endl;
+		}
+		std::exit(0);
+	}
 
 	std::cout << sign << std::endl; // HEADER
 
@@ -31,7 +33,7 @@ int main(const int argc, const char * argv[]) {
 
 	if (!fs::exists("src") && !fs::exists("of.yml") && !fs::exists("addons.make") && !fs::exists("../../../.ofroot")) {
 		alert("⚠️ Not an ofWorks project folder, no action taken", 95);
-		alert ("no src folder found, no of.yml file or addons.make found and no OF installed in default path ../../..");
+		alert("no src folder found, no of.yml file or addons.make found and no OF installed in default path ../../..");
 		build = false;
 		conf.help();
 	}
