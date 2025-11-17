@@ -28,13 +28,12 @@ jobs:
 
     defaults:
       run:
-        shell: bash
         # working-directory: ${{ inputs.lib }}
+        shell: bash
+        # shell: ${{ matrix.shell }} {0}
 
     runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: ${{ matrix.shell }} {0}
+
     steps:
       - uses: actions/checkout@v5
 
