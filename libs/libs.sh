@@ -206,7 +206,7 @@ case "$PLATFORM" in
 
 
         # Install system dependencies (skip in CI)
-        if [[ -z "${CI:-}" ]]; then
+        # if [[ -z "${CI:-}" ]]; then
             section "Installing system dependencies"
             ${SUDO_CMD} apt-get -y install \
             	ninja-build wget2 cmake \
@@ -222,7 +222,7 @@ case "$PLATFORM" in
                 # make \
                 # libssl3 libcairo2-dev libssl-dev libcurl4 libcurl4-openssl-dev \
                 # libasound2-dev   \
-        fi
+        # fi
 
         if ! command -v chalet &> /dev/null; then
             if [[ ${PLATFORM} == 'linux64' ]]; then
