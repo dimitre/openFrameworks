@@ -13,7 +13,7 @@ env:
 jobs:
   ofworks:
     strategy:
-      fail-fast: false
+      # fail-fast: false
       matrix:
         include:
           - { os: ubuntu-latest, platform: linux64, shell: bash }
@@ -31,6 +31,23 @@ jobs:
       run:
         shell: ${{ matrix.shell }} {0}
     steps:
+      - name: Install Chalet
+        # if: matrix.platform == 'vs'
+        uses: jaxxstorm/action-install-gh-release@v2.1.0
+        with:
+          repo: chalet-org/chalet
+          cache: enable
+          extension: .zip
+          prerelease: "false"
+
+      - name: Whereis Chalet
+        run: |
+          whereis chalet
+
+      - name: Chalet Test / Version
+        run: |
+          chalet --version
+
       - uses: actions/checkout@v5
 
       - name: ccache
@@ -74,19 +91,6 @@ jobs:
       #   uses: tecolicom/actions-use-homebrew-tools@v1.3
       #   with:
       #     tools: wget2
-
-      - name: Install Chalet
-        # if: matrix.platform == 'vs'
-        uses: jaxxstorm/action-install-gh-release@v2.1.0
-        with:
-          repo: chalet-org/chalet
-          cache: enable
-          extension: .zip
-          prerelease: "false"
-
-      - name: Chalet Test / Version
-        run: |
-          chalet --version
 
       - name: ofgen compile
         if: runner.os != 'Windows'
