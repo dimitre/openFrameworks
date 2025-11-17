@@ -51,9 +51,9 @@ jobs:
           extension: .zip
           prerelease: "false"
 
-      - name: Whereis Chalet
-        run: |
-          whereis chalet
+      # - name: Whereis Chalet
+      #   run: |
+      #     whereis chalet
 
       - name: Chalet Test / Version
         run: |
