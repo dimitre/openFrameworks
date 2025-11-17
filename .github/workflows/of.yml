@@ -36,12 +36,21 @@ jobs:
         with:
           key: ${{ matrix.platform }}-${{ matrix.target }}
 
-      - name: RPI - Compiler
-        if: matrix.platform == 'rpi-aarch64' && runner.os == 'Linux'
-        run: |
-          sudo apt install gcc g++ binutils
-
       - uses: actions/checkout@v5
+
+      # - name: RPI - Compiler
+      #   if: matrix.platform == 'rpi-aarch64' && runner.os == 'Linux'
+      #   run: |
+      #     sudo apt install gcc g++ binutils
+
+      - name: Libs
+        shell: bash
+        run: ./libs/libs.sh
+
+      - name: LS Libs
+        shell: bash
+        run: |
+          ls libs/**/lib/*
 
       # - name: Cache Packages - Linux Apt
       #   if: runner.os == 'Linux'
@@ -78,15 +87,6 @@ jobs:
       - name: Chalet Test / Version
         run: |
           chalet --version
-
-      - name: Libs
-        shell: bash
-        run: ./libs/libs.sh
-
-      - name: LS Libs
-        shell: bash
-        run: |
-          ls libs/**/lib/*.a
 
       - name: ofgen compile
         if: runner.os != 'Windows'

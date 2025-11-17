@@ -186,6 +186,13 @@ case "$PLATFORM" in
         	else
       			section "cmake already installed"
        		fi
+
+      		if ! command -v ninja &> /dev/null; then
+     			brew install ninja
+        	else
+      			section "ninja already installed"
+       		fi
+
        	else
         	alert "Brew not installed, won't install wget2"
        	fi
@@ -204,9 +211,9 @@ case "$PLATFORM" in
             ${SUDO_CMD} apt-get -y install \
             	ninja-build wget2 cmake \
                 libfontconfig1-dev \
-                libglu1-mesa-dev \
+                libglu1-mesa-dev libgl1-mesa-dev \
                 libxrandr-dev \
-                freeglut3-dev libxmu-dev libxxf86vm-dev libgl1-mesa-dev libudev-dev \
+                freeglut3-dev libxmu-dev libxxf86vm-dev libudev-dev \
                 libxcursor-dev libxi-dev libxinerama-dev \
                 libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
                 gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa \
