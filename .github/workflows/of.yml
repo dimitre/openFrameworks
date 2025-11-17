@@ -9,6 +9,7 @@ on:
 
 env:
   ccache: ccache
+  GH_TOKEN: ${{ github.token }}
 
 jobs:
   ofworks:
