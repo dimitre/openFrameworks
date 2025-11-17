@@ -18,7 +18,8 @@ jobs:
       matrix:
         include:
           - { os: ubuntu-latest, platform: linux64, shell: bash }
-          - { os: macos-26, platform: macos, shell: bash }
+          # - { os: macos-26, platform: macos, shell: bash }
+          - { os: macos-15, platform: macos, shell: bash }
           - { os: windows-latest, platform: vs, shell: powershell }
           - {
               platform: rpi-aarch64,
@@ -71,7 +72,7 @@ jobs:
       - name: ccache
         uses: hendrikmuhs/ccache-action@v1.2.19
         with:
-          key: ${{ matrix.platform }}-${{ matrix.target }}
+          key: ${{ matrix.platform }}
 
       # - name: RPI - Compiler
       #   if: matrix.platform == 'rpi-aarch64' && runner.os == 'Linux'
@@ -129,7 +130,6 @@ jobs:
         run: |
           cd examples/demos/flechilhas
           ofgen templates=chalet
-          chalet bundle
-          zip -r ${{ matrix.platform }}_flechilhas.zip dist/*
-          ls -la ${{ matrix.platform }}_flechilhas.zip
-          gh release upload demo ${{ matrix.platform }}_flechilhas.zip --clobber
+          chalet bundle --compiler-cache
+          zip -r ofWorks_${{ matrix.platform }}_flechilhas.zip dist/*
+          gh release upload demo *.zip --clobber
