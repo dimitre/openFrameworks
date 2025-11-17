@@ -1,0 +1,288 @@
+name: OF
+
+# on: workflow_dispatch
+on:
+  push:
+#   paths-ignore:
+#     # - "examples/**"
+#     - ".github/workflows/pi.yml"
+#     # FIXME: remove
+#     - ".github/workflows/of.yml"
+
+# concurrency:
+#   group: ${{ github.workflow }}
+#   cancel-in-progress: false
+
+# env:
+# ccache: ccache
+
+jobs:
+  ofworks:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # ubuntu and macos completing good, so removed from here now.
+          - { os: ubuntu-latest, platform: linux64, shell: bash }
+          - { os: macos-26, platform: macos, shell: bash }
+          - { os: windows-latest, platform: vs, shell: powershell }
+          - {
+              platform: rpi-aarch64,
+              os: ubuntu-22.04-arm,
+              prefix: aarch64-linux-gnu,
+              toolchain: aarch64-linux-gnu-gcc,
+            }
+          # - {
+          #     platform: rpi-aarch64,
+          #     os: ubuntu-latest,
+          #     prefix: aarch64-linux-gnu,
+          #     toolchain: aarch64-linux-gnu-gcc,
+          #   }
+
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: ${{ matrix.shell }} {0}
+    steps:
+      # FIXME: Remove in near future, when runners have 4.1.2 at least
+      # cmake 4.1.1 is doomed. 4.1.2 works
+      # - name: macOS fix CMAKE Brew
+      #   if: runner.os == 'macOS'
+      #   run: |
+      #     brew update
+      #     brew uninstall --ignore-dependencies cmake || true
+      #     brew cleanup -s cmake
+      #     brew install --force-bottle cmake          # re-install
+
+      #     which cmake
+      #     cmake --version
+
+      - uses: actions/checkout@v5
+
+      - name: RPI - Apt Cache Cross Compile
+        if: matrix.platform == 'rpi-aarch64' || matrix.platform == 'rpi-armv6l'
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: multistrap gcc-${{ matrix.prefix }} g++-${{ matrix.prefix }}
+          version: 1.0
+
+      # FIXME: Test if it works OK
+      - name: RPI - Cache Multistrap
+        if: inputs.multistrap && (matrix.platform == 'rpi-aarch64' || matrix.platform == 'rpi-armv6l')
+        uses: actions/cache@v4
+        with:
+          path: raspbian
+          # key: ${{ matrix.prefix }}-rpicache
+          # I'll now keep just one key, so all actions benefits to the same cache package
+          key: rpi-multistrap-cache
+
+      - name: RPI - multistrap
+        if: inputs.multistrap && (matrix.platform == 'rpi-aarch64' || matrix.platform == 'rpi-armv6l')
+        run: |
+          mkdir -p raspbian/etc/apt/apt.conf.d/
+          echo 'Acquire::AllowInsecureRepositories "true";' | sudo tee raspbian/etc/apt/apt.conf.d/90insecure
+          multistrap -a arm64 -d raspbian -f ../multistrap.conf
+
+      # - name: ccache
+      #   uses: hendrikmuhs/ccache-action@v1.2.19
+      #   with:
+      #     key: ${{ matrix.platform }}-${{ matrix.target }}
+
+      - uses: msys2/setup-msys2@v2.28.0
+        if: runner.os == 'Windows' && matrix.platform == 'msys2'
+        with: #toolchain:p
+          pacboy: gcc:p make:p pkgconf:p wget2:p yaml-cpp:p pugixml:p nlohmann-json:p fmt:p openssl:p python:p assimp:p cairo:p curl:p freeglut:p FreeImage:p glew:p glfw:p glm:p libsndfile:p libusb:p libxml2:p mpg123:p openal:p opencv:p rtaudio:p uriparser:p utf8cpp:p
+          # update: true
+          install: >-
+            git
+            unzip
+            ccache
+            base-devel
+          # make pkg-conf ?
+          #
+      # - uses: msys2/setup-msys2@v2.28.0
+      #   if: runner.os == 'Windows' && matrix.platform == 'vs'
+      #   with:
+      #     pacboy: pkgconf:p
+      #     install: >-
+      #       base-devel
+      - name: Test MSYS2 tools
+        if: runner.os == 'Windows' && matrix.platform == 'msys2'
+        run: |
+          whereis gcc
+          whereis g++
+          whereis c++
+          whereis find
+          whereis ar
+          whereis pkgconf
+          whereis ld
+          ls /mingw64/bin/pkgconf
+          ls /mingw64/bin/gcc
+          ls /mingw64/bin/g++
+          ls /mingw64/bin/c++
+          ls /mingw64/bin/ld
+        # whereis lld
+        # ls /mingw64/bin/lld
+        # ls /usr/bin/lld
+      # Preparation for ofgen
+
+      # - name: Add msbuild to PATH
+      #   if: runner.os == 'Windows'
+      #   uses: microsoft/setup-msbuild@v2
+
+      - name: Cache Packages - Linux Apt
+        if: runner.os == 'Linux'
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: >
+            wget2
+            libfontconfig1-dev
+            libxrandr-dev
+            libjack-jackd2-0 libjack-jackd2-dev libasound2-dev
+            freeglut3-dev libxmu-dev libxxf86vm-dev libopenal-dev libsndfile1-dev libpulse-dev
+            libgl1-mesa-dev libudev-dev libdrm-dev
+            libxcursor-dev libxi-dev libxinerama-dev
+            libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-pulseaudio
+            gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa
+            gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav
+          # libglfw3-dev
+          # libyaml-cpp-dev nlohmann-json3-dev libpugixml-dev
+          # make libcairo2-dev libgtk2.0-dev libgtk2.0-0
+          # libssl3 libssl-dev libcurl4 libcurl4-openssl-dev
+          version: 1.0
+
+      - name: Cache Packages - macOS Brew
+        if: runner.os == 'macOS'
+        uses: tecolicom/actions-use-homebrew-tools@v1.3
+        with:
+          tools: wget2
+        # yaml-cpp fmt nlohmann-json pugixml # fmt ccache
+
+      - name: Install Chalet
+        # if: matrix.platform == 'vs'
+        uses: jaxxstorm/action-install-gh-release@v2.1.0
+        with:
+          repo: chalet-org/chalet
+          cache: enable
+          extension: .zip
+          prerelease: "false"
+
+      - name: Chalet Test / Version
+        # if: matrix.platform == 'vs'
+        run: |
+          chalet --version
+      # - name: ofgen CMAKE cache
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: "ofGen/build"
+      #     key: ofgen-cmake-${{ matrix.platform }}
+
+      - name: Libs
+        shell: bash
+        run: ./libs/libs.sh
+
+      # - name: LS Libs
+      #   shell: bash
+      #   run: ls -alFR ./libs/
+
+      # - name: ofgen compile windows cmake
+      #   if: runner.os == 'Windows'
+      #   shell: pwsh
+      #   run: |
+      #     cd ofGen
+      #     .\compile.bat
+      #     echo "C:\Program Files (x86)\ofgen\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: ofgen compile
+        if: runner.os != 'Windows'
+        run: |
+          cd ofGen
+          # chalet bundle
+          # FIXME: script nao ta rolando no github actions
+          ./compile.sh
+
+      - name: ofgen compile windows chalet
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          cd ofGen
+          ./compile.ps1
+          # chalet bundle
+          (Resolve-Path .\dist).Path | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: ofgen test
+        run: |
+          ofgen colors
+
+      # Not working, no bin folder
+      # - name: emptyExample Chalet
+      #   run: |
+      #     cd examples/templates/emptyExample
+      #     ofgen templates=chalet
+      #     chalet build
+
+      # - name: 3DPrimitivesExample Chalet Gen
+      #   run: |
+      #     cd examples/3d/3DPrimitivesExample
+      #     ofgen templates=chalet
+
+      # - name: 3DPrimitivesExample Chalet Cat
+      #   run: |
+      #     cd examples/3d/3DPrimitivesExample
+      #     cat chalet.yaml
+
+      # - name: 3DPrimitivesExample Chalet Build
+      #   run: |
+      #     cd examples/3d/3DPrimitivesExample
+      #     chalet build --show-commands
+
+      # - name: ofxAssimpExample Chalet
+      #   run: |
+      #     cd examples/3d/ofxAssimpExample
+      #     ofgen templates=chalet
+      #     chalet build --show-commands
+
+      # - name: opencvExample Chalet
+      #   run: |
+      #     cd examples/computer_vision/opencvExample
+      #     ofgen templates=chalet
+      #     chalet build --show-commands
+
+      - name: Empty Example Chalet RPI
+        if: matrix.platform == 'rpi-aarch64'
+        run: |
+          cd examples/templates/emptyExample
+          ofgen templates=chalet
+          chalet configure --toolchain ${{ matrix.toolchain }} #-a auto
+          chalet build --show-commands
+
+      - name: Empty Example Chalet
+        run: |
+          cd examples/templates/emptyExample
+          ofgen build
+          # chalet build --show-commands
+
+      - name: All Addons Example Chalet
+        run: |
+          cd examples/templates/allAddonsExample
+          ofgen build
+          # ofgen templates=chalet
+          # chalet build --show-commands
+
+      # - name: All Addons Example
+      #   if: runner.os != 'Windows'
+      #   run: |
+      #     cd examples/templates/allAddonsExample
+      #     ofgen buildrun
+
+      # - name: All Addons Example
+      #   if: runner.os == 'Windows'
+      #   shell: powershell
+      #   run: |
+      #     cd examples/templates/allAddonsExample
+      #     # ofgen buildrun
+      #     ofgen
+      #     msbuild
+
+      # - name: Tests
+      #   run: ./scripts/tests.sh
