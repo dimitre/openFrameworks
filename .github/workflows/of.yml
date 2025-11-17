@@ -49,6 +49,15 @@ jobs:
         run: |
           ccache --version
 
+      - name: Configure ccache for MSVC
+        if: matrix.platform == 'vs'
+        shell: bash
+        run: |
+          echo "CCACHE_COMPILER_TYPE=msvc" >> $GITHUB_ENV
+          echo "CCACHE_COMPILERCHECK=content" >> $GITHUB_ENV
+          echo "CCACHE_SLOPPINESS=pch_defines,time_macros,include_file_mtime,include_file_ctime" >> $GITHUB_ENV
+          echo "CCACHE_DEPEND=1" >> $GITHUB_ENV
+
       - name: Install zip
         if: matrix.platform == 'vs'
         run: choco install zip -y
@@ -153,6 +162,8 @@ jobs:
         run: |
           cd examples/demos/flechilhas
           ofgen templates=chalet
+          echo "\n\n---------\n\n"
+
           chalet bundle --compiler-cache --show-commands
           zip -r ofWorks_${{ matrix.platform }}_flechilhas.zip dist/*
           gh release upload demo *.zip --clobber
