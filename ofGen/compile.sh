@@ -94,7 +94,12 @@ if command -v cmake &> /dev/null; then
 else
 	# cmake not found. lets go for the alternative.
 	if command -v chalet &> /dev/null; then
-		chalet bundle &&
+		CCACHE_PARAM=""
+		if [[ "${CI:-false}" == "true" ]]; then
+			CCACHE_PARAM=" --compiler-cache"
+		fi
+
+		chalet bundle ${CCACHE_PARAM} &&
 		if [[ -d "./dist" ]]; then
 			DIST_PATH=$(cygpath -w "$(pwd)/dist")
 			powershell.exe -ExecutionPolicy Bypass -Command "
