@@ -1006,22 +1006,28 @@ void ofTrueTypeFont::drawChar(uint32_t c, float x, float y, bool vFlipped) const
 	// FIXME: optimize to addvertices, addtexcoords.
 	// this is called every frame every string.
 	// add index can be done only once (maybe)
-	stringQuads.addVertex(glm::vec3(xmin,ymin,0.f));
-	stringQuads.addVertex(glm::vec3(xmax,ymin,0.f));
-	stringQuads.addVertex(glm::vec3(xmax,ymax,0.f));
-	stringQuads.addVertex(glm::vec3(xmin,ymax,0.f));
+	stringQuads.addVertices({
+		{ xmin, ymin, 0.f },
+		{ xmax, ymin, 0.f },
+		{ xmax, ymax, 0.f },
+		{ xmin, ymax, 0.f },
+	});
 
-	stringQuads.addTexCoord(glm::vec2(props.t1,props.v1));
-	stringQuads.addTexCoord(glm::vec2(props.t2,props.v1));
-	stringQuads.addTexCoord(glm::vec2(props.t2,props.v2));
-	stringQuads.addTexCoord(glm::vec2(props.t1,props.v2));
+	stringQuads.addTexCoords({
+		{ props.t1, props.v1 },
+		{ props.t2, props.v1 },
+		{ props.t2, props.v2 },
+		{ props.t1, props.v2 }
+	});
 
-	stringQuads.addIndex(firstIndex);
-	stringQuads.addIndex(firstIndex+1);
-	stringQuads.addIndex(firstIndex+2);
-	stringQuads.addIndex(firstIndex+2);
-	stringQuads.addIndex(firstIndex+3);
-	stringQuads.addIndex(firstIndex);
+	stringQuads.addIndices({
+		firstIndex,
+		static_cast<ofIndexType>(firstIndex + 1),
+		static_cast<ofIndexType>(firstIndex + 2),
+		static_cast<ofIndexType>(firstIndex + 2),
+		static_cast<ofIndexType>(firstIndex + 3),
+		firstIndex
+	});
 
 
 }
