@@ -83,6 +83,7 @@ jobs:
       #   with:
       #     packages: >
       #       wget2
+      #       ninja-build
       #       libfontconfig1-dev
       #       libxrandr-dev
       #       libjack-jackd2-0 libjack-jackd2-dev libasound2-dev
@@ -98,7 +99,7 @@ jobs:
       #   if: runner.os == 'macOS'
       #   uses: tecolicom/actions-use-homebrew-tools@v1.3
       #   with:
-      #     tools: wget2
+      #     tools: wget2 ninja
 
       - name: ofgen compile
         if: runner.os != 'Windows'
@@ -119,62 +120,6 @@ jobs:
         run: |
           ofgen colors
 
-      # Not working, no bin folder
-      - name: emptyExample Chalet
-        run: |
-          cd examples/templates/emptyExample
-          ofgen templates=chalet
-          chalet build
-
-      - name: 3DPrimitivesExample Chalet Gen
-        run: |
-          cd examples/3d/3DPrimitivesExample
-          ofgen templates=chalet
-          chalet build
-
-      # - name: 3DPrimitivesExample Chalet Cat
-      #   run: |
-      #     cd examples/3d/3DPrimitivesExample
-      #     cat chalet.yaml
-
-      # - name: 3DPrimitivesExample Chalet Build
-      #   run: |
-      #     cd examples/3d/3DPrimitivesExample
-      #     chalet build --show-commands
-
-      # - name: ofxAssimpExample Chalet
-      #   run: |
-      #     cd examples/3d/ofxAssimpExample
-      #     ofgen templates=chalet
-      #     chalet build --show-commands
-
-      # - name: opencvExample Chalet
-      #   run: |
-      #     cd examples/computer_vision/opencvExample
-      #     ofgen templates=chalet
-      #     chalet build --show-commands
-
-      # - name: Empty Example Chalet RPI
-      #   if: matrix.platform == 'rpi-aarch64'
-      #   run: |
-      #     cd examples/templates/emptyExample
-      #     ofgen templates=chalet
-      #     chalet configure --toolchain ${{ matrix.toolchain }} #-a auto
-      #     chalet build --show-commands
-
-      # - name: Empty Example Chalet
-      #   run: |
-      #     cd examples/templates/emptyExample
-      #     ofgen build
-      #     # chalet build --show-commands
-
-      - name: All Addons Example Chalet
-        run: |
-          cd examples/templates/allAddonsExample
-          ofgen build
-          # ofgen templates=chalet
-          # chalet build --show-commands
-
       - name: DEMO publish
         # if: matrix.platform == 'rpi-aarch64'
         env:
@@ -187,20 +132,3 @@ jobs:
           zip -r ${{ matrix.platform }}_flechilhas.zip dist/*
           ls -la ${{ matrix.platform }}_flechilhas.zip
           gh release upload demo ${{ matrix.platform }}_flechilhas.zip --clobber
-      # - name: All Addons Example
-      #   if: runner.os != 'Windows'
-      #   run: |
-      #     cd examples/templates/allAddonsExample
-      #     ofgen buildrun
-
-      # - name: All Addons Example
-      #   if: runner.os == 'Windows'
-      #   shell: powershell
-      #   run: |
-      #     cd examples/templates/allAddonsExample
-      #     # ofgen buildrun
-      #     ofgen
-      #     msbuild
-
-      # - name: Tests
-      #   run: ./scripts/tests.sh

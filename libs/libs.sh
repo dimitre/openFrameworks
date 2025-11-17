@@ -163,6 +163,12 @@ case "$PLATFORM" in
     vs)
     	CORELIBS+=( videoInput )
 
+    	if command -v winget &> /dev/null; then
+   			if ! command -v wget2 &> /dev/null; then
+     			winget install wget2
+     		fi
+      	fi
+
         ;;
 
     macos)
