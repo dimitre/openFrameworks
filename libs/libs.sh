@@ -215,7 +215,7 @@ case "$PLATFORM" in
                 libxrandr-dev \
                 freeglut3-dev libxmu-dev libxxf86vm-dev libudev-dev \
                 libxcursor-dev libxi-dev libxinerama-dev \
-                libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
+                libunwind-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
                 gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa \
                 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav \
                 libopenal-dev libsndfile1-dev
