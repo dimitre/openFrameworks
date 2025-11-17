@@ -1195,6 +1195,10 @@ void ofTemplateChalet::save() {
 	projectYaml["distribution"]["empty"]["buildTargets"] = conf.projectName;
 	renameYamlKey(projectYaml["distribution"], "empty", conf.projectName);
 
+	renameYamlKey(projectYaml["distribution"]["empty.dmg"]["positions"], "empty", conf.projectName);
+	renameYamlKey(projectYaml["distribution"], "empty.dmg", conf.projectName + ".dmg");
+
+
 	// Change key "empty" to project name in targets
 	// {
 	// 	auto targets = projectYaml["targets"];

@@ -388,3 +388,22 @@ distribution:
         CFBundleSignature: "????"
         LSMinimumSystemVersion: "10.8"
         NSHighResolutionCapable: true
+
+  empty.dmg:
+    kind: macosDiskImage
+    pathbarVisible: false
+    textSize: 12
+    iconSize: 80
+    # background:
+    #   1x: platform/macos/dmg-background.png
+    #   2x: platform/macos/dmg-background@2x.png
+    size:
+      width: 512
+      height: 342
+    positions:
+      empty:
+        x: 120
+        y: 188
+      Applications:
+        x: 392
+        y: 188
