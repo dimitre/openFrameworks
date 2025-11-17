@@ -7,14 +7,25 @@
 #endif
 
 int main(const int argc, const char * argv[]) {
+    auto t1 = std::chrono::high_resolution_clock::now();
 #if defined(_WIN32)
 	SetConsoleOutputCP(CP_UTF8); // 65001
 #endif
+    conf.parseParameters(argc, argv);
+    if (conf.singleParameter == "yaml-addons-ls") {
+        YAML::Node addonsList(YAML::NodeType::Sequence);
 
-	auto t1 = std::chrono::high_resolution_clock::now();
+   	    for (auto const & d : fs::directory_iterator { conf.ofPath / "addons" }) {
+            if (fs::is_directory(d.path())) {
+                addonsList.push_back(d.path().filename().string());
+            }
+        }
+        std::cout << addonsList << std::endl;
+        std::exit(0);
+    }
+
 
 	std::cout << sign << std::endl; // HEADER
-	conf.parseParameters(argc, argv);
 
 	bool build = true;
 
