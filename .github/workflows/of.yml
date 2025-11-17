@@ -10,6 +10,7 @@ on:
 env:
   ccache: ccache
   GH_TOKEN: ${{ github.token }}
+  CMAKE_CXX_COMPILER_LAUNCHER: ccache
 
 jobs:
   ofworks:
