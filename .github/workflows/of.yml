@@ -153,6 +153,6 @@ jobs:
         run: |
           cd examples/demos/flechilhas
           ofgen templates=chalet
-          chalet bundle --compiler-cache
+          chalet bundle --compiler-cache --show-commands
           zip -r ofWorks_${{ matrix.platform }}_flechilhas.zip dist/*
           gh release upload demo *.zip --clobber

@@ -96,7 +96,7 @@ else
 	if command -v chalet &> /dev/null; then
 		CCACHE_PARAM=""
 		if [[ "${CI:-false}" == "true" ]]; then
-			CCACHE_PARAM=" --compiler-cache"
+			CCACHE_PARAM=" --compiler-cache --show-commands"
 		fi
 
 		chalet bundle ${CCACHE_PARAM} &&
