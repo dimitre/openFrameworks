@@ -23,7 +23,7 @@ jobs:
               platform: rpi-aarch64,
               os: ubuntu-22.04-arm,
               prefix: aarch64-linux-gnu,
-              toolchain: aarch64-linux-gnu-gcc,
+              toolchain: aarch64-linux-gnu-gcc-12,
             }
 
     runs-on: ${{ matrix.os }}
@@ -31,6 +31,15 @@ jobs:
       run:
         shell: ${{ matrix.shell }} {0}
     steps:
+      - name: Libs
+        shell: bash
+        run: ./libs/libs.sh
+
+      - name: LS Libs
+        shell: bash
+        run: |
+          ls libs/**/lib/*
+
       - name: Install Chalet
         # if: matrix.platform == 'vs'
         uses: jaxxstorm/action-install-gh-release@v2.1.0
@@ -59,15 +68,6 @@ jobs:
       #   if: matrix.platform == 'rpi-aarch64' && runner.os == 'Linux'
       #   run: |
       #     sudo apt install gcc g++ binutils
-
-      - name: Libs
-        shell: bash
-        run: ./libs/libs.sh
-
-      - name: LS Libs
-        shell: bash
-        run: |
-          ls libs/**/lib/*
 
       # - name: Cache Packages - Linux Apt
       #   if: runner.os == 'Linux'
