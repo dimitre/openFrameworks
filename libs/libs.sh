@@ -163,11 +163,19 @@ case "$PLATFORM" in
     vs)
     	CORELIBS+=( videoInput )
 
-    	if command -v winget &> /dev/null; then
-   			if ! command -v wget2 &> /dev/null; then
-     			winget install wget2
-     		fi
+    	if !command -v scoop &> /dev/null; then
+		     irm get.scoop.sh | iex
       	fi
+
+       	if ! command -v wget2 &> /dev/null; then
+ 			scoop install wget2
+    	fi
+
+    	# if command -v winget &> /dev/null; then
+   		# 	if ! command -v wget2 &> /dev/null; then
+     # 			winget install wget2
+     # 		fi
+     #  	fi
 
         ;;
 
