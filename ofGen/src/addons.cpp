@@ -4,7 +4,7 @@
 #include "templates.h"
 #include <filesystem>
 
-void scanFolder(const fs::path & path,
+void ofAddon::scanFolder(const fs::path & path,
 	std::map<std::string, std::vector<fs::path>> & filesMap,
 	bool recursive) {
 	// it should exist and be a folder.
@@ -44,7 +44,10 @@ void scanFolder(const fs::path & path,
 				continue;
 			} else {
 				// ADD To includes list, keep iterating
-				filesMap["includes"].emplace_back(f);
+				// FIXME: This is maybe unneded... test without it with multiple addons
+				if (!isProject) {
+					filesMap["includes"].emplace_back(f);
+				}
 			}
 		} else {
 			if (ext == ".a" || ext == ".lib") {
@@ -197,11 +200,28 @@ void ofAddon::loadFiles() {
 					}
 				}
 			}
+
+			// if is project, add libs and include folders for each lib.
+			else {
+				if (isProject) {
+					alert("		isProject=true, adding lib and include folders for each lib. " + folderLibs.string(), 35);
+
+					if (fs::exists(f / "lib")) {
+						scanFolder(f / "lib", filesMap, true);
+					}
+					if (fs::exists(f / "include")) {
+						scanFolder(f / "include", filesMap, true);
+					}
+				}
+			}
 		}
 
 		if (!hasPlatformFolder) {
-			alert("		platform folder not found, will scan everything " + folderLibs.string(), 35);
-			scanFolder(folderLibs, filesMap, true);
+			// if isProject is true, libs are added already
+			if (!isProject) {
+				alert("		platform folder not found, will scan everything " + folderLibs.string(), 35);
+				scanFolder(folderLibs, filesMap, true);
+			}
 		}
 	}
 

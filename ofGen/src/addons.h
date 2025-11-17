@@ -52,12 +52,14 @@ public:
 	void loadAddonConfig();
 	void refine();
 	void showFiles();
+
+	void scanFolder(const fs::path & path,
+		std::map<std::string, std::vector<fs::path>> & filesMap,
+		// std::map<std::string, std::vector<fs::path>> & exclusionsMap,
+		bool recursive = false);
 };
 
-void scanFolder(const fs::path & path,
-	std::map<std::string, std::vector<fs::path>> & filesMap,
-	// std::map<std::string, std::vector<fs::path>> & exclusionsMap,
-	bool recursive = false);
+
 
 
 
