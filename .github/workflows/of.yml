@@ -40,6 +40,15 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@v1.2.19
+        with:
+          key: ${{ matrix.platform }}
+
+      - name: ccache test version
+        run: |
+          ccache --version
+
       - name: Install zip
         if: matrix.platform == 'vs'
         run: choco install zip -y
@@ -111,11 +120,6 @@ jobs:
       - name: Chalet Test / Version
         run: |
           chalet --version
-
-      - name: ccache
-        uses: hendrikmuhs/ccache-action@v1.2.19
-        with:
-          key: ${{ matrix.platform }}
 
       # - name: RPI - Compiler
       #   if: matrix.platform == 'rpi-aarch64' && runner.os == 'Linux'
