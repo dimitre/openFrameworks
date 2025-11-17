@@ -26,6 +26,11 @@ jobs:
               toolchain: aarch64-linux-gnu-gcc-12,
             }
 
+    defaults:
+      run:
+        shell: bash
+        # working-directory: ${{ inputs.lib }}
+
     runs-on: ${{ matrix.os }}
     defaults:
       run:
