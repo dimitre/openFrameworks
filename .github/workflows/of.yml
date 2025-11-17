@@ -43,24 +43,41 @@ jobs:
         if: matrix.platform == 'vs'
         run: choco install zip -y
 
-      - name: Cache Packages - Linux Apt
+      - name: Linux install apt
         if: runner.os == 'Linux'
-        uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: >
-            wget2
-            ninja-build
-            libfontconfig1-dev
-            libxrandr-dev
-            libglu1-mesa-dev libgl1-mesa-dev
-            libjack-jackd2-0 libjack-jackd2-dev libasound2-dev
-            freeglut3-dev libxmu-dev libxxf86vm-dev libopenal-dev libsndfile1-dev libpulse-dev
-            libudev-dev libdrm-dev
-            libxcursor-dev libxi-dev libxinerama-dev
-            libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-pulseaudio
-            gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa
-            gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav
-          version: 1.0-${{ matrix.platform }}
+        run: >
+          sudo apt install
+          gh
+          ninja-build
+          libfontconfig1-dev
+          libxrandr-dev
+          libglu1-mesa-dev libgl1-mesa-dev
+          libjack-jackd2-0 libjack-jackd2-dev libasound2-dev
+          freeglut3-dev libxmu-dev libxxf86vm-dev libopenal-dev libsndfile1-dev libpulse-dev
+          libudev-dev libdrm-dev
+          libxcursor-dev libxi-dev libxinerama-dev
+          libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-pulseaudio
+          gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa
+          gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav
+
+      # - name: Cache Packages - Linux Apt
+      #   if: runner.os == 'Linux'
+      #   uses: awalsh128/cache-apt-pkgs-action@latest
+      #   with:
+      #     packages: >
+      #       wget2
+      #       ninja-build
+      #       libfontconfig1-dev
+      #       libxrandr-dev
+      #       libglu1-mesa-dev libgl1-mesa-dev
+      #       libjack-jackd2-0 libjack-jackd2-dev libasound2-dev
+      #       freeglut3-dev libxmu-dev libxxf86vm-dev libopenal-dev libsndfile1-dev libpulse-dev
+      #       libudev-dev libdrm-dev
+      #       libxcursor-dev libxi-dev libxinerama-dev
+      #       libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-pulseaudio
+      #       gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa
+      #       gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav
+      #     version: 1.0-${{ matrix.platform }}
 
       - name: Cache Packages - macOS Brew
         if: runner.os == 'macOS'
