@@ -10,7 +10,8 @@ typedef ofColor_<float> ofFloatColor;
 typedef ofColor_<unsigned short> ofShortColor;
 
 #include <limits>
-
+#include <string.h> // memcpy
+#include <functional> // std::function
 
 /// \file
 /// ofPixels is an object for working with blocks of pixels, those pixels can
@@ -481,7 +482,7 @@ public:
         size_t getComponentsPerPixel() const;
         ofPixelFormat getPixelFormat() const;
         ofColor_<PixelType> getColor() const;
-		
+
 		using value_type = ConstPixel;
 		using iterator_category = std::forward_iterator_tag;
 		using difference_type = std::ptrdiff_t;
@@ -515,7 +516,7 @@ public:
 		size_t getComponentsPerPixel() const;
 		ofPixelFormat getPixelFormat() const;
 		ofColor_<PixelType> getColor() const;
-		
+
 		using value_type = Pixel;
 		using iterator_category = std::forward_iterator_tag;
 		using difference_type = std::ptrdiff_t;
@@ -565,7 +566,7 @@ public:
 		Pixel getPixel(size_t pixel);
 		Pixels getPixels();
         Pixels getPixels(size_t first, size_t numPixels);
-		
+
 		using value_type = Line;
 		using iterator_category = std::forward_iterator_tag;
 		using difference_type = std::ptrdiff_t;
@@ -627,7 +628,7 @@ public:
         ConstPixel getPixel(size_t pixel) const;
 		ConstPixels getPixels() const;
 		ConstPixels getPixels(size_t first, size_t numPixels) const;
-		
+
 		using value_type = ConstLine;
 		using iterator_category = std::forward_iterator_tag;
 		using difference_type = std::ptrdiff_t;

@@ -594,7 +594,7 @@ void ofShader::checkShaderInfoLog(GLuint shader, GLenum type, ofLogLevel logLeve
         ofBuffer infoBuffer;
         infoBuffer.allocate(infoLength);
         glGetShaderInfoLog(shader, infoLength, &infoLength, infoBuffer.getData());
-		
+
 		// FIXME: fmt here.
 //        ofLog(logLevel, "ofShader: %s shader reports:\n%s", nameForType(type).c_str(), infoBuffer.getText().c_str());
 #if (!defined(TARGET_LINUX) || defined(GCC_HAS_REGEX))
@@ -961,7 +961,7 @@ void ofShader::setUniformTexture(const string & name, const ofTexture & tex, int
 		setUniformTexture( name, texData, textureLocation);
 	}
 }
-	
+
 //--------------------------------------------------------------
 void ofShader::setUniformTexture(const string & name, const ofTextureData & texData, int textureLocation) const{
     if (bLoaded) {

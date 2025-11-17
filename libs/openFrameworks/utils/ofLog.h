@@ -5,7 +5,6 @@
 #include <sstream>
 
 
-
 /// \brief Convert a variable length argument to a string.
 /// \param format A printf-style format string.
 /// \param args A variable argument list.

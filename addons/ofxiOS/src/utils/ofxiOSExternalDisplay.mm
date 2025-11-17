@@ -7,6 +7,7 @@
 
 #include "ofxiOSExternalDisplay.h"
 #include <TargetConditionals.h>
+#include <vector>
 
 using std::vector;
 
@@ -44,7 +45,7 @@ vector<ofxiOSExternalDisplayMode> ofxiOSExternalDisplay::getExternalDisplayModes
     }
     UIScreen * externalScreen;
     externalScreen = [[UIScreen screens] objectAtIndex:1];
-    
+
     for(int i = 0; i < [[externalScreen availableModes] count]; i++){
         UIScreenMode * screenMode = [[externalScreen availableModes] objectAtIndex:i];
         externalDislayModes.push_back(ofxiOSExternalDisplayMode());
@@ -61,21 +62,21 @@ bool ofxiOSExternalDisplay::displayOnExternalScreen(ofxiOSExternalDisplayMode ex
     }
     UIScreen * externalScreen;
     externalScreen = [[UIScreen screens] objectAtIndex:1];
-    
+
     for(int i = 0; i < [[externalScreen availableModes] count]; i++){
         UIScreenMode * screenMode = [[externalScreen availableModes] objectAtIndex:i];
         if (screenMode.size.width == externalDisplayMode.width &&
             screenMode.size.height == externalDisplayMode.height &&
             screenMode.pixelAspectRatio == externalDisplayMode.pixelAspectRatio){
-           
+
             ofxiOSAppDelegate * appDelegate;
             appDelegate = [[UIApplication sharedApplication] delegate];
-            
+
             bool bOk = [appDelegate displayOnScreenWithIndex:1 andScreenModeIndex:i];
             return bOk;
         }
     }
-    
+
     return false;
 }
 
@@ -94,14 +95,14 @@ bool ofxiOSExternalDisplay::displayOnExternalScreenWithPreferredDisplayMode(){
             break;
         }
     }
-    
+
     if(!bFound){
         return false;
     }
-    
+
     ofxiOSAppDelegate * appDelegate;
     appDelegate = [[UIApplication sharedApplication] delegate];
-    
+
     bool bOk = [appDelegate displayOnScreenWithIndex:1 andScreenModeIndex:i];
     return bOk;
 }
@@ -109,7 +110,7 @@ bool ofxiOSExternalDisplay::displayOnExternalScreenWithPreferredDisplayMode(){
 bool ofxiOSExternalDisplay::displayOnDeviceScreen(){
     ofxiOSAppDelegate * appDelegate;
     appDelegate = [[UIApplication sharedApplication] delegate];
-    
+
     bool bOk = [appDelegate displayOnScreenWithIndex:0 andScreenModeIndex:0];
     return bOk;
 }
@@ -127,7 +128,7 @@ bool ofxiOSExternalDisplay::mirrorOn(){
 
     [appDelegate destroyExternalWindow];
     return true;
-    
+
     // the below code checks if the display is being mirrored.
     // the problem is that this does not take effect straight away and always returns as false.
     // the user will have to check themselves if mirroring is working by calling isMirroring()

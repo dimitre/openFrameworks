@@ -8,7 +8,7 @@
 //	#endif
 //#endif
 
-#define OF_TUNINGFORK
+#define OFWORKS
 
 // version: ------------------------
 #define OF_VERSION_MAJOR 0

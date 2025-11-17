@@ -1,7 +1,7 @@
 #include "ofLog.h"
 #include <ofUtils.h>
 #include <map>
-#include <functional>
+#include <functional> // std::function
 
 #ifdef TARGET_ANDROID
 	#include "ofxAndroidLogChannel.h"

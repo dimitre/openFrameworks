@@ -4,6 +4,7 @@
 #define OF_MESH_H
 
 #include "ofGLUtils.h"
+#include <vector>
 
 template<class V, class N, class C, class T>
 class ofMeshFace_;
@@ -318,7 +319,7 @@ public:
 	virtual bool usingNormals() const;
 
 	void smoothNormals( float angle );
-        
+
         /// \brief Duplicates vertices and updates normals to get a low-poly look.
         void flatNormals();
 
@@ -435,7 +436,7 @@ public:
 	void removeTexCoord(ofIndexType index);
 
 	void removeTexCoords(ofIndexType startIndex, ofIndexType endIndex);
-	
+
 	void setTexCoord(ofIndexType index, const T& t);
 
 	/// \brief  Clear all the texture coordinates.

@@ -2,6 +2,7 @@
 
 #include "ofMesh.h"
 #include "ofNode.h"
+#include <vector>
 
 class ofTexture;
 class ofVboMesh;
@@ -77,54 +78,54 @@ protected:
 
 /// \brief The ofPlanePrimitive allows you to create an UV plane.
 /// Can be used for example as simple canvas for projecting simple texture .
-/// 
-/// Like all primitives it allows you to set the size, in this case height 
+///
+/// Like all primitives it allows you to set the size, in this case height
 /// and width, draw it, set positions, etc, as a simple example:
-/// 
+///
 /// ~~~~{.cpp}
-/// 
+///
 /// ofPlanePrimitive plane;
-/// 
+///
 /// void setup()
 /// {
-/// /// let's say we have a window set to be at 
+/// /// let's say we have a window set to be at
 /// // resolution 640x480...
-/// 
+///
 ///     plane.set(640, 480);   ///dimensions for width and height in pixels
 /// plane.setPosition(320, 240, 0); /// position in x y z
 /// plane.setResolution(2, 2); /// this resolution (as columns and rows) is enough
 /// }
-/// 
+///
 /// void draw()
 /// {
 /// plane.drawWireframe();
 /// }
 /// ~~~~
 /// As you can see, plane is constructed from two triangles.
-/// To draw a texture over any primitive, simply bind the ofTexture instance 
+/// To draw a texture over any primitive, simply bind the ofTexture instance
 /// and then draw your primitive:
-/// 
+///
 /// ~~~~{.cpp}
-/// 
+///
 /// texture.getTextureReference().bind();
 /// // now draw filled...
 /// plane.draw();
-/// 
+///
 /// ~~~~
-/// 
-/// The plane primitive also allows you to simply pass an ofTexture to the 
-/// plane and generate the texture coordinates from that texture so that the 
-/// ofTexture fills the plane when it's drawn. This saves you the hassle of 
+///
+/// The plane primitive also allows you to simply pass an ofTexture to the
+/// plane and generate the texture coordinates from that texture so that the
+/// ofTexture fills the plane when it's drawn. This saves you the hassle of
 /// creating all the texture coordinates for each vertex, which is nice.
 
 class ofPlanePrimitive : public of3dPrimitive {
 public:
     ofPlanePrimitive();
-    ofPlanePrimitive( float width, float height, int columns, int rows, 
+    ofPlanePrimitive( float width, float height, int columns, int rows,
         ofPrimitiveMode mode=OF_PRIMITIVE_TRIANGLE_STRIP );
     ~ofPlanePrimitive();
 
-    void set(float width, float height, int columns, int rows, 
+    void set(float width, float height, int columns, int rows,
         ofPrimitiveMode mode=OF_PRIMITIVE_TRIANGLE_STRIP );
     void set( float width, float height );
     void resizeToTexture( ofTexture& inTexture, float scale=1.f );
@@ -152,63 +153,63 @@ protected:
 
 
 /// \brief The ofSpherePrimitive allows you to create a UV sphere.
-/// A UV spherewhich is a sphere based on UV slices rather than faces like 
+/// A UV spherewhich is a sphere based on UV slices rather than faces like
 /// the ofIcoSpherePrimitive. Note this:
-/// 
+///
 /// [IMG](3d/spheretypes.png)
-/// 
+///
 /// On the left is a UV sphere and on the right is an ICO sphere.
-/// 
-/// Like all primitives it allows you to set the size (radius), draw it, 
+///
+/// Like all primitives it allows you to set the size (radius), draw it,
 /// set positions, etc, as a simple example:
-/// 
+///
 /// ~~~~{.cpp}
-/// 
+///
 /// void setup()
 /// {
-/// 
+///
 ///     sphere.setRadius( width );
 /// }
-/// 
+///
 /// void draw()
 /// {
-/// 
+///
 ///     sphere.setPosition(ofGetWidth()*.2, ofGetHeight()*.75, 0);
 ///     sphere.rotate(spinX, 1.0, 0.0, 0.0);
 ///     sphere.rotate(spinY, 0, 1.0, 0.0);
-/// 
+///
 ///     // get all the faces from the icoSphere, handy when you want to copy
 ///     // individual vertices or tweak them a little ;)
 ///     vector<ofMeshFace> triangles = sphere.getMesh().getUniqueFaces();
-/// 
+///
 ///     // now draw
 ///     sphere.draw();
 /// }
 /// ~~~~
-/// 
-/// To draw a texture over any primitive, simply bind the ofTexture instance 
+///
+/// To draw a texture over any primitive, simply bind the ofTexture instance
 /// and then draw your primitive:
-/// 
+///
 /// ~~~~{.cpp}
-/// 
+///
 /// texture.getTextureReference().bind();
 /// // now draw
 /// sphere.draw();
-/// 
+///
 /// ~~~~
-/// 
-/// The sphere can look a little weird if you don't do ofEnableDepthTest() 
+///
+/// The sphere can look a little weird if you don't do ofEnableDepthTest()
 /// and ofDisableAlphaBlending().
-/// 
+///
 
 class ofSpherePrimitive : public of3dPrimitive {
 public:
     ofSpherePrimitive();
-    ofSpherePrimitive( float radius, int res, 
+    ofSpherePrimitive( float radius, int res,
         ofPrimitiveMode mode=OF_PRIMITIVE_TRIANGLE_STRIP );
     ~ofSpherePrimitive();
 
-    void set( float radius, int resolution, 
+    void set( float radius, int resolution,
         ofPrimitiveMode mode=OF_PRIMITIVE_TRIANGLE_STRIP );
     void setResolution( int res );
     void setRadius(float radius);
@@ -222,32 +223,32 @@ protected:
     int resolution;
 };
 
-/// \brief The ofIcoSpherePrimitive allows you to create an icosphere. 
+/// \brief The ofIcoSpherePrimitive allows you to create an icosphere.
 /// An icosphere is a sphere not based on UV slices like the ofSpherePrimitive,
 /// but rather faces. Like this:
-/// 
-/// Like all primitives it allows you to set the radius, 
+///
+/// Like all primitives it allows you to set the radius,
 /// draw it, set positions, etc.
-/// 
+///
 /// ~~~~{.cpp}
-/// 
+///
 /// void setup()
 /// {
-/// 
+///
 ///     icoSphere.setRadius( width );
 /// }
-/// 
+///
 /// void draw()
 /// {
-/// 
+///
 ///     icoSphere.setPosition(ofGetWidth()*.2, ofGetHeight()*.75, 0);
 ///     icoSphere.rotate(spinX, 1.0, 0.0, 0.0);
 ///     icoSphere.rotate(spinY, 0, 1.0, 0.0);
-/// 
+///
 ///     // get all the faces from the icoSphere, handy when you want to copy
 ///     // individual vertices or tweak them a little ;)
 ///     vector<ofMeshFace> triangles = icoSphere.getMesh().getUniqueFaces();
-/// 
+///
 ///     // now draw
 ///     icoSphere.draw();
 /// }
@@ -274,54 +275,54 @@ protected:
 
 
 /// \brief The ofCylinderPrimitive allows you to create an cylinder mesh.
-/// 
-/// Like all primitives it allows you to set the size, for the cylinder 
+///
+/// Like all primitives it allows you to set the size, for the cylinder
 /// a radius and height, draw it, set positions, etc, as a simple example:
-/// 
+///
 /// ~~~~{.cpp}
-/// 
+///
 /// void setup()
 /// {
-/// 
+///
 ///     cylinder.set( cylinderRadius, cylinderHeight );
 /// }
-/// 
+///
 /// void draw()
 /// {
-/// 
+///
 ///     cylinder.setPosition(ofGetWidth()*.2, ofGetHeight()*.75, 0);
 ///     cylinder.rotate(spinX, 1.0, 0.0, 0.0);
 ///     cylinder.rotate(spinY, 0, 1.0, 0.0);
-/// 
+///
 ///     // get all the faces from the icoSphere, handy when you want to copy
 ///     // individual vertices or tweak them a little ;)
 ///     vector<ofMeshFace> triangles = cylinder.getMesh().getUniqueFaces();
-/// 
+///
 ///     // now draw
 ///     cylinder.draw();
 /// }
 /// ~~~~
-/// 
-/// To draw a texture over any primitive, simply bind the ofTexture instance 
+///
+/// To draw a texture over any primitive, simply bind the ofTexture instance
 /// and then draw your primitive:
-/// 
+///
 /// ~~~~{.cpp}
-/// 
+///
 /// texture.getTextureReference().bind();
 /// // now draw
 /// cylinder.draw();
-/// 
+///
 /// ~~~~
 
 class ofCylinderPrimitive : public of3dPrimitive {
 public:
     ofCylinderPrimitive();
-    ofCylinderPrimitive( float radius, float height, int radiusSegments, 
+    ofCylinderPrimitive( float radius, float height, int radiusSegments,
         int heightSegments, int capSegments=2, bool bCapped = true,
         ofPrimitiveMode mode=OF_PRIMITIVE_TRIANGLE_STRIP );
     ~ofCylinderPrimitive();
 
-    void set( float radius, float height, int radiusSegments, 
+    void set( float radius, float height, int radiusSegments,
         int heightSegments, int capSegments=2, bool bCapped=true,
         ofPrimitiveMode mode=OF_PRIMITIVE_TRIANGLE_STRIP );
     void set( float radius, float height, bool bCapped=true );
@@ -362,58 +363,58 @@ protected:
 	glm::vec3 resolution;
 };
 
-/// \brief The ofConePrimitive allows you to create a 3D cone. 
-/// Like all primitives it allows you to set the size, draw it, 
+/// \brief The ofConePrimitive allows you to create a 3D cone.
+/// Like all primitives it allows you to set the size, draw it,
 /// set positions, etc, as a simple example:
-/// 
+///
 /// ~~~~{.cpp}
-/// 
+///
 /// void setup()
 /// {
-/// 
+///
 ///     cone.set( coneRadius, coneHeight, coneRadiusSegments, coneHeightSegments );
 /// }
-/// 
+///
 /// void draw()
 /// {
-/// 
+///
 ///     cone.setPosition(ofGetWidth()*.2, ofGetHeight()*.75, 0);
 ///     cone.rotate(spinX, 1.0, 0.0, 0.0);
 ///     cone.rotate(spinY, 0, 1.0, 0.0);
-/// 
+///
 ///     // get all the faces from the cone, handy when you want to copy
 ///     // individual vertices or tweak them a little ;)
 ///     vector<ofMeshFace> triangles = cone.getMesh().getUniqueFaces();
-/// 
+///
 ///     // now draw
 ///     cone.draw();
 /// }
 /// ~~~~
-/// 
-/// To draw a texture over any primitive, simply bind the ofTexture instance 
+///
+/// To draw a texture over any primitive, simply bind the ofTexture instance
 /// and then draw your primitive:
-/// 
+///
 /// ~~~~{.cpp}
-/// 
+///
 /// texture.getTextureReference().bind();
 /// // now draw
 /// cone.draw();
-/// 
+///
 /// ~~~~
-/// 
+///
 /// Beware of the cone texture coordinates, they're a little strange.
-/// 
+///
 
 class ofConePrimitive : public of3dPrimitive {
 public:
 
     ofConePrimitive();
-    ofConePrimitive( float radius, float height, int radiusSegments, 
-        int heightSegments, int capSegments=2, 
+    ofConePrimitive( float radius, float height, int radiusSegments,
+        int heightSegments, int capSegments=2,
         ofPrimitiveMode mode=OF_PRIMITIVE_TRIANGLE_STRIP );
     ~ofConePrimitive();
 
-    void set( float radius, float height, int radiusSegments, int heightSegments, 
+    void set( float radius, float height, int radiusSegments, int heightSegments,
         int capSegments=2, ofPrimitiveMode mode=OF_PRIMITIVE_TRIANGLE_STRIP );
     void set( float radius, float height );
     void setResolutionRadius( int radiusRes );
@@ -466,45 +467,45 @@ protected:
 
 
 /// \brief The ofBoxPrimitive allows you to create cubes and cuboids.
-/// 
+///
 /// Like other primitives, it allows you to set its dimensions and position, draw it, etc. As a simple example:
-/// 
+///
 /// ~~~~{.cpp}
-/// 
+///
 /// void setup()
 /// {
-/// 
+///
 ///     box.set( boxSize );
 ///     // or
 ///     // box.set( boxHeight, boxWidth, boxDepth );
 /// }
-/// 
+///
 /// void draw()
 /// {
-/// 
+///
 ///     box.setPosition(ofGetWidth()*.2, ofGetHeight()*.75, 0);
 ///     box.rotate(spinX, 1.0, 0.0, 0.0);
 ///     box.rotate(spinY, 0, 1.0, 0.0);
-/// 
+///
 ///     // get all the faces from the icoSphere, handy when you want to copy
 ///     // individual vertices or tweak them a little ;)
 ///     vector<ofMeshFace> triangles = box.getMesh().getUniqueFaces();
-/// 
+///
 ///     // now draw
 ///     box.draw();
 /// }
 /// ~~~~
-/// 
+///
 /// To draw a texture over any primitive, simply bind the ofTexture instance and then draw your primitive:
-/// 
+///
 /// ~~~~{.cpp}
-/// 
+///
 /// texture.getTextureReference().bind();
 /// // now draw
 /// box.draw();
-/// 
+///
 /// ~~~~
-/// 
+///
 
 class ofBoxPrimitive : public of3dPrimitive {
 public:
@@ -519,11 +520,11 @@ public:
         SIDES_TOTAL
     };
     ofBoxPrimitive();
-    ofBoxPrimitive( float width, float height, float depth, int resWidth=2, 
+    ofBoxPrimitive( float width, float height, float depth, int resWidth=2,
         int resHeight=2, int resDepth=2 );
     ~ofBoxPrimitive();
 
-    void set( float width, float height, float depth, int resWidth, 
+    void set( float width, float height, float depth, int resWidth,
         int resHeight, int resDepth);
     void set( float width, float height, float depth );
     void set( float size ); // all sides the same dimensions //

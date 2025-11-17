@@ -132,3 +132,14 @@ using std::weak_ptr;
 
 #include "ofWindowSettings.h"
 #include "ofColor.h"
+
+
+#include <stdint.h>
+#include <cstdio>
+#include <cstdlib>
+#include <string>
+#include <cstring>
+#include <iostream>
+#include <vector>
+#include <memory>
+#include <functional>
