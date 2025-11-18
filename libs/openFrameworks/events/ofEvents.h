@@ -112,7 +112,7 @@ enum ofKey{
 //-----------------------------------------------
 class ofDragInfo {
 public:
-	std::vector<of::filesystem::path> files;
+	std::vector<fs::path> files;
 	glm::vec2 position;
 };
 

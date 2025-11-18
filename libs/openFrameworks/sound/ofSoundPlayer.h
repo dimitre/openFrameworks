@@ -47,15 +47,15 @@ public:
     ///
     /// \param fileName Path to the sound file, relative to your app's data folder.
     /// \param stream set "true" to enable streaming from disk (for large files).
-    bool load(const of::filesystem::path & fileName, bool stream = false);
+    bool load(const fs::path & fileName, bool stream = false);
     [[deprecated("Use load")]]
-	bool loadSound(const of::filesystem::path & fileName, bool stream = false);
+	bool loadSound(const fs::path & fileName, bool stream = false);
 
     /// \brief Stops and unloads the current sound.
     void unload();
 	[[deprecated("Use unload")]]
 	void unloadSound();
-    
+
     /// \brief Starts playback.
     void play();
 
@@ -81,7 +81,7 @@ public:
     /// \brief Sets whether to loop once the end of the file is reached.
     /// \param loop "true" to loop, default is false.
     void setLoop(bool loop);
-    
+
     /// \brief Enables playing multiple simultaneous copies of the sound.
     /// \param multiplay "true" to enable, default is false.
     void setMultiPlay(bool multiplay);
@@ -89,7 +89,7 @@ public:
     /// \brief Sets position of the playhead within the file (aka "seeking").
     /// \param percent range is 0 (beginning of file) to 1 (end of file).
     void setPosition(float percent);
-    
+
     /// \brief Sets position of the playhead within the file (aka "seeking").
     /// \param ms number of milliseconds from the start of the file.
     void setPositionMS(int ms);
@@ -111,7 +111,7 @@ public:
     /// \brief Gets playback speed.
     /// \return playback speed (see ofSoundPlayer::setSpeed()).
     float getSpeed() const;
-    
+
     /// \brief Gets stereo pan.
     /// \return stereo pan in the range -1 to 1.
     float getPan() const;
@@ -123,11 +123,11 @@ public:
     /// \brief Queries the player to see if its file was loaded successfully.
     /// \return whether or not the player is ready to begin playback.
     bool isLoaded() const;
-	
+
 	/// \brief Gets duration in seconds.
 	/// \return duration in seconds.
 	float getDuration() const;
-	
+
 	/// \brief Gets duration in milliseconds.
 	/// \return duration in milliseconds.
 	unsigned int getDurationMS() const;

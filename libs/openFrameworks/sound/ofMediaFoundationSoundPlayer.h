@@ -116,7 +116,7 @@ public:
 	ofMediaFoundationSoundPlayer();
 	~ofMediaFoundationSoundPlayer();
 
-	bool load(const of::filesystem::path& fileName, bool stream = false) override;
+	bool load(const fs::path& fileName, bool stream = false) override;
 	void unload() override;
 
 	void play() override;
@@ -214,7 +214,7 @@ protected:
 	unsigned int mDurationMS = 0;
 
 	// 2 = INT_16, 3 = INT_24 and 4 = FLOAT_32
-	// TODO: Adjust this based on file loaded 
+	// TODO: Adjust this based on file loaded
 	unsigned char mBytesPerSample = 2;
 	uint64_t mTotalNumFrames = 0;
 	size_t mBufferIndex = 0;

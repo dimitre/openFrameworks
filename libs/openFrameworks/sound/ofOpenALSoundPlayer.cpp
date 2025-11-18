@@ -21,8 +21,6 @@
 #include <mpg123.h>
 #endif
 
-namespace fs = of::filesystem;
-
 static ALCdevice * alDevice = nullptr;
 static ALCcontext * alContext = nullptr;
 std::vector<float> ofOpenALSoundPlayer::window;

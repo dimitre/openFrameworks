@@ -15,7 +15,7 @@ ofXml::ofXml(std::shared_ptr<pugi::xml_document> doc, const pugi::xml_node & xml
 
 }
 
-bool ofXml::load(const of::filesystem::path & file){
+bool ofXml::load(const fs::path & file){
 	auto auxDoc = std::make_shared<pugi::xml_document>();
 	auto res = auxDoc->load_file(ofToDataPath(file).c_str());
 	if( res ){
@@ -47,7 +47,7 @@ bool ofXml::parse(const std::string & xmlStr){
 	}
 }
 
-bool ofXml::save(const of::filesystem::path & file) const{
+bool ofXml::save(const fs::path & file) const{
 	if(xml == doc->root()){
 		auto res = doc->save_file(ofToDataPath(file).c_str());
 		ofLogVerbose("ofXml")<<"save: "<< res;
@@ -447,14 +447,14 @@ void ofSerialize(ofXml & xml, const ofAbstractParameter & parameter){
 		name = "UnknownName";
 	}
 	ofXml child	= xml.findFirst(name);
-	
+
 	if(!child){
 		child = xml.appendChild(name);
 		ofLogVerbose("ofXml") << "creating group " << name;
 	}
 	if(parameter.type() == typeid(ofParameterGroup).name()){
 		const ofParameterGroup & group = static_cast <const ofParameterGroup &>(parameter);
-		
+
 		ofLogVerbose("ofXml") << "group " << name;
 		for(auto & p: group){
 			ofSerialize(child, *p);
@@ -472,7 +472,7 @@ void ofDeserialize(const ofXml & xml, ofAbstractParameter & parameter){
 		return;
 	}
 	string name = parameter.getEscapedName();
-	
+
 	ofXml child = xml.findFirst(name);
 	if(child){
 		if(parameter.type() == typeid(ofParameterGroup).name()){

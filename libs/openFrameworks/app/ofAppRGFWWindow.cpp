@@ -327,7 +327,7 @@ void ofAppRGFWWindow::setup(const ofWindowSettings & _settings) {
 }
 
     //------------------------------------------------------------
-void ofAppRGFWWindow::setWindowIcon(const of::filesystem::path & path) {
+void ofAppRGFWWindow::setWindowIcon(const fs::path & path) {
 	ofPixels iconPixels;
 	ofLoadImage(iconPixels, path);
 	setWindowIcon(iconPixels);

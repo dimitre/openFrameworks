@@ -82,7 +82,7 @@ ofVideoPlayer::ofVideoPlayer() {
 }
 
 //---------------------------------------------------------------------------
-ofVideoPlayer::ofVideoPlayer(const of::filesystem::path & fileName) : ofVideoPlayer() {
+ofVideoPlayer::ofVideoPlayer(const fs::path & fileName) : ofVideoPlayer() {
 	load(fileName);
 }
 
@@ -138,7 +138,7 @@ ofPixelFormat ofVideoPlayer::getPixelFormat() const{
 }
 
 //---------------------------------------------------------------------------
-bool ofVideoPlayer::load(const of::filesystem::path & fileName){
+bool ofVideoPlayer::load(const fs::path & fileName){
 	if( !player ){
 		setPlayer(std::make_shared<OF_VID_PLAYER_TYPE>());
 		player->setPixelFormat(internalPixelFormat);
@@ -171,7 +171,7 @@ bool ofVideoPlayer::load(const of::filesystem::path & fileName){
 }
 
 //---------------------------------------------------------------------------
-void ofVideoPlayer::loadAsync(const of::filesystem::path & fileName){
+void ofVideoPlayer::loadAsync(const fs::path & fileName){
 	if( !player ){
 		setPlayer(std::make_shared<OF_VID_PLAYER_TYPE>());
 		player->setPixelFormat(internalPixelFormat);
@@ -182,7 +182,7 @@ void ofVideoPlayer::loadAsync(const of::filesystem::path & fileName){
 }
 
 //---------------------------------------------------------------------------
-of::filesystem::path ofVideoPlayer::getMoviePath() const {
+fs::path ofVideoPlayer::getMoviePath() const {
     return moviePath;
 }
 

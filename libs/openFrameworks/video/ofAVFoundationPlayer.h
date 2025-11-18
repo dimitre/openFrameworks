@@ -27,8 +27,8 @@ public:
 	ofAVFoundationPlayer();
 	~ofAVFoundationPlayer();
 
-	bool load(const of::filesystem::path & fileName);
-	void loadAsync(const of::filesystem::path & fileName);
+	bool load(const fs::path & fileName);
+	void loadAsync(const fs::path & fileName);
 	void close();
 	void update();
 
@@ -89,7 +89,7 @@ public:
 
 protected:
 
-	bool loadPlayer(const of::filesystem::path & fileName, bool bAsync);
+	bool loadPlayer(const fs::path & fileName, bool bAsync);
 	void disposePlayer();
 	bool isReady() const;
 

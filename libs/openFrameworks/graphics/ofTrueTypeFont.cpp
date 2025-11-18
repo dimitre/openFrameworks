@@ -233,7 +233,7 @@ static ofPath makeContoursForCharacter(FT_Face face){
 #include <ApplicationServices/ApplicationServices.h>
 
 //------------------------------------------------------------------
-static of::filesystem::path osxFontPathByName(const of::filesystem::path & fileName) {
+static fs::path osxFontPathByName(const fs::path & fileName) {
 	CFStringRef targetName = CFStringCreateWithCString(nullptr, fileName.c_str(), kCFStringEncodingUTF8);
 	CTFontDescriptorRef targetDescriptor = CTFontDescriptorCreateWithNameAndSize(targetName, 0.0);
 	CFURLRef targetURL = (CFURLRef) CTFontDescriptorCopyAttribute(targetDescriptor, kCTFontURLAttribute);
@@ -248,7 +248,7 @@ static of::filesystem::path osxFontPathByName(const of::filesystem::path & fileN
 
 	CFRelease(targetName);
 	CFRelease(targetDescriptor);
-	of::filesystem::path fontPath = { fontDir };
+	fs::path fontPath = { fontDir };
 	return fontPath;
 }
 #endif
@@ -256,7 +256,7 @@ static of::filesystem::path osxFontPathByName(const of::filesystem::path & fileN
 #ifdef TARGET_WIN32
 #include <unordered_map>
 // font font face -> file name name mapping
-static std::unordered_map<string, of::filesystem::path> fonts_table;
+static std::unordered_map<string, fs::path> fonts_table;
 // read font linking information from registry, and store in std::map
 //------------------------------------------------------------------
 void initWindows(){
@@ -314,7 +314,7 @@ void initWindows(){
 			string font_file = value_data_char;
 			curr_face = curr_face.substr(0, curr_face.find('(') - 1);
 			curr_face = ofToLower(curr_face);
-			of::filesystem::path fontPath = { fontsDir + font_file };
+			fs::path fontPath = { fontsDir + font_file };
 			fonts_table[curr_face] = fontPath;
 	}
 	HeapFree(GetProcessHeap(), 0, value_data);
@@ -322,15 +322,15 @@ void initWindows(){
 }
 
 
-static of::filesystem::path winFontPathByName(const string & fontname) {
+static fs::path winFontPathByName(const string & fontname) {
 	return fonts_table[fontname];
 }
 #endif
 
 #ifdef TARGET_LINUX
 //------------------------------------------------------------------
-static of::filesystem::path linuxFontPathByName(const string & fontname) {
-	of::filesystem::path fontPath;
+static fs::path linuxFontPathByName(const string & fontname) {
+	fs::path fontPath;
 	FcPattern * pattern = FcNameParse((const FcChar8*)fontname.c_str());
 	FcBool ret = FcConfigSubstitute(0,pattern,FcMatchPattern);
 	if(!ret){
@@ -366,11 +366,11 @@ static of::filesystem::path linuxFontPathByName(const string & fontname) {
 //-----------------------------------------------------------
 // FIXME: it seems first parameter is string because it represents the font name only / can be
 static bool loadFontFace(const string & _fontname, FT_Face & face,
-						 of::filesystem::path & _filename, int index){
+						 fs::path & _filename, int index){
 	auto fontname = _fontname;
 	auto filename = ofToDataPath(fontname);
 	int fontID = index;
-	if(!of::filesystem::exists(filename)){
+	if(!fs::exists(filename)){
 #ifdef TARGET_LINUX
 		filename = linuxFontPathByName(fontname);
 #elif defined(TARGET_OSX)
@@ -612,7 +612,7 @@ void ofTrueTypeFont::reloadTextures(){
 }
 
 //-----------------------------------------------------------
-bool ofTrueTypeFont::loadFont(const of::filesystem::path & filename, int fontSize, bool bAntiAliased, bool bFullCharacterSet, bool makeContours, float simplifyAmt, int dpi) {
+bool ofTrueTypeFont::loadFont(const fs::path & filename, int fontSize, bool bAntiAliased, bool bFullCharacterSet, bool makeContours, float simplifyAmt, int dpi) {
 	return load(filename, fontSize, bAntiAliased, bFullCharacterSet, makeContours, simplifyAmt, dpi);
 }
 
@@ -688,7 +688,7 @@ ofTrueTypeFont::glyph ofTrueTypeFont::loadGlyph(uint32_t utf8) const{
 }
 
 //-----------------------------------------------------------
-bool ofTrueTypeFont::load(const of::filesystem::path & filename, int fontSize, bool antialiased, bool fullCharacterSet, bool makeContours, float simplifyAmt, int dpi) {
+bool ofTrueTypeFont::load(const fs::path & filename, int fontSize, bool antialiased, bool fullCharacterSet, bool makeContours, float simplifyAmt, int dpi) {
 
 	ofTrueTypeFontSettings settings(filename,fontSize);
 	settings.antialiased = antialiased;

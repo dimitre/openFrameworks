@@ -67,36 +67,36 @@ float * ofFmodSoundGetSpectrum(int nBands){
         FMOD_ChannelGroup_AddDSP(channelgroup,0,fftDSP);
         FMOD_DSP_SetParameterInt(fftDSP, FMOD_DSP_FFT_WINDOWTYPE, FMOD_DSP_FFT_WINDOW_HANNING);
     }
-    
+
     if( fftDSP != NULL ){
         FMOD_DSP_PARAMETER_FFT *fft;
         auto result = FMOD_DSP_GetParameterData(fftDSP, FMOD_DSP_FFT_SPECTRUMDATA, (void **)&fft, 0, 0, 0);
         if( result == 0 ){
-        
+
             // Only read / display half of the buffer typically for analysis
             // as the 2nd half is usually the same data reversed due to the nature of the way FFT works. ( comment from link above )
             int length = fft->length/2;
             if( length > 0 ){
-        
+
                 std::vector <float> avgValCount;
-                avgValCount.assign(nBands, 0.0); 
-                
+                avgValCount.assign(nBands, 0.0);
+
                 float normalizedBand = 0;
                 float normStep = 1.0 / (float)length;
-                
+
                 for (int bin = 0; bin < length; bin++){
                     //should map 0 to nBands but accounting for lower frequency bands being more important
                     int logIndexBand = log10(1.0 + normalizedBand*9.0) * nBands;
-                    
+
                     //get both channels as that is what the old FMOD call did
                     for (int channel = 0; channel < fft->numchannels; channel++){
                         fftSpectrum_[logIndexBand] += fft->spectrum[channel][bin];
                         avgValCount[logIndexBand] += 1.0;
                     }
-                    
+
                     normalizedBand += normStep;
                 }
-                                
+
                 //average the remapped bands based on how many times we added to each bin
                 for(int i = 0; i < nBands; i++){
                     if( avgValCount[i] > 1.0 ){
@@ -146,9 +146,9 @@ ofFmodSoundPlayer::~ofFmodSoundPlayer(){
 // this should only be called once
 void ofFmodSoundPlayer::initializeFmod(){
 	if(!bFmodInitialized_){
-		
+
 		FMOD_System_Create(&sys);
-		
+
 		// set buffersize, keep number of buffers
 		unsigned int bsTmp;
 		int nbTmp;
@@ -176,7 +176,7 @@ void ofFmodSoundPlayer::closeFmod(){
 }
 
 //------------------------------------------------------------
-bool ofFmodSoundPlayer::load(const of::filesystem::path & _fileName, bool stream){
+bool ofFmodSoundPlayer::load(const fs::path & _fileName, bool stream){
 
 	auto fileName = ofToDataPath(_fileName);
 

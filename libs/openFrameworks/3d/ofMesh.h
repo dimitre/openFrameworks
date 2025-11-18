@@ -608,7 +608,7 @@ public:
 	///
 	/// It expects that the file will be in the [PLY Format](http://en.wikipedia.org/wiki/PLY_(file_format)).
 	/// It will only load meshes saved in the PLY ASCII format; the binary format is not supported.
-    void load(const of::filesystem::path& path);
+    void load(const fs::path& path);
 
 	///  \brief Saves the mesh at the passed path in the [PLY Format](http://en.wikipedia.org/wiki/PLY_(file_format)).
 	///
@@ -619,7 +619,7 @@ public:
 	///  If you're planning on reloading the mesh into ofMesh, ofMesh currently only supports loading the ASCII format.
 	///
 	///  For more information, see the [PLY format specification](http://paulbourke.net/dataformats/ply/).
-    void save(const of::filesystem::path& path, bool useBinary = false) const;
+    void save(const fs::path& path, bool useBinary = false) const;
 
 	/// \}
 

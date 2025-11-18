@@ -12,9 +12,9 @@ public:
 	/// needs to be called before loadMovie
 	bool 	setPixelFormat(ofPixelFormat pixelFormat);
 	ofPixelFormat	getPixelFormat() const;
-	
-	void loadAsync(const of::filesystem::path & fileName) override;
-	bool load(const of::filesystem::path & fileName) override;
+
+	void loadAsync(const fs::path & fileName) override;
+	bool load(const fs::path & fileName) override;
 
 	void 	update();
 

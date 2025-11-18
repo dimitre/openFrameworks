@@ -7,10 +7,10 @@
 class ofVideoPlayer : public ofBaseVideoDraws {
 public:
 	ofVideoPlayer();
-	ofVideoPlayer(const of::filesystem::path & fileName);
+	ofVideoPlayer(const fs::path & fileName);
 
-	bool load(const of::filesystem::path & fileName);
-	void loadAsync(const of::filesystem::path & fileName);
+	bool load(const fs::path & fileName);
+	void loadAsync(const fs::path & fileName);
 
 
 	/// \brief Get the path to the loaded video file.
@@ -18,7 +18,7 @@ public:
 	/// If no video file is loaded this returns an empty string.
 	///
 	/// \returns A path to the loaded video or an empty string if not loaded.
-	of::filesystem::path				getMoviePath() const;
+	fs::path				getMoviePath() const;
 
 	bool				setPixelFormat(ofPixelFormat pixelFormat);
 	ofPixelFormat		getPixelFormat() const;
@@ -176,5 +176,5 @@ private:
 	/// \brief The internal pixel format.
 	mutable ofPixelFormat internalPixelFormat;
 	/// \brief The stored path to the video's path.
-	of::filesystem::path moviePath;
+	fs::path moviePath;
 };

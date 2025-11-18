@@ -19,7 +19,7 @@ class ofDirectShowPlayer : public ofBaseVideoPlayer{
 		ofDirectShowPlayer(ofDirectShowPlayer &&);
 		ofDirectShowPlayer & operator=(ofDirectShowPlayer&&);
 
-        bool load(const of::filesystem::path & fileName) override;
+        bool load(const fs::path & fileName) override;
         void                update();
 
         void                close();

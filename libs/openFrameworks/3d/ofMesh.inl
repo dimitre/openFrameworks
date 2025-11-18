@@ -936,7 +936,7 @@ void ofMesh_<V, N, C, T>::append(const ofMesh_<V, N, C, T> & mesh) {
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-void ofMesh_<V, N, C, T>::load(const of::filesystem::path & path) {
+void ofMesh_<V, N, C, T>::load(const fs::path & path) {
 	ofFile is = { path, ofFile::ReadOnly };
 	auto & data = *this;
 
@@ -1171,7 +1171,7 @@ clean:
 	data = backup;
 }
 template <class V, class N, class C, class T>
-void ofMesh_<V, N, C, T>::save(const of::filesystem::path & path, bool useBinary) const {
+void ofMesh_<V, N, C, T>::save(const fs::path & path, bool useBinary) const {
 	std::ofstream os;
 	if (useBinary) {
 		os.open(path, std::ios::out | std::ios::binary);

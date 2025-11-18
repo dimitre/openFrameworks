@@ -224,7 +224,7 @@ static mango::image::Format getMangoFormat(const ofPixels_<PixelType> & pix) {
 }
 
 template <typename PixelType>
-static bool loadImage(ofPixels_<PixelType> & pix, const of::filesystem::path & _fileName, const ofImageLoadSettings & settings) {
+static bool loadImage(ofPixels_<PixelType> & pix, const fs::path & _fileName, const ofImageLoadSettings & settings) {
 
 	fs::path fileImage { ofToDataPath(_fileName) };
 	if (!fs::exists(fileImage)) {
@@ -398,7 +398,7 @@ static bool loadImage(ofPixels_<PixelType> & pix,
 }
 
 //----------------------------------------------------------------
-bool ofLoadImage(ofPixels & pix, const of::filesystem::path & path, const ofImageLoadSettings & settings) {
+bool ofLoadImage(ofPixels & pix, const fs::path & path, const ofImageLoadSettings & settings) {
 	return loadImage(pix, path, settings);
 }
 
@@ -408,7 +408,7 @@ bool ofLoadImage(ofPixels & pix, const ofBuffer & buffer, const ofImageLoadSetti
 }
 
 //----------------------------------------------------------------
-bool ofLoadImage(ofShortPixels & pix, const of::filesystem::path & path, const ofImageLoadSettings & settings) {
+bool ofLoadImage(ofShortPixels & pix, const fs::path & path, const ofImageLoadSettings & settings) {
 	return loadImage(pix, path, settings);
 }
 
@@ -418,7 +418,7 @@ bool ofLoadImage(ofShortPixels & pix, const ofBuffer & buffer, const ofImageLoad
 }
 
 //----------------------------------------------------------------
-bool ofLoadImage(ofFloatPixels & pix, const of::filesystem::path & path, const ofImageLoadSettings & settings) {
+bool ofLoadImage(ofFloatPixels & pix, const fs::path & path, const ofImageLoadSettings & settings) {
 	return loadImage(pix, path, settings);
 }
 
@@ -428,12 +428,12 @@ bool ofLoadImage(ofFloatPixels & pix, const ofBuffer & buffer, const ofImageLoad
 }
 
 //----------------------------------------------------------------
-bool ofLoadImage(ofTexture & tex, const of::filesystem::path & path, const ofImageLoadSettings & settings) {
+bool ofLoadImage(ofTexture & tex, const fs::path & path, const ofImageLoadSettings & settings) {
 	return ofLoadImage(tex, path, false, settings);
 }
 
 //----------------------------------------------------------------
-bool ofLoadImage(ofTexture & tex, const of::filesystem::path & path, bool bFlipInY, const ofImageLoadSettings & settings) {
+bool ofLoadImage(ofTexture & tex, const fs::path & path, bool bFlipInY, const ofImageLoadSettings & settings) {
 	bool loaded = false;
 	auto ext = ofGetExtensionLower(path);
 
@@ -482,7 +482,7 @@ bool ofLoadImage(ofTexture & tex, const ofBuffer & buffer, const ofImageLoadSett
 
 //----------------------------------------------------------------
 template <typename PixelType>
-static bool saveImage(const ofPixels_<PixelType> & _pix, const of::filesystem::path & _fileName, ofImageQualityType qualityLevel) {
+static bool saveImage(const ofPixels_<PixelType> & _pix, const fs::path & _fileName, ofImageQualityType qualityLevel) {
 	try {
 		auto fileImage { ofToDataPath(_fileName) };
 
@@ -671,17 +671,17 @@ static bool saveImage(const ofPixels_<PixelType> & _pix, const of::filesystem::p
 }
 
 //----------------------------------------------------------------
-bool ofSaveImage(const ofPixels & pix, const of::filesystem::path & fileName, ofImageQualityType qualityLevel) {
+bool ofSaveImage(const ofPixels & pix, const fs::path & fileName, ofImageQualityType qualityLevel) {
 	return saveImage(pix, fileName, qualityLevel);
 }
 
 //----------------------------------------------------------------
-bool ofSaveImage(const ofFloatPixels & pix, const of::filesystem::path & fileName, ofImageQualityType qualityLevel) {
+bool ofSaveImage(const ofFloatPixels & pix, const fs::path & fileName, ofImageQualityType qualityLevel) {
 	return saveImage(pix, fileName, qualityLevel);
 }
 
 //----------------------------------------------------------------
-bool ofSaveImage(const ofShortPixels & pix, const of::filesystem::path & fileName, ofImageQualityType qualityLevel) {
+bool ofSaveImage(const ofShortPixels & pix, const fs::path & fileName, ofImageQualityType qualityLevel) {
 	return saveImage(pix, fileName, qualityLevel);
 }
 
@@ -831,7 +831,7 @@ ofImage_<PixelType>::ofImage_(const ofPixels_<PixelType> & pix) {
 }
 
 template <typename PixelType>
-ofImage_<PixelType>::ofImage_(const of::filesystem::path & fileName, const ofImageLoadSettings & settings) {
+ofImage_<PixelType>::ofImage_(const fs::path & fileName, const ofImageLoadSettings & settings) {
 	width = 0;
 	height = 0;
 	bpp = 0;
@@ -926,7 +926,7 @@ ofImage_<PixelType>::~ofImage_() {
 
 //----------------------------------------------------------
 template <typename PixelType>
-bool ofImage_<PixelType>::load(const of::filesystem::path & fileName, const ofImageLoadSettings & settings) {
+bool ofImage_<PixelType>::load(const fs::path & fileName, const ofImageLoadSettings & settings) {
 #if defined(TARGET_ANDROID)
 	ofAddListener(ofxAndroidEvents().unloadGL, this, &ofImage_<PixelType>::unloadTexture);
 	ofAddListener(ofxAndroidEvents().reloadGL, this, &ofImage_<PixelType>::update);
@@ -943,7 +943,7 @@ bool ofImage_<PixelType>::load(const of::filesystem::path & fileName, const ofIm
 
 //----------------------------------------------------------
 //template<typename PixelType>
-//bool ofImage_<PixelType>::loadImage(const of::filesystem::path & fileName){
+//bool ofImage_<PixelType>::loadImage(const fs::path & fileName){
 //	return load(fileName);
 //}
 
@@ -972,7 +972,7 @@ bool ofImage_<PixelType>::load(const ofBuffer & buffer, const ofImageLoadSetting
 
 //----------------------------------------------------------
 template <typename PixelType>
-bool ofImage_<PixelType>::save(const of::filesystem::path & fileName, ofImageQualityType qualityLevel) const {
+bool ofImage_<PixelType>::save(const fs::path & fileName, ofImageQualityType qualityLevel) const {
 	return ofSaveImage(pixels, fileName, qualityLevel);
 }
 
@@ -984,7 +984,7 @@ bool ofImage_<PixelType>::save(ofBuffer & buffer, ofImageFormat imageFormat, ofI
 
 //----------------------------------------------------------
 //template<typename PixelType>
-//void ofImage_<PixelType>::saveImage(const of::filesystem::path & fileName, ofImageQualityType qualityLevel) const {
+//void ofImage_<PixelType>::saveImage(const fs::path & fileName, ofImageQualityType qualityLevel) const {
 //	save(fileName, qualityLevel);
 //}
 

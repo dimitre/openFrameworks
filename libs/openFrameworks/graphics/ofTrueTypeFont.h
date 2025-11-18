@@ -139,7 +139,7 @@ enum ofTrueTypeFontDirection : uint32_t {
 
 struct ofTrueTypeFontSettings {
 
-	of::filesystem::path fontName;
+	fs::path fontName;
 	int fontSize = 0;
 	bool antialiased = true;
 	bool contours = false;
@@ -149,7 +149,7 @@ struct ofTrueTypeFontSettings {
 	ofTrueTypeFontDirection direction = OF_TTF_LEFT_TO_RIGHT;
 	std::vector<ofUnicode::range> ranges;
 
-	ofTrueTypeFontSettings(const of::filesystem::path & name, int size)
+	ofTrueTypeFontSettings(const fs::path & name, int size)
 		: fontName(name)
 		, fontSize(size) { }
 
@@ -196,7 +196,7 @@ public:
 	/// \param simplifyAmt the amount to simplify the vector contours.  Larger number means more simplified.
 	/// \param dpi the dots per inch used to specify rendering size.
 	/// \returns true if the font was loaded correctly.
-	bool load(const of::filesystem::path & filename,
+	bool load(const fs::path & filename,
 		int fontsize,
 		bool _bAntiAliased = true,
 		bool _bFullCharacterSet = true,
@@ -205,7 +205,7 @@ public:
 		int dpi = 0);
 
 	[[deprecated("Use load")]]
-	bool loadFont(const of::filesystem::path & filename, int fontsize, bool _bAntiAliased = true, bool _bFullCharacterSet = false, bool makeContours = false, float simplifyAmt = 0.0f, int dpi = 0);
+	bool loadFont(const fs::path & filename, int fontsize, bool _bAntiAliased = true, bool _bFullCharacterSet = false, bool makeContours = false, float simplifyAmt = 0.0f, int dpi = 0);
 
 	bool load(const ofTrueTypeFontSettings & settings);
 

@@ -23,10 +23,10 @@ class ofEventArgs;
 #endif
 
 class ofAVEngineSoundPlayer : public ofBaseSoundPlayer {
-    
+
 public:
 
-//thanks to @bangnoise for this trick 
+//thanks to @bangnoise for this trick
 #ifdef __OBJC__
     using ObjectType = id<NSObject>;
 #else
@@ -35,14 +35,14 @@ public:
 
     ofAVEngineSoundPlayer();
     ~ofAVEngineSoundPlayer();
-    
+
     static std::vector <float> getSystemSpectrum(int bands);
 
-    bool load(const of::filesystem::path& fileName, bool stream = false);
+    bool load(const fs::path& fileName, bool stream = false);
     void unload();
     void play();
     void stop();
-	
+
     void setVolume(float vol);
     void setPan(float vol);
     void setSpeed(float spd);
@@ -51,7 +51,7 @@ public:
     void setMultiPlay(bool bMp);
     void setPosition(float pct);
     void setPositionMS(int ms);
-    
+
     float getPosition() const;
     int getPositionMS() const;
     bool isPlaying() const;
@@ -59,17 +59,17 @@ public:
     float getPan() const;
     bool isLoaded() const;
     float getVolume() const;
-	
+
 	float getDuration() const;
 	unsigned int getDurationMS() const;
-    
+
     void * getAVEnginePlayer();
-    
+
 protected:
-    
+
 	void updateFunction(ofEventArgs & args);
 	bool bAddedUpdate = false;
-	
+
         void cleanupMultiplayers();
         static bool removeMultiPlayer(void * aPlayer);
         ObjectType soundPlayer;

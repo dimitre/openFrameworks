@@ -17,8 +17,6 @@
 	#include <limits.h>        /* PATH_MAX */
 #endif
 
-namespace fs = of::filesystem;
-
 using std::string;
 using std::vector;
 using std::fstream;
@@ -1089,7 +1087,7 @@ bool ofFile::doesFileExist(const fs::path & _path, bool bRelativeToData){
 	if(bRelativeToData){
 		path = ofToDataPath(path);
 	}
-	return !path.empty() && of::filesystem::exists(path);
+	return !path.empty() && fs::exists(path);
 }
 
 //------------------------------------------------------------------------------------------------------------

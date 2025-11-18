@@ -1207,7 +1207,7 @@ std::string ofGetVersionPreRelease();
 /// The output file type will be deduced from the given file name.
 ///
 /// \param filename The image output file.
-void ofSaveScreen(const of::filesystem::path & fileName);
+void ofSaveScreen(const fs::path & fileName);
 
 /// \brief Saves the current frame as a PNG image.
 ///
@@ -1222,7 +1222,7 @@ void ofSaveFrame(bool bUseViewport = false);
 /// The output file type will be deduced from the given file name.
 ///
 /// \param filename The image output file.
-void ofSaveViewport(const of::filesystem::path & filename);
+void ofSaveViewport(const fs::path & filename);
 
 /// \section System
 

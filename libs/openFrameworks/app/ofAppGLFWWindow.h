@@ -112,7 +112,7 @@ public:
 	Window getX11Window();
 	XIC getX11XIC();
 
-	void setWindowIcon(const of::filesystem::path & path);
+	void setWindowIcon(const fs::path & path);
 	void setWindowIcon(const ofPixels & iconPixels);
 	#endif
 

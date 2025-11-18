@@ -6,7 +6,7 @@
 
 //---------------------------------------------------------------------------
 ofBaseVideoGrabber::~ofBaseVideoGrabber(){
-	
+
 }
 
 //---------------------------------------------------------------------------
@@ -48,7 +48,7 @@ ofBaseVideoPlayer::~ofBaseVideoPlayer(){
 }
 
 //---------------------------------------------------------------------------
-bool ofBaseVideoPlayer::load(const of::filesystem::path & fileName){
+bool ofBaseVideoPlayer::load(const fs::path & fileName){
 	return load(ofPathToString(fileName));
 }
 
@@ -59,7 +59,7 @@ bool ofBaseVideoPlayer::load(std::string fileName){
 }
 
 //---------------------------------------------------------------------------
-void ofBaseVideoPlayer::loadAsync(const of::filesystem::path & fileName){
+void ofBaseVideoPlayer::loadAsync(const fs::path & fileName){
 	loadAsync(ofPathToString(fileName));
 }
 

@@ -52,17 +52,17 @@ ofAVFoundationPlayer& ofAVFoundationPlayer::operator=(ofAVFoundationPlayer other
 }
 
 //--------------------------------------------------------------
-void ofAVFoundationPlayer::loadAsync(const of::filesystem::path & fileName){
+void ofAVFoundationPlayer::loadAsync(const fs::path & fileName){
     loadPlayer(fileName, true);
 }
 
 //--------------------------------------------------------------
-bool ofAVFoundationPlayer::load(const of::filesystem::path & fileName) {
+bool ofAVFoundationPlayer::load(const fs::path & fileName) {
     return loadPlayer(fileName, false);
 }
 
 //--------------------------------------------------------------
-bool ofAVFoundationPlayer::loadPlayer(const of::filesystem::path & fileName, bool bAsync) {
+bool ofAVFoundationPlayer::loadPlayer(const fs::path & fileName, bool bAsync) {
 	if( ofGetUsingArbTex() == false ){
         killTextureCache();
 		bUseTextureCache = false;

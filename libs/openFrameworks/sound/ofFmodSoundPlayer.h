@@ -42,7 +42,7 @@ class ofFmodSoundPlayer : public ofBaseSoundPlayer {
 		ofFmodSoundPlayer();
 		virtual ~ofFmodSoundPlayer();
 
-        bool load(const of::filesystem::path& fileName, bool stream = false);
+        bool load(const fs::path& fileName, bool stream = false);
 		void unload();
 		void play();
 		void stop();
@@ -63,13 +63,13 @@ class ofFmodSoundPlayer : public ofBaseSoundPlayer {
 		float getPan() const;
 		float getVolume() const;
 		bool isLoaded() const;
-	
+
 		float getDuration() const;
 		unsigned int getDurationMS() const;
 
 		static void initializeFmod();
 		static void closeFmod();
-	
+
 
 		bool isStreaming;
 		bool bMultiPlay;
@@ -81,7 +81,7 @@ class ofFmodSoundPlayer : public ofBaseSoundPlayer {
 		float internalFreq; // 44100 ?
 		float speed; // -n to n, 1 = normal, -1 backwards
 		unsigned int length; // in samples;
-		unsigned int durationMS; // duration in milliseconds 
+		unsigned int durationMS; // duration in milliseconds
 
 		FMOD_RESULT result;
 		FMOD_CHANNEL * channel = NULL;

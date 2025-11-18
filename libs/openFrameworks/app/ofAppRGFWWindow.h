@@ -116,7 +116,7 @@ public:
 	XIC getX11XIC();
 	#endif
 
-	void setWindowIcon(const of::filesystem::path & path);
+	void setWindowIcon(const fs::path & path);
 	void setWindowIcon(const ofPixels & iconPixels);
 
 	#if defined(TARGET_LINUX) && !defined(TARGET_OPENGLES)

@@ -209,7 +209,7 @@ public:
 	/// \param name The name of the video resource to load.
 	/// \return True if the video was loaded successfully.
 	/// \sa loadAsync()
-	virtual bool load(const of::filesystem::path & fileName);
+	virtual bool load(const fs::path & fileName);
 
 	/// \brief Legacy approach for loading videos for older inherited classes
 	/// \param name The name of the video resource to load.
@@ -226,8 +226,8 @@ public:
 	///
 	/// \param name The name of the video resource to load.
 	/// \sa isLoaded()
-	virtual void loadAsync(const of::filesystem::path & fileName);
-	
+	virtual void loadAsync(const fs::path & fileName);
+
 	/// \brief Legacy approach for Asynchronously load a video resource by name.
 	/// \param name The name of the video resource to load.
 	virtual void loadAsync(std::string fileName);

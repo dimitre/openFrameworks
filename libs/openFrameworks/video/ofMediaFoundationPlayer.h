@@ -2,21 +2,21 @@
  -----------------------------------------------------------------------------
  Based on code by Andrew Wright
  https://github.com/axjxwright/AX-MediaPlayer/
- 
+
  MIT License
- 
+
  Copyright (c) 2021 Andrew Wright / AX Interactive
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in all
  copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -52,7 +52,7 @@ namespace of {
 class ofMediaFoundationPlayer : public ofBaseVideoPlayer, public of::MediaEngineNotifyCallback {
 protected:
     friend class ofMediaFoundationSoundPlayer;
-    
+
     // MediaEngineNotify: Implements the callback for Media Engine event notification.
     class ofMEEventProcessor : public IMFMediaEngineNotify {
     public:
@@ -99,8 +99,8 @@ public:
 
     static void setDurationHackEnabled(bool ab);
 
-    bool load(const of::filesystem::path & fileName) override;
-    void loadAsync(const of::filesystem::path & fileName) override;
+    bool load(const fs::path & fileName) override;
+    void loadAsync(const fs::path & fileName) override;
     void close() override;
 
     bool                isInitialized() const override;
@@ -159,7 +159,7 @@ public:
     ofEvent<MF_MEDIA_ENGINE_ERR> MFErrorEvent;
 
 protected:
-    bool _load(const of::filesystem::path & fileName, bool abAsync);
+    bool _load(const fs::path & fileName, bool abAsync);
     void OnMediaEngineEvent(DWORD aEvent, DWORD_PTR param1, DWORD param2) override;
 
     class MEDXDeviceManager {
@@ -193,11 +193,11 @@ public:
     public:
         virtual bool allocate(ofPixelFormat afmt, int aw, int ah);
         virtual bool transferFrame(IMFMediaEngine* aengine) = 0;
-        virtual bool create(DXGI_FORMAT aDxFormat) = 0; 
+        virtual bool create(DXGI_FORMAT aDxFormat) = 0;
         virtual bool isValid() = 0;
         virtual bool draw(ofPixels& apix) = 0;
         virtual bool updatePixels(ofTexture& aSrcTex, ofPixels& apix, ofPixelFormat aTargetPixFormat) = 0;
-        
+
         int getWidth() { return mWidth; }
         int getHeight() { return mHeight; }
 
@@ -215,7 +215,7 @@ public:
     };
 
 protected:
-    
+
     void handleMEEvent(DWORD aevent);
     void updateDuration();
     bool updateDimensions();
@@ -248,7 +248,7 @@ protected:
     static std::shared_ptr<MEDXDeviceManager> sDeviceManager;
 
     DXGI_FORMAT m_d3dFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
-    
+
     // Media Engine related
     Microsoft::WRL::ComPtr<IMFMediaEngine> m_spMediaEngine;
     Microsoft::WRL::ComPtr<IMFMediaEngineEx> m_spEngineEx;
@@ -258,15 +258,15 @@ protected:
     std::queue<DWORD> mEventsQueue;
     std::mutex mMutexEvents;
     // needed to copy the pixels while in lock()
-    // also an easy color conversion 
+    // also an easy color conversion
     ofFbo mFbo;
     ofTexture mCopyTex;
     ofPixels mPixels;
     mutable bool mBUpdatePixels = false;
-	
+
     bool mBLoadAsync = false;
     std::atomic_bool mBIsDoneAtomic;
     std::atomic_bool mBIsClosedAtomic;
     std::condition_variable mWaitCondition;
-    
+
 };

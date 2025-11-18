@@ -188,7 +188,7 @@ ofMediaFoundationSoundPlayer::~ofMediaFoundationSoundPlayer() {
 }
 
 //--------------------
-bool ofMediaFoundationSoundPlayer::load(const of::filesystem::path & fileName, bool stream) {
+bool ofMediaFoundationSoundPlayer::load(const fs::path & fileName, bool stream) {
     unload();
 
 	auto filePath = fileName;

@@ -101,10 +101,10 @@ public:
 
 	ofXml();
 
-	bool load(const of::filesystem::path & file);
+	bool load(const fs::path & file);
 	bool load(const ofBuffer & buffer);
 	bool parse(const std::string & xmlStr);
-	bool save(const of::filesystem::path & file) const;
+	bool save(const fs::path & file) const;
 	void clear();
 	std::string toString(const std::string & indent = "\t") const;
 
@@ -136,7 +136,7 @@ public:
 
 	ofXml getFirstChild() const;
 	ofXml getLastChild() const;
-	
+
 	ofXml getParent() const;
 
 
