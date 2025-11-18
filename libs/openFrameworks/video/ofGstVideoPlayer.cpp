@@ -6,11 +6,13 @@
  */
 
 #include "ofGstVideoPlayer.h"
+#include "ofConstants.h"
+#include "ofGstUtils.h"
+#include "ofFileUtils.h"
+
 #include <gst/gst.h>
 #include <gst/video/video.h>
 #include <gst/app/gstappsink.h>
-#include "ofConstants.h"
-#include "ofGstUtils.h"
 
 ofGstVideoPlayer::ofGstVideoPlayer(){
 	nFrames						= 0;
@@ -110,7 +112,7 @@ bool ofGstVideoPlayer::createPipeline(std::string name){
 											"format", G_TYPE_STRING, format.c_str(),
 											NULL);
 	}
-    
+
 #endif
 
 	#if GST_VERSION_MAJOR==0
