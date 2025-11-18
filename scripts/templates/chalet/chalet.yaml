@@ -79,6 +79,7 @@ abstracts:*:
     includeDirs:
       - ${var:ofPath}/libs/openFrameworks/**
       - ${var:ofPath}/libs/{${var:platform}}/include
+      - ${var:ofPath}/libs/{${var:platform}}/include/freetype2
       # - ${var:ofPath}/libs/{${var:platform}}/include/**
 
     compileOptions[:linux+architecture:x86_64]:
