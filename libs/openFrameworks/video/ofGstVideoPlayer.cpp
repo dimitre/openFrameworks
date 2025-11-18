@@ -8,7 +8,7 @@
 #include "ofGstVideoPlayer.h"
 #include "ofConstants.h"
 #include "ofGstUtils.h"
-#include "ofFileUtils.h"
+//#include "ofFileUtils.h"
 
 #include <gst/gst.h>
 #include <gst/video/video.h>
@@ -201,11 +201,11 @@ bool ofGstVideoPlayer::load(const fs::path & fileName){
 		bIsStream = bAsyncLoad;
 	}else if( name.find( "://",0 ) == std::string::npos){
 		GError * err = NULL;
-		gchar* name_ptr = gst_filename_to_uri(ofToDataPath(name).c_str(),&err);
+		gchar* name_ptr = gst_filename_to_uri(ofCore.toDataPath(name).c_str(),&err);
 		name = name_ptr;
 		g_free(name_ptr);
 		if(err) g_free(err);
-		//name = ofToDataPath(name);
+		//name = ofCore.toDataPath(name);
 		bIsStream = bAsyncLoad;
 	}else{
 		bIsStream = true;

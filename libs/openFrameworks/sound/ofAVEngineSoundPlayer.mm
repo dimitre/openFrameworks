@@ -6,7 +6,8 @@
 //  Modified by Dan Rosser 9/5/22
 
 #include "ofAVEngineSoundPlayer.h"
-#include "ofFileUtils.h" // ofToDataPath
+//#include "ofFileUtils.h" // ofToDataPath
+#include "ofAppRunner.h" // ofToDataPath
 
 #ifdef OF_SOUND_PLAYER_AV_ENGINE
 
@@ -1019,7 +1020,7 @@ bool ofAVEngineSoundPlayer::load(const fs::path & fileName, bool stream) {
         unload();
     }
 
-    auto filePath = ofToDataPath(fileName);
+    auto filePath = ofCore.toDataPath(fileName);
     @autoreleasepool {
         soundPlayer = [[AVEnginePlayer alloc] init];
     }

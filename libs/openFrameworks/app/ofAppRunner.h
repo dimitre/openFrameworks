@@ -135,6 +135,8 @@ public:
 	// ofFileUtils
 	//	bool isInit() { return initialized; }
 	
+
+	
 	fs::path getAppPath(){
 		#if defined(TARGET_LINUX) || defined(TARGET_ANDROID)
 			char buff[FILENAME_MAX];
@@ -173,6 +175,11 @@ public:
 	fs::path dataPath;
 	fs::path defaultWorkingDirectory;
 	bool enableDataPath = true;
+	
+	// ofToDataPath equivalent now.
+	fs::path toDataPath(const fs::path & path) {
+		return dataPath / path;
+	}
 	
 	bool isInsideAppBundle(const fs::path& appPath) {
 		for (fs::path p = fs::weakly_canonical(appPath); p != p.root_path(); p = p.parent_path()) {

@@ -1,5 +1,6 @@
 #pragma once
 
+// FIXME: Remove this, change to istream
 #include "ofFileUtils.h" // ofFile
 
 #include "ofParameter.h"

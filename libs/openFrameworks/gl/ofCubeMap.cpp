@@ -8,7 +8,6 @@
 #include "ofCubeMapShaders.h"
 #include "ofFbo.h"
 #include "ofTexture.h"
-//#include "ofFileUtils.h"
 #include "ofMaterial.h"
 
 #ifdef TARGET_ANDROID

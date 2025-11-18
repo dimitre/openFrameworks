@@ -5,9 +5,9 @@
 #include "ofLog.h"
 #include "ofUtils.h"
 
-#ifdef TARGET_WIN32
-#include "ofFileUtils.h"
-#endif
+//#ifdef TARGET_WIN32
+//#include "ofFileUtils.h"
+//#endif
 
 #include "ofAppGLFWWindow.h"
 
@@ -350,7 +350,7 @@ static int CALLBACK loadDialogBrowseCallback(
 	std::string defaultPath = *(std::string *)lpData;
 	if (defaultPath != "" && uMsg == BFFM_INITIALIZED) {
 		wchar_t wideCharacterBuffer[MAX_PATH];
-		wcscpy(wideCharacterBuffer, ofToDataPath(defaultPath).c_str());
+		wcscpy(wideCharacterBuffer, ofCore.toDataPath(defaultPath).c_str());
 		SendMessage(hwnd, BFFM_SETSELECTION, 1, (LPARAM)wideCharacterBuffer);
 	}
 

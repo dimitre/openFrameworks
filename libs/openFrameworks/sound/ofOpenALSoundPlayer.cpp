@@ -2,7 +2,7 @@
 
 #ifdef OF_SOUND_PLAYER_OPENAL
 
-#include "ofFileUtils.h"
+//#include "ofFileUtils.h"
 #include "ofLog.h"
 #include "ofEvents.h"
 #include "ofUtils.h"
@@ -497,7 +497,7 @@ bool ofOpenALSoundPlayer::readFile(const fs::path & fileName, std::vector<short>
 //------------------------------------------------------------
 bool ofOpenALSoundPlayer::load(const fs::path& _fileName, bool is_stream){
 
-	auto fileName = ofToDataPath(_fileName);
+	auto fileName = ofCore.toDataPath(_fileName);
 
 	bMultiPlay = false;
 	isStreaming = is_stream;
