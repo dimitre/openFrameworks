@@ -196,12 +196,16 @@ void ofPath::quadBezierTo(const glm::vec3 & cp1, const glm::vec3 & cp2, const gl
 
 //----------------------------------------------------------
 void ofPath::quadBezierTo(const glm::vec2 & cp1, const glm::vec2 & cp2, const glm::vec2 & p){
-	quadBezierTo(glm::vec3(cp1, 0.0), glm::vec3(cp2, 0.0), glm::vec3(p, 0.0));
+	quadBezierTo(glm::vec3(cp1, 0.0f), glm::vec3(cp2, 0.0f), glm::vec3(p, 0.0f));
 }
 
 //----------------------------------------------------------
 void ofPath::quadBezierTo(float cx1, float cy1, float cx2, float cy2, float x, float y){
-	quadBezierTo(glm::vec3(cx1,cy1,0),glm::vec3(cx2,cy2,0),glm::vec3(x,y,0));
+	quadBezierTo(
+		glm::vec3(cx1, cy1, 0.0f),
+		glm::vec3(cx2, cy2, 0.0f),
+		glm::vec3(x, y, 0.0f)
+	);
 }
 
 //----------------------------------------------------------

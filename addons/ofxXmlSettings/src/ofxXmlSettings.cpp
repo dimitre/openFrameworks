@@ -1,5 +1,7 @@
 #include "ofxXmlSettings.h"
 
+#include "ofFileUtils.h" // ofToDataPath
+
 #include <vector>
 #include <string>
 #include <iostream>
