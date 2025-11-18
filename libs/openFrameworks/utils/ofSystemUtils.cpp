@@ -431,9 +431,9 @@ ofFileDialogResult ofSystemLoadDialog(std::string windowTitle, bool bFolderSelec
 		//the title if specified
 		wchar_t szTitle[MAX_PATH];
 		if (defaultPath != "") {
-			wcscpy(szDir, ofToDataPath(defaultPath).c_str());
+			wcscpy(szDir, ofCore.toDataPath(defaultPath).c_str());
 			ofn.lpstrInitialDir = szDir;
-			// auto d = convertWideToNarrow(ofToDataPath(defaultPath).c_str());
+			// auto d = convertWideToNarrow(ofCore.toDataPath(defaultPath).c_str());
 			// ofn.lpstrInitialDir = d.c_str();
 		}
 
@@ -507,9 +507,9 @@ ofFileDialogResult ofSystemLoadDialog(std::string windowTitle, bool bFolderSelec
 #if defined(OF_USING_GTK)
 	auto locale = std::locale();
 	if (bFolderSelection)
-		results.filePath = gtkFileDialog(GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, windowTitle, ofToDataPath(defaultPath).c_str());
+		results.filePath = gtkFileDialog(GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, windowTitle, ofCore.toDataPath(defaultPath).c_str());
 	else
-		results.filePath = gtkFileDialog(GTK_FILE_CHOOSER_ACTION_OPEN, windowTitle, ofToDataPath(defaultPath).c_str());
+		results.filePath = gtkFileDialog(GTK_FILE_CHOOSER_ACTION_OPEN, windowTitle, ofCore.toDataPath(defaultPath).c_str());
 	resetLocale(locale);
 #else
 
@@ -612,8 +612,8 @@ ofFileDialogResult ofSystemSaveDialog(std::string defaultName, std::string messa
 	//----------------------------------------------------------------------------------------
 #if defined(TARGET_LINUX) && defined(OF_USING_GTK)
 	auto locale = std::locale();
-	// results.filePath = gtkFileDialog(GTK_FILE_CHOOSER_ACTION_SAVE, messageName, ofToDataPath(defaultName).string());
-	results.filePath = gtkFileDialog(GTK_FILE_CHOOSER_ACTION_SAVE, messageName, ofToDataPath(defaultName));
+	// results.filePath = gtkFileDialog(GTK_FILE_CHOOSER_ACTION_SAVE, messageName, ofCore.toDataPath(defaultName).string());
+	results.filePath = gtkFileDialog(GTK_FILE_CHOOSER_ACTION_SAVE, messageName, ofCore.toDataPath(defaultName));
 	resetLocale(locale);
 #endif
 	//----------------------------------------------------------------------------------------
