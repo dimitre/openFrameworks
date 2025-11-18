@@ -50,11 +50,6 @@ void ofSetupOpenGL(const shared_ptr<ofWindow> & windowPtr, int w, int h, ofWindo
 	#include "ofGstUtils.h"
 #endif
 
-// adding this for vc2010 compile: error C3861: 'closeQuicktime': identifier not found
-#if defined(OF_VIDEO_CAPTURE_QUICKTIME) || defined(OF_VIDEO_PLAYER_QUICKTIME)
-	#include "ofQtUtils.h"
-#endif
-
 #if defined(TARGET_WIN32)
 	#include <mmsystem.h>
 #endif

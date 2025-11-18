@@ -126,8 +126,8 @@ enum ofTargetPlatform{
 	#define GLEW_NO_GLU
     #define TARGET_GLFW_WINDOW
     #define OF_CAIRO
-	#include "GL/glew.h"
-	#include "GL/wglew.h"
+	#include <GL/glew.h>
+	#include <GL/wglew.h>
 	#define OF_RTAUDIO
 	#define __WINDOWS_DS__
 	#define __WINDOWS_WASAPI__
@@ -303,16 +303,20 @@ typedef TESSindex ofIndexType;
 // check if any soundplayer api is defined from the compiler
 
 #if !defined(TARGET_NO_SOUND)
-	#if !defined(OF_SOUND_PLAYER_FMOD) && !defined(OF_SOUND_PLAYER_OPENAL) && !defined(OF_SOUND_PLAYER_EMSCRIPTEN) && !defined(OF_SOUND_PLAYER_MEDIA_FOUNDATION)
-	  #ifdef TARGET_OF_IOS
-		#define OF_SOUND_PLAYER_IPHONE
-	  #elif defined(TARGET_LINUX) || defined(TARGET_MINGW)
-		#define OF_SOUND_PLAYER_OPENAL
-	  #elif defined(TARGET_EMSCRIPTEN)
-		#define OF_SOUND_PLAYER_EMSCRIPTEN
-	  #elif !defined(TARGET_ANDROID) && !defined(TARGET_OF_MAC)
-//		#define OF_SOUND_PLAYER_FMOD
-	  #endif
+	#if defined(USE_FMOD)
+		#define OF_SOUND_PLAYER_FMOD
+	#else
+		#if defined(TARGET_OF_IOS) || defined(TARGET_OSX)
+			#define OF_SOUND_PLAYER_AV_ENGINE
+		// #elif defined(TARGET_OF_IOS)
+		// 	#define OF_SOUND_PLAYER_IPHONE
+		#elif defined(TARGET_LINUX) || defined(TARGET_MINGW)
+			#define OF_SOUND_PLAYER_OPENAL
+		#elif defined(TARGET_EMSCRIPTEN)
+			#define OF_SOUND_PLAYER_EMSCRIPTEN
+		#elif defined(TARGET_WIN32)
+			#define OF_SOUND_PLAYER_MEDIA_FOUNDATION
+		#endif
 	#endif
 #endif
 
