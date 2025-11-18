@@ -6,8 +6,9 @@
 #include "ofUtils.h"
 
 //#ifdef TARGET_WIN32
-//#include "ofFileUtils.h"
+//#include "ofFileUtils.h" //ofToDataPath
 //#endif
+#include "ofAppRunner.h" //toDataPath
 
 #include "ofAppGLFWWindow.h"
 
