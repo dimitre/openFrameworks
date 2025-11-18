@@ -4,6 +4,8 @@
 #define OF_MESH_H
 
 #include "ofGLUtils.h"
+#include "ofFileUtils.h" // ofBuffer
+
 #include <vector>
 
 template<class V, class N, class C, class T>

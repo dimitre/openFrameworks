@@ -38,12 +38,15 @@ targets:
       staticLinks[:windows]:
         - ../libs/vs/lib/pugixml.lib
         - ../libs/vs/lib/yaml-cpp.lib
+        - ../libs/vs/lib/fmt.lib
       staticLinks[:macos]:
         - ../libs/macos/lib/libpugixml.a
         - ../libs/macos/lib/libyaml-cpp.a
+        - ../libs/macos/lib/libfmt.a
       staticLinks[:linux]:
         - ../libs/linux64/lib/libpugixml.a
         - ../libs/linux64/lib/libyaml-cpp.a
+        - ../libs/linux64/lib/libfmt.a
 
     files:
       include:

@@ -156,10 +156,6 @@ bool ofSaveImage(const ofFloatPixels & pix, ofBuffer & buffer, ofImageFormat for
 bool ofSaveImage(const ofShortPixels & pix, const of::filesystem::path& path, ofImageQualityType qualityLevel = OF_IMAGE_QUALITY_BEST);
 bool ofSaveImage(const ofShortPixels & pix, ofBuffer & buffer, ofImageFormat format = OF_IMAGE_FORMAT_PNG, ofImageQualityType qualityLevel = OF_IMAGE_QUALITY_BEST);
 
-/// \brief Deallocates FreeImage resources.
-///
-/// Used internally during shutdown.
-void ofCloseFreeImage();
 
 /// \brief A class representing an image using memory and gpu based pixels.
 /// \tparam PixelType The data type used to represent a single pixel value.

@@ -1,3 +1,5 @@
+#include "ofFileUtils.h" // ofBuffer
+
 #include "ofSerial.h"
 #include "ofUtils.h"
 #include "ofLog.h"

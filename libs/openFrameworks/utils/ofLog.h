@@ -1,8 +1,10 @@
 #pragma once
 
 // Only private ofFile file;
-#include "ofFileUtils.h"
+//#include "ofFileUtils.h"
+#include "ofConstants.h" // of::filesystem::path
 #include <sstream>
+#include <fstream>
 
 
 /// \brief Convert a variable length argument to a string.
@@ -759,7 +761,8 @@ public:
 	void close();
 
 private:
-	ofFile file; ///< The location of the log file.
+	std::ofstream file;
+//	ofFile file; ///< The location of the log file.
 };
 
 /// \endcond

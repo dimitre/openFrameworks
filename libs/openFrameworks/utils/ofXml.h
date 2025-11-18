@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ofParameter.h"
+#include "ofFileUtils.h" // ofBuffer
+
 #include <pugixml.hpp>
 
 template<typename It>

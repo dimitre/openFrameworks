@@ -88,7 +88,6 @@ void ofExitCallback();
 //void ofURLFileLoaderShutdown();
 //void ofURLFileLoaderShutdown() {};
 void ofTrueTypeShutdown();
-void ofCloseFreeImage();
 
 #if defined(TARGET_ANDROID) || defined(TARGET_LINUX_ARM)
 inline void ofSoundShutdown() { }
@@ -101,7 +100,6 @@ void ofInit() {
 	ofCore.shutdownFunctions = {
 //		ofURLFileLoaderShutdown,
 		ofTrueTypeShutdown,
-		ofCloseFreeImage,
 #ifndef TARGET_NO_SOUND
 		ofSoundShutdown,
 #endif

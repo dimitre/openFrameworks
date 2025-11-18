@@ -24,21 +24,7 @@ using namespace mango;
 //using namespace mango::math;
 using namespace mango::image;
 
-//----------------------------------------------------------
-// static variable for freeImage initialization:
-void ofInitFreeImage(bool deinit = false) {
-	// need a new bool to avoid c++ "deinitialization order fiasco":
-	// http://www.parashift.com/c++-faq-lite/ctors.html#faq-10.15
-	//	static bool	* bFreeImageInited = new bool(false);
-	//	if(!*bFreeImageInited && !deinit){
-	//		FreeImage_Initialise();
-	//		*bFreeImageInited = true;
-	//	}
-	//	if(*bFreeImageInited && deinit){
-	//		FreeImage_DeInitialise();
-	//		*bFreeImageInited = false;
-	//	}
-}
+
 //
 //template <typename T>
 //FREE_IMAGE_TYPE getFreeImageType(const ofPixels_<T>& pix);
@@ -301,7 +287,6 @@ static bool loadImage(ofPixels_<PixelType> & pix, const of::filesystem::path & _
 	return false;
 
 	//
-	////	ofInitFreeImage();
 	//
 	//
 	//	auto filenameString = _fileName.string();
@@ -365,7 +350,6 @@ static bool loadImage(ofPixels_<PixelType> & pix,
 	// FIXME: Implement this.
 	return false;
 
-	//	ofInitFreeImage();
 	//	bool bLoaded = false;
 	//	FIBITMAP* bmp = nullptr;
 	//	FIMEMORY* hmem = nullptr;
@@ -582,7 +566,6 @@ static bool saveImage(const ofPixels_<PixelType> & _pix, const of::filesystem::p
 		ofLogError("ofImage") << "saveImage(): Unknown exception saving \"" << _fileName << "\"";
 		return false;
 	}
-	//	ofInitFreeImage();
 	//	if (_pix.isAllocated() == false){
 	//		ofLogError("ofImage") << "saveImage(): couldn't save " << _fileName << ", pixels are not allocated";
 	//		return false;
@@ -710,7 +693,6 @@ static bool saveImage(const ofPixels_<PixelType> & _pix, ofBuffer & buffer, ofIm
 	return false;
 	// thanks to alvaro casinelli for the implementation
 
-	//	ofInitFreeImage();
 	//
 	//	if (_pix.isAllocated() == false){
 	//		ofLogError("ofImage") << "saveImage(): couldn't save to ofBuffer, pixels are not allocated";
@@ -818,12 +800,6 @@ bool ofSaveImage(const ofShortPixels & pix, ofBuffer & buffer, ofImageFormat for
 	return saveImage(pix, buffer, format, qualityLevel);
 }
 
-//----------------------------------------------------
-// freeImage based stuff:
-void ofCloseFreeImage() {
-	ofInitFreeImage(true);
-}
-
 //-------------------------------------------------------------
 //  implementation
 
@@ -838,7 +814,6 @@ ofImage_<PixelType>::ofImage_() {
 	bUseTexture = true; // the default is, yes, use a texture
 
 	//----------------------- init free image if necessary
-	ofInitFreeImage();
 }
 
 //----------------------------------------------------------
@@ -851,7 +826,6 @@ ofImage_<PixelType>::ofImage_(const ofPixels_<PixelType> & pix) {
 	bUseTexture = true; // the default is, yes, use a texture
 
 	//----------------------- init free image if necessary
-	ofInitFreeImage();
 
 	setFromPixels(pix);
 }
@@ -865,7 +839,6 @@ ofImage_<PixelType>::ofImage_(const of::filesystem::path & fileName, const ofIma
 	bUseTexture = true; // the default is, yes, use a texture
 
 	//----------------------- init free image if necessary
-	ofInitFreeImage();
 
 	load(fileName, settings);
 }

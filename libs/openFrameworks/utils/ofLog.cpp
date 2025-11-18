@@ -64,7 +64,7 @@ ofLogLevel ofGetLogLevel(string module){
 
 //--------------------------------------------------
 void ofLogToFile(const of::filesystem::path & path, bool append){
-	ofLog::setChannel(std::make_shared<ofFileLoggerChannel>(path,append));
+	ofLog::setChannel(std::make_shared<ofFileLoggerChannel>(path, append));
 }
 
 //--------------------------------------------------
@@ -272,20 +272,43 @@ ofFileLoggerChannel::~ofFileLoggerChannel(){
 }
 
 void ofFileLoggerChannel::close(){
-	file.close();
+	if (file.is_open()) {
+		file.close();
+	}
 }
 
 void ofFileLoggerChannel::setFile(const of::filesystem::path & path, bool append) {
-	file.open(path,append ? ofFile::Append:ofFile::WriteOnly);
+	
+	close(); // Close any existing file
+	
+	auto mode = std::ios::out;
+	if (append) {
+		mode |= std::ios::app;
+	}
+	
+	file.open(path, mode);
+	
+//	file.open(path,append ? ofFile::Append:ofFile::WriteOnly);
 	file << std::endl;
 	file << std::endl;
 	file << "--------------------------------------- " << ofGetTimestampString() << std::endl;
 }
 
 void ofFileLoggerChannel::log(ofLogLevel level, const string & module, const string & message){
-	file << "[" << ofGetLogLevelName(level, true) << "] ";
-	if(module != ""){
-		file << module << ": ";
+//	file << "[" << ofGetLogLevelName(level, true) << "] ";
+//	if(module != ""){
+//		file << module << ": ";
+//	}
+//	file << message << std::endl;
+	
+	if (file.is_open()) {
+		file << "[" << ofGetLogLevelName(level, true) << "] ";
+		if(module != ""){
+			file << module << ": ";
+		}
+		
+		file << message << std::endl;
+		file.flush(); // Optional: ensure immediate write
 	}
-	file << message << std::endl;
+	
 }

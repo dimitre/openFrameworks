@@ -1,7 +1,9 @@
 #pragma once
 
-#include <nlohmann/json.hpp> // MSYS2 : use of system-installed include
+#include "ofFileUtils.h" // ofFile
+
 #include "ofParameter.h"
+#include <nlohmann/json.hpp> // MSYS2 : use of system-installed include
 
 // for convenience
 using ofJson = nlohmann::json;
