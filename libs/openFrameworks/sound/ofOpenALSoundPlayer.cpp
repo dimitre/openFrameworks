@@ -3,6 +3,8 @@
 #ifdef OF_SOUND_PLAYER_OPENAL
 
 //#include "ofFileUtils.h"
+#include "ofAppRunner.h"
+
 #include "ofLog.h"
 #include "ofEvents.h"
 #include "ofUtils.h"
