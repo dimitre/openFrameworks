@@ -1,3 +1,0 @@
-ofxUnitTests
-ofxNetwork
-ofxURL
