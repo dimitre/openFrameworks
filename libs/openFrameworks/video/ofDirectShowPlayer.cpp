@@ -1,5 +1,6 @@
 #include "ofDirectShowPlayer.h"
 #include "ofPixels.h" // MARK: pixels, srcBuffer
+#include "ofAppRunner.h" // toDataPath
 #include <functional>
 
 #ifdef _MSC_VER
@@ -1148,7 +1149,7 @@ ofDirectShowPlayer & ofDirectShowPlayer::operator=(ofDirectShowPlayer&& other) {
 }
 
 bool ofDirectShowPlayer::load(const fs::path & fileName){
-    auto path = ofToDataPath(fileName);
+    auto path = ofCore.toDataPath(fileName);
 
     close();
     player.reset(new DirectShowVideo());
