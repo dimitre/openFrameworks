@@ -1,6 +1,8 @@
+#ifdef TARGET_WIN32
+#include "ofFileUtils.h"
+#endif
 
 #include "ofSystemUtils.h"
-//#include "ofFileUtils.h"
 #include "ofLog.h"
 #include "ofUtils.h"
 // FIXME: ofConstants Targets
@@ -508,7 +510,7 @@ ofFileDialogResult ofSystemLoadDialog(std::string windowTitle, bool bFolderSelec
 		results.filePath = gtkFileDialog(GTK_FILE_CHOOSER_ACTION_OPEN, windowTitle, ofToDataPath(defaultPath).c_str());
 	resetLocale(locale);
 #else
-	
+
 	std::string zenity = "zenity --file-selection";
 
 	auto escapeShell = [](const std::string& s) -> std::string {
@@ -531,8 +533,8 @@ ofFileDialogResult ofSystemLoadDialog(std::string windowTitle, bool bFolderSelec
 	results.filePath = ofSystem(zenity);
 
 #endif
-	
-	
+
+
 #endif
 	//----------------------------------------------------------------------------------------
 	//----------------------------------------------------------------------------------------
