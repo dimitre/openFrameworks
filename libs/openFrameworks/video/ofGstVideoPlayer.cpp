@@ -9,6 +9,7 @@
 #include "ofConstants.h"
 #include "ofGstUtils.h"
 #include "ofFileUtils.h" // ofPathToString
+#include "ofAppRunner.h" // toDataPath
 
 #include <gst/gst.h>
 #include <gst/video/video.h>
