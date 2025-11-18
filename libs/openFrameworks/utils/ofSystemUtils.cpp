@@ -1,12 +1,13 @@
-#ifdef TARGET_WIN32
-#include "ofFileUtils.h"
-#endif
+// FIXME: ofConstants Targets
+#include "ofConstants.h"
 
 #include "ofSystemUtils.h"
 #include "ofLog.h"
 #include "ofUtils.h"
-// FIXME: ofConstants Targets
-#include "ofConstants.h"
+
+#ifdef TARGET_WIN32
+#include "ofFileUtils.h"
+#endif
 
 #include "ofAppGLFWWindow.h"
 
