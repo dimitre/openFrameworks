@@ -8,7 +8,7 @@
 #include "ofGstVideoPlayer.h"
 #include "ofConstants.h"
 #include "ofGstUtils.h"
-//#include "ofFileUtils.h"
+#include "ofFileUtils.h" // ofPathToString
 
 #include <gst/gst.h>
 #include <gst/video/video.h>
