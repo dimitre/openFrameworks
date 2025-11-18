@@ -108,10 +108,10 @@ jobs:
         shell: bash
         run: ./libs/libs.sh
 
-      - name: LS Libs
-        shell: bash
-        run: |
-          ls libs/**/lib/*
+      # - name: LS Libs
+      #   shell: bash
+      #   run: |
+      #     ls libs/**/lib/*
 
       - name: Install Chalet
         # if: matrix.platform == 'vs'
