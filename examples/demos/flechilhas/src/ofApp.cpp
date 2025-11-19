@@ -53,6 +53,6 @@ void ofApp::keyPressed(int key) {
 // if we had mouse cursor somewhere
 void ofApp::mousePressed(ofMouseEventArgs & mouse) {
 	if (mouse.x < 300 && mouse.y < 200) {
-		openURL("https://dmtr.org/");
+		ofOpenURL("https://dmtr.org/");
 	}
 }

@@ -1316,3 +1316,6 @@ private:
 	/// `ofUTF8Iterator(...)` is invalid, this variable will be empty.
 	std::string src_valid;
 };
+
+
+void ofOpenURL(const std::string& url);
