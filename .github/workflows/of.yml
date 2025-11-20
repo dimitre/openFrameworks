@@ -137,6 +137,11 @@ jobs:
       #   run: |
       #     sudo apt install gcc g++ binutils
 
+      - name: ofgen compile test remove
+        run: |
+          cd ofGen
+          chalet bundle
+
       - name: ofgen compile
         if: runner.os != 'Windows'
         run: |
