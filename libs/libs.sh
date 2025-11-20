@@ -221,11 +221,11 @@ case "$PLATFORM" in
 					section "chalet already installed"
 				fi
 
-				if ! command -v cmake &> /dev/null; then
-					brew install cmake
-				else
-					section "cmake already installed"
-				fi
+				# if ! command -v cmake &> /dev/null; then
+				# 	brew install cmake
+				# else
+				# 	section "cmake already installed"
+				# fi
 
 				if ! command -v ninja &> /dev/null; then
 					brew install ninja
@@ -253,7 +253,8 @@ case "$PLATFORM" in
 				${SUDO_CMD} pacman -Syu --noconfirm
 
 				${SUDO_CMD} pacman -S --noconfirm --needed \
-					gcc unzip ninja wget cmake \
+					gcc unzip ninja wget \
+					# cmake \
 					fontconfig \
 					glu mesa \
 					libxrandr \
@@ -266,7 +267,8 @@ case "$PLATFORM" in
 				${SUDO_CMD} apt-get update
 
 				${SUDO_CMD} apt-get -y install \
-					ninja-build wget2 cmake \
+					ninja-build wget2 \
+					# cmake \
 					libfontconfig1-dev \
 					libglu1-mesa-dev libgl1-mesa-dev \
 					libxrandr-dev \
