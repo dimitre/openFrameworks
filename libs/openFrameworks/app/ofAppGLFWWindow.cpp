@@ -117,11 +117,25 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 // Wayland is not fully supported in GLFW
 // this will force using X11 on wayland (XWayland)
 //	#pragma message("__linux__ is " __linux__)
-   #if defined(__linux__)
+#if defined(__linux__)
+//	if (glfwPlatformSupported(GLFW_PLATFORM_WAYLAND)) {
 //		glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_WAYLAND);
-	glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
-//		#pragma message("WOOOOWWWW WOW")
-   #endif
+//	} else {
+//		glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
+//	}
+	
+	// Check if actually running on Wayland
+	const char* waylandDisplay = getenv("WAYLAND_DISPLAY");
+	const char* sessionType = getenv("XDG_SESSION_TYPE");
+	
+	if ((waylandDisplay != nullptr ||
+		 (sessionType && strcmp(sessionType, "wayland") == 0)) &&
+		glfwPlatformSupported(GLFW_PLATFORM_WAYLAND)) {
+		glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_WAYLAND);
+	} else {
+		glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
+	}
+#endif
 
 
 	glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, settings.highResolutionCapable);
