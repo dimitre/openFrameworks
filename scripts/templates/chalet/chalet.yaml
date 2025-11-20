@@ -367,14 +367,15 @@ distribution:
     exclude:
       - data/.gitkeep
 
-    # linuxDesktopEntry:
-    # template: platform/linux/app.desktop
-    # icon: platform/linux/app-logo.png
-    # copyToApplications: true
+    linuxDesktopEntry:
+      icon: ${var:ofPath}/scripts/ofWorks.png
+      template: platform/linux/app.desktop
+      # copyToApplications: true
 
     macosBundle:
       type: app
-      icon: ${var:ofPath}/libs/openFrameworksCompiled/project/macos/of.icns
+      # icon: ${var:ofPath}/libs/openFrameworksCompiled/project/macos/of.icns
+      icon: ${var:ofPath}/scripts/ofWorks.png
       infoPropertyList:
         CFBundleDevelopmentRegion: en-US
         CFBundleDisplayName: ${name}
