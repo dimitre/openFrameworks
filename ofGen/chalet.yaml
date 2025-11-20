@@ -1,5 +1,12 @@
 name: ofgen
-version: 0.1.1
+version: 0.8.2
+# variables:
+# platform: xyz
+# This doesn't work but doesn't error either.
+# platform[:windows]: vs
+# platform[:macos]: macos
+# platform[:linux+architecture:x86_64]: linux64
+# platform[:linux+architecture:arm64]: rpi-aarch64
 # allowedArchitectures:
 #   - x86_64-pc-windows-msvc
 #   - i686-pc-windows-msvc
@@ -26,12 +33,19 @@ targets:
       includeDirs:
         - src
         - src/uuidxx/src
+      # includeDirs:
+      #   - ../libs/${var:platform}/include
       includeDirs[:windows]:
         - ../libs/vs/include/
       includeDirs[:macos]:
         - ../libs/macos/include/
-      includeDirs[:linux]:
+      # includeDirs[:linux]:
+      #   - ../libs/linux64/include/
+      includeDirs[:linux+architecture:x86_64]:
         - ../libs/linux64/include/
+      includeDirs[:linux+architecture:arm64]:
+        - ../libs/rpi-aarch64/include/
+
       defines:
         # - YAML_CPP_NO_DLL
         - YAML_CPP_STATIC_DEFINE
@@ -43,10 +57,15 @@ targets:
         - ../libs/macos/lib/libpugixml.a
         - ../libs/macos/lib/libyaml-cpp.a
         - ../libs/macos/lib/libfmt.a
-      staticLinks[:linux]:
+      # staticLinks[:linux]:
+      staticLinks[:linux+architecture:x86_64]:
         - ../libs/linux64/lib/libpugixml.a
         - ../libs/linux64/lib/libyaml-cpp.a
         - ../libs/linux64/lib/libfmt.a
+      staticLinks[:linux+architecture:arm64]:
+        - ../libs/rpi-aarch64/lib/libpugixml.a
+        - ../libs/rpi-aarch64/lib/libyaml-cpp.a
+        - ../libs/rpi-aarch64/lib/libfmt.a
 
     files:
       include:

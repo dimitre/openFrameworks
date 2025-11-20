@@ -252,7 +252,7 @@ case "$PLATFORM" in
 				${SUDO_CMD} pacman -Syu --noconfirm
 
 				${SUDO_CMD} pacman -S --noconfirm --needed \
-					ninja wget cmake \
+					gcc unzip ninja wget cmake \
 					fontconfig \
 					glu mesa \
 					libxrandr \
