@@ -1,5 +1,4 @@
 #include "templates.h"
-#include <fstream>
 
 struct ofTemplateMake : public ofTemplate {
 public:

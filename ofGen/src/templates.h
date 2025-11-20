@@ -41,7 +41,6 @@ public:
 	std::string runCommand;
 	std::string cleanCommand;
 
-
 	std::vector<copyTemplateFile> copyTemplateFiles;
 
 	void info() {
@@ -80,7 +79,7 @@ public:
 		}
 	}
 
-	void eraseFiles() {
+	void cleanTemplateFiles() {
 		for (auto & c : copyTemplateFiles) {
 			alert("will remove " + c.to.string(), 96);
 		}
@@ -244,16 +243,17 @@ public:
 		// openCommand = "chalet . ";
 		buildCommand = "chalet build";
 		runCommand = "chalet buildrun";
+		cleanCommand = "chalet clean --all";
 	}
 	void load() override;
 	void save() override;
 	void addAddon(ofAddon * a) override;
 
-	void renameYamlKey(YAML::Node node, // ← Pass by value, not reference
+	void renameYamlKey(YAML::Node node,
 		const std::string & oldKey,
 		const std::string & newKey) {
 		if (node[oldKey]) {
-			node[newKey] = std::move(node[oldKey]); // Still modifies original data
+			node[newKey] = std::move(node[oldKey]);
 			node.remove(oldKey);
 		}
 	}

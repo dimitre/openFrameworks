@@ -3,8 +3,9 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <filesystem>
+namespace fs = std::filesystem;
 
-#include "utils.h"
 // extern genConfig conf;
 
 struct ofTemplate;
@@ -12,14 +13,7 @@ struct ofAddon;
 
 // ofProject is a determinate OF project, it can have multiple addons, and multiple templates.
 
-struct ofProject {
-public:
-	fs::path path;
-	std::vector<ofAddon *> addons;
-	std::vector<ofTemplate *> templates;
-	void build();
-	void eraseTemplates();
-};
+
 
 // struct ofAdditional {
 // public:

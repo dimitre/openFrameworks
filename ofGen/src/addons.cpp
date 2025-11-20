@@ -1,12 +1,8 @@
-
-
 #include "addons.h"
 #include "ofTemplateVSCode.h"
 #include "templates.h"
 // #include "ofTemplateVisualStudio.h"
 // #include "ofTemplateMake.h"
-
-#include <filesystem>
 
 void ofAddon::scanFolder(const fs::path & path,
 	std::map<std::string, std::vector<fs::path>> & filesMap,
@@ -358,39 +354,8 @@ void parseConfigAllAddons() {
 	alert("parseConfig end");
 }
 
-void ofProject::build() {
-	divider();
-	alert("ofProject::build", 92);
-	// std::cout << "addons.size " << addons.size() << std::endl;
-	// std::cout << "templates.size " << templates.size() << std::endl;
-
-	// each template for specific project
-	for (auto & t : templates) {
-		t->load();
-		t->info();
-
-		alert("	Building template " + t->name, 95);
-		// each addon for specific project
-		for (auto & a : addons) {
-			// alert("	ofProject::addAddon " + t->name + " : " + a->name, 34);
-			t->addAddon(a);
-		}
-		t->save();
-		t->build();
-	}
-}
-
-void ofProject::eraseTemplates() {
-	divider();
-	alert("ofProject::eraseTemplates", 92);
-	for (auto & t : templates) {
-		t->load();
-		t->eraseFiles();
-	}
-}
-
 bool buildProject() {
-	ofProject project;
+	// ofProject project;
 
 	bool hasYml = conf.loadYML();
 	if (hasYml) {
@@ -407,13 +372,13 @@ bool buildProject() {
 		alert("No templates found, ofgen will deduce from platform", 95);
 
 		std::map<std::string, std::vector<std::string>> platformTemplates {
-			// { "vs", { "visualstudio" } },
-			{ "vs", { "chalet", "zed" } },
 			{ "macos", { "macos", "chalet", "zed" } },
-			// { "msys2", { "make", "vscode" } },
-			// { "linux64", { "make", "vscode" } },
+			{ "vs", { "chalet", "zed" } },
 			{ "linux64", { "chalet", "zed" } },
 			{ "linuxaarch64", { "chalet", "zed" } },
+			// { "vs", { "visualstudio" } },
+			// { "msys2", { "make", "vscode" } },
+			// { "linux64", { "make", "vscode" } },
 		};
 
 		std::string platform { getPlatformString() };
@@ -447,21 +412,22 @@ bool buildProject() {
 	for (auto & t : conf.templateNames) {
 		if (t == "chalet") {
 			conf.templates.emplace_back(new ofTemplateChalet());
-			project.templates.emplace_back(conf.templates.back());
+			conf.project.templates.emplace_back(conf.templates.back());
 		} else if (t == "zed") {
 			conf.templates.emplace_back(new ofTemplateZed());
-			project.templates.emplace_back(conf.templates.back());
+			conf.project.templates.emplace_back(conf.templates.back());
 		} else if (t == "macos") {
 			conf.templates.emplace_back(new ofTemplateMacos());
-			project.templates.emplace_back(conf.templates.back());
+			conf.project.templates.emplace_back(conf.templates.back());
 		} else if (t == "vscode") {
 			conf.templates.emplace_back(new ofTemplateVSCode());
-			project.templates.emplace_back(conf.templates.back());
+			conf.project.templates.emplace_back(conf.templates.back());
 		}
 		// else if (t == "make") {
 		// 	conf.templates.emplace_back(new ofTemplateMake());
 		// 	project.templates.emplace_back(conf.templates.back());
 		// }
+
 		// else if (t == "visualstudio") {
 		// 	conf.templates.emplace_back(new ofTemplateVisualStudio());
 		// 	project.templates.emplace_back(conf.templates.back());
@@ -533,7 +499,7 @@ bool buildProject() {
 			}
 			addon->load();
 			// conf.addons.emplace_back(addon);
-			project.addons.emplace_back(conf.addons.back());
+			conf.project.addons.emplace_back(conf.addons.back());
 		}
 
 		// TODO: Add here additional sources
@@ -583,13 +549,13 @@ bool buildProject() {
 
 			addon->load();
 			// conf.addons.emplace_back(addon);
-			project.addons.emplace_back(conf.addons.back());
+			conf.project.addons.emplace_back(conf.addons.back());
 		}
 	}
 	// }
 
 	// pass files to projects.
-	project.build();
+	conf.project.build();
 
 	return true;
 }

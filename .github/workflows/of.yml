@@ -10,7 +10,7 @@ on:
 env:
   ccache: ccache
   GH_TOKEN: ${{ github.token }}
-  CMAKE_CXX_COMPILER_LAUNCHER: ccache
+  # CMAKE_CXX_COMPILER_LAUNCHER: ccache
 
 jobs:
   ofworks:
@@ -40,14 +40,14 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: ccache
+      - name: ccache install
         uses: hendrikmuhs/ccache-action@v1.2.19
         with:
           key: ${{ matrix.platform }}
 
-      - name: ccache test version
-        run: |
-          ccache --version
+      # - name: ccache test version
+      #   run: |
+      #     ccache --version
 
       - name: Configure ccache for MSVC
         if: matrix.platform == 'vs'
@@ -137,24 +137,16 @@ jobs:
       #   run: |
       #     sudo apt install gcc g++ binutils
 
-      # - name: ofgen compile test remove
-      #   run: |
-      #     cd ofGen
-      #     chalet bundle
-
       - name: ofgen compile
-        # if: runner.os != 'Windows'
         run: |
           cd ofGen
           ./compile.sh
 
-      - name: ofgen compile windows chalet
+      - name: ofgen windows add to path
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
           cd ofGen
-          # ./compile.ps1
-          # chalet bundle
           (Resolve-Path .\dist).Path | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: ofgen test
@@ -169,7 +161,10 @@ jobs:
         run: |
           cd examples/demos/flechilhas
           ofgen templates=chalet
-          echo "\n\n---------\n\n"
+
+          echo
+          echo
+          echo
 
           chalet bundle --compiler-cache --show-commands
           zip -r ofWorks_${{ matrix.platform }}_flechilhas.zip dist/*

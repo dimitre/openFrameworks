@@ -8,6 +8,8 @@
 
 int main(const int argc, const char * argv[]) {
 	auto t1 = std::chrono::high_resolution_clock::now();
+
+
 #if defined(_WIN32)
 	SetConsoleOutputCP(CP_UTF8); // 65001
 #endif
@@ -74,7 +76,7 @@ int main(const int argc, const char * argv[]) {
 			cout << conf.buildCommand << endl;
 			exit(1);
 		} else if (conf.singleParameter == "cleantemplates") {
-			// project.eraseTemplates();
+			conf.project.cleanTemplates();
 		}
 
 		else {

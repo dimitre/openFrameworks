@@ -168,7 +168,18 @@ static inline void divider() {
 struct ofTemplate;
 struct ofAddon;
 
+struct ofProject {
+public:
+	fs::path path;
+	std::vector<ofAddon *> addons;
+	std::vector<ofTemplate *> templates;
+	void build();
+	void cleanTemplates();
+};
+
 struct genConfig {
+	ofProject project;
+
 
 	std::string projectName { "" };
 	fs::path ofPath { "../../.." };

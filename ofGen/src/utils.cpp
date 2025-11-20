@@ -1,10 +1,45 @@
 #include "utils.h"
+#include "templates.h"
 #include <fstream> // ifstream
 #include <iostream> // cout
 #include <regex>
 #include <vector>
 
 genConfig conf;
+
+
+void ofProject::build() {
+	divider();
+	alert("ofProject::build", 92);
+	// std::cout << "addons.size " << addons.size() << std::endl;
+	// std::cout << "templates.size " << templates.size() << std::endl;
+
+	// each template for specific project
+	for (auto & t : templates) {
+		t->load();
+		t->info();
+
+		alert("	Building template " + t->name, 95);
+		// each addon for specific project
+		for (auto & a : addons) {
+			// alert("	ofProject::addAddon " + t->name + " : " + a->name, 34);
+			t->addAddon(a);
+		}
+		t->save();
+		t->build();
+	}
+}
+
+void ofProject::cleanTemplates() {
+	divider();
+	alert("ofProject::cleanTemplates", 92);
+	for (auto & t : templates) {
+		t->load();
+		t->cleanTemplateFiles();
+	}
+}
+
+
 
 std::string ofPathToString(const fs::path & path) {
 	try {
