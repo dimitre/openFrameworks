@@ -197,7 +197,8 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           cd ofGen
-          # chalet bundle
+          # FIXME: remove soon, just to test chalet here.
+          chalet bundle
           # FIXME: script nao ta rolando no github actions
           ./compile.sh
 
