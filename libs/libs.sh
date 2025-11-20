@@ -163,7 +163,7 @@ case "$PLATFORM" in
 	vs)
 		CORELIBS+=( videoInput )
 
-		if !command -v scoop &> /dev/null; then
+		if ! command -v scoop &> /dev/null; then
 			section "installing scoop..."
 			powershell.exe -ExecutionPolicy Bypass -Command "irm get.scoop.sh | iex"
 		fi
