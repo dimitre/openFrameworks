@@ -164,14 +164,14 @@ case "$PLATFORM" in
 		CORELIBS+=( videoInput )
 
 
-		if ! command -v gh &> /dev/null; then
-			section "GH not installed, installing scoop and gh..."
+		if ! command -v wget2 &> /dev/null; then
+			section "wget2 not installed, installing scoop and wget2..."
 			powershell.exe -ExecutionPolicy Bypass -Command "
 				if (!(Get-Command scoop -ErrorAction SilentlyContinue)) {
 					irm get.scoop.sh | iex
 				}
 				\$env:Path = [System.Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path','User')
-				scoop install gh
+				scoop install wget2
 			"
 
 			# Add scoop shims to PATH for this bash session
@@ -181,14 +181,14 @@ case "$PLATFORM" in
 				export PATH="$SCOOP_SHIMS:$PATH"
 			fi
 
-			# Verify gh is now available
-			if command -v gh &> /dev/null; then
-				section "GH successfully installed and available!"
+			# Verify wget2 is now available
+			if command -v wget2 &> /dev/null; then
+				section "wget2 successfully installed and available!"
 			else
-				alert "GH installed but may require a new shell session"
+				alert "wget2 installed but may require a new shell session"
 			fi
 		else
-			section "GH already installed!"
+			section "wget2 already installed!"
 		fi
 
 		;;
