@@ -283,13 +283,30 @@ case "$PLATFORM" in
 			fi
 
 			if ! command -v chalet &> /dev/null; then
-				if [[ ${PLATFORM} == 'linux64' ]]; then
-					curl -L -O https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet_${CHALETVERSION}_amd64.deb &&
-					${SUDO_CMD} dpkg -i chalet*.deb
+				if [[ -f /etc/arch-release ]]; then
+					# Arch Linux - install from zip
+					section "Installing chalet on Arch Linux..."
+					if [[ ${PLATFORM} == 'linux64' ]]; then
+						CHALET_ARCH="x86_64"
+					else
+						CHALET_ARCH="aarch64"
+					fi
+
+					curl -L -O https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet-${CHALET_ARCH}-linux-gnu.zip
+					unzip -o chalet-${CHALET_ARCH}-linux-gnu.zip
+					${SUDO_CMD} mv chalet /usr/local/bin/
+					${SUDO_CMD} chmod +x /usr/local/bin/chalet
+					rm -f chalet-${CHALET_ARCH}-linux-gnu.zip
 				else
-					# there is arm only also.
-					curl -L -O https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet_${CHALETVERSION}_arm64.deb &&
-					${SUDO_CMD} dpkg -i chalet*.deb
+
+					if [[ ${PLATFORM} == 'linux64' ]]; then
+						curl -L -O https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet_${CHALETVERSION}_amd64.deb &&
+						${SUDO_CMD} dpkg -i chalet*.deb
+					else
+						# there is arm only also.
+						curl -L -O https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet_${CHALETVERSION}_arm64.deb &&
+						${SUDO_CMD} dpkg -i chalet*.deb
+					fi
 				fi
 			else
 				section "chalet already installed"
