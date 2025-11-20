@@ -6,8 +6,8 @@ VERSION=v0.12.6
 OF_FOLDER=..
 CHALETVERSION=0.8.15
 
-# wipeDownloads=true
-wipeDownloads=false
+wipeDownloads=true
+# wipeDownloads=false
 wipeAddonLibs=true
 wipeLibs=true
 
