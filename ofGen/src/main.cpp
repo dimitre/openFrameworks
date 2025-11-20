@@ -9,13 +9,14 @@
 int main(const int argc, const char * argv[]) {
 	auto t1 = std::chrono::high_resolution_clock::now();
 
-
 #if defined(_WIN32)
 	SetConsoleOutputCP(CP_UTF8); // 65001
 #endif
-	conf.parseParameters(argc, argv);
-	if (conf.singleParameter == "yaml-addons-ls") {
 
+	conf.parseParameters(argc, argv);
+
+	// Pure Yaml output goes here, before the header SIGN
+	if (conf.singleParameter == "yaml-addons-ls") {
 		auto addonsFolder { conf.ofPath / "addons" };
 		if (fs::exists(addonsFolder)) {
 			YAML::Node addonsList(YAML::NodeType::Sequence);
@@ -30,15 +31,9 @@ int main(const int argc, const char * argv[]) {
 	}
 
 	std::cout << sign << std::endl; // HEADER
-
 	bool build = true;
 
-	if (!fs::exists("src") && !fs::exists("of.yml") && !fs::exists("addons.make") && !fs::exists("../../../.ofroot")) {
-		alert("⚠️ Not an ofWorks project folder, no action taken", 95);
-		alert("no src folder found, no of.yml file or addons.make found and no OF installed in default path ../../..");
-		build = false;
-		conf.help();
-	}
+
 
 	if (!empty(conf.singleParameter)) {
 		alert("single parameter: " + conf.singleParameter);

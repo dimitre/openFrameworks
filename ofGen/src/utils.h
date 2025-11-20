@@ -298,6 +298,15 @@ templates : zed,macos
 		return fs::exists(ofPath / ".ofroot");
 	}
 
+	bool isValidProjectLocation() {
+		return !(
+			!fs::exists("src") &&
+			!fs::exists("of.yml") &&
+			!fs::exists("addons.make") &&
+			!fs::exists("../../../.ofroot")
+		);
+	}
+
 	void help() {
 		cout << R"(
 help:

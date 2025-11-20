@@ -1,14 +1,12 @@
 #include "utils.h"
 #include "addons.h"
-#include "templates.h"
 #include "ofTemplateVSCode.h"
+#include "templates.h"
 
 #include <fstream> // ifstream
 #include <iostream> // cout
 #include <regex>
 #include <vector>
-
-
 
 genConfig conf;
 
@@ -143,49 +141,39 @@ void genConfig::import() {
 	if (fs::exists("of.yml")) {
 		alert("of.yml already present", 32);
 	} else {
-		std::ifstream file("addons.make");
-		YAML::Node node;
-		node["ofpath"] = "../../..";
-		if (file.is_open()) {
-			std::string line;
-			while (std::getline(file, line)) {
-				// msg(line, 33);
-				// next line trims whitespace at the end.
-				line = line.substr(0, line.find_last_not_of(" \f\n\r\t\v") + 1);
-				node["addons"].push_back(line);
+		if (!isValidProjectLocation()) {
+			alert("⚠️  not a valid ofWorks project folder. exiting", 91);
+			// alert("⚠️  Not an ofWorks project folder, no action taken", 94);
+
+		} else {
+			std::ifstream file("addons.make");
+			YAML::Node node;
+			node["ofpath"] = "../../..";
+			if (file.is_open()) {
+				std::string line;
+				while (std::getline(file, line)) {
+					// msg(line, 33);
+					// next line trims whitespace at the end.
+					line = line.substr(0, line.find_last_not_of(" \f\n\r\t\v") + 1);
+					node["addons"].push_back(line);
+				}
 			}
+			file.close();
+
+			std::ofstream ofYml("of.yml");
+			cout << node << endl;
+			ofYml << node;
+			ofYml.close();
+			cout << endl;
+			alert("ok, of.yml created from addons.make", 32);
 		}
-		file.close();
-		// std::string saida = node.as<std::string>();
-
-		// for (auto & t : templateNames) {
-		// 	node["templates"].push_back(t);
-		// }
-		// node["templates"].SetMapStyle(YAML::Flow);
-
-		// YAML::Emitter out;
-		// out << YAML::Flow;
-		// out << YAML::BeginSeq;
-		// for (auto & t : templateNames) {
-		// 	out << t;
-		// }
-		// out << YAML::EndSeq;
-		// out << YAML::Flow;
-		// out << YAML::BeginSeq << 2 << 3 << 5 << 7 << 11 << YAML::EndSeq;
-
-		std::ofstream ofYml("of.yml");
-		cout << node << endl;
-		ofYml << node;
-		ofYml.close();
-		cout << endl;
-		alert("ok, of.yml created from addons.make", 32);
 	}
 }
 
 bool genConfig::loadYML() {
 	fs::path configFile { "of.yml" };
 	if (!fs::exists(configFile)) {
-		alert("no of.yml present. use `ofgen import` to create one from addons.make", 32);
+		// alert("no of.yml present. use `ofgen import` to create one from addons.make", 32);
 		return false;
 		// alert("missing of.yml file ", 31);
 	} else {
@@ -295,11 +283,38 @@ std::vector<fs::path> genConfig::nodeToPaths(const std::string & index) {
 bool genConfig::buildProject() {
 
 	// ofProject project;
+	//
+	if (!isValidProjectLocation()) {
+
+		// MV desc to inside isValidProjectLocation check
+		alert("⚠️  not a valid ofWorks project folder, no action taken", 91);
+		alert("no src folder found, no of.yml file or addons.make found and no OF installed in default path ../../..");
+		alert("use ```ofgen help``` to see more options");
+
+		// ◢██
+		// build = false;
+		return false;
+		// conf.help();
+	}
 
 	bool hasYml = loadYML();
 	if (hasYml) {
 		alert("of.yml found, building from there", 95);
 	} else {
+
+		if (!isValidOfPath()) {
+			alert("OF not found in default path " + ofPath.string());
+			help();
+			return false;
+		} else {
+			alert("of path OK, proceeding");
+
+			if (!fs::exists("bin")) {
+				alert("bin folder not found, creating");
+				fs::create_directory("bin");
+			}
+		}
+
 		alert("building from addons.make", 95);
 		fs::path addonsListFile { projectPath / "addons.make" };
 		if (fs::exists(addonsListFile)) {
@@ -308,7 +323,7 @@ bool genConfig::buildProject() {
 			alert("no addons.make found", 95);
 		}
 
-		alert("No templates found, ofgen will deduce from platform", 95);
+		alert("No templates found (of.yml or parameters), ofgen will deduce from platform", 95);
 
 		std::map<std::string, std::vector<std::string>> platformTemplates {
 			{ "macos", { "macos", "chalet", "zed" } },
@@ -331,19 +346,6 @@ bool genConfig::buildProject() {
 
 		alert("Templates ");
 		cout << joinStrings(templateNames, ", ") << endl;
-	}
-
-	if (!isValidOfPath()) {
-		alert("OF not found in default path " + ofPath.string());
-		help();
-		return false;
-	} else {
-		alert("of path OK, proceeding");
-
-		if (!fs::exists("bin")) {
-			alert("bin folder not found, creating");
-			fs::create_directory("bin");
-		}
 	}
 
 	// scanFolder()
