@@ -170,6 +170,7 @@ case "$PLATFORM" in
 				if (!(Get-Command scoop -ErrorAction SilentlyContinue)) {
 					irm get.scoop.sh | iex
 				}
+				\$env:Path = [System.Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path','User')
 				scoop install gh
 			"
 		else
