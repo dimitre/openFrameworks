@@ -1,5 +1,5 @@
 name: ofgen
-version: 0.8.3
+version: 0.8.4
 # variables:
 # platform: xyz
 # This doesn't work but doesn't error either.

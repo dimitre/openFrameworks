@@ -1,12 +1,16 @@
 #include "utils.h"
+#include "addons.h"
 #include "templates.h"
+#include "ofTemplateVSCode.h"
+
 #include <fstream> // ifstream
 #include <iostream> // cout
 #include <regex>
 #include <vector>
 
-genConfig conf;
 
+
+genConfig conf;
 
 void ofProject::build() {
 	divider();
@@ -38,8 +42,6 @@ void ofProject::cleanTemplates() {
 		t->cleanTemplateFiles();
 	}
 }
-
-
 
 std::string ofPathToString(const fs::path & path) {
 	try {
@@ -288,4 +290,211 @@ std::vector<fs::path> genConfig::nodeToPaths(const std::string & index) {
 		}
 	}
 	return out;
+}
+
+bool genConfig::buildProject() {
+
+	// ofProject project;
+
+	bool hasYml = loadYML();
+	if (hasYml) {
+		alert("of.yml found, building from there", 95);
+	} else {
+		alert("building from addons.make", 95);
+		fs::path addonsListFile { projectPath / "addons.make" };
+		if (fs::exists(addonsListFile)) {
+			addonsNames = textToVector(addonsListFile);
+		} else {
+			alert("no addons.make found", 95);
+		}
+
+		alert("No templates found, ofgen will deduce from platform", 95);
+
+		std::map<std::string, std::vector<std::string>> platformTemplates {
+			{ "macos", { "macos", "chalet", "zed" } },
+			{ "vs", { "chalet", "zed" } },
+			{ "linux64", { "chalet", "zed" } },
+			{ "linuxaarch64", { "chalet", "zed" } },
+			// { "vs", { "visualstudio" } },
+			// { "msys2", { "make", "vscode" } },
+			// { "linux64", { "make", "vscode" } },
+		};
+
+		std::string platform { getPlatformString() };
+		cout << "platform is " << platform << endl;
+		if (!empty(platform)) {
+			if (empty(templateNames)) {
+				templateNames = platformTemplates[platform];
+			} else {
+			}
+		}
+
+		alert("Templates ");
+		cout << joinStrings(templateNames, ", ") << endl;
+	}
+
+	if (!isValidOfPath()) {
+		alert("OF not found in default path " + ofPath.string());
+		help();
+		return false;
+	} else {
+		alert("of path OK, proceeding");
+
+		if (!fs::exists("bin")) {
+			alert("bin folder not found, creating");
+			fs::create_directory("bin");
+		}
+	}
+
+	// scanFolder()
+	// create templates, add to project
+	for (auto & t : templateNames) {
+		if (t == "chalet") {
+			templates.emplace_back(new ofTemplateChalet());
+			project.templates.emplace_back(templates.back());
+		} else if (t == "zed") {
+			templates.emplace_back(new ofTemplateZed());
+			project.templates.emplace_back(templates.back());
+		} else if (t == "macos") {
+			templates.emplace_back(new ofTemplateMacos());
+			project.templates.emplace_back(templates.back());
+		} else if (t == "vscode") {
+			templates.emplace_back(new ofTemplateVSCode());
+			project.templates.emplace_back(templates.back());
+		}
+		// else if (t == "make") {
+		// 	templates.emplace_back(new ofTemplateMake());
+		// 	project.templates.emplace_back(templates.back());
+		// }
+
+		// else if (t == "visualstudio") {
+		// 	templates.emplace_back(new ofTemplateVisualStudio());
+		// 	project.templates.emplace_back(templates.back());
+		// }
+
+		else {
+			alert("invalid template name : " + t + ", exiting", 95);
+			return false;
+			// std::exit(1);
+		}
+
+		if (empty(openCommand) && !empty(templates.back()->openCommand)) {
+			openCommand = templates.back()->openCommand;
+		}
+
+		if (empty(buildCommand) && !empty(templates.back()->buildCommand)) {
+			buildCommand = templates.back()->buildCommand;
+		}
+
+		if (empty(runCommand) && !empty(templates.back()->runCommand)) {
+			runCommand = templates.back()->runCommand;
+		}
+	}
+
+	// load templates, show info of each template
+	// for (auto & t : templates) {
+	// 	// cout << t->name << " : " << t->path << endl;
+	// 	t->load();
+	// 	t->info();
+	// }
+
+	// now parse project addons, or yml
+
+	if (!fs::exists("./src")) {
+		// FIXME: check if template is ios and copy mm files accordingly. if not copy src files from templates.
+		fs::path from { ofPath / "scripts" / "templates" / "src" };
+		fs::path to { "./src" };
+		alert(from.string(), 95);
+		alert(fs::current_path().string(), 95);
+		try {
+			fs::copy(from, to, fs::copy_options::recursive | fs::copy_options::update_existing);
+		} catch (fs::filesystem_error & e) {
+			std::cerr << "error copying template file " << from << " : " << to << std::endl;
+			return false;
+		}
+	}
+	// exit(1);
+
+	// DELICATE. treating projects as an addon.
+	// it works well. not delicate anymore.
+	// src will always exist because we copy them if not.
+	// if (fs::exists("./src"))
+	{
+		{
+			addons.push_back(new ofAddon());
+			ofAddon * addon = addons.back();
+			addon->isProject = true;
+			addon->name = "ProjectSourceFiles_" + projectName;
+			addon->path = "";
+
+			for (auto & f : frameworks) {
+				addon->filesMap["frameworks"].emplace_back(f);
+			}
+
+			// addon->showFiles();
+			// addon->info();
+			for (auto & path : additionalSources) {
+				addon->filesMap["includes"].emplace_back(path);
+			}
+			addon->load();
+			// addons.emplace_back(addon);
+			project.addons.emplace_back(addons.back());
+		}
+
+		// TODO: Add here additional sources
+		// for (auto & a : additionalSources) {
+		// 	alert(">> Additional Sources Folder: " + a.string(), 95);
+		// 	addons.push_back(new ofAddon());
+		// 	ofAddon * addon = addons.back();
+		// 	addon->isProject = true;
+		// 	addon->name = "AdditionalSource_" + projectName;
+		// 	addon->path = a;
+		// 	addon->isProject = true;
+
+		// 	scanFolder(a, addon->filesMap, true);
+		// 	addon->load();
+		// 	project.addons.emplace_back(addons.back());
+		// }
+	}
+	// else {
+	// 	alert("NO SRC FILE FOUND IN PROJECT", 95);
+	// 	std::exit(1);
+	// }
+
+	// fs::path addonsListFile { projectPath / "addons.make" };
+	// if (fs::exists(addonsListFile)) {
+	// vector<std::string> addonsList { textToVector(addonsListFile) };
+	// vector<std::string> addonsList = { "ofxMidi" }; //ofxMidi ofxOpenCv
+
+	for (auto & l : addonsNames) {
+		if (l != "") {
+			addons.push_back(new ofAddon());
+			ofAddon * addon = addons.back();
+
+			// ofAddon addon;
+			addon->name = l;
+			// check if local addon exists, if not check in of addons folder.
+			if (fs::exists(projectPath / l)) {
+				addon->path = projectPath / l;
+			} else {
+				if (fs::exists(ofPath / "addons" / l)) {
+					addon->path = ofPath / "addons" / l;
+				}
+			}
+
+			if (std::empty(addon->path)) {
+				continue;
+			}
+
+			addon->load();
+			// addons.emplace_back(addon);
+			project.addons.emplace_back(addons.back());
+		}
+	}
+	// }
+
+	// pass files to projects.
+	project.build();
+
+	return true;
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream> // cout
-static std::string version = "v0.8.3";
+static std::string version = "v0.8.4";
 
 #include <filesystem>
 #include <map>
@@ -364,6 +364,8 @@ ofGen templates=zed,macos,chalet addons=ofxMidi,ofxOpencv ofpath=../../.. path=/
 	std::vector<std::string> nodeToStrings(const std::string & index);
 	std::vector<fs::path> nodeToPaths(const std::string & index);
 	// void scanFolderRecursive(const fs::path & path);
+
+	bool buildProject();
 };
 // conf
 // static genConfig conf;

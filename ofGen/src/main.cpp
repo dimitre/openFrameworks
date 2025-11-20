@@ -54,13 +54,13 @@ int main(const int argc, const char * argv[]) {
 		}
 		// Now building projects
 		else if (conf.singleParameter == "open") {
-			buildProject();
+			conf.buildProject();
 			conf.open();
 		} else if (conf.singleParameter == "build") {
-			buildProject();
+			conf.buildProject();
 			conf.build();
 		} else if (conf.singleParameter == "buildrun") {
-			buildProject();
+			conf.buildProject();
 			int result = conf.build();
 			// cout << "OWWWW " << x << endl;
 			if (result == 0) {
@@ -72,7 +72,7 @@ int main(const int argc, const char * argv[]) {
 
 		// FIXME: finish this way of displaying the command to build and run to be used in bash
 		else if (conf.singleParameter == "echobuildrun") {
-			buildProject();
+			conf.buildProject();
 			cout << conf.buildCommand << endl;
 			exit(1);
 		} else if (conf.singleParameter == "cleantemplates") {
@@ -85,7 +85,7 @@ int main(const int argc, const char * argv[]) {
 		}
 	} else {
 		if (build) {
-			buildProject();
+			conf.buildProject();
 			auto t2 = std::chrono::high_resolution_clock::now();
 			std::chrono::duration<double> ms_double = t2 - t1;
 			std::cout << "" << ms_double.count() << " seconds" << std::endl;

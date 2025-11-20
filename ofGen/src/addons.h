@@ -59,6 +59,6 @@ public:
 
 // void parseAddon( const fs::path & addonPath ) {
 //
-bool buildProject();
+// bool buildProject();
 void parseConfigAllAddons();
 void createTemplates();
