@@ -247,24 +247,41 @@ case "$PLATFORM" in
 		if [[ -z "${CI:-}" ]]; then
 			section "Installing system dependencies"
 
-			${SUDO_CMD} apt-get update
+			if [ -f "/etc/arch-release" ]; then
+				# Arch Linux
+				${SUDO_CMD} pacman -Syu --noconfirm
 
-			${SUDO_CMD} apt-get -y install \
-				ninja-build wget2 cmake \
-				libfontconfig1-dev \
-				libglu1-mesa-dev libgl1-mesa-dev \
-				libxrandr-dev \
-				freeglut3-dev libxmu-dev libxxf86vm-dev libudev-dev \
-				libxcursor-dev libxi-dev libxinerama-dev \
-				libunwind-dev \
-				libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
-				gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa \
-				gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav \
-				libopenal-dev libsndfile1-dev
-				# make \
-				# libssl3 libcairo2-dev libssl-dev libcurl4 libcurl4-openssl-dev \
-				# libasound2-dev   \
-				#
+				${SUDO_CMD} pacman -S --noconfirm --needed \
+					ninja wget cmake \
+					fontconfig \
+					glu mesa \
+					libxrandr \
+					freeglut libxmu libxxf86vm \
+					libxcursor libxi libxinerama \
+					libunwind \
+					gstreamer gst-plugins-base gst-plugins-bad gst-plugins-good gst-libav \
+					openal libsndfile
+			else
+				${SUDO_CMD} apt-get update
+
+				${SUDO_CMD} apt-get -y install \
+					ninja-build wget2 cmake \
+					libfontconfig1-dev \
+					libglu1-mesa-dev libgl1-mesa-dev \
+					libxrandr-dev \
+					freeglut3-dev libxmu-dev libxxf86vm-dev libudev-dev \
+					libxcursor-dev libxi-dev libxinerama-dev \
+					libunwind-dev \
+					libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
+					gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa \
+					gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav \
+					libopenal-dev libsndfile1-dev
+					# make \
+					# libssl3 libcairo2-dev libssl-dev libcurl4 libcurl4-openssl-dev \
+					# libasound2-dev   \
+					#
+			fi
+
 			if ! command -v chalet &> /dev/null; then
 				if [[ ${PLATFORM} == 'linux64' ]]; then
 					curl -L -O https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet_${CHALETVERSION}_amd64.deb &&
