@@ -45,6 +45,8 @@ targets:
         - ../libs/linux64/include/
       includeDirs[:linux+architecture:arm64]:
         - ../libs/rpi-aarch64/include/
+      includeDirs[:linux+architecture:aarch64]:
+        - ../libs/rpi-aarch64/include/
 
       defines:
         # - YAML_CPP_NO_DLL
@@ -63,6 +65,10 @@ targets:
         - ../libs/linux64/lib/libyaml-cpp.a
         - ../libs/linux64/lib/libfmt.a
       staticLinks[:linux+architecture:arm64]:
+        - ../libs/rpi-aarch64/lib/libpugixml.a
+        - ../libs/rpi-aarch64/lib/libyaml-cpp.a
+        - ../libs/rpi-aarch64/lib/libfmt.a
+      staticLinks[:linux+architecture:aarch64]:
         - ../libs/rpi-aarch64/lib/libpugixml.a
         - ../libs/rpi-aarch64/lib/libyaml-cpp.a
         - ../libs/rpi-aarch64/lib/libfmt.a
