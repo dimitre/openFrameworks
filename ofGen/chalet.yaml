@@ -39,8 +39,8 @@ targets:
         - ../libs/vs/include/
       includeDirs[:macos]:
         - ../libs/macos/include/
-      # includeDirs[:linux]:
-      #   - ../libs/linux64/include/
+      includeDirs[:linux]:
+        - ../libs/ASDFG/include/
       includeDirs[:linux+architecture:x86_64]:
         - ../libs/linux64/include/
       includeDirs[:linux+architecture:arm64]:
