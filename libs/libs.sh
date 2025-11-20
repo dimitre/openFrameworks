@@ -165,12 +165,12 @@ case "$PLATFORM" in
 
 		if !command -v scoop &> /dev/null; then
 			section "installing scoop..."
-			irm get.scoop.sh | iex
+			powershell.exe -ExecutionPolicy Bypass -Command "irm get.scoop.sh | iex"
 		fi
 
 		if ! command -v gh &> /dev/null; then
 			if command -v scoop &> /dev/null; then
-				scoop install gh
+				powershell.exe -Command "scoop install gh"
 			fi
 		fi
 
