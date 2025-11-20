@@ -173,15 +173,23 @@ case "$PLATFORM" in
 				\$env:Path = [System.Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path','User')
 				scoop install gh
 			"
-		else
-			section "GH installed!"
-		fi
 
-		# if command -v winget &> /dev/null; then
-		#	if ! command -v wget2 &> /dev/null; then
-	 #			winget install wget2
-	 #		fi
-	 #	fi
+			# Add scoop shims to PATH for this bash session
+			section "Adding scoop to PATH..."
+			SCOOP_SHIMS="$HOME/scoop/shims"
+			if [[ ":$PATH:" != *":$SCOOP_SHIMS:"* ]]; then
+				export PATH="$SCOOP_SHIMS:$PATH"
+			fi
+
+			# Verify gh is now available
+			if command -v gh &> /dev/null; then
+				section "GH successfully installed and available!"
+			else
+				alert "GH installed but may require a new shell session"
+			fi
+		else
+			section "GH already installed!"
+		fi
 
 		;;
 
