@@ -7,6 +7,7 @@ OF_FOLDER=..
 CHALETVERSION=0.8.15
 
 wipeDownloads=true
+wipeDownloadsAfterInstall=true
 # wipeDownloads=false
 wipeAddonLibs=true
 wipeLibs=true
@@ -449,6 +450,11 @@ executa mkdir -p "${DOWNLOAD}"
 getlink
 unzipCore
 unzipAddons
+
+if [[ "$wipeDownloadsAfterInstall" == true && -d "${DOWNLOAD}" ]]; then
+	echo "Removing Downloaded and Installed Libraries"
+	rm -rf "${DOWNLOAD}"
+fi
 
 sectionOK "Install ofLibs done"
 

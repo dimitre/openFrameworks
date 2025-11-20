@@ -11,7 +11,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Cache variables for precompiled library directories
 # ------------------------------------------------------------------
 set(YAMLCPP_ROOT "" CACHE PATH "Root directory for yaml-cpp (containing lib/ and include/)")
-set(PUGIXML_ROOT "" CACHE PATH "Root directory for pugixml (containing lib/ and include/)")
+# set(PUGIXML_ROOT "" CACHE PATH "Root directory for pugixml (containing lib/ and include/)")
 set(NLOHMANN_JSON_ROOT "" CACHE PATH "Root directory for nlohmann_json (containing include/)")
 set(FMT_ROOT "" CACHE PATH "Root directory for fmt (containing lib/ and include/)")
 
@@ -19,8 +19,8 @@ set(FMT_ROOT "" CACHE PATH "Root directory for fmt (containing lib/ and include/
 set(YAMLCPP_LIBRARY_DIR "" CACHE PATH "Directory containing yaml-cpp library files")
 set(YAMLCPP_INCLUDE_DIR "" CACHE PATH "Directory containing yaml-cpp headers")
 
-set(PUGIXML_LIBRARY_DIR "" CACHE PATH "Directory containing pugixml library files")
-set(PUGIXML_INCLUDE_DIR "" CACHE PATH "Directory containing pugixml headers")
+# set(PUGIXML_LIBRARY_DIR "" CACHE PATH "Directory containing pugixml library files")
+# set(PUGIXML_INCLUDE_DIR "" CACHE PATH "Directory containing pugixml headers")
 
 set(NLOHMANN_JSON_INCLUDE_DIR "" CACHE PATH "Directory containing nlohmann_json headers")
 
@@ -36,7 +36,12 @@ add_executable(ofgen
 				src/templates.cpp
 				src/utils.cpp
 				src/uuidxx/src/uuidxx.cpp
+				src/ofTemplateVSCode.cpp
 )
+
+#
+# src/ofTemplateMake.cpp
+# src/ofTemplateVisualStudio.cpp
 
 target_compile_definitions(ofgen PRIVATE YAML_CPP_STATIC_DEFINE)
 
@@ -102,25 +107,25 @@ message(STATUS "Found yaml-cpp: ${YAMLCPP_LIBRARY}")
 message(STATUS "  Include dir: ${YAMLCPP_INCLUDE_DIR}")
 
 # pugixml
-if(PUGIXML_ROOT)
-	set(PUGIXML_LIBRARY_DIR "${PUGIXML_ROOT}/lib")
-	set(PUGIXML_INCLUDE_DIR "${PUGIXML_ROOT}/include")
-endif()
+# if(PUGIXML_ROOT)
+# 	set(PUGIXML_LIBRARY_DIR "${PUGIXML_ROOT}/lib")
+# 	set(PUGIXML_INCLUDE_DIR "${PUGIXML_ROOT}/include")
+# endif()
 
-if(NOT PUGIXML_LIBRARY_DIR OR NOT PUGIXML_INCLUDE_DIR)
-	message(FATAL_ERROR "Either PUGIXML_ROOT or both PUGIXML_LIBRARY_DIR and PUGIXML_INCLUDE_DIR must be set")
-endif()
+# if(NOT PUGIXML_LIBRARY_DIR OR NOT PUGIXML_INCLUDE_DIR)
+# 	message(FATAL_ERROR "Either PUGIXML_ROOT or both PUGIXML_LIBRARY_DIR and PUGIXML_INCLUDE_DIR must be set")
+# endif()
 
-find_static_lib(PUGIXML_LIBRARY "pugixml" "${PUGIXML_LIBRARY_DIR}")
+# find_static_lib(PUGIXML_LIBRARY "pugixml" "${PUGIXML_LIBRARY_DIR}")
 
-add_library(pugixml STATIC IMPORTED)
-set_target_properties(pugixml PROPERTIES
-	IMPORTED_LOCATION "${PUGIXML_LIBRARY}"
-	INTERFACE_INCLUDE_DIRECTORIES "${PUGIXML_INCLUDE_DIR}"
-)
+# add_library(pugixml STATIC IMPORTED)
+# set_target_properties(pugixml PROPERTIES
+# 	IMPORTED_LOCATION "${PUGIXML_LIBRARY}"
+# 	INTERFACE_INCLUDE_DIRECTORIES "${PUGIXML_INCLUDE_DIR}"
+# )
 
-message(STATUS "Found pugixml: ${PUGIXML_LIBRARY}")
-message(STATUS "  Include dir: ${PUGIXML_INCLUDE_DIR}")
+# message(STATUS "Found pugixml: ${PUGIXML_LIBRARY}")
+# message(STATUS "  Include dir: ${PUGIXML_INCLUDE_DIR}")
 
 
 # fmt
@@ -166,7 +171,7 @@ message(STATUS "Found nlohmann_json: ${NLOHMANN_JSON_INCLUDE_DIR}")
 # Link libraries
 target_link_libraries(ofgen PRIVATE
 				yaml-cpp
-				pugixml
+				# pugixml
 				fmt
 				nlohmann_json
 )

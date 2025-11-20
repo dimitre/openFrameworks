@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream> // cout
-static std::string version = "v0.8.2";
+static std::string version = "v0.8.3";
 
 #include <filesystem>
 #include <map>
@@ -207,7 +207,7 @@ struct genConfig {
 	std::string buildCommand;
 	std::string runCommand;
 
-	bool doesTemplateExist(std::string val) {
+	bool isTemplateAddedToProject(std::string val) {
 		return std::find(templateNames.begin(), templateNames.end(), val) != templateNames.end();
 	}
 
@@ -276,9 +276,9 @@ templates : zed,macos
 		// Give projectName to general config
 		projectName = fs::current_path().filename().string();
 
-		if (doesTemplateExist("zed") || doesTemplateExist("vscode")) {
-			if (!doesTemplateExist("make")) {
-				templateNames.push_back("make");
+		if (isTemplateAddedToProject("zed") || isTemplateAddedToProject("vscode")) {
+			if (!isTemplateAddedToProject("chalet")) {
+				templateNames.push_back("chalet");
 			}
 		}
 	}
@@ -347,7 +347,7 @@ ofGen templates=zed,macos,chalet addons=ofxMidi,ofxOpencv ofpath=../../.. path=/
 	// 	std::system(command.c_str());
 	// }
 
-	YAML::Node config;
+	YAML::Node ofYaml;
 	void import();
 	bool loadYML();
 	std::vector<std::string> nodeToStrings(const std::string & index);

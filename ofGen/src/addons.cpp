@@ -1,7 +1,11 @@
 
 
 #include "addons.h"
+#include "ofTemplateVSCode.h"
 #include "templates.h"
+// #include "ofTemplateVisualStudio.h"
+// #include "ofTemplateMake.h"
+
 #include <filesystem>
 
 void ofAddon::scanFolder(const fs::path & path,
@@ -441,25 +445,29 @@ bool buildProject() {
 	// scanFolder()
 	// create templates, add to project
 	for (auto & t : conf.templateNames) {
-		if (t == "macos") {
-			conf.templates.emplace_back(new ofTemplateMacos());
+		if (t == "chalet") {
+			conf.templates.emplace_back(new ofTemplateChalet());
 			project.templates.emplace_back(conf.templates.back());
 		} else if (t == "zed") {
 			conf.templates.emplace_back(new ofTemplateZed());
 			project.templates.emplace_back(conf.templates.back());
-		} else if (t == "make") {
-			conf.templates.emplace_back(new ofTemplateMake());
+		} else if (t == "macos") {
+			conf.templates.emplace_back(new ofTemplateMacos());
 			project.templates.emplace_back(conf.templates.back());
 		} else if (t == "vscode") {
 			conf.templates.emplace_back(new ofTemplateVSCode());
 			project.templates.emplace_back(conf.templates.back());
-		} else if (t == "visualstudio") {
-			conf.templates.emplace_back(new ofTemplateVisualStudio());
-			project.templates.emplace_back(conf.templates.back());
-		} else if (t == "chalet") {
-			conf.templates.emplace_back(new ofTemplateChalet());
-			project.templates.emplace_back(conf.templates.back());
-		} else {
+		}
+		// else if (t == "make") {
+		// 	conf.templates.emplace_back(new ofTemplateMake());
+		// 	project.templates.emplace_back(conf.templates.back());
+		// }
+		// else if (t == "visualstudio") {
+		// 	conf.templates.emplace_back(new ofTemplateVisualStudio());
+		// 	project.templates.emplace_back(conf.templates.back());
+		// }
+
+		else {
 			alert("invalid template name : " + t + ", exiting", 95);
 			return false;
 			// std::exit(1);

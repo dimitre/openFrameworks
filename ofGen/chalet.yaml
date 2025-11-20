@@ -1,5 +1,5 @@
 name: ofgen
-version: 0.8.2
+version: 0.8.3
 # variables:
 # platform: xyz
 # This doesn't work but doesn't error either.
@@ -52,24 +52,24 @@ targets:
         # - YAML_CPP_NO_DLL
         - YAML_CPP_STATIC_DEFINE
       staticLinks[:windows]:
-        - ../libs/vs/lib/pugixml.lib
+        # - ../libs/vs/lib/pugixml.lib
         - ../libs/vs/lib/yaml-cpp.lib
         - ../libs/vs/lib/fmt.lib
       staticLinks[:macos]:
-        - ../libs/macos/lib/libpugixml.a
+        # - ../libs/macos/lib/libpugixml.a
         - ../libs/macos/lib/libyaml-cpp.a
         - ../libs/macos/lib/libfmt.a
       # staticLinks[:linux]:
       staticLinks[:linux+architecture:x86_64]:
-        - ../libs/linux64/lib/libpugixml.a
+        # - ../libs/linux64/lib/libpugixml.a
         - ../libs/linux64/lib/libyaml-cpp.a
         - ../libs/linux64/lib/libfmt.a
       staticLinks[:linux+architecture:arm64]:
-        - ../libs/rpi-aarch64/lib/libpugixml.a
+        # - ../libs/rpi-aarch64/lib/libpugixml.a
         - ../libs/rpi-aarch64/lib/libyaml-cpp.a
         - ../libs/rpi-aarch64/lib/libfmt.a
       staticLinks[:linux+architecture:aarch64]:
-        - ../libs/rpi-aarch64/lib/libpugixml.a
+        # - ../libs/rpi-aarch64/lib/libpugixml.a
         - ../libs/rpi-aarch64/lib/libyaml-cpp.a
         - ../libs/rpi-aarch64/lib/libfmt.a
 
@@ -78,6 +78,8 @@ targets:
         - src/*.cpp
         - src/uuidxx/src/*.cpp
       exclude:
+        - src/ofTemplateMake.cpp
+        - src/ofTemplateVisualStudio.cpp
         - cmake
         - .zed
 distribution:

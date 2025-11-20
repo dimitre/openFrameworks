@@ -153,16 +153,16 @@ bool genConfig::loadYML() {
 		// alert("missing of.yml file ", 31);
 	} else {
 		// config = YAML::LoadFile(configFile);
-		config = YAML::LoadFile(configFile.string());
-		if (config["ofpath"]) { // use ofpath only if the key exists.
-			auto ofPathYML = config["ofpath"];
+		ofYaml = YAML::LoadFile(configFile.string());
+		if (ofYaml["ofpath"]) { // use ofpath only if the key exists.
+			auto ofPathYML = ofYaml["ofpath"];
 			ofPath = ofPathYML.as<std::string>();
 		}
 
 		conf.addonsNames = nodeToStrings("addons");
 
-		if (config["addonsSources"]) {
-			for (auto c : config["addonsSources"]) {
+		if (ofYaml["addonsSources"]) {
+			for (auto c : ofYaml["addonsSources"]) {
 				auto name { c["name"].as<std::string>() };
 				auto repo { c["repository"].as<std::string>() };
 				if (fs::exists(ofPath / "addons" / name)) {
@@ -235,8 +235,8 @@ bool genConfig::loadYML() {
 
 std::vector<std::string> genConfig::nodeToStrings(const std::string & index) {
 	std::vector<std::string> out;
-	if (config[index]) {
-		auto items = config[index];
+	if (ofYaml[index]) {
+		auto items = ofYaml[index];
 		for (std::size_t i = 0; i < items.size(); i++) {
 			out.emplace_back(items[i].as<std::string>());
 		}
@@ -246,8 +246,8 @@ std::vector<std::string> genConfig::nodeToStrings(const std::string & index) {
 
 std::vector<fs::path> genConfig::nodeToPaths(const std::string & index) {
 	std::vector<fs::path> out;
-	if (config[index]) {
-		auto items = config[index];
+	if (ofYaml[index]) {
+		auto items = ofYaml[index];
 		for (std::size_t i = 0; i < items.size(); i++) {
 			out.emplace_back(items[i].as<std::string>());
 		}

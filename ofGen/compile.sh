@@ -9,6 +9,10 @@ section() {
 	printf "💻${COLOR} ${@} ${NC}\n\r"
 }
 
+sectionInstall() {
+    printf "💿${COLOR} ${@} ${NC}\n\r"
+}
+
 # Auto-detect platform
 if [[ "$OSTYPE" == "msys"* ]]; then
 	PLATFORM=vs
@@ -49,59 +53,23 @@ fi
 
 section "Compiling ofgen"
 
-run_cmake() {
-	mkdir -p build
-	cd build
-	cmake .. \
-		-DCMAKE_BUILD_TYPE=Release \
-		-DYAMLCPP_ROOT=../../libs/${PLATFORM} \
-		-DPUGIXML_ROOT=../../libs/${PLATFORM} \
-		-DFMT_ROOT=../../libs/${PLATFORM} \
-		-DNLOHMANN_JSON_ROOT=../../libs/${PLATFORM}
-}
-
-if command -v cmake &> /dev/null; then
-	if ! run_cmake; then
-		echo "CMake failed, cleaning build directory and retrying..."
-		cd ..
-		rm -rf build
-		run_cmake
-	fi
-	cmake --build . --config Release
-
-	# Determine if we need sudo
-	if command -v sudo &> /dev/null; then
-		INSTALL_CMD="sudo cmake"
-	else
-		INSTALL_CMD="cmake"
-	fi
-
-	# Auto-install in CI, ask in interactive mode
-	if [[ "${CI:-false}" == "true" ]]; then
-		section "CI detected, auto-installing..."
-		${INSTALL_CMD} --install . --config Release
-	else
-		# Clear any buffered input, then prompt
-		read -t 0.01 -n 10000 discard 2>/dev/null || true
-		read -p "Install ofgen to system? (y/n) " -n 1 -r REPLY </dev/tty
-		echo
-		if [[ $REPLY =~ ^[Yy]$ ]]; then
-			${INSTALL_CMD} --install . --config Release
-			section "ofWorks ofgen Installation complete"
-		else
-			section "Skipping installation. Binary available at: build/ofgen"
-		fi
-	fi
+# Determine if we need sudo
+if command -v sudo &> /dev/null; then
+  SUDO_CMD="sudo"
 else
-	# cmake not found. lets go for the alternative.
-	if command -v chalet &> /dev/null; then
-		CCACHE_PARAM=""
-		if [[ "${CI:-false}" == "true" ]]; then
-			CCACHE_PARAM=" --compiler-cache --show-commands"
-		fi
+  SUDO_CMD=""
+fi
 
-		chalet bundle ${CCACHE_PARAM} &&
-		if [[ -d "./dist" ]]; then
+if command -v chalet &> /dev/null; then
+	CCACHE_PARAM=""
+	if [[ "${CI:-false}" == "true" ]]; then
+		CCACHE_PARAM=" --compiler-cache --show-commands"
+	fi
+
+	chalet bundle ${CCACHE_PARAM} &&
+	if [[ -d "./dist" ]]; then
+
+		if [[ $PLATFORM == 'vs' ]]; then
 			DIST_PATH=$(cygpath -w "$(pwd)/dist")
 			powershell.exe -ExecutionPolicy Bypass -Command "
 					\$dist = '$DIST_PATH'
@@ -111,8 +79,90 @@ else
 					}
 			"
 			section "Added to Windows PATH"
+		else
+
+			sectionInstall "ofWorks ofgen (command line tool for generating OF projects)"
+			echo This will install a symlink in /usr/local/bin/ so ofgen can be called from any directory.
+			echo You will be asked for user password.
+
+		   	if [[ ! -d "/usr/local/bin" ]]; then
+		   		echo "/usr/local/bin does not exist. creating."
+		       	${SUDO_CMD} mkdir /usr/local/bin
+			fi
+
+			# echo ${SUDO_CMD} ln -sf "$PWD/dist/ofgen" /usr/local/bin/ofgen
+			${SUDO_CMD} ln -sf "$PWD/dist/ofgen" /usr/local/bin/ofgen
+
+			echo All good!
+
 		fi
-	else
-		printf "No Cmake or Chalet found"
+
+
 	fi
+else
+	printf "No Cmake or Chalet found"
 fi
+
+
+
+# if command -v cmake &> /dev/null; then
+
+# 	run_cmake() {
+# 		mkdir -p build
+# 		cd build
+# 		cmake .. \
+# 			-DCMAKE_BUILD_TYPE=Release \
+# 			-DYAMLCPP_ROOT=../../libs/${PLATFORM} \
+# 			-DFMT_ROOT=../../libs/${PLATFORM} \
+# 			-DNLOHMANN_JSON_ROOT=../../libs/${PLATFORM}
+# 			# -DPUGIXML_ROOT=../../libs/${PLATFORM} \
+# }
+
+# 	if ! run_cmake; then
+# 		echo "CMake failed, cleaning build directory and retrying..."
+# 		cd ..
+# 		rm -rf build
+# 		run_cmake
+# 	fi
+# 	cmake --build . --config Release
+
+# 	# Auto-install in CI, ask in interactive mode
+# 	if [[ "${CI:-false}" == "true" ]]; then
+# 		section "CI detected, auto-installing..."
+# 		${SUDO_CMD} cmake --install . --config Release
+# 	else
+# 		# Clear any buffered input, then prompt
+# 		read -t 0.01 -n 10000 discard 2>/dev/null || true
+# 		read -p "Install ofgen to system? (y/n) " -n 1 -r REPLY </dev/tty
+# 		echo
+# 		if [[ $REPLY =~ ^[Yy]$ ]]; then
+# 			${SUDO_CMD} cmake --install . --config Release
+# 			section "ofWorks ofgen Installation complete"
+# 		else
+# 			section "Skipping installation. Binary available at: build/ofgen"
+# 		fi
+# 	fi
+# else
+# 	# cmake not found. lets go for the alternative.
+# 	if command -v chalet &> /dev/null; then
+# 		CCACHE_PARAM=""
+# 		if [[ "${CI:-false}" == "true" ]]; then
+# 			CCACHE_PARAM=" --compiler-cache --show-commands"
+# 		fi
+
+# 		chalet bundle ${CCACHE_PARAM} &&
+# 		if [[ -d "./dist" ]]; then
+# 			DIST_PATH=$(cygpath -w "$(pwd)/dist")
+# 			powershell.exe -ExecutionPolicy Bypass -Command "
+# 					\$dist = '$DIST_PATH'
+# 					\$userPath = [Environment]::GetEnvironmentVariable('Path','User')
+# 					if (\$userPath -split [IO.Path]::PathSeparator -notcontains \$dist) {
+# 							[Environment]::SetEnvironmentVariable('Path', \$userPath + [IO.Path]::PathSeparator + \$dist, 'User')
+# 					}
+# 			"
+# 			section "Added to Windows PATH"
+# 		fi
+# 	else
+# 		printf "No Cmake or Chalet found"
+# 	fi
+# fi
