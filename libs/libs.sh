@@ -165,21 +165,13 @@ case "$PLATFORM" in
 
 
 		if ! command -v gh &> /dev/null; then
-			section "GH not installed"
-
-			SCOOP_PATH="$HOME/scoop/shims/scoop.ps1"
-
-			if [ ! -f "$SCOOP_PATH" ]; then
-				section "installing scoop..."
-				powershell.exe -ExecutionPolicy Bypass -Command "irm get.scoop.sh | iex"
-			fi
-
-			if [ -f "$SCOOP_PATH" ]; then
-				section "Installing GH via Scoop"
-				powershell.exe -Command "scoop install gh"
-			else
-				section "ERROR: Scoop installation failed"
-			fi
+			section "GH not installed, installing scoop and gh..."
+			powershell.exe -ExecutionPolicy Bypass -Command "
+				if (!(Get-Command scoop -ErrorAction SilentlyContinue)) {
+					irm get.scoop.sh | iex
+				}
+				scoop install gh
+			"
 		else
 			section "GH installed!"
 		fi
