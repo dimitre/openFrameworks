@@ -163,15 +163,21 @@ case "$PLATFORM" in
 	vs)
 		CORELIBS+=( videoInput )
 
-		if ! command -v scoop &> /dev/null; then
-			section "installing scoop..."
-			powershell.exe -ExecutionPolicy Bypass -Command "irm get.scoop.sh | iex"
-		fi
 
 		if ! command -v gh &> /dev/null; then
+			section "GH not installed"
+
+			if ! command -v scoop &> /dev/null; then
+				section "installing scoop..."
+				powershell.exe -ExecutionPolicy Bypass -Command "irm get.scoop.sh | iex"
+			fi
+
 			if command -v scoop &> /dev/null; then
+				section "Installing GH via Scoop"
 				powershell.exe -Command "scoop install gh"
 			fi
+		else
+			section "GH installed!"
 		fi
 
 		# if command -v winget &> /dev/null; then
