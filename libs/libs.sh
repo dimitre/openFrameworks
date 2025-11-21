@@ -261,6 +261,7 @@ case "$PLATFORM" in
 					freeglut libxmu libxxf86vm \
 					libxcursor libxi libxinerama \
 					libunwind \
+					glib2 glib2-devel \
 					gstreamer gst-plugins-base gst-plugins-bad gst-plugins-good gst-libav \
 					openal libsndfile
 			else
