@@ -326,7 +326,7 @@ bool genConfig::buildProject() {
 		alert("No templates found (of.yml or parameters), ofgen will deduce from platform", 95);
 
 		std::map<std::string, std::vector<std::string>> platformTemplates {
-			{ "macos", { "macos", "chalet", "zed" } },
+			{ "macos", { "chalet", "zed", "macos" } },
 			{ "vs", { "chalet", "zed" } },
 			{ "linux64", { "chalet", "zed" } },
 			{ "linuxaarch64", { "chalet", "zed" } },
