@@ -253,6 +253,8 @@ case "$PLATFORM" in
 				${SUDO_CMD} pacman -Syu --noconfirm
 
 				# cmake \
+				#
+
 				${SUDO_CMD} pacman -S --noconfirm --needed \
 					gcc unzip ninja wget \
 					fontconfig \
