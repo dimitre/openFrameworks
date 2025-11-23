@@ -274,9 +274,10 @@ case "$PLATFORM" in
 			else
 				${SUDO_CMD} apt-get update
 
+				# cmake \
+
 				${SUDO_CMD} apt-get -y install \
 					ninja-build wget2 \
-					# cmake \
 					libfontconfig1-dev \
 					libglu1-mesa-dev libgl1-mesa-dev \
 					libxrandr-dev \
