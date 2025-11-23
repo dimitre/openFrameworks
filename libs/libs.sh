@@ -161,6 +161,11 @@ CORELIBS=( mango yaml-cpp freetype glew glfw glm json pugixml rtAudio tess2 urip
 
 
 case "$PLATFORM" in
+    emscripten)
+        # remove glew from list
+        CORELIBS=( "${CORELIBS[@]/glew}" )
+    ;;
+
 	vs)
 		CORELIBS+=( videoInput )
 
