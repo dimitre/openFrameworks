@@ -2,7 +2,7 @@
 cd "$(dirname "$0")"
 set -eu
 
-VERSION=v0.12.6
+VERSION=v1.0
 OF_FOLDER=..
 CHALETVERSION=0.8.15
 
@@ -366,14 +366,14 @@ ALLLIBS=("${CORELIBS[@]}" "${ADDONLIBS[@]}")
 getlink() {
 	if command -v gh &>/dev/null; then
 		section "Downloading with GH (github command line)"
-		gh release download ${VERSION} -R dimitre/ofLibs --pattern "ofLibs_*_${PLATFORM}.zip" -D "${DOWNLOAD}"
+		gh release download ${VERSION} -R ofWorks/ofLibs --pattern "ofLibs_*_${PLATFORM}.zip" -D "${DOWNLOAD}"
 
 
 	elif command -v wget2 &>/dev/null; then
 		# wget2 is available - use it for parallel downloads
 		PARAMS=""
 		for LIBNAME in "${ALLLIBS[@]}"; do
-			PARAMS+=" https://github.com/dimitre/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
+			PARAMS+=" https://github.com/ofWorks/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
 		done
 		section "Downloading with wget2 (parallel downloads)"
 		#--clobber=off (skips download if file exists at all)
@@ -398,7 +398,7 @@ getlink() {
 		for LIBNAME in "${ALLLIBS[@]}"; do
 			local filepath="${DOWNLOAD}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
 			executa wget -N --no-verbose --show-progress \
-				"https://github.com/dimitre/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip" \
+				"https://github.com/ofWorks/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip" \
 				-P "${DOWNLOAD}"
 		done
 	elif command -v powershell.exe &>/dev/null; then
@@ -406,7 +406,7 @@ getlink() {
 		section "Downloading with PowerShell (sequential)"
 		for LIBNAME in "${ALLLIBS[@]}"; do
 			local filepath="${DOWNLOAD}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
-			local url="https://github.com/dimitre/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
+			local url="https://github.com/ofWorks/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
 			executa powershell.exe -Command "Invoke-WebRequest -Uri '${url}' -OutFile '${filepath}'"
 		done
 	else
@@ -417,10 +417,10 @@ getlink() {
 			# Only use -z if file exists, otherwise just download
 			if [[ -f "${filepath}" ]]; then
 				executa curl -L -z "${filepath}" -o "${filepath}" \
-				"https://github.com/dimitre/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
+				"https://github.com/ofWorks/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
 			else
 				executa curl -L -o "${filepath}" \
-				"https://github.com/dimitre/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
+				"https://github.com/ofWorks/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
 			fi
 		done
 	fi
