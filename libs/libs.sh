@@ -212,12 +212,12 @@ case "$PLATFORM" in
 
 			if command -v brew &> /dev/null; then
 
-				if ! command -v gh &> /dev/null; then
-					# section "no wget2"
-					brew install gh
-				else
-					section "gh already installed"
-				fi
+				# if ! command -v gh &> /dev/null; then
+				# 	# section "no wget2"
+				# 	brew install gh
+				# else
+				# 	section "gh already installed"
+				# fi
 
 				if ! command -v wget2 &> /dev/null; then
 					# section "no wget2"
@@ -246,7 +246,7 @@ case "$PLATFORM" in
 				fi
 
 			else
-				alert "Brew not installed, won't install gh (github command line)"
+				alert "Brew not installed, won't install wget2 (github command line)"
 			fi
 		fi
 
