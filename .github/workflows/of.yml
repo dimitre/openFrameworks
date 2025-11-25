@@ -28,6 +28,12 @@ jobs:
               prefix: aarch64-linux-gnu,
               toolchain: aarch64-linux-gnu-gcc-12,
             }
+          - {
+              os: ubuntu-latest,
+              platform: emscripten,
+              toolchain: emscripten,
+              shell: bash,
+            }
 
     defaults:
       run:
@@ -44,6 +50,13 @@ jobs:
         uses: hendrikmuhs/ccache-action@v1.2.19
         with:
           key: ${{ matrix.platform }}
+
+      - name: Emscripten Install
+        if: matrix.platform == 'emscripten'
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 4.0.20
+          actions-cache-folder: "emsdk-cache"
 
       # - name: ccache test version
       #   run: |
