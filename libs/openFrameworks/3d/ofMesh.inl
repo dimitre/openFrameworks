@@ -4,6 +4,9 @@
 // 	#include "ofMesh.h"
 // #endif
 
+#include "ofFileUtils.h" //ofFile
+
+
 #include "ofAppRunner.h"
 #include "ofColor.h"
 #include "ofGraphicsBaseTypes.h"

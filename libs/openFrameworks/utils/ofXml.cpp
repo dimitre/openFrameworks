@@ -1,6 +1,7 @@
 #include "ofXml.h"
 #include "ofUtils.h"
 #include <clocale>
+#include "ofAppRunner.h" // toDataPath
 
 using std::string;
 
@@ -17,7 +18,7 @@ ofXml::ofXml(std::shared_ptr<pugi::xml_document> doc, const pugi::xml_node & xml
 
 bool ofXml::load(const fs::path & file){
 	auto auxDoc = std::make_shared<pugi::xml_document>();
-	auto res = auxDoc->load_file(ofToDataPath(file).c_str());
+	auto res = auxDoc->load_file(ofCore.toDataPath(file).c_str());
 	if( res ){
 		doc = auxDoc;
 		xml = doc->root();
@@ -49,14 +50,14 @@ bool ofXml::parse(const std::string & xmlStr){
 
 bool ofXml::save(const fs::path & file) const{
 	if(xml == doc->root()){
-		auto res = doc->save_file(ofToDataPath(file).c_str());
+		auto res = doc->save_file(ofCore.toDataPath(file).c_str());
 		ofLogVerbose("ofXml")<<"save: "<< res;
 		ofLogVerbose("ofXml")<<this->toString();
 		return res;
 	}else{
 		pugi::xml_document doc;
 		if(doc.append_copy(xml.root())){
-			return doc.save_file(ofToDataPath(file).c_str());
+			return doc.save_file(ofCore.toDataPath(file).c_str());
 		}
 	}
 	return false;

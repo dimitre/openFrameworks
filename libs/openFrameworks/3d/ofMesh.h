@@ -4,7 +4,7 @@
 #define OF_MESH_H
 
 #include "ofGLUtils.h"
-#include "ofFileUtils.h" // ofBuffer
+#include "ofBuffer.h"
 
 #include <vector>
 

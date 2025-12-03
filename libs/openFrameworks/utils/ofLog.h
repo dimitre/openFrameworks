@@ -1,7 +1,5 @@
 #pragma once
 
-// Only private ofFile file;
-//#include "ofFileUtils.h"
 #include "ofConstants.h" // fs::path
 #include <sstream>
 #include <fstream>

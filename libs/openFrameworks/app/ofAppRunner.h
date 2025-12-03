@@ -3,8 +3,6 @@
 #include "ofMainLoop.h"
 #include "ofWindowSettings.h"
 
-// FIXME: temporario
-//#include "ofFileUtils.h"
 
 #ifdef TARGET_OSX
 	#include <mach-o/dyld.h>       /* _NSGetExecutablePath */

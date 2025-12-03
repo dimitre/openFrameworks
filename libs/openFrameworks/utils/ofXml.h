@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofParameter.h"
-#include "ofFileUtils.h" // ofBuffer
+#include "ofBuffer.h"
 
 #include <pugixml.hpp>
 

@@ -1,4 +1,7 @@
-#include "ofFileUtils.h" // ofBuffer
+// FIXME: Remove ofDirectory from here
+#include "ofFileUtils.h" // ofDirectory
+
+#include "ofBuffer.h"
 
 #include "ofSerial.h"
 #include "ofUtils.h"
@@ -184,25 +187,23 @@ static bool isDeviceArduino( ofSerialDeviceInfo & A ){
 void ofSerial::buildDeviceList(){
 	deviceType = "serial";
 	devices.clear();
-	vector <string> prefixMatch;
 
-	#ifdef TARGET_OSX
-
-		prefixMatch.push_back("cu.");
-		prefixMatch.push_back("tty.");
-
-	#endif
-
-	#ifdef TARGET_LINUX
-
-		prefixMatch.push_back("ttyACM");
-		prefixMatch.push_back("ttyS");
-		prefixMatch.push_back("ttyUSB");
-		prefixMatch.push_back("rfc");
-
-	#endif
 
 	#if defined( TARGET_OSX ) || defined( TARGET_LINUX )
+	
+
+	#ifdef TARGET_OSX
+	vector <string> prefixMatch { "cu.", "tty." };
+	#else // LINUX
+	vector <string> prefixMatch {
+		"ttyACM",
+		"ttyS",
+		"ttyUSB",
+		"rfc",
+	};
+	#endif
+	
+	
 		ofDirectory dir("/dev");
 		int deviceCount = 0;
 		for(auto & entry: dir){

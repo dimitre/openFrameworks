@@ -4,11 +4,8 @@
 //--------------------------
 // utils
 #include "ofConstants.h"
-//#include "ofFileUtils.h"
 #include "ofLog.h"
 #include "ofSystemUtils.h"
-
-//#include "ofURLFileLoader.h"
 
 #include "ofUtils.h"
 
@@ -70,7 +67,6 @@
 #include "ofPixels.h"
 #include "ofPolyline.h"
 #include "ofRendererCollection.h"
-//#include "ofTessellator.h"
 #include "ofTrueTypeFont.h"
 
 //--------------------------
@@ -134,8 +130,10 @@ using std::weak_ptr;
 #include "ofColor.h"
 
 #ifdef OF_COMPAT
-#pragma message ("ARWIL")
 #include "ofxMath.h"
+#include "ofFileUtils.h"
+#include "ofTessellator.h"
+//#include "ofURLFileLoader.h"
 #endif
 
 #include <stdint.h>
