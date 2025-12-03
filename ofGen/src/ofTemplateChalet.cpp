@@ -31,7 +31,7 @@ std::string timeString() {
 	// const auto zt  = current_zone()->to_local(now);   // local time point
 	// return fmt::format("{:%Y%m%d-%H%M}", zt);          // e.g. 202512031137
 
-	return fmt::format("{:%Y%m%d%H%M}", system_clock::now()); // GMT / UTC
+	return fmt::format("{:%Y%m%d-%H%M}", system_clock::now()); // GMT / UTC
 }
 
 void ofTemplateChalet::load() {
