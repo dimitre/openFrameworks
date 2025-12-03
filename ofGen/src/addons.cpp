@@ -1,5 +1,6 @@
 #include "addons.h"
 #include "ofTemplateVSCode.h"
+#include "ofTemplateChalet.h"
 #include "templates.h"
 // #include "ofTemplateVisualStudio.h"
 // #include "ofTemplateMake.h"

@@ -133,6 +133,10 @@ using std::weak_ptr;
 #include "ofWindowSettings.h"
 #include "ofColor.h"
 
+#ifdef OF_COMPAT
+#pragma message ("ARWIL")
+#include "ofxMath.h"
+#endif
 
 #include <stdint.h>
 #include <cstdio>

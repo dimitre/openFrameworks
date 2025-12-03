@@ -1,6 +1,7 @@
 #include "utils.h"
 #include "addons.h"
 #include "ofTemplateVSCode.h"
+#include "ofTemplateChalet.h"
 #include "templates.h"
 
 #include <fstream> // ifstream
