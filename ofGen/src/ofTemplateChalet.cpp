@@ -2,24 +2,36 @@
 #include "addons.h"
 #include <fstream>
 
+// #include <chrono>
+// #include <format>
+
+// std::string timeString() {
+//     using namespace std::chrono;
+
+//     const auto now = system_clock::now();
+//     const auto tt  = system_clock::to_time_t(now);
+
+//     std::tm tm{};
+//     localtime_r(&tt, &tm);           // local time
+
+//     return std::format("{:04}{:02}{:02}-{:02}{:02}",
+//                        tm.tm_year + 1900,
+//                        tm.tm_mon  + 1,
+//                        tm.tm_mday,
+//                        tm.tm_hour,
+//                        tm.tm_min);
+// }
+//
 #include <chrono>
-#include <format>
+#include <fmt/chrono.h> // fmt’s chrono integration
 
 std::string timeString() {
-    using namespace std::chrono;
+	using namespace std::chrono;
+	// const auto now = system_clock::now();
+	// const auto zt  = current_zone()->to_local(now);   // local time point
+	// return fmt::format("{:%Y%m%d-%H%M}", zt);          // e.g. 202512031137
 
-    const auto now = system_clock::now();
-    const auto tt  = system_clock::to_time_t(now);
-
-    std::tm tm{};
-    localtime_r(&tt, &tm);           // local time
-
-    return std::format("{:04}{:02}{:02}-{:02}{:02}",
-                       tm.tm_year + 1900,
-                       tm.tm_mon  + 1,
-                       tm.tm_mday,
-                       tm.tm_hour,
-                       tm.tm_min);
+	return fmt::format("{:%Y%m%d%H%M}", system_clock::now()); // GMT / UTC
 }
 
 void ofTemplateChalet::load() {
@@ -151,7 +163,6 @@ void ofTemplateChalet::save() {
 
 	renameYamlKey(projectYaml["distribution"]["empty.dmg"]["positions"], "empty", conf.projectName);
 	renameYamlKey(projectYaml["distribution"], "empty.dmg", conf.projectName + ".dmg");
-
 
 	// Change key "empty" to project name in targets
 	// {
