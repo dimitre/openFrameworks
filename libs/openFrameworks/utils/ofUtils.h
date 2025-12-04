@@ -4,12 +4,12 @@
 #include "ofConstants.h"
 
 // Undefine assert before including utf8cpp
-#ifdef assert
-#undef assert
-#endif
+//#ifdef assert
+//#undef assert
+//#endif
 
 // Define it as no-op
-#define assert(x) ((void)0)
+//#define assert(x) ((void)0)
 
 
 #include <utf8cpp/utf8.h>
@@ -25,6 +25,7 @@
 #include "ofRandomDistributions.h"
 #include "ofRandomEngine.h"
 
+// FIXME: Remove ofTime from core.
 #include "ofTime.h"
 
 
@@ -45,14 +46,7 @@ inline std::ostream& operator<<(std::ostream& os, const vec<2, T, P>& vec) {
 
 static const std::string OF_BROWSER_DEFAULT_TARGET { "_blank" };
 
-/// \section Elapsed Time
-/// \brief Reset the elapsed time counter.
-///
-/// This method resets the times returned by ofGetElapsedTimef(),
-/// ofGetElapsedTimeMillis() and ofGetElapsedTimeMicros() to zero.
-///
-/// \note This is called on the first frame during app startup.
-void ofResetElapsedTimeCounter();
+
 
 /// \brief Get the elapsed time in seconds.
 ///
@@ -63,12 +57,7 @@ void ofResetElapsedTimeCounter();
 /// \returns the floating point elapsed time in seconds.
 float ofGetElapsedTimef();
 
-/// \brief Get the Unix Time in milliseconds.
-///
-/// This returns the milliseconds since Midnight, January 1, 1970.
-///
-/// \returns the milliseconds since Midnight, January 1, 1970.
-uint64_t ofGetUnixTimeMillis();
+
 
 /// \brief Get the elapsed time in milliseconds.
 ///
@@ -105,30 +94,6 @@ int ofGetMinutes();
 /// \returns the hour of the day [0-23].
 int ofGetHours();
 
-/// \brief Get the number of seconds since Midnight, January 1, 1970.
-///
-/// Resolution is in seconds.
-///
-/// \returns the number of seconds since Midnight, January 1, 1970 (epoch time).
-uint64_t ofGetUnixTime();
-
-/// \brief Get the system time in milliseconds (system uptime).
-/// \returns the system time in milliseconds.
-[[deprecated("Use ofGetSystemTimeMillis()")]]
-uint64_t ofGetSystemTime();
-
-/// \brief Get the system time in milliseconds (system uptime).
-/// \returns the system time in milliseconds.
-uint64_t ofGetSystemTimeMillis();
-
-/// \brief Get the system time in microseconds (system uptime).
-/// \returns the system time in microseconds.
-uint64_t ofGetSystemTimeMicros();
-
-
-/// \brief Get the system time.
-/// \returns the system time, which is the time since the system booted (uptime).
-ofTime ofGetCurrentTime();
 
 /// \brief Sleeps the current thread for the specified amount of milliseconds.
 /// \param millis The number of millseconds to sleep.

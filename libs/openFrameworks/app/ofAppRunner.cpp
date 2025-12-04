@@ -8,7 +8,7 @@
 #include "ofLog.h"
 #include "ofMainLoop.h"
 #include "ofRectangle.h"
-#include "ofUtils.h" // initUtils
+//#include "ofUtils.h" // initUtils
 
 
 
@@ -128,7 +128,8 @@ void ofInit() {
 #endif
 
 //	of::priv::initutils();
-	ofResetElapsedTimeCounter();
+// 
+//	ofResetElapsedTimeCounter();
 	of::random::Engine::construct();
 
 

@@ -204,8 +204,8 @@ private:
 	// TEMPORARY
 	#include <GLFW/glfw3.h>
 
-	// TEMP oftostring
-	#include "ofUtils.h"
+	// TEMP
+	#include "ofUtils.h" // ofToString
 	#include <vector>
 
 static struct ofMonitors {

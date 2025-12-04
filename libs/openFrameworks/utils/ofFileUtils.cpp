@@ -1,7 +1,7 @@
 
 #include "ofFileUtils.h" // its own implementation
 #include "ofLog.h"
-#include "ofUtils.h"
+#include "ofUtils.h" // ofToLower, ofToInt, ofSort, ofRemove, ofContains
 
 // ofCore object.
 #include "ofAppRunner.h"
@@ -217,13 +217,8 @@ fs::path ofFile::path() const {
 }
 
 //------------------------------------------------------------------------------------------------------------
-//std::string ofFile::path() const {
-//	return ofPathToString(pathFS());
-//}
-
-//------------------------------------------------------------------------------------------------------------
 // FIXME: Deprecate
-string ofFile::getExtension() const {
+std::string ofFile::getExtension() const {
 	auto dotext = myFile.extension().string();
 	// FIXME: probably not needed;
 	if(!dotext.empty() && dotext.front()=='.'){

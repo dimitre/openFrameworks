@@ -8,10 +8,6 @@
 #include "ofConstants.h"
 #include <unordered_map>
 
-#ifdef OF_USE_LEGACY_MATH
-#include "ofVec3f.h"
-
-#endif
 
 template<typename T>
 class ofColor_;

@@ -671,7 +671,7 @@ void ofMediaFoundationPlayer::loadAsync(const fs::path & fileName) {
 bool ofMediaFoundationPlayer::_load(const fs::path & fileName, bool abAsync) {
     close();
 
-    std::string name = ofPathToString(fileName);
+	std::string name { ofPathToString(fileName) };
     mBLoadAsync = abAsync;
 
     bool bStream = false;

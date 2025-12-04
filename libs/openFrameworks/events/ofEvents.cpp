@@ -3,6 +3,10 @@
 #include "ofEvents.h"
 #include "ofLog.h"
 
+// FIXME: Remove
+#include "ofTimer.h" // ofGetFixedStepForFps
+
+
 static ofEventArgs voidEventArgs;
 
 //--------------------------------------
