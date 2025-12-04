@@ -1,6 +1,5 @@
 #pragma once
 
-//#include "ofUtils.h"
 #include "ofLog.h"
 
 template<typename T>

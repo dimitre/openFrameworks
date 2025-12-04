@@ -1,5 +1,4 @@
 #include "ofParameter.h"
-//#include "ofUtils.h"
 
 ofParameterGroup::ofParameterGroup()
 	: obj(new Value) {

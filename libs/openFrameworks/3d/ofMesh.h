@@ -7,6 +7,19 @@
 #include "ofBuffer.h"
 
 #include <vector>
+#include <sstream> // ofTo
+
+/// \brief Convert a string to a given data type.
+/// \tparam T The return type.
+/// \param str The string value to convert to a give type.
+/// \returns the string converted to the type.
+template <typename T>
+T ofTo(const std::string & str) {
+	T x;
+	std::istringstream cur(str);
+	cur >> x;
+	return x;
+}
 
 template<class V, class N, class C, class T>
 class ofMeshFace_;

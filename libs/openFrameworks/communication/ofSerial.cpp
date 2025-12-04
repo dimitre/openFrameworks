@@ -4,7 +4,6 @@
 #include "ofBuffer.h"
 
 #include "ofSerial.h"
-//#include "ofUtils.h"
 #include "ofLog.h"
 #include <fcntl.h>
 #include <errno.h>

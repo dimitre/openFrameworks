@@ -1,13 +1,10 @@
 #include "ofParameter.h"
-//#include "ofUtils.h"
 
-using std::string;
-
-string ofAbstractParameter::getEscapedName() const {
+std::string ofAbstractParameter::getEscapedName() const {
     return escape(getName());
 }
 
-string ofAbstractParameter::escape(const string & _str) const {
+std::string ofAbstractParameter::escape(const std::string & _str) const {
 
     std::string str(_str);
 
@@ -29,12 +26,12 @@ string ofAbstractParameter::escape(const string & _str) const {
     return str;
 }
 
-string ofAbstractParameter::type() const {
+std::string ofAbstractParameter::type() const {
     return typeid(*this).name();
 }
 
-std::vector<string> ofAbstractParameter::getGroupHierarchyNames() const {
-    std::vector<string> hierarchy;
+std::vector<std::string> ofAbstractParameter::getGroupHierarchyNames() const {
+    std::vector<std::string> hierarchy;
     auto p = getFirstParent();
     if (p) {
         hierarchy = p.getGroupHierarchyNames();
@@ -53,7 +50,7 @@ std::ostream & operator<<(std::ostream & os, const ofAbstractParameter & p) {
 }
 
 std::istream & operator>>(std::istream & is, ofAbstractParameter & p) {
-    string str;
+	std::string str;
     is >> str;
     p.fromString(str);
     return is;
@@ -71,15 +68,15 @@ ofParameter<void>::ofParameter()
     : obj(new Value) {
 }
 
-ofParameter<void>::ofParameter(const string & name)
+ofParameter<void>::ofParameter(const std::string & name)
     : obj(new Value(name)) {
 }
 
-void ofParameter<void>::setName(const string & name) {
+void ofParameter<void>::setName(const std::string & name) {
     obj->name = name;
 }
 
-string ofParameter<void>::getName() const {
+std::string ofParameter<void>::getName() const {
     return obj->name;
 }
 
@@ -87,7 +84,7 @@ std::string ofParameter<void>::toString() const {
     return "";
 }
 
-string ofParameter<void>::valueType() const {
+std::string ofParameter<void>::valueType() const {
     return typeid(void).name();
 }
 

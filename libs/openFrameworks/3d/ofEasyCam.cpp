@@ -1,5 +1,4 @@
 #include "ofEasyCam.h"
-//#include "ofUtils.h"
 #include "ofGraphicsBaseTypes.h"
 
 #define GLM_ENABLE_EXPERIMENTAL

@@ -4,8 +4,6 @@
 // index updating/deleting?
 // setVertexData with float* should know about ofVec3f vs ofVec2f?
 
-
-//#include "ofUtils.h"
 #include "ofVbo.h"
 #include "ofShader.h"
 #include "ofGLUtils.h"

@@ -8,9 +8,6 @@
 #include "ofLog.h"
 #include "ofMainLoop.h"
 #include "ofRectangle.h"
-//#include "ofUtils.h" // initUtils
-
-
 
 std::shared_ptr<ofBaseRenderer> & ofCoreInternal::getCurrentRenderer() {
 	return mainLoop.currentWindow.lock()->currentRenderer;

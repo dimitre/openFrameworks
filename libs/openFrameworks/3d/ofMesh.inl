@@ -11,7 +11,7 @@
 #include "ofColor.h"
 #include "ofGraphicsBaseTypes.h"
 #include "ofLog.h"
-#include "ofUtils.h" // ofTo
+#include "ofUtils.h" // ofTo ofToString ofMap
 
 #include <glm/gtx/vector_angle.hpp>
 
@@ -19,6 +19,9 @@
 
 //FIXME: TEMP
 #include "ofAppBaseWindow.h"
+
+
+
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
