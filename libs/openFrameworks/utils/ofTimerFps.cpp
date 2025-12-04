@@ -21,20 +21,39 @@ void ofTimerFps::setFps(int fps) {
 //	interval = std::ratio<1s, fps>;
 	currentFPS = fps;
 
-	interval = duration_cast<microseconds>(1s) / currentFPS;
+	interval = space(1'000'000'000LL) / fps;   // nanoseconds per frame
+//	interval = duration_cast<microseconds>(1s) / currentFPS;
 }
 
+
+//void ofTimerFps::waitNext() {
+//   // Lazy wakeup
+//   std::this_thread::sleep_until(wakeTime - 36ms); //4ms
+////	std::this_thread::sleep_until(wakeTime - 2ms); //4ms
+//
+//   // Processor Coffee
+//   while(steady_clock::now() < (wakeTime)) { // 0.05ms 0.5us // - 0.5us  - 1ns
+//	   std::this_thread::yield();
+////	   std::this_thread::sleep_for(5us);
+//   }
+//
+//   lastWakeTime = wakeTime;
+//   wakeTime += interval;
+//}
+
+
 void ofTimerFps::waitNext() {
-   // Lazy wakeup
-   std::this_thread::sleep_until(wakeTime - 36ms); //4ms
-//	std::this_thread::sleep_until(wakeTime - 2ms); //4ms
+	auto now = steady_clock::now();
 
-   // Processor Coffee
-   while(steady_clock::now() < (wakeTime)) { // 0.05ms 0.5us // - 0.5us  - 1ns
-	   std::this_thread::yield();
-//	   std::this_thread::sleep_for(5us);
-   }
+	auto sleepUntil = wakeTime - 3ms;
+	if (sleepUntil > now) {
+		std::this_thread::sleep_until(sleepUntil);
+	}
 
-   lastWakeTime = wakeTime;
-   wakeTime += interval;
+	while (steady_clock::now() < wakeTime) {
+		std::this_thread::yield();
+	}
+
+	lastWakeTime = wakeTime;
+	wakeTime += interval;
 }

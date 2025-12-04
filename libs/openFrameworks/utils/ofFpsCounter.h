@@ -21,6 +21,7 @@ public:
 	// update more often
 	void update();
 	double getFps() const;
+	double getFpsRounded(int decimals = 2) const;
 	uint64_t getNumFrames() const;
 	uint64_t getLastFrameNanos() const;
 	double getLastFrameSecs() const;

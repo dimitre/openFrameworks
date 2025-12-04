@@ -232,7 +232,8 @@ bool ofCoreEvents::getTargetFrameRateEnabled() const {
 
 //--------------------------------------
 float ofCoreEvents::getFrameRate() const {
-	return fps.getFps();
+//	return fps.getFps();
+	return fps.getFpsRounded();
 //	return fps2.getFps();
 }
 

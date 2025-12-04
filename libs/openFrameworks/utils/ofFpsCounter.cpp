@@ -7,8 +7,9 @@ ofFpsCounter::ofFpsCounter()
 	, diff(std::chrono::duration<long long, std::nano>(0))
 	, then(std::chrono::steady_clock::now())
 	, timeMode(0) {
+//		timestamps.clear();
+//		timestamps.resize(targetFPS + 7);
 		timestamps.clear();
-		timestamps.resize(targetFPS + 7);
 	}
 
 ofFpsCounter::ofFpsCounter(double targetFPS, int mode)
@@ -18,7 +19,7 @@ ofFpsCounter::ofFpsCounter(double targetFPS, int mode)
 	, then(std::chrono::steady_clock::now())
 	, timeMode(mode) {
 		timestamps.clear();
-		timestamps.resize(targetFPS + 7);
+//		timestamps.resize(targetFPS + 7);
 	}
 
 void ofFpsCounter::newFrame(){
@@ -41,25 +42,45 @@ void ofFpsCounter::update(){
 	update(now);
 }
 
-void ofFpsCounter::update(time_point<steady_clock> now){
-	while(!timestamps.empty() && timestamps.front() + 2s < now){
+void ofFpsCounter::update(time_point<steady_clock> now) {
+	while (!timestamps.empty() && timestamps.front() < now - 2s)
 		timestamps.pop_front();
-	}
-	if (timestamps.size() < 2) {
-		fps = targetFPS; // if no sample size then set fps to target until can sample
+
+	if (timestamps.size() < static_cast<size_t>(targetFPS)) {   // <--- real seconds
+		fps = targetFPS;
 		return;
 	}
-	diff = now - timestamps.front();		
-	if (diff > std::chrono::duration<double>(0)) {
-		fps = static_cast<double>(timestamps.size()) / std::chrono::duration<double>(diff).count();
-	} else {
-		fps = timestamps.size();
-	}
-	
+
+	int64_t diffNs { duration_cast<nanoseconds>(now - timestamps.front()).count() };
+	fps = 1'000'000'000.0 * timestamps.size() / diffNs;
 }
+
+
+//void ofFpsCounter::update(time_point<steady_clock> now){
+//	while(!timestamps.empty() && timestamps.front() + 2s < now){
+//		timestamps.pop_front();
+//	}
+//	if (timestamps.size() < 2) {
+//		fps = targetFPS; // if no sample size then set fps to target until can sample
+//		return;
+//	}
+//	diff = now - timestamps.front();		
+//	if (diff > std::chrono::duration<double>(0)) {
+//		fps = static_cast<double>(timestamps.size()) / std::chrono::duration<double>(diff).count();
+//	} else {
+//		fps = timestamps.size();
+//	}
+//	
+//}
 
 double ofFpsCounter::getFps() const{
 	return fps;
+}
+
+double ofFpsCounter::getFpsRounded(int decimals) const
+{
+	double scale = std::pow(10.0, decimals);
+	return std::round(fps * scale) / scale;
 }
 
 uint64_t ofFpsCounter::getNumFrames() const{
@@ -90,9 +111,16 @@ void ofFpsCounter::setTimeMode(int mode) {
 	timeMode = mode;
 }
 
-void ofFpsCounter::setTargetFPS(double fps) {
+//void ofFpsCounter::setTargetFPS(double fps) {
+//	targetFPS = fps;
+//	if (fps > timestamps.max_size()) {
+//		timestamps.resize(fps);
+//	}
+//}
+
+void ofFpsCounter::setTargetFPS(double fps)
+{
 	targetFPS = fps;
-	if (fps > timestamps.max_size()) {
-		timestamps.resize(fps);
-	}
+	timestamps.clear();
+	nFrameCount = 0;
 }
