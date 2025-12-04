@@ -176,35 +176,33 @@ case "$PLATFORM" in
 	vs)
 		CORELIBS+=( videoInput )
 
+    # --- 1. 100 % user-scope Scoop ---------------------------------
+    export SCOOP="$HOME/scoop"          # force user install even if admin
 
-		if ! command -v wget2 &> /dev/null; then
-			section "wget2 not installed, installing scoop and wget2..."
-			powershell.exe -ExecutionPolicy Bypass -Command "
-				if (!(Get-Command scoop -ErrorAction SilentlyContinue)) {
-					irm get.scoop.sh | iex
-				}
-				\$env:Path = [System.Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path','User')
-				scoop install wget2
-			"
+    if ! command -v wget2 &>/dev/null; then
+        section "wget2 not installed, installing scoop and wget2..."
+        powershell.exe -ExecutionPolicy Bypass -Command "
+            if (!(Get-Command scoop -ErrorAction SilentlyContinue)) {
+                irm get.scoop.sh | iex
+            }
+            scoop install wget2
+        "
 
-			# Add scoop shims to PATH for this bash session
-			section "Adding scoop to PATH..."
-			SCOOP_SHIMS="$HOME/scoop/shims"
-			if [[ ":$PATH:" != *":$SCOOP_SHIMS:"* ]]; then
-				export PATH="$SCOOP_SHIMS:$PATH"
-			fi
+        # --- 2.  make shim folder visible to *this* bash -----------
+        SCOOP_SHIMS="$HOME/scoop/shims"
+        if [[ ":$PATH:" != *":$SCOOP_SHIMS:"* ]]; then
+            export PATH="$SCOOP_SHIMS:$PATH"
+        fi
 
-			# Verify wget2 is now available
-			if command -v wget2 &> /dev/null; then
-				section "wget2 successfully installed and available!"
-			else
-				alert "wget2 installed but may require a new shell session"
-			fi
-		else
-			section "wget2 already installed!"
-		fi
-
-		;;
+        if command -v wget2 &>/dev/null; then
+            section "wget2 successfully installed and available!"
+        else
+            alert "wget2 installed but may require a new shell session"
+        fi
+    else
+        section "wget2 already installed!"
+    fi
+    ;;
 
 	macos)
 		# Install system dependencies (skip in CI)
