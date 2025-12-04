@@ -4,7 +4,6 @@
 #define OF_MESH_H
 
 #include "ofGLUtils.h"
-#include "ofBuffer.h"
 
 #include <vector>
 #include <sstream> // ofTo

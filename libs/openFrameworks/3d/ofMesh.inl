@@ -20,6 +20,8 @@
 //FIXME: TEMP
 #include "ofAppBaseWindow.h"
 
+#include "ofBuffer.h"
+
 
 
 

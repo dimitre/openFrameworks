@@ -17,14 +17,16 @@
 	#include <limits.h>        /* PATH_MAX */
 #endif
 
+
+#define OF_USING_STD_FS
+
+
 using std::string;
 using std::vector;
 using std::fstream;
 using std::istream;
 using std::ostream;
 using std::ios;
-
-
 
 //------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------

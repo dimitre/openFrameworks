@@ -326,4 +326,5 @@ namespace fs = std::filesystem;
 namespace of {
 	namespace filesystem = std::filesystem;
 }
-#define OF_USING_STD_FS
+
+

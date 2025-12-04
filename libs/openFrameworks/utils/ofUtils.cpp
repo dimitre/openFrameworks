@@ -54,22 +54,6 @@ using std::vector;
 
 
 //--------------------------------------
-float ofGetElapsedTimef() {
-	return ofCore.clock.getElapsedTimef();
-}
-
-//--------------------------------------
-uint64_t ofGetElapsedTimeMillis() {
-	return ofCore.clock.getElapsedTimeMillis();
-}
-
-//--------------------------------------
-uint64_t ofGetElapsedTimeMicros() {
-	return ofCore.clock.getElapsedTimeMicros();
-}
-
-
-//--------------------------------------
 void ofSleepMillis(int millis) {
 #ifdef TARGET_WIN32
 	Sleep(millis);

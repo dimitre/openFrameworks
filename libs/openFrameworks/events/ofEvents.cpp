@@ -301,7 +301,7 @@ bool ofCoreEvents::notifySetup() {
 	return ofNotifyEvent(setup, voidEventArgs);
 }
 
-#include "ofGraphics.h"
+//#include "ofGraphics.h"
 //------------------------------------------
 bool ofCoreEvents::notifyUpdate() {
 	return ofNotifyEvent(update, voidEventArgs);
