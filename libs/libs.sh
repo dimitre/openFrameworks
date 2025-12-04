@@ -174,20 +174,27 @@ case "$PLATFORM" in
     ;;
 
 	vs)
-		CORELIBS+=( videoInput )
+	    CORELIBS+=( videoInput )
 
-	    # ----- wget2 without Scoop -----
-	    WGET2_DIR="$HOME/wget2"
-	    if ! command -v wget2 &>/dev/null; then
-	        section "Fetching portable wget2 ..."
+	    # ----- wget2 : use system copy if present, else portable fallback -----
+	    if command -v wget2 &>/dev/null; then
+	        section "wget2 already available in PATH – nothing to do."
+	    else
+	        WGET2_DIR="$HOME/wget2"
 	        mkdir -p "$WGET2_DIR"
-	        powershell -NoP -C "Invoke-WebRequest -Uri https://github.com/rockdaboot/wget2/releases/download/v2.1.0/wget2-2.1.0-win64.zip -OutFile '$HOME/wget2.zip'"
-	        unzip -q "$HOME/wget2.zip" -d "$HOME"
-	        rm -f "$HOME/wget2.zip"
-	        mv "$HOME/wget2-"* "$WGET2_DIR" 2>/dev/null || true
+
+	        # download single static exe (64-bit, 2.28 MB)
+	        if [[ ! -x "$WGET2_DIR/wget2.exe" ]]; then
+	            section "Fetching portable wget2.exe …"
+	            curl -L -o "$WGET2_DIR/wget2.exe" \
+	                https://github.com/rockdaboot/wget2/releases/download/v2.1.0/wget2.exe
+	            chmod +x "$WGET2_DIR/wget2.exe"
+	        fi
+
+	        # inject into PATH for this session
+	        [[ ":$PATH:" != *":$WGET2_DIR:"* ]] && export PATH="$WGET2_DIR:$PATH"
 	    fi
-	    export PATH="$WGET2_DIR:$PATH"
-	    # --------------------------------
+	    # ------------------------------------------
     ;;
 
 	macos)
