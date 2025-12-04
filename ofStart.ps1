@@ -5,6 +5,6 @@ if (!(Test-Path $bash)) {
 # $PSScriptRoot = folder that contains this .ps1
 # & $bash "$PSScriptRoot\ofStart.sh" @args
 
-Start-Process -FilePath $bash -ArgumentList "$PSScriptRoot\ofStart.sh",$args -NoNewWindow -Wait
-
+Start-Process -FilePath $bash -ArgumentList "`"$PSScriptRoot\ofStart.sh`" $args" -NoNewWindow -Wait
+# Start-Process -FilePath $bash -ArgumentList "$PSScriptRoot\ofStart.sh",$args -NoNewWindow -Wait
 #Start-Process -FilePath $bash -ArgumentList "$PSScriptRoot\ofStart.sh",$args -NoNewWindow -Wait
