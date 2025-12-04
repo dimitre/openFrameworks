@@ -3,11 +3,20 @@
 #include <glm/vec4.hpp>
 
 #include "ofEvents.h"
-#include "ofColor.h"
+//#include "ofColor.h"
 #include "ofLog.h"
 #include "ofMathConstants.h"
 #include "ofRectangle.h"
 #include "ofUtils.h" // ofToString
+
+
+//namespace glm {
+//	struct vec2;
+//	struct vec3;
+//	struct vec4;
+//}
+template<typename T> class ofColor_;
+//class ofRectangle;
 
 
 #include <map>
