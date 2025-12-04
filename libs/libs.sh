@@ -181,9 +181,11 @@ case "$PLATFORM" in
 
     if ! command -v wget2 &>/dev/null; then
         section "wget2 not installed, installing scoop and wget2..."
-        powershell.exe -ExecutionPolicy Bypass -Command "
+        powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "
+            # force load the module before Scoop installer tries to read policy
+            Import-Module Microsoft.PowerShell.Security -ErrorAction Stop
             if (!(Get-Command scoop -ErrorAction SilentlyContinue)) {
-                irm get.scoop.sh | iex
+                & ([scriptblock]::Create((Invoke-RestMethod -Uri get.scoop.sh)))
             }
             scoop install wget2
         "
