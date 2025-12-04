@@ -176,31 +176,18 @@ case "$PLATFORM" in
 	vs)
 		CORELIBS+=( videoInput )
 
-    # --- 1. 100 % user-scope Scoop ---------------------------------
-    export SCOOP="$HOME/scoop"          # force user install even if admin
-
-    if ! command -v wget2 &>/dev/null; then
-        section "wget2 not installed, installing scoop and wget2..."
-        powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "
-            # keep the installer happy
-            Set-Variable -Name allowedExecutionPolicy -Value @('Bypass') -Scope Global
-            & ([scriptblock]::Create((Invoke-RestMethod -Uri get.scoop.sh)))
-            scoop install wget2
-        "
-        # --- 2.  make shim folder visible to *this* bash -----------
-        SCOOP_SHIMS="$HOME/scoop/shims"
-        if [[ ":$PATH:" != *":$SCOOP_SHIMS:"* ]]; then
-            export PATH="$SCOOP_SHIMS:$PATH"
-        fi
-
-        if command -v wget2 &>/dev/null; then
-            section "wget2 successfully installed and available!"
-        else
-            alert "wget2 installed but may require a new shell session"
-        fi
-    else
-        section "wget2 already installed!"
-    fi
+	    # ----- wget2 without Scoop -----
+	    WGET2_DIR="$HOME/wget2"
+	    if ! command -v wget2 &>/dev/null; then
+	        section "Fetching portable wget2 ..."
+	        mkdir -p "$WGET2_DIR"
+	        powershell -NoP -C "Invoke-WebRequest -Uri https://github.com/rockdaboot/wget2/releases/download/v2.1.0/wget2-2.1.0-win64.zip -OutFile '$HOME/wget2.zip'"
+	        unzip -q "$HOME/wget2.zip" -d "$HOME"
+	        rm -f "$HOME/wget2.zip"
+	        mv "$HOME/wget2-"* "$WGET2_DIR" 2>/dev/null || true
+	    fi
+	    export PATH="$WGET2_DIR:$PATH"
+	    # --------------------------------
     ;;
 
 	macos)
