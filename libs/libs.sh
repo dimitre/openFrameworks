@@ -186,9 +186,9 @@ case "$PLATFORM" in
 	        # download single static exe (64-bit, 2.28 MB)
 	        if [[ ! -x "$WGET2_DIR/wget2.exe" ]]; then
 	            section "Fetching portable wget2.exe …"
-	            curl -L -o "$WGET2_DIR/wget2.exe" \
-	                https://github.com/rockdaboot/wget2/releases/download/v2.1.0/wget2.exe
-	            chmod +x "$WGET2_DIR/wget2.exe"
+				curl -L -o "$WGET2_DIR/wget2.exe" \
+     --ssl-revoke-best-effort \
+     https://github.com/rockdaboot/wget2/releases/download/v2.1.0/wget2.exe	            chmod +x "$WGET2_DIR/wget2.exe"
 	        fi
 
 	        # inject into PATH for this session
