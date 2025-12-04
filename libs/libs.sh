@@ -182,9 +182,11 @@ case "$PLATFORM" in
     if ! command -v wget2 &>/dev/null; then
         section "wget2 not installed, installing scoop and wget2..."
         powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "
-            & ([scriptblock]::Create((Invoke-RestMethod -Uri get.scoop.sh))) ; scoop install wget2
+            # keep the installer happy
+            Set-Variable -Name allowedExecutionPolicy -Value @('Bypass') -Scope Global
+            & ([scriptblock]::Create((Invoke-RestMethod -Uri get.scoop.sh)))
+            scoop install wget2
         "
-
         # --- 2.  make shim folder visible to *this* bash -----------
         SCOOP_SHIMS="$HOME/scoop/shims"
         if [[ ":$PATH:" != *":$SCOOP_SHIMS:"* ]]; then
