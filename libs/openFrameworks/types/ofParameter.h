@@ -1575,3 +1575,13 @@ template <typename ParameterType, typename Friend>
 void ofReadOnlyParameter<ParameterType, Friend>::setParent(ofParameterGroup & _parent) {
 	parameter.setParent(_parent);
 }
+
+
+extern template class ofParameter<void>;
+extern template class ofParameter<int>;
+extern template class ofParameter<float>;
+extern template class ofParameter<glm::vec2>;
+extern template class ofParameter<glm::vec3>;
+extern template class ofParameter<glm::vec4>;
+//extern template class ofParameter<bool>;
+//extern template class ofParameter<std::string>;

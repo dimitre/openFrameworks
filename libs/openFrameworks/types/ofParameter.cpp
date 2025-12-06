@@ -177,3 +177,12 @@ void ofParameter<void>::setParent(ofParameterGroup & parent) {
 size_t ofParameter<void>::getNumListeners() const {
     return obj->changedE.size();
 }
+
+template class ofParameter<void>;
+template class ofParameter<int>;
+template class ofParameter<float>;
+template class ofParameter<glm::vec2>;
+template class ofParameter<glm::vec3>;
+template class ofParameter<glm::vec4>;
+//template class ofParameter<bool>;
+//template class ofParameter<std::string>;
