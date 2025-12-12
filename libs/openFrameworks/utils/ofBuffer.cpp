@@ -388,6 +388,10 @@ std::istream & operator>>(std::istream & istr, ofBuffer & buf){
 
 //--------------------------------------------------
 ofBuffer ofBufferFromFile(const fs::path & path, bool binary){
+//	cout << "ofBufferFromFile " << path << endl;
+//	if (!fs::exists(ofCore.toDataPath(path))) {
+//		cout << "ERROR ofBufferFromFile file not found " << path << " : " << ofCore.toDataPath(path) << endl;
+//	}
 	std::ifstream fileFrom(ofCore.toDataPath(path));
 	return ofBuffer(fileFrom);
 

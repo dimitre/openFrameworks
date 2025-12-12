@@ -176,6 +176,7 @@ public:
 	
 	// ofToDataPath equivalent now.
 	fs::path toDataPath(const fs::path & path) {
+//		cout << "toDataPath dataPath = " << dataPath << endl;
 		return dataPath / path;
 	}
 	
