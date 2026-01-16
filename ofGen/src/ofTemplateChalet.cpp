@@ -99,7 +99,7 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 					alert("	└─ appleFramework inside Addon " + s, 94);
 					projectYaml["targets"]["empty"]["settings:Cxx"]["appleFrameworks"].push_back(fs::path(s).stem().string());
 					std::string frameworkPath = std::string("${var:ofPath}/addons/") + a->name + "/" + fs::path(s).parent_path().string();
-					alert("frameworkPath::" + frameworkPath, 92);
+					alert("frameworkPath :: " + frameworkPath, 92);
 					projectYaml["targets"]["empty"]["settings:Cxx"]["appleFrameworkPaths"].push_back(frameworkPath);
 				} else {
 					projectYaml["targets"]["empty"]["settings:Cxx"]["appleFrameworks"].push_back(s);
@@ -138,7 +138,7 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 			alert("	└─ appleFramework inside Addon " + s, 94);
 			projectYaml["targets"]["empty"]["settings:Cxx"]["appleFrameworks"].push_back(fs::path(s).stem().string());
 			std::string frameworkPath = std::string("${var:ofPath}/addons/") + a->name + "/" + fs::path(s).parent_path().string();
-			alert("frameworkPath::" + frameworkPath, 92);
+			alert("	frameworkPath :: " + frameworkPath, 92);
 			projectYaml["targets"]["empty"]["settings:Cxx"]["appleFrameworkPaths"].push_back(frameworkPath);
 		} else {
 			projectYaml["targets"]["empty"]["settings:Cxx"]["appleFrameworks"].push_back(s);
