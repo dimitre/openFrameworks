@@ -90,11 +90,11 @@ class ofOpenALSoundPlayer : public ofBaseSoundPlayer, public ofThread, public of
 		void update(ofEventArgs & args);
 
 
-//		void initFFT(int bands);
-//		float * getCurrentBufferSum(int size);
-//		static void createWindow(int size);
-//		static void runWindow(std::vector<float> & signal);
-//		static void initSystemFFT(int bands);
+		void initFFT(int bands);
+		float * getCurrentBufferSum(int size);
+		static void createWindow(int size);
+		static void runWindow(std::vector<float> & signal);
+		static void initSystemFFT(int bands);
 
 
 
