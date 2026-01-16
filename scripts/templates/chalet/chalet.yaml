@@ -383,28 +383,29 @@ distribution:
       type: app
       # icon: ${var:ofPath}/libs/openFrameworksCompiled/project/macos/of.icns
       icon: ${var:ofPath}/scripts/ofWorks.png
+      iconMethod: sips
       infoPropertyList:
         CFBundleDevelopmentRegion: en-US
         CFBundleDisplayName: ${name}
         CFBundleExecutable: ${mainExecutable}
         CFBundleIconFile: ${icon}
         CFBundleIdentifier: cc.ofWorks.${name}
-        CFBundleInfoDictionaryVersion: "6.0"
+        CFBundleInfoDictionaryVersion: 6.0
         CFBundleName: ${bundleName}
         CFBundlePackageType: APPL
-        ## FIXME
+        CFBundleSignature: ????
+        # CFBundleShortVersionString: !!str "1.0.0"
+        # CFBundleVersion: !!str "1.0.0"
+        # LSMinimumSystemVersion: !!str "11.6"
         CFBundleShortVersionString: "1.0.0"
-        ## FIXME
         CFBundleVersion: "1.0.0"
-        CFBundleSignature: "????"
-        LSMinimumSystemVersion: "10.8"
+        LSMinimumSystemVersion: "11.6.0"
         NSHighResolutionCapable: true
         NSCameraUsageDescription: This app needs to access the camera
         NSMicrophoneUsageDescription: This app needs to access the microphone
         NSCameraUseContinuityCameraDeviceType: false
         ITSAppUsesNonExemptEncryption: false
         NSHumanReadableCopyright: Made using ofworks.cc (openFrameworks fork)
-        CFBundleDevelopmentRegion: en
 
   # empty.dmg:
   #   kind: macosDiskImage
