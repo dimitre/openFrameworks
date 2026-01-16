@@ -1,36 +1,11 @@
 #include "ofTemplateChalet.h"
 #include "addons.h"
 #include <fstream>
-
-// #include <chrono>
-// #include <format>
-
-// std::string timeString() {
-//     using namespace std::chrono;
-
-//     const auto now = system_clock::now();
-//     const auto tt  = system_clock::to_time_t(now);
-
-//     std::tm tm{};
-//     localtime_r(&tt, &tm);           // local time
-
-//     return std::format("{:04}{:02}{:02}-{:02}{:02}",
-//                        tm.tm_year + 1900,
-//                        tm.tm_mon  + 1,
-//                        tm.tm_mday,
-//                        tm.tm_hour,
-//                        tm.tm_min);
-// }
-//
 #include <chrono>
 #include <fmt/chrono.h> // fmt’s chrono integration
 
 std::string timeString() {
 	using namespace std::chrono;
-	// const auto now = system_clock::now();
-	// const auto zt  = current_zone()->to_local(now);   // local time point
-	// return fmt::format("{:%Y%m%d-%H%M}", zt);          // e.g. 202512031137
-
 	return fmt::format("{:%Y%m%d-%H%M}", system_clock::now()); // GMT / UTC
 }
 
@@ -122,10 +97,13 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 				size_t found = s.find('/');
 				if (found != std::string::npos) {
 					alert("	└─ appleFramework inside Addon " + s, 94);
-					s = std::string("${var:ofPath}/addons/") + a->name + "/" + s;
+					projectYaml["targets"]["empty"]["settings:Cxx"]["appleFrameworks"].push_back(fs::path(s).stem().string());
+					std::string frameworkPath = std::string("${var:ofPath}/addons/") + a->name + "/" + fs::path(s).parent_path().string();
+					alert("frameworkPath::" + frameworkPath, 92);
+					projectYaml["targets"]["empty"]["settings:Cxx"]["appleFrameworkPaths"].push_back(frameworkPath);
+				} else {
+					projectYaml["targets"]["empty"]["settings:Cxx"]["appleFrameworks"].push_back(s);
 				}
-
-				projectYaml["targets"]["empty"]["settings:Cxx"]["appleFrameworks"].push_back(s);
 			}
 		}
 	}
@@ -152,7 +130,19 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 	for (const fs::path & f : a->filteredMap["frameworks"]) {
 		// addFramework(a->path / f);
 		alert("	└─ appleFramework " + f.string(), 94);
-		projectYaml["targets"]["empty"]["settings:Cxx"]["appleFrameworks"].push_back(f.string());
+		// projectYaml["targets"]["empty"]["settings:Cxx"]["appleFrameworks"].push_back(f.string());
+
+		std::string s = f.string();
+		size_t found = s.find('/');
+		if (found != std::string::npos) {
+			alert("	└─ appleFramework inside Addon " + s, 94);
+			projectYaml["targets"]["empty"]["settings:Cxx"]["appleFrameworks"].push_back(fs::path(s).stem().string());
+			std::string frameworkPath = std::string("${var:ofPath}/addons/") + a->name + "/" + fs::path(s).parent_path().string();
+			alert("frameworkPath::" + frameworkPath, 92);
+			projectYaml["targets"]["empty"]["settings:Cxx"]["appleFrameworkPaths"].push_back(frameworkPath);
+		} else {
+			projectYaml["targets"]["empty"]["settings:Cxx"]["appleFrameworks"].push_back(s);
+		}
 	}
 
 	// I'm now removing this one. it was handled already by conf.defines in general addon loading. ofAddon::loadFiles populating conf.defines
