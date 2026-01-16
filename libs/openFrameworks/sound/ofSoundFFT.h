@@ -14,14 +14,14 @@ public:
 	virtual float * getCurrentBufferSum(int size) {};
 	static void createWindow(int size);
 	static void runWindow(std::vector<float> & signal);
-	
+
 	float * getSpectrum(int bands);
 
 //	static float * getSystemSpectrum(int bands);
 	float * getSystemSpectrum(int bands);
-	
+
 	// fft structures
-private:
+// private:
 	std::vector<std::vector<float> > fftBuffers;
 	kiss_fftr_cfg fftCfg;
 	std::vector<float> windowedSignal;
@@ -32,7 +32,7 @@ private:
 	static std::vector<float> systemWindowedSignal;
 	static std::vector<float> systemBins;
 	static std::vector<kiss_fft_cpx> systemCx_out;
-	
+
 	static std::vector<float> window;
 	static float windowSum;
 };

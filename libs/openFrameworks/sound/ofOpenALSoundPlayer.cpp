@@ -152,6 +152,7 @@ ofOpenALSoundPlayer::ofOpenALSoundPlayer(){
 	isStreaming		= false;
 	channels		= 0;
 	duration		= 0;
+
 	fftCfg			= 0;
 	streamf			= 0;
 #ifdef OF_USING_MPG123
