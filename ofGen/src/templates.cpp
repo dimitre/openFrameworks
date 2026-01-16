@@ -427,9 +427,9 @@ void ofTemplateMacos::addFramework(const fs::path & path) {
 	// void addFramework (const std::string & path);
 	alert("	addFramework " + path.string(), 95);
 
-	std::string pathString = path.string();
-
 	bool isRelativeToSDK = false;
+
+	std::string pathString = path.string();
 	size_t found = pathString.find('/');
 	if (found == std::string::npos) {
 		isRelativeToSDK = true;

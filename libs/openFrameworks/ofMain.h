@@ -130,6 +130,8 @@ using std::weak_ptr;
 //#include "ofURLFileLoader.h"
 #endif
 
+
+
 #include <stdint.h>
 #include <cstdio>
 #include <cstdlib>
@@ -139,3 +141,4 @@ using std::weak_ptr;
 #include <vector>
 #include <memory>
 #include <functional>
+#include <algorithm> // std::min

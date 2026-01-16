@@ -201,4 +201,6 @@ public:
 
 	virtual float getDuration() const = 0;
 	virtual unsigned int getDurationMS() const = 0;
+	
+//	static float * getSystemSpectrum(int bands);
 };

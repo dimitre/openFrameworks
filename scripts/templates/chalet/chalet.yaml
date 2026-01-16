@@ -268,6 +268,8 @@ abstracts:*:
       - ${var:ofPath}/libs/${var:platform}/lib/x86_64-linux-gnu/liblcms2.a
 
     staticLinks[:macos]:
+      # - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
+
       - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
       - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
       - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
@@ -386,31 +388,39 @@ distribution:
         CFBundleDisplayName: ${name}
         CFBundleExecutable: ${mainExecutable}
         CFBundleIconFile: ${icon}
-        CFBundleIdentifier: com.developer.application
+        CFBundleIdentifier: cc.ofWorks.${name}
         CFBundleInfoDictionaryVersion: "6.0"
         CFBundleName: ${bundleName}
         CFBundlePackageType: APPL
+        ## FIXME
         CFBundleShortVersionString: "1.0.0"
+        ## FIXME
         CFBundleVersion: "1.0.0"
         CFBundleSignature: "????"
         LSMinimumSystemVersion: "10.8"
         NSHighResolutionCapable: true
+        NSCameraUsageDescription: This app needs to access the camera
+        NSMicrophoneUsageDescription: This app needs to access the microphone
+        NSCameraUseContinuityCameraDeviceType: false
+        ITSAppUsesNonExemptEncryption: false
+        NSHumanReadableCopyright: Made using ofworks.cc (openFrameworks fork)
+        CFBundleDevelopmentRegion: en
 
-  empty.dmg:
-    kind: macosDiskImage
-    pathbarVisible: false
-    textSize: 12
-    iconSize: 80
-    # background:
-    #   1x: platform/macos/dmg-background.png
-    #   2x: platform/macos/dmg-background@2x.png
-    size:
-      width: 512
-      height: 342
-    positions:
-      empty:
-        x: 120
-        y: 188
-      Applications:
-        x: 392
-        y: 188
+  # empty.dmg:
+  #   kind: macosDiskImage
+  #   pathbarVisible: false
+  #   textSize: 12
+  #   iconSize: 80
+  #   # background:
+  #   #   1x: platform/macos/dmg-background.png
+  #   #   2x: platform/macos/dmg-background@2x.png
+  #   size:
+  #     width: 512
+  #     height: 342
+  #   positions:
+  #     empty:
+  #       x: 120
+  #       y: 188
+  #     Applications:
+  #       x: 392
+  #       y: 188

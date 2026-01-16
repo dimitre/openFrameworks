@@ -135,13 +135,15 @@ mkdir -p "${DOWNLOAD}"
 # Platform-Specific Configuration
 # ============================================
 
-ADDONLIBS=( assimp opencv libusb pixman cairo )
+# now removing pixman from the list. it is bundled together with Cairo .zip
+#ADDONLIBS=( assimp opencv libusb pixman cairo )
+ADDONLIBS=( assimp opencv libusb cairo )
 LIBADDONS=(
 	"assimp:ofxAssimp"
 	"libusb:ofxKinect"
 	"opencv:ofxOpenCv"
 	"cairo:ofxCairo"
-	"pixman:ofxCairo"
+	# "pixman:ofxCairo"
 )
 
 	# msys2)
@@ -199,6 +201,9 @@ case "$PLATFORM" in
     ;;
 
 	macos)
+		# temporary test to see if kiss does the job
+		CORELIBS+=( kissfft )
+
 		# Install system dependencies (skip in CI)
 		if [[ -z "${CI:-}" ]]; then
 

@@ -149,6 +149,12 @@ static const void *PlayerRateContext = &ItemStatusContext;
 		return NO;
 	}
 	
+	// FIX: Prevent synchronous loading on main thread
+	if (bAsync == NO && [NSThread isMainThread]) {
+		NSLog(@"Warning: Synchronous video loading should not be called from main thread. Using async mode.");
+		bAsync = YES;
+	}
+	
 	
 	// store state
 	BOOL _bReady = bReady;
@@ -170,7 +176,9 @@ static const void *PlayerRateContext = &ItemStatusContext;
 	if(bAsync == YES){
 		queue = dispatch_get_main_queue();
 	} else {
-		queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+//		queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+		// FIX: Use USER_INITIATED QoS to avoid priority inversion
+		queue = dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0);
 	}
 	
 	dispatch_async(queue, ^{
@@ -442,7 +450,7 @@ static const void *PlayerRateContext = &ItemStatusContext;
 	videoSampleBuffer = nil;
 	audioSampleBuffer = nil;
 	
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+	dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
 		
 		@autoreleasepool {
 			
@@ -544,6 +552,13 @@ static const void *PlayerRateContext = &ItemStatusContext;
 
 - (void)unloadVideo
 {
+	// Prevent synchronous unload on main thread
+	if ([NSThread isMainThread]) {
+		NSLog(@"Warning: Synchronous video unload should not be called from main thread. Use unloadVideoAsync instead.");
+		[self unloadVideoAsync];
+		return;
+	}
+	
 	// create a condition
 	deallocCond = [[NSCondition alloc] init];
 	[deallocCond lock];

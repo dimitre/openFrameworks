@@ -138,18 +138,18 @@ void ofAddon::loadFiles() {
 	alert("	loadFiles " + path.string(), 34);
 
 	for (auto & p : addonProperties["ADDON_LIBS"]) {
-		alert("-> addon libs " + p, 35);
+		alert("	-> addon libs " + p, 35);
 		filesMap["libs"].emplace_back(p);
 	}
 
 	for (auto & p : addonProperties["ADDON_INCLUDES"]) {
-		alert("-> addon includes " + p, 35);
+		alert("	-> addon includes " + p, 35);
 		filesMap["includes"].emplace_back(p);
 	}
 
 	// test 12 oct.
 	for (auto & p : addonProperties["ADDON_DEFINES"]) {
-		alert("-> addon defines " + p, 35);
+		alert("	-> addon defines " + p, 35);
 		conf.defines.emplace_back(p);
 	}
 

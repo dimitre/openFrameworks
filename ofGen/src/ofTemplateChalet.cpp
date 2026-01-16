@@ -115,10 +115,16 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 
 	if (a->addonProperties.count("ADDON_FRAMEWORKS")) {
 		for (const auto & f : a->addonProperties["ADDON_FRAMEWORKS"]) {
-			for (const auto & s : ofSplitString(f, " ")) {
+			for (auto & s : ofSplitString(f, " ")) {
 				// alert("     appleFramework " + s, 95);
 				alert("	└─ appleFramework " + s, 94);
 				// projectYaml["abstracts:*"]["settings:Cxx"]["appleFrameworks"].push_back(s);
+				size_t found = s.find('/');
+				if (found != std::string::npos) {
+					alert("	└─ appleFramework inside Addon " + s, 94);
+					s = std::string("${var:ofPath}/addons/") + a->name + "/" + s;
+				}
+
 				projectYaml["targets"]["empty"]["settings:Cxx"]["appleFrameworks"].push_back(s);
 			}
 		}

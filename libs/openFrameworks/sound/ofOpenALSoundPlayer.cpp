@@ -999,27 +999,25 @@ void ofOpenALSoundPlayer::stop(){
 	}
 }
 
-// ----------------------------------------------------------------------------
-void ofOpenALSoundPlayer::initFFT(int bands){
-	if(int(bins.size())==bands) return;
-	int signalSize = (bands-1)*2;
-	if(fftCfg!=0) kiss_fftr_free(fftCfg);
-	fftCfg = kiss_fftr_alloc(signalSize, 0, nullptr, nullptr);
-	cx_out.resize(bands);
-	bins.resize(bands);
-	createWindow(signalSize);
-}
+//void ofOpenALSoundPlayer::initSystemFFT(int bands){
+//	if(int(systemBins.size())==bands) return;
+//	int signalSize = (bands-1)*2;
+//	if(systemFftCfg!=0) kiss_fftr_free(systemFftCfg);
+//	systemFftCfg = kiss_fftr_alloc(signalSize, 0, nullptr, nullptr);
+//	systemCx_out.resize(bands);
+//	systemBins.resize(bands);
+//	createWindow(signalSize);
+//}
 
-// ----------------------------------------------------------------------------
-void ofOpenALSoundPlayer::initSystemFFT(int bands){
-	if(int(systemBins.size())==bands) return;
-	int signalSize = (bands-1)*2;
-	if(systemFftCfg!=0) kiss_fftr_free(systemFftCfg);
-	systemFftCfg = kiss_fftr_alloc(signalSize, 0, nullptr, nullptr);
-	systemCx_out.resize(bands);
-	systemBins.resize(bands);
-	createWindow(signalSize);
-}
+//void ofOpenALSoundPlayer::initFFT(int bands){
+//	if(int(bins.size())==bands) return;
+//	int signalSize = (bands-1)*2;
+//	if(fftCfg!=0) kiss_fftr_free(fftCfg);
+//	fftCfg = kiss_fftr_alloc(signalSize, 0, nullptr, nullptr);
+//	cx_out.resize(bands);
+//	bins.resize(bands);
+//	createWindow(signalSize);
+//}
 
 float * ofOpenALSoundPlayer::getCurrentBufferSum(int size){
 	if(int(windowedSignal.size())!=size){

@@ -9,8 +9,8 @@
 
 typedef unsigned int ALuint;
 
-#include <kissfft/kiss_fft.h>
-#include <kissfft/kiss_fftr.h>
+//#include <kissfft/kiss_fft.h>
+//#include <kissfft/kiss_fftr.h>
 #include <sndfile.h>
 
 #ifdef OF_USING_MPG123
@@ -40,7 +40,7 @@ float * ofFmodSoundGetSpectrum(int nBands);		// max 512...
 
 
 // --------------------- player functions:
-class ofOpenALSoundPlayer : public ofBaseSoundPlayer, public ofThread {
+class ofOpenALSoundPlayer : public ofBaseSoundPlayer, public ofThread, public ofSoundFFT {
 
 	public:
 
@@ -87,12 +87,16 @@ class ofOpenALSoundPlayer : public ofBaseSoundPlayer, public ofThread {
 	private:
 		friend void ofOpenALSoundUpdate();
 		void update(ofEventArgs & args);
-		void initFFT(int bands);
-		float * getCurrentBufferSum(int size);
-
-		static void createWindow(int size);
-		static void runWindow(std::vector<float> & signal);
-		static void initSystemFFT(int bands);
+	
+	
+//		void initFFT(int bands);
+//		float * getCurrentBufferSum(int size);
+//		static void createWindow(int size);
+//		static void runWindow(std::vector<float> & signal);
+//		static void initSystemFFT(int bands);
+	
+	
+	
 
         bool sfReadFile(const fs::path& path,std::vector<short> & buffer,std::vector<float> & fftAuxBuffer);
         bool sfStream(const fs::path& path,std::vector<short> & buffer,std::vector<float> & fftAuxBuffer);
@@ -115,8 +119,8 @@ class ofOpenALSoundPlayer : public ofBaseSoundPlayer, public ofThread {
 		float speed; // -n to n, 1 = normal, -1 backwards
 		unsigned int length; // in samples;
 
-		static std::vector<float> window;
-		static float windowSum;
+//		static std::vector<float> window;
+//		static float windowSum;
 
 		int channels;
 		float duration; //in secs
@@ -124,18 +128,18 @@ class ofOpenALSoundPlayer : public ofBaseSoundPlayer, public ofThread {
 		std::vector<ALuint> buffers;
 		std::vector<ALuint> sources;
 
-		// fft structures
-		std::vector<std::vector<float> > fftBuffers;
-		kiss_fftr_cfg fftCfg;
-		std::vector<float> windowedSignal;
-		std::vector<float> bins;
-		std::vector<kiss_fft_cpx> cx_out;
-
-
-		static kiss_fftr_cfg systemFftCfg;
-		static std::vector<float> systemWindowedSignal;
-		static std::vector<float> systemBins;
-		static std::vector<kiss_fft_cpx> systemCx_out;
+//		// fft structures
+//		std::vector<std::vector<float> > fftBuffers;
+//		kiss_fftr_cfg fftCfg;
+//		std::vector<float> windowedSignal;
+//		std::vector<float> bins;
+//		std::vector<kiss_fft_cpx> cx_out;
+//
+//
+//		static kiss_fftr_cfg systemFftCfg;
+//		static std::vector<float> systemWindowedSignal;
+//		static std::vector<float> systemBins;
+//		static std::vector<kiss_fft_cpx> systemCx_out;
 
 		SNDFILE* streamf;
 		size_t stream_samples_read;

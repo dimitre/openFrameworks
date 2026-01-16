@@ -1013,6 +1013,11 @@ ofAVEngineSoundPlayer::~ofAVEngineSoundPlayer() {
     unload();
 }
 
+float * ofAVEngineSoundPlayer::getSystemSpectrum(int bands) {
+	
+}
+
+
 bool ofAVEngineSoundPlayer::load(const fs::path & fileName, bool stream) {
     if(soundPlayer != NULL) {
         unload();

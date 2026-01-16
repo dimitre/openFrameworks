@@ -5,6 +5,10 @@
 #ifdef OF_SOUND_PLAYER_AV_ENGINE
 #include "ofAVEngineSoundPlayer.h"
 #define OF_SOUND_PLAYER_TYPE ofAVEngineSoundPlayer
+// FIXME: UNDO
+//#define OF_SOUND_PLAYER_OPENAL
+//#include "ofOpenALSoundPlayer.h"
+//#define OF_SOUND_PLAYER_TYPE ofOpenALSoundPlayer
 #endif
 
 #ifdef OF_SOUND_PLAYER_FMOD
@@ -88,15 +92,16 @@ float * ofSoundGetSpectrum(int nBands){
 	#elif defined(OF_SOUND_PLAYER_EMSCRIPTEN)
 		return ofxEmscriptenSoundPlayer::getSystemSpectrum(nBands);
 	#else
-		ofLogWarning("ofSoundPlayer") << "ofSoundGetSpectrum() not implemented on this platform, returning nullptr";
-		return nullptr;
+	return OF_SOUND_PLAYER_TYPE::getSystemSpectrum(nBands);
+//		ofLogWarning("ofSoundPlayer") << "ofSoundGetSpectrum() not implemented on this platform, returning nullptr";
+//		return nullptr;
 	#endif
 }
 
 //---------------------------------------------------------------------------
 ofSoundPlayer::ofSoundPlayer (){
 #ifdef OF_SOUND_PLAYER_TYPE
-	player	= std::make_shared<OF_SOUND_PLAYER_TYPE>();
+	player = std::make_shared<OF_SOUND_PLAYER_TYPE>();
 #endif
 }
 

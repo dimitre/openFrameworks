@@ -18,6 +18,7 @@ OF_CORE_LIBS[config=Debug] = $(OF_PATH)/libs/openFrameworksCompiled/lib/macos/op
 //OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/liblzma.a
 
 
+OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libkissfft-float.a
 
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libfmt.a
 OF_CORE_LIBS = $(inherited) $(OF_PATH)/libs/macos/lib/libmango.a

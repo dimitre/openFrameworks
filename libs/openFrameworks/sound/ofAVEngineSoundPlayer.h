@@ -22,6 +22,9 @@ class ofEventArgs;
     #import <Accelerate/Accelerate.h>
 #endif
 
+//#include "ofSoundFFT.h"
+//, public ofSoundFFT
+
 class ofAVEngineSoundPlayer : public ofBaseSoundPlayer {
 
 public:
@@ -36,7 +39,8 @@ public:
     ofAVEngineSoundPlayer();
     ~ofAVEngineSoundPlayer();
 
-    static std::vector <float> getSystemSpectrum(int bands);
+//    static std::vector <float> getSystemSpectrum(int bands);
+	static float * getSystemSpectrum(int bands);
 
     bool load(const fs::path& fileName, bool stream = false);
     void unload();
