@@ -9,6 +9,7 @@
 
 typedef unsigned int ALuint;
 
+#include "ofSoundFFT.h"
 //#include <kissfft/kiss_fft.h>
 //#include <kissfft/kiss_fftr.h>
 #include <sndfile.h>
@@ -87,16 +88,16 @@ class ofOpenALSoundPlayer : public ofBaseSoundPlayer, public ofThread, public of
 	private:
 		friend void ofOpenALSoundUpdate();
 		void update(ofEventArgs & args);
-	
-	
+
+
 //		void initFFT(int bands);
 //		float * getCurrentBufferSum(int size);
 //		static void createWindow(int size);
 //		static void runWindow(std::vector<float> & signal);
 //		static void initSystemFFT(int bands);
-	
-	
-	
+
+
+
 
         bool sfReadFile(const fs::path& path,std::vector<short> & buffer,std::vector<float> & fftAuxBuffer);
         bool sfStream(const fs::path& path,std::vector<short> & buffer,std::vector<float> & fftAuxBuffer);
