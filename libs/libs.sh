@@ -218,8 +218,8 @@ case "$PLATFORM" in
 				# fi
 
 				if ! command -v wget2 &> /dev/null; then
-					# section "no wget2"
-					brew install wget2
+					section "Installing wget2 (as gh fallback)"
+					brew install wget2 || echo "Failed to install wget2. You can try to install gh or wget2 manually."
 				else
 					section "wget2 already installed"
 				fi
