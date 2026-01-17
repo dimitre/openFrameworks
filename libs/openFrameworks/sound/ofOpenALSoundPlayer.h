@@ -121,8 +121,6 @@ class ofOpenALSoundPlayer : public ofBaseSoundPlayer, public ofThread {
 		float speed; // -n to n, 1 = normal, -1 backwards
 		unsigned int length; // in samples;
 
-//		static std::vector<float> window;
-//		static float windowSum;
 
 		int channels;
 		float duration; //in secs
@@ -131,6 +129,9 @@ class ofOpenALSoundPlayer : public ofBaseSoundPlayer, public ofThread {
 		std::vector<ALuint> sources;
 
 //		// fft structures
+		static std::vector<float> window;
+		static float windowSum;
+	
 		std::vector<std::vector<float> > fftBuffers;
 		kiss_fftr_cfg fftCfg;
 		std::vector<float> windowedSignal;
