@@ -36,7 +36,7 @@ void ofSoundFFT::process(const float* input, int size) {
 	
 	kiss_fftr(fftCfg, windowedSignal.data(), cx_out.data());
 	
-	const float norm = 1.0f / (fftSize * 0.5f * windowSum);
+	const float norm = 2.0f / windowSum;
 	for (size_t i = 0; i < spectrum.size(); ++i) {
 		spectrum[i] = std::sqrt(cx_out[i].r * cx_out[i].r + cx_out[i].i * cx_out[i].i) * norm;
 	}

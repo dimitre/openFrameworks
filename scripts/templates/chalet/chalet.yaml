@@ -59,12 +59,6 @@ abstracts:*:
       # - URI_STATIC
       - URI_STATIC_BUILD
 
-      # FIXME: Remove this and test on Windows.
-      # - FREEIMAGE_LIB
-      # - JPEG_STATIC
-      # - TIFF_STATIC
-      # - ZLIB_CONST
-
       # only for libfreenect, ofxKinect. if it works it can be moved there.
       - strdup=_strdup
       # FIXME: remove this from core, and put back here
@@ -193,19 +187,14 @@ abstracts:*:
       - Ws2_32 # ofxNetwork. I can move only there later
       # - uriparser # URI parsing
       # - glew32 # GLEW extension loader
-      # - FreeImage
 
     staticLinks[:windows]:
-      # - ${var:ofPath}/libs/${var:platform}/lib/jpeg-static.lib
-      # - ${var:ofPath}/libs/${var:platform}/lib/FreeImage.lib
-      # - ${var:ofPath}/libs/${var:platform}/lib/tiff.lib
-      # - ${var:ofPath}/libs/${var:platform}/lib/turbojpeg-static.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/kissfft-float.lib
 
       - ${var:ofPath}/libs/${var:platform}/lib/mango.lib
       - ${var:ofPath}/libs/${var:platform}/lib/bz2_static.lib
       - ${var:ofPath}/libs/${var:platform}/lib/deflatestatic.lib
       - ${var:ofPath}/libs/${var:platform}/lib/liblcms2.lib
-      # - ${var:ofPath}/libs/${var:platform}/lib/liblcms2.a
       - ${var:ofPath}/libs/${var:platform}/lib/lz4.lib
       - ${var:ofPath}/libs/${var:platform}/lib/zstd_static.lib
 
@@ -232,21 +221,12 @@ abstracts:*:
       # - ${var:ofPath}/libs/${var:platform}/lib/yaml-cpp.lib
 
     staticLinks[:linux]:
-      #libpng, libbrotlienc, libjpeg libbrotlicommon,libbrotlidec
-
-      # - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
-      # - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
-      # # - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
-      # - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
-      # - ${var:ofPath}/libs/${var:platform}/lib/libjpeg.a
-
       - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
       - ${var:ofPath}/libs/${var:platform}/lib/libfmt.a
+
       - ${var:ofPath}/libs/${var:platform}/lib/libmango.a
       - ${var:ofPath}/libs/${var:platform}/lib/libbz2_static.a
       - ${var:ofPath}/libs/${var:platform}/lib/libdeflate.a
-      # - ${var:ofPath}/libs/${var:platform}/lib/liblcms2.a
-      # FIXME: try to solve this on meson and not here. ok for now
       - ${var:ofPath}/libs/${var:platform}/lib/liblz4.a
       - ${var:ofPath}/libs/${var:platform}/lib/libzstd.a
 
@@ -269,7 +249,7 @@ abstracts:*:
     #   - ${var:ofPath}/libs/${var:platform}/lib/x86_64-linux-gnu/liblcms2.a
 
     staticLinks[:macos]:
-      # - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
 
       - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
       - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
@@ -288,34 +268,21 @@ abstracts:*:
       - ${var:ofPath}/libs/${var:platform}/lib/libz.a
 
       - ${var:ofPath}/libs/${var:platform}/lib/libfmt.a
+
       - ${var:ofPath}/libs/${var:platform}/lib/libmango.a
       - ${var:ofPath}/libs/${var:platform}/lib/libbz2_static.a
       - ${var:ofPath}/libs/${var:platform}/lib/libdeflate.a
       - ${var:ofPath}/libs/${var:platform}/lib/liblcms2.a
       - ${var:ofPath}/libs/${var:platform}/lib/liblz4.a
       - ${var:ofPath}/libs/${var:platform}/lib/libzstd.a
-
-      # FREEIMAGE
-      # - ${var:ofPath}/libs/${var:platform}/lib/libturbojpeg.a
-      # - ${var:ofPath}/libs/${var:platform}/lib/libtiff.a
-      # - ${var:ofPath}/libs/${var:platform}/lib/libFreeImage.a
-      # - ${var:ofPath}/libs/${var:platform}/lib/libtiffxx.a
-      # - ${var:ofPath}/libs/${var:platform}/lib/liblzma.a
 targets:
-  # OFLib:
-  #   kind: chaletProject
-  #   location: ${var:ofPath}
   ofWorks:
     kind: staticLibrary
-    # outputDirectory: ${var:ofPath}
-
-    # outputDirectory: ${var:ofPath}/_build
-    # outputDir: ${var:ofPath}/_build
-    # location: ${var:ofPath}
     files:
       include:
         - ${var:ofPath}/libs/openFrameworks/{3d,communication,events,gl,graphics,math,sound,types,utils,video}/*.cpp
         - ${var:ofPath}/libs/openFrameworks/app/{ofBaseApp,ofMainLoop,ofAppRunner,ofAppGLFWWindow}.cpp
+
       include[:macos]:
         - ${var:ofPath}/libs/openFrameworks/**.{mm,m}
 

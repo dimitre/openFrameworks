@@ -91,6 +91,8 @@ float * ofSoundGetSpectrum(int nBands){
 		return ofOpenALSoundPlayer::getSystemSpectrum(nBands);
 	#elif defined(OF_SOUND_PLAYER_EMSCRIPTEN)
 		return ofxEmscriptenSoundPlayer::getSystemSpectrum(nBands);
+	#elif defined(OF_SOUND_PLAYER_AV_ENGINE)
+		return ofAVEngineSoundPlayer::getSystemSpectrum(nBands);
 	#else
 //	return OF_SOUND_PLAYER_TYPE::getSystemSpectrum(nBands);
 		ofLogWarning("ofSoundPlayer") << "ofSoundGetSpectrum() not implemented on this platform, returning nullptr";

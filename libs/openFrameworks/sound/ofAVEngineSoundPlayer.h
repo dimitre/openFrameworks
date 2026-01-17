@@ -17,9 +17,9 @@ class ofEventArgs;
 
 // FIXME: some can be moved to .mm
 #ifdef __OBJC__
-    #import <Foundation/Foundation.h>
-    #import <AVFoundation/AVFoundation.h>
-    #import <Accelerate/Accelerate.h>
+	#import <Foundation/Foundation.h>
+	#import <AVFoundation/AVFoundation.h>
+	#import <Accelerate/Accelerate.h>
 #endif
 
 #include "ofSoundFFT.h"
@@ -29,57 +29,67 @@ public:
 
 //thanks to @bangnoise for this trick
 #ifdef __OBJC__
-    using ObjectType = id<NSObject>;
+	using ObjectType = id<NSObject>;
 #else
-    using ObjectType = void *;
+	using ObjectType = void *;
 #endif
 
-    ofAVEngineSoundPlayer();
-    ~ofAVEngineSoundPlayer();
+	ofAVEngineSoundPlayer();
+	~ofAVEngineSoundPlayer();
 
 	const std::vector<float>& getSpectrum(int bands) const; // per-player
 	void installFFTOnMixer(); // called after engine starts
+	void installSystemFFTOnPlayerMixer(); // temp: for testing
 	
-    bool load(const fs::path& fileName, bool stream = false);
-    void unload();
-    void play();
-    void stop();
+	// System-wide spectrum analysis
+	static float* getSystemSpectrum(int bands);
+	static void installSystemFFT();
+	static void removeSystemFFT();
+	
+	bool load(const fs::path& fileName, bool stream = false);
+	void unload();
+	void play();
+	void stop();
 
-    void setVolume(float vol);
-    void setPan(float vol);
-    void setSpeed(float spd);
-    void setPaused(bool bP);
-    void setLoop(bool bLp);
-    void setMultiPlay(bool bMp);
-    void setPosition(float pct);
-    void setPositionMS(int ms);
+	void setVolume(float vol);
+	void setPan(float vol);
+	void setSpeed(float spd);
+	void setPaused(bool bP);
+	void setLoop(bool bLp);
+	void setMultiPlay(bool bMp);
+	void setPosition(float pct);
+	void setPositionMS(int ms);
 
-    float getPosition() const;
-    int getPositionMS() const;
-    bool isPlaying() const;
-    float getSpeed() const;
-    float getPan() const;
-    bool isLoaded() const;
-    float getVolume() const;
+	float getPosition() const;
+	int getPositionMS() const;
+	bool isPlaying() const;
+	float getSpeed() const;
+	float getPan() const;
+	bool isLoaded() const;
+	float getVolume() const;
 
 	float getDuration() const;
 	unsigned int getDurationMS() const;
 
-    void * getAVEnginePlayer();
+	void * getAVEnginePlayer();
 
 private:
 	ofSoundFFT fft;
+	
+	// Static members for system-wide FFT
+	static ofSoundFFT systemFFT;
+	static std::vector<float> systemBins;
+	static bool systemFFTInstalled;
 	
 protected:
 
 	void updateFunction(ofEventArgs & args);
 	bool bAddedUpdate = false;
 
-        void cleanupMultiplayers();
-        static bool removeMultiPlayer(void * aPlayer);
-        ObjectType soundPlayer;
+	void cleanupMultiplayers();
+	static bool removeMultiPlayer(void * aPlayer);
+	ObjectType soundPlayer;
 	std::vector <ObjectType> mMultiplayerSoundPlayers;
-	static std::vector<float> systemBins;
 
 };
 
