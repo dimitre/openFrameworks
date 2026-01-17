@@ -22,11 +22,9 @@ class ofEventArgs;
     #import <Accelerate/Accelerate.h>
 #endif
 
-//#include "ofSoundFFT.h"
-//, public ofSoundFFT
+#include "ofSoundFFT.h"
 
 class ofAVEngineSoundPlayer : public ofBaseSoundPlayer {
-
 public:
 
 //thanks to @bangnoise for this trick
@@ -39,9 +37,9 @@ public:
     ofAVEngineSoundPlayer();
     ~ofAVEngineSoundPlayer();
 
-//    static std::vector <float> getSystemSpectrum(int bands);
-	static float * getSystemSpectrum(int bands);
-
+	const std::vector<float>& getSpectrum(int bands) const; // per-player
+	void installFFTOnMixer(); // called after engine starts
+	
     bool load(const fs::path& fileName, bool stream = false);
     void unload();
     void play();
@@ -69,6 +67,9 @@ public:
 
     void * getAVEnginePlayer();
 
+private:
+	ofSoundFFT fft;
+	
 protected:
 
 	void updateFunction(ofEventArgs & args);

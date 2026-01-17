@@ -2,9 +2,10 @@
 cd "$(dirname "$0")"
 set -eu
 
-VERSION=v1.0
+LIBSVERSION=v1.0
 OF_FOLDER=..
 CHALETVERSION=0.8.16
+WGET2VERSION=v2.2.1
 
 wipeDownloads=true
 wipeDownloadsAfterInstall=true
@@ -121,7 +122,7 @@ if [[ "$wipeLibs" == true && -d "${LIBS_FOLDER}" ]]; then
 	executa rm -rf "${LIBS_FOLDER}"
 fi
 
-DOWNLOAD="./_ofLibs_${VERSION}_${PLATFORM}"
+DOWNLOAD="./_ofLibs_${LIBSVERSION}_${PLATFORM}"
 
 if [[ "$wipeDownloads" == true && -d "${DOWNLOAD}" ]]; then
 	echo "Removing Previously Downloaded Libraries"
@@ -190,7 +191,7 @@ case "$PLATFORM" in
 	            section "Fetching portable wget2.exe …"
 				curl -L -o "$WGET2_DIR/wget2.exe" \
      --ssl-revoke-best-effort \
-     https://github.com/rockdaboot/wget2/releases/download/v2.1.0/wget2.exe
+     https://github.com/rockdaboot/wget2/releases/download/$WGET2VERSION/wget2.exe
      			chmod +x "$WGET2_DIR/wget2.exe"
 	        fi
 
@@ -370,14 +371,14 @@ ALLLIBS=("${CORELIBS[@]}" "${ADDONLIBS[@]}")
 getlink() {
 	if command -v gh &>/dev/null; then
 		section "Downloading with GH (github command line)"
-		gh release download ${VERSION} -R ofWorks/ofLibs --pattern "ofLibs_*_${PLATFORM}.zip" -D "${DOWNLOAD}"
+		gh release download ${LIBSVERSION} -R ofWorks/ofLibs --pattern "ofLibs_*_${PLATFORM}.zip" -D "${DOWNLOAD}"
 
 
 	elif command -v wget2 &>/dev/null; then
 		# wget2 is available - use it for parallel downloads
 		PARAMS=""
 		for LIBNAME in "${ALLLIBS[@]}"; do
-			PARAMS+=" https://github.com/ofWorks/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
+			PARAMS+=" https://github.com/ofWorks/ofLibs/releases/download/${LIBSVERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
 		done
 		section "Downloading with wget2 (parallel downloads)"
 		#--clobber=off (skips download if file exists at all)
@@ -402,7 +403,7 @@ getlink() {
 		for LIBNAME in "${ALLLIBS[@]}"; do
 			local filepath="${DOWNLOAD}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
 			executa wget -N --no-verbose --show-progress \
-				"https://github.com/ofWorks/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip" \
+				"https://github.com/ofWorks/ofLibs/releases/download/${LIBSVERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip" \
 				-P "${DOWNLOAD}"
 		done
 	elif command -v powershell.exe &>/dev/null; then
@@ -410,7 +411,7 @@ getlink() {
 		section "Downloading with PowerShell (sequential)"
 		for LIBNAME in "${ALLLIBS[@]}"; do
 			local filepath="${DOWNLOAD}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
-			local url="https://github.com/ofWorks/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
+			local url="https://github.com/ofWorks/ofLibs/releases/download/${LIBSVERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
 			executa powershell.exe -Command "Invoke-WebRequest -Uri '${url}' -OutFile '${filepath}'"
 		done
 	else
@@ -421,10 +422,10 @@ getlink() {
 			# Only use -z if file exists, otherwise just download
 			if [[ -f "${filepath}" ]]; then
 				executa curl -L -z "${filepath}" -o "${filepath}" \
-				"https://github.com/ofWorks/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
+				"https://github.com/ofWorks/ofLibs/releases/download/${LIBSVERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
 			else
 				executa curl -L -o "${filepath}" \
-				"https://github.com/ofWorks/ofLibs/releases/download/${VERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
+				"https://github.com/ofWorks/ofLibs/releases/download/${LIBSVERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
 			fi
 		done
 	fi

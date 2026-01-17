@@ -8,29 +8,22 @@ class ofSoundFFT {
 public:
 	ofSoundFFT();
 	~ofSoundFFT();
-	static void initSystemFFT(int bands);
 
-	void initFFT(int bands);
-	virtual float * getCurrentBufferSum(int size) {};
-	static void createWindow(int size);
-	static void runWindow(std::vector<float> & signal);
+	void setup(int bands);
+	void process(const float* input, int size);
+	const std::vector<float>& getSpectrum() const { return spectrum; }
+	
+	static std::vector<float> createWindow(int size, int type = 0);
+	static void applyWindow(std::vector<float> &signal, const std::vector<float> &window);
 
-//	float * getSpectrum(int bands);
-//	float * getSystemSpectrum(int bands);
-
-	// fft structures
-// private:
-	std::vector<std::vector<float> > fftBuffers;
-	kiss_fftr_cfg fftCfg;
+private:
+	kiss_fftr_cfg fftCfg = nullptr;
+	int fftSize = 0;
 	std::vector<float> windowedSignal;
-	std::vector<float> bins;
 	std::vector<kiss_fft_cpx> cx_out;
-
-	static kiss_fftr_cfg systemFftCfg;
-	static std::vector<float> systemWindowedSignal;
-	static std::vector<float> systemBins;
-	static std::vector<kiss_fft_cpx> systemCx_out;
-
-	static std::vector<float> window;
-	static float windowSum;
+	std::vector<float> spectrum;
+	std::vector<float> window;
+	float windowSum = 0.0f;
+	
+	float computeWindowSum(const std::vector<float>& window);
 };

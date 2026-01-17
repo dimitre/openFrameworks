@@ -1013,11 +1013,6 @@ ofAVEngineSoundPlayer::~ofAVEngineSoundPlayer() {
     unload();
 }
 
-float * ofAVEngineSoundPlayer::getSystemSpectrum(int bands) {
-	
-}
-
-
 bool ofAVEngineSoundPlayer::load(const fs::path & fileName, bool stream) {
     if(soundPlayer != NULL) {
         unload();
@@ -1257,6 +1252,21 @@ unsigned int ofAVEngineSoundPlayer::getDurationMS() const {
 
 void * ofAVEngineSoundPlayer::getAVEnginePlayer() {
     return (__bridge void *)soundPlayer;
+}
+
+void ofAVEngineSoundPlayer::installFFTOnMixer() {
+	AVAudioMixerNode* mixer = [(AVEnginePlayer*)soundPlayer mainMixer];
+	[mixer installTapOnBus:0 bufferSize:2048 format:[mixer outputFormatForBus:0] block:^(AVAudioPCMBuffer *buffer, AVAudioTime *when) {
+		float* data = buffer.floatChannelData[0];
+		fft.process(data, buffer.frameLength);
+	}];
+}
+
+const std::vector<float>& ofAVEngineSoundPlayer::getSpectrum(int bands) const {
+	if (fft.getSpectrum().size() != bands) {
+		const_cast<ofSoundFFT&>(fft).setup(bands); // lazy init
+	}
+	return fft.getSpectrum();
 }
 
 #endif
