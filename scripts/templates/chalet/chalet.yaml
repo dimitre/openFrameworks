@@ -1,5 +1,5 @@
 name: ofWorksProject
-version: "0.12.1"
+version: "0.0.1"
 variables:
   generator: manual
   platform: macos
@@ -397,8 +397,8 @@ distribution:
         # CFBundleShortVersionString: !!str "1.0.0"
         # CFBundleVersion: !!str "1.0.0"
         # LSMinimumSystemVersion: !!str "11.6"
-        CFBundleShortVersionString: "1.0.0"
-        CFBundleVersion: "1.0.0"
+        CFBundleShortVersionString: ${version}
+        CFBundleVersion: ${version}
         LSMinimumSystemVersion: "11.6.0"
         NSHighResolutionCapable: true
         NSCameraUsageDescription: This app needs to access the camera

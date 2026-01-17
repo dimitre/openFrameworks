@@ -185,6 +185,13 @@ bool genConfig::loadYML() {
 			ofPath = ofPathYML.as<std::string>();
 		}
 
+		//"icon",
+		for (const auto & s : std::vector<std::string> { "version" }) {
+			if (ofYaml[s]) {
+				conf.settings[s] = ofYaml[s].as<std::string>();
+			}
+		}
+
 		conf.addonsNames = nodeToStrings("addons");
 
 		if (ofYaml["addonsSources"]) {

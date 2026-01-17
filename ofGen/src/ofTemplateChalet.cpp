@@ -22,6 +22,10 @@ void ofTemplateChalet::load() {
 	projectYaml = YAML::LoadFile(projectFrom.string());
 
 	projectYaml["name"] = conf.projectName;
+
+	if (conf.settings.contains("version")) {
+		projectYaml["version"] = conf.settings["version"];
+	}
 	projectYaml["variables"]["platform"] = getPlatformString();
 	projectYaml["variables"]["addons"] = joinStrings(addonsNames, ",");
 	projectYaml["variables"]["generator"] = getVersion();

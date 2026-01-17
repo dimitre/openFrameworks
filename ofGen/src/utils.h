@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream> // cout
-static std::string version = "v0.8.9";
+static std::string version = "v0.9.0";
 
 #include <filesystem>
 #include <map>
@@ -180,6 +180,8 @@ public:
 struct genConfig {
 	ofProject project;
 
+	// 16 jan 2026
+	std::map<std::string, std::string> settings;
 
 	std::string projectName { "" };
 	fs::path ofPath { "../../.." };
