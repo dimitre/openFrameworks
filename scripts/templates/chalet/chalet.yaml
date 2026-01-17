@@ -374,9 +374,9 @@ distribution:
     exclude:
       - data/.gitkeep
 
-    # linuxDesktopEntry:
-    # icon: ${var:ofPath}/scripts/ofWorks.png
-    # template: platform/linux/app.desktop
+    linuxDesktopEntry:
+      icon: ${var:ofPath}/scripts/ofWorks.png
+      template: platform/linux/app.desktop
     # copyToApplications: true
 
     macosBundle:

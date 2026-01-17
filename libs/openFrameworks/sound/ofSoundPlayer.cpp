@@ -92,9 +92,9 @@ float * ofSoundGetSpectrum(int nBands){
 	#elif defined(OF_SOUND_PLAYER_EMSCRIPTEN)
 		return ofxEmscriptenSoundPlayer::getSystemSpectrum(nBands);
 	#else
-	return OF_SOUND_PLAYER_TYPE::getSystemSpectrum(nBands);
-//		ofLogWarning("ofSoundPlayer") << "ofSoundGetSpectrum() not implemented on this platform, returning nullptr";
-//		return nullptr;
+//	return OF_SOUND_PLAYER_TYPE::getSystemSpectrum(nBands);
+		ofLogWarning("ofSoundPlayer") << "ofSoundGetSpectrum() not implemented on this platform, returning nullptr";
+		return nullptr;
 	#endif
 }
 
