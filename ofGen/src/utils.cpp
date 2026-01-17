@@ -150,6 +150,9 @@ void genConfig::import() {
 			std::ifstream file("addons.make");
 			YAML::Node node;
 			node["ofpath"] = "../../..";
+			node["version"] = "0.0.1";
+			node["templates"] = std::vector{ "chalet", "zed" };
+
 			if (file.is_open()) {
 				std::string line;
 				while (std::getline(file, line)) {
@@ -161,9 +164,22 @@ void genConfig::import() {
 			}
 			file.close();
 
+			// YAML::Emitter emitter;
+			// emitter << node;
+			// emitter << "\n";  // blank line
+			// emitter << "# addons:\n";
+			// emitter << "#   - ofxOpencv\n";
+			// // emitter << "#   - ofxMath\n";
+			// emitter << "\n";  // blank line
+
 			std::ofstream ofYml("of.yml");
-			cout << node << endl;
+			// cout << node << endl;
 			ofYml << node;
+			ofYml << "\n\n";  // blank lines
+			ofYml << "# addons:\n";
+			ofYml << "#   - ofxOpencv\n";
+			ofYml << "#   - ofxMath\n";
+
 			ofYml.close();
 			cout << endl;
 			alert("ok, of.yml created from addons.make", 32);

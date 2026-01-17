@@ -60,25 +60,24 @@ void ofSoundFFT::runWindow(std::vector<float> & signal){
 
 
 
-
-float * ofSoundFFT::getSpectrum(int bands){
-	initFFT(bands);
-	bins.assign(bins.size(),0);
-	
-	// FIXME: sources are ofOpenALSoundPlayer object
-//	if(sources.empty()) return &bins[0];
-
-	int signalSize = (bands-1)*2;
-	getCurrentBufferSum(signalSize);
-
-	float normalizer = 2. / windowSum;
-	runWindow(windowedSignal);
-	kiss_fftr(fftCfg, &windowedSignal[0], &cx_out[0]);
-	for(int i= 0; i < bands; i++) {
-		bins[i] += sqrtf(cx_out[i].r * cx_out[i].r + cx_out[i].i * cx_out[i].i) * normalizer;
-	}
-	return &bins[0];
-}
+// FIXME: sources are ofOpenALSoundPlayer object
+//float * ofSoundFFT::getSpectrum(int bands){
+//	initFFT(bands);
+//	bins.assign(bins.size(),0);
+//	
+////	if(sources.empty()) return &bins[0];
+//
+//	int signalSize = (bands-1)*2;
+//	getCurrentBufferSum(signalSize);
+//
+//	float normalizer = 2. / windowSum;
+//	runWindow(windowedSignal);
+//	kiss_fftr(fftCfg, &windowedSignal[0], &cx_out[0]);
+//	for(int i= 0; i < bands; i++) {
+//		bins[i] += sqrtf(cx_out[i].r * cx_out[i].r + cx_out[i].i * cx_out[i].i) * normalizer;
+//	}
+//	return &bins[0];
+//}
 
 //float * ofSoundFFT::getSystemSpectrum(int bands){
 //	initSystemFFT(bands);

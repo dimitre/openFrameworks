@@ -15,10 +15,8 @@ public:
 	static void createWindow(int size);
 	static void runWindow(std::vector<float> & signal);
 
-	float * getSpectrum(int bands);
-
-//	static float * getSystemSpectrum(int bands);
-	float * getSystemSpectrum(int bands);
+//	float * getSpectrum(int bands);
+//	float * getSystemSpectrum(int bands);
 
 	// fft structures
 // private:

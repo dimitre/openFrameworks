@@ -121,7 +121,7 @@ if [[ "$wipeLibs" == true && -d "${LIBS_FOLDER}" ]]; then
 	executa rm -rf "${LIBS_FOLDER}"
 fi
 
-DOWNLOAD="./_download_${VERSION}_${PLATFORM}"
+DOWNLOAD="./_ofLibs_${VERSION}_${PLATFORM}"
 
 if [[ "$wipeDownloads" == true && -d "${DOWNLOAD}" ]]; then
 	echo "Removing Previously Downloaded Libraries"
