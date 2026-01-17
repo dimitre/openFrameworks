@@ -25,19 +25,19 @@
 static ALCdevice * alDevice = nullptr;
 static ALCcontext * alContext = nullptr;
 
-// std::vector<float> ofOpenALSoundPlayer::window;
-// float ofOpenALSoundPlayer::windowSum = 0.f;
-// kiss_fftr_cfg ofOpenALSoundPlayer::systemFftCfg=0;
-// std::vector<float> ofOpenALSoundPlayer::systemWindowedSignal;
-// std::vector<float> ofOpenALSoundPlayer::systemBins;
-// std::vector<kiss_fft_cpx> ofOpenALSoundPlayer::systemCx_out;
+std::vector<float> ofOpenALSoundPlayer::window;
+float ofOpenALSoundPlayer::windowSum = 0.f;
+kiss_fftr_cfg ofOpenALSoundPlayer::systemFftCfg=0;
+std::vector<float> ofOpenALSoundPlayer::systemWindowedSignal;
+std::vector<float> ofOpenALSoundPlayer::systemBins;
+std::vector<kiss_fft_cpx> ofOpenALSoundPlayer::systemCx_out;
 
-std::vector<float> ofSoundFFT::window;
-float ofSoundFFT::windowSum = 0.f;
-kiss_fftr_cfg ofSoundFFT::systemFftCfg=0;
-std::vector<float> ofSoundFFT::systemWindowedSignal;
-std::vector<float> ofSoundFFT::systemBins;
-std::vector<kiss_fft_cpx> ofSoundFFT::systemCx_out;
+//std::vector<float> ofSoundFFT::window;
+//float ofSoundFFT::windowSum = 0.f;
+//kiss_fftr_cfg ofSoundFFT::systemFftCfg=0;
+//std::vector<float> ofSoundFFT::systemWindowedSignal;
+//std::vector<float> ofSoundFFT::systemBins;
+//std::vector<kiss_fft_cpx> ofSoundFFT::systemCx_out;
 
 static std::set<ofOpenALSoundPlayer*> & players(){
 	static std::set<ofOpenALSoundPlayer*> * players = new std::set<ofOpenALSoundPlayer*>;
