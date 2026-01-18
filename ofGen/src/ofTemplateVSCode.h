@@ -45,8 +45,9 @@ public:
 			try {
 				data = json::parse(ifs);
 			} catch (json::parse_error & ex) {
-				std::cerr << "JSON parse error at byte" << ex.byte << std::endl;
+				std::cerr << "json parse error at byte :: " << ex.byte << std::endl;
 				std::cerr << "fileName" << fileName.string() << std::endl;
+				// std::cout << ifs.rdbuf() << std::endl;
 			}
 		}
 

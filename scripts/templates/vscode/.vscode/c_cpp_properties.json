@@ -20,12 +20,8 @@
 			"${OF_LIBS_ROOT}/uriparser/include",
 			"${OF_LIBS_ROOT}/utf8/include"
 		],
-		"PROJECT_ADDON_INCLUDES": [
-			
-		],
-		"PROJECT_EXTRA_INCLUDES": [
-			
-		]
+		"PROJECT_ADDON_INCLUDES": [],
+		"PROJECT_EXTRA_INCLUDES": []
 	},
 	"configurations": [
 		{
@@ -41,7 +37,6 @@
 			],
 			"browse": {
 				"limitSymbolsToIncludedHeaders": true,
-				"databaseFilename": "${workspaceRoot}/.vscode/browse.db",
 				"path": [
 					"/usr/local/include",
 					"/System/Library/Frameworks",
@@ -53,14 +48,9 @@
 					"${PROJECT_EXTRA_INCLUDES}"
 				]
 			},
-			"configurationProvider": "ms-vscode.makefile-tools",
-			"mergeConfigurations": true,
-			"intelliSenseMode": "${default}",
-			"macFrameworkPath": [
-				"/System/Library/Frameworks",
-				"/Library/Frameworks"
-			],
-			"compilerPath": "/usr/bin/gcc",
+			"intelliSenseMode": "clang-x64",
+			"macFrameworkPath": ["/System/Library/Frameworks", "/Library/Frameworks"],
+			"compilerPath": "/usr/bin/clang",
 			"cStandard": "c17",
 			"cppStandard": "c++17"
 		},
@@ -77,20 +67,19 @@
 				"/usr/include/x86_64-linux-gnu",
 				"${OF_INCLUDE}",
 				"${OF_LIBS_INCLUDE}",
-				"${workspaceRoot}/../../../libs/kiss/include",
+				"${workspaceFolder}/../../../libs/kiss/include",
 				"/usr/include/x86_64-linux-gnu/c++/*",
 				"/usr/include/pulse",
 				"/usr/include/cairo",
 				"/usr/include/gstreamer-1.0",
 				"/usr/include/glib-2.0",
-				"${workspaceRoot}",
+				"${workspaceFolder}",
 				"${workspaceFolder}/src/**",
 				"${PROJECT_ADDON_INCLUDES}",
 				"${PROJECT_EXTRA_INCLUDES}"
 			],
 			"browse": {
 				"limitSymbolsToIncludedHeaders": true,
-				"databaseFilename": "",
 				"path": [
 					"/usr/local/include",
 					"/usr/include",
@@ -101,9 +90,7 @@
 					"${PROJECT_EXTRA_INCLUDES}"
 				]
 			},
-			"intelliSenseMode": "${default}",
-			"configurationProvider": "ms-vscode.makefile-tools",
-			"mergeConfigurations": true,
+			"intelliSenseMode": "gcc-x64",
 			"compilerPath": "/usr/bin/gcc",
 			"cStandard": "c17",
 			"cppStandard": "c++17"
@@ -121,7 +108,6 @@
 			],
 			"browse": {
 				"limitSymbolsToIncludedHeaders": true,
-				"databaseFilename": "",
 				"path": [
 					"${workspaceFolder}/src/**",
 					"${OF_INCLUDE}",
@@ -130,10 +116,8 @@
 					"${PROJECT_EXTRA_INCLUDES}"
 				]
 			},
-			"intelliSenseMode": "clang-x64",
+			"intelliSenseMode": "gcc-x64",
 			"compilerPath": "C:/msys64/mingw64/bin/g++.exe",
-			"configurationProvider": "ms-vscode.makefile-tools",
-			"mergeConfigurations": true,
 			"cStandard": "c17",
 			"cppStandard": "c++17"
 		}

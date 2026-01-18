@@ -1,6 +1,3 @@
 {
-	"recommendations": [
-		"ms-vscode.makefile-tools",
-		"ms-vscode.cpptools"
-	]
+	"recommendations": ["vadimcn.vscode-lldb"]
 }

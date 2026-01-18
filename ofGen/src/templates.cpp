@@ -495,7 +495,8 @@ void ofTemplateMacos::edit(std::string & str) {
 	try {
 		j = json::parse(str);
 	} catch (json::parse_error & e) {
-		std::cerr << "JSON parse error at byte " << e.byte << std::endl;
+		std::cerr << "json parse error at byte :: " << e.byte << std::endl;
+		// std::cerr << str << std::endl;
 		// std::cerr << contents.rdbuf() << std::endl;
 	}
 

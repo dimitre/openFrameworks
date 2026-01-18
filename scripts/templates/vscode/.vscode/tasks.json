@@ -1,10 +1,6 @@
 {
-
 	"version": "2.0.0",
-	"shell":{
-		"task": true
-	},
-	"windows" : {
+	"windows": {
 		"options": {
 			"shell": {
 				"executable": "C:\\msys64\\msys2_shell.cmd",
@@ -13,7 +9,9 @@
 					"-mingw64",
 					"-no-start",
 					"-here",
-					"-shell bash -c"
+					"-shell",
+					"bash",
+					"-c"
 				]
 			}
 		}
@@ -30,37 +28,21 @@
 			"message": 5
 		}
 	},
-
-	"group": {
-		"kind": "build",
-	},
-
 	"presentation": {
 		"reveal": "always",
-		"panel": "shared"
+		"panel": "shared",
+		"showReuseMessage": false
 	},
-
 	"tasks": [
 		{
 			"type": "shell",
-			"label": "Build RELEASE",
-			"command": "make -j -s 2>&1"
-			// "windows" : {
-			// 	"command" : "msbuild"
-			// }
-		},
-		{
-			"type": "shell",
-			"label": "Run RELEASE",
-			"command": "make RunRelease >&1",
-			"windows" : {
-				"command" : "bin/*.exe"
-			}
-		},
-		{
-			"label": "Build and Run Release",
-			"dependsOn": ["Build RELEASE", "Run RELEASE"],
-			"dependsOrder": "sequence",
+			"label": "▶️ Run (chalet buildrun)",
+			"command": "chalet buildrun",
+			"problemMatcher": [],
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared"
+			},
 			"group": {
 				"kind": "build",
 				"isDefault": true
@@ -68,25 +50,33 @@
 		},
 		{
 			"type": "shell",
-			"label": "Build DEBUG",
-			"command": "make Debug -j -s 2>&1 || exit 1"
-		},
-
-		{
-			"type": "shell",
-			"label": "Clean DEBUG",
-			"command": "make CleanDebug"
-		},
-
-		{
-			"type": "shell",
-			"label": "Clean RELEASE",
-			"command": "make CleanRelease"
+			"label": "💾 Gen (ofgen templates=chalet)",
+			"command": "ofgen templates=chalet",
+			"problemMatcher": [],
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared"
+			}
 		},
 		{
 			"type": "shell",
-			"label": "Clean ALL",
-			"command": "make clean"
+			"label": "🫧 Clean (chalet clean --all)",
+			"command": "chalet clean --all",
+			"problemMatcher": [],
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared"
+			}
+		},
+		{
+			"type": "shell",
+			"label": "💾 ▶️ Gen Run (ofgen templates=chalet buildrun)",
+			"command": "ofgen templates=chalet buildrun",
+			"problemMatcher": [],
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared"
+			}
 		}
 	]
 }
