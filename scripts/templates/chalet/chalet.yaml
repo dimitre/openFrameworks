@@ -189,7 +189,7 @@ abstracts:*:
       # - glew32 # GLEW extension loader
 
     staticLinks[:windows]:
-      - ${var:ofPath}/libs/${var:platform}/lib/kissfft-float.lib
+      # - ${var:ofPath}/libs/${var:platform}/lib/kissfft-float.lib
 
       - ${var:ofPath}/libs/${var:platform}/lib/mango.lib
       - ${var:ofPath}/libs/${var:platform}/lib/bz2_static.lib
@@ -364,9 +364,6 @@ distribution:
         CFBundleName: ${bundleName}
         CFBundlePackageType: APPL
         CFBundleSignature: ????
-        # CFBundleShortVersionString: !!str "1.0.0"
-        # CFBundleVersion: !!str "1.0.0"
-        # LSMinimumSystemVersion: !!str "11.6"
         CFBundleShortVersionString: ${version}
         CFBundleVersion: ${version}
         LSMinimumSystemVersion: "11.6.0"
