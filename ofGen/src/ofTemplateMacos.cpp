@@ -1,8 +1,16 @@
 #include "ofTemplateMacos.h"
 #include "addons.h"
+#include "uuidxx.h"
+
+#include <nlohmann/json.hpp>
+using nlohmann::json;
+
 // #include <fstream>
 // #include <chrono>
 // #include <fmt/chrono.h> // fmt’s chrono integration
+std::string generateUUID(const std::string & input) {
+	return uuidxx::uuid::Generate().ToString(false);
+}
 
 std::string ofTemplateMacos::addFile(const fs::path & path, const fs::path & folder, const fileProperties & fp) {
 	std::string UUID { "" };

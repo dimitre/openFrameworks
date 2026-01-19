@@ -2,15 +2,12 @@
 // #include "ofTemplateVSCode.h"
 #include "addons.h"
 #include "utils.h"
-#include "uuidxx.h"
 // #include <cmath>
 #include <fstream> //in utils
 #include <nlohmann/json.hpp>
 using nlohmann::json;
 
-std::string generateUUID(const std::string & input) {
-	return uuidxx::uuid::Generate().ToString(false);
-}
+
 
 void copyTemplateFile::info() {
 	// std::cout << std::endl;

@@ -1,6 +1,9 @@
 #include "templates.h"
 #include <fstream>
 
+#include <nlohmann/json.hpp>
+using nlohmann::json;
+
 struct ofTemplateVSCode : public ofTemplate {
 public:
 	ofTemplateVSCode() {

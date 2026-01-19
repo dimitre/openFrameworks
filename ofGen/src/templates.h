@@ -7,8 +7,6 @@ using std::string;
 using std::vector;
 struct ofAddon;
 
-#include <nlohmann/json.hpp>
-using nlohmann::json;
 
 std::string generateUUID(const std::string & input);
 
