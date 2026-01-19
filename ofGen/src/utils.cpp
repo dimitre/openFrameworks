@@ -1,7 +1,9 @@
 #include "utils.h"
 #include "addons.h"
-#include "ofTemplateVSCode.h"
 #include "ofTemplateChalet.h"
+#include "ofTemplateMacos.h"
+#include "ofTemplateVSCode.h"
+#include "ofTemplateZed.h"
 #include "templates.h"
 
 #include <fstream> // ifstream
@@ -151,7 +153,7 @@ void genConfig::import() {
 			YAML::Node node;
 			node["ofpath"] = "../../..";
 			node["version"] = "0.0.1";
-			node["templates"] = std::vector{ "chalet", "zed" };
+			node["templates"] = std::vector { "chalet", "zed" };
 
 			if (file.is_open()) {
 				std::string line;
@@ -175,7 +177,7 @@ void genConfig::import() {
 			std::ofstream ofYml("of.yml");
 			// cout << node << endl;
 			ofYml << node;
-			ofYml << "\n\n";  // blank lines
+			ofYml << "\n\n"; // blank lines
 			ofYml << "# addons:\n";
 			ofYml << "#   - ofxOpencv\n";
 			ofYml << "#   - ofxMath\n";
@@ -195,6 +197,8 @@ bool genConfig::loadYML() {
 		// alert("missing of.yml file ", 31);
 	} else {
 		// config = YAML::LoadFile(configFile);
+		//
+		// TODO: Idea, I can keep ofYaml inside conf, so more info can be parsed only if needed, like infoPlist in Chalet/macos template.
 		ofYaml = YAML::LoadFile(configFile.string());
 		if (ofYaml["ofpath"]) { // use ofpath only if the key exists.
 			auto ofPathYML = ofYaml["ofpath"];
@@ -205,6 +209,16 @@ bool genConfig::loadYML() {
 		for (const auto & s : std::vector<std::string> { "version" }) {
 			if (ofYaml[s]) {
 				conf.settings[s] = ofYaml[s].as<std::string>();
+			}
+		}
+
+		if (ofYaml["infoPlist"]) { //info.plist
+			YAML::Node infoNode = ofYaml["infoPlist"];
+			for (YAML::const_iterator it = infoNode.begin(); it != infoNode.end(); ++it) {
+				std::string key { it->first.as<std::string>() };
+				std::string value { it->second.as<std::string>() };
+				// Handle bool (YES/NO) vs string values
+				conf.infoPlist[key] = value;
 			}
 		}
 

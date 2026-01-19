@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream> // cout
-static std::string version = "v0.9.0";
+static std::string version = "v0.9.1";
 
 #include <filesystem>
 #include <map>
@@ -163,8 +163,6 @@ static inline void divider() {
 	std::cout << colorText("-----------------------------------------------------------", 90) << std::endl;
 }
 
-// extern genConfig conf;
-
 struct ofTemplate;
 struct ofAddon;
 
@@ -182,6 +180,9 @@ struct genConfig {
 
 	// 16 jan 2026
 	std::map<std::string, std::string> settings;
+	// 19 jan 2026
+	std::map<std::string, std::string> infoPlist;
+
 
 	std::string projectName { "" };
 	fs::path ofPath { "../../.." };

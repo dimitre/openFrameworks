@@ -26,6 +26,11 @@ void ofTemplateChalet::load() {
 	if (conf.settings.contains("version")) {
 		projectYaml["version"] = conf.settings["version"];
 	}
+
+	for (const auto & e : conf.infoPlist) {
+		projectYaml["distribution"]["empty"]["macosBundle"]["infoPropertyList"][e.first] = e.second;
+	}
+
 	projectYaml["variables"]["platform"] = getPlatformString();
 	projectYaml["variables"]["addons"] = joinStrings(addonsNames, ",");
 	projectYaml["variables"]["generator"] = getVersion();
@@ -36,7 +41,13 @@ void ofTemplateChalet::load() {
 			if (i.path().extension() == ".ico") {
 				alert("icon found " + i.path().string(), 95);
 				projectYaml["targets"]["empty"]["settings:Cxx"]["windowsApplicationIcon"] = i.path().string();
-			} else if (i.path().extension() == ".png") {
+			}
+			if (i.path().extension() == ".icns") {
+				alert("icon found " + i.path().string(), 95);
+				projectYaml["distribution"]["empty"]["macosBundle"]["icon"] = i.path().string();
+			}
+
+			if (i.path().extension() == ".png") {
 				alert("icon found " + i.path().string(), 95);
 				projectYaml["distribution"]["empty"]["linuxDesktopEntry"]["icon"] = i.path().string();
 				projectYaml["distribution"]["empty"]["linuxDesktopEntry"]["template"] = "platform/linux/app.desktop";

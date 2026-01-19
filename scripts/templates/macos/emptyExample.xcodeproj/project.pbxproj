@@ -92,17 +92,10 @@
       "isa" : "PBXCopyFilesBuildPhase",
       "runOnlyForDeploymentPostprocessing" : "0"
     },
-    "E4B6FCAD0C3E899E008CF71C" : {
-      "fileEncoding" : "4",
-      "isa" : "PBXFileReference",
-      "lastKnownFileType" : "text.plist.xml",
-      "path" : "openFrameworks-Info.plist",
-      "sourceTree" : "<group>"
-    },
+
     "E4B69B4A0A3A1720003C02F2" : {
       "children" : [
         "191CD6FA2847E21E0085CBB6",
-        "E4B6FCAD0C3E899E008CF71C",
         "E4EB6923138AFD0F00A09F29",
         "191EF70929D778A400F35F26",
         "BB4B014C10F69532006C3DED",

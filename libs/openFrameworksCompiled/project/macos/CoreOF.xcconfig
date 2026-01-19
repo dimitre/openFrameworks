@@ -1,3 +1,36 @@
+PRODUCT_NAME = $(TARGET_NAME)
+PRODUCT_NAME[config=Debug] = $(TARGET_NAME)Debug
+PRODUCT_BUNDLE_IDENTIFIER = cc.ofWorks.${TARGET_NAME:rfc1034identifier}
+DEVELOPMENT_LANGUAGE = English
+ENABLE_USER_SCRIPT_SANDBOXING=NO
+
+CODE_SIGN_IDENTITY = -;
+CODE_SIGN_STYLE = Automatic;
+
+MARKETING_VERSION = 0.0.1
+CURRENT_PROJECT_VERSION = 1
+
+BUILD_ARCHS = -arch arm64
+ARCHS = arm64
+ONLY_ACTIVE_ARCH = YES
+
+GENERATE_INFOPLIST_FILE = YES
+INFOPLIST_FILE = $(OF_PATH)/libs/openFrameworksCompiled/project/macos/Info.plist
+INFOPLIST_KEY_CFBundlePackageType = APPL
+//INFOPLIST_KEY_CFBundleInfoDictionaryVersion = 6.0
+
+INFOPLIST_KEY_CFBundleDevelopmentRegion = en
+INFOPLIST_KEY_NSHighResolutionCapable = YES
+INFOPLIST_KEY_LSMinimumSystemVersion = $(MACOSX_DEPLOYMENT_TARGET)
+//INFOPLIST_KEY_LSApplicationCategoryType = public.app-category.games
+INFOPLIST_KEY_LSApplicationCategoryType = public.app-category.video
+INFOPLIST_KEY_NSHumanReadableCopyright = Made using ofworks.cc (openFrameworks fork)
+
+ICON_NAME = of.icns
+ICON_NAME[config=Debug] = of_debug.icns
+ICON_FILE = $(OF_PATH)/libs/openFrameworksCompiled/project/macos/$(ICON_NAME)
+
+
 // define which C++ library is required to build, based on target architecture
 CLANG_CXX_LIBRARY = libc++
 CLANG_ENABLE_OBJC_ARC = YES
