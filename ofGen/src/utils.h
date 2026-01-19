@@ -34,18 +34,20 @@ inline void alert(std::string msg, int color = 2) {
 }
 
 const std::string sign = colorText(R"(
- ░░░  ▒▒▒▒  ▓▓▓  ████ █   █
+ ░░░  ▒▒▒▒  ▓▓▓  ████ █   █ 〇
 ░   ░ ▒    ▓     █    ██  █
 ░   ░ ▒▒▒  ▓  ▓▓ ███  █ █ █
 ░   ░ ▒    ▓   ▓ █    █  ██
- ░░░  ▒     ▓▓▓  ████ █   █)", 32) // 91
+ ░░░  ▒     ▓▓▓  ████ █   █
+)", 32) // 91
     + R"(
 Project Generator for ofWorks (OpenFrameworks fork)
                  Prototype )" + version
 
 	+ colorText(R"(
                  Report issues or suggestions on
-                 https://github.com/dimitre/ofworks/
+                 https://github.com/ofworks/ofworks/
+                 https://ofworks.cc/
 )",
 		34); // 92
 

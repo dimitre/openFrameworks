@@ -43,13 +43,6 @@ public:
 
 	std::vector<copyTemplateFile> copyTemplateFiles;
 
-	void info() {
-		alert("	ofTemplate::info projectName=" + name + ", path=" + path.string(), 34);
-		// for (auto & c : copyTemplateFiles) {
-		// 	c.info();
-		// }
-	}
-
 	virtual void addSrc(const fs::path & srcFile, const fs::path & folder) {
 		std::cout << "	ofTemplate::addSrc() called on primitive member " << name << std::endl;
 	};
@@ -75,8 +68,11 @@ public:
 		alert("	ofTemplate::build " + name + ", path=" + path.string(), 34);
 		for (auto & c : copyTemplateFiles) {
 			c.run();
-			// c.info();
 		}
+	}
+
+	void info() {
+		// alert("	ofTemplate::info projectName=" + name + ", path=" + path.string(), 34);
 	}
 
 	void cleanTemplateFiles() {

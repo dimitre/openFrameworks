@@ -13,7 +13,7 @@ std::string generateUUID(const std::string & input) {
 }
 
 void copyTemplateFile::info() {
-	std::cout << std::endl;
+	// std::cout << std::endl;
 	alert("	copyTemplateFile", 96);
 	alert("	from " + from.string(), 2);
 	alert("	to " + to.string(), 90);
@@ -65,7 +65,7 @@ bool copyTemplateFile::run() {
 			}
 
 			for (auto & a : appends) {
-				alert("	└─ append " + a, 94);
+				alert("	└─ append " + a, 90);
 				contents += "\n" + a;
 			}
 

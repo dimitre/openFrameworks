@@ -38,17 +38,18 @@ void ofTemplateChalet::load() {
 
 	if (fs::exists("icon") && fs::is_directory("icon")) {
 		for (auto const & i : fs::directory_iterator { "icon" }) {
+			std::string found;
 			if (i.path().extension() == ".ico") {
-				alert("icon found " + i.path().string(), 95);
+				alert("	▸ icon found " + i.path().string(), 94);
 				projectYaml["targets"]["empty"]["settings:Cxx"]["windowsApplicationIcon"] = i.path().string();
 			}
 			if (i.path().extension() == ".icns") {
-				alert("icon found " + i.path().string(), 95);
+				alert("	▸ icon found " + i.path().string(), 94);
 				projectYaml["distribution"]["empty"]["macosBundle"]["icon"] = i.path().string();
 			}
 
 			if (i.path().extension() == ".png") {
-				alert("icon found " + i.path().string(), 95);
+				alert("	▸ icon found " + i.path().string(), 94);
 				projectYaml["distribution"]["empty"]["linuxDesktopEntry"]["icon"] = i.path().string();
 				projectYaml["distribution"]["empty"]["linuxDesktopEntry"]["template"] = "platform/linux/app.desktop";
 				projectYaml["distribution"]["empty"]["macosBundle"]["icon"] = i.path().string();
@@ -58,6 +59,7 @@ void ofTemplateChalet::load() {
 
 	// MARK: Not ok to remove since addonToChalet only include defines from ADDON_DEFINES, not from of.yml define
 	for (auto & d : conf.defines) {
+		alert( "ADD DEFINE CHALET" + d, 33 );
 		projectYaml["targets"]["empty"]["settings:Cxx"]["defines"].push_back(d);
 	}
 
@@ -107,11 +109,11 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 		for (const auto & f : a->addonProperties["ADDON_FRAMEWORKS"]) {
 			for (auto & s : ofSplitString(f, " ")) {
 				// alert("     appleFramework " + s, 95);
-				alert("	└─ appleFramework " + s, 94);
+				alert("	▸ appleFramework " + s, 95);
 				// projectYaml["abstracts:*"]["settings:Cxx"]["appleFrameworks"].push_back(s);
 				size_t found = s.find('/');
 				if (found != std::string::npos) {
-					alert("	└─ appleFramework inside Addon " + s, 94);
+					alert("	▸ appleFramework inside Addon " + s, 94);
 					projectYaml["targets"]["empty"]["settings:Cxx"]["appleFrameworks"].push_back(fs::path(s).stem().string());
 					std::string frameworkPath = std::string("${var:ofPath}/addons/") + a->name + "/" + fs::path(s).parent_path().string();
 					alert("frameworkPath :: " + frameworkPath, 92);
@@ -137,6 +139,9 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 				for (const auto & s : ofSplitString(property, " ")) {
 					alert("	└─ " + param.second + " : " + s, 94);
 					projectYaml["targets"]["empty"]["settings:Cxx"][param.second].push_back(s);
+					// if (!projectYaml["targets"]["empty"]["settings:Cxx"][param.second][s]) {
+					// 	projectYaml["targets"]["empty"]["settings:Cxx"][param.second].push_back(s);
+					// }
 				}
 			}
 		}
@@ -144,13 +149,13 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 
 	for (const fs::path & f : a->filteredMap["frameworks"]) {
 		// addFramework(a->path / f);
-		alert("	└─ appleFramework " + f.string(), 94);
+		alert("	▸ appleFramework " + f.string(), 91);
 		// projectYaml["targets"]["empty"]["settings:Cxx"]["appleFrameworks"].push_back(f.string());
 
 		std::string s = f.string();
 		size_t found = s.find('/');
 		if (found != std::string::npos) {
-			alert("	└─ appleFramework inside Addon " + s, 94);
+			alert("	└─ appleFramework inside Addon " + s, 91);
 			projectYaml["targets"]["empty"]["settings:Cxx"]["appleFrameworks"].push_back(fs::path(s).stem().string());
 			std::string frameworkPath = std::string("${var:ofPath}/addons/") + a->name + "/" + fs::path(s).parent_path().string();
 			alert("	frameworkPath :: " + frameworkPath, 92);

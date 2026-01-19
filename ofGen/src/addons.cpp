@@ -61,7 +61,7 @@ void ofAddon::scanFolder(const fs::path & path,
 			} else if (ext == ".c" || ext == ".cpp" || ext == ".cc" || ext == ".cxx" || ext == ".m" || ext == ".mm") {
 				filesMap["sources"].emplace_back(f);
 			} else {
-				alert("		no desired extension " + f.string(), 94);
+				alert("	└─ ignoring file extension " + f.string(), 2);
 			}
 		}
 	}
@@ -148,10 +148,10 @@ void ofAddon::loadFiles() {
 	}
 
 	// test 12 oct.
-	for (auto & p : addonProperties["ADDON_DEFINES"]) {
-		alert("	-> addon defines " + p, 35);
-		conf.defines.emplace_back(p);
-	}
+	// for (auto & p : addonProperties["ADDON_DEFINES"]) {
+	// 	alert("	-> addon defines " + p, 35);
+	// 	conf.defines.emplace_back(p);
+	// }
 
 	scanFolder(path / "src", filesMap, true);
 
@@ -169,13 +169,14 @@ void ofAddon::loadFiles() {
 				continue;
 			}
 			//
-			alert("		" + f.string(), 35);
+			//
+			alert("	└─ " + f.string(), 90);
 
 			if (fs::exists(f / "lib")) {
 				for (const auto & p : conf.platforms) {
 					fs::path folder { f / "lib" / p };
 					if (!fs::exists(folder)) {
-						alert("		folder don't exist " + folder.string(), 96);
+						alert("	folder not found " + folder.string(), 96); //
 						continue;
 					} else {
 						hasPlatformFolder = true;
@@ -220,7 +221,7 @@ void ofAddon::loadFiles() {
 		if (!hasPlatformFolder) {
 			// if isProject is true, libs are added already
 			if (!isProject) {
-				alert("		platform folder not found, will scan everything " + folderLibs.string(), 35);
+				alert("	└─ platform folder not found, will scan everything " + folderLibs.string(), 90);
 				scanFolder(folderLibs, filesMap, true);
 			}
 		}

@@ -21,10 +21,10 @@ void ofProject::build() {
 
 	// each template for specific project
 	for (auto & t : templates) {
+		// alert("	Building template " + t->name, 95);
 		t->load();
 		t->info();
 
-		alert("	Building template " + t->name, 95);
 		// each addon for specific project
 		for (auto & a : addons) {
 			// alert("	ofProject::addAddon " + t->name + " : " + a->name, 34);

@@ -41,8 +41,6 @@ abstracts:*:
     # - OF_USING_GTK
     # - OF_USING_STD_FS=1
 
-    # defines[:macos]: #[toolchain:apple-llvm]:
-    # - __MACOSX_CORE__ # only needed in ofxMidi
     compileOptions[:macos]:
       - -fobjc-arc
       - -mmacosx-version-min=12.0 # Add this line

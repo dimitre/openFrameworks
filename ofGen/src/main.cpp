@@ -92,6 +92,8 @@ int main(const int argc, const char * argv[]) {
 
 	std::cout << std::endl;
 	alert(getVersion(), 92);
+	alert("https://ofworks.cc", 94);
+	std::cout << std::endl;
 
 	// if (build) {
 	// 	auto t2 = std::chrono::high_resolution_clock::now();
