@@ -1,6 +1,6 @@
 #include "ofTemplateChalet.h"
-#include "genConfig.h"
 #include "addons.h"
+#include "genConfig.h"
 #include <fstream>
 // #include <chrono>
 #include <fmt/chrono.h> // fmt’s chrono integration
@@ -14,7 +14,6 @@ ofTemplateChalet::ofTemplateChalet() {
 	runCommand = "chalet buildrun";
 	cleanCommand = "chalet clean --all";
 }
-
 
 std::string timeString() {
 	using namespace std::chrono;
@@ -39,8 +38,13 @@ void ofTemplateChalet::load() {
 		projectYaml["version"] = conf.settings["version"];
 	}
 
-	for (const auto & e : conf.infoPlist) {
-		projectYaml["distribution"]["empty"]["macosBundle"]["infoPropertyList"][e.first] = e.second;
+	for (const auto & i : conf.infoPlist) {
+		alert("	▸ infoPlist " + i.first + ": " + i.second, 90);
+		projectYaml["distribution"]["empty"]["macosBundle"]["infoPropertyList"][i.first] = i.second;
+
+		// YAML::Node targetNode = projectYaml["distribution"]["empty"]["macosBundle"]["infoPropertyList"][i.first];
+		// targetNode = i.second;
+		// targetNode.SetTag("!!str");
 	}
 
 	projectYaml["variables"]["platform"] = getPlatformString();
@@ -71,7 +75,7 @@ void ofTemplateChalet::load() {
 
 	// MARK: Not ok to remove since addonToChalet only include defines from ADDON_DEFINES, not from of.yml define
 	for (auto & d : conf.defines) {
-		alert( "ADD DEFINE CHALET" + d, 33 );
+		alert("ADD DEFINE CHALET" + d, 33);
 		projectYaml["targets"]["empty"]["settings:Cxx"]["defines"].push_back(d);
 	}
 

@@ -11,6 +11,7 @@ typedef ofColor_<unsigned short> ofShortColor;
 #include <limits>
 #include <string.h> // memcpy
 #include <functional> // std::function
+#include <algorithm> // std::clamp
 
 /// \file
 /// ofPixels is an object for working with blocks of pixels, those pixels can

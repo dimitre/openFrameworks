@@ -87,10 +87,12 @@ bool genConfig::loadYML() {
 		}
 
 		if (ofYaml["infoPlist"]) { //info.plist
+			// alert("--- infoPlist entry", 96);
 			YAML::Node infoNode = ofYaml["infoPlist"];
 			for (YAML::const_iterator it = infoNode.begin(); it != infoNode.end(); ++it) {
 				std::string key { it->first.as<std::string>() };
 				std::string value { it->second.as<std::string>() };
+				// alert("--- infoPlist " + key + " = " + value, 96);
 				// Handle bool (YES/NO) vs string values
 				conf.infoPlist[key] = value;
 			}
