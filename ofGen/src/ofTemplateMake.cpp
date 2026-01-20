@@ -1,7 +1,16 @@
 #include "ofTemplateMake.h"
+#include "genConfig.h"
 #include "addons.h"
 #include <fstream>
 
+ofTemplateMake::ofTemplateMake() {
+	name = "make";
+	path = conf.ofPath / "scripts" / "templates" / name;
+
+	buildCommand = "make -j";
+	runCommand = "make RunRelease";
+	cleanCommand = "make clean";
+}
 
 void ofTemplateMake::load() {
 	alert("ofTemplateMake::load()", 92);

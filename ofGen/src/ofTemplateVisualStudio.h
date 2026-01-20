@@ -8,16 +8,7 @@ extern genConfig conf;
 // #include <fstream>
 struct ofTemplateVisualStudio : public ofTemplate {
 public:
-	ofTemplateVisualStudio() {
-		name = "visualstudio";
-		path = conf.ofPath / "scripts" / "templates" / name;
-		//FIXME - implement
-		openCommand = "open " + conf.projectName + ".xcodeproj";
-		// buildCommand = "msbuild";
-		buildCommand = "powershell -c \"msbuild\"";
-		// Untested
-		cleanCommand = "powershell -c \"msbuild *.sln -t:Clean\"";
-	}
+	ofTemplateVisualStudio();
 
 	// pugi::xml_document filterXmlDoc;
 	// pugi::xml_document doc;

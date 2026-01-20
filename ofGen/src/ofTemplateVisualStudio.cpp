@@ -1,5 +1,18 @@
 #include "ofTemplateVisualStudio.h"
+#include "genConfig.h"
 #include "addons.h"
+
+ofTemplateVisualStudio::ofTemplateVisualStudio() {
+	name = "visualstudio";
+	path = conf.ofPath / "scripts" / "templates" / name;
+	//FIXME - implement
+	openCommand = "open " + conf.projectName + ".xcodeproj";
+	// buildCommand = "msbuild";
+	buildCommand = "powershell -c \"msbuild\"";
+	// Untested
+	cleanCommand = "powershell -c \"msbuild *.sln -t:Clean\"";
+}
+
 
 void ofTemplateVisualStudio::addAddon(ofAddon * a) {
 

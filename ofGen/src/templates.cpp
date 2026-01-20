@@ -1,16 +1,13 @@
 #include "templates.h"
+#include "utils.h"
+#include <fstream> //in utils
 // #include "ofTemplateVSCode.h"
 // #include "addons.h"
-#include "utils.h"
 // #include <cmath>
-#include <fstream> //in utils
-#include <nlohmann/json.hpp>
-using nlohmann::json;
-
-
+// #include <nlohmann/json.hpp>
+// using nlohmann::json;
 
 void copyTemplateFile::info() {
-	// std::cout << std::endl;
 	alert("	copyTemplateFile", 96);
 	alert("	from " + from.string(), 2);
 	alert("	to " + to.string(), 90);
