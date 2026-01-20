@@ -2,6 +2,8 @@
 // #include "ofTemplateVSCode.h"
 // #include "ofTemplateChalet.h"
 #include "templates.h"
+#include "genConfig.h"
+
 // #include "ofTemplateVisualStudio.h"
 // #include "ofTemplateMake.h"
 

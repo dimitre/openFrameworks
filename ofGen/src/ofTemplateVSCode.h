@@ -1,17 +1,16 @@
 #include "templates.h"
+struct genConfig;
+extern genConfig conf;
+
 #include <fstream>
 
 #include <nlohmann/json.hpp>
 using nlohmann::json;
 
+
 struct ofTemplateVSCode : public ofTemplate {
 public:
-	ofTemplateVSCode() {
-		name = "vscode";
-		path = conf.ofPath / "scripts" / "templates" / name;
-
-		openCommand = "vscode . ";
-	}
+	ofTemplateVSCode();
 	void load() override;
 	void save() override;
 

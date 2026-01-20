@@ -1,15 +1,11 @@
 #include "templates.h"
+struct genConfig;
+extern genConfig conf;
+#include <map>
 
 struct ofTemplateMacos : public ofTemplate {
 public:
-	ofTemplateMacos() {
-		name = "macos";
-		path = conf.ofPath / "scripts" / "templates" / name;
-
-		openCommand = "open " + conf.projectName + ".xcodeproj";
-		buildCommand = "xcodebuild";
-		runCommand = "open -n bin/" + conf.projectName + ".app";
-	}
+	ofTemplateMacos();
 	void load() override;
 	void save() override;
 	void addAddon(ofAddon * a) override;

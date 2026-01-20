@@ -1,4 +1,7 @@
 #include "templates.h"
+struct genConfig;
+extern genConfig conf;
+
 // Visual Studio
 #include <pugixml.hpp>
 

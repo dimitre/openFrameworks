@@ -1,5 +1,12 @@
 #include "ofTemplateZed.h"
+#include "genConfig.h"
 #include "addons.h"
+
+ofTemplateZed::ofTemplateZed() {
+	name = "zed";
+	path = conf.ofPath / "scripts" / "templates" / name;
+	openCommand = "zed . ";
+}
 
 void ofTemplateZed::load() {
 	alert("ofTemplateZed::load()", 92);

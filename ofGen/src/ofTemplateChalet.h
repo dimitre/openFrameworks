@@ -1,18 +1,14 @@
 #include "templates.h"
+struct genConfig;
+extern genConfig conf;
+
+#include <yaml-cpp/yaml.h>
 
 struct ofTemplateChalet : public ofTemplate {
 public:
 	YAML::Node projectYaml;
 
-	ofTemplateChalet() {
-		name = "chalet";
-		path = conf.ofPath / "scripts" / "templates" / name;
-
-		// openCommand = "chalet . ";
-		buildCommand = "chalet build";
-		runCommand = "chalet buildrun";
-		cleanCommand = "chalet clean --all";
-	}
+	ofTemplateChalet();
 	void load() override;
 	void save() override;
 	void addAddon(ofAddon * a) override;

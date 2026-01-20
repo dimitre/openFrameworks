@@ -1,9 +1,20 @@
 #include "ofTemplateMacos.h"
+#include "genConfig.h"
 #include "addons.h"
 #include "uuidxx.h"
 
 #include <nlohmann/json.hpp>
 using nlohmann::json;
+
+ofTemplateMacos::ofTemplateMacos() {
+	name = "macos";
+	path = conf.ofPath / "scripts" / "templates" / name;
+
+	openCommand = "open " + conf.projectName + ".xcodeproj";
+	buildCommand = "xcodebuild";
+	runCommand = "open -n bin/" + conf.projectName + ".app";
+}
+
 
 // #include <fstream>
 // #include <chrono>

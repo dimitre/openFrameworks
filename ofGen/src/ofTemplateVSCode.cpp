@@ -1,7 +1,12 @@
-// #include "templates.h"
 #include "ofTemplateVSCode.h"
+#include "genConfig.h"
 #include "addons.h"
 
+ofTemplateVSCode::ofTemplateVSCode() {
+	name = "vscode";
+	path = conf.ofPath / "scripts" / "templates" / name;
+	openCommand = "vscode . ";
+}
 
 void ofTemplateVSCode::save() {
 	alert("ofTemplateVSCode::save()", 92);

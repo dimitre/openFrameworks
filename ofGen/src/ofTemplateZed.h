@@ -1,13 +1,10 @@
 #include "templates.h"
+struct genConfig;
+extern genConfig conf;
 
 struct ofTemplateZed : public ofTemplate {
 public:
-	ofTemplateZed() {
-		name = "zed";
-		path = conf.ofPath / "scripts" / "templates" / name;
-
-		openCommand = "zed . ";
-	}
+	ofTemplateZed();
 	void load() override;
 	void save() override;
 };

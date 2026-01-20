@@ -1,4 +1,6 @@
 #include "templates.h"
+struct genConfig;
+extern genConfig conf;
 
 struct ofTemplateMake : public ofTemplate {
 public:

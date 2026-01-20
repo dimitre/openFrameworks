@@ -6,6 +6,8 @@
 	#include <windows.h>
 #endif
 
+#include "genConfig.h"
+
 int main(const int argc, const char * argv[]) {
 	auto t1 = std::chrono::high_resolution_clock::now();
 

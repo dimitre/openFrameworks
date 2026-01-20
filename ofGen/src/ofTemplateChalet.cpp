@@ -1,8 +1,20 @@
 #include "ofTemplateChalet.h"
+#include "genConfig.h"
 #include "addons.h"
 #include <fstream>
 #include <chrono>
 #include <fmt/chrono.h> // fmt’s chrono integration
+
+ofTemplateChalet::ofTemplateChalet() {
+	name = "chalet";
+	path = conf.ofPath / "scripts" / "templates" / name;
+
+	// openCommand = "chalet . ";
+	buildCommand = "chalet build";
+	runCommand = "chalet buildrun";
+	cleanCommand = "chalet clean --all";
+}
+
 
 std::string timeString() {
 	using namespace std::chrono;
