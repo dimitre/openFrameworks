@@ -68,16 +68,7 @@ int main(const int argc, const char * argv[]) {
 
 	// Pure Yaml output goes here, before the header SIGN
 	if (conf.singleParameter == "yaml-addons-ls") {
-		auto addonsFolder { conf.ofPath / "addons" };
-		if (fs::exists(addonsFolder)) {
-			YAML::Node addonsList(YAML::NodeType::Sequence);
-			for (auto const & d : fs::directory_iterator { addonsFolder }) {
-				if (fs::is_directory(d.path())) {
-					addonsList.push_back(d.path().filename().string());
-				}
-			}
-			std::cout << addonsList << std::endl;
-		}
+		conf.listAddonsAsYaml();
 		std::exit(0);
 	}
 

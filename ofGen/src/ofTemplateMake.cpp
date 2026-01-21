@@ -5,7 +5,7 @@
 
 ofTemplateMake::ofTemplateMake() {
 	name = "make";
-	path = conf.ofPath / "scripts" / "templates" / name;
+	path = conf.getTemplatesFolder() / name;
 
 	buildCommand = "make -j";
 	runCommand = "make RunRelease";

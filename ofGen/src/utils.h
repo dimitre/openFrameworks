@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream> // cout
-static std::string version = "v0.9.3";
+static std::string version = "v0.9.4";
 
 #include <filesystem>
 #include <vector>
@@ -14,8 +14,6 @@ namespace fs = std::filesystem;
 // static constexpr std::string_view VERSION = "ofGen v0.4";
 using std::cout;
 using std::endl;
-// using std::string;
-// using std::vector;
 
 static inline std::string getVersion() {
 	return "ofGen " + version;

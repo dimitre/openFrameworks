@@ -1,18 +1,44 @@
 #include "genConfig.h"
 genConfig conf;
-// #include <iostream> // cout
 #include <fstream>
 #include "templates.h"
-
-// struct ofTemplateChalet;
 
 #include "ofTemplateChalet.h"
 #include "ofTemplateMacos.h"
 #include "ofTemplateVSCode.h"
 #include "ofTemplateZed.h"
 
-// void genConfig::open() {
-// }
+class genConfig::Impl {
+public:
+    YAML::Node ofYaml;
+
+
+    // Any other YAML-related helpers
+    std::vector<std::string> nodeToStrings(const YAML::Node& yaml, const std::string& index);
+};
+
+genConfig::genConfig() : pImpl(std::make_unique<Impl>()) {}
+genConfig::~genConfig() = default;
+
+void genConfig::listAddonsAsYaml() {
+	alert ("listAddonsAsYaml", 96);
+	auto addonsFolder { ofPath / "addons" };
+	if (fs::exists(addonsFolder)) {
+		alert ("folder yes", 96);
+
+		YAML::Node addonsList(YAML::NodeType::Sequence);
+		for (auto const & d : fs::directory_iterator { addonsFolder }) {
+			if (fs::is_directory(d.path())) {
+				addonsList.push_back(d.path().filename().string());
+			}
+		}
+		std::cout << addonsList << std::endl;
+	} else {
+		alert ("no folder", 96);
+
+	}
+}
+
 
 void genConfig::import() {
 	if (fs::exists("of.yml")) {
@@ -40,23 +66,15 @@ void genConfig::import() {
 			}
 			file.close();
 
-			// YAML::Emitter emitter;
-			// emitter << node;
-			// emitter << "\n";  // blank line
-			// emitter << "# addons:\n";
-			// emitter << "#   - ofxOpencv\n";
-			// // emitter << "#   - ofxMath\n";
-			// emitter << "\n";  // blank line
-
-			std::ofstream ofYml("of.yml");
+			std::ofstream ofYamlOut("of.yml");
 			// cout << node << endl;
-			ofYml << node;
-			ofYml << "\n\n"; // blank lines
-			ofYml << "# addons:\n";
-			ofYml << "#   - ofxOpencv\n";
-			ofYml << "#   - ofxMath\n";
+			ofYamlOut << node;
+			ofYamlOut << "\n\n"; // blank lines
+			ofYamlOut << "# addons:\n";
+			ofYamlOut << "#   - ofxOpencv\n";
+			ofYamlOut << "#   - ofxMath\n";
 
-			ofYml.close();
+			ofYamlOut.close();
 			cout << endl;
 			alert("ok, of.yml created from addons.make", 32);
 		}
@@ -73,22 +91,22 @@ bool genConfig::loadYML() {
 		// config = YAML::LoadFile(configFile);
 		//
 		// TODO: Idea, I can keep ofYaml inside conf, so more info can be parsed only if needed, like infoPlist in Chalet/macos template.
-		ofYaml = YAML::LoadFile(configFile.string());
-		if (ofYaml["ofpath"]) { // use ofpath only if the key exists.
-			auto ofPathYML = ofYaml["ofpath"];
+		pImpl->ofYaml = YAML::LoadFile(configFile.string());
+		if (pImpl->ofYaml["ofpath"]) { // use ofpath only if the key exists.
+			auto ofPathYML = pImpl->ofYaml["ofpath"];
 			ofPath = ofPathYML.as<std::string>();
 		}
 
 		//"icon",
 		for (const auto & s : std::vector<std::string> { "version" }) {
-			if (ofYaml[s]) {
-				conf.settings[s] = ofYaml[s].as<std::string>();
+			if (pImpl->ofYaml[s]) {
+				conf.settings[s] = pImpl->ofYaml[s].as<std::string>();
 			}
 		}
 
-		if (ofYaml["infoPlist"]) { //info.plist
+		if (pImpl->ofYaml["infoPlist"]) { //info.plist
 			// alert("--- infoPlist entry", 96);
-			YAML::Node infoNode = ofYaml["infoPlist"];
+			YAML::Node infoNode = pImpl->ofYaml["infoPlist"];
 			for (YAML::const_iterator it = infoNode.begin(); it != infoNode.end(); ++it) {
 				std::string key { it->first.as<std::string>() };
 				std::string value { it->second.as<std::string>() };
@@ -100,8 +118,8 @@ bool genConfig::loadYML() {
 
 		conf.addonsNames = nodeToStrings("addons");
 
-		if (ofYaml["addonsSources"]) {
-			for (auto c : ofYaml["addonsSources"]) {
+		if (pImpl->ofYaml["addonsSources"]) {
+			for (auto c : pImpl->ofYaml["addonsSources"]) {
 				auto name { c["name"].as<std::string>() };
 				auto repo { c["repository"].as<std::string>() };
 				if (fs::exists(ofPath / "addons" / name)) {
@@ -174,8 +192,8 @@ bool genConfig::loadYML() {
 
 std::vector<std::string> genConfig::nodeToStrings(const std::string & index) {
 	std::vector<std::string> out;
-	if (ofYaml[index]) {
-		auto items = ofYaml[index];
+	if (pImpl->ofYaml[index]) {
+		auto items = pImpl->ofYaml[index];
 		for (std::size_t i = 0; i < items.size(); i++) {
 			out.emplace_back(items[i].as<std::string>());
 		}
@@ -185,8 +203,8 @@ std::vector<std::string> genConfig::nodeToStrings(const std::string & index) {
 
 std::vector<fs::path> genConfig::nodeToPaths(const std::string & index) {
 	std::vector<fs::path> out;
-	if (ofYaml[index]) {
-		auto items = ofYaml[index];
+	if (pImpl->ofYaml[index]) {
+		auto items = pImpl->ofYaml[index];
 		for (std::size_t i = 0; i < items.size(); i++) {
 			out.emplace_back(items[i].as<std::string>());
 		}
@@ -217,7 +235,7 @@ bool genConfig::buildProject() {
 	} else {
 
 		if (!isValidOfPath()) {
-			alert("OF not found in default path " + ofPath.string());
+			alert("⚠️  OF not found in default path " + ofPath.string());
 			help();
 			return false;
 		} else {

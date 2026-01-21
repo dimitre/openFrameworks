@@ -4,7 +4,7 @@
 
 ofTemplateVSCode::ofTemplateVSCode() {
 	name = "vscode";
-	path = conf.ofPath / "scripts" / "templates" / name;
+	path = conf.getTemplatesFolder() / name;
 	openCommand = "vscode . ";
 }
 

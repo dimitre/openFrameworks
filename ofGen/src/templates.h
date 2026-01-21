@@ -1,12 +1,7 @@
 #pragma once
 
 #include "utils.h"
-// extern genConfig conf;
-// #include <fstream>
-using std::string;
-using std::vector;
 struct ofAddon;
-
 
 std::string generateUUID(const std::string & input);
 

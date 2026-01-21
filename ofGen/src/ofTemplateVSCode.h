@@ -27,7 +27,7 @@ public:
 			data[p].emplace_back(object);
 		}
 
-		void addToArray(string pointer, fs::path value) {
+		void addToArray(std::string pointer, fs::path value) {
 			json::json_pointer p = json::json_pointer(pointer);
 			if (!data[p].is_array()) {
 				data[p] = json::array();

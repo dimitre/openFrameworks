@@ -4,7 +4,7 @@
 
 ofTemplateZed::ofTemplateZed() {
 	name = "zed";
-	path = conf.ofPath / "scripts" / "templates" / name;
+	path = conf.getTemplatesFolder() / name;
 	openCommand = "zed . ";
 }
 

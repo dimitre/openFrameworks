@@ -6,20 +6,10 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
-// extern genConfig conf;
-
 struct ofTemplate;
 struct ofAddon;
 
 // ofProject is a determinate OF project, it can have multiple addons, and multiple templates.
-
-
-
-// struct ofAdditional {
-// public:
-//    	fs::path path;
-// 	std::map<std::string, std::vector<fs::path>> filesMap;
-// };
 
 struct ofAddon {
 public:
@@ -54,8 +44,5 @@ public:
 };
 
 
-// void parseAddon( const fs::path & addonPath ) {
-//
-// bool buildProject();
 void parseConfigAllAddons();
 void createTemplates();

@@ -2,12 +2,11 @@
 #include "addons.h"
 #include "genConfig.h"
 #include <fstream>
-// #include <chrono>
 #include <fmt/chrono.h> // fmt’s chrono integration
 
 ofTemplateChalet::ofTemplateChalet() {
 	name = "chalet";
-	path = conf.ofPath / "scripts" / "templates" / name;
+	path = conf.getTemplatesFolder() / name;
 
 	// openCommand = "chalet . ";
 	buildCommand = "chalet build";
@@ -16,8 +15,7 @@ ofTemplateChalet::ofTemplateChalet() {
 }
 
 std::string timeString() {
-	using namespace std::chrono;
-	return fmt::format("{:%Y%m%d-%H%M}", system_clock::now()); // GMT / UTC
+	return fmt::format("{:%Y%m%d-%H%M}", std::chrono::system_clock::now()); // GMT / UTC
 }
 
 void ofTemplateChalet::load() {

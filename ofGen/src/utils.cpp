@@ -7,6 +7,7 @@
 #include <regex>
 #include <vector>
 
+#include <fmt/format.h>
 // genConfig conf;
 
 void ofProject::build() {

@@ -4,11 +4,26 @@
 #include "addons.h"
 #include <vector>
 #include <string>
-#include <yaml-cpp/yaml.h>
+// #include <yaml-cpp/yaml.h>
 
 struct genConfig {
+
+	genConfig();
+	~genConfig();
+
 	ofProject project;
 
+	void listAddonsAsYaml();
+
+	// // we can avoid including YAML everywhere by making shared_ptr / pimpl lang.
+	// YAML::Node ofYaml;
+ // Forward declare and hide YAML
+    class Impl;
+    std::unique_ptr<Impl> pImpl;
+
+	fs::path getTemplatesFolder() {
+		return ofPath / "scripts" / "templates";
+	}
 	// 16 jan 2026
 	std::map<std::string, std::string> settings;
 	// 19 jan 2026
@@ -51,6 +66,8 @@ struct genConfig {
 	std::string openCommand;
 	std::string buildCommand;
 	std::string runCommand;
+
+
 
 	bool isTemplateAddedToProject(std::string val) {
 		return std::find(templateNames.begin(), templateNames.end(), val) != templateNames.end();
@@ -201,7 +218,6 @@ ofGen templates=zed,macos,chalet addons=ofxMidi,ofxOpencv ofpath=../../.. path=/
 	// 	std::system(command.c_str());
 	// }
 
-	YAML::Node ofYaml;
 	void import();
 	bool loadYML();
 	std::vector<std::string> nodeToStrings(const std::string & index);

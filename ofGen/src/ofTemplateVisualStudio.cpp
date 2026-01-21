@@ -4,7 +4,7 @@
 
 ofTemplateVisualStudio::ofTemplateVisualStudio() {
 	name = "visualstudio";
-	path = conf.ofPath / "scripts" / "templates" / name;
+	path = conf.getTemplatesFolder() / name;
 	//FIXME - implement
 	openCommand = "open " + conf.projectName + ".xcodeproj";
 	// buildCommand = "msbuild";
