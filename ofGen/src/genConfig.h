@@ -15,6 +15,8 @@ struct genConfig {
 
 	void listAddonsAsYaml();
 
+	bool isTemplateAddedToProject(std::string val);
+
 	// // we can avoid including YAML everywhere by making shared_ptr / pimpl lang.
 	// YAML::Node ofYaml;
  // Forward declare and hide YAML
@@ -69,9 +71,6 @@ struct genConfig {
 
 
 
-	bool isTemplateAddedToProject(std::string val) {
-		return std::find(templateNames.begin(), templateNames.end(), val) != templateNames.end();
-	}
 
 	void parseParameters(const int argc, const char * argv[]) {
 		// alert ("platform string " + getPlatformString(), 95);

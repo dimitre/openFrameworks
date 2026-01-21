@@ -1,24 +1,27 @@
 #include "genConfig.h"
 genConfig conf;
-#include <fstream>
 #include "templates.h"
 
 #include "ofTemplateChalet.h"
 #include "ofTemplateMacos.h"
 #include "ofTemplateVSCode.h"
 #include "ofTemplateZed.h"
+#include <fstream>
+#include <algorithm>
 
 class genConfig::Impl {
 public:
     YAML::Node ofYaml;
-
-
     // Any other YAML-related helpers
     std::vector<std::string> nodeToStrings(const YAML::Node& yaml, const std::string& index);
 };
 
 genConfig::genConfig() : pImpl(std::make_unique<Impl>()) {}
 genConfig::~genConfig() = default;
+
+bool genConfig::isTemplateAddedToProject(std::string val) {
+	return std::find(templateNames.begin(), templateNames.end(), val) != templateNames.end();
+}
 
 void genConfig::listAddonsAsYaml() {
 	alert ("listAddonsAsYaml", 96);
