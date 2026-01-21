@@ -1,6 +1,7 @@
 #include "addons.h"
 #include "templates.h"
 #include "genConfig.h"
+#include <algorithm>
 
 void ofAddon::scanFolder(const fs::path & path,
 	std::map<std::string, std::vector<fs::path>> & filesMap,
