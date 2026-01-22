@@ -368,7 +368,7 @@ distribution:
         NSHighResolutionCapable: true
         NSCameraUsageDescription: This app needs to access the camera
         NSMicrophoneUsageDescription: This app needs to access the microphone
-        NSCameraUseContinuityCameraDeviceType: false
+        # NSCameraUseContinuityCameraDeviceType: false
         ITSAppUsesNonExemptEncryption: false
         NSHumanReadableCopyright: Made using ofworks.cc (openFrameworks fork)
 
