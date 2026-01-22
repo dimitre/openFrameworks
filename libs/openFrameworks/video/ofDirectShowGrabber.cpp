@@ -107,25 +107,38 @@ ofPixelFormat ofDirectShowGrabber::getPixelFormat() const {
 
 //--------------------------------------------------------------------
 std::vector<ofVideoDevice> ofDirectShowGrabber::listDevices() const {
-    
-    std::vector <ofVideoDevice> devices; 
-	
+    std::vector <ofVideoDevice> devices;
     //---------------------------------
 	#ifdef OF_VIDEO_CAPTURE_DIRECTSHOW
 	//---------------------------------
-		ofLogNotice() << "---";
-        VI.listDevices();
-        ofLogNotice() << "---";
+//		ofLogNotice() << "---";
+//        VI.listDevices();
+//        ofLogNotice() << "---";
         
-		std::vector <std::string> devList = VI.getDeviceList(); 
+//		std::vector <std::string> devList = VI.getDeviceList(); 
         
-        for(std::size_t i = 0; i < devList.size(); i++){
-            ofVideoDevice vd; 
-            vd.deviceName = devList[i]; 
-            vd.id = i;  
-            vd.bAvailable = true; 
-            devices.push_back(vd); 
-        }
+	std::size_t i = 0;
+	for (const auto & device : VI.getDeviceList()) {
+		ofVideoDevice vd;
+		vd.deviceName = devList[i];
+		vd.id = i;
+		vd.bAvailable = true;
+		
+		cout << vd.id << endl;
+		cout << vd.deviceName << endl;
+		cout << "-------" << endl;
+		
+		devices.push_back(vd);
+		i++;
+	}
+	
+//        for(std::size_t i = 0; i < devList.size(); i++){
+//            ofVideoDevice vd; 
+//            vd.deviceName = devList[i]; 
+//            vd.id = i;  
+//            vd.bAvailable = true; 
+//            devices.push_back(vd); 
+//        }
 
 	//---------------------------------
 	#endif
