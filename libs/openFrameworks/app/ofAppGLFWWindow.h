@@ -234,8 +234,8 @@ public:
 	void update() {
 		int numberOfMonitors;
 		monitors = glfwGetMonitors(&numberOfMonitors);
-
-		std::cout << "GLFW: ofMonitors update numberOfMonitors " << numberOfMonitors << std::endl;
+		//ofGetFrameNum() <<
+		std::cout <<  "ofMonitors update numberOfMonitors " << numberOfMonitors << std::endl;
 		rects.clear();
 		allMonitorsRect = { 0, 0, 0, 0 };
 
