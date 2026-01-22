@@ -389,49 +389,62 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 	glfwSetDropCallback(windowP, drop_cb);
 	glfwSetWindowRefreshCallback(windowP, refresh_cb);
 
-#ifdef TARGET_LINUX
-	XSetLocaleModifiers("");
-	xim = XOpenIM(getX11Display(), 0, 0, 0);
-	if (!xim) {
-		// fallback to internal input method
-		XSetLocaleModifiers("@im=none");
-		xim = XOpenIM(getX11Display(), 0, 0, 0);
+#if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI_LEGACY)
+	// Only initialize XIM/XIC when running on X11, not on Wayland
+	// On Wayland, GLFW handles input directly without XIM
+	if (glfwGetPlatform() == GLFW_PLATFORM_X11) {
+		Display* display = getX11Display();
+		Window window = getX11Window();
+		
+		if (display && window) {
+			XSetLocaleModifiers("");
+			xim = XOpenIM(display, 0, 0, 0);
+			if (!xim) {
+				// fallback to internal input method
+				XSetLocaleModifiers("@im=none");
+				xim = XOpenIM(display, 0, 0, 0);
+			}
+			xic = XCreateIC(xim,
+				XNInputStyle, XIMPreeditNothing | XIMStatusNothing,
+				XNClientWindow, window,
+				XNFocusWindow, window,
+				NULL);
+		}
+	} else {
+		// Running on Wayland - GLFW handles input natively
+		xim = nullptr;
+		xic = nullptr;
 	}
-	xic = XCreateIC(xim,
-		XNInputStyle, XIMPreeditNothing | XIMStatusNothing,
-		XNClientWindow, getX11Window(),
-		XNFocusWindow, getX11Window(),
-		NULL);
 #endif
 
 }
 
 #ifdef TARGET_LINUX
-    //------------------------------------------------------------
-    void ofAppGLFWWindow::setWindowIcon(const fs::path & path) {
-        ofPixels iconPixels;
-        ofLoadImage(iconPixels, path);
-        setWindowIcon(iconPixels);
-    }
+	//------------------------------------------------------------
+	void ofAppGLFWWindow::setWindowIcon(const fs::path & path) {
+		ofPixels iconPixels;
+		ofLoadImage(iconPixels, path);
+		setWindowIcon(iconPixels);
+	}
 
-    //------------------------------------------------------------
-    void ofAppGLFWWindow::setWindowIcon(const ofPixels & iconPixels) {
-        iconSet = true;
-        int length = 2 + iconPixels.getWidth() * iconPixels.getHeight();
-        std::vector<unsigned long> buffer(length);
-        buffer[0] = iconPixels.getWidth();
-        buffer[1] = iconPixels.getHeight();
-        for (size_t i = 0; i < iconPixels.getWidth() * iconPixels.getHeight(); i++) {
-            buffer[i + 2] = iconPixels[i * 4 + 3] << 24;
-            buffer[i + 2] += iconPixels[i * 4 + 0] << 16;
-            buffer[i + 2] += iconPixels[i * 4 + 1] << 8;
-            buffer[i + 2] += iconPixels[i * 4 + 2];
-        }
+	//------------------------------------------------------------
+	void ofAppGLFWWindow::setWindowIcon(const ofPixels & iconPixels) {
+		iconSet = true;
+		int length = 2 + iconPixels.getWidth() * iconPixels.getHeight();
+		std::vector<unsigned long> buffer(length);
+		buffer[0] = iconPixels.getWidth();
+		buffer[1] = iconPixels.getHeight();
+		for (size_t i = 0; i < iconPixels.getWidth() * iconPixels.getHeight(); i++) {
+			buffer[i + 2] = iconPixels[i * 4 + 3] << 24;
+			buffer[i + 2] += iconPixels[i * 4 + 0] << 16;
+			buffer[i + 2] += iconPixels[i * 4 + 1] << 8;
+			buffer[i + 2] += iconPixels[i * 4 + 2];
+		}
 
-        XChangeProperty(getX11Display(), getX11Window(), XInternAtom(getX11Display(), "_NET_WM_ICON", False), XA_CARDINAL, 32,
-                        PropModeReplace, (const unsigned char *)buffer.data(), length);
-        XFlush(getX11Display());
-    }
+		XChangeProperty(getX11Display(), getX11Window(), XInternAtom(getX11Display(), "_NET_WM_ICON", False), XA_CARDINAL, 32,
+						PropModeReplace, (const unsigned char *)buffer.data(), length);
+		XFlush(getX11Display());
+	}
 #endif
 
 //--------------------------------------------
@@ -1592,57 +1605,57 @@ void ofAppGLFWWindow::makeCurrent() {
 }
 
 #if defined(TARGET_LINUX)
-    Display * ofAppGLFWWindow::getX11Display() {
-        return glfwGetX11Display();
-    }
+	Display * ofAppGLFWWindow::getX11Display() {
+		return glfwGetX11Display();
+	}
 
-    Window ofAppGLFWWindow::getX11Window() {
-        return glfwGetX11Window(windowP);
-    }
+	Window ofAppGLFWWindow::getX11Window() {
+		return glfwGetX11Window(windowP);
+	}
 
-    XIC ofAppGLFWWindow::getX11XIC() {
-        return xic;
-    }
+	XIC ofAppGLFWWindow::getX11XIC() {
+		return xic;
+	}
 #endif
 
 #if defined(TARGET_LINUX) && !defined(TARGET_OPENGLES)
-    GLXContext ofAppGLFWWindow::getGLXContext() {
-        return glfwGetGLXContext(windowP);
-    }
+	GLXContext ofAppGLFWWindow::getGLXContext() {
+		return glfwGetGLXContext(windowP);
+	}
 #endif
 
 #if defined(TARGET_LINUX) && defined(TARGET_OPENGLES)
-    EGLDisplay ofAppGLFWWindow::getEGLDisplay() {
-        return glfwGetEGLDisplay();
-    }
+	EGLDisplay ofAppGLFWWindow::getEGLDisplay() {
+		return glfwGetEGLDisplay();
+	}
 
-    EGLContext ofAppGLFWWindow::getEGLContext() {
-        return glfwGetEGLContext(windowP);
-    }
+	EGLContext ofAppGLFWWindow::getEGLContext() {
+		return glfwGetEGLContext(windowP);
+	}
 
-    EGLSurface ofAppGLFWWindow::getEGLSurface() {
-        return glfwGetEGLSurface(windowP);
-    }
+	EGLSurface ofAppGLFWWindow::getEGLSurface() {
+		return glfwGetEGLSurface(windowP);
+	}
 #endif
 
 #if defined(TARGET_OSX)
-    void * ofAppGLFWWindow::getNSGLContext() {
-        return (__bridge void *)glfwGetNSGLContext(windowP);
-    }
+	void * ofAppGLFWWindow::getNSGLContext() {
+		return (__bridge void *)glfwGetNSGLContext(windowP);
+	}
 
-    void * ofAppGLFWWindow::getCocoaWindow() {
-        return (__bridge void *)glfwGetCocoaWindow(windowP);
-    }
+	void * ofAppGLFWWindow::getCocoaWindow() {
+		return (__bridge void *)glfwGetCocoaWindow(windowP);
+	}
 #endif
 
 #if defined(TARGET_WIN32)
-    HGLRC ofAppGLFWWindow::getWGLContext() {
-        return glfwGetWGLContext(windowP);
-    }
+	HGLRC ofAppGLFWWindow::getWGLContext() {
+		return glfwGetWGLContext(windowP);
+	}
 
-    HWND ofAppGLFWWindow::getWin32Window() {
-        return glfwGetWin32Window(windowP);
-    }
+	HWND ofAppGLFWWindow::getWin32Window() {
+		return glfwGetWin32Window(windowP);
+	}
 
 #endif
 
