@@ -11,11 +11,11 @@ abstracts:*:
   language[toolchain:apple-llvm]: Objective-C++
   settings:Cxx:
     cppStandard: c++20
-
     compileOptions:
-      # - -fstack-protector
-      - -fstack-protector-strong
       - -D_FORTIFY_SOURCE=3
+    compileOptions[:!windows]:
+      - -fstack-protector-strong
+
     # compileOptions[:macos]:
     # - -Wfatal-errors
     # minimal extra pedantic strict strictPedantic
