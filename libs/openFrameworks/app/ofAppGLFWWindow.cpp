@@ -105,25 +105,9 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 
 	settings = _settings;
 
-	if (!glfwInit()) {
-		ofLogError("ofAppGLFWWindow") << "couldn't init GLFW";
-		return;
-	}
-
-
-	glfwDefaultWindowHints();
-
-// copied from here: https://github.com/sofa-framework/SofaGLFW/pull/174/files
-// Wayland is not fully supported in GLFW
-// this will force using X11 on wayland (XWayland)
-//	#pragma message("__linux__ is " __linux__)
+// CRITICAL: glfwInitHint() must be called BEFORE glfwInit()
+// Platform selection needs to happen before initialization
 #if defined(__linux__)
-//	if (glfwPlatformSupported(GLFW_PLATFORM_WAYLAND)) {
-//		glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_WAYLAND);
-//	} else {
-//		glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
-//	}
-	
 	// Check if actually running on Wayland
 	const char* waylandDisplay = getenv("WAYLAND_DISPLAY");
 	const char* sessionType = getenv("XDG_SESSION_TYPE");
@@ -136,6 +120,23 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 		glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
 	}
 #endif
+
+	if (!glfwInit()) {
+		ofLogError("ofAppGLFWWindow") << "couldn't init GLFW";
+		return;
+	}
+
+#if defined(__linux__)
+	// Verify which platform was actually initialized
+	int platform = glfwGetPlatform();
+	if (platform == GLFW_PLATFORM_WAYLAND) {
+		ofLogNotice("ofAppGLFWWindow") << "GLFW initialized with Wayland backend";
+	} else if (platform == GLFW_PLATFORM_X11) {
+		ofLogNotice("ofAppGLFWWindow") << "GLFW initialized with X11 backend";
+	}
+#endif
+
+	glfwDefaultWindowHints();
 
 
 	glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, settings.highResolutionCapable);
