@@ -42,6 +42,9 @@ void ofApp::draw() {
 }
 
 void ofApp::keyPressed(int key) {
+	if (key == 'q') {
+		ofSystemAlertDialog("keyboard ok");
+	}
 	//	if (key == ' ') {
 	//		writer.toggleRecording();
 	//	}
