@@ -377,3 +377,38 @@ float ofVideoGrabber::getWidth() const{
 bool ofVideoGrabber::isInitialized() const{
 	return grabber && grabber->isInitialized() && (!bUseTexture || tex[0].isAllocated() || grabber->getTexturePtr());
 }
+
+bool ofVideoGrabber::setDeviceByName(const std::string & name) {
+	int deviceID = -1;
+	for (const auto & d : listDevices()) {
+		if (d.deviceName == name) {
+			deviceID = d.id;
+			break;
+		}
+	}
+	if (deviceID != -1) {
+		setDeviceID(deviceID);
+	}
+	return deviceID != -1;
+}
+
+bool ofVideoGrabber::setDeviceByNames(const std::vector<std::string> & names) {
+	int deviceID = -1;
+	bool found = false;
+	for (const auto & name : names) {
+		if (!found) {
+			for (const auto & d : listDevices()) {
+				if (d.deviceName == name) {
+					cout << "FOUND YES " << name << endl;
+					deviceID = d.id;
+					found = true;
+					break;
+				}
+			}
+		}
+	}
+	if (deviceID != -1) {
+		setDeviceID(deviceID);
+	}
+	return deviceID != -1;
+}

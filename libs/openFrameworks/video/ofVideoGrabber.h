@@ -34,6 +34,8 @@ public:
 	const std::vector<ofTexture> & getTexturePlanes() const;
 	void				setVerbose(bool bTalkToMe);
 	void				setDeviceID(int _deviceID);
+	bool setDeviceByName(const std::string & name);
+	bool setDeviceByNames(const std::vector<std::string> & names);
 	void				setDesiredFrameRate(int framerate);
 	void				setUseTexture(bool bUse);
 	bool 				isUsingTexture() const;
