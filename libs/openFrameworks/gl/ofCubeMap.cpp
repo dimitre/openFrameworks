@@ -429,7 +429,7 @@ bool ofCubeMap::load( ofCubeMapSettings aSettings ) {
 			// figure out the number of mip maps //
 			data->maxMipLevels = log2(srcCubeFSize)+1;
 
-			auto encFolder = data->settings.cacheDirectory;
+			auto encFolder { data->settings.cacheDirectory };
 			if( !encFolder.empty() ) {
 				if( !ofDirectory::doesDirectoryExist( data->settings.cacheDirectory )) {
 					#if !defined(TARGET_EMSCRIPTEN)

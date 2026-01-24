@@ -1496,6 +1496,11 @@ fs::path ofToDataPath(const fs::path & path, bool makeAbsolute){
 	return ofCore.dataPath / path;
 };
 
+//std::string ofToDataPath(const std::string & path, bool makeAbsolute){
+//	return (ofCore.dataPath / path).string();
+//};
+
+
 //--------------------------------------------------
 // Function used internally in OF core. API can change later
 std::string ofPathToString(const fs::path & path) {

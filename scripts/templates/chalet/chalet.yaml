@@ -305,6 +305,7 @@ targets:
       exclude[:windows]:
         - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils}.cpp
         - ${var:ofPath}/libs/openFrameworks/sound/ofFmodSoundPlayer.cpp
+        - ${var:ofPath}/libs/openFrameworks/sound/ofRtAudioSoundStream.cpp
         # new, 17 jan 2026
         - ${var:ofPath}/libs/openFrameworks/sound/ofSoundFFT.cpp
 

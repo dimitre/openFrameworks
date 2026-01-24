@@ -954,9 +954,16 @@ void ofDisableDataPath();
 /// \param absolute Set to true to return an absolute path.
 /// \returns the new path, unless paths were disabled with ofDisableDataPath().
 
+//struct PathResult {
+//	fs::path p;
+//	operator fs::path() const { return p; }
+//	operator std::string() const { return p.string(); }
+//};
+//PathResult ofToDataPath(const fs::path& path, bool makeAbsolute = false);
+//std::string ofToDataPath(const std::string& path, bool makeAbsolute = false);
+
 fs::path ofToDataPath(const fs::path & path, bool absolute=false);
 
-//std::string ofToDataPath(const fs::path & path, bool absolute = false);
 
 /// \brief Reset the working directory to the platform default.
 ///
