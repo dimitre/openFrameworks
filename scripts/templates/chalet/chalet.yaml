@@ -212,7 +212,7 @@ abstracts:*:
       - ${var:ofPath}/libs/${var:platform}/lib/glfw3.lib
       - ${var:ofPath}/libs/${var:platform}/lib/glm.lib
       - ${var:ofPath}/libs/${var:platform}/lib/pugixml.lib
-      # - ${var:ofPath}/libs/${var:platform}/lib/rtaudio.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/rtaudio.lib
       - ${var:ofPath}/libs/${var:platform}/lib/tess2.lib
       - ${var:ofPath}/libs/${var:platform}/lib/uriparser.lib
       - ${var:ofPath}/libs/${var:platform}/lib/videoInput.lib
@@ -305,7 +305,7 @@ targets:
       exclude[:windows]:
         - ${var:ofPath}/libs/openFrameworks/video/{ofGstVideoGrabber,ofGstVideoPlayer,ofGstUtils}.cpp
         - ${var:ofPath}/libs/openFrameworks/sound/ofFmodSoundPlayer.cpp
-        - ${var:ofPath}/libs/openFrameworks/sound/ofRtAudioSoundStream.cpp
+        # - ${var:ofPath}/libs/openFrameworks/sound/ofRtAudioSoundStream.cpp
         - ${var:ofPath}/libs/openFrameworks/sound/ofOpenALSoundPlayer.cpp
 
         # new, 17 jan 2026
