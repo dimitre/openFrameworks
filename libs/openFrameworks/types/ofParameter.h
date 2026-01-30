@@ -951,7 +951,7 @@ void ofParameter<ParameterType>::disableEvents() {
 template <typename ParameterType>
 inline ParameterType ofParameter<ParameterType>::operator++(int) {
 	ParameterType r = obj->value;
-	obj->value++;
+	++obj->value;
 	set(obj->value);
 	return r;
 }
