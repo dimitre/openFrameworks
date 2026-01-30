@@ -966,14 +966,14 @@ inline ofParameter<ParameterType> & ofParameter<ParameterType>::operator++() {
 template <typename ParameterType>
 inline ParameterType ofParameter<ParameterType>::operator--(int) {
 	ParameterType r = obj->value;
-	obj->value--;
+	(void)--obj->value;
 	set(obj->value);
 	return r;
 }
 
 template <typename ParameterType>
 inline ofParameter<ParameterType> & ofParameter<ParameterType>::operator--() {
-	--obj->value;
+	(void)--obj->value;
 	set(obj->value);
 	return *this;
 }

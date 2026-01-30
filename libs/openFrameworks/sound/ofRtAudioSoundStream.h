@@ -7,8 +7,8 @@
 typedef unsigned int RtAudioStreamStatus;
 //class RtAudio;
 
-inline namespace rt {
-inline namespace audio {
+namespace rt {
+namespace audio {
 	class RtAudio;
 }
 }
