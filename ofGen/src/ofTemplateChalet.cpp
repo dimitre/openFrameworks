@@ -73,7 +73,7 @@ void ofTemplateChalet::load() {
 
 	// MARK: Not ok to remove since addonToChalet only include defines from ADDON_DEFINES, not from of.yml define
 	for (auto & d : conf.defines) {
-		alert("ADD DEFINE CHALET" + d, 33);
+		alert("	Add define chalet " + d);
 		projectYaml["targets"]["empty"]["settings:Cxx"]["defines"].push_back(d);
 	}
 
