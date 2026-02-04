@@ -2,6 +2,7 @@
 #include "genConfig.h"
 #include "addons.h"
 #include "uuidxx.h"
+#include <algorithm> // Sort
 
 #include <nlohmann/json.hpp>
 using nlohmann::json;
@@ -246,18 +247,15 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 	// 	cout << "-----" << endl;
 	// }
 
+	std::vector<std::pair <fs::path, fs::path> > sources;
 	for (auto & f : a->filteredMap["sources"]) {
 		fs::path p = (a->path / f).parent_path();
 		fs::path p2 = relative(p, conf.ofPath);
 		if (a->isProject) {
 			p2 = f.parent_path();
-			// alert ("ADDON IS PROJECT", 95);
-			// alert(f.string(), 95);
-			// alert(f.filename().string(), 95);
-			// alert(p2.string(), 96);
 		}
-
-		addSrc(f.filename(), p2);
+		sources.emplace_back(f.filename(), p2);
+		// addSrc(f.filename(), p2);
 	}
 
 	for (auto & f : a->filteredMap["headers"]) {
@@ -268,8 +266,17 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 			p2 = relative(p, conf.projectPath);
 			p2 = f.parent_path();
 		}
+		sources.emplace_back(f.filename(), p2);
+		// addSrc(f.filename(), p2);
+	}
 
-		addSrc(f.filename(), p2);
+	std::sort(sources.begin(), sources.end(), [](const std::pair <fs::path, fs::path> & a, const std::pair <fs::path, fs::path> & b) {
+		return a.first < b.first;
+		// return ofStringToLower(a.first.string()) < ofStringToLower(b.first.string());
+	});
+
+	for (auto & s : sources) {
+		addSrc(s.first, s.second);
 	}
 
 	// ADD Include
