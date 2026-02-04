@@ -24,16 +24,19 @@ section() {
 	printf "${COLOR}%s${NC}\n" "$*"
 }
 
-sectionOK() {
-	printf "💾 ${COLOR}%s${NC}\n" "$*"
+sectionOk() {
+	# 💾
+	printf "[${COLOR}✓${NC}] ${COLOR}%s${NC}\n" "$*"
+
 }
 
 executa2() {
-	printf "✅ ${COLOR2}%s${NC}\n" "$*"
+	# ✅
+	printf "${COLOR2}%s${NC}\n" "$*"
 }
 
 executa() {
-	printf "✅ ${COLOR2}%s${NC}\n" "$*"
+	printf "${COLOR2}%s${NC}\n" "$*"
 	"$@"
 }
 
@@ -41,7 +44,7 @@ alert() {
 	printf "⚠️ ${COLOR2}%s${NC}\n" "$*"
 }
 
-sectionOK "ofWorks install ofLibs"
+section "💾 ofWorks will install ofLibs"
 
 # Determine if we need sudo
 if command -v sudo &> /dev/null; then
@@ -181,7 +184,7 @@ case "$PLATFORM" in
 
 	    # ----- wget2 : use system copy if present, else portable fallback -----
 	    if command -v wget2 &>/dev/null; then
-	        section "wget2 already available in PATH – nothing to do."
+	        section "wget2 detected"
 	    else
 	        WGET2_DIR="$HOME/wget2"
 	        mkdir -p "$WGET2_DIR"
@@ -214,33 +217,33 @@ case "$PLATFORM" in
 				# 	# section "no wget2"
 				# 	brew install gh
 				# else
-				# 	section "gh already installed"
+				# 	section "gh detected"
 				# fi
 
 				if ! command -v wget2 &> /dev/null; then
 					# section "no wget2"
 					brew install wget2
 				else
-					section "wget2 already installed"
+					sectionOk "wget2 detected"
 				fi
 
 				if ! command -v chalet &> /dev/null; then
 					brew tap chalet-org/chalet
 					brew install --cask chalet
 				else
-					section "chalet already installed"
+					sectionOk "chalet detected"
 				fi
 
 				# if ! command -v cmake &> /dev/null; then
 				# 	brew install cmake
 				# else
-				# 	section "cmake already installed"
+				# 	section "cmake detected"
 				# fi
 
 				if ! command -v ninja &> /dev/null; then
 					brew install ninja
 				else
-					section "ninja already installed"
+					sectionOk "ninja detected"
 				fi
 
 			else
@@ -432,7 +435,8 @@ getlink() {
 }
 
 unzipCore() {
-	echo "unzipCore"
+
+	section "Uncompress ofWorks Core Libs"
 	for LIBNAME in "${CORELIBS[@]}"; do
 		filename="${DOWNLOAD}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
 		executa unzip -qq -o "${filename}" -d "${LIBS_FOLDER}"
@@ -443,7 +447,7 @@ unzipCore() {
 }
 
 unzipAddons() {
-	echo "unzipAddons"
+	section "Uncompress ofWorks Addons Libs"
 
 	for libaddon in "${LIBADDONS[@]}"; do
 		lib=${libaddon%%:*}
@@ -472,6 +476,6 @@ if [[ "$wipeDownloadsAfterInstall" == true && -d "${DOWNLOAD}" ]]; then
 	rm -rf "${DOWNLOAD}"
 fi
 
-sectionOK "Install ofLibs done"
+sectionOk "Install ofLibs done"
 
 trap 'printf "${NC}"' EXIT

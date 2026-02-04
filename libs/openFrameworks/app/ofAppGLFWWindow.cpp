@@ -220,7 +220,7 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 	int monitorIndex = 0;
 	// Check to see if desired monitor is connected.
 
-//	allMonitors.update();
+	allMonitors.update();
 //	cout << "ofAppGLFWWindow allMonitors size " << allMonitors.rects.size();
 	if ((int)allMonitors.rects.size() > settings.monitor) {
 		monitorIndex = settings.monitor;
