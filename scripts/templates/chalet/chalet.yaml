@@ -72,6 +72,8 @@ abstracts:*:
       # FIXME: Test removing this
       # - /D_CRT_NO_VA_START_VALIDATION
       - /MT
+      # trying to make ccache work on gh actions
+      - /Z7
 
     includeDirs:
       - ${var:ofPath}/libs/openFrameworks/*
