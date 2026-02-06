@@ -74,6 +74,7 @@ abstracts:*:
       - /MT
       # trying to make ccache work on gh actions
       - /Z7
+      - /MP1 # Or find where /MP is set and remove it
 
     includeDirs:
       - ${var:ofPath}/libs/openFrameworks/*
