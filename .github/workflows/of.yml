@@ -198,5 +198,5 @@ jobs:
           zip -r ofWorks_${{ matrix.platform }}_flechilhas.zip dist/*
           gh release upload demo *.zip --clobber
 
-      - run: |
-          cat ${{ github.workspace }}/ccache-debug/*.ccache-log 2>/dev/null | head -100
+      # - run: |
+      #     cat ${{ github.workspace }}/ccache-debug/*.ccache-log 2>/dev/null | head -100
