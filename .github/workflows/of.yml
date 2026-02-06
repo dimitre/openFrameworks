@@ -46,9 +46,15 @@ jobs:
     env:
       # Only set MSVC-specific vars for Windows (vs), otherwise empty/default
       CCACHE_COMPILER_TYPE: ${{ matrix.platform == 'vs' && 'msvc' || '' }}
-      CCACHE_COMPILERCHECK: ${{ matrix.platform == 'vs' && 'content' || '' }}
-      CCACHE_SLOPPINESS: ${{ matrix.platform == 'vs' && 'pch_defines,time_macros,include_file_mtime,include_file_ctime' || '' }}
-      CCACHE_DEPEND: ${{ matrix.platform == 'vs' && '1' || '' }}
+      # CCACHE_COMPILERCHECK: ${{ matrix.platform == 'vs' && 'content' || '' }}
+      CCACHE_COMPILERCHECK: content
+      CCACHE_SLOPPINESS: ${{ matrix.platform == 'vs' && 'pch_defines,time_macros,include_file_mtime,include_file_ctime' || 'include_file_mtime,time_macros' }}
+      # CCACHE_DEPEND: ${{ matrix.platform == 'vs' && '1' || '' }}
+      CCACHE_DEPEND: 1
+
+      CCACHE_COMPILERCHECK: content  # or: %compiler% -dumpversion
+      # CCACHE_SLOPPINESS: include_file_mtime,time_macros
+
       # Optional: debug mode to diagnose cache misses
       # CCACHE_DEBUG: ${{ matrix.platform == 'vs' && '1' || '' }}
 
@@ -191,3 +197,6 @@ jobs:
           chalet bundle --compiler-cache --show-commands
           zip -r ofWorks_${{ matrix.platform }}_flechilhas.zip dist/*
           gh release upload demo *.zip --clobber
+
+      - run: |
+        cat ${{ github.workspace }}/ccache-debug/*.ccache-log 2>/dev/null | head -100
