@@ -199,4 +199,4 @@ jobs:
           gh release upload demo *.zip --clobber
 
       - run: |
-        cat ${{ github.workspace }}/ccache-debug/*.ccache-log 2>/dev/null | head -100
+          cat ${{ github.workspace }}/ccache-debug/*.ccache-log 2>/dev/null | head -100
