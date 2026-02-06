@@ -43,6 +43,15 @@ jobs:
 
     runs-on: ${{ matrix.os }}
 
+    env:
+      # Only set MSVC-specific vars for Windows (vs), otherwise empty/default
+      CCACHE_COMPILER_TYPE: ${{ matrix.platform == 'vs' && 'msvc' || '' }}
+      CCACHE_COMPILERCHECK: ${{ matrix.platform == 'vs' && 'content' || '' }}
+      CCACHE_SLOPPINESS: ${{ matrix.platform == 'vs' && 'pch_defines,time_macros,include_file_mtime,include_file_ctime' || '' }}
+      CCACHE_DEPEND: ${{ matrix.platform == 'vs' && '1' || '' }}
+      # Optional: debug mode to diagnose cache misses
+      # CCACHE_DEBUG: ${{ matrix.platform == 'vs' && '1' || '' }}
+
     steps:
       - uses: actions/checkout@v5
 
