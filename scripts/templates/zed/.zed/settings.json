@@ -6,27 +6,30 @@
 
 // Ok, added file_scan_exclusions, 06/11/2025
 {
-  "file_scan_exclusions": ["build/**"],
-  "languages": {
-    "C++": {
-      "hard_tabs": true,
-      "tab_size": 4,
-      // "indent_size": 4,
-      // "indent_style": "tabs",
-      "formatter": "language_server",
-      "format_on_save": "on",
+	"file_scan_exclusions": ["build/**"],
+	"diagnostics": {
+		"include_warnings": true,
+	},
+	"languages": {
+		"C++": {
+			"hard_tabs": true,
+			"tab_size": 4,
+			// "indent_size": 4,
+			// "indent_style": "tabs",
+			"formatter": "language_server",
+			"format_on_save": "on",
 
-      "enable_language_server": true,
-      "use_autoclose": true,
-      "extend_comment_on_newline": true,
-      "remove_trailing_whitespace_on_save": true,
-      "code_actions_on_format": {
-        "clangd": true
-      },
-      "always_treat_brackets_as_autoclosed": true,
-      "ensure_final_newline_on_save": true
-      // ,
-      // "show_copilot_suggestions": true
-    }
-  }
+			"enable_language_server": true,
+			"use_autoclose": true,
+			"extend_comment_on_newline": true,
+			"remove_trailing_whitespace_on_save": true,
+			"code_actions_on_format": {
+				"clangd": true,
+			},
+			"always_treat_brackets_as_autoclosed": true,
+			"ensure_final_newline_on_save": true,
+			// ,
+			// "show_copilot_suggestions": true
+		},
+	},
 }

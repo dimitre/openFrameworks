@@ -1,8 +1,17 @@
 #include "ofTemplateMacos.h"
-#include "genConfig.h"
 #include "addons.h"
-#include "uuidxx.h"
+#include "genConfig.h"
+// #include "uuidxx.h"
+
+
 #include <algorithm> // Sort
+
+// new UUID method
+#include <functional>
+#include <sstream>
+#include <iomanip>
+#include <string>
+
 
 #include <nlohmann/json.hpp>
 using nlohmann::json;
@@ -18,7 +27,49 @@ ofTemplateMacos::ofTemplateMacos() {
 }
 
 std::string generateUUID(const std::string & input) {
-	return uuidxx::uuid::Generate().ToString(false);
+	// return uuidxx::uuid::Generate().ToString(false);
+	//
+	// Use FNV-1a hash for better distribution than std::hash
+	constexpr uint64_t FNV_OFFSET = 14695981039346656037ULL;
+	constexpr uint64_t FNV_PRIME = 1099511628211ULL;
+
+	auto fnv1a = [](const std::string & str) -> uint64_t {
+		uint64_t hash = FNV_OFFSET;
+		for (char c : str) {
+			hash ^= static_cast<uint64_t>(c);
+			hash *= FNV_PRIME;
+		}
+		return hash;
+	};
+
+	// Generate two hashes for full 128-bit coverage
+	uint64_t hash1 = fnv1a(input);
+	uint64_t hash2 = fnv1a(input + std::to_string(hash1));
+
+	// Format as UUID: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+	std::stringstream ss;
+	ss << std::hex << std::uppercase << std::setfill('0');
+
+	// 8 chars
+	ss << std::setw(8) << ((hash1 >> 32) & 0xFFFFFFFF);
+	ss << "-";
+
+	// 4 chars
+	ss << std::setw(4) << ((hash1 >> 16) & 0xFFFF);
+	ss << "-";
+
+	// 4 chars
+	ss << std::setw(4) << (hash1 & 0xFFFF);
+	ss << "-";
+
+	// 4 chars
+	ss << std::setw(4) << ((hash2 >> 48) & 0xFFFF);
+	ss << "-";
+
+	// 12 chars
+	ss << std::setw(12) << (hash2 & 0xFFFFFFFFFFFFULL);
+
+	return ss.str();
 }
 
 std::string ofTemplateMacos::addFile(const fs::path & path, const fs::path & folder, const fileProperties & fp) {
@@ -27,7 +78,7 @@ std::string ofTemplateMacos::addFile(const fs::path & path, const fs::path & fol
 
 	fs::path ext { path.extension() };
 	{
-		std::string fileType = extensionToFileType[ext];
+		std::string fileType { extensionToFileType[ext] };
 
 		if (empty(fileType)) {
 			if (fs::is_directory(path) || fp.isGroupWithoutFolder) {
@@ -46,12 +97,13 @@ std::string ofTemplateMacos::addFile(const fs::path & path, const fs::path & fol
 			addCommand("Add :objects:" + UUID + ":isa string PBXFileReference");
 		}
 
-		// if (!empty(fileType)) {
-		// addCommand("Add :objects:" + UUID + ":lastKnownFileType string " + fileType);
-		// }
-
 		addCommand("Add :objects:" + UUID + ":name string " + ofPathToString(path.filename()));
+		// cout << commands.back() << endl;
 
+		if (!empty(fileType)) {
+			addCommand("Add :objects:" + UUID + ":lastKnownFileType string " + fileType);
+			// cout << commands.back() << endl;
+		}
 		if (fp.absolute || fp.isRelativeToSDK || path.is_absolute()) { //
 			// FIXME: Still some confusion here about relative to source or absolute.
 
@@ -171,7 +223,7 @@ void ofTemplateMacos::addSrc(const fs::path & srcFile, const fs::path & folder) 
 	fp.addToBuildPhase = true;
 	fp.isSrc = true;
 
-	if (ext == ".h" || ext == ".hpp" || ext == ".tcc" || ext == ".inl" || ext == ".in") {
+	if (ext == ".h" || ext == ".hpp" || ext == ".tcc" || ext == ".inl" || ext == ".in" || ext == ".inc") {
 		fp.addToBuildPhase = false;
 	} else if (ext == ".xib") {
 		fp.addToBuildPhase = false;
@@ -247,7 +299,7 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 	// 	cout << "-----" << endl;
 	// }
 
-	std::vector<std::pair <fs::path, fs::path> > sources;
+	std::vector<std::pair<fs::path, fs::path>> sources;
 	for (auto & f : a->filteredMap["sources"]) {
 		fs::path p = (a->path / f).parent_path();
 		fs::path p2 = relative(p, conf.ofPath);
@@ -270,7 +322,7 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 		// addSrc(f.filename(), p2);
 	}
 
-	std::sort(sources.begin(), sources.end(), [](const std::pair <fs::path, fs::path> & a, const std::pair <fs::path, fs::path> & b) {
+	std::sort(sources.begin(), sources.end(), [](const std::pair<fs::path, fs::path> & a, const std::pair<fs::path, fs::path> & b) {
 		return a.first < b.first;
 		// return ofStringToLower(a.first.string()) < ofStringToLower(b.first.string());
 	});
@@ -512,8 +564,6 @@ void ofTemplateMacos::edit(std::string & str) {
 	str = dump;
 	// cout << dump << endl;
 }
-
-
 
 void ofTemplateMacos::load() {
 	alert("ofTemplateMacos::load()", 92);
@@ -791,9 +841,6 @@ std::string ofTemplateMacos::getFolderUUID(const fs::path & folder, fs::path bas
 	}
 }
 
-
-
-
 void ofTemplateMacos::save() {
 	alert("ofTemplateMacos::save()", 92);
 
@@ -816,7 +863,6 @@ void ofTemplateMacos::save() {
 		copyTemplateFiles[0].appends.emplace_back("INFOPLIST_KEY_" + i.first + " = " + i.second);
 	}
 
-
 	if (conf.defines.size()) {
 		std::string allDefines = "GCC_PREPROCESSOR_DEFINITIONS=$(inherited)";
 		// std::string allDefines = "GCC_PREPROCESSOR_DEFINITIONS=$(inherited)";
@@ -824,7 +870,6 @@ void ofTemplateMacos::save() {
 			allDefines += " " + d;
 		}
 		copyTemplateFiles[0].appends.emplace_back(allDefines);
-
 	}
 
 	if (conf.settings.contains("version")) {

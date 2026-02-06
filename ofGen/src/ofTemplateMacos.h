@@ -88,7 +88,8 @@ public:
 		// two new ones. .in to fulfill ofxAssimp needs.
 		{ ".inc", "sourcecode.cpp.h" },
 		{ ".in", "sourcecode.cpp.h" },
-		// { ".inl", "sourcecode.cpp.h" },
+		{ ".inl", "sourcecode.cpp.h" },
+		{ ".tcc", "sourcecode.cpp.h" },
 		{ ".mm", "sourcecode.cpp.objcpp" },
 		{ ".m", "sourcecode.cpp.objcpp" },
 

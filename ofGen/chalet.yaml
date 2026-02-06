@@ -1,5 +1,5 @@
 name: ofgen
-version: 0.9.5
+version: 0.9.6
 # variables:
 # platform: xyz
 # This doesn't work but doesn't error either.
@@ -32,7 +32,7 @@ targets:
       #   - /NODEFAULTLIB:msvcprt.lib
       includeDirs:
         - src
-        - src/uuidxx/src
+        # - src/uuidxx/src
       # includeDirs:
       #   - ../libs/${var:platform}/include
       includeDirs[:windows]:
@@ -76,7 +76,7 @@ targets:
     files:
       include:
         - src/*.cpp
-        - src/uuidxx/src/*.cpp
+        # - src/uuidxx/src/*.cpp
       exclude:
         - src/ofTemplateMake.cpp
         - src/ofTemplateVisualStudio.cpp
