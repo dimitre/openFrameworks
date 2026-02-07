@@ -41,4 +41,16 @@
 		"show_summary": true,
 		// "problem_matcher": "$gcc",
 	},
+
+	{
+		"label": "📦 Bundle",
+		"command": "chalet bundle",
+		"use_new_terminal": false,
+		"allow_concurrent_runs": false,
+		"reveal": "always",
+		"hide": "never",
+		"shell": "system",
+		"show_summary": true,
+		// "problem_matcher": "$gcc",
+	},
 ]
