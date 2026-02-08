@@ -4,8 +4,8 @@ meta:
 	ADDON_AUTHOR = OF Team
 	ADDON_URL = http://github.com/openframeworks/openFrameworks
 
-# common:
-	# ADDON_DEFINES = OFXURL
+common:
+	ADDON_LIBS_EXCLUDE = libs/cairo/lib/cairo
 
 # macos:
 	# ADDON_LIBS = $(OF_ROOT)/libs/macos/lib/libcairo.a
