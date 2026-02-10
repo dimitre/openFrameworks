@@ -24,12 +24,14 @@ class ofBaseSoundInput{
 		///
 		/// \deprecated This legacy method is deprecated and will be removed.
 		/// Use void audioIn(ofSoundBuffer& buffer) instead.
+		[[deprecated ("Use void audioIn( ofSoundBuffer& buffer ) instead")]]
 		virtual void audioIn( float * input, int bufferSize, int nChannels, int deviceID, long unsigned long tickCount );
 
 		/// \brief Use void audioIn(ofSoundBuffer& buffer) instead.
 		///
 		/// \deprecated This legacy method is deprecated and will be removed.
 		/// Use void audioIn(ofSoundBuffer& buffer) instead.
+		[[deprecated ("Use void audioIn( ofSoundBuffer& buffer ) instead")]]
 		virtual void audioIn( float * input, int bufferSize, int nChannels );
 
 		[[deprecated ("Use void audioIn( ofSoundBuffer& buffer ) instead")]]
@@ -50,10 +52,12 @@ class ofBaseSoundOutput{
 
 		/// \deprecated This legacy method is deprecated and will be removed.
 		/// Use void audioOut(ofSoundBuffer& buffer) instead.
+		[[deprecated ("Use void audioIn( ofSoundBuffer& buffer ) instead")]]
 		virtual void audioOut( float * output, int bufferSize, int nChannels, int deviceID, long unsigned long tickCount  );
 
 		/// \deprecated This legacy method is deprecated and will be removed.
 		/// Use void audioOut(ofSoundBuffer& buffer) instead.
+		[[deprecated ("Use void audioIn( ofSoundBuffer& buffer ) instead")]]
 		virtual void audioOut( float * output, int bufferSize, int nChannels );
 
 		[[deprecated ("Use void audioOut( ofSoundBuffer& buffer ) instead")]]

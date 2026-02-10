@@ -360,7 +360,8 @@ void ofBaseSoundInput::audioIn( float * input, int bufferSize, int nChannels, in
 }
 
 void ofBaseSoundInput::audioIn( float * input, int bufferSize, int nChannels ){
-	audioReceived(input, bufferSize, nChannels);
+	audioIn(input, bufferSize, nChannels);
+//	audioReceived(input, bufferSize, nChannels);
 }
 
 
