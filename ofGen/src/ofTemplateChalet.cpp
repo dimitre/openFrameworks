@@ -32,7 +32,11 @@ void ofTemplateChalet::load() {
 
 	projectYaml["name"] = conf.projectName;
 
-	if (conf.settings.contains("version")) {
+#if(CMAKE_CXX_STANDARD <= 17)
+		if (conf.settings.find("version") != conf.settings.end()) {
+#else
+		if (conf.settings.contains("version")) {
+#endif
 		projectYaml["version"] = conf.settings["version"];
 	}
 

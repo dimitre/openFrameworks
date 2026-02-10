@@ -320,7 +320,11 @@ void ofAddon::loadAddonConfig() {
 	};
 
 	for (auto & e : exclusionsType) {
+#if(CMAKE_CXX_STANDARD <= 17)
+		if (addonProperties.find(e.first) != addonProperties.end()) {
+#else
 		if (addonProperties.contains(e.first)) {
+#endif
 			// alert(e.first + " not empty");
 			for (auto & a : addonProperties[e.first]) {
 			std::string value = stringReplace(a, "%", "");
