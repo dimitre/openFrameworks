@@ -45,7 +45,7 @@ public:
 
 	virtual void setWindowPosition(int, int){}
 	virtual void setWindowShape(int, int){}
-	virtual void setWindowRect(const ofRectangle & rect){}
+	virtual void setWindowRect(const ofRectangle & ){}
 
 	virtual glm::ivec2 getWindowPosition() { return {}; }
 	virtual glm::ivec2 getWindowSize() { return glm::ivec2(); }
@@ -61,19 +61,19 @@ public:
 	virtual int getWidth(){ return 0; }
 	virtual int getHeight(){ return 0; }
 
-	virtual void setWindowTitle(const std::string & title){}
+	virtual void setWindowTitle(const std::string & ){}
 
 	virtual ofWindowMode getWindowMode() { return settings.windowMode; }
 
-	virtual void setFullscreen(bool fullscreen){}
+	virtual void setFullscreen(bool ){}
 	virtual void toggleFullscreen(){}
-	virtual void setWindowMousePassthrough(bool allowPassthrough){}
+	virtual void setWindowMousePassthrough(bool ){}
 
 	virtual void enableSetupScreen(){}
 	virtual void disableSetupScreen(){}
 
-	virtual void setVerticalSync(bool enabled){}
-	virtual void setClipboardString(const std::string& text){}
+	virtual void setVerticalSync(bool ){}
+	virtual void setClipboardString(const std::string& ){}
 	virtual std::string getClipboardString(){ return ""; }
 
 	virtual void makeCurrent(){}

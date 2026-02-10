@@ -557,7 +557,8 @@ public:
 	}
 
 	template<class TObj, typename TMethod>
-	void remove(TObj * listener, TMethod method, int priority){
+//	void remove(TObj * listener, TMethod method, int priority){
+	void remove(TObj * listener, TMethod method, int ){
 		 ofEvent<T,Mutex>::self->remove(*make_function_id(listener,method));
 	}
 
@@ -714,7 +715,8 @@ public:
 	}
 
 	template<class TObj, typename TMethod>
-	void remove(TObj * listener, TMethod method, int priority){
+//	void remove(TObj * listener, TMethod method, int priority){
+	void remove(TObj * listener, TMethod method, int ){
 		ofEvent<void,Mutex>::self->remove(*make_function_id(listener,method));
 	}
 

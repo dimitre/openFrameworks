@@ -32,11 +32,8 @@ class ofBaseSoundInput{
 		/// Use void audioIn(ofSoundBuffer& buffer) instead.
 		virtual void audioIn( float * input, int bufferSize, int nChannels );
 
-		/// \brief Use void audioIn(ofSoundBuffer& buffer) instead.
-		///
-		/// \deprecated This legacy method is deprecated and will be removed.
-		/// Use void audioIn(ofSoundBuffer& buffer) instead.
-		virtual void audioReceived( float * input, int bufferSize, int nChannels ){}
+		[[deprecated ("Use void audioIn( ofSoundBuffer& buffer ) instead")]]
+		virtual void audioReceived( float * , int , int  ){}
 };
 
 /// \class ofBaseSoundOutput
@@ -59,9 +56,9 @@ class ofBaseSoundOutput{
 		/// Use void audioOut(ofSoundBuffer& buffer) instead.
 		virtual void audioOut( float * output, int bufferSize, int nChannels );
 
-		/// \deprecated This legacy method is deprecated and will be removed.
-		/// Use void audioOut(ofSoundBuffer& buffer) instead.
-		virtual void audioRequested( float * output, int bufferSize, int nChannels ){}
+		[[deprecated ("Use void audioOut( ofSoundBuffer& buffer ) instead")]]
+//		virtual void audioRequested( float * output, int bufferSize, int nChannels ){}
+		virtual void audioRequested( float * , int , int ){}
 };
 
 /// \class ofSoundDevice
@@ -201,6 +198,6 @@ public:
 
 	virtual float getDuration() const = 0;
 	virtual unsigned int getDurationMS() const = 0;
-	
+
 	static float * getSystemSpectrum(int bands);
 };
