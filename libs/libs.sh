@@ -182,26 +182,31 @@ case "$PLATFORM" in
 	vs)
 	    CORELIBS+=( videoInput )
 
-	    # ----- wget2 : use system copy if present, else portable fallback -----
-	    if command -v wget2 &>/dev/null; then
-	        section "wget2 detected"
-	    else
-	        WGET2_DIR="$HOME/wget2"
-	        mkdir -p "$WGET2_DIR"
+		# avoid install wget2 in github environment. GH will take care of downloading libs.
+		if [[ -z "${CI:-}" ]]; then
 
-	        # download single static exe (64-bit, 2.28 MB)
-	        if [[ ! -x "$WGET2_DIR/wget2.exe" ]]; then
-	            section "Fetching portable wget2.exe …"
-				curl -L -o "$WGET2_DIR/wget2.exe" \
-     --ssl-revoke-best-effort \
-     https://github.com/rockdaboot/wget2/releases/download/$WGET2VERSION/wget2.exe
-     			chmod +x "$WGET2_DIR/wget2.exe"
-	        fi
+		    # ----- wget2 : use system copy if present, else portable fallback -----
+		    if command -v wget2 &>/dev/null; then
+		        section "wget2 detected"
+		    else
+		        WGET2_DIR="$HOME/wget2"
+		        mkdir -p "$WGET2_DIR"
 
-	        # inject into PATH for this session
-	        [[ ":$PATH:" != *":$WGET2_DIR:"* ]] && export PATH="$WGET2_DIR:$PATH"
-	    fi
-	    # ------------------------------------------
+		        # download single static exe (64-bit, 2.28 MB)
+		        if [[ ! -x "$WGET2_DIR/wget2.exe" ]]; then
+		            section "Fetching portable wget2.exe …"
+					curl -L -o "$WGET2_DIR/wget2.exe" \
+	     --ssl-revoke-best-effort \
+	     https://github.com/rockdaboot/wget2/releases/download/$WGET2VERSION/wget2.exe
+	     			chmod +x "$WGET2_DIR/wget2.exe"
+		        fi
+
+		        # inject into PATH for this session
+		        [[ ":$PATH:" != *":$WGET2_DIR:"* ]] && export PATH="$WGET2_DIR:$PATH"
+		    fi
+		    # ------------------------------------------
+		fi
+
     ;;
 
 	macos)

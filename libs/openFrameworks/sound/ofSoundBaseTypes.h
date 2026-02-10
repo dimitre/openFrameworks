@@ -24,17 +24,17 @@ class ofBaseSoundInput{
 		///
 		/// \deprecated This legacy method is deprecated and will be removed.
 		/// Use void audioIn(ofSoundBuffer& buffer) instead.
-		[[deprecated ("Use void audioIn( ofSoundBuffer& buffer ) instead")]]
+//		[[deprecated ("Use void audioIn( ofSoundBuffer& buffer ) instead")]]
 		virtual void audioIn( float * input, int bufferSize, int nChannels, int deviceID, long unsigned long tickCount );
 
 		/// \brief Use void audioIn(ofSoundBuffer& buffer) instead.
 		///
 		/// \deprecated This legacy method is deprecated and will be removed.
 		/// Use void audioIn(ofSoundBuffer& buffer) instead.
-		[[deprecated ("Use void audioIn( ofSoundBuffer& buffer ) instead")]]
+//		[[deprecated ("Use void audioIn( ofSoundBuffer& buffer ) instead")]]
 		virtual void audioIn( float * input, int bufferSize, int nChannels );
 
-		[[deprecated ("Use void audioIn( ofSoundBuffer& buffer ) instead")]]
+//		[[deprecated ("Use void audioIn( ofSoundBuffer& buffer ) instead")]]
 		virtual void audioReceived( float * , int , int  ){}
 };
 
