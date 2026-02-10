@@ -373,5 +373,6 @@ void ofBaseSoundOutput::audioOut( float * output, int bufferSize, int nChannels,
 }
 
 void ofBaseSoundOutput::audioOut( float * output, int bufferSize, int nChannels ){
-	audioRequested(output, bufferSize, nChannels);
+	audioOut(output, bufferSize, nChannels);
+//	audioRequested(output, bufferSize, nChannels);
 }
