@@ -765,7 +765,7 @@ bound_normal(float min, float max, float focus = 4.0f, G & g = of::random::gen()
 		std::cout << "ofRandomNormalLimits():" << "max must be > than min\n";
 		return {};
 	} else {
-		if (focus <= .0099) {
+		if (focus <= .0099f) {
 			std::cout << "ofRandomNormalLimits():" << "focus must be at least .01\n";
 			return {};
 		} else {

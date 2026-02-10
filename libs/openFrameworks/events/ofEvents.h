@@ -309,9 +309,10 @@ public:
 class ofMonitorsEventArgs : public ofEventArgs {
 public:
 	ofMonitorsEventArgs(){}
-
-	ofMonitorsEventArgs(int number) {}
+//	ofMonitorsEventArgs(int number) {}
+	ofMonitorsEventArgs(int) {}
 };
+
 
 class ofMessage : public ofEventArgs {
 public:

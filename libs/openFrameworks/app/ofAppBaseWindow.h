@@ -43,11 +43,11 @@ public:
 	virtual void hideCursor(){}
 	virtual void showCursor(){}
 
-	virtual void setWindowPosition(int x, int y){}
-	virtual void setWindowShape(int w, int h){}
+	virtual void setWindowPosition(int, int){}
+	virtual void setWindowShape(int, int){}
 	virtual void setWindowRect(const ofRectangle & rect){}
 
-	virtual glm::ivec2 getWindowPosition() { return glm::ivec2(); }
+	virtual glm::ivec2 getWindowPosition() { return {}; }
 	virtual glm::ivec2 getWindowSize() { return glm::ivec2(); }
 	virtual glm::ivec2 getFramebufferSize() { return glm::ivec2(); }
 	virtual glm::ivec2 getScreenSize() { return glm::ivec2(); }

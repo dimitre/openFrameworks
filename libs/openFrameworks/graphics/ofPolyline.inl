@@ -599,7 +599,7 @@ T ofPolyline_<T>::getClosestPoint(const T& target, unsigned int* nearestIndex) c
 	float distance = 0;
 	T nearestPoint(0);
 	unsigned int nearest = 0;
-	float normalizedPosition = 0;
+	float normalizedPosition = 0.0f;
 	unsigned int lastPosition = polyline.size() - 1;
 	if(polyline.isClosed()) {
 		lastPosition++;
@@ -622,7 +622,7 @@ T ofPolyline_<T>::getClosestPoint(const T& target, unsigned int* nearestIndex) c
 	}
 
 	if(nearestIndex != nullptr) {
-		if(normalizedPosition > .5) {
+		if(normalizedPosition > .5f) {
 			nearest++;
 			if(nearest == polyline.size()) {
 				nearest = 0;
@@ -725,15 +725,16 @@ namespace of{
 			T  w;
 			T  Pb;                // base of perpendicular from v[i] to S
 			float  b, cw, dv2;        // dv2 = distance v[i] to S squared
+			// FIXME: we have cu as double, cw as float. keep type uniformity here.
 
 			for (int i=j+1; i<k; i++){
 				// compute distance squared
 				w = v[i] - S.P0;
 				cw = glm::dot(w, u);
 				if ( cw <= 0 ) dv2 = glm::length2(v[i] - S.P0);
-				else if ( cu <= cw ) dv2 = glm::length2(v[i] - S.P1);
+				else if ( (float)cu <= cw ) dv2 = glm::length2(v[i] - S.P1);
 				else {
-					b = (float)(cw / cu);
+					b = cw / (float)cu;
 					Pb = S.P0 + u*b;
 					dv2 = glm::length2(v[i] - Pb);
 				}

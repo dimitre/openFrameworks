@@ -19,6 +19,9 @@ class ofxTCPClient{
 		ofxTCPClient();
 		~ofxTCPClient();
 
+		ofxTCPClient(const ofxTCPClient&) = delete;
+    	ofxTCPClient& operator=(const ofxTCPClient&) = delete;
+
 		void threadedFunction();
 
 		void setVerbose(bool _verbose);
@@ -27,7 +30,7 @@ class ofxTCPClient{
 		void setMessageDelimiter(std::string delim);
 		bool close();
 
-	
+
 		//send data as a string - a short message
 		//is added to the end of the string which is
 		//used to indicate the end of the message to
@@ -87,8 +90,8 @@ class ofxTCPClient{
 
 private:
 		// private copy so this can't be copied to avoid problems with destruction
-		ofxTCPClient(const ofxTCPManager & mom){};
-		ofxTCPClient & operator=(const ofxTCPClient & mom){return *this;}
+		// ofxTCPClient(const ofxTCPManager & mom){};
+		// ofxTCPClient & operator=(const ofxTCPClient & mom){return *this;}
 
         //don't use this one
         //for server to use internally only!

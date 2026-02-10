@@ -331,6 +331,8 @@ std::shared_ptr<ofBaseLoggerChannel> ofGetLoggerChannel();
 
 class ofLog{
 	public:
+		ofLog(ofLog const&) = delete;        					// not defined, not copyable
+		ofLog& operator=(ofLog& ) = delete;	// not defined, not assignable
 
 		/// \name Logging
 		/// \{
@@ -469,6 +471,7 @@ class ofLog{
 		ofLog(ofLogLevel level, const char* format, Args&& ... args)
 			: ofLog(level, ofVAArgsToString(format, args...)){}
 		/// \}
+		///
 
 		//--------------------------------------------------
 		/// \name Logging configuration
@@ -564,13 +567,12 @@ class ofLog{
 		/// \endcond
 
 	private:
+		// ofLog(ofLog const&) {}        					// not defined, not copyable
+		// ofLog& operator=(ofLog& from) {return *this;}	// not defined, not assignable
+
+
 		std::stringstream message;	///< Temporary buffer.
-
 		static bool bAutoSpace; ///< Should space be added between messages?
-
-		ofLog(ofLog const&) {}        					// not defined, not copyable
-		ofLog& operator=(ofLog& from) {return *this;}	// not defined, not assignable
-
 		static std::string & getPadding(); ///< The padding between std::ostream calls.
 };
 

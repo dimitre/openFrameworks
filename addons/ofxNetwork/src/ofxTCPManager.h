@@ -172,6 +172,9 @@ public:
 		if ((m_hSocket)&&(m_hSocket != INVALID_SOCKET)) Close();
 	};
 
+ 	ofxTCPManager(const ofxTCPManager&) = delete;
+    ofxTCPManager& operator=(const ofxTCPManager&) = delete;
+
 	bool Close();
 	bool Create();
 	bool Listen(int iMaxConnections);
@@ -212,8 +215,8 @@ public:
 
 private:
 	// private copy so this can't be copied to avoid problems with destruction
-	ofxTCPManager(const ofxTCPManager & mom){};
-	ofxTCPManager & operator=(const ofxTCPManager & mom){return *this;}
+	// ofxTCPManager(const ofxTCPManager & mom){};
+	// ofxTCPManager & operator=(const ofxTCPManager & mom){return *this;}
 	int WaitReceive(time_t timeoutSeconds, time_t timeoutMillis);
 	int WaitSend(time_t timeoutSeconds, time_t timeoutMillis);
 
