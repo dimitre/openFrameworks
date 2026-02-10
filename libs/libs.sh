@@ -4,8 +4,9 @@ set -eu
 
 LIBSVERSION=v1.0
 OF_FOLDER=..
-CHALETVERSION=0.8.16
+CHALETVERSION=0.8.17
 WGET2VERSION=v2.2.1
+# check new versions here : https://github.com/rockdaboot/wget2/releases/
 
 wipeDownloads=true
 wipeDownloadsAfterInstall=true
@@ -27,7 +28,6 @@ section() {
 sectionOk() {
 	# 💾
 	printf "[${COLOR}✓${NC}] ${COLOR}%s${NC}\n" "$*"
-
 }
 
 executa2() {
