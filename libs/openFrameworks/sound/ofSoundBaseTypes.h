@@ -52,17 +52,17 @@ class ofBaseSoundOutput{
 
 		/// \deprecated This legacy method is deprecated and will be removed.
 		/// Use void audioOut(ofSoundBuffer& buffer) instead.
-		[[deprecated ("Use void audioIn( ofSoundBuffer& buffer ) instead")]]
+//		[[deprecated ("Use void audioIn( ofSoundBuffer& buffer ) instead")]]
 		virtual void audioOut( float * output, int bufferSize, int nChannels, int deviceID, long unsigned long tickCount  );
 
 		/// \deprecated This legacy method is deprecated and will be removed.
 		/// Use void audioOut(ofSoundBuffer& buffer) instead.
-		[[deprecated ("Use void audioIn( ofSoundBuffer& buffer ) instead")]]
+//		[[deprecated ("Use void audioIn( ofSoundBuffer& buffer ) instead")]]
 		virtual void audioOut( float * output, int bufferSize, int nChannels );
 
-		[[deprecated ("Use void audioOut( ofSoundBuffer& buffer ) instead")]]
-//		virtual void audioRequested( float * output, int bufferSize, int nChannels ){}
+//		[[deprecated ("Use void audioOut( ofSoundBuffer& buffer ) instead")]]
 		virtual void audioRequested( float * , int , int ){}
+	//		virtual void audioRequested( float * output, int bufferSize, int nChannels ){}
 };
 
 /// \class ofSoundDevice
