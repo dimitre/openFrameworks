@@ -85,9 +85,9 @@ public:
     /// \brief A union representing the internal data.
 	///
     /// \sa r, g, b and a
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wgnu-anonymous-struct"
-    #pragma GCC diagnostic ignored "-Wnested-anon-types"  // For Clang
+//    #pragma GCC diagnostic push
+//    #pragma GCC diagnostic ignored "-Wgnu-anonymous-struct"
+//    #pragma GCC diagnostic ignored "-Wnested-anon-types"  // For Clang
     union {
         struct {
             PixelType r; ///< \brief The red color component.
@@ -97,7 +97,7 @@ public:
         };
         PixelType v[4]; ///< \brief The pixel values as an array.
     };
-    #pragma GCC diagnostic pop
+//    #pragma GCC diagnostic pop
 
     /// \}
 
