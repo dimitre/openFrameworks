@@ -16,11 +16,26 @@ abstracts:*:
     compileOptions[:!windows]:
       - -fstack-protector-strong
 
-    # compileOptions[:macos]:
+    compileOptions[:macos]:
+      - -fobjc-arc
+      - -mmacosx-version-min=12.0 # Add this line
+
+    compileOptions[toolchain:msvc]:
+      # FIXME: Test removing this
+      # - /D_CRT_NO_VA_START_VALIDATION
+      - /MT
+      # trying to make ccache work on gh actions
+      - /Z7
+      - /MP1 # Or find where /MP is set and remove it
+    compileOptions[:linux+architecture:x86_64]:
+      - -msse2
+      - -msse
+      - -mfpmath=sse
+
     # - -Wfatal-errors
     # minimal extra pedantic strict strictPedantic
-    warningsPreset: minimal
-    # warningsPreset: extra
+    # warningsPreset: minimal
+    warningsPreset: extra
     # warnings: [fatal-errors]
     # treatWarningsAsErrors: true
     runtimeTypeInformation: true
@@ -41,10 +56,6 @@ abstracts:*:
     # defines[:linux]:
     # - OF_USING_GTK
     # - OF_USING_STD_FS=1
-
-    compileOptions[:macos]:
-      - -fobjc-arc
-      - -mmacosx-version-min=12.0 # Add this line
 
     linkerOptions[:macos]:
       - -mmacosx-version-min=12.0
@@ -69,24 +80,12 @@ abstracts:*:
       # - /FORCE:MULTIPLE
 
     staticRuntimeLibrary: true
-    compileOptions[toolchain:msvc]:
-      # FIXME: Test removing this
-      # - /D_CRT_NO_VA_START_VALIDATION
-      - /MT
-      # trying to make ccache work on gh actions
-      - /Z7
-      - /MP1 # Or find where /MP is set and remove it
 
     includeDirs:
       - ${var:ofPath}/libs/openFrameworks/*
       - ${var:ofPath}/libs/{${var:platform}}/include
       - ${var:ofPath}/libs/{${var:platform}}/include/freetype2
       # - ${var:ofPath}/libs/{${var:platform}}/include/**
-
-    compileOptions[:linux+architecture:x86_64]:
-      - -msse2
-      - -msse
-      - -mfpmath=sse
 
     includeDirs[:linux]:
       - /usr/include/gstreamer-1.0
