@@ -124,7 +124,7 @@ enum ofTargetPlatform{
 #if defined(TARGET_WIN32)
 	#define GLEW_STATIC
 	#define GLEW_NO_GLU
-    #define TARGET_GLFW_WINDOW
+//    #define TARGET_GLFW_WINDOW
     #define OF_CAIRO
 	#include <GL/glew.h>
 	#include <GL/wglew.h>
@@ -180,7 +180,7 @@ enum ofTargetPlatform{
 
 
 #elif defined(TARGET_OSX)
-	#define TARGET_GLFW_WINDOW
+//	#define TARGET_GLFW_WINDOW
     #define OF_CAIRO
 	#define OF_RTAUDIO
 
@@ -229,7 +229,7 @@ enum ofTargetPlatform{
 		#include <EGL/egl.h>
 		#include <EGL/eglext.h>
 	#else // desktop linux
-        #define TARGET_GLFW_WINDOW
+//        #define TARGET_GLFW_WINDOW
         #define OF_RTAUDIO
 		#ifndef __LINUX_PULSE__
 			#define __LINUX_PULSE__
@@ -283,8 +283,8 @@ enum ofTargetPlatform{
 #ifdef FORCE_RGFW
 	#ifdef TARGET_GLFW_WINDOW
 		#undef TARGET_GLFW_WINDOW
-		#define TARGET_RGFW_WINDOW
 	#endif
+	#define TARGET_RGFW_WINDOW
 #endif
 
 #include <tesselator.h>
