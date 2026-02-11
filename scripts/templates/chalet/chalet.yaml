@@ -27,6 +27,7 @@ abstracts:*:
     threads: true
     exceptions: true
     # defines:
+    # - TARGET_GLFW_WINDOW
     # - OF
     defines[:macos]:
       - GL_SILENCE_DEPRECATION
@@ -125,6 +126,10 @@ abstracts:*:
       - QuartzCore
 
     links[:linux]:
+      - wayland-client
+      - wayland-cursor
+      - wayland-egl
+      - xkbcommon
       # - glfw
       - fontconfig
       - Xrandr

@@ -71,7 +71,14 @@ void ofAppGLFWWindow::close() {
 		glfwSetCursorEnterCallback( windowP, nullptr );
 		glfwSetKeyCallback( windowP, nullptr );
 		glfwSetWindowSizeCallback( windowP, nullptr );
+#if defined(TARGET_LINUX)
+		// Wayland does not support window position callbacks
+		if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
+			glfwSetWindowPosCallback(windowP, nullptr);
+		}
+#else
 		glfwSetWindowPosCallback(windowP, nullptr);
+#endif
 		glfwSetFramebufferSizeCallback( windowP, nullptr);
 		glfwSetWindowCloseCallback( windowP, nullptr );
 		glfwSetScrollCallback( windowP, nullptr );
@@ -383,7 +390,14 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 	glfwSetKeyCallback(windowP, keyboard_cb);
 	glfwSetCharCallback(windowP, char_cb);
 	glfwSetWindowSizeCallback(windowP, resize_cb);
-	glfwSetWindowPosCallback(windowP,position_cb);
+#if defined(TARGET_LINUX)
+	// Wayland does not support window position callbacks
+	if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
+		glfwSetWindowPosCallback(windowP, position_cb);
+	}
+#else
+	glfwSetWindowPosCallback(windowP, position_cb);
+#endif
 	glfwSetFramebufferSizeCallback(windowP, framebuffer_size_cb);
 	glfwSetWindowCloseCallback(windowP, exit_cb);
 	glfwSetScrollCallback(windowP, scroll_cb);
@@ -430,6 +444,11 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 
 	//------------------------------------------------------------
 	void ofAppGLFWWindow::setWindowIcon(const ofPixels & iconPixels) {
+		// Wayland does not support setting window icon via X11
+		if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
+			return;
+		}
+		
 		iconSet = true;
 		int length = 2 + iconPixels.getWidth() * iconPixels.getHeight();
 		std::vector<unsigned long> buffer(length);
@@ -583,7 +602,14 @@ ofRectangle ofAppGLFWWindow::getWindowRect() {
 //	return windowRect;
 
 	glm::ivec2 pos;
-	glfwGetWindowPos( windowP, &pos.x, &pos.y );
+#if defined(TARGET_LINUX)
+	// Wayland does not support getting window position
+	if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
+		glfwGetWindowPos(windowP, &pos.x, &pos.y);
+	}
+#else
+	glfwGetWindowPos(windowP, &pos.x, &pos.y);
+#endif
 	glm::ivec2 size;
 	glfwGetWindowSize(windowP, &size.x, &size.y);
 	return ofRectangle(pos.x, pos.y, size.x, size.y);
@@ -599,7 +625,14 @@ glm::ivec2 ofAppGLFWWindow::getWindowSize() {
 //------------------------------------------------------------
 glm::ivec2 ofAppGLFWWindow::getWindowPosition() {
 	glm::ivec2 pos;
-	glfwGetWindowPos( windowP, &pos.x, &pos.y );
+#if defined(TARGET_LINUX)
+	// Wayland does not support getting window position
+	if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
+		glfwGetWindowPos(windowP, &pos.x, &pos.y);
+	}
+#else
+	glfwGetWindowPos(windowP, &pos.x, &pos.y);
+#endif
 	return pos;
 }
 
@@ -639,12 +672,29 @@ GLFWwindow * ofAppGLFWWindow::getGLFWWindow() {
 void ofAppGLFWWindow::setWindowRect(const ofRectangle & rect) {
 //	cout << settings.windowName << " setWindowRect " << rect << endl;
 	windowRect = rect;
+#if defined(TARGET_LINUX)
+	// Wayland does not support setting window position
+	if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
+		// Only set size on Wayland, position is controlled by compositor
+		glfwSetWindowSize(windowP, rect.width, rect.height);
+	} else {
+		glfwSetWindowMonitor(windowP, NULL, rect.x, rect.y, rect.width, rect.height, GLFW_DONT_CARE);
+	}
+#else
 	glfwSetWindowMonitor(windowP, NULL, rect.x, rect.y, rect.width, rect.height, GLFW_DONT_CARE);
+#endif
 }
 
 //------------------------------------------------------------
 void ofAppGLFWWindow::setWindowPosition(int x, int y) {
+#if defined(TARGET_LINUX)
+	// Wayland does not support setting window position
+	if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
+		glfwSetWindowPos(windowP, x, y);
+	}
+#else
 	glfwSetWindowPos(windowP, x, y);
+#endif
 }
 
 //------------------------------------------------------------
