@@ -358,6 +358,13 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 #ifndef TARGET_OPENGLES
 	static bool inited = false;
 	if (!inited) {
+#if defined(TARGET_LINUX)
+		// Skip GLEW on Wayland - it requires GLX which isn't available
+		// GLFW handles OpenGL function loading internally
+		if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
+			ofLogNotice("ofAppGLFWWindow") << "Skipping GLEW init on Wayland";
+		} else {
+#endif
 		glewExperimental = GL_TRUE;
 		GLenum err = glewInit();
 		if (GLEW_OK != err) {
@@ -365,6 +372,9 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 			ofLogError("ofAppRunner") << "couldn't init GLEW: " << glewGetErrorString(err);
 			return;
 		}
+#if defined(TARGET_LINUX)
+		}
+#endif
 		inited = true;
 	}
 #endif
