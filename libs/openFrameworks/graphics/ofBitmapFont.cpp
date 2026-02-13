@@ -394,7 +394,8 @@ static void addBitmapCharacter(ofMesh & charMesh, int & vertexCount, int charact
 	}	
 }
 
-ofMesh ofBitmapFont::getMesh(const string & text, int x, int y, ofDrawBitmapMode mode, bool vFlipped) const{
+// FIXME: unused param mode
+ofMesh ofBitmapFont::getMesh(const string & text, int x, int y, ofDrawBitmapMode , bool vFlipped) const{
 	int len = (int)text.length();
 	float fontSize = 8.0f;
 

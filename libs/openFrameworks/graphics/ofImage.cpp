@@ -223,7 +223,8 @@ static mango::image::Format getMangoFormat(const ofPixels_<PixelType> & pix) {
 }
 
 template <typename PixelType>
-static bool loadImage(ofPixels_<PixelType> & pix, const fs::path & _fileName, const ofImageLoadSettings & settings) {
+// FIXME: unused param settings
+static bool loadImage(ofPixels_<PixelType> & pix, const fs::path & _fileName, const ofImageLoadSettings & ) {
 
 	fs::path fileImage { ofToDataPath(_fileName) };
 	if (!fs::exists(fileImage)) {
@@ -343,10 +344,14 @@ static bool loadImage(ofPixels_<PixelType> & pix, const fs::path & _fileName, co
 }
 
 template <typename PixelType>
-static bool loadImage(ofPixels_<PixelType> & pix,
-	const ofBuffer & buffer,
-	const ofImageLoadSettings & settings) {
-	// FIXME: Implement this.
+//static bool loadImage(ofPixels_<PixelType> & pix,
+//	const ofBuffer & buffer,
+//	const ofImageLoadSettings & settings) {
+
+// FIXME: Implement this.
+static bool loadImage(ofPixels_<PixelType> & ,
+	const ofBuffer & ,
+	const ofImageLoadSettings & ) {
 	return false;
 
 	//	bool bLoaded = false;
@@ -686,7 +691,8 @@ bool ofSaveImage(const ofShortPixels & pix, const fs::path & fileName, ofImageQu
 
 //----------------------------------------------------------------
 template <typename PixelType>
-static bool saveImage(const ofPixels_<PixelType> & _pix, ofBuffer & buffer, ofImageFormat format, ofImageQualityType qualityLevel) {
+//static bool saveImage(const ofPixels_<PixelType> & _pix, ofBuffer & buffer, ofImageFormat format, ofImageQualityType qualityLevel) {
+static bool saveImage(const ofPixels_<PixelType> & , ofBuffer & , ofImageFormat , ofImageQualityType ) {
 
 	// FIXME: Implement this
 	return false;
@@ -1351,7 +1357,9 @@ void ofImage_<PixelType>::mirror(bool vertical, bool horizontal) {
 
 //----------------------------------------------------
 template <typename PixelType>
-void ofImage_<PixelType>::resizePixels(ofPixels_<PixelType> & pix, int newWidth, int newHeight) {
+// FIXME: implement or remove
+//void ofImage_<PixelType>::resizePixels(ofPixels_<PixelType> & pix, int newWidth, int newHeight) {
+void ofImage_<PixelType>::resizePixels(ofPixels_<PixelType> & , int , int ) {
 
 	//	FIBITMAP * bmp					= getBmpFromPixels(pix);
 	//	FIBITMAP * convertedBmp			= nullptr;
@@ -1365,7 +1373,9 @@ void ofImage_<PixelType>::resizePixels(ofPixels_<PixelType> & pix, int newWidth,
 
 //----------------------------------------------------
 template <typename PixelType>
-void ofImage_<PixelType>::changeTypeOfPixels(ofPixels_<PixelType> & pix, ofImageType newType) {
+// FIXME: implement or remove
+//void ofImage_<PixelType>::changeTypeOfPixels(ofPixels_<PixelType> & pix, ofImageType newType) {
+void ofImage_<PixelType>::changeTypeOfPixels(ofPixels_<PixelType> & , ofImageType ) {
 	//	int oldType = pix.getImageType();
 	//
 	//	if (oldType == newType) {

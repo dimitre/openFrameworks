@@ -39,15 +39,18 @@ using std::vector;
 // ------------------------------------
 
 
-void * memAllocator( void *userData, unsigned int size ){
+// FIXME: unused param userData
+void * memAllocator( void *, unsigned int size ){
 	return malloc(size);
 }
 
-void * memReallocator( void *userData, void* ptr, unsigned int size ){
+// FIXME: unused param userData
+void * memReallocator( void *, void* ptr, unsigned int size ){
 	return realloc(ptr,size);
 }
 
-void memFree( void *userData, void *ptr ){
+// FIXME: unused param userData
+void memFree( void *, void *ptr ){
 	free (ptr);
 }
 
@@ -150,7 +153,8 @@ void ofTessellator::tessellateToPolylines( const vector<ofPolyline>& src, ofPoly
 
 
 //----------------------------------------------------------
-void ofTessellator::performTessellation(ofPolyWindingMode polyWindingMode, ofMesh& dstmesh, bool bIs2D ) {
+// FIXME: removed param bIs2D
+void ofTessellator::performTessellation(ofPolyWindingMode polyWindingMode, ofMesh& dstmesh, bool ) {
 
 	if (!tessTesselate(cacheTess, polyWindingMode, TESS_POLYGONS, 3, 3, 0)){
 		ofLogError("ofTessellator") << "performTessellation(): mesh polygon tessellation failed, winding mode " << polyWindingMode;
@@ -172,9 +176,9 @@ void ofTessellator::performTessellation(ofPolyWindingMode polyWindingMode, ofMes
 
 }
 
-
+// FIXME: removed param bIs2D
 //----------------------------------------------------------
-void ofTessellator::performTessellation(ofPolyWindingMode polyWindingMode, vector<ofPolyline>& dstpoly, bool bIs2D ) {
+void ofTessellator::performTessellation(ofPolyWindingMode polyWindingMode, vector<ofPolyline>& dstpoly, bool ) {
 	if (!tessTesselate(cacheTess, polyWindingMode, TESS_BOUNDARY_CONTOURS, 0, 3, 0)){
 		ofLogError("ofTessellator") << "performTesselation(): polyline boundary contours tessellation failed, winding mode " << polyWindingMode;
 		return;

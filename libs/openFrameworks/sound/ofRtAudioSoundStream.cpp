@@ -281,7 +281,8 @@ ofSoundDevice ofRtAudioSoundStream::getOutDevice() const{
 }
 
 //------------------------------------------------------------------------------
-int ofRtAudioSoundStream::rtAudioCallback(void *outputBuffer, void *inputBuffer, unsigned int nFramesPerBuffer, double streamTime, RtAudioStreamStatus status, void *data) {
+	// FIXME: unused param streamTime
+int ofRtAudioSoundStream::rtAudioCallback(void *outputBuffer, void *inputBuffer, unsigned int nFramesPerBuffer, double , RtAudioStreamStatus status, void *data) {
 	ofRtAudioSoundStream * rtStreamPtr = (ofRtAudioSoundStream *)data;
 
 	if (status) {

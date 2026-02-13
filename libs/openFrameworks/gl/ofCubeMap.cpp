@@ -731,7 +731,8 @@ void ofCubeMap::_initEmptyTextures(GLuint aCubeMapId, int aSize){
 }
 
 //--------------------------------------------------------------
-void ofCubeMap::_initEmptyTextures(GLuint aCubeMapId, GLint aInternalFormat, int aSize, int aNumMipMaps ){
+// FIXME: unused param aNumMipMaps
+void ofCubeMap::_initEmptyTextures(GLuint aCubeMapId, GLint aInternalFormat, int aSize, int  ){
 	GLenum textureTarget = getTextureTarget();
 	glBindTexture(textureTarget, aCubeMapId );
 	auto glFormat = getGLFormatFromInternalFormat(aInternalFormat);

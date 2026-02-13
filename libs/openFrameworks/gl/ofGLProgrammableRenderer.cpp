@@ -1852,7 +1852,8 @@ void ofGLProgrammableRenderer::bind(const ofCamera & camera, const ofRectangle &
 }
 
 //----------------------------------------------------------
-void ofGLProgrammableRenderer::unbind(const ofCamera & camera) {
+// FIXME: unused param camera
+void ofGLProgrammableRenderer::unbind(const ofCamera & ) {
 	popView();
 }
 
