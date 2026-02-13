@@ -715,8 +715,8 @@ bool ofGLProgrammableRenderer::isVFlipped() const {
 }
 
 //----------------------------------------------------------
-void ofGLProgrammableRenderer::setCoordHandedness(ofHandednessType handedness) {
-	;
+// FIXME: handedness
+void ofGLProgrammableRenderer::setCoordHandedness(ofHandednessType ) {
 }
 
 //----------------------------------------------------------
@@ -1438,7 +1438,8 @@ void ofGLProgrammableRenderer::setCurveResolution(int resolution) {
 }
 
 //----------------------------------------------------------
-void ofGLProgrammableRenderer::setAttributes(bool vertices, bool color, bool tex, bool normals, GLuint drawMode) {
+// FIXME: why? removed bool vertices
+void ofGLProgrammableRenderer::setAttributes(bool, bool color, bool tex, bool normals, GLuint drawMode) {
 	bool wasColorsEnabled = colorsEnabled;
 	bool wasUsingTexture = texCoordsEnabled & (currentTextureTarget != OF_NO_TEXTURE);
 	GLuint prevDrawMode = mDrawMode;
@@ -1626,7 +1627,8 @@ void ofGLProgrammableRenderer::bind(const ofShader & shader) {
 }
 
 //----------------------------------------------------------
-void ofGLProgrammableRenderer::unbind(const ofShader & shader) {
+// FIXME: removed param shader
+void ofGLProgrammableRenderer::unbind(const ofShader & ) {
 	glUseProgram(0);
 	usingCustomShader = false;
 	bCustomShadowShader = false;
@@ -1757,7 +1759,8 @@ void ofGLProgrammableRenderer::unbind(const ofBaseMaterial &) {
 }
 
 //----------------------------------------------------------
-void ofGLProgrammableRenderer::unbind(const ofShadow & shadow) {
+// FIXME: Removed param shadow
+void ofGLProgrammableRenderer::unbind(const ofShadow & ) {
 	currentShadow = nullptr;
 	bIsShadowDepthPass = false;
 	bCustomShadowShader = false;
@@ -1765,7 +1768,8 @@ void ofGLProgrammableRenderer::unbind(const ofShadow & shadow) {
 }
 
 //----------------------------------------------------------
-void ofGLProgrammableRenderer::unbind(const ofShadow & shadow, GLenum aCubeFace) {
+// FIXME: Removed param aCubeFace
+void ofGLProgrammableRenderer::unbind(const ofShadow & shadow, GLenum ) {
 	unbind(shadow);
 }
 

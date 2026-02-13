@@ -8,48 +8,48 @@ ofBaseApp::ofBaseApp() {
 ofBaseApp::~ofBaseApp(){
 }
 
-void ofBaseApp::setup(){}
-void ofBaseApp::update(){}
-void ofBaseApp::draw(){}
-void ofBaseApp::exit(){}
+void ofBaseApp::setup() {}
+void ofBaseApp::update() {}
+void ofBaseApp::draw() {}
+void ofBaseApp::exit() {}
 
-void ofBaseApp::windowResized(int w, int h){}
+void ofBaseApp::windowResized(int, int ) {}
 
-void ofBaseApp::keyPressed( int key ){}
-void ofBaseApp::keyReleased( int key ){}
+void ofBaseApp::keyPressed( int  ) {}
+void ofBaseApp::keyReleased( int  ) {}
 
 /// \brief Called on the active window when the mouse is moved
-void ofBaseApp::mouseMoved( int x, int y ){}
+void ofBaseApp::mouseMoved( int, int  ) {}
 
 /// \brief Called on the active window when the mouse is dragged, i.e.
 /// moved with a button pressed
-void ofBaseApp::mouseDragged( int x, int y, int button ){}
+void ofBaseApp::mouseDragged( int, int, int  ) {}
 
 /// \brief Called on the active window when a mouse button is pressed
-void ofBaseApp::mousePressed( int x, int y, int button ){}
+void ofBaseApp::mousePressed( int, int, int  ) {}
 
 /// \brief Called on the active window when a mouse button is released
-void ofBaseApp::mouseReleased(int x, int y, int button ){}
+void ofBaseApp::mouseReleased(int, int, int  ) {}
 
-void ofBaseApp::mouseScrolled(int x, int y, float scrollX, float scrollY ){}
+void ofBaseApp::mouseScrolled(int, int, float, float  ) {}
 
-void ofBaseApp::mouseEntered( int x, int y ){}
+void ofBaseApp::mouseEntered( int, int  ) {}
 
-void ofBaseApp::mouseExited( int x, int y){}
+void ofBaseApp::mouseExited( int, int ) {}
 
-void ofBaseApp::dragEvent(ofDragInfo dragInfo) { }
-void ofBaseApp::gotMessage(ofMessage msg){ }
+void ofBaseApp::dragEvent(ofDragInfo ) {}
+void ofBaseApp::gotMessage(ofMessage ) {}
 
-void ofBaseApp::setup(ofEventArgs & args){
+void ofBaseApp::setup(ofEventArgs & ){
 	setup();
 }
-void ofBaseApp::update(ofEventArgs & args){
+void ofBaseApp::update(ofEventArgs & ){
 	update();
 }
-void ofBaseApp::draw(ofEventArgs & args){
+void ofBaseApp::draw(ofEventArgs & ){
 	draw();
 }
-void ofBaseApp::exit(ofEventArgs & args){
+void ofBaseApp::exit(ofEventArgs & ){
 	exit();
 }
 
@@ -100,11 +100,11 @@ void ofBaseApp::messageReceived(ofMessage & message){
 	gotMessage(message);
 }
 
-void ofBaseApp::touchDown(int x, int y, int id) {};
-void ofBaseApp::touchMoved(int x, int y, int id) {};
-void ofBaseApp::touchUp(int x, int y, int id) {};
-void ofBaseApp::touchDoubleTap(int x, int y, int id) {};
-void ofBaseApp::touchCancelled(int x, int y, int id) {};
+void ofBaseApp::touchDown(int, int, int) {};
+void ofBaseApp::touchMoved(int, int, int) {};
+void ofBaseApp::touchUp(int, int, int) {};
+void ofBaseApp::touchDoubleTap(int, int, int) {};
+void ofBaseApp::touchCancelled(int, int, int) {};
 
 void ofBaseApp::touchDown(ofTouchEventArgs & touch) {
 	touchDown(touch.x, touch.y, touch.id);

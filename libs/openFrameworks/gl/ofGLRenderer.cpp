@@ -457,7 +457,8 @@ void ofGLRenderer::bind(const ofShader & shader) {
 }
 
 //----------------------------------------------------------
-void ofGLRenderer::unbind(const ofShader & shader) {
+// FIXME: why? shader
+void ofGLRenderer::unbind(const ofShader & ) {
 	glUseProgram(0);
 }
 
@@ -581,19 +582,20 @@ void ofGLRenderer::unbind(const ofBaseMaterial &) {
 
 // does nothing, only programmable renderer supported
 //----------------------------------------------------------
-void ofGLRenderer::bind(const ofShadow & shadow) {
+// FIXME: maybe remove and use only in primitive?
+void ofGLRenderer::bind(const ofShadow & ) {
 	ofLogWarning("ofGLRenderer::bind(const ofShadow & shadow) : shadows are only supported via programmable renderer");
 };
 //----------------------------------------------------------
-void ofGLRenderer::bind(const ofShadow & shadow, GLenum aCubeFace) {
+void ofGLRenderer::bind(const ofShadow &, GLenum ) {
 	ofLogWarning("ofGLRenderer::bind(const ofShadow & shadow) : shadows are only supported via programmable renderer");
 };
 
 // does nothing, only programmable renderer supported
 //----------------------------------------------------------
-void ofGLRenderer::unbind(const ofShadow & shadow) {};
+void ofGLRenderer::unbind(const ofShadow & ) {};
 //----------------------------------------------------------
-void ofGLRenderer::unbind(const ofShadow & shadow, GLenum aCubeFace) {};
+void ofGLRenderer::unbind(const ofShadow & , GLenum ) {};
 
 //----------------------------------------------------------
 void ofGLRenderer::bind(const ofTexture & texture, int location) {
@@ -652,7 +654,8 @@ void ofGLRenderer::bind(const ofCamera & camera, const ofRectangle & _viewport) 
 }
 
 //----------------------------------------------------------
-void ofGLRenderer::unbind(const ofCamera & camera) {
+// FIXME: removed parameter camera
+void ofGLRenderer::unbind(const ofCamera & ) {
 	popView();
 }
 
@@ -731,7 +734,8 @@ int ofGLRenderer::getViewportHeight() const {
 }
 
 //----------------------------------------------------------
-void ofGLRenderer::setCoordHandedness(ofHandednessType handedness) {
+// FIXME: empty handedness
+void ofGLRenderer::setCoordHandedness(ofHandednessType ) {
 }
 
 //----------------------------------------------------------
@@ -1028,7 +1032,7 @@ void ofGLRenderer::loadViewMatrix(const glm::mat4 & m) {
 }
 
 //----------------------------------------------------------
-void ofGLRenderer::multViewMatrix(const glm::mat4 & m) {
+void ofGLRenderer::multViewMatrix(const glm::mat4 & ) {
 	ofLogError() << "mutlViewMatrix not implemented on fixed GL renderer";
 }
 
