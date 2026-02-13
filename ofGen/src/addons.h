@@ -29,6 +29,7 @@ public:
 	std::map<std::string, std::vector<std::string>> addonProperties;
 
 	bool isProject = false;
+	bool isLocal = false;
 
 	void load();
 	void loadFiles();

@@ -247,8 +247,14 @@ void ofTemplateChalet::load() {
 void ofTemplateChalet::addAddon(ofAddon * a) {
 	// alert(" ofTemplateChalet::addAddon() " + a->name, 91);
 
+	std::string folder { a->isLocal ? a->path.string() + "/" : "${var:ofPath}/addons/" + a->name + "/" };
+	if (a->isProject) {
+		folder = "";
+	}
+	// alert ("FOLDER = " + folder, 95);
+	// alert ("a->path = " + a->path.string(), 95);
+
 	for (auto & f : a->filteredMap["sources"]) {
-		std::string folder = a->isProject ? "" : "${var:ofPath}/addons/" + a->name + "/";
 		std::string path { folder + f.generic_string() };
 		projectYaml["targets"]["empty"]["files"]["include"].push_back(path);
 	}
@@ -256,9 +262,7 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 	// }
 
 	for (auto & f : a->filteredMap["includes"]) {
-		std::string folder = a->isProject ? "" : "${var:ofPath}/addons/" + a->name + "/";
 		std::string path { folder + f.string() };
-
 		// projectYaml["abstracts:*"]["settings:Cxx"]["includeDirs"].push_back(path);
 		projectYaml["targets"]["empty"]["settings:Cxx"]["includeDirs"].push_back(path);
 	}
@@ -267,7 +271,6 @@ void ofTemplateChalet::addAddon(ofAddon * a) {
 		// fs::path p { a->path / f };
 		// std::string path { "${var:ofPath}/addons/" + a->name + "/" + f.string() };
 
-		std::string folder = a->isProject ? "" : "${var:ofPath}/addons/" + a->name + "/";
 		std::string path { folder + f.string() };
 		projectYaml["targets"]["empty"]["settings:Cxx"]["staticLinks"].push_back(path);
 	}

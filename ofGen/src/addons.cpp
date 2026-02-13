@@ -141,7 +141,7 @@ void ofAddon::loadFiles() {
 	}
 
 	for (auto & p : addonProperties["ADDON_INCLUDES"]) {
-		alert("	-> addon includes " + p, 35);
+		alert("	▸ addon includes " + p, 35);
 		filesMap["includes"].emplace_back(p);
 	}
 

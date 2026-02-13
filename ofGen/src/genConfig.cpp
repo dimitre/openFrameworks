@@ -356,43 +356,45 @@ bool genConfig::buildProject() {
 	// it works well. not delicate anymore.
 	// src will always exist because we copy them if not.
 	// if (fs::exists("./src"))
-	{
-		{
-			addons.push_back(new ofAddon());
-			ofAddon * addon = addons.back();
-			addon->isProject = true;
-			addon->name = "ProjectSourceFiles_" + projectName;
-			addon->path = "";
 
-			for (auto & f : frameworks) {
-				addon->filesMap["frameworks"].emplace_back(f);
-			}
 
-			// addon->showFiles();
-			// addon->info();
-			for (auto & path : additionalSources) {
-				addon->filesMap["includes"].emplace_back(path);
-			}
-			addon->load();
-			// addons.emplace_back(addon);
-			project.addons.emplace_back(addons.back());
-		}
+	// THIS Adds the project as it was an addon. Beautiful
+	addons.push_back(new ofAddon());
+	ofAddon * addon = addons.back();
+	addon->isProject = true;
+	addon->isLocal = true;
+	addon->name = "ProjectSourceFiles_" + projectName;
+	addon->path = "";
 
-		// TODO: Add here additional sources
-		// for (auto & a : additionalSources) {
-		// 	alert(">> Additional Sources Folder: " + a.string(), 95);
-		// 	addons.push_back(new ofAddon());
-		// 	ofAddon * addon = addons.back();
-		// 	addon->isProject = true;
-		// 	addon->name = "AdditionalSource_" + projectName;
-		// 	addon->path = a;
-		// 	addon->isProject = true;
-
-		// 	scanFolder(a, addon->filesMap, true);
-		// 	addon->load();
-		// 	project.addons.emplace_back(addons.back());
-		// }
+	for (auto & f : frameworks) {
+		addon->filesMap["frameworks"].emplace_back(f);
 	}
+
+	// addon->showFiles();
+	// addon->info();
+	for (auto & path : additionalSources) {
+		addon->filesMap["includes"].emplace_back(path);
+	}
+	addon->load();
+	// addons.emplace_back(addon);
+	project.addons.emplace_back(addons.back());
+
+
+	// TODO: Add here additional sources
+	// for (auto & a : additionalSources) {
+	// 	alert(">> Additional Sources Folder: " + a.string(), 95);
+	// 	addons.push_back(new ofAddon());
+	// 	ofAddon * addon = addons.back();
+	// 	addon->isProject = true;
+	// 	addon->name = "AdditionalSource_" + projectName;
+	// 	addon->path = a;
+	// 	addon->isProject = true;
+
+	// 	scanFolder(a, addon->filesMap, true);
+	// 	addon->load();
+	// 	project.addons.emplace_back(addons.back());
+	// }
+
 	// else {
 	// 	alert("NO SRC FILE FOUND IN PROJECT", 95);
 	// 	std::exit(1);
@@ -412,6 +414,7 @@ bool genConfig::buildProject() {
 			addon->name = l;
 			// check if local addon exists, if not check in of addons folder.
 			if (fs::exists(projectPath / l)) {
+				addon->isLocal = true;
 				addon->path = projectPath / l;
 			} else {
 				if (fs::exists(ofPath / "addons" / l)) {
