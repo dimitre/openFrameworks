@@ -69,10 +69,10 @@ public:
 
 	/// \brief End using this material's properties.
 	virtual void end() const = 0;
-	
+
 	/// \return true if the material has a depth shader
 	virtual bool hasDepthShader() const {return false;}
-	
+
 	/// \brief Create and return a shader used to render depth for a shadow pass, only queried if has a custom depth shader.
 	///
 	/// \param textureTarget an implementation-specific value to specify the type of shader to use
@@ -131,12 +131,12 @@ protected:
 	friend class ofGLProgrammableRenderer;
 
 	/// \brief Set to bound. Later used if certain properties are set so the shader can be updated without calling end(), set var and then begin() again.
-	virtual void bind(ofGLProgrammableRenderer & renderer) const {
+	virtual void bind(ofGLProgrammableRenderer & ) const {
 		mBound = true;
 	}
 
 	/// \brief Unbind the shader.
-	virtual void unbind(ofGLProgrammableRenderer & renderer) const {
+	virtual void unbind(ofGLProgrammableRenderer & ) const {
 		mBound = false;
 	}
 

@@ -10,17 +10,17 @@ ofBaseVideoGrabber::~ofBaseVideoGrabber(){
 }
 
 //---------------------------------------------------------------------------
-void ofBaseVideoGrabber::setVerbose(bool bTalkToMe){
+void ofBaseVideoGrabber::setVerbose(bool ){
 	ofLogWarning("ofBaseVideoGrabber") << "setVerbose() not implemented";
 }
 
 //---------------------------------------------------------------------------
-void ofBaseVideoGrabber::setDeviceID(int _deviceID){
+void ofBaseVideoGrabber::setDeviceID(int ){
 	ofLogWarning("ofBaseVideoGrabber") << "setDeviceID() not implemented";
 }
 
 //---------------------------------------------------------------------------
-void ofBaseVideoGrabber::setDesiredFrameRate(int framerate){
+void ofBaseVideoGrabber::setDesiredFrameRate(int ){
 	ofLogWarning("ofBaseVideoGrabber") << "setDesiredFrameRate() not implemented";
 }
 
@@ -94,32 +94,32 @@ bool ofBaseVideoPlayer::getIsMovieDone() const {
 }
 
 //---------------------------------------------------------------------------
-void ofBaseVideoPlayer::setPaused(bool bPause){
+void ofBaseVideoPlayer::setPaused(bool ){
 	ofLogWarning("ofBaseVideoPlayer") << "setPaused() not implemented";
 }
 
 //---------------------------------------------------------------------------
-void ofBaseVideoPlayer::setPosition(float pct){
+void ofBaseVideoPlayer::setPosition(float ){
 	ofLogWarning("ofBaseVideoPlayer") << "setPosition() not implemented";
 }
 
 //---------------------------------------------------------------------------
-void ofBaseVideoPlayer::setVolume(float volume){
+void ofBaseVideoPlayer::setVolume(float ){
 	ofLogWarning("ofBaseVideoPlayer") << "setVolume() not implemented";
 }
 
 //---------------------------------------------------------------------------
-void ofBaseVideoPlayer::setLoopState(ofLoopType state){
+void ofBaseVideoPlayer::setLoopState(ofLoopType ){
 	ofLogWarning("ofBaseVideoPlayer") << "setLoopState() not implemented";
 }
 
 //---------------------------------------------------------------------------
-void ofBaseVideoPlayer::setSpeed(float speed){
+void ofBaseVideoPlayer::setSpeed(float ){
 	ofLogWarning("ofBaseVideoPlayer") << "setSpeed() not implemented";
 }
 
 //---------------------------------------------------------------------------
-void ofBaseVideoPlayer::setFrame(int frame){
+void ofBaseVideoPlayer::setFrame(int ){
 	ofLogWarning("ofBaseVideoPlayer") << "setFrame() not implemented";
 }
 

@@ -152,7 +152,7 @@ void of3dPrimitive::mapTexCoords( float u1, float v1, float u2, float v2 ) {
 	
 	auto prevTcoord = getTexCoords();
     
-	for(ofIndexType j = 0; j < getMesh().getNumTexCoords(); j++ ) {
+	for(auto j = 0; j < getMesh().getNumTexCoords(); j++ ) {
 		auto tcoord = getMesh().getTexCoord(j);
         tcoord.x = ofMap(tcoord.x, prevTcoord.x, prevTcoord.z, u1, u2);
         tcoord.y = ofMap(tcoord.y, prevTcoord.y, prevTcoord.w, v1, v2);

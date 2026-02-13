@@ -707,7 +707,7 @@ V ofMesh_<V, N, C, T>::getCentroid() const {
 	}
 
 	V sum;
-	for (ofIndexType i = 0; i < vertices.size(); i++) {
+	for (auto i = 0; i < vertices.size(); i++) {
 		sum += vertices[i];
 	}
 	sum /= vertices.size();
@@ -770,7 +770,7 @@ void ofMesh_<V, N, C, T>::setupIndicesAuto() {
 	bIndicesChanged = true;
 	bFacesDirty = true;
 	indices.resize(vertices.size());
-	for (ofIndexType i = 0; i < vertices.size(); i++) {
+	for (auto i = 0; i < vertices.size(); i++) {
 		indices[i] = i;
 	}
 }
@@ -1319,7 +1319,7 @@ void ofMesh_<V, N, C, T>::setColorForIndices(ofIndexType startIndex, ofIndexType
 		getColors().resize(getNumVertices());
 	}
 
-	for (ofIndexType i = startIndex; i < endIndex; i++) {
+	for (auto i = startIndex; i < endIndex; i++) {
 		setColor(getIndex(i), color);
 	}
 }
@@ -1381,7 +1381,7 @@ ofMesh_<V, N, C, T> ofMesh_<V, N, C, T>::getMeshForIndices(ofIndexType startInde
 
 	ofIndexType offsetIndex = getIndex(startIndex);
 	bool bFoundLessThanZero = false;
-	for (ofIndexType i = startIndex; i < endIndex; i++) {
+	for (auto i = startIndex; i < endIndex; i++) {
 		ofIndexType index;
 		if (getIndex(i) < offsetIndex) {
 			index = 0;
@@ -1407,7 +1407,7 @@ void ofMesh_<V, N, C, T>::mergeDuplicateVertices() {
 	std::vector<ofIndexType> indices = getIndices();
 
 	//get indexes to share single point - TODO: try j < i
-	for (ofIndexType i = 0; i < indices.size(); i++) {
+	for (auto i = 0; i < indices.size(); i++) {
 		for (ofIndexType j = 0; j < indices.size(); j++) {
 			if (i == j) continue;
 
@@ -1704,8 +1704,8 @@ void ofMesh_<V, N, C, T>::smoothNormals(float angle) {
 		float angleCos = std::cos(glm::radians(angle));
 		float numNormals = 0;
 
-		for (ofIndexType j = 0; j < triangles.size(); j++) {
-			for (ofIndexType k = 0; k < 3; k++) {
+		for (auto j = 0; j < triangles.size(); j++) {
+			for (auto k = 0; k < 3; k++) {
 				vert = triangles[j].getVertex(k);
 				std::string vstring {
 					"x" + ofToString(vert.x == -0 ? 0 : vert.x) + "y" + ofToString(vert.y == -0 ? 0 : vert.y) + "z" + ofToString(vert.z == -0 ? 0 : vert.z)
@@ -1714,7 +1714,7 @@ void ofMesh_<V, N, C, T>::smoothNormals(float angle) {
 				numNormals = 0;
 				normal = { 0.f, 0.f, 0.f };
 				if (vertHash.find(vstring) != vertHash.end()) {
-					for (ofIndexType i = 0; i < vertHash[vstring].size(); i++) {
+					for (auto i = 0; i < vertHash[vstring].size(); i++) {
 						auto f1 = triangles[j].getFaceNormal();
 						auto f2 = triangles[vertHash[vstring][i]].getFaceNormal();
 						if (glm::dot(toGlm(f1), toGlm(f2)) >= angleCos) {
@@ -2028,17 +2028,17 @@ ofMesh_<V, N, C, T> ofMesh_<V, N, C, T>::icosphere(float radius, std::size_t ite
 		10, 11, 9
 	};
 
-	for (ofIndexType i = 0; i < 60; i += 3) {
+	for (std::size_t i = 0; i < 60; i += 3) {
 		sphere.addTriangle(firstFaces[i], firstFaces[i + 1], firstFaces[i + 2]);
 	}
 
 	auto & vertices = sphere.getVertices();
 	auto & faces = sphere.getIndices();
 
-	ofIndexType size = faces.size();
+	std::size_t size = faces.size();
 
 	/// Step 2 : tessellate
-	for (ofIndexType iteration = 0; iteration < iterations; iteration++) {
+	for (std::size_t iteration = 0; iteration < iterations; iteration++) {
 		size *= 4;
 		std::vector<ofIndexType> newFaces;
 		for (ofIndexType i = 0; i < size / 12; i++) {
@@ -2133,7 +2133,7 @@ ofMesh_<V, N, C, T> ofMesh_<V, N, C, T>::icosphere(float radius, std::size_t ite
 	// i wish there was a more elegant way to do this, but anything happening before "split vertices"
 	// makes things very, very complicated.
 
-	for (ofIndexType i = 0; i < faces.size(); i += 3) {
+	for (auto i = 0; i < faces.size(); i += 3) {
 		std::swap(faces[i + 1], faces[i + 2]);
 	}
 

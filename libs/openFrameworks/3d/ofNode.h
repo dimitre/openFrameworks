@@ -17,7 +17,7 @@ public:
 
 	ofNode();
 	virtual ~ofNode();
-	
+
 	ofNode(const ofNode & node);
 	ofNode(ofNode && node);
 	ofNode & operator=(const ofNode & node);
@@ -532,9 +532,9 @@ protected:
 	ofNode * parent = nullptr;
 
 private:
-	void onParentPositionChanged(glm::vec3 & position) {onPositionChanged();}
-	void onParentOrientationChanged(glm::quat & orientation) {onOrientationChanged();}
-	void onParentScaleChanged(glm::vec3 & scale) {onScaleChanged();}
+	void onParentPositionChanged(glm::vec3 & ) { onPositionChanged(); }
+	void onParentOrientationChanged(glm::quat & ) { onOrientationChanged(); }
+	void onParentScaleChanged(glm::vec3 & ) { onScaleChanged(); }
 
 	ofParameter<glm::vec3> position;
 	ofParameter<glm::quat> orientation;

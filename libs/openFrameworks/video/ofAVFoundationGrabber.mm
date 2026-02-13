@@ -91,7 +91,7 @@
 //	}
 	
 	if([devices count] > 0) {
-		if(deviceID>[devices count]-1)
+		if(deviceID > (int)[devices count]-1)
 			deviceID = [devices count]-1;
 		// We set the device
 		device = [devices objectAtIndex:deviceID];
@@ -647,7 +647,7 @@ void ofAVFoundationGrabber::getDevicesInfo() const{
 std::vector <ofVideoDevice> ofAVFoundationGrabber::listDevices() const{
 	std::vector <std::string> devList = [grabber listDevices];
     std::vector <ofVideoDevice> devices;
-    for(int i = 0; i < devList.size(); i++){
+    for(auto i = 0; i < devList.size(); i++){
 		devices.emplace_back(ofVideoDevice{
 			.deviceName = devList[i],
 			.id = i,

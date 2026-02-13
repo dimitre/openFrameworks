@@ -83,6 +83,7 @@ void ofTemplateChalet::load() {
 			}
 		}
 
+		alert ("getPlatformString() " + getPlatformString(), 95);
 
 		if (getPlatformString() == "vs" && !hasIco && hasPng) {
 			fs::path icoPath { fs::path { "icon" } / (conf.projectName + ".ico") };

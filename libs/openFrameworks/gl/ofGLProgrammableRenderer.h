@@ -227,11 +227,11 @@ public:
     bool getLightingEnabled();
     void enableSeparateSpecularLight(){}
     void disableSeparateSpecularLight(){}
-	void setSmoothLighting(bool b){}
-	void setGlobalAmbientColor(const ofFloatColor& c){}
+	void setSmoothLighting(bool ){}
+	void setGlobalAmbientColor(const ofFloatColor& ){}
     void enableLight(int lightIndex);
     void disableLight(int lightIndex);
-	void setLightSpotlightCutOff(int lightIndex, float spotCutOff){}
+	void setLightSpotlightCutOff(int , float ){}
 	void setLightSpotConcentration(int lightIndex, float exponent){}
 	void setLightAttenuation(int lightIndex, float constant, float linear, float quadratic ){}
 	void setLightAmbientColor(int lightIndex, const ofFloatColor& c){}
