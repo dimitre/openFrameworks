@@ -194,7 +194,6 @@ public:
 		initialized = true;
 		exiting = false;
 		
-		
 		appPath = getAppPath();
 		appName = appPath.stem().string();
 //		cout << "ofCore init appPath = " << appPath << endl;
@@ -203,8 +202,8 @@ public:
 #if defined(TARGET_OSX)
 		bool isMacOSBundle = isInsideAppBundle(appPath);
 		if (isMacOSBundle) {
-//			cout << "YES isMacOSBundle " << endl;
 			appFolder = appPath.parent_path().parent_path().parent_path().parent_path();
+//			cout << "YES isMacOSBundle, appFolder = " << appFolder.string() << endl;
 		} else {
 //			cout << "NO isMacOSBundle " << endl;
 		}
