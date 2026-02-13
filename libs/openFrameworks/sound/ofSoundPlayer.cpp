@@ -61,7 +61,7 @@ void ofSoundSetVolume(float vol){
 	#elif defined(OF_SOUND_PLAYER_MEDIA_FOUNDATION)
 		ofMediaFoundationSoundPlayer::SetMasterVolume(vol);
 	#else
-		ofLogWarning("ofSoundPlayer") << "ofSoundSetVolume() not implemented on this platform";
+		ofLogWarning("ofSoundPlayer") << "ofSoundSetVolume() not implemented on this platform, vol=" << vol;
 	#endif
 }
 

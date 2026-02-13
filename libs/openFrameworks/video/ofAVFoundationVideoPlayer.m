@@ -1100,9 +1100,13 @@ static const void *PlayerRateContext = &ItemStatusContext;
 	__block ofAVFoundationVideoPlayer* refToSelf = self;
 	timeObserver = [_player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(interval, NSEC_PER_SEC)
 														 queue:dispatch_get_main_queue()
-                                                    usingBlock:^(CMTime time) {
+                                                    usingBlock:^(__unused CMTime time) {
                                                         [refToSelf update];
-                                                    }];
+                                                    }
+//													usingBlock:^(CMTime ) {
+//														[refToSelf update];
+//													}
+	];
 }
 
 - (void)removeTimeObserverFromPlayer {
@@ -1181,9 +1185,13 @@ static const void *PlayerRateContext = &ItemStatusContext;
 		[_player seekToTime:time
 			toleranceBefore:kCMTimePositiveInfinity
 			 toleranceAfter:kCMTimePositiveInfinity
-		  completionHandler:^(BOOL finished) {
+		  completionHandler:^(__unused BOOL finished) {
 			  bSeeking = NO;
-		  }];
+		  }
+//		  completionHandler:^(BOOL ) {
+//			  bSeeking = NO;
+//		  }
+		];
 	}
 #endif
 }
@@ -1236,9 +1244,10 @@ static const void *PlayerRateContext = &ItemStatusContext;
 	[_player seekToTime:time
 		toleranceBefore:tolerance
 		 toleranceAfter:tolerance
-	  completionHandler:^(BOOL finished) {
+	  completionHandler:^(__unused BOOL finished) {
 		self->bSeeking = NO;
-	  }];
+	  }
+	];
 }
 
 //---------------------------------------------------------- states.

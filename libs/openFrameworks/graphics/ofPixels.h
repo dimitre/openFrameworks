@@ -498,6 +498,7 @@ public:
 
 	struct Pixel {
 		Pixel(PixelType * pixel, size_t bytesPerPixel, ofPixelFormat pixelFormat);
+		Pixel(Pixel const& rhs) = default;
         const Pixel& operator*() const;
         const Pixel* operator->() const;
         Pixel& operator++();

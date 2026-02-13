@@ -365,8 +365,8 @@ static fs::path linuxFontPathByName(const string & fontname) {
 
 //-----------------------------------------------------------
 // FIXME: it seems first parameter is string because it represents the font name only / can be
-static bool loadFontFace(const string & _fontname, FT_Face & face,
-						 fs::path & _filename, int index){
+// FIXME: unused _filename
+static bool loadFontFace(const string & _fontname, FT_Face & face, fs::path & , int index){
 	auto fontname = _fontname;
 	fs::path filename = ofToDataPath(fontname);
 	int fontID = index;
