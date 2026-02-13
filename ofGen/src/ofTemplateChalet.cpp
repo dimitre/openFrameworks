@@ -8,6 +8,7 @@
 // #include <cstdint>      // uint8_t, int32_t
 // #include <algorithm>    // std::min
 // #include <filesystem>   // std::filesystem (C++17)
+#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"  // (already included in your project presumably)
 
 ofTemplateChalet::ofTemplateChalet() {
