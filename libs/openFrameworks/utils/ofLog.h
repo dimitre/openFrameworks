@@ -15,6 +15,7 @@
 //	return std::format(fmt, std::forward<Args>(args)...);
 //}
 
+#ifdef OF_COMPAT
 template <typename... Args>
 //__attribute__((__format__ (__printf__, 2, 0)))
 //__attribute__((__format__ (__printf__, 1, 2)))  // 1=format, 2=first arg
@@ -37,6 +38,7 @@ std::string ofVAArgsToString(const char* format, Args&&... args) {
 
 	return s;
 }
+#endif
 
 /// \file
 /// ofLog provides an interface for writing text output from your app.
@@ -467,9 +469,11 @@ class ofLog{
 		///
 		/// \param level The ofLogLevel for this log message.
 		/// \param format The printf-style format string.
+#ifdef OF_COMPAT
 		template <typename ... Args>
 		ofLog(ofLogLevel level, const char* format, Args&& ... args)
 			: ofLog(level, ofVAArgsToString(format, args...)){}
+#endif
 		/// \}
 		///
 

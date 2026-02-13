@@ -1036,7 +1036,7 @@ namespace {
 		return modifiers;
 	}
 
-unsigned long keycodeToUnicode(ofAppGLFWWindow * window, int scancode, int modifier) {
+unsigned long keycodeToUnicode(ofAppGLFWWindow * /*window*/, int scancode, int modifier) {
 
 
 
@@ -1501,7 +1501,7 @@ void ofAppGLFWWindow::refresh_cb(GLFWwindow * windowP_) {
 }
 
 //------------------------------------------------------------
-void ofAppGLFWWindow::monitor_cb(GLFWmonitor * monitor, int event) {
+void ofAppGLFWWindow::monitor_cb(GLFWmonitor * /*monitor*/, int /*event*/) {
 	allMonitors.update();
 //	cout << "monitor_cb!" << endl;
 //	cout << "monitors rect size: " << allMonitors.rects.size() << endl;
@@ -1511,7 +1511,7 @@ void ofAppGLFWWindow::monitor_cb(GLFWmonitor * monitor, int event) {
 		if (w->settings.showOnlyInSelectedMonitor) {
 //			cout << "monitor_cb windowName " << w->settings.windowName << endl;
 			auto win = static_cast<ofAppGLFWWindow *>(w.get());
-			if (allMonitors.rects.size() > w->settings.monitor) {
+			if (w->settings.monitor >= 0 && allMonitors.rects.size() > static_cast<size_t>(w->settings.monitor)) {
 				if (w->settings.windowMode == OF_FULLSCREEN) {
 					w->setWindowRect(allMonitors.rects[w->settings.monitor]);
 				}

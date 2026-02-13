@@ -27,7 +27,7 @@ ofxTCPClient::~ofxTCPClient(){
 }
 
 //--------------------------
-void ofxTCPClient::setVerbose(bool _verbose){
+void ofxTCPClient::setVerbose(bool /*_verbose*/){
     ofLogWarning("ofxTCPClient") << "setVerbose(): is deprecated, replaced by ofLogWarning and ofLogError";
 }
 
@@ -294,7 +294,7 @@ static int findDelimiter(char * data, int size, string delimiter){
 }
 
 //--------------------------
-int ofxTCPClient::receiveRawMsg(char * receiveBuffer, int numBytes){
+int ofxTCPClient::receiveRawMsg(char * receiveBuffer, int /*numBytes*/){
 	int length=-2;
 	//only get data from the buffer if we don't have already some complete message
 	if(findDelimiter(tmpBuffReceive.getData(),tmpBuffReceive.size(),messageDelimiter)==-1){

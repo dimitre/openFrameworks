@@ -19,7 +19,7 @@ ofxTCPServer::~ofxTCPServer(){
 }
 
 //--------------------------
-void ofxTCPServer::setVerbose(bool _verbose){
+void ofxTCPServer::setVerbose(bool /*_verbose*/){
 	ofLogWarning("ofxTCPServer") << "setVerbose(): is deprecated, replaced by ofLogWarning and ofLogError";
 }
 

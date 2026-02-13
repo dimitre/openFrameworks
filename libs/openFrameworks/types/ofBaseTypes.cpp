@@ -362,8 +362,7 @@ void ofBaseSoundInput::audioIn( float * input, int bufferSize, int nChannels, in
 }
 
 void ofBaseSoundInput::audioIn( float * input, int bufferSize, int nChannels ){
-	audioIn(input, bufferSize, nChannels);
-//	audioReceived(input, bufferSize, nChannels);
+	audioReceived(input, bufferSize, nChannels);
 }
 
 
@@ -377,6 +376,5 @@ void ofBaseSoundOutput::audioOut( float * output, int bufferSize, int nChannels,
 }
 
 void ofBaseSoundOutput::audioOut( float * output, int bufferSize, int nChannels ){
-	audioOut(output, bufferSize, nChannels);
-//	audioRequested(output, bufferSize, nChannels);
+	audioRequested(output, bufferSize, nChannels);
 }

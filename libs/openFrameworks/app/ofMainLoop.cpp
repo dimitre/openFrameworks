@@ -322,7 +322,7 @@ void ofMainLoop::keyPressed(ofKeyEventArgs & key){
 
 int thisWindow = 0;
 void ofMainLoop::ofBeginWindow(int n) {
-	if (n < windows.size()) {
+	if (n >= 0 && static_cast<size_t>(n) < windows.size()) {
 		thisWindow = n;
 		currentWindow = windows[thisWindow];
 		windows[thisWindow]->makeCurrent();
