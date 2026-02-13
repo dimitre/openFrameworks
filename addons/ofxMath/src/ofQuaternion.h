@@ -157,6 +157,7 @@ public:
     // mathematical objects) so they are implemented differently.
     // Also define methods for conjugate and the multiplicative inverse.
 
+    ofQuaternion(const ofQuaternion&) = default;
     inline ofQuaternion& operator =(const ofQuaternion& q);
     inline bool operator ==(const ofQuaternion& q) const;
     inline bool operator !=(const ofQuaternion& q) const;

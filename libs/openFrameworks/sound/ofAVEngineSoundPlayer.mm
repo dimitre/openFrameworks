@@ -27,7 +27,7 @@
 // https://github.com/garynewby/XYAudioView/blob/master/XYAudioView/BasicAVAudioEngine.m
 // https://github.com/twilio/video-quickstart-ios/blob/master/AudioDeviceExample/AudioDevices/ExampleAVAudioEngineDevice.m
 
-static BOOL audioSessionSetup = NO;
+// static BOOL audioSessionSetup = NO;
 static AVAudioEngine * _engine = nullptr;
 
 static NSString *kShouldEnginePauseNotification = @"kShouldEnginePauseNotification";
@@ -120,6 +120,14 @@ static NSString *kShouldEnginePauseNotification = @"kShouldEnginePauseNotificati
 @implementation AVEnginePlayer
 
 @synthesize timer;
+
+- (void)beginInterruption {
+	// Handle audio session interruption begin
+}
+
+- (void)endInterruption {
+	// Handle audio session interruption end
+}
 
 - (AVAudioEngine *) engine {
 
@@ -246,8 +254,6 @@ static NSString *kShouldEnginePauseNotification = @"kShouldEnginePauseNotificati
 	self = [super init];
 	if (self) {
 		[self setupSharedSession];
-		NSError * error = nil;
-
 		_mainMixer = [[self engine] mainMixerNode];
 		_mainMixer.outputVolume = 0.98;
 
@@ -541,7 +547,6 @@ static NSString *kShouldEnginePauseNotification = @"kShouldEnginePauseNotificati
 		[self unloadSound];
 	}
 
-	NSError * err = nil;
 	@autoreleasepool {
 		self.soundPlayer = [[AVAudioPlayerNode alloc] init];
 		self.variSpeed = [[AVAudioUnitVarispeed alloc] init];
@@ -566,8 +571,6 @@ static NSString *kShouldEnginePauseNotification = @"kShouldEnginePauseNotificati
 		NSLog(@"AVEnginePlayer::connectPlayerToEngine variSpeed is nil!");
 		return NO;
 	}
-
-	NSError * err = nil;
 
 	[[self engine] connect:self.soundPlayer to:self.variSpeed format:[self.soundFile processingFormat]];
 	[[self engine] connect:self.variSpeed to:self.mainMixer format:[self.soundFile processingFormat]];
@@ -836,7 +839,7 @@ ofAVEngineSoundPlayer::~ofAVEngineSoundPlayer() {
 	unload();
 }
 
-bool ofAVEngineSoundPlayer::load(const fs::path & fileName, bool stream) {
+bool ofAVEngineSoundPlayer::load(const fs::path & fileName, bool /* stream */) {
 	if(soundPlayer != NULL) {
 		unload();
 	}
@@ -921,7 +924,8 @@ bool ofAVEngineSoundPlayer::removeMultiPlayer(void * aPlayer){
 
 //better do do this in a thread?
 //feels safer to use ofEvents().update so we don't need to lock.
-void ofAVEngineSoundPlayer::updateFunction( ofEventArgs & args ){
+// FIXME: removed unused param args
+void ofAVEngineSoundPlayer::updateFunction( ofEventArgs & ){
 
 	vector <ObjectType> playerPlayingList;
 
@@ -1087,18 +1091,18 @@ void ofAVEngineSoundPlayer::installFFTOnMixer() {
 		ofLogWarning("ofAVEngineSoundPlayer") << "installFFTOnMixer(): soundPlayer is NULL";
 		return;
 	}
-	
+
 	AVAudioMixerNode* mixer = [(AVEnginePlayer*)soundPlayer mainMixer];
 	if (mixer == nullptr) {
 		ofLogError("ofAVEngineSoundPlayer") << "installFFTOnMixer(): mixer is null";
 		return;
 	}
-	
-	[mixer installTapOnBus:0 bufferSize:2048 format:[mixer outputFormatForBus:0] block:^(AVAudioPCMBuffer *buffer, AVAudioTime *when) {
+
+	[mixer installTapOnBus:0 bufferSize:2048 format:[mixer outputFormatForBus:0] block:^(AVAudioPCMBuffer *buffer, AVAudioTime * /* when */) {
 		float* data = buffer.floatChannelData[0];
 		fft.process(data, buffer.frameLength);
 	}];
-	
+
 	ofLogVerbose("ofAVEngineSoundPlayer") << "installFFTOnMixer(): per-player tap installed";
 }
 
@@ -1108,27 +1112,27 @@ void ofAVEngineSoundPlayer::installSystemFFTOnPlayerMixer() {
 		ofLogWarning("ofAVEngineSoundPlayer") << "installSystemFFTOnPlayerMixer(): soundPlayer is NULL";
 		return;
 	}
-	
+
 	AVAudioMixerNode* mixer = [(AVEnginePlayer*)soundPlayer mainMixer];
 	if (mixer == nullptr) {
 		ofLogError("ofAVEngineSoundPlayer") << "installSystemFFTOnPlayerMixer(): mixer is null";
 		return;
 	}
-	
+
 	// Make sure systemFFT is initialized
 	if (systemFFT.getSpectrum().size() == 0) {
 		systemFFT.setup(512);
 		systemBins.resize(257, 0.0f);
 	}
-	
+
 	int fftSize = (int)(systemFFT.getSpectrum().size() - 1) * 2;
 	AVAudioFrameCount bufferSize = fftSize;
-	
-	[mixer installTapOnBus:0 bufferSize:bufferSize format:[mixer outputFormatForBus:0] block:^(AVAudioPCMBuffer *buffer, AVAudioTime *when) {
+
+	[mixer installTapOnBus:0 bufferSize:bufferSize format:[mixer outputFormatForBus:0] block:^(AVAudioPCMBuffer *buffer, AVAudioTime * /* when */) {
 		if (buffer.frameLength > 0 && buffer.floatChannelData != nullptr && buffer.format.channelCount > 0) {
 			float* data = buffer.floatChannelData[0];
 			int frameLength = (int)buffer.frameLength;
-			
+
 			// Debug: check if we're receiving audio
 			static int debugCounter = 0;
 			if (debugCounter++ % 100 == 0) {
@@ -1138,7 +1142,7 @@ void ofAVEngineSoundPlayer::installSystemFFTOnPlayerMixer() {
 				}
 				NSLog(@"Player FFT Tap: frameLength=%d, maxAudio=%.4f", frameLength, maxVal);
 			}
-			
+
 			systemFFT.process(data, frameLength);
 			const auto& spectrum = systemFFT.getSpectrum();
 			if (systemBins.size() != spectrum.size()) {
@@ -1147,13 +1151,13 @@ void ofAVEngineSoundPlayer::installSystemFFTOnPlayerMixer() {
 			std::copy(spectrum.begin(), spectrum.end(), systemBins.begin());
 		}
 	}];
-	
+
 	systemFFTInstalled = true;
 	ofLogVerbose("ofAVEngineSoundPlayer") << "installSystemFFTOnPlayerMixer(): tap installed on player mixer";
 }
 
 const std::vector<float>& ofAVEngineSoundPlayer::getSpectrum(int bands) const {
-	if (fft.getSpectrum().size() != bands) {
+	if (fft.getSpectrum().size() != static_cast<size_t>(bands)) {
 		const_cast<ofSoundFFT&>(fft).setup(bands); // lazy init
 	}
 	return fft.getSpectrum();
@@ -1164,13 +1168,13 @@ void ofAVEngineSoundPlayer::installSystemFFT() {
 	if (systemFFTInstalled) {
 		return;
 	}
-	
+
 	// Engine might not exist yet - this is OK, we'll install on first load
 	if (_engine == nullptr) {
 		ofLogVerbose("ofAVEngineSoundPlayer") << "installSystemFFT(): engine not yet created, will install on first sound load";
 		return;
 	}
-	
+
 	// Make sure engine is running
 	if (![_engine isRunning]) {
 		NSError* error = nil;
@@ -1179,38 +1183,38 @@ void ofAVEngineSoundPlayer::installSystemFFT() {
 			return;
 		}
 	}
-	
+
 	AVAudioMixerNode* mainMixer = [_engine mainMixerNode];
 	if (mainMixer == nullptr) {
 		ofLogError("ofAVEngineSoundPlayer") << "installSystemFFT(): mainMixer is null";
 		return;
 	}
-	
+
 	// Make sure systemFFT is initialized with a default size
 	if (systemFFT.getSpectrum().size() == 0) {
 		systemFFT.setup(512); // Default to 512 bands
 		systemBins.resize(257, 0.0f); // 512/2 + 1
 	}
-	
+
 	// Install tap on the main mixer output to capture system-wide audio
 	AVAudioFormat* format = [mainMixer outputFormatForBus:0];
 	if (format == nullptr) {
 		ofLogError("ofAVEngineSoundPlayer") << "installSystemFFT(): format is null";
 		return;
 	}
-	
+
 	// Calculate buffer size based on FFT size
 	int fftSize = (int)(systemFFT.getSpectrum().size() - 1) * 2;
 	AVAudioFrameCount bufferSize = fftSize;
-	
+
 	ofLogVerbose("ofAVEngineSoundPlayer") << "installSystemFFT(): installing tap with buffer size " << bufferSize;
-	
-	[mainMixer installTapOnBus:0 bufferSize:bufferSize format:format block:^(AVAudioPCMBuffer *buffer, AVAudioTime *when) {
+
+	[mainMixer installTapOnBus:0 bufferSize:bufferSize format:format block:^(AVAudioPCMBuffer *buffer, AVAudioTime * /* when */) {
 		if (buffer.frameLength > 0 && buffer.floatChannelData != nullptr && buffer.format.channelCount > 0) {
 			float* data = buffer.floatChannelData[0];
 			int frameLength = (int)buffer.frameLength;
 			int fftSize = (int)(systemFFT.getSpectrum().size() - 1) * 2;
-			
+
 			// Debug: check if we're receiving audio
 			static int debugCounter = 0;
 			if (debugCounter++ % 100 == 0) { // Log every 100th buffer
@@ -1220,7 +1224,7 @@ void ofAVEngineSoundPlayer::installSystemFFT() {
 				}
 				NSLog(@"FFT Tap: frameLength=%d, fftSize=%d, maxAudio=%.4f", frameLength, fftSize, maxVal);
 			}
-			
+
 			// Only process if we have enough data
 			if (frameLength >= fftSize) {
 				// Process the audio through FFT (use first fftSize samples)
@@ -1234,7 +1238,7 @@ void ofAVEngineSoundPlayer::installSystemFFT() {
 			}
 		}
 	}];
-	
+
 	systemFFTInstalled = true;
 	ofLogVerbose("ofAVEngineSoundPlayer") << "installSystemFFT(): tap installed successfully";
 }
@@ -1243,18 +1247,18 @@ void ofAVEngineSoundPlayer::removeSystemFFT() {
 	if (!systemFFTInstalled || _engine == nullptr) {
 		return;
 	}
-	
+
 	AVAudioMixerNode* mainMixer = [_engine mainMixerNode];
 	if (mainMixer != nullptr) {
 		[mainMixer removeTapOnBus:0];
 	}
-	
+
 	systemBins.clear();
 	systemFFTInstalled = false;
 }
 
 float* ofAVEngineSoundPlayer::getSystemSpectrum(int bands) {
-	if (systemFFT.getSpectrum().size() != bands) {
+	if (systemFFT.getSpectrum().size() != static_cast<size_t>(bands)) {
 		systemFFT.setup(bands);
 		systemBins.resize(bands / 2 + 1, 0.0f);
 	}
