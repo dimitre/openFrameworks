@@ -307,28 +307,12 @@ public:
 	/// \brief Disable lighting with this renderer.
 	virtual void disableLighting()=0;
 
-	/// \brief Enable seperate specular lighting parameters.
-	virtual void enableSeparateSpecularLight()=0;
-
-	/// \brief Disable seperate specular lighting parameters.
-	virtual void disableSeparateSpecularLight()=0;
-
 	/// \brief Returns true if lighting is enabled with this renderer.
 	///
 	/// \return True if lighting is enabled with this renderer.
 	/// \sa enableLighting()
 	/// \sa disableLighting()
 	virtual bool getLightingEnabled()=0;
-
-	/// \brief Enable/disable smooth light shading.
-	///
-	/// \param b True to enable smooth light shading.
-	virtual void setSmoothLighting(bool b)=0;
-
-	/// \brief Set the global ambient light color.
-	///
-	/// \param c The color to set this renderer to use as ambient lighting.
-	virtual void setGlobalAmbientColor(const ofFloatColor& c)=0;
 
 	/// \brief Enable a light at a specific index.
 	///
@@ -340,12 +324,29 @@ public:
 	/// \param lightIndex The index of the light to disable.
 	virtual void disableLight(int lightIndex)=0;
 
+	/// \brief Enable seperate specular lighting parameters.
+	virtual void enableSeparateSpecularLight() {};
+
+	/// \brief Disable seperate specular lighting parameters.
+	virtual void disableSeparateSpecularLight() {};
+
+	/// \brief Enable/disable smooth light shading.
+	///
+	/// \param b True to enable smooth light shading.
+	virtual void setSmoothLighting(bool ) {};
+
+	/// \brief Set the global ambient light color.
+	///
+	/// \param c The color to set this renderer to use as ambient lighting.
+	virtual void setGlobalAmbientColor(const ofFloatColor& ) {};
+
 	/// \brief Set the spot light cutoff for a light at a specific index.
 	///
 	/// \param lightIndex The index of the light whose spot cutoff will be set.
 	/// \param spotCutOff The spot light cut off value.
 	/// \sa GL_SPOT_CUTOFF
-	virtual void setLightSpotlightCutOff(int lightIndex, float spotCutOff)=0;
+	// virtual void setLightSpotlightCutOff(int lightIndex, float spotCutOff);
+	virtual void setLightSpotlightCutOff(int , float ) {};
 
 	/// \brief Set the spotlight concentration (exponent) for a light at a
 	///        specific index.
@@ -353,7 +354,8 @@ public:
 	///        will be set.
 	/// \param exponent The spot light exponent value.
 	/// \sa GL_SPOT_EXPONENT
-	virtual void setLightSpotConcentration(int lightIndex, float exponent)=0;
+	// virtual void setLightSpotConcentration(int lightIndex, float exponent);
+	virtual void setLightSpotConcentration(int , float ) {};
 
 	/// \brief Set the light attenuation for a light at a specific index.
 	///
@@ -369,32 +371,37 @@ public:
 	/// \sa GL_CONSTANT_ATTENUATION
 	/// \sa GL_LINEAR_ATTENUATION
 	/// \sa GL_QUADRATIC_ATTENUATION
-	virtual void setLightAttenuation(int lightIndex, float constant, float linear, float quadratic )=0;
+	// virtual void setLightAttenuation(int lightIndex, float constant, float linear, float quadratic );
+	virtual void setLightAttenuation(int , float , float , float ) {};
 
 	/// \brief Set the ambient light color for a light at a specific index.
 	///
 	/// \param lightIndex The index of the light to set the ambient color of.
 	/// \param c The color to set the ambient light.
-	virtual void setLightAmbientColor(int lightIndex, const ofFloatColor& c)=0;
+	// virtual void setLightAmbientColor(int lightIndex, const ofFloatColor& c);
+	virtual void setLightAmbientColor(int , const ofFloatColor& ) {};
 
 	/// \brief Set the diffues light color for a light at a specific index.
 	///
 	/// \param lightIndex The index of the light to set the diffuse color of.
 	/// \param c The color to set the diffuse light.
-	virtual void setLightDiffuseColor(int lightIndex, const ofFloatColor& c)=0;
+	// virtual void setLightDiffuseColor(int lightIndex, const ofFloatColor& c) {};
+	virtual void setLightDiffuseColor(int , const ofFloatColor& ) {};
 
 	/// \brief Set the specular light color for a light at a specific index.
 	///
 	/// \param lightIndex The index of the light to set the specular color of.
 	/// \param c The color to set the specular light.
-	virtual void setLightSpecularColor(int lightIndex, const ofFloatColor& c)=0;
+	// virtual void setLightSpecularColor(int lightIndex, const ofFloatColor& c) {};
+	virtual void setLightSpecularColor(int , const ofFloatColor& ) {};
 
 	/// \brief Set the position of a light at a specific index.
 	///
 	/// \param lightIndex The index of the light to set the position color of.
 	/// \param position A vector of four values that specify the position of the light in homogeneous object coordinates.
 	/// \sa GL_POSITION
-	virtual void setLightPosition(int lightIndex, const glm::vec4 & position)=0;
+	// virtual void setLightPosition(int lightIndex, const glm::vec4 & position) {};
+	virtual void setLightPosition(int , const glm::vec4 & ) {};
 
 	/// \brief Set the spot direction of a light at a specific index.
 	///
@@ -402,7 +409,8 @@ public:
 	/// \param direction A vector of four values that specify the direction of
 	///        the light in homogeneous object coordinates.
 	/// \sa GL_SPOT_DIRECTION
-	virtual void setLightSpotDirection(int lightIndex, const glm::vec4 & direction)=0;
+	// virtual void setLightSpotDirection(int lightIndex, const glm::vec4 & direction) {};
+	virtual void setLightSpotDirection(int , const glm::vec4 & ) {};
 
 	/// \section GL Version
 

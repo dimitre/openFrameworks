@@ -2,6 +2,7 @@
 
 #include "ofGraphicsBaseTypes.h"
 #include <vector>
+#include <tesselator.h>
 
 typedef struct TESStesselator TESStesselator;
 typedef struct TESSalloc TESSalloc;

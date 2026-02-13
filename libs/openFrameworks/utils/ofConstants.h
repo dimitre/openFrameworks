@@ -287,9 +287,10 @@ enum ofTargetPlatform{
 	#define TARGET_RGFW_WINDOW
 #endif
 
-#include <tesselator.h>
-typedef TESSindex ofIndexType;
+//#include <tesselator.h>
+//typedef TESSindex ofIndexType;
 //typedef std::size_t ofIndexType;
+typedef unsigned int ofIndexType;
 
 
 #define OF_EXIT_APP(val)		std::exit(val);

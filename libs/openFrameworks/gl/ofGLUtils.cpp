@@ -370,12 +370,16 @@ int ofGetGLType(const ofPixels & pixels) {
 }
 
 //---------------------------------
-int ofGetGLType(const ofShortPixels & pixels) {
+// FIXME: WHY?
+int ofGetGLType(const ofShortPixels & ) {
+//int ofGetGLType(const ofShortPixels & pixels) {
 	return GL_UNSIGNED_SHORT;
 }
 
 //---------------------------------
-int ofGetGLType(const ofFloatPixels & pixels) {
+// FIXME: WHY?
+int ofGetGLType(const ofFloatPixels & ) {
+//int ofGetGLType(const ofFloatPixels & pixels) {
 	return GL_FLOAT;
 }
 
@@ -984,7 +988,8 @@ shared_ptr<ofBaseGLRenderer> ofGetGLRenderer(){
 
 #ifndef TARGET_OPENGLES
 namespace{
-	void gl_debug_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *message, void * user){
+		// removed params (unused) :GLenum source / GLsizei length / void * user
+	void gl_debug_callback(GLenum , GLenum type, GLuint id, GLenum severity, GLsizei , const GLchar *message, void * ){
 		std::ostringstream oss;
 		oss << "GL Debug: ";
 

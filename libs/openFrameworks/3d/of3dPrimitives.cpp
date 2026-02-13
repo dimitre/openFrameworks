@@ -152,7 +152,7 @@ void of3dPrimitive::mapTexCoords( float u1, float v1, float u2, float v2 ) {
 	
 	auto prevTcoord = getTexCoords();
     
-	for(auto j = 0; j < getMesh().getNumTexCoords(); j++ ) {
+	for(std::size_t j = 0; j < getMesh().getNumTexCoords(); j++ ) {
 		auto tcoord = getMesh().getTexCoord(j);
         tcoord.x = ofMap(tcoord.x, prevTcoord.x, prevTcoord.z, u1, u2);
         tcoord.y = ofMap(tcoord.y, prevTcoord.y, prevTcoord.w, v1, v2);
@@ -246,7 +246,7 @@ void of3dPrimitive::drawNormals(float length, bool bFaceNormals) const{
         normalsMesh.getVertices().resize( normals.size() * 2);
         
         if(bFaceNormals) {
-			for(ofIndexType i = 0; i < normals.size(); i++ ) {
+			for(std::size_t i = 0; i < normals.size(); i++ ) {
                 if(i % 3 == 0) {
                     vert = (vertices[i]+vertices[i+1]+vertices[i+2]) / 3.0f;
                 } else if(i % 3 == 1) {
@@ -260,7 +260,7 @@ void of3dPrimitive::drawNormals(float length, bool bFaceNormals) const{
 				normalsMesh.setVertex(i*2+1, vert+normal);
             }
         } else {
-			for(ofIndexType i = 0; i < normals.size(); i++) {
+			for(std::size_t i = 0; i < normals.size(); i++) {
                 vert = vertices[i];
 				normal = glm::normalize(normals[i]);
                 normalsMesh.setVertex( i*2, vert);
@@ -421,7 +421,9 @@ ofSpherePrimitive::ofSpherePrimitive() {
 }
 
 //----------------------------------------------------------
-ofSpherePrimitive::ofSpherePrimitive( float _radius, int res, ofPrimitiveMode mode ) {
+//ofSpherePrimitive::ofSpherePrimitive( float _radius, int res, ofPrimitiveMode mode ) {
+// FIXME: Mode never used here
+ofSpherePrimitive::ofSpherePrimitive( float _radius, int res, ofPrimitiveMode  ) {
 	radius = _radius;
 	texCoords = {0.f, 0.f, 1.f, 1.f};
     setResolution( res );
@@ -453,8 +455,9 @@ void ofSpherePrimitive::setResolution( int res ) {
 //----------------------------------------------------------
 void ofSpherePrimitive::setMode( ofPrimitiveMode mode ) {
     ofPrimitiveMode currMode = getMesh().getMode();
-    if(currMode != mode)
-        set(getRadius(), getResolution(), mode );
+	if(currMode != mode) {
+		set(getRadius(), getResolution(), mode );
+	}
 }
 
 //----------------------------------------------------------

@@ -53,7 +53,8 @@ bool ofBaseVideoPlayer::load(const fs::path & fileName){
 }
 
 //---------------------------------------------------------------------------
-bool ofBaseVideoPlayer::load(std::string fileName){
+// FIXME:: fs::path
+bool ofBaseVideoPlayer::load(std::string ){
 	ofLogError("ofBaseVideoPlayer") << " One of the two load functions need to be implemented ";
 	return false;
 }

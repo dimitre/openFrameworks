@@ -647,7 +647,7 @@ void ofAVFoundationGrabber::getDevicesInfo() const{
 std::vector <ofVideoDevice> ofAVFoundationGrabber::listDevices() const{
 	std::vector <std::string> devList = [grabber listDevices];
     std::vector <ofVideoDevice> devices;
-    for(auto i = 0; i < devList.size(); i++){
+    for(int i = 0; i < (int)devList.size(); i++){
 		devices.emplace_back(ofVideoDevice{
 			.deviceName = devList[i],
 			.id = i,

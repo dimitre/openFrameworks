@@ -25,7 +25,7 @@ ofEasyCam::ofEasyCam(){
 	
 }
 //----------------------------------------
-void ofEasyCam::update(ofEventArgs & args){
+void ofEasyCam::update(ofEventArgs & ){
 	if(this->viewport.isZero()){
 		viewport = getViewport();
 	}

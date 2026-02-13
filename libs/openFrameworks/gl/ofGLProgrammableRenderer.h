@@ -22,7 +22,7 @@ public:
 
     static const std::string TYPE;
 	const std::string & getType(){ return TYPE; }
-    
+
     void startRender();
     void finishRender();
 
@@ -45,14 +45,14 @@ public:
 	void draw(const ofVboMesh & mesh, ofPolyRenderMode renderType) const;
 	void drawInstanced(const ofVboMesh & mesh, ofPolyRenderMode renderType, int primCount) const;
     ofPath & getPath();
-    
-    
-    
+
+
+
 	//--------------------------------------------
 	// transformations
 	void pushView();
     void popView();
-    
+
 	// setup matrices and viewport (upto you to push and pop view before and after)
 	// if width or height are 0, assume windows dimensions (ofGetWidth(), ofGetHeight())
 	// if nearDist or farDist are 0 assume defaults (calculated based on width / height)
@@ -66,10 +66,10 @@ public:
 	int getViewportWidth() const;
 	int getViewportHeight() const;
 	bool isVFlipped() const;
-    
+
 	void setCoordHandedness(ofHandednessType handedness);
 	ofHandednessType getCoordHandedness() const;
-    
+
 	//our openGL wrappers
 	void pushMatrix();
 	void popMatrix();
@@ -110,13 +110,13 @@ public:
 	glm::mat4 getCurrentViewMatrix() const;
 	glm::mat4 getCurrentNormalMatrix() const;
 	glm::mat4 getCurrentModelMatrix() const;
-	
+
 	glm::vec3 getCurrentEyePosition() const;
-	
+
 	// screen coordinate things / default gl values
 	void setupGraphicDefaults();
 	void setupScreen();
-    
+
 	// drawing modes
 	void setFillMode(ofFillFlag fill);
 	ofFillFlag getFillMode();
@@ -132,7 +132,7 @@ public:
 	void disablePointSprites();
 	void enableAntiAliasing();
 	void disableAntiAliasing();
-	
+
 	/// \brief Enable size attenuation for line widths. Width changes based on distance from camera.
 	void enableLineSizeAttenuation();
 	/// \brief Disable size attenuation for line widths. Consistent width based on pixels in screen space (default).
@@ -142,7 +142,7 @@ public:
 	/// \brief Disable OF's line shaders to enable openGL rendering. Does not support varying line widths.
 	void disableLinesShaders();
 	bool areLinesShadersEnabled() const;
-    
+
 	// color options
 	void setColor(float r, float g, float b); // 0-1
 	void setColor(float r, float g, float b, float a); // 0-1
@@ -152,7 +152,7 @@ public:
 	void setHexColor( int hexColor ); // hex, like web 0xFF0033;
 
 	void setBitmapTextMode(ofDrawBitmapMode mode);
-    
+
 	// bg color
 	ofFloatColor getBackgroundColor();
 	void setBackgroundColor(const ofFloatColor & c);
@@ -163,13 +163,13 @@ public:
 
 	bool getBackgroundAuto();
 	void setBackgroundAuto(bool bManual);		// default is true
-    
+
 	void clear();
 	void clear(float r, float g, float b, float a=0.f);
 	void clear(float brightness, float a=0.f);
 	void clearAlpha();
-    
-    
+
+
 	// drawing
 	void drawLine(float x1, float y1, float z1, float x2, float y2, float z2) const;
 	void drawRectangle(float x, float y, float z, float w, float h) const;
@@ -225,20 +225,23 @@ public:
     void enableLighting();
     void disableLighting();
     bool getLightingEnabled();
-    void enableSeparateSpecularLight(){}
-    void disableSeparateSpecularLight(){}
-	void setSmoothLighting(bool ){}
-	void setGlobalAmbientColor(const ofFloatColor& ){}
+
     void enableLight(int lightIndex);
     void disableLight(int lightIndex);
-	void setLightSpotlightCutOff(int , float ){}
-	void setLightSpotConcentration(int lightIndex, float exponent){}
-	void setLightAttenuation(int lightIndex, float constant, float linear, float quadratic ){}
-	void setLightAmbientColor(int lightIndex, const ofFloatColor& c){}
-	void setLightDiffuseColor(int lightIndex, const ofFloatColor& c){}
-	void setLightSpecularColor(int lightIndex, const ofFloatColor& c){}
-	void setLightPosition(int lightIndex, const glm::vec4 & position){}
-	void setLightSpotDirection(int lightIndex, const glm::vec4 & direction){}
+
+    //    void enableSeparateSpecularLight(){}
+    //    void disableSeparateSpecularLight(){}
+	// void setSmoothLighting(bool ){}
+	// void setGlobalAmbientColor(const ofFloatColor& ){}
+	// FIXME: base class is pure virtual exige implementation and we have no implementation here.
+	// void setLightSpotlightCutOff(int , float ){}
+	// void setLightSpotConcentration(int , float ){}
+	// void setLightAttenuation(int lightIndex, float constant, float linear, float quadratic ){}
+	// void setLightAmbientColor(int lightIndex, const ofFloatColor& c){}
+	// void setLightDiffuseColor(int lightIndex, const ofFloatColor& c){}
+	// void setLightSpecularColor(int lightIndex, const ofFloatColor& c){}
+	// void setLightPosition(int lightIndex, const glm::vec4 & position){}
+	// void setLightSpotDirection(int lightIndex, const glm::vec4 & direction){}
 
 	std::string defaultVertexShaderHeader(GLenum textureTarget);
 	std::string defaultFragmentShaderHeader(GLenum textureTarget);
@@ -281,7 +284,7 @@ private:
 		ofShader noTexColor;
 		ofShader noTexNoColor;
 	};
-	
+
 	// useful for lines //
 	class LinesBundle {
 	public:
@@ -317,18 +320,18 @@ private:
 	void setAttributes(bool vertices, bool color, bool tex, bool normals, GLuint drawMode);
 //	void setAttributes(bool vertices, bool color, bool tex, bool normals);
 	void setAlphaBitmapText(bool bitmapText);
-	
-	
+
+
 	// LINES
 	void configureMeshToMatchWithNewVertsAndIndices(const ofMesh& aSrcMesh, ofMesh& aDstMesh, std::size_t aTargetNumVertices, std::size_t aTargetNumIndices);
 	void configureLinesBundleFromMesh(LinesBundle& aLinesBundle, GLuint drawMode, const ofMesh& amesh);
-	
-    
+
+
 	ofMatrixStack matrixStack;
 
 	bool bBackgroundAuto;
 	int major, minor;
-	
+
 	const ofShader * currentShader;
 
 	bool verticesEnabled, colorsEnabled, texCoordsEnabled, normalsEnabled, bitmapStringEnabled;
@@ -341,7 +344,7 @@ private:
 
 	const ofBaseMaterial * currentMaterial;
 	int alphaMaskTextureTarget;
-	
+
 	const ofShadow* currentShadow;
 	bool bIsShadowDepthPass;
 	GLenum shadowCubeFace;
@@ -353,7 +356,7 @@ private:
 	ofBitmapFont bitmapFont;
 	ofPath path;
 	const ofAppBaseWindow * window;
-	
+
 	mutable GLuint mDrawMode = GL_TRIANGLES;
 	std::unordered_map<GLuint, LinesBundle> mLinesBundleMap;
 	mutable bool mBRenderingLines = false;
@@ -375,12 +378,12 @@ private:
 	ofShader defaultOESTexColor;
 	ofShader defaultOESTexNoColor;
 #endif
-	
+
 	ofShader alphaMaskRectShader;
 	ofShader alphaMask2DShader;
-	
+
 	ofShader bitmapStringShader;
-	
+
 	ofShader shaderPlanarYUY2;
 	ofShader shaderNV12;
 	ofShader shaderNV21;
@@ -389,7 +392,7 @@ private:
 	ofShader shaderNV12Rect;
 	ofShader shaderNV21Rect;
 	ofShader shaderPlanarYUVRect;
-	
+
 	glm::vec3 currentEyePos;
 
 	//void setDefaultFramebufferId(const GLuint& fboId_); ///< windowing systems might use this to set the default framebuffer for this renderer.
@@ -403,12 +406,12 @@ private:
 	std::deque<GLuint> framebufferIdStack;	///< keeps track of currently bound framebuffers
 	GLuint defaultFramebufferId;		///< default GL_FRAMEBUFFER_BINDING, windowing frameworks might want to set this to their MSAA framebuffer, defaults to 0
     GLuint currentFramebufferId;		///< the framebuffer id currently bound to the GL_FRAMEBUFFER target
-	
+
 	// UNUSED / commented out;
 //	uint64_t beginDefaultShaderFrame;
-	
-	
-	
+
+
+
 	struct matricesBuffer {
 		glm::mat4 modelMatrix { 1.0f };
 		glm::mat4 viewMatrix { 1.0f };

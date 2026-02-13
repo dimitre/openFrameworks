@@ -185,10 +185,10 @@ const ofxOscSenderSettings & ofxOscSender::getSettings() const {
 void ofxOscSender::appendBundle(const ofxOscBundle & bundle, osc::OutboundPacketStream & p) {
 	// recursively serialise the bundle
 	p << osc::BeginBundleImmediate;
-	for (int i = 0; i < bundle.getBundleCount(); i++) {
+	for (std::size_t i = 0; i < bundle.getBundleCount(); i++) {
 		appendBundle(bundle.getBundleAt(i), p);
 	}
-	for (int i = 0; i < bundle.getMessageCount(); i++) {
+	for (std::size_t i = 0; i < bundle.getMessageCount(); i++) {
 		appendMessage(bundle.getMessageAt(i), p);
 	}
 	p << osc::EndBundle;

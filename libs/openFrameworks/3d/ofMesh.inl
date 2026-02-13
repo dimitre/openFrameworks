@@ -707,9 +707,11 @@ V ofMesh_<V, N, C, T>::getCentroid() const {
 	}
 
 	V sum;
-	for (auto i = 0; i < vertices.size(); i++) {
-		sum += vertices[i];
+
+	for (const auto & v : vertices) {
+		sum += v;
 	}
+	// FIXME: loss of precision here?
 	sum /= vertices.size();
 	return sum;
 }
@@ -1403,12 +1405,12 @@ ofMesh_<V, N, C, T> ofMesh_<V, N, C, T>::getMeshForIndices(ofIndexType startInde
 template <class V, class N, class C, class T>
 void ofMesh_<V, N, C, T>::mergeDuplicateVertices() {
 
-	std::vector<V> verts = getVertices();
-	std::vector<ofIndexType> indices = getIndices();
+	std::vector<V> verts { getVertices() };
+	std::vector<ofIndexType> indices { getIndices() };
 
 	//get indexes to share single point - TODO: try j < i
 	for (auto i = 0; i < indices.size(); i++) {
-		for (ofIndexType j = 0; j < indices.size(); j++) {
+		for (auto j = 0; j < indices.size(); j++) {
 			if (i == j) continue;
 
 			ofIndexType i1 = indices[i];
@@ -1438,11 +1440,11 @@ void ofMesh_<V, N, C, T>::mergeDuplicateVertices() {
 	std::vector<N> newNormals;
 	std::vector<N> & normals = getNormals();
 
-	for (ofIndexType i = 0; i < indices.size(); i++) {
+	for (auto i = 0; i < indices.size(); i++) {
 		ptCreated[i] = false;
 	}
 
-	for (ofIndexType i = 0; i < indices.size(); i++) {
+	for (auto i = 0; i < indices.size(); i++) {
 		ofIndexType index = indices[i];
 		const auto & p = verts[index];
 
@@ -1521,7 +1523,7 @@ const std::vector<ofMeshFace_<V, N, C, T>> & ofMesh_<V, N, C, T>::getUniqueFaces
 		bool bHasTexcoords = hasTexCoords();
 
 		if (getMode() == OF_PRIMITIVE_TRIANGLES) {
-			for (ofIndexType j = 0; j < indices.size(); j += 3) {
+			for (auto j = 0; j < indices.size(); j += 3) {
 				ofMeshFace_<V, N, C, T> & tri = faces[triindex];
 				for (std::size_t k = 0; k < 3; k++) {
 					index = indices[j + k];
@@ -1561,7 +1563,7 @@ std::vector<N> ofMesh_<V, N, C, T>::getFaceNormals(bool perVertex) const {
 			}
 			ofMeshFace_<V, N, C, T> face;
 			N n;
-			for (ofIndexType i = 0; i < indices.size(); i += 3) {
+			for (auto i = 0; i < indices.size(); i += 3) {
 				face.setVertex(0, vertices[indices[i + 0]]);
 				face.setVertex(1, vertices[indices[i + 1]]);
 				face.setVertex(2, vertices[indices[i + 2]]);
@@ -1645,8 +1647,8 @@ void ofMesh_<V, N, C, T>::smoothNormals(float angle) {
 		std::vector<V> verts;
 		verts.reserve(triangles.size() * 3);
 
-		for (ofIndexType i = 0; i < triangles.size(); i++) {
-			for (ofIndexType j = 0; j < 3; j++) {
+		for (auto i = 0; i < triangles.size(); i++) {
+			for (auto j = 0; j < 3; j++) {
 				verts.emplace_back(triangles[i].getVertex(j));
 			}
 		}
@@ -1654,8 +1656,8 @@ void ofMesh_<V, N, C, T>::smoothNormals(float angle) {
 		std::unordered_map<int, int> removeIds;
 
 		float epsilon = .01f;
-		for (ofIndexType i = 0; i < verts.size() - 1; i++) {
-			for (ofIndexType j = i + 1; j < verts.size(); j++) {
+		for (auto i = 0; i < verts.size() - 1; i++) {
+			for (auto j = i + 1; j < verts.size(); j++) {
 				if (i != j) {
 					const auto & v1 = toGlm(verts[i]);
 					const auto & v2 = toGlm(verts[j]);
@@ -1674,14 +1676,14 @@ void ofMesh_<V, N, C, T>::smoothNormals(float angle) {
 
 		//ofLogNotice("ofMesh") << "smoothNormals(): num verts = " << verts.size() << " tris size = " << triangles.size();
 
-		for (ofIndexType i = 0; i < verts.size(); i++) {
+		for (auto i = 0; i < verts.size(); i++) {
 			std::string vstring {
 				"x" + ofToString(verts[i].x == -0 ? 0 : verts[i].x) + "y" + ofToString(verts[i].y == -0 ? 0 : verts[i].y) + "z" + ofToString(verts[i].z == -0 ? 0 : verts[i].z)
 			};
 
 			if (vertHash.find(vstring) == vertHash.end()) {
-				for (ofIndexType j = 0; j < triangles.size(); j++) {
-					for (ofIndexType k = 0; k < 3; k++) {
+				for (auto j = 0; j < triangles.size(); j++) {
+					for (auto k = 0; k < 3; k++) {
 						if (verts[i].x == triangles[j].getVertex(k).x) {
 							if (verts[i].y == triangles[j].getVertex(k).y) {
 								if (verts[i].z == triangles[j].getVertex(k).z) {
@@ -1751,12 +1753,12 @@ void ofMesh_<V, N, C, T>::flatNormals() {
 
 		// add mesh data back, duplicating vertices and recalculating normals
 		N normal;
-		for (ofIndexType i = 0; i < indices.size(); i++) {
-			ofIndexType indexCurr = indices[i];
+		for (auto i = 0; i < indices.size(); i++) {
+			auto indexCurr = indices[i];
 
 			if (i % 3 == 0) {
-				ofIndexType indexNext1 = indices[i + 1];
-				ofIndexType indexNext2 = indices[i + 2];
+				auto indexNext1 = indices[i + 1];
+				auto indexNext2 = indices[i + 2];
 				auto e1 = verts[indexCurr] - verts[indexNext1];
 				auto e2 = verts[indexNext2] - verts[indexNext1];
 				normal = glm::normalize(glm::cross(e1, e2));
@@ -2065,8 +2067,9 @@ ofMesh_<V, N, C, T> ofMesh_<V, N, C, T>::icosphere(float radius, std::size_t ite
 
 	/// Step 3 : generate texcoords
 	std::vector<T> texCoords;
-	for (ofIndexType i = 0; i < vertices.size(); i++) {
-		const auto & vec = vertices[i];
+	//	for (auto i = 0; i < vertices.size(); i++) {
+	//		const auto & vec = vertices[i];
+	for (const auto & vec : vertices) {
 		float u, v;
 		float r0 = sqrtf(vec.x * vec.x + vec.z * vec.z);
 		float alpha;
@@ -2083,7 +2086,7 @@ ofMesh_<V, N, C, T> ofMesh_<V, N, C, T>::icosphere(float radius, std::size_t ite
 	// find vertices to split
 	std::vector<ofIndexType> indexToSplit;
 
-	for (ofIndexType i = 0; i < faces.size() / 3; i++) {
+	for (std::size_t i = 0; i < faces.size() / 3; i++) {
 		T & t0 = texCoords[faces[i * 3 + 0]];
 		T & t1 = texCoords[faces[i * 3 + 1]];
 		T & t2 = texCoords[faces[i * 3 + 2]];
@@ -2109,19 +2112,19 @@ ofMesh_<V, N, C, T> ofMesh_<V, N, C, T>::icosphere(float radius, std::size_t ite
 	}
 
 	//split vertices
-	for (ofIndexType i = 0; i < indexToSplit.size(); i++) {
-		ofIndexType index = indexToSplit[i];
+	for (std::size_t i = 0; i < indexToSplit.size(); i++) {
+		auto index = indexToSplit[i];
 		//duplicate vertex
 		V v = vertices[index];
 		T t = texCoords[index] + T(1.f, 0.f);
 		vertices.push_back(v);
 		texCoords.push_back(t);
-		ofIndexType newIndex = vertices.size() - 1;
+		auto newIndex = vertices.size() - 1;
 		//reassign indices
-		for (ofIndexType j = 0; j < faces.size(); j++) {
+		for (std::size_t j = 0; j < faces.size(); j++) {
 			if (faces[j] == index) {
-				ofIndexType index1 = faces[(j + 1) % 3 + (j / 3) * 3];
-				ofIndexType index2 = faces[(j + 2) % 3 + (j / 3) * 3];
+				auto index1 = faces[(j + 1) % 3 + (j / 3) * 3];
+				auto index2 = faces[(j + 2) % 3 + (j / 3) * 3];
 				if ((texCoords[index1].x > 0.5) || (texCoords[index2].x > 0.5)) {
 					faces[j] = newIndex;
 				}
@@ -2140,8 +2143,8 @@ ofMesh_<V, N, C, T> ofMesh_<V, N, C, T>::icosphere(float radius, std::size_t ite
 	sphere.addNormals(vertices);
 	sphere.addTexCoords(texCoords);
 
-	for (ofIndexType i = 0; i < vertices.size(); i++) {
-		vertices[i] *= radius;
+	for (auto & v : vertices) {
+		v *= radius;
 	}
 
 	return sphere;
