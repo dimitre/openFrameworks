@@ -1347,7 +1347,8 @@ string ofFilePath::removeTrailingSlash(const fs::path & _path){
 
 
 //------------------------------------------------------------------------------------------------------------
-string ofFilePath::getFileName(const fs::path & filePath, bool bRelativeToData){
+// FIXME: why? bool bRelativeToData
+string ofFilePath::getFileName(const fs::path & filePath, bool ){
 	return ofPathToString(filePath.filename());
 }
 
@@ -1492,7 +1493,8 @@ void ofSetDataPathRoot(const fs::path& newRoot){
 //	dataPathRoot() = newRoot;
 }
 
-fs::path ofToDataPath(const fs::path & path, bool makeAbsolute){
+// FIXME: Why? bool makeAbsolute
+fs::path ofToDataPath(const fs::path & path, bool ){
 	return ofCore.dataPath / path;
 };
 

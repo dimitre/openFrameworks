@@ -387,7 +387,8 @@ std::istream & operator>>(std::istream & istr, ofBuffer & buf){
 }
 
 //--------------------------------------------------
-ofBuffer ofBufferFromFile(const fs::path & path, bool binary){
+// FIXME: WHY? bool binary
+ofBuffer ofBufferFromFile(const fs::path & path, bool ){
 //	cout << "ofBufferFromFile " << path << endl;
 //	if (!fs::exists(ofCore.toDataPath(path))) {
 //		cout << "ERROR ofBufferFromFile file not found " << path << " : " << ofCore.toDataPath(path) << endl;
@@ -400,7 +401,8 @@ ofBuffer ofBufferFromFile(const fs::path & path, bool binary){
 }
 
 //--------------------------------------------------
-bool ofBufferToFile(const fs::path & path, const ofBuffer& buffer, bool binary){
+// FIXME: WHY? bool binary
+bool ofBufferToFile(const fs::path & path, const ofBuffer& buffer, bool ){
 //	ofFile f(path, ofFile::WriteOnly, binary);
 //	return buffer.writeTo(f);
 	

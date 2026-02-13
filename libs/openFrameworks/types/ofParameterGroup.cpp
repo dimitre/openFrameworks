@@ -372,7 +372,8 @@ std::string ofParameterGroup::toString() const {
 	return out.str();
 }
 
-void ofParameterGroup::fromString(const std::string & name) {
+//FIXME: WHY?
+void ofParameterGroup::fromString(const std::string & ) { //name
 	ofLogWarning() << "ofParameterGroup doesn't implement fromString yet";
 }
 

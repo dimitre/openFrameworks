@@ -718,7 +718,8 @@ ofMaterial::TextureUnifom ofMaterial::getCustomUniformTexture(const std::string 
 
 // called from ofGLProgrammableRenderer
 //-----------------------------------------------------------
-void ofMaterial::unbind(ofGLProgrammableRenderer & renderer) const {
+// FIXME: why? renderer
+void ofMaterial::unbind(ofGLProgrammableRenderer & ) const {
 	mBound = false;
 	currentRenderShader = nullptr;
 }
@@ -1230,12 +1231,14 @@ void ofMaterial::updateLights(const ofShader & shader,ofGLProgrammableRenderer &
 	}
 }
 
-void ofMaterial::updateShadows(const ofShader & shader,ofGLProgrammableRenderer & renderer) const {
+// FIXME: why? renderer
+void ofMaterial::updateShadows(const ofShader & shader,ofGLProgrammableRenderer & ) const {
 	// going to start above the highest tex location
 	shader.setShadowUniforms(getHighestUniformTextureLocation()+1);
 }
 
-void ofMaterial::updateEnvironmentMaps(const ofShader & shader,ofGLProgrammableRenderer & renderer) const {
+// FIXME: why? renderer
+void ofMaterial::updateEnvironmentMaps(const ofShader & shader,ofGLProgrammableRenderer & ) const {
 	if( isPBR() ) {
 		// adding 4 to the offset to account for the shadows
 		shader.setPbrEnvironmentMapUniforms(getHighestUniformTextureLocation()+1+4);

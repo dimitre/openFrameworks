@@ -2136,7 +2136,7 @@ ofMesh_<V, N, C, T> ofMesh_<V, N, C, T>::icosphere(float radius, std::size_t ite
 	// i wish there was a more elegant way to do this, but anything happening before "split vertices"
 	// makes things very, very complicated.
 
-	for (auto i = 0; i < faces.size(); i += 3) {
+	for (std::size_t i = 0; i < faces.size(); i += 3) {
 		std::swap(faces[i + 1], faces[i + 2]);
 	}
 

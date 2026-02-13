@@ -356,7 +356,8 @@ void ofBaseSoundInput::audioIn( ofSoundBuffer& buffer ){
 	audioIn(&buffer[0], buffer.getNumFrames(), buffer.getNumChannels(), buffer.getDeviceID(), buffer.getTickCount());
 }
 
-void ofBaseSoundInput::audioIn( float * input, int bufferSize, int nChannels, int deviceID, long unsigned long tickCount ){
+//void ofBaseSoundInput::audioIn( float * input, int bufferSize, int nChannels, int deviceID, long unsigned long tickCount ){
+void ofBaseSoundInput::audioIn( float * input, int bufferSize, int nChannels, int , long unsigned long ){
 	audioIn(input, bufferSize, nChannels);
 }
 
@@ -370,7 +371,8 @@ void ofBaseSoundOutput::audioOut( ofSoundBuffer& buffer ){
 	audioOut(&buffer[0], buffer.getNumFrames(), buffer.getNumChannels(), buffer.getDeviceID(), buffer.getTickCount());
 }
 
-void ofBaseSoundOutput::audioOut( float * output, int bufferSize, int nChannels, int deviceID, long unsigned long tickCount  ){
+// FIXME: why? int deviceID, long unsigned long tickCount
+void ofBaseSoundOutput::audioOut( float * output, int bufferSize, int nChannels, int , long unsigned long   ){
 	audioOut(output, bufferSize, nChannels);
 }
 

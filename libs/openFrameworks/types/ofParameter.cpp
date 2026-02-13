@@ -88,7 +88,8 @@ std::string ofParameter<void>::valueType() const {
     return typeid(void).name();
 }
 
-void ofParameter<void>::fromString(const std::string & name) {
+// FIXME: WHY? //name
+void ofParameter<void>::fromString(const std::string & ) {
 }
 
 ofParameter<void> & ofParameter<void>::set(const std::string & name) {

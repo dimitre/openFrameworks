@@ -544,7 +544,8 @@ string ofTrimBack(const string & src, const string & locale) {
 }
 
 //--------------------------------------------------
-string ofTrim(const string & src, const string & locale) {
+// FIXME: WHY?
+string ofTrim(const string & src, const string & ) { // locale
 	return ofTrimFront(ofTrimBack(src));
 }
 

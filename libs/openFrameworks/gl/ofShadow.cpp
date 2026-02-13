@@ -637,7 +637,8 @@ bool ofShadow::beginDepth(GLenum aCubeFace) {
 }
 
 //--------------------------------------------------------------
-bool ofShadow::endDepth(GLenum aCubeFace) {
+// FIXME: why?
+bool ofShadow::endDepth(GLenum ) { //aCubeFace
 	return endDepth();
 }
 
@@ -914,7 +915,8 @@ const ofShader & ofShadow::getDepthShader(ofGLProgrammableRenderer & renderer) c
 }
 
 //--------------------------------------------------------------
-void ofShadow::updateDepth(const ofShader & shader,ofGLProgrammableRenderer & renderer) const {
+// FIXME: WHY? ofGLProgrammableRenderer & renderer
+void ofShadow::updateDepth(const ofShader & shader,ofGLProgrammableRenderer & ) const {
 	shader.setUniform3f("uLightPos", data->position );
 	shader.setUniform1f("uNearPlane", data->nearClip );
 	shader.setUniform1f("uFarPlane", data->farClip );
@@ -937,7 +939,8 @@ void ofShadow::updateDepth(const ofShader & shader,ofGLProgrammableRenderer & re
 }
 
 //--------------------------------------------------------------
-void ofShadow::updateDepth(const ofShader & shader,GLenum aCubeFace,ofGLProgrammableRenderer & renderer) const {
+// FIXME: WHY? ofGLProgrammableRenderer & renderer
+void ofShadow::updateDepth(const ofShader & shader,GLenum aCubeFace,ofGLProgrammableRenderer & ) const {
 //	shader.begin();
 	shader.setUniform3f("uLightPos", data->position );
 	shader.setUniform1f("uNearPlane", data->nearClip );

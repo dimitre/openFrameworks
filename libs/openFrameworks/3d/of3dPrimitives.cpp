@@ -513,9 +513,11 @@ void ofIcoSpherePrimitive::setResolution( int iterations ) {
 }
 
 //----------------------------------------------------------
-void ofIcoSpherePrimitive::setMode( ofPrimitiveMode mode ) {
+// FIXME: why? maybe it is overriding base classes?
+void ofIcoSpherePrimitive::setMode( ofPrimitiveMode ) { //mode
     // ofIcoSpherePrimitive only works with OF_PRIMITIVE_TRIANGLES //
-    setResolution( getResolution() );
+	// FIXME: why do anything in first place?
+//    setResolution( getResolution() );
 }
 
 //----------------------------------------------------------
@@ -1061,9 +1063,10 @@ void ofBoxPrimitive::setResolution( int resWidth, int resHeight, int resDepth ) 
 }
 
 //----------------------------------------------------------
-void ofBoxPrimitive::setMode( ofPrimitiveMode mode ) {
+// FIXME: why? and why does it do anything?
+void ofBoxPrimitive::setMode( ofPrimitiveMode ) { // mode
     // only supports triangles //
-    setResolution( getResolution().x, getResolution().y, getResolution().z );
+	//    setResolution( getResolution().x, getResolution().y, getResolution().z );
 }
 
 //--------------------------------------------------------------
