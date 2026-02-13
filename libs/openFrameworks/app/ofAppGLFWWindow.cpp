@@ -1036,10 +1036,7 @@ namespace {
 		return modifiers;
 	}
 
-unsigned long keycodeToUnicode(ofAppGLFWWindow * /*window*/, int scancode, int modifier) {
-
-
-
+unsigned long keycodeToUnicode(ofAppGLFWWindow * window, int scancode, int modifier) {
 #ifdef TARGET_LINUX
 	XkbStateRec xkb_state = {};
 	XkbGetState(window->getX11Display(), XkbUseCoreKbd, &xkb_state);
@@ -1176,6 +1173,7 @@ unsigned long keycodeToUnicode(ofAppGLFWWindow * /*window*/, int scancode, int m
 	}
 
 #endif
+	
 	return 0;
 }
 }
