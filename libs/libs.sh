@@ -186,7 +186,8 @@ case "$PLATFORM" in
 			if [[ -z "${CI:-}" ]]; then
 
 				# ----- chalet : portable install with version check -----
-				CHALET_DIR="$HOME/chalet"
+				# Use local .tools dir to avoid accent issues in Windows usernames
+				CHALET_DIR="./.tools/chalet"
 				NEED_INSTALL=false
 
 				if [[ -x "$CHALET_DIR/chalet.exe" ]]; then
@@ -213,15 +214,17 @@ case "$PLATFORM" in
 					rm -f "$CHALET_DIR/chalet.zip"
 				fi
 
-				# inject into PATH for this session
-				[[ ":$PATH:" != *":$CHALET_DIR:"* ]] && export PATH="$CHALET_DIR:$PATH"
+				# inject into PATH for this session (convert to absolute path)
+				CHALET_DIR_ABS="$(cd "$CHALET_DIR" && pwd)"
+				[[ ":$PATH:" != *":$CHALET_DIR_ABS:"* ]] && export PATH="$CHALET_DIR_ABS:$PATH"
 				# ------------------------------------------
 
 			    # ----- wget2 : use system copy if present, else portable fallback -----
 			    if command -v wget2 &>/dev/null; then
 			        section "wget2 detected"
 			    else
-			        WGET2_DIR="$HOME/wget2"
+					# Use local .tools dir to avoid accent issues in Windows usernames
+			        WGET2_DIR="./.tools/wget2"
 			        mkdir -p "$WGET2_DIR"
 
 			        # download single static exe (64-bit, 2.28 MB)
@@ -234,7 +237,8 @@ case "$PLATFORM" in
 			        fi
 
 			        # inject into PATH for this session
-			        [[ ":$PATH:" != *":$WGET2_DIR:"* ]] && export PATH="$WGET2_DIR:$PATH"
+			        WGET2_DIR_ABS="$(cd "$WGET2_DIR" && pwd)"
+        [[ ":$PATH:" != *":$WGET2_DIR_ABS:"* ]] && export PATH="$WGET2_DIR_ABS:$PATH"
 			    fi
 			    # ------------------------------------------
 			fi
