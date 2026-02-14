@@ -509,7 +509,17 @@ unzipCore() {
 		executa unzip -qq -o "${filename}" -d "${LIBS_FOLDER}"
 
 		# Move license files to _licenses folder with library name prepended
-		for file in "${LIBS_FOLDER}"/*.{txt,md,MIT} "${LIBS_FOLDER}"/LICENSE "${LIBS_FOLDER}"/LICENSES "${LIBS_FOLDER}"/COPYING "${LIBS_FOLDER}"/COPYING.*; do
+		# Include common case variations for cross-platform compatibility
+		# Put lowercase first to prefer original case on case-insensitive filesystems
+		for file in \
+			"${LIBS_FOLDER}"/*.{txt,md,mit} \
+			"${LIBS_FOLDER}"/*.{TXT,MD,MIT} \
+			"${LIBS_FOLDER}"/{license,License,LICENSE,licence,Licence,LICENCE} \
+			"${LIBS_FOLDER}"/{licenses,Licenses,LICENSES,licences,Licences,LICENCES} \
+			"${LIBS_FOLDER}"/{copying,Copying,COPYING} \
+			"${LIBS_FOLDER}"/{copying,Copying,COPYING}.* \
+			"${LIBS_FOLDER}"/{notice,Notice,NOTICE} \
+			"${LIBS_FOLDER}"/{notice,Notice,NOTICE}.*; do
 			if [[ -f "$file" ]]; then
 				basename=$(basename "$file")
 				mv "$file" "${LIBS_FOLDER}/_licenses/${LIBNAME}_${basename}"
