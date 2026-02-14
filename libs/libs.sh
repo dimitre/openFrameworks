@@ -179,33 +179,65 @@ case "$PLATFORM" in
         )
     ;;
 
-	vs)
-	    CORELIBS+=( videoInput )
+		vs)
+		    CORELIBS+=( videoInput )
 
-		# avoid install wget2 in github environment. GH will take care of downloading libs.
-		if [[ -z "${CI:-}" ]]; then
+			# avoid install tools in github environment. GH will take care of downloading libs.
+			if [[ -z "${CI:-}" ]]; then
 
-		    # ----- wget2 : use system copy if present, else portable fallback -----
-		    if command -v wget2 &>/dev/null; then
-		        section "wget2 detected"
-		    else
-		        WGET2_DIR="$HOME/wget2"
-		        mkdir -p "$WGET2_DIR"
+				# ----- chalet : portable install with version check -----
+				CHALET_DIR="$HOME/chalet"
+				NEED_INSTALL=false
 
-		        # download single static exe (64-bit, 2.28 MB)
-		        if [[ ! -x "$WGET2_DIR/wget2.exe" ]]; then
-		            section "Fetching portable wget2.exe …"
-					curl -L -o "$WGET2_DIR/wget2.exe" \
+				if [[ -x "$CHALET_DIR/chalet.exe" ]]; then
+					version=$("$CHALET_DIR/chalet.exe" --version 2>/dev/null | awk '{print $3}')
+					if [ "$CHALETVERSION" != "$version" ]; then
+						section "chalet version mismatch ($version != $CHALETVERSION), updating..."
+						rm -rf "$CHALET_DIR"
+						NEED_INSTALL=true
+					else
+						sectionOk "chalet already installed ($version)"
+					fi
+				else
+					NEED_INSTALL=true
+				fi
+
+				if [ "$NEED_INSTALL" = true ]; then
+					section "Fetching chalet ${CHALETVERSION} for Windows..."
+					mkdir -p "$CHALET_DIR"
+
+					curl -L -o "$CHALET_DIR/chalet.zip" \
+						"https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet-x86_64-windows-gnu.zip"
+
+					unzip -o "$CHALET_DIR/chalet.zip" -d "$CHALET_DIR"
+					rm -f "$CHALET_DIR/chalet.zip"
+				fi
+
+				# inject into PATH for this session
+				[[ ":$PATH:" != *":$CHALET_DIR:"* ]] && export PATH="$CHALET_DIR:$PATH"
+				# ------------------------------------------
+
+			    # ----- wget2 : use system copy if present, else portable fallback -----
+			    if command -v wget2 &>/dev/null; then
+			        section "wget2 detected"
+			    else
+			        WGET2_DIR="$HOME/wget2"
+			        mkdir -p "$WGET2_DIR"
+
+			        # download single static exe (64-bit, 2.28 MB)
+			        if [[ ! -x "$WGET2_DIR/wget2.exe" ]]; then
+			            section "Fetching portable wget2.exe …"
+						curl -L -o "$WGET2_DIR/wget2.exe" \
 	     --ssl-revoke-best-effort \
 	     https://github.com/rockdaboot/wget2/releases/download/$WGET2VERSION/wget2.exe
 	     			chmod +x "$WGET2_DIR/wget2.exe"
-		        fi
+			        fi
 
-		        # inject into PATH for this session
-		        [[ ":$PATH:" != *":$WGET2_DIR:"* ]] && export PATH="$WGET2_DIR:$PATH"
-		    fi
-		    # ------------------------------------------
-		fi
+			        # inject into PATH for this session
+			        [[ ":$PATH:" != *":$WGET2_DIR:"* ]] && export PATH="$WGET2_DIR:$PATH"
+			    fi
+			    # ------------------------------------------
+			fi
 
     ;;
 
@@ -226,38 +258,24 @@ case "$PLATFORM" in
 				    fi
 				fi
 
-
-				# if ! command -v gh &> /dev/null; then
-				# 	# section "no wget2"
-				# 	brew install gh
-				# else
-				# 	section "gh detected"
-				# fi
-
 				if ! command -v wget2 &> /dev/null; then
 					# section "no wget2"
 					brew install wget2
 				else
-					sectionOk "wget2 detected"
+					sectionOk "wget2 already installed"
 				fi
 
 				if ! command -v chalet &> /dev/null; then
 					brew tap chalet-org/chalet
 					brew install --cask chalet
 				else
-					sectionOk "chalet detected"
+					sectionOk "chalet already installed"
 				fi
-
-				# if ! command -v cmake &> /dev/null; then
-				# 	brew install cmake
-				# else
-				# 	section "cmake detected"
-				# fi
 
 				if ! command -v ninja &> /dev/null; then
 					brew install ninja
 				else
-					sectionOk "ninja detected"
+					sectionOk "ninja already installed"
 				fi
 
 			else
@@ -275,12 +293,9 @@ case "$PLATFORM" in
 		if [[ -z "${CI:-}" ]]; then
 			section "Installing system dependencies"
 
+			# Arch Linux
 			if [ -f "/etc/arch-release" ]; then
-				# Arch Linux
 				${SUDO_CMD} pacman -Syu --noconfirm
-
-				# cmake \
-				#
 
 				${SUDO_CMD} pacman -S --noconfirm --needed \
 					gcc unzip ninja wget \
@@ -297,7 +312,6 @@ case "$PLATFORM" in
 				${SUDO_CMD} apt-get update
 
 				# cmake \
-
 				${SUDO_CMD} apt-get -y install \
 					ninja-build wget2 \
 					libfontconfig1-dev \
@@ -316,9 +330,30 @@ case "$PLATFORM" in
 					#
 			fi
 
-			if ! command -v chalet &> /dev/null; then
+			# Check if chalet is installed and if version matches
+			NEED_INSTALL=false
+			if command -v chalet &> /dev/null; then
+				version=$(chalet --version | awk '{print $3}')
+				if [ "$CHALETVERSION" != "$version" ]; then
+					section "chalet version mismatch ($version != $CHALETVERSION), uninstalling..."
+					# Arch Linux
+					if [[ -f /etc/arch-release ]]; then
+						${SUDO_CMD} rm -f /usr/local/bin/chalet
+					else
+						# UBUNTU
+						${SUDO_CMD} dpkg -r chalet 2>/dev/null || true
+					fi
+					NEED_INSTALL=true
+				else
+					sectionOk "chalet already installed ($version)"
+				fi
+			else
+				NEED_INSTALL=true
+			fi
+
+			if [ "$NEED_INSTALL" = true ]; then
+				# Arch Linux
 				if [[ -f /etc/arch-release ]]; then
-					# Arch Linux - install from zip
 					section "Installing chalet on Arch Linux..."
 					if [[ ${PLATFORM} == 'linux64' ]]; then
 						CHALET_ARCH="x86_64"
@@ -332,7 +367,8 @@ case "$PLATFORM" in
 					${SUDO_CMD} chmod +x /usr/local/bin/chalet
 					rm -f chalet-${CHALET_ARCH}-linux-gnu.zip
 				else
-
+					# UBUNTU
+					section "Installing chalet..."
 					if [[ ${PLATFORM} == 'linux64' ]]; then
 						curl -L -O https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet_${CHALETVERSION}_amd64.deb &&
 						${SUDO_CMD} dpkg -i chalet*.deb
@@ -342,8 +378,6 @@ case "$PLATFORM" in
 						${SUDO_CMD} dpkg -i chalet*.deb
 					fi
 				fi
-			else
-				section "chalet already installed"
 			fi
 		fi # end if CI
 
@@ -396,7 +430,8 @@ getlink() {
 		PARAMS=""
 		for LIBNAME in "${ALLLIBS[@]}"; do
 			PARAMS+=" https://github.com/ofWorks/ofLibs/releases/download/${LIBSVERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
-		done
+
+done
 		section "Downloading with wget2 (parallel downloads)"
 		#--clobber=off (skips download if file exists at all)
 		# --progress=bar:force
@@ -417,7 +452,7 @@ getlink() {
 	elif command -v wget &>/dev/null; then
 		# Fallback to wget - sequential downloads with timestamp checking
 		section "Downloading with wget (sequential)"
-		for LIBNAME in "${ALLLIBS[@]}"; do
+		for LIBNAME in "${CORELIBS[@]}"; do
 			local filepath="${DOWNLOAD}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
 			executa wget -N --no-verbose --show-progress \
 				"https://github.com/ofWorks/ofLibs/releases/download/${LIBSVERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip" \
@@ -426,7 +461,7 @@ getlink() {
 	elif command -v powershell.exe &>/dev/null; then
 		# Fallback to PowerShell on Windows
 		section "Downloading with PowerShell (sequential)"
-		for LIBNAME in "${ALLLIBS[@]}"; do
+		for LIBNAME in "${CORELIBS[@]}"; do
 			local filepath="${DOWNLOAD}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
 			local url="https://github.com/ofWorks/ofLibs/releases/download/${LIBSVERSION}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
 			executa powershell.exe -Command "Invoke-WebRequest -Uri '${url}' -OutFile '${filepath}'"
@@ -434,7 +469,7 @@ getlink() {
 	else
 		# Fallback to curl - sequential downloads
 		section "Downloading with curl (sequential)"
-		for LIBNAME in "${ALLLIBS[@]}"; do
+		for LIBNAME in "${CORELIBS[@]}"; do
 			local filepath="${DOWNLOAD}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
 			# Only use -z if file exists, otherwise just download
 			if [[ -f "${filepath}" ]]; then
