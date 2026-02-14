@@ -217,6 +217,15 @@ case "$PLATFORM" in
 		if [[ -z "${CI:-}" ]]; then
 
 			if command -v brew &> /dev/null; then
+				# Experimental: Uninstall chalet if version is not the same as defined here.
+				# it will be installed again soon after.
+				if command -v chalet &> /dev/null; then
+				    version=$(chalet --version | awk '{print $3}')
+				    if [ "$CHALETVERSION" != "$version" ]; then  # Changed [[ to [ and added quotes and space
+				        brew uninstall chalet
+				    fi
+				fi
+
 
 				# if ! command -v gh &> /dev/null; then
 				# 	# section "no wget2"
