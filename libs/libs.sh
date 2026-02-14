@@ -185,6 +185,27 @@ case "$PLATFORM" in
 			# avoid install tools in github environment. GH will take care of downloading libs.
 			if [[ -z "${CI:-}" ]]; then
 
+				# ----- wget2 : install first (needed for chalet download) -----
+				# Use local .tools dir to avoid accent issues in Windows usernames
+				WGET2_DIR="./.tools/wget2"
+				if ! command -v wget2 &>/dev/null; then
+					if [[ ! -x "$WGET2_DIR/wget2.exe" ]]; then
+						section "Fetching portable wget2.exe …"
+						mkdir -p "$WGET2_DIR"
+						curl -L -o "$WGET2_DIR/wget2.exe" \
+							--ssl-revoke-best-effort \
+							https://github.com/rockdaboot/wget2/releases/download/$WGET2VERSION/wget2.exe
+						chmod +x "$WGET2_DIR/wget2.exe"
+					fi
+					# inject into PATH for this session
+					WGET2_DIR_ABS="$(cd "$WGET2_DIR" && pwd)"
+					[[ ":$PATH:" != *":$WGET2_DIR_ABS:"* ]] && export PATH="$WGET2_DIR_ABS:$PATH"
+					sectionOk "wget2 installed"
+				else
+					sectionOk "wget2 detected"
+				fi
+				# ------------------------------------------
+
 				# ----- chalet : portable install with version check -----
 				# Use local .tools dir to avoid accent issues in Windows usernames
 				CHALET_DIR="./.tools/chalet"
@@ -207,7 +228,7 @@ case "$PLATFORM" in
 					section "Fetching chalet ${CHALETVERSION} for Windows..."
 					mkdir -p "$CHALET_DIR"
 
-					curl -L -o "$CHALET_DIR/chalet.zip" \
+					wget2 -O "$CHALET_DIR/chalet.zip" \
 						"https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet-x86_64-pc-windows-msvc.zip"
 
 					# Verify it's a valid zip before extracting
@@ -225,29 +246,6 @@ case "$PLATFORM" in
 				CHALET_DIR_ABS="$(cd "$CHALET_DIR" && pwd)"
 				[[ ":$PATH:" != *":$CHALET_DIR_ABS:"* ]] && export PATH="$CHALET_DIR_ABS:$PATH"
 				# ------------------------------------------
-
-			    # ----- wget2 : use system copy if present, else portable fallback -----
-			    if command -v wget2 &>/dev/null; then
-			        section "wget2 detected"
-			    else
-					# Use local .tools dir to avoid accent issues in Windows usernames
-			        WGET2_DIR="./.tools/wget2"
-			        mkdir -p "$WGET2_DIR"
-
-			        # download single static exe (64-bit, 2.28 MB)
-			        if [[ ! -x "$WGET2_DIR/wget2.exe" ]]; then
-			            section "Fetching portable wget2.exe …"
-						curl -L -o "$WGET2_DIR/wget2.exe" \
-	     --ssl-revoke-best-effort \
-	     https://github.com/rockdaboot/wget2/releases/download/$WGET2VERSION/wget2.exe
-	     			chmod +x "$WGET2_DIR/wget2.exe"
-			        fi
-
-			        # inject into PATH for this session
-			        WGET2_DIR_ABS="$(cd "$WGET2_DIR" && pwd)"
-        [[ ":$PATH:" != *":$WGET2_DIR_ABS:"* ]] && export PATH="$WGET2_DIR_ABS:$PATH"
-			    fi
-			    # ------------------------------------------
 			fi
 
     ;;
@@ -372,7 +370,12 @@ case "$PLATFORM" in
 						CHALET_ARCH="aarch64"
 					fi
 
-					curl -L -O https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet-${CHALET_ARCH}-linux-gnu.zip
+					# Use wget2 if available, otherwise curl
+					if command -v wget2 &>/dev/null; then
+						wget2 -O chalet-${CHALET_ARCH}-linux-gnu.zip https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet-${CHALET_ARCH}-linux-gnu.zip
+					else
+						curl -L -O https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet-${CHALET_ARCH}-linux-gnu.zip
+					fi
 					unzip -o chalet-${CHALET_ARCH}-linux-gnu.zip
 					${SUDO_CMD} mv chalet /usr/local/bin/
 					${SUDO_CMD} chmod +x /usr/local/bin/chalet
@@ -381,11 +384,11 @@ case "$PLATFORM" in
 					# UBUNTU
 					section "Installing chalet..."
 					if [[ ${PLATFORM} == 'linux64' ]]; then
-						curl -L -O https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet_${CHALETVERSION}_amd64.deb &&
+						wget2 -O chalet_${CHALETVERSION}_amd64.deb https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet_${CHALETVERSION}_amd64.deb &&
 						${SUDO_CMD} dpkg -i chalet*.deb
 					else
 						# there is arm only also.
-						curl -L -O https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet_${CHALETVERSION}_arm64.deb &&
+						wget2 -O chalet_${CHALETVERSION}_arm64.deb https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet_${CHALETVERSION}_arm64.deb &&
 						${SUDO_CMD} dpkg -i chalet*.deb
 					fi
 				fi

@@ -193,8 +193,9 @@ jobs:
           echo
           chalet bundle --compiler-cache --show-commands
           cd dist
-          zip -r -y "../${{ github.workflow }}_${{ matrix.platform }}_flechilhas.zip" .
           # zip -r -y "../${{ github.workflow }}_${{ runner.os }}_flechilhas.zip" .
+          # zip -r -y "../${{ github.workflow }}_${{ matrix.platform }}_flechilhas.zip" .
+          zip -r "../${{ github.workflow }}_${{ matrix.platform }}_flechilhas.zip" .
           cd ..
           gh release upload demo *.zip --clobber
 
