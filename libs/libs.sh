@@ -318,25 +318,35 @@ case "$PLATFORM" in
 					gstreamer gst-plugins-base gst-plugins-bad gst-plugins-good gst-libav \
 					openal libsndfile
 			else
-				${SUDO_CMD} apt-get update
-
-				# cmake \
-				${SUDO_CMD} apt-get -y install \
-					ninja-build wget2 \
-					libfontconfig1-dev \
-					libglu1-mesa-dev libgl1-mesa-dev \
-					libxrandr-dev \
-					freeglut3-dev libxmu-dev libxxf86vm-dev libudev-dev \
-					libxcursor-dev libxi-dev libxinerama-dev \
-					libunwind-dev \
-					libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
-					gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa \
-					gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav \
+				# Check which packages are missing before installing
+				UBUNTU_PACKAGES=(
+					ninja-build wget2
+					libfontconfig1-dev
+					libglu1-mesa-dev libgl1-mesa-dev
+					libxrandr-dev
+					freeglut3-dev libxmu-dev libxxf86vm-dev libudev-dev
+					libxcursor-dev libxi-dev libxinerama-dev
+					libunwind-dev
+					libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+					gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa
+					gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav
 					libopenal-dev libsndfile1-dev
-					# make \
-					# libssl3 libcairo2-dev libssl-dev libcurl4 libcurl4-openssl-dev \
-					# libasound2-dev   \
-					#
+				)
+
+				MISSING_PACKAGES=()
+				for pkg in "${UBUNTU_PACKAGES[@]}"; do
+					if ! dpkg -l "$pkg" 2>/dev/null | grep -q "^ii"; then
+						MISSING_PACKAGES+=("$pkg")
+					fi
+				done
+
+				if [[ ${#MISSING_PACKAGES[@]} -gt 0 ]]; then
+					section "Installing missing packages: ${MISSING_PACKAGES[*]}"
+					${SUDO_CMD} apt-get update
+					${SUDO_CMD} apt-get -y install "${MISSING_PACKAGES[@]}"
+				else
+					sectionOk "All system dependencies already installed"
+				fi
 			fi
 
 			# Check if chalet is installed and if version matches
