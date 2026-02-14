@@ -1,7 +1,8 @@
 #pragma once
 
 #include <iostream> // cout
-static std::string version = "v0.9.7";
+//static std::string version = "v0.9.7";
+static std::string version = OFGEN_VERSION;
 
 #include <filesystem>
 #include <vector>

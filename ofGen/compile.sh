@@ -51,6 +51,19 @@ if [[ ! -d "../libs/${PLATFORM}" ]]; then
 	exit 1
 fi
 
+# Version check to skip unnecessary rebuilds
+ofgen_latest_version=$(grep '^version:' chalet.yaml | awk '{print $2}')
+ofgen_installed_version=$(ofgen --version 2>/dev/null | tr -d '[:space:]')
+
+if [ "$ofgen_installed_version" == "$ofgen_latest_version" ]; then
+	section "ofgen $ofgen_latest_version is already up to date, skipping build"
+	exit 0
+elif [ -z "$ofgen_installed_version" ]; then
+	section "Installing ofgen $ofgen_latest_version..."
+else
+	section "Recompiling ofgen ($ofgen_installed_version -> $ofgen_latest_version)..."
+fi
+
 section "Compiling ofgen"
 
 # Determine if we need sudo

@@ -66,8 +66,14 @@ int main(const int argc, const char * argv[]) {
 
 	conf.parseParameters(argc, argv);
 
-	// Pure Yaml output goes here, before the header SIGN
-	if (conf.singleParameter == "yaml-addons-ls") {
+	if (conf.singleParameter == "--version") {
+		// conf.version();
+		// cout << getVersion() << endl;
+		cout << version << endl;
+		std::exit(0);
+	}
+	else if (conf.singleParameter == "yaml-addons-ls") {
+		// Pure Yaml output goes here, before the header SIGN
 		conf.listAddonsAsYaml();
 		std::exit(0);
 	}
@@ -82,6 +88,7 @@ int main(const int argc, const char * argv[]) {
 		build = false;
 
 		// First parameters without bulding project.
+
 		if (conf.singleParameter == "colors") {
 			testColors();
 		} else if (conf.singleParameter == "import") {
