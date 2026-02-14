@@ -500,13 +500,30 @@ done
 unzipCore() {
 
 	section "Uncompress ofWorks Core Libs"
+
+	# Create licenses folder (use _licenses to avoid case conflicts on macOS)
+	mkdir -p "${LIBS_FOLDER}/_licenses"
+
 	for LIBNAME in "${CORELIBS[@]}"; do
 		filename="${DOWNLOAD}/ofLibs_${LIBNAME}_${PLATFORM}.zip"
 		executa unzip -qq -o "${filename}" -d "${LIBS_FOLDER}"
-	done
 
-	rm -rf "${LIBS_FOLDER}"/*.{txt,md,MIT}
-	rm -rf "${LIBS_FOLDER}"/{LICENSE,COPYING,LICENSES}
+		# Move license files to _licenses folder with library name prepended
+		for file in "${LIBS_FOLDER}"/*.{txt,md,MIT} "${LIBS_FOLDER}"/LICENSE "${LIBS_FOLDER}"/LICENSES "${LIBS_FOLDER}"/COPYING "${LIBS_FOLDER}"/COPYING.*; do
+			if [[ -f "$file" ]]; then
+				basename=$(basename "$file")
+				mv "$file" "${LIBS_FOLDER}/_licenses/${LIBNAME}_${basename}"
+			fi
+		done
+		# Also handle LICENSES directory if it exists
+		if [[ -d "${LIBS_FOLDER}/LICENSES" ]]; then
+			mv "${LIBS_FOLDER}/LICENSES" "${LIBS_FOLDER}/_licenses/${LIBNAME}_LICENSES"
+		fi
+
+			# rm -rf "${LIBS_FOLDER}"/*.{txt,md,MIT}
+			# rm -rf "${LIBS_FOLDER}"/{LICENSE,COPYING,LICENSES}
+			# rm -rf "${LIBS_FOLDER}"/COPYING.*
+	done
 }
 
 unzipAddons() {
