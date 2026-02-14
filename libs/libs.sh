@@ -208,7 +208,14 @@ case "$PLATFORM" in
 					mkdir -p "$CHALET_DIR"
 
 					curl -L -o "$CHALET_DIR/chalet.zip" \
-						"https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet-x86_64-windows-gnu.zip"
+						"https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet-x86_64-pc-windows-msvc.zip"
+
+					# Verify it's a valid zip before extracting
+					if ! unzip -t "$CHALET_DIR/chalet.zip" > /dev/null 2>&1; then
+						echo "Error: Downloaded file is not a valid zip. Cleaning up..."
+						rm -rf "$CHALET_DIR"
+						exit 1
+					fi
 
 					unzip -o "$CHALET_DIR/chalet.zip" -d "$CHALET_DIR"
 					rm -f "$CHALET_DIR/chalet.zip"
