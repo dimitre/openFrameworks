@@ -49,6 +49,7 @@ void genConfig::import() {
 	} else {
 		if (!isValidProjectLocation()) {
 			alert("⚠️  not a valid ofWorks project folder. exiting", 91);
+			alert(fs::current_path().string(), 91);
 			// alert("⚠️  Not an ofWorks project folder, no action taken", 94);
 
 		} else {
@@ -223,6 +224,7 @@ bool genConfig::buildProject() {
 
 		// MV desc to inside isValidProjectLocation check
 		alert("⚠️  not a valid ofWorks project folder, no action taken", 91);
+		alert(fs::current_path().string(), 91);
 		alert("no src folder found, no of.yml file or addons.make found and no OF installed in default path ../../..");
 		alert("use ```ofgen help``` to see more options");
 
