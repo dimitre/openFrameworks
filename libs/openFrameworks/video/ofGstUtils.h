@@ -170,11 +170,11 @@ public:
 	bool 			isFrameNew() const override;
 	ofPixels &		getPixels() override;
 	const ofPixels &	getPixels() const override;
-	ofTexture * 	getTexture() override;
+	ofTexture * 	getTexture();
 	void 			update() override;
 
-	float 			getHeight() const override;
-	float 			getWidth() const override;
+	float 			getHeight() const;
+	float 			getWidth() const;
 
 	void 			close() override;
 
