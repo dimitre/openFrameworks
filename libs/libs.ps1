@@ -4,3 +4,6 @@ if (!(Test-Path $bash)) {
 }
 # $PSScriptRoot = folder that contains this .ps1
 & $bash "$PSScriptRoot\libs.sh" @args
+
+# Refresh PATH from registry so chalet is available in current session
+$env:Path = [Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [Environment]::GetEnvironmentVariable("Path", "User")

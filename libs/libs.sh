@@ -246,17 +246,27 @@ case "$PLATFORM" in
 				CHALET_DIR_ABS="$(cd "$CHALET_DIR" && pwd)"
 				[[ ":$PATH:" != *":$CHALET_DIR_ABS:"* ]] && export PATH="$CHALET_DIR_ABS:$PATH"
 
-				# Add to Windows user PATH permanently using PowerShell
+				# Add to Windows SYSTEM PATH permanently using PowerShell (requires admin)
 				CHALET_DIR_WIN=$(cygpath -w "$CHALET_DIR_ABS")
+				section "Adding chalet to Windows PATH: $CHALET_DIR_WIN"
 				powershell.exe -Command "
+					\$currentPath = [Environment]::GetEnvironmentVariable('Path', 'Machine')
+					if (\$currentPath -notlike '*$CHALET_DIR_WIN*') {
+						[Environment]::SetEnvironmentVariable('Path', \$currentPath + ';$CHALET_DIR_WIN', 'Machine')
+						Write-Host 'Chalet added to system PATH'
+					} else {
+						Write-Host 'Chalet already in system PATH'
+					}
+				" 2>/dev/null || powershell.exe -Command "
 					\$currentPath = [Environment]::GetEnvironmentVariable('Path', 'User')
 					if (\$currentPath -notlike '*$CHALET_DIR_WIN*') {
 						[Environment]::SetEnvironmentVariable('Path', \$currentPath + ';$CHALET_DIR_WIN', 'User')
-						Write-Host 'Chalet added to user PATH'
+						Write-Host 'Chalet added to user PATH (no admin rights)'
 					} else {
 						Write-Host 'Chalet already in user PATH'
 					}
 				"
+				alert "NOTE: You may need to restart your terminal for chalet to be available in new sessions"
 				# ------------------------------------------
 			fi
 
