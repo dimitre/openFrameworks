@@ -25,10 +25,10 @@ typedef ofPixels_<unsigned char> ofPixels;
 
 [[deprecated("In This Branch ~ use ofWindowSettings instead")]] typedef ofWindowSettings ofRGFWWindowSettings;
 
-class ofAppRGFWWindow : public ofAppBaseWindow {
+class ofAppRGFWWindow final : public ofAppBaseWindow {
 public:
 	ofAppRGFWWindow();
-	~ofAppRGFWWindow();
+	~ofAppRGFWWindow() override;
 
 	//	ofWindowMode getWindowMode() { return settings.windowMode; }
 
@@ -45,60 +45,60 @@ public:
 	// this functions are only meant to be called from inside OF don't call them from your code
 	//	using ofAppBaseWindow::setup;
 
-	void setup(const ofWindowSettings & settings) override;
-	void update() override;
-	void draw() override;
-	bool getWindowShouldClose() override;
-	void setWindowShouldClose() override;
+	void setup(const ofWindowSettings & settings) override final;
+	void update() override final;
+	void draw() override final;
+	bool getWindowShouldClose() override final;
+	void setWindowShouldClose() override final;
 
-	void hideCursor() override;
-	void showCursor() override;
+	void hideCursor() override final;
+	void showCursor() override final;
 
-	int getHeight() override;
-	int getWidth() override;
+	int getHeight() override final;
+	int getWidth() override final;
 
-	ofCoreEvents & events() override;
+	ofCoreEvents & events() override final;
 //	std::shared_ptr<ofBaseRenderer> & renderer() override;
 
 	RGFW_window * getRGFWWindow();
-	void * getWindowContext() override { return getRGFWWindow(); }
+	void * getWindowContext() override final { return getRGFWWindow(); }
 	ofWindowSettings getSettings() { return settings; }
 
-	glm::ivec2 getScreenSize() override;
+	glm::ivec2 getScreenSize() override final;
 
-	ofRectangle getWindowRect() override;
-	glm::ivec2 getWindowPosition() override;
-	glm::ivec2 getWindowSize() override;
+	ofRectangle getWindowRect() override final;
+	glm::ivec2 getWindowPosition() override final;
+	glm::ivec2 getWindowSize() override final;
 
-	glm::ivec2 getFramebufferSize() override;
+	glm::ivec2 getFramebufferSize() override final;
 
-	void setWindowTitle(const std::string & title) override;
+	void setWindowTitle(const std::string & title) override final;
 
-	void setWindowRect(const ofRectangle & rect) override;
-	void setWindowPosition(int x, int y) override;
-	void setWindowShape(int w, int h) override;
+	void setWindowRect(const ofRectangle & rect) override final;
+	void setWindowPosition(int x, int y) override final;
+	void setWindowShape(int w, int h) override final;
 
-	void setFullscreen(bool fullscreen) override;
-	void toggleFullscreen() override;
+	void setFullscreen(bool fullscreen) override final;
+	void toggleFullscreen() override final;
 
 	// MARK: WOW not override
 	void setWindowMousePassThrough(bool allowPassThrough);
 
-	void enableSetupScreen() override;
-	void disableSetupScreen() override;
+	void enableSetupScreen() override final;
+	void disableSetupScreen() override final;
 
-	void setVerticalSync(bool bSync) override;
+	void setVerticalSync(bool bSync) override final;
 
-	void setClipboardString(const std::string & text) override;
-	std::string getClipboardString() override;
+	void setClipboardString(const std::string & text) override final;
+	std::string getClipboardString() override final;
 
 	// MARK: WOW not override
 	int getPixelScreenCoordScale();
 
-	void makeCurrent() override;
-	void swapBuffers() override;
-	void startRender() override;
-	void finishRender() override;
+	void makeCurrent() override final;
+	void swapBuffers() override final;
+	void startRender() override final;
+	void finishRender() override final;
 
 	static void listVideoModes();
 	static void listMonitors();
@@ -111,8 +111,8 @@ public:
 	typedef struct _XIM * XIM;
 	typedef struct _XIC * XIC;
 
-	Display * getX11Display();
-	Window getX11Window();
+	Display * getX11Display() override;
+	Window getX11Window() override;
 	XIC getX11XIC();
 	#endif
 
@@ -120,23 +120,23 @@ public:
 	void setWindowIcon(const ofPixels & iconPixels);
 
 	#if defined(TARGET_LINUX) && !defined(TARGET_OPENGLES)
-	GLXContext getGLXContext();
+	GLXContext getGLXContext() override;
 	#endif
 
 	#if defined(TARGET_LINUX) && defined(TARGET_OPENGLES)
-	EGLDisplay getEGLDisplay();
-	EGLContext getEGLContext();
-	EGLSurface getEGLSurface();
+	EGLDisplay getEGLDisplay() override;
+	EGLContext getEGLContext() override;
+	EGLSurface getEGLSurface() override;
 	#endif
 
 	#if defined(TARGET_OSX)
-	void * getNSGLContext() override;
-	void * getCocoaWindow() override;
+	void * getNSGLContext() override final;
+	void * getCocoaWindow() override final;
 	#endif
 
 	#if defined(TARGET_WIN32)
-	HGLRC getWGLContext();
-	HWND getWin32Window();
+	HGLRC getWGLContext() override;
+	HWND getWin32Window() override;
 	#endif
 	void setPixelRatio(float ratio);
 private:
@@ -157,7 +157,7 @@ private:
 	static void char_cb(RGFW_window * windowP_, uint32_t key);
 	static void scroll_cb(RGFW_window * windowP_, double x, double y);
 	static void framebuffer_size_cb(RGFW_window * windowP_, int w, int h);
-	void close() override;
+	void close() override final;
 
 	#if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI_LEGACY)
 	XIM xim;
@@ -186,8 +186,8 @@ private:
 
 	bool iconSet;
 
-	void beginDraw() override;
-	void endDraw() override;
+	void beginDraw() override final;
+	void endDraw() override final;
 
 	//	static ofAppRGFWWindow * thisWindow = static_cast<ofAppRGFWWindow *>(this);
 

@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 
-class ofApp : public ofBaseApp {
+class ofApp final : public ofBaseApp {
 public:
 	void setup() override;
 	void update() override;

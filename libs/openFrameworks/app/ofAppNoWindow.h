@@ -6,11 +6,11 @@
 class ofBaseApp;
 class ofBaseRenderer;
 
-class ofAppNoWindow : public ofAppBaseWindow {
+class ofAppNoWindow final : public ofAppBaseWindow {
 
 public:
 	ofAppNoWindow();
-	~ofAppNoWindow(){}
+	~ofAppNoWindow() override {}
 
 	static bool doesLoop(){ return false; }
 	static bool allowsMultiWindow(){ return false; }
@@ -21,19 +21,19 @@ public:
 	void run(ofBaseApp * appPtr);
 
 	static void exitApp();
-	void setup(const ofWindowSettings & settings);
-	void update();
-	void draw();
+	void setup(const ofWindowSettings & settings) override;
+	void update() override;
+	void draw() override;
 
-	glm::ivec2 getWindowPosition();
-	glm::ivec2 getWindowSize();
-	glm::ivec2 getScreenSize();
+	glm::ivec2 getWindowPosition() override;
+	glm::ivec2 getWindowSize() override;
+	glm::ivec2 getScreenSize() override;
 
-	int			getWidth();
-	int			getHeight();
+	int			getWidth() override;
+	int			getHeight() override;
 
-	ofCoreEvents & events();
-	std::shared_ptr<ofBaseRenderer> & renderer();
+	ofCoreEvents & events() override;
+	std::shared_ptr<ofBaseRenderer> & renderer() override;
 
 private:
 	int width, height;

@@ -35,7 +35,7 @@ typedef void *EGLContext;
 typedef std::map<EGLint,EGLint> ofEGLAttributeList;
 typedef std::map<EGLint,EGLint>::iterator ofEGLAttributeListIterator;
 
-struct ofAppEGLWindowSettings: public ofGLESWindowSettings {
+struct ofAppEGLWindowSettings final : public ofGLESWindowSettings {
 public:
 	ofAppEGLWindowType eglWindowPreference; ///< what window type is preferred?
 	EGLint eglWindowOpacity; ///< 0-255 window alpha value
@@ -53,7 +53,7 @@ public:
 	ofAppEGLWindowSettings(const ofGLESWindowSettings & settings);
 };
 
-class ofAppEGLWindow : public ofAppBaseWindow, public ofThread {
+class ofAppEGLWindow final : public ofAppBaseWindow, public ofThread {
 public:
 
 	/// ofAppEGLWindow::Settings is currently deprecated in favor of
@@ -61,7 +61,7 @@ public:
 	typedef ofAppEGLWindowSettings Settings;
 
 	ofAppEGLWindow();
-	~ofAppEGLWindow();
+	~ofAppEGLWindow() override;
 
 	static void loop(){};
 	static bool doesLoop(){ return false; }
@@ -73,53 +73,53 @@ public:
 	void setup(const ofAppEGLWindowSettings & settings);
 	void setup(const ofGLESWindowSettings & settings);
 
-	void update();
-	void draw();
-	void close();
-	void makeCurrent();
-	void swapBuffers();
-	void startRender();
-	void finishRender();
+	void update() override;
+	void draw() override;
+	void close() override;
+	void makeCurrent() override;
+	void swapBuffers() override;
+	void startRender() override;
+	void finishRender() override;
 
-	ofCoreEvents & events();
-	std::shared_ptr<ofBaseRenderer> & renderer();
+	ofCoreEvents & events() override;
+	std::shared_ptr<ofBaseRenderer> & renderer() override;
 
 	void setThreadTimeout(long timeOut){ threadTimeout = timeOut; }
 
-	void hideCursor();
-	void showCursor();
+	void hideCursor() override;
+	void showCursor() override;
 
-	void setWindowPosition(int x, int y);
-	void setWindowShape(int w, int h);
-	void setWindowRect(const ofRectangle & rect);
+	void setWindowPosition(int x, int y) override;
+	void setWindowShape(int w, int h) override;
+	void setWindowRect(const ofRectangle & rect) override;
 
-	glm::ivec2 getWindowPosition();
-	glm::ivec2 getWindowSize();
-	glm::ivec2 getScreenSize();
+	glm::ivec2 getWindowPosition() override;
+	glm::ivec2 getWindowSize() override;
+	glm::ivec2 getScreenSize() override;
 
-	bool doesHWOrientation();
+	bool doesHWOrientation() override;
 
 	//this is used by ofGetWidth and now determines the window width based on orientation
-	int getWidth();
-	int getHeight();
+	int getWidth() override;
+	int getHeight() override;
 
-	void setWindowTitle(const std::string & title); // TODO const correct
+	void setWindowTitle(const std::string & title) override; // TODO const correct
 
-	void setFullscreen(bool fullscreen);
-	void toggleFullscreen();
+	void setFullscreen(bool fullscreen) override;
+	void toggleFullscreen() override;
 
-	void enableSetupScreen();
-	void disableSetupScreen();
+	void enableSetupScreen() override;
+	void disableSetupScreen() override;
 
-	void setVerticalSync(bool enabled);
+	void setVerticalSync(bool enabled) override;
 
-	EGLDisplay getEglDisplay() const;
-	EGLSurface getEglSurface() const;
-	EGLContext getEglContext() const;
+	EGLDisplay getEglDisplay() const override;
+	EGLSurface getEglSurface() const override;
+	EGLContext getEglContext() const override;
 
 #ifndef TARGET_RASPBERRY_PI_LEGACY
-	Display* getX11Display();
-	Window getX11Window();
+	Display* getX11Display() override;
+	Window getX11Window() override;
 #endif
 
 	EGLConfig getEglConfig() const;
@@ -150,7 +150,7 @@ protected:
 	int nFramesSinceWindowResized;  ///< \brief The number of frames passed/shown since the window got resized.
 
 
-	void threadedFunction();
+	void threadedFunction() override;
 	std::queue<ofMouseEventArgs> mouseEvents;
 	std::queue<ofKeyEventArgs>   keyEvents;
 	std::queue<ofTouchEventArgs> touchEvents;

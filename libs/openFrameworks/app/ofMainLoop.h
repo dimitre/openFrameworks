@@ -7,10 +7,10 @@ class ofBaseApp;
 class ofAppBaseWindow;
 class ofWindowSettings;
 
-class ofMainLoop : public std::enable_shared_from_this<ofMainLoop> {
+class ofMainLoop final : public std::enable_shared_from_this<ofMainLoop> {
 public:
 	ofMainLoop();
-	virtual ~ofMainLoop();
+	~ofMainLoop();
 
 	std::shared_ptr<ofAppBaseWindow> createWindow(const ofWindowSettings & settings);
 
