@@ -54,12 +54,12 @@ public:
 	static bool CloseMediaFoundation();
 	static int GetNumInstances();
 
-	class AsyncCallback : public IMFAsyncCallback {
+	class AsyncCallback final : public IMFAsyncCallback {
 	public:
 		AsyncCallback(std::function<void()> aCallBack) {
 			mCallBack = aCallBack;
 		}
-		virtual ~AsyncCallback() = default;
+		~AsyncCallback() = default;
 
 		IFACEMETHODIMP GetParameters(_Out_ DWORD* flags, _Out_ DWORD* queue) {
 			*flags = 0;// MFASYNC_BLOCKING_CALLBACK;
@@ -108,7 +108,7 @@ protected:
 	static int sNumMFInstances;
 };
 
-class ofMediaFoundationSoundPlayer : public ofBaseSoundPlayer, public of::MFSourceReaderNotifyCallback {
+class ofMediaFoundationSoundPlayer final : public ofBaseSoundPlayer, public of::MFSourceReaderNotifyCallback {
 public:
 
 	static void SetMasterVolume(float apct);
@@ -227,7 +227,7 @@ protected:
 
 
 	// https://github.com/walbourn/directx-sdk-samples/blob/main/XAudio2/XAudio2MFStream/XAudio2MFStream.cpp
-	struct StreamingVoiceContext : public IXAudio2VoiceCallback {
+	struct StreamingVoiceContext final : public IXAudio2VoiceCallback {
 		STDMETHOD_(void, OnVoiceProcessingPassStart)(UINT32) override {}
 		STDMETHOD_(void, OnVoiceProcessingPassEnd)() override {}
 		STDMETHOD_(void, OnStreamEnd)() override {}
@@ -245,7 +245,7 @@ protected:
 			hBufferEndEvent(CreateEvent(nullptr, FALSE, FALSE, nullptr))
 #endif
 		{}
-		virtual ~StreamingVoiceContext() {
+		~StreamingVoiceContext() {
 			CloseHandle(hBufferEndEvent);
 		}
 	};
@@ -256,7 +256,7 @@ protected:
 
 	CRITICAL_SECTION m_critSec;
 
-	class SourceReaderCallback : public IMFSourceReaderCallback {
+	class SourceReaderCallback final : public IMFSourceReaderCallback {
 	public:
 		STDMETHOD(QueryInterface) (REFIID iid, _COM_Outptr_ void** ppv) override {
 			if (!ppv)
@@ -292,7 +292,7 @@ protected:
 		HRESULT             status;
 		of::MFSourceReaderNotifyCallback* mCB = nullptr;
 		SourceReaderCallback() : status(S_OK) {}
-		virtual ~SourceReaderCallback() {}
+		~SourceReaderCallback() {}
 
 	};
 

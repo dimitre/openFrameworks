@@ -13,29 +13,29 @@ namespace audio {
 }
 }
 
-class ofRtAudioSoundStream : public ofBaseSoundStream {
+class ofRtAudioSoundStream final : public ofBaseSoundStream {
 public:
 	ofRtAudioSoundStream();
 	~ofRtAudioSoundStream();
 
-	std::vector<ofSoundDevice> getDeviceList(ofSoundDevice::Api api) const;
+	std::vector<ofSoundDevice> getDeviceList(ofSoundDevice::Api api) const override;
 
-	void setInput(ofBaseSoundInput * soundInput);
-	void setOutput(ofBaseSoundOutput * soundOutput);
-	bool setup(const ofSoundStreamSettings & settings);
+	void setInput(ofBaseSoundInput * soundInput) override;
+	void setOutput(ofBaseSoundOutput * soundOutput) override;
+	bool setup(const ofSoundStreamSettings & settings) override;
 
-	void start();
-	void stop();
-	void close();
+	void start() override;
+	void stop() override;
+	void close() override;
 
-	uint64_t getTickCount() const;
+	uint64_t getTickCount() const override;
 
-	int getNumInputChannels() const;
-	int getNumOutputChannels() const;
-	int getSampleRate() const;
-	int getBufferSize() const;
-	ofSoundDevice getInDevice() const;
-	ofSoundDevice getOutDevice() const;
+	int getNumInputChannels() const override;
+	int getNumOutputChannels() const override;
+	int getSampleRate() const override;
+	int getBufferSize() const override;
+	ofSoundDevice getInDevice() const override;
+	ofSoundDevice getOutDevice() const override;
 
 
 private:

@@ -63,37 +63,37 @@ class ofAVFoundationGrabber;
 #endif
 
 
-class ofAVFoundationGrabber : virtual public ofBaseVideoGrabber{
+class ofAVFoundationGrabber final : virtual public ofBaseVideoGrabber{
 
 	public:
 		ofAVFoundationGrabber();
 		~ofAVFoundationGrabber();
 
-	void getDevicesInfo() const;
-		void setDeviceID(int deviceID);
-		void setDesiredFrameRate(int capRate);
-		bool setPixelFormat(ofPixelFormat PixelFormat);
+	void getDevicesInfo() const override;
+		void setDeviceID(int deviceID) override;
+		void setDesiredFrameRate(int capRate) override;
+		bool setPixelFormat(ofPixelFormat PixelFormat) override;
 
-        bool setup(int w, int h);
-		void update();
-		bool isFrameNew() const;
-		void close();
+        bool setup(int w, int h) override;
+		void update() override;
+		bool isFrameNew() const override;
+		void close() override;
 
-		ofPixels&		 		getPixels();
-        const ofPixels&		    getPixels() const;
+		ofPixels&		 		getPixels() override;
+        const ofPixels&		    getPixels() const override;
 
-		float getWidth() const{
+		float getWidth() const override{
 			return width;
 		}
-		float getHeight() const{
+		float getHeight() const override{
 			return height;
 		}
 
-        bool isInitialized() const;
+        bool isInitialized() const override;
 
 		void updatePixelsCB();
-		std::vector <ofVideoDevice> listDevices() const;
-		ofPixelFormat getPixelFormat() const;
+		std::vector <ofVideoDevice> listDevices() const override;
+		ofPixelFormat getPixelFormat() const override;
 
 	protected:
 		bool newFrame = false;

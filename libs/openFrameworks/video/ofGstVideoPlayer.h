@@ -3,58 +3,58 @@
 #include "ofGstUtils.h"
 
 
-class ofGstVideoPlayer: public ofBaseVideoPlayer, public ofGstAppSink{
+class ofGstVideoPlayer final: public ofBaseVideoPlayer, public ofGstAppSink{
 public:
 
 	ofGstVideoPlayer();
 	~ofGstVideoPlayer();
 
 	/// needs to be called before loadMovie
-	bool 	setPixelFormat(ofPixelFormat pixelFormat);
-	ofPixelFormat	getPixelFormat() const;
+	bool 	setPixelFormat(ofPixelFormat pixelFormat) override;
+	ofPixelFormat	getPixelFormat() const override;
 
 	void loadAsync(const fs::path & fileName) override;
 	bool load(const fs::path & fileName) override;
 
-	void 	update();
+	void 	update() override;
 
-	int		getCurrentFrame() const;
-	int		getTotalNumFrames() const;
+	int		getCurrentFrame() const override;
+	int		getTotalNumFrames() const override;
 
-	void 	firstFrame();
-	void 	nextFrame();
-	void 	previousFrame();
-	void 	setFrame(int frame);  // frame 0 = first frame...
+	void 	firstFrame() override;
+	void 	nextFrame() override;
+	void 	previousFrame() override;
+	void 	setFrame(int frame) override;  // frame 0 = first frame...
 
 	bool	isStream() const;
 
-	void 	play();
-	void 	stop();
-	void 	setPaused(bool bPause);
-	bool 	isPaused() const;
-	bool 	isLoaded() const;
-	bool 	isPlaying() const;
+	void 	play() override;
+	void 	stop() override;
+	void 	setPaused(bool bPause) override;
+	bool 	isPaused() const override;
+	bool 	isLoaded() const override;
+	bool 	isPlaying() const override;
 
-	float	getPosition() const;
-	float 	getSpeed() const;
-	float 	getDuration() const;
-	bool  	getIsMovieDone() const;
+	float	getPosition() const override;
+	float 	getSpeed() const override;
+	float 	getDuration() const override;
+	bool  	getIsMovieDone() const override;
 
-	void 	setPosition(float pct);
-	void 	setVolume(float volume);
-	void 	setLoopState(ofLoopType state);
-	ofLoopType 	getLoopState() const;
-	void 	setSpeed(float speed);
-	void 	close();
+	void 	setPosition(float pct) override;
+	void 	setVolume(float volume) override;
+	void 	setLoopState(ofLoopType state) override;
+	ofLoopType 	getLoopState() const override;
+	void 	setSpeed(float speed) override;
+	void 	close() override;
 
-	bool 			isFrameNew() const;
+	bool 			isFrameNew() const override;
 
-	ofPixels&		getPixels();
-	const ofPixels& getPixels() const;
-	ofTexture * getTexturePtr();
+	ofPixels&		getPixels() override;
+	const ofPixels& getPixels() const override;
+	ofTexture * getTexturePtr() override;
 
-	float 			getHeight() const;
-	float 			getWidth() const;
+	float 			getHeight() const override;
+	float 			getWidth() const override;
 
 	void setFrameByFrame(bool frameByFrame);
 	void setThreadAppSink(bool threaded);
@@ -69,7 +69,7 @@ protected:
 	void on_stream_prepared();
 
 	// return true to set the message as attended so upstream doesn't try to process it
-	virtual bool on_message(GstMessage* msg){return false;};
+	bool on_message(GstMessage* msg) override {return false;}
 
 private:
 	ofPixelFormat		internalPixelFormat;

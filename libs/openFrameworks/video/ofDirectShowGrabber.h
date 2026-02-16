@@ -12,36 +12,36 @@
 	#include <videoInput.h>
 // #endif
 
-class ofDirectShowGrabber : public ofBaseVideoGrabber{
+class ofDirectShowGrabber final : public ofBaseVideoGrabber{
 
 	public :
 
 		ofDirectShowGrabber();
-		virtual ~ofDirectShowGrabber();
+		~ofDirectShowGrabber();
 
-		std::vector<ofVideoDevice>	listDevices() const;
-		bool					setup(int w, int h);
-		void					update();
-		bool					isFrameNew() const;
-		bool					isInitialized() const;
+		std::vector<ofVideoDevice>	listDevices() const override;
+		bool					setup(int w, int h) override;
+		void					update() override;
+		bool					isFrameNew() const override;
+		bool					isInitialized() const override;
 
-		bool					setPixelFormat(ofPixelFormat pixelFormat);
-		ofPixelFormat			getPixelFormat() const;
+		bool					setPixelFormat(ofPixelFormat pixelFormat) override;
+		ofPixelFormat			getPixelFormat() const override;
 
-		ofPixels &				getPixels();
-		const ofPixels &		getPixels() const;
+		ofPixels &				getPixels() override;
+		const ofPixels &		getPixels() const override;
 
-		void					close();
+		void					close() override;
 		void					clearMemory();
 
-		void					videoSettings();
+		void					videoSettings() override;
 
-		float					getWidth() const;
-		float					getHeight() const;
+		float					getWidth() const override;
+		float					getHeight() const override;
 
-		void					setVerbose(bool bTalkToMe);
-		void					setDeviceID(int _deviceID);
-		void					setDesiredFrameRate(int framerate);
+		void					setVerbose(bool bTalkToMe) override;
+		void					setDeviceID(int _deviceID) override;
+		void					setDesiredFrameRate(int framerate) override;
 
 
 

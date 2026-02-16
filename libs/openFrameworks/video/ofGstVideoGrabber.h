@@ -31,35 +31,35 @@ struct ofGstCamData{
   bool bInited;
 };
 
-class ofGstVideoGrabber: public ofBaseVideoGrabber{
+class ofGstVideoGrabber final: public ofBaseVideoGrabber{
 public:
 	ofGstVideoGrabber();
 	~ofGstVideoGrabber();
 
 	/// needs to be called before initGrabber
-	bool setPixelFormat(ofPixelFormat pixelFormat);
-	ofPixelFormat	getPixelFormat() const;
+	bool setPixelFormat(ofPixelFormat pixelFormat) override;
+	ofPixelFormat	getPixelFormat() const override;
 	
-	void videoSettings(){};//TODO: what is this??
+	void videoSettings() override {};//TODO: what is this??
 
-	std::vector<ofVideoDevice> listDevices() const;
-	void setDeviceID(int id);
-	void setDesiredFrameRate(int framerate);
-	bool setup(int w, int h);
+	std::vector<ofVideoDevice> listDevices() const override;
+	void setDeviceID(int id) override;
+	void setDesiredFrameRate(int framerate) override;
+	bool setup(int w, int h) override;
 
-	void 			update();
-	bool 			isFrameNew() const;
+	void 			update() override;
+	bool 			isFrameNew() const override;
 
-	ofPixels&		getPixels();
-	const ofPixels &		getPixels() const;
-	ofTexture * getTexturePtr();
+	ofPixels&		getPixels() override;
+	const ofPixels &		getPixels() const override;
+	ofTexture * getTexturePtr() override;
 
-	float 			getHeight() const;
-	float 			getWidth() const;
-	void 			close();
+	float 			getHeight() const override;
+	float 			getWidth() const override;
+	void 			close() override;
 
-	void			setVerbose(bool bVerbose);
-	bool			isInitialized() const;
+	void			setVerbose(bool bVerbose) override;
+	bool			isInitialized() const override;
 
 	ofGstVideoUtils *	getGstVideoUtils();
 private:

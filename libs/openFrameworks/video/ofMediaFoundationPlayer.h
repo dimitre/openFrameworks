@@ -49,12 +49,12 @@ namespace of {
     };
 }
 
-class ofMediaFoundationPlayer : public ofBaseVideoPlayer, public of::MediaEngineNotifyCallback {
+class ofMediaFoundationPlayer final : public ofBaseVideoPlayer, public of::MediaEngineNotifyCallback {
 protected:
     friend class ofMediaFoundationSoundPlayer;
 
     // MediaEngineNotify: Implements the callback for Media Engine event notification.
-    class ofMEEventProcessor : public IMFMediaEngineNotify {
+    class ofMEEventProcessor final : public IMFMediaEngineNotify {
     public:
 
         STDMETHODIMP QueryInterface(REFIID riid, void** ppv) {
@@ -117,7 +117,7 @@ public:
     float               getWidth() const override;
     float               getHeight() const override;
 
-    ofTexture*          getTexturePtr();
+    ofTexture*          getTexturePtr() override;
 
     bool                isPaused() const override;
 
@@ -162,7 +162,7 @@ protected:
     bool _load(const fs::path & fileName, bool abAsync);
     void OnMediaEngineEvent(DWORD aEvent, DWORD_PTR param1, DWORD param2) override;
 
-    class MEDXDeviceManager {
+    class MEDXDeviceManager final {
     public:
         MEDXDeviceManager();
         ~MEDXDeviceManager();

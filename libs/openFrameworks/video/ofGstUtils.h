@@ -154,29 +154,29 @@ private:
 //----------------------------------------- videoUtils
 //-------------------------------------------------
 
-class ofGstVideoUtils: public ofBaseVideo, public ofGstUtils{
+class ofGstVideoUtils final: public ofBaseVideo, public ofGstUtils{
 public:
 
 	ofGstVideoUtils();
-	virtual ~ofGstVideoUtils();
+	~ofGstVideoUtils();
 
 	bool 			setPipeline(std::string pipeline, ofPixelFormat pixelFormat=OF_PIXELS_RGB, bool isStream=false, int w=-1, int h=-1);
 
-	bool 			setPixelFormat(ofPixelFormat pixelFormat);
-	ofPixelFormat 	getPixelFormat() const;
+	bool 			setPixelFormat(ofPixelFormat pixelFormat) override;
+	ofPixelFormat 	getPixelFormat() const override;
 	bool 			allocate(int w, int h, ofPixelFormat pixelFormat);
 	void 			reallocateOnNextFrame();
 
-	bool 			isFrameNew() const;
-	ofPixels &		getPixels();
-	const ofPixels &	getPixels() const;
-	ofTexture * 	getTexture();
-	void 			update();
+	bool 			isFrameNew() const override;
+	ofPixels &		getPixels() override;
+	const ofPixels &	getPixels() const override;
+	ofTexture * 	getTexture() override;
+	void 			update() override;
 
-	float 			getHeight() const;
-	float 			getWidth() const;
+	float 			getHeight() const override;
+	float 			getWidth() const override;
 
-	void 			close();
+	void 			close() override;
 
 #if GST_VERSION_MAJOR>0
 	static std::string			getGstFormatName(ofPixelFormat format);
@@ -184,7 +184,7 @@ public:
 	static ofPixelFormat	getOFFormat(GstVideoFormat format);
 #endif
 
-	bool			isInitialized() const;
+	bool			isInitialized() const override;
 	
 	// copy pixels from gst buffer to avoid
 	// https://bugzilla.gnome.org/show_bug.cgi?id=737427
@@ -199,14 +199,14 @@ public:
 protected:
 #if GST_VERSION_MAJOR==0
 	GstFlowReturn process_buffer(std::shared_ptr<GstBuffer> buffer);
-	GstFlowReturn preroll_cb(std::shared_ptr<GstBuffer> buffer);
-	GstFlowReturn buffer_cb(std::shared_ptr<GstBuffer> buffer);
+	GstFlowReturn preroll_cb(std::shared_ptr<GstBuffer> buffer) override;
+	GstFlowReturn buffer_cb(std::shared_ptr<GstBuffer> buffer) override;
 #else
 	GstFlowReturn process_sample(std::shared_ptr<GstSample> sample);
-	GstFlowReturn preroll_cb(std::shared_ptr<GstSample> buffer);
-	GstFlowReturn buffer_cb(std::shared_ptr<GstSample> buffer);
+	GstFlowReturn preroll_cb(std::shared_ptr<GstSample> buffer) override;
+	GstFlowReturn buffer_cb(std::shared_ptr<GstSample> buffer) override;
 #endif
-	void			eos_cb();
+	void			eos_cb() override;
 
 
 	ofPixels		pixels;				// 24 bit: rgb

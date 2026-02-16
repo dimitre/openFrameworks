@@ -11,7 +11,7 @@ typedef ofPixels_<unsigned char> ofPixels;
 
 class DirectShowVideo;
 
-class ofDirectShowPlayer : public ofBaseVideoPlayer{
+class ofDirectShowPlayer final : public ofBaseVideoPlayer{
     public:
 		ofDirectShowPlayer();
 		ofDirectShowPlayer(const ofDirectShowPlayer&) = delete;
@@ -20,47 +20,47 @@ class ofDirectShowPlayer : public ofBaseVideoPlayer{
 		ofDirectShowPlayer & operator=(ofDirectShowPlayer&&);
 
         bool load(const fs::path & fileName) override;
-        void                update();
+        void                update() override;
 
-        void                close();
+        void                close() override;
 
-        void                play();
-        void                stop();
+        void                play() override;
+        void                stop() override;
 
-        bool                isFrameNew() const;
+        bool                isFrameNew() const override;
 
-        const ofPixels &    getPixels() const;
-        ofPixels &          getPixels();
+        const ofPixels &    getPixels() const override;
+        ofPixels &          getPixels() override;
 
-        float               getWidth() const;
-        float               getHeight() const;
+        float               getWidth() const override;
+        float               getHeight() const override;
 
-        bool                isPaused() const;
-        bool                isLoaded() const;
-        bool                isPlaying() const;
+        bool                isPaused() const override;
+        bool                isLoaded() const override;
+        bool                isPlaying() const override;
 
-        bool                setPixelFormat(ofPixelFormat pixelFormat);
-        ofPixelFormat       getPixelFormat() const;
+        bool                setPixelFormat(ofPixelFormat pixelFormat) override;
+        ofPixelFormat       getPixelFormat() const override;
 
-        float               getPosition() const;
-        float               getSpeed() const;
-        float               getDuration() const;
-        bool                getIsMovieDone() const;
+        float               getPosition() const override;
+        float               getSpeed() const override;
+        float               getDuration() const override;
+        bool                getIsMovieDone() const override;
 
-        void                setPaused(bool bPause);
-        void                setPosition(float pct);
-        void                setVolume(float volume); // 0..1
-        void                setLoopState(ofLoopType state);
-        void                setSpeed(float speed);
-        void                setFrame(int frame);  // frame 0 = first frame...
+        void                setPaused(bool bPause) override;
+        void                setPosition(float pct) override;
+        void                setVolume(float volume) override; // 0..1
+        void                setLoopState(ofLoopType state) override;
+        void                setSpeed(float speed) override;
+        void                setFrame(int frame) override;  // frame 0 = first frame...
 
-        int                 getCurrentFrame() const;
-        int                 getTotalNumFrames() const;
-        ofLoopType          getLoopState() const;
+        int                 getCurrentFrame() const override;
+        int                 getTotalNumFrames() const override;
+        ofLoopType          getLoopState() const override;
 
-        void                firstFrame();
-        void                nextFrame();
-        void                previousFrame();
+        void                firstFrame() override;
+        void                nextFrame() override;
+        void                previousFrame() override;
 
     protected:
         std::shared_ptr<DirectShowVideo>   player;

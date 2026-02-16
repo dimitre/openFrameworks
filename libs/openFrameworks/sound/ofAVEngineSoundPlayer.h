@@ -24,7 +24,7 @@ class ofEventArgs;
 
 #include "ofSoundFFT.h"
 
-class ofAVEngineSoundPlayer : public ofBaseSoundPlayer {
+class ofAVEngineSoundPlayer final : public ofBaseSoundPlayer {
 public:
 
 //thanks to @bangnoise for this trick
@@ -46,30 +46,30 @@ public:
 	static void installSystemFFT();
 	static void removeSystemFFT();
 	
-	bool load(const fs::path& fileName, bool stream = false);
-	void unload();
-	void play();
-	void stop();
+	bool load(const fs::path& fileName, bool stream = false) override;
+	void unload() override;
+	void play() override;
+	void stop() override;
 
-	void setVolume(float vol);
-	void setPan(float vol);
-	void setSpeed(float spd);
-	void setPaused(bool bP);
-	void setLoop(bool bLp);
-	void setMultiPlay(bool bMp);
-	void setPosition(float pct);
-	void setPositionMS(int ms);
+	void setVolume(float vol) override;
+	void setPan(float vol) override;
+	void setSpeed(float spd) override;
+	void setPaused(bool bP) override;
+	void setLoop(bool bLp) override;
+	void setMultiPlay(bool bMp) override;
+	void setPosition(float pct) override;
+	void setPositionMS(int ms) override;
 
-	float getPosition() const;
-	int getPositionMS() const;
-	bool isPlaying() const;
-	float getSpeed() const;
-	float getPan() const;
-	bool isLoaded() const;
-	float getVolume() const;
+	float getPosition() const override;
+	int getPositionMS() const override;
+	bool isPlaying() const override;
+	float getSpeed() const override;
+	float getPan() const override;
+	bool isLoaded() const override;
+	float getVolume() const override;
 
-	float getDuration() const;
-	unsigned int getDurationMS() const;
+	float getDuration() const override;
+	unsigned int getDurationMS() const override;
 
 	void * getAVEnginePlayer();
 

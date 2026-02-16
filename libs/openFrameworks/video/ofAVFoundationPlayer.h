@@ -20,63 +20,63 @@
 #import <CoreVideo/CoreVideo.h>
 #endif
 
-class ofAVFoundationPlayer : public ofBaseVideoPlayer {
+class ofAVFoundationPlayer final : public ofBaseVideoPlayer {
 
 public:
 
 	ofAVFoundationPlayer();
 	~ofAVFoundationPlayer();
 
-	bool load(const fs::path & fileName);
-	void loadAsync(const fs::path & fileName);
-	void close();
-	void update();
+	bool load(const fs::path & fileName) override;
+	void loadAsync(const fs::path & fileName) override;
+	void close() override;
+	void update() override;
 
 	void draw();
 	void draw(float x, float y);
 	void draw(const ofRectangle & rect);
 	void draw(float x, float y, float w, float h);
 
-	bool setPixelFormat(ofPixelFormat pixelFormat);
-	ofPixelFormat getPixelFormat() const;
+	bool setPixelFormat(ofPixelFormat pixelFormat) override;
+	ofPixelFormat getPixelFormat() const override;
 
-	void play();
-	void stop();
+	void play() override;
+	void stop() override;
 
-	bool isFrameNew() const;
-	const ofPixels & getPixels() const;
-	ofPixels & getPixels();
-	ofTexture * getTexturePtr();
+	bool isFrameNew() const override;
+	const ofPixels & getPixels() const override;
+	ofPixels & getPixels() override;
+	ofTexture * getTexturePtr() override;
 	void initTextureCache();
 	void killTexture();
 	void killTextureCache();
 
-	float getWidth() const;
-	float getHeight() const;
+	float getWidth() const override;
+	float getHeight() const override;
 
-	bool isPaused() const;
-	bool isLoaded() const;
-	bool isPlaying() const;
+	bool isPaused() const override;
+	bool isLoaded() const override;
+	bool isPlaying() const override;
 
-	float getPosition() const;
-	float getSpeed() const;
-	float getDuration() const;
-	bool getIsMovieDone() const;
+	float getPosition() const override;
+	float getSpeed() const override;
+	float getDuration() const override;
+	bool getIsMovieDone() const override;
 
-	void setPaused(bool bPause);
-	void setPosition(float pct);
-	void setVolume(float volume); // 0..1
-	void setLoopState(ofLoopType state);
-	void setSpeed(float speed);
-	void setFrame(int frame);  // frame 0 = first frame...
+	void setPaused(bool bPause) override;
+	void setPosition(float pct) override;
+	void setVolume(float volume) override; // 0..1
+	void setLoopState(ofLoopType state) override;
+	void setSpeed(float speed) override;
+	void setFrame(int frame) override;  // frame 0 = first frame...
 
-	int	getCurrentFrame() const;
-	int	getTotalNumFrames() const;
-	ofLoopType getLoopState() const;
+	int	getCurrentFrame() const override;
+	int	getTotalNumFrames() const override;
+	ofLoopType getLoopState() const override;
 
-	void firstFrame();
-	void nextFrame();
-	void previousFrame();
+	void firstFrame() override;
+	void nextFrame() override;
+	void previousFrame() override;
 
 	ofAVFoundationPlayer& operator=(ofAVFoundationPlayer other);
 

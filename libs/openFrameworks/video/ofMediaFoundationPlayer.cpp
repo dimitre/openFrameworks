@@ -219,7 +219,7 @@ bool ofMediaFoundationPlayer::METexture::_swapPixelsFromSrc4ChannelTo3(ofPixels&
 }
 
 //----------------------------------------------
-class SharedDXGLTexture : public ofMediaFoundationPlayer::METexture {
+class SharedDXGLTexture final : public ofMediaFoundationPlayer::METexture {
 public:
     SharedDXGLTexture() { mGLDX_Handle = nullptr; }
     ~SharedDXGLTexture();
@@ -247,7 +247,7 @@ protected:
 };
 
 //----------------------------------------------
-class WICTextureManager : public ofMediaFoundationPlayer::METexture {
+class WICTextureManager final : public ofMediaFoundationPlayer::METexture {
 public:
     bool isValid() override { return mBValid; }
 

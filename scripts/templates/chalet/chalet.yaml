@@ -1,9 +1,13 @@
 name: ofWorksProject
-version: "0.0.1"
+version: "0.9.0"
 variables:
   generator: manual
   platform: macos
   ofPath: ../../..
+# externalDependencies:
+#   ofWorksCore:
+#     kind: local
+#     path: ${var:ofPath}/core/chalet
 
 abstracts:*:
   # $embed("${var:ofPath}/libs/openFrameworksCompiled/project/chalet/of-common.yaml")
@@ -193,6 +197,42 @@ abstracts:*:
       # - uriparser # URI parsing
       # - glew32 # GLEW extension loader
 
+    staticLinks[:!windows]:
+      - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libfmt.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
+
+      - ${var:ofPath}/libs/${var:platform}/lib/libmango.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libbz2_static.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libdeflate.a
+      - ${var:ofPath}/libs/${var:platform}/lib/liblcms2.a
+      - ${var:ofPath}/libs/${var:platform}/lib/liblz4.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libzstd.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
+
+      - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
+
+      # All Freetype deps
+      - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libbrotlidec.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libbrotlicommon.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libbrotlienc.a
+      # - ${var:ofPath}/libs/${var:platform}/lib/libpng.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libz.a
+      - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
+      - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
+
+      # - ${var:ofPath}/libs/${var:platform}/lib/libpng.a
+
+    # staticLinks[:linux+architecture:aarch64]:
+    #   - ${var:ofPath}/libs/${var:platform}/lib/aarch64-linux-gnu/liblcms2.a
+    # staticLinks[:linux+architecture:x86_64]:
+    #   - ${var:ofPath}/libs/${var:platform}/lib/x86_64-linux-gnu/liblcms2.a
+    # staticLinks[:linux]:
+    # staticLinks[:macos]:
+
     staticLinks[:windows]:
       # - ${var:ofPath}/libs/${var:platform}/lib/kissfft-float.lib
 
@@ -224,62 +264,6 @@ abstracts:*:
       - ${var:ofPath}/libs/${var:platform}/lib/uriparser.lib
       - ${var:ofPath}/libs/${var:platform}/lib/videoInput.lib
       # - ${var:ofPath}/libs/${var:platform}/lib/yaml-cpp.lib
-
-    staticLinks[:linux]:
-      - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libfmt.a
-
-      - ${var:ofPath}/libs/${var:platform}/lib/libmango.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libbz2_static.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libdeflate.a
-      - ${var:ofPath}/libs/${var:platform}/lib/liblz4.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libzstd.a
-
-      - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
-      # - ${var:ofPath}/libs/${var:platform}/lib/libpng.a
-
-      - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
-      - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
-      - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libz.a
-
-      - ${var:ofPath}/libs/${var:platform}/lib/liblcms2.a
-    # staticLinks[:linux+architecture:aarch64]:
-    #   - ${var:ofPath}/libs/${var:platform}/lib/aarch64-linux-gnu/liblcms2.a
-    # staticLinks[:linux+architecture:x86_64]:
-    #   - ${var:ofPath}/libs/${var:platform}/lib/x86_64-linux-gnu/liblcms2.a
-
-    staticLinks[:macos]:
-      - ${var:ofPath}/libs/${var:platform}/lib/libkissfft-float.a
-
-      - ${var:ofPath}/libs/${var:platform}/lib/libglew.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libglfw3.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libtess2.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libglm.a
-      - ${var:ofPath}/libs/${var:platform}/lib/liburiparser.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libpugixml.a
-      - ${var:ofPath}/libs/${var:platform}/lib/librtaudio.a
-
-      # All Freetype deps
-      - ${var:ofPath}/libs/${var:platform}/lib/libfreetype.a
-      # - ${var:ofPath}/libs/${var:platform}/lib/libbrotlidec.a
-      # - ${var:ofPath}/libs/${var:platform}/lib/libbrotlicommon.a
-      # - ${var:ofPath}/libs/${var:platform}/lib/libbrotlienc.a
-      # - ${var:ofPath}/libs/${var:platform}/lib/libpng.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libz.a
-
-      - ${var:ofPath}/libs/${var:platform}/lib/libfmt.a
-
-      - ${var:ofPath}/libs/${var:platform}/lib/libmango.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libbz2_static.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libdeflate.a
-      - ${var:ofPath}/libs/${var:platform}/lib/liblcms2.a
-      - ${var:ofPath}/libs/${var:platform}/lib/liblz4.a
-      - ${var:ofPath}/libs/${var:platform}/lib/libzstd.a
 targets:
   ofWorks:
     kind: staticLibrary
@@ -318,6 +302,12 @@ targets:
         # new, 17 jan 2026
         - ${var:ofPath}/libs/openFrameworks/sound/ofSoundFFT.cpp
 
+  # ofWorksCore:
+  #   kind: chaletProject
+  #   #   location: ${var:ofPath}/core/chalet
+  #   location: ${external:ofWorksCore}
+  #   recheck: false
+
   empty:
     kind: executable
     runWorkingDirectory: ${cwd}/bin
@@ -330,6 +320,9 @@ targets:
     settings:Cxx:
       staticLinks:
         - ofWorks
+        # - ${cwd}/${externalBuild:ofWorksCore}/libofWorks.a
+        # - ${var:ofPath}/core/chalet/dist/libofWorks.a
+        # - ${externalBuild:ofWorksCore}/libofWorks.a # Now this works!
       includeDirs:
         - ${var:ofPath}/libs/openFrameworks
       # windowsApplicationIcon: platform/windows/app.ico
