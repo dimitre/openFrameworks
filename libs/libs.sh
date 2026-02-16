@@ -245,6 +245,18 @@ case "$PLATFORM" in
 				# inject into PATH for this session (convert to absolute path)
 				CHALET_DIR_ABS="$(cd "$CHALET_DIR" && pwd)"
 				[[ ":$PATH:" != *":$CHALET_DIR_ABS:"* ]] && export PATH="$CHALET_DIR_ABS:$PATH"
+
+				# Add to Windows user PATH permanently using PowerShell
+				CHALET_DIR_WIN=$(cygpath -w "$CHALET_DIR_ABS")
+				powershell.exe -Command "
+					\$currentPath = [Environment]::GetEnvironmentVariable('Path', 'User')
+					if (\$currentPath -notlike '*$CHALET_DIR_WIN*') {
+						[Environment]::SetEnvironmentVariable('Path', \$currentPath + ';$CHALET_DIR_WIN', 'User')
+						Write-Host 'Chalet added to user PATH'
+					} else {
+						Write-Host 'Chalet already in user PATH'
+					}
+				"
 				# ------------------------------------------
 			fi
 
