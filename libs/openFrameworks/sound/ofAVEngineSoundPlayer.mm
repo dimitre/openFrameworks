@@ -975,6 +975,7 @@ void ofAVEngineSoundPlayer::setSpeed(float value) {
 }
 
 void ofAVEngineSoundPlayer::setPaused(bool bPause) {
+	bPaused = bPause;
 	if(soundPlayer == NULL) {
 		return;
 	}
@@ -1027,7 +1028,7 @@ int ofAVEngineSoundPlayer::getPositionMS() const {
 	return [(AVEnginePlayer *)soundPlayer positionMs];
 }
 
-bool ofAVEngineSoundPlayer::isPlaying()  const{
+bool ofAVEngineSoundPlayer::isPlaying() const {
 	if(soundPlayer == NULL) {
 		return false;
 	}
@@ -1080,6 +1081,10 @@ unsigned int ofAVEngineSoundPlayer::getDurationMS() const {
 		return 0;
 	}
 	return ([(AVEnginePlayer *)soundPlayer soundDurationSeconds] * 1000.0f);
+}
+
+bool ofAVEngineSoundPlayer::isPaused() const {
+	return bPaused;
 }
 
 void * ofAVEngineSoundPlayer::getAVEnginePlayer() {

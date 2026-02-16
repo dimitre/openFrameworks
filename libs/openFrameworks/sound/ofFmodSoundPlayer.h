@@ -59,6 +59,7 @@ class ofFmodSoundPlayer final : public ofBaseSoundPlayer {
 		float getPosition() const override;
 		int getPositionMS() const override;
 		bool isPlaying() const override;
+		bool isPaused() const override;
 		float getSpeed() const override;
 		float getPan() const override;
 		float getVolume() const override;

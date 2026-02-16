@@ -686,6 +686,7 @@ void ofMediaFoundationSoundPlayer::setSpeed(float spd) {
 
 //--------------------
 void ofMediaFoundationSoundPlayer::setPaused(bool bP) {
+	mBPaused = bP;
     if (bP) {
         if (mVoice) {
             mVoice->Stop();
@@ -798,6 +799,11 @@ int ofMediaFoundationSoundPlayer::getPositionMS() const {
 //--------------------
 bool ofMediaFoundationSoundPlayer::isPlaying() const {
 	return mBIsPlaying;
+};
+
+//--------------------
+bool ofMediaFoundationSoundPlayer::isPaused() const {
+	return mBPaused;
 };
 
 //--------------------

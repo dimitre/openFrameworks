@@ -254,6 +254,15 @@ bool ofSoundPlayer::isLoaded() const{
 }
 
 //--------------------------------------------------------------------
+bool ofSoundPlayer::isPaused() const{
+	if( player ){
+		return player->isPaused();
+	} else {
+		return false;
+	}
+}
+
+//--------------------------------------------------------------------
 float ofSoundPlayer::getSpeed() const{
 	if( player ){
 		return player->getSpeed();

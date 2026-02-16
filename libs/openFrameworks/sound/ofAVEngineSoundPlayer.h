@@ -63,6 +63,7 @@ public:
 	float getPosition() const override;
 	int getPositionMS() const override;
 	bool isPlaying() const override;
+	bool isPaused() const override;
 	float getSpeed() const override;
 	float getPan() const override;
 	bool isLoaded() const override;
@@ -85,6 +86,7 @@ protected:
 
 	void updateFunction(ofEventArgs & args);
 	bool bAddedUpdate = false;
+	bool bPaused = false;
 
 	void cleanupMultiplayers();
 	static bool removeMultiPlayer(void * aPlayer);

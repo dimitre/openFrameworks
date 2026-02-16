@@ -134,6 +134,7 @@ public:
 	float getPosition() const override;
 	int getPositionMS() const override;
 	bool isPlaying() const override;
+	bool isPaused() const override;
 	float getSpeed() const override;
 	float getPan() const override;
 	bool isLoaded() const override;
@@ -202,6 +203,7 @@ protected:
 
 	bool mBLoaded = false;
 	bool mBIsPlaying = false;
+	bool mBPaused = false;
 	float mVolume = 1.0f;
 	float mPan = 0.0f;
 	float mSpeed = 1.0f;

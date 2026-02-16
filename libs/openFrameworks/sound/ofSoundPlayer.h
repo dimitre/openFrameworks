@@ -124,6 +124,10 @@ public:
     /// \return whether or not the player is ready to begin playback.
     bool isLoaded() const;
 
+    /// \brief Queries the player to see if it is paused.
+    /// \return whether or not the player is paused.
+    bool isPaused() const;
+
 	/// \brief Gets duration in seconds.
 	/// \return duration in seconds.
 	float getDuration() const;

@@ -241,6 +241,11 @@ bool ofFmodSoundPlayer::isPlaying() const{
 }
 
 //------------------------------------------------------------
+bool ofFmodSoundPlayer::isPaused() const{
+	return bPaused;
+}
+
+//------------------------------------------------------------
 float ofFmodSoundPlayer::getSpeed() const{
 	return speed;
 }
