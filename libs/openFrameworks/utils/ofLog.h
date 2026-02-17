@@ -723,25 +723,25 @@ public:
 };
 
 /// \brief A logger channel that logs its messages to the console.
-class ofConsoleLoggerChannel: public ofBaseLoggerChannel{
+class ofConsoleLoggerChannel final: public ofBaseLoggerChannel{
 public:
 	/// \brief Destroy the console logger channel.
-	virtual ~ofConsoleLoggerChannel(){};
-	void log(ofLogLevel level, const std::string & module, const std::string & message);
+	~ofConsoleLoggerChannel() override {};
+	void log(ofLogLevel level, const std::string & module, const std::string & message) override;
 };
 
 #ifdef TARGET_WIN32
 /// A logger channel that logs its messages to windows debug view and visual studio output.
-class ofDebugViewLoggerChannel : public ofBaseLoggerChannel {
+class ofDebugViewLoggerChannel final : public ofBaseLoggerChannel {
 public:
 	/// \brief Destroy the console logger channel.
-	virtual ~ofDebugViewLoggerChannel() {};
-	void log(ofLogLevel level, const std::string & module, const std::string & message);
+	~ofDebugViewLoggerChannel() override {};
+	void log(ofLogLevel level, const std::string & module, const std::string & message) override;
 };
 #endif
 
 /// \brief A logger channel that logs its messages to a log file.
-class ofFileLoggerChannel: public ofBaseLoggerChannel{
+class ofFileLoggerChannel final: public ofBaseLoggerChannel{
 public:
 	/// \brief Create an ofFileLoggerChannel.
 	ofFileLoggerChannel();
@@ -752,14 +752,14 @@ public:
     ofFileLoggerChannel(const fs::path & path, bool append);
 
 	/// \brief Destroy the file logger channel.
-	virtual ~ofFileLoggerChannel();
+	~ofFileLoggerChannel() override;
 
 	/// \brief Set the log file.
 	/// \param path The file path for the log file.
 	/// \param append True if the log data should be added to an existing file.
     void setFile(const fs::path & path,bool append=false);
 
-	void log(ofLogLevel level, const std::string & module, const std::string & message);
+	void log(ofLogLevel level, const std::string & module, const std::string & message) override;
 
 	/// \brief CLose the log file.
 	void close();
