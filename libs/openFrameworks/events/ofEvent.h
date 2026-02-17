@@ -47,7 +47,7 @@ namespace priv{
 	};
 
 	// -------------------------------------
-	class StdFunctionId: public BaseFunctionId{
+	class StdFunctionId final : public BaseFunctionId{
 		static std::atomic<uint_fast64_t> nextId;
 		uint64_t id;
 
@@ -57,14 +57,14 @@ namespace priv{
 		StdFunctionId()
 		:id(nextId++){}
 
-		virtual ~StdFunctionId();
+		~StdFunctionId() override;
 
-		bool operator==(const BaseFunctionId & otherid) const{
+		bool operator==(const BaseFunctionId & otherid) const override {
 			const auto * other = dynamic_cast<const StdFunctionId*>(&otherid);
 			return other && id == other->id;
 		}
 
-		BaseFunctionId * clone() const{
+		BaseFunctionId * clone() const override {
 			return new StdFunctionId(id);
 		}
 	};
@@ -235,7 +235,7 @@ namespace priv{
 		};
 		std::shared_ptr<Data> self{new Data};
 
-		class EventToken: public AbstractEventToken{
+		class EventToken final : public AbstractEventToken{
 			public:
 				EventToken() {};
 				template<typename Id>
@@ -245,7 +245,7 @@ namespace priv{
 
 				}
 
-				~EventToken(){
+				~EventToken() override {
 					auto event = this->event.lock();
 					if(event){
 						event->remove(*id);

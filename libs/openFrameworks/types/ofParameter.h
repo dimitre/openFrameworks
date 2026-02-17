@@ -123,7 +123,7 @@ public:
 	}
 
 	void add(ofAbstractParameter & param);
-	std::string valueType() const;
+	std::string valueType() const override;
 
 	void remove(ofAbstractParameter & param);
 	void remove(std::size_t index);
@@ -203,7 +203,7 @@ public:
 	ofParameter<ofRectangle> & getRectangle(std::size_t pos);
 	ofParameterGroup & getGroup(std::size_t pos);
 
-	bool isInit() const {
+	bool isInit() const override {
 		for (std::size_t i = 0; i < size(); i++) {
 			if (!get(i).isInit()) return false;
 		}
@@ -254,11 +254,11 @@ public:
 
 	friend std::ostream & operator<<(std::ostream & os, const ofParameterGroup & group);
 
-	std::string getName() const;
-	void setName(const std::string & name);
-	std::string getEscapedName() const;
-	std::string toString() const;
-	void fromString(const std::string & name);
+	std::string getName() const override;
+	void setName(const std::string & name) override;
+	std::string getEscapedName() const override;
+	std::string toString() const override;
+	void fromString(const std::string & name) override;
 
 	bool contains(const std::string & name) const;
 
@@ -267,12 +267,12 @@ public:
 	const ofAbstractParameter & back() const;
 	const ofAbstractParameter & front() const;
 
-	void setSerializable(bool serializable);
-	bool isSerializable() const;
-	bool isReadOnly() const;
-	std::shared_ptr<ofAbstractParameter> newReference() const;
+	void setSerializable(bool serializable) override;
+	bool isSerializable() const override;
+	bool isReadOnly() const override;
+	std::shared_ptr<ofAbstractParameter> newReference() const override;
 
-	void setParent(ofParameterGroup & parent);
+	void setParent(ofParameterGroup & parent) override;
 
 	operator bool() const;
 
@@ -288,7 +288,7 @@ public:
 	std::vector<std::shared_ptr<ofAbstractParameter>>::const_reverse_iterator rend() const;
 
 protected:
-	const void * getInternalObject() const;
+	const void * getInternalObject() const override;
 
 private:
 	class Value {
@@ -315,7 +315,7 @@ private:
 	template <typename T, typename F>
 	friend class ofReadOnlyParameter;
 
-	const ofParameterGroup getFirstParent() const;
+	const ofParameterGroup getFirstParent() const override;
 };
 
 template <typename ParameterType>
@@ -566,8 +566,8 @@ public:
 	const ParameterType * operator->() const;
 	operator const ParameterType &() const;
 
-	void setName(const std::string & name);
-	std::string getName() const;
+	void setName(const std::string & name) override;
+	std::string getName() const override;
 
 	ParameterType getMin() const;
 
@@ -583,8 +583,8 @@ public:
 		return obj->changedE.didNotify();
 	}
 
-	std::string toString() const;
-	void fromString(const std::string & name);
+	std::string toString() const override;
+	void fromString(const std::string & name) override;
 
 	template <class ListenerClass, typename ListenerMethod>
 	void addListener(ListenerClass * listener, ListenerMethod method, int prio = OF_EVENT_ORDER_AFTER_APP) {
@@ -603,9 +603,9 @@ public:
 
 	void enableEvents();
 	void disableEvents();
-	bool isSerializable() const;
-	bool isReadOnly() const;
-	std::string valueType() const;
+	bool isSerializable() const override;
+	bool isReadOnly() const override;
+	std::string valueType() const override;
 
 	void makeReferenceTo(ofParameter<ParameterType> & mom);
 
@@ -648,14 +648,14 @@ public:
 	void setMin(const ParameterType & min);
 	void setMax(const ParameterType & max);
 	void setInit(const ParameterType & init);
-	bool isInit() const;
+	bool isInit() const override;
 
-	void setSerializable(bool serializable);
-	std::shared_ptr<ofAbstractParameter> newReference() const;
+	void setSerializable(bool serializable) override;
+	std::shared_ptr<ofAbstractParameter> newReference() const override;
 
-	void setParent(ofParameterGroup & _parent);
+	void setParent(ofParameterGroup & _parent) override;
 
-	const ofParameterGroup getFirstParent() const {
+	const ofParameterGroup getFirstParent() const override {
 		obj->parents.erase(std::remove_if(obj->parents.begin(), obj->parents.end(),
 							   [](std::weak_ptr<ofParameterGroup::Value> p) { return p.lock() == nullptr; }),
 			obj->parents.end());
@@ -667,7 +667,7 @@ public:
 	}
 
 	size_t getNumListeners() const;
-	const void * getInternalObject() const;
+	const void * getInternalObject() const override;
 
 protected:
 private:
@@ -1089,15 +1089,15 @@ public:
 	ofParameter();
 	ofParameter(const std::string & name);
 
-	bool isInit() const { return false; }
+	bool isInit() const override { return false; }
 
 	ofParameter<void> & set(const std::string & name);
 
-	void setName(const std::string & name);
-	std::string getName() const;
+	void setName(const std::string & name) override;
+	std::string getName() const override;
 
-	std::string toString() const;
-	void fromString(const std::string & name);
+	std::string toString() const override;
+	void fromString(const std::string & name) override;
 
 	template <class ListenerClass, typename ListenerMethod>
 	void addListener(ListenerClass * listener, ListenerMethod method, int prio = OF_EVENT_ORDER_AFTER_APP) {
@@ -1125,18 +1125,18 @@ public:
 
 	void enableEvents();
 	void disableEvents();
-	bool isSerializable() const;
-	bool isReadOnly() const;
-	std::string valueType() const;
+	bool isSerializable() const override;
+	bool isReadOnly() const override;
+	std::string valueType() const override;
 
 	void makeReferenceTo(ofParameter<void> & mom);
 
-	void setSerializable(bool serializable);
-	std::shared_ptr<ofAbstractParameter> newReference() const;
+	void setSerializable(bool serializable) override;
+	std::shared_ptr<ofAbstractParameter> newReference() const override;
 
-	void setParent(ofParameterGroup & _parent);
+	void setParent(ofParameterGroup & _parent) override;
 
-	const ofParameterGroup getFirstParent() const {
+	const ofParameterGroup getFirstParent() const override {
 		auto first = std::find_if(obj->parents.begin(), obj->parents.end(), [](std::weak_ptr<ofParameterGroup::Value> p) { return p.lock() != nullptr; });
 		if (first != obj->parents.end()) {
 			return first->lock();
@@ -1146,7 +1146,7 @@ public:
 	}
 	size_t getNumListeners() const;
 
-	const void * getInternalObject() const {
+	const void * getInternalObject() const override {
 		return obj.get();
 	}
 
@@ -1212,9 +1212,9 @@ public:
 	template <typename... Args>
 	std::unique_ptr<of::priv::AbstractEventToken> newListener(Args... args);
 
-	bool isSerializable() const;
-	bool isReadOnly() const;
-	std::string valueType() const;
+	bool isSerializable() const override;
+	bool isReadOnly() const override;
+	std::string valueType() const override;
 
 protected:
 	void setName(const std::string & name);
@@ -1265,13 +1265,13 @@ protected:
 	void setMin(const ParameterType & min);
 	void setMax(const ParameterType & max);
 	void setInit(const ParameterType & init);
-	bool isInit() const;
+	bool isInit() const override;
 
 	void fromString(const std::string & str);
 
-	void setParent(ofParameterGroup & _parent);
+	void setParent(ofParameterGroup & _parent) override;
 
-	const ofParameterGroup getFirstParent() const {
+	const ofParameterGroup getFirstParent() const override {
 		return parameter.getFirstParent();
 	}
 
