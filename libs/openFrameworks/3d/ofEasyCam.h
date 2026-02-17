@@ -8,7 +8,7 @@ class ofRectangle;
 #include <glm/gtc/quaternion.hpp>
 
 /// \brief A super simple camera for interacting with objects in 3D space.
-class ofEasyCam : public ofCamera {
+class ofEasyCam final : public ofCamera {
 public:
 	/// \name Constructor and Destructor
 	/// \{
@@ -20,8 +20,8 @@ public:
 	/// \name Rendering
 	/// \{
 
-	virtual void begin(const ofRectangle & viewport);
-	virtual void begin() {
+	void begin(const ofRectangle & viewport) override;
+	void begin() override {
 		begin(getViewport());
 	}
 
@@ -182,7 +182,7 @@ public:
 	void removeAllInteractions();
 
 protected:
-	virtual void onPositionChanged();
+	void onPositionChanged() override;
 
 private:
 	void setDistance(float distance, bool save);

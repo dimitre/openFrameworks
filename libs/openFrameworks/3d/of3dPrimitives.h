@@ -118,7 +118,7 @@ protected:
 /// ofTexture fills the plane when it's drawn. This saves you the hassle of
 /// creating all the texture coordinates for each vertex, which is nice.
 
-class ofPlanePrimitive : public of3dPrimitive {
+class ofPlanePrimitive final : public of3dPrimitive {
 public:
     ofPlanePrimitive();
     ofPlanePrimitive( float width, float height, int columns, int rows,
@@ -202,7 +202,7 @@ protected:
 /// and ofDisableAlphaBlending().
 ///
 
-class ofSpherePrimitive : public of3dPrimitive {
+class ofSpherePrimitive final : public of3dPrimitive {
 public:
     ofSpherePrimitive();
     ofSpherePrimitive( float radius, int res,
@@ -254,7 +254,7 @@ protected:
 /// }
 /// ~~~~
 
-class ofIcoSpherePrimitive : public of3dPrimitive {
+class ofIcoSpherePrimitive final : public of3dPrimitive {
 public:
     ofIcoSpherePrimitive();
     ofIcoSpherePrimitive( float radius, int iterations );
@@ -314,7 +314,7 @@ protected:
 ///
 /// ~~~~
 
-class ofCylinderPrimitive : public of3dPrimitive {
+class ofCylinderPrimitive final : public of3dPrimitive {
 public:
     ofCylinderPrimitive();
     ofCylinderPrimitive( float radius, float height, int radiusSegments,
@@ -405,7 +405,7 @@ protected:
 /// Beware of the cone texture coordinates, they're a little strange.
 ///
 
-class ofConePrimitive : public of3dPrimitive {
+class ofConePrimitive final : public of3dPrimitive {
 public:
 
     ofConePrimitive();
@@ -507,7 +507,7 @@ protected:
 /// ~~~~
 ///
 
-class ofBoxPrimitive : public of3dPrimitive {
+class ofBoxPrimitive final : public of3dPrimitive {
 public:
 
     enum BoxSides {
