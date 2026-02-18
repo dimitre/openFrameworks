@@ -29,7 +29,7 @@ public:
 	static void construct(Args &&... args) {
 		struct Dummy final : Derived {
 			using Derived::Derived;
-			void prohibit_construct_from_derived() const noexcept override { }
+			void prohibit_construct_from_derived() const noexcept override final { }
 		};
 
 		using Instance = Dummy;

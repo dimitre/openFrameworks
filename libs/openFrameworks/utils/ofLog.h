@@ -584,7 +584,7 @@ class ofLog{
 /// \brief Derived log class for easy verbose logging.
 ///
 /// Example: `ofLogVerbose("Log message")`.
-class ofLogVerbose : public ofLog{
+class ofLogVerbose final : public ofLog{
 	public:
 		/// \brief Create a verbose log message.
 		/// \param module The target module.
@@ -606,7 +606,7 @@ class ofLogVerbose : public ofLog{
 /// \brief Derived log class for easy notice logging.
 ///
 /// Example: `ofLogNotice("Log message")`.
-class ofLogNotice : public ofLog{
+class ofLogNotice final : public ofLog{
 	public:
 		/// \brief Create a notice log message.
 		/// \param module The target module.
@@ -628,7 +628,7 @@ class ofLogNotice : public ofLog{
 /// \brief Derived log class for easy warning logging.
 ///
 /// Example: `ofLogWarning("Log message")`.
-class ofLogWarning : public ofLog{
+class ofLogWarning final : public ofLog{
 	public:
 	/// \brief Create a verbose log message.
 	/// \param module The target module.
@@ -649,7 +649,7 @@ class ofLogWarning : public ofLog{
 /// \brief Derived log class for easy error logging.
 ///
 /// Example: `ofLogError("Log message")`.
-class ofLogError : public ofLog{
+class ofLogError final : public ofLog{
 	public:
 		/// \brief Create a error log message.
 		/// \param module The target module.
@@ -671,7 +671,7 @@ class ofLogError : public ofLog{
 /// \brief Derived log class for easy fatal error logging.
 ///
 /// Example: `ofLogFatalError("Log message")`.
-class ofLogFatalError : public ofLog{
+class ofLogFatalError final : public ofLog{
 	public:
 		/// \brief Create a fatal error log message.
 		/// \param module The target module.
