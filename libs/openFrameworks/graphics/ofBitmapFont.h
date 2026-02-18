@@ -16,7 +16,7 @@
  
  */
 
-class ofBitmapFont{
+class ofBitmapFont final {
 public:
 	ofBitmapFont();
 	~ofBitmapFont();

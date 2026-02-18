@@ -4,41 +4,41 @@
 #include "of3dGraphics.h"
 #include "ofPath.h" // MARK: ofPath path;
 
-class ofRendererCollection: public ofBaseRenderer{
+class ofRendererCollection final: public ofBaseRenderer{
 public:
 	 ofRendererCollection():graphics3d(this){}
 	 ~ofRendererCollection(){}
 
 	 static const std::string TYPE;
-	 const std::string & getType(){ return TYPE; }
+	 const std::string & getType() override { return TYPE; }
 
 	 std::shared_ptr<ofBaseGLRenderer> getGLRenderer();
 
 	 bool rendersPathPrimitives();
 
-	 void startRender();
+	 void startRender() override;
 
-	 void finishRender();
+	 void finishRender() override;
 
 
 	 using ofBaseRenderer::draw;
 
-	 void draw(const ofPolyline & poly) const;
-	 void draw(const ofPath & shape) const;
+	 void draw(const ofPolyline & poly) const override;
+	 void draw(const ofPath & shape) const override;
 
-	 void draw(const ofMesh & vertexData, ofPolyRenderMode mode, bool useColors, bool useTextures, bool useNormals) const;
+	 void draw(const ofMesh & vertexData, ofPolyRenderMode mode, bool useColors, bool useTextures, bool useNormals) const override;
 
-	void draw(const  of3dPrimitive& model, ofPolyRenderMode renderType ) const ;
+	void draw(const  of3dPrimitive& model, ofPolyRenderMode renderType ) const override;
 
-	void draw(const  ofNode& node) const ;
+	void draw(const  ofNode& node) const override;
 
-	void draw(const ofImage & img, float x, float y, float z, float w, float h, float sx, float sy, float sw, float sh) const;
+	void draw(const ofImage & img, float x, float y, float z, float w, float h, float sx, float sy, float sw, float sh) const override;
 
-	void draw(const ofFloatImage & img, float x, float y, float z, float w, float h, float sx, float sy, float sw, float sh) const;
+	void draw(const ofFloatImage & img, float x, float y, float z, float w, float h, float sx, float sy, float sw, float sh) const override;
 
-	void draw(const ofShortImage & img, float x, float y, float z, float w, float h, float sx, float sy, float sw, float sh) const;
+	void draw(const ofShortImage & img, float x, float y, float z, float w, float h, float sx, float sy, float sw, float sh) const override;
 
-	void draw(const ofBaseVideoDraws & video, float x, float y, float w, float h) const;
+	void draw(const ofBaseVideoDraws & video, float x, float y, float w, float h) const override;
 
 	/*void bind(const ofBaseVideoDraws & video) const{
 		for(int i=0;i<(int)renderers.size();i++){
@@ -53,183 +53,183 @@ public:
 	}*/
 
 
-	glm::mat4 getCurrentMatrix(ofMatrixMode matrixMode_) const;
+	glm::mat4 getCurrentMatrix(ofMatrixMode matrixMode_) const override;
 
 
-	glm::mat4 getCurrentOrientationMatrix() const;
+	glm::mat4 getCurrentOrientationMatrix() const override;
 
-	glm::mat4 getCurrentNormalMatrix() const;
+	glm::mat4 getCurrentNormalMatrix() const override;
 
 	//--------------------------------------------
 	// transformations
-	 void pushView();
+	 void pushView() override;
 
-	 void popView();
+	 void popView() override;
 	// setup matrices and viewport (upto you to push and pop view before and after)
 	// if width or height are 0, assume windows dimensions (ofGetWidth(), ofGetHeight())
 	// if nearDist or farDist are 0 assume defaults (calculated based on width / height)
-	void viewport(ofRectangle viewport);
+	void viewport(ofRectangle viewport) override;
 
-	 void viewport(float x = 0, float y = 0, float width = -1, float height = -1, bool vflip=true);
+	 void viewport(float x = 0, float y = 0, float width = -1, float height = -1, bool vflip=true) override;
 
-	 void setupScreenPerspective(float width = -1, float height = -1, float fov = 60, float nearDist = 0, float farDist = 0);
+	 void setupScreenPerspective(float width = -1, float height = -1, float fov = 60, float nearDist = 0, float farDist = 0) override;
 
-	 void setupScreenOrtho(float width = -1, float height = -1, float nearDist = -1, float farDist = 1);
+	 void setupScreenOrtho(float width = -1, float height = -1, float nearDist = -1, float farDist = 1) override;
 
-	 ofRectangle getCurrentViewport() const;
+	 ofRectangle getCurrentViewport() const override;
 
-	 ofRectangle getNativeViewport() const;
+	 ofRectangle getNativeViewport() const override;
 
-	 int getViewportWidth() const;
-	 int getViewportHeight() const;
+	 int getViewportWidth() const override;
+	 int getViewportHeight() const override;
 
-	 void setCoordHandedness(ofHandednessType handedness);
-	 ofHandednessType getCoordHandedness() const;
+	 void setCoordHandedness(ofHandednessType handedness) override;
+	 ofHandednessType getCoordHandedness() const override;
 
 	//our openGL wrappers
-	 void pushMatrix();
-	 void popMatrix();
-	 void translate(float x, float y, float z = 0);
-	 void translate(const glm::vec3 & p);
-	 void scale(float xAmnt, float yAmnt, float zAmnt = 1);
+	 void pushMatrix() override;
+	 void popMatrix() override;
+	 void translate(float x, float y, float z = 0) override;
+	 void translate(const glm::vec3 & p) override;
+	 void scale(float xAmnt, float yAmnt, float zAmnt = 1) override;
 
-	 void rotateDeg(float degrees, float vecX, float vecY, float vecZ);
-	 void rotateXDeg(float degrees);
-	 void rotateYDeg(float degrees);
-	 void rotateZDeg(float degrees);
-	 void rotateDeg(float degrees);
+	 void rotateDeg(float degrees, float vecX, float vecY, float vecZ) override;
+	 void rotateXDeg(float degrees) override;
+	 void rotateYDeg(float degrees) override;
+	 void rotateZDeg(float degrees) override;
+	 void rotateDeg(float degrees) override;
 
-	 void rotateRad(float radians, float vecX, float vecY, float vecZ);
-	 void rotateXRad(float radians);
-	 void rotateYRad(float radians);
-	 void rotateZRad(float radians);
-	 void rotateRad(float radians);
-	void loadIdentityMatrix (void);
+	 void rotateRad(float radians, float vecX, float vecY, float vecZ) override;
+	 void rotateXRad(float radians) override;
+	 void rotateYRad(float radians) override;
+	 void rotateZRad(float radians) override;
+	 void rotateRad(float radians) override;
+	void loadIdentityMatrix (void) override;
 
-	void loadMatrix (const glm::mat4 & m);
+	void loadMatrix (const glm::mat4 & m) override;
 
-	void loadMatrix (const float * m);
+	void loadMatrix (const float * m) override;
 
-	void multMatrix (const glm::mat4 & m);
+	void multMatrix (const glm::mat4 & m) override;
 
-	void multMatrix (const float * m);
+	void multMatrix (const float * m) override;
 
-	void setOrientation(ofOrientation orientation, bool vflip);
+	void setOrientation(ofOrientation orientation, bool vflip) override;
 
-	bool isVFlipped() const;
+	bool isVFlipped() const override;
 
-	void matrixMode(ofMatrixMode mode);
+	void matrixMode(ofMatrixMode mode) override;
 
-	void loadViewMatrix(const glm::mat4& m);
+	void loadViewMatrix(const glm::mat4& m) override;
 
-	void multViewMatrix(const glm::mat4& m);
+	void multViewMatrix(const glm::mat4& m) override;
 
-	glm::mat4 getCurrentViewMatrix() const;
+	glm::mat4 getCurrentViewMatrix() const override;
 
 
 	// screen coordinate things / default gl values
-	 void setupGraphicDefaults();
+	 void setupGraphicDefaults() override;
 
-	 void setupScreen();
+	 void setupScreen() override;
 
 	// color options
-	void setColor(float r, float g, float b);
+	void setColor(float r, float g, float b) override;
 
-	void setColor(float r, float g, float b, float a);
+	void setColor(float r, float g, float b, float a) override;
 
-	void setColor(const ofFloatColor & color);
+	void setColor(const ofFloatColor & color) override;
 
-	void setColor(const ofFloatColor & color, float _a);
+	void setColor(const ofFloatColor & color, float _a) override;
 
-	void setColor(float gray);
+	void setColor(float gray) override;
 
-	void setHexColor( int hexColor );
+	void setHexColor( int hexColor ) override;
 
 	// bg color
-	ofFloatColor getBackgroundColor();
+	ofFloatColor getBackgroundColor() override;
 
-	void setBackgroundColor(const ofFloatColor & color);
+	void setBackgroundColor(const ofFloatColor & color) override;
 
-	bool getBackgroundAuto();
+	bool getBackgroundAuto() override;
 
-	void background(const ofFloatColor & c);
+	void background(const ofFloatColor & c) override;
 
-	void background(float brightness);
+	void background(float brightness) override;
 
-	void background(int hexColor, int _a=255);
+	void background(int hexColor, int _a=255) override;
 
-	void background(float r, float g, float b, float a=1.f);
+	void background(float r, float g, float b, float a=1.f) override;
 
-	void setBackgroundAuto(bool bManual);
+	void setBackgroundAuto(bool bManual) override;
 
-	void clear();
+	void clear() override;
 
-	void clear(float r, float g, float b, float a=0);
+	void clear(float r, float g, float b, float a=0) override;
 
-	void clear(float brightness, float a=0);
+	void clear(float brightness, float a=0) override;
 
-	void clearAlpha();
+	void clearAlpha() override;
 
 	// drawing modes
-	void setRectMode(ofRectMode mode);
+	void setRectMode(ofRectMode mode) override;
 
-	ofRectMode getRectMode();
+	ofRectMode getRectMode() override;
 
-	void setFillMode(ofFillFlag fill);
+	void setFillMode(ofFillFlag fill) override;
 
-	ofFillFlag getFillMode();
+	ofFillFlag getFillMode() override;
 
-	void setLineWidth(float lineWidth);
-	void setPointSize(float pointSize);
-	void setDepthTest(bool depthTest);
+	void setLineWidth(float lineWidth) override;
+	void setPointSize(float pointSize) override;
+	void setDepthTest(bool depthTest) override;
 
-	void setBlendMode(ofBlendMode blendMode);
-	void setLineSmoothing(bool smooth);
-	void setCircleResolution(int res);
+	void setBlendMode(ofBlendMode blendMode) override;
+	void setLineSmoothing(bool smooth) override;
+	void setCircleResolution(int res) override;
 	void enablePointSprites();
 	void disablePointSprites();
 
-	void enableAntiAliasing();
+	void enableAntiAliasing() override;
 
-	void disableAntiAliasing();
+	void disableAntiAliasing() override;
 
-	void setBitmapTextMode(ofDrawBitmapMode mode);
+	void setBitmapTextMode(ofDrawBitmapMode mode) override;
 
-	ofStyle getStyle() const;
+	ofStyle getStyle() const override;
 
-	void pushStyle();
+	void pushStyle() override;
 
-	void popStyle();
+	void popStyle() override;
 
-	void setStyle(const ofStyle & style);
+	void setStyle(const ofStyle & style) override;
 
-	void setCurveResolution(int res);
+	void setCurveResolution(int res) override;
 
-	void setPolyMode(ofPolyWindingMode mode);
+	void setPolyMode(ofPolyWindingMode mode) override;
 
 	// drawing
-	void drawLine(float x1, float y1, float z1, float x2, float y2, float z2) const;
+	void drawLine(float x1, float y1, float z1, float x2, float y2, float z2) const override;
 
-	void drawRectangle(float x, float y, float z, float w, float h) const;
+	void drawRectangle(float x, float y, float z, float w, float h) const override;
 
-	void drawTriangle(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3) const;
+	void drawTriangle(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3) const override;
 
-	void drawCircle(float x, float y, float z, float radius) const;
+	void drawCircle(float x, float y, float z, float radius) const override;
 
-	void drawEllipse(float x, float y, float z, float width, float height) const;
+	void drawEllipse(float x, float y, float z, float width, float height) const override;
 
-	void drawString(std::string text, float x, float y, float z) const;
+	void drawString(std::string text, float x, float y, float z) const override;
 
-	void drawString(const ofTrueTypeFont & font, std::string text, float x, float y) const;
+	void drawString(const ofTrueTypeFont & font, std::string text, float x, float y) const override;
 
-	virtual void bind(const ofCamera & camera, const ofRectangle & viewport);
-	virtual void unbind(const ofCamera & camera);
+	void bind(const ofCamera & camera, const ofRectangle & viewport) override;
+	void unbind(const ofCamera & camera) override;
 
-	const of3dGraphics & get3dGraphics() const;
+	const of3dGraphics & get3dGraphics() const override;
 
-	of3dGraphics & get3dGraphics();
+	of3dGraphics & get3dGraphics() override;
 
-	ofPath & getPath();
+	ofPath & getPath() override;
 
 	std::vector<std::shared_ptr<ofBaseRenderer> > renderers;
 	of3dGraphics graphics3d;

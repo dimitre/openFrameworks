@@ -227,7 +227,7 @@ public:
     ///
     /// \param x Draw position on the x axis.
     /// \param y Draw position on the y axis.
-    void draw(float x, float y) const;
+    void draw(float x, float y) const override;
 
     /// \brief Draw the texture at it's normal size with depth.
     ///
@@ -244,7 +244,7 @@ public:
     /// \param y Draw position on the y axis.
     /// \param w Draw width.
     /// \param h Draw height.
-    void draw(float x, float y, float w, float h) const;
+    void draw(float x, float y, float w, float h) const override;
 
     /// \brief Draw the image at a given size with depth.
     ///
@@ -330,13 +330,13 @@ public:
     /// \brief Turns on or off the allocation and use of a texture.
     ///
     /// \param bUse Allocate and use a texture or not.
-    void setUseTexture(bool bUse);
+    void setUseTexture(bool bUse) override;
 
     /// \brief Returns whether the ofImage has a texture or not.
     ///
     /// If the ofImage doesn't have a texture, nothing will be drawn to the screen.
     /// \returns true if the ofImage is using a texture.
-    bool isUsingTexture() const;
+    bool isUsingTexture() const override;
 
     /// \brief Returns a reference to the texture that the ofImage contains.
     ///
@@ -345,11 +345,11 @@ public:
     /// to copy the data from the texture back to the pixels and keep the ofImage in sync.
     ///
     /// \returns A reference to the texture that the ofImage contains.
-    ofTexture & getTexture();
+    ofTexture & getTexture() override;
 
 	/// \brief Returns a const reference to the texture that the ofImage contains.
 	/// \returns A const reference to the texture that the ofImage contains.
-    const ofTexture & getTexture() const;
+    const ofTexture & getTexture() const override;
 
     /// \brief Binds the oftexture instance that the ofImage contains so that
     /// it can be used for advanced drawing.
@@ -382,8 +382,8 @@ public:
     /// \warning This is a raw pointer. It's up to you to get this right.
     ///
     /// \returns A raw pointer to the pixel data.
-    ofPixels_<PixelType> & getPixels();
-    const ofPixels_<PixelType> & getPixels() const;
+    ofPixels_<PixelType> & getPixels() override;
+    const ofPixels_<PixelType> & getPixels() const override;
 
 
     operator ofPixels_<PixelType>&();
@@ -403,11 +403,11 @@ public:
 
     /// \brief Get height of image as a float.
     /// \returns Height of image as float.
-    float getHeight() const;
+    float getHeight() const override;
 
     /// \brief Get width of image as a float.
     /// \returns Width of image as float.
-    float getWidth() const;
+    float getWidth() const override;
 
     /// \}
     /// \name Pixel Setters
@@ -543,7 +543,7 @@ public:
     ///
     /// \param xPct X position of the new anchor, specified as a percent of the width of the image.
     /// \param yPct Y position of the new anchor, specified as a percent of the height of the image.
-    void setAnchorPercent(float xPct, float yPct);
+    void setAnchorPercent(float xPct, float yPct) override;
 
     /// \brief Changes drawing position from top-left corner to position specified by x,y.
     ///
@@ -554,13 +554,13 @@ public:
     ///
     /// \param x X position of the new anchor.
     /// \param y Y position of the new anchor.
-    void setAnchorPoint(float x, float y);
+    void setAnchorPoint(float x, float y) override;
 
     /// \brief Removes anchor positioning.
     ///
     /// Resets the anchor to (0, 0) so the image will be drawn from its
     /// upper left hand corner.
-    void resetAnchor();
+    void resetAnchor() override;
 
     /// \}
 

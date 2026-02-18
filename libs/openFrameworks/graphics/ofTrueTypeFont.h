@@ -162,7 +162,7 @@ struct ofTrueTypeFontSettings {
 	}
 };
 
-class ofTrueTypeFont {
+class ofTrueTypeFont final {
 
 public:
 	/// \brief Construct a default ofTrueTypeFont.

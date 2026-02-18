@@ -50,7 +50,7 @@ typedef ofColor_<unsigned short> ofShortColor;
 /// ~~~~{.cpp}
 /// path.setMode(POLYLINES);
 /// ~~~~
-class ofPath{
+class ofPath final {
 public:
 	/// \name Create and remove paths and sub paths
 	/// \{

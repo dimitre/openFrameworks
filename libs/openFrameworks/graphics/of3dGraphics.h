@@ -456,7 +456,7 @@ void ofDrawBox( float width, float height, float depth );
 // [[deprecated("Use ofDrawBox")]]
 // void ofBox( float width, float height, float depth ) ;
 
-class of3dGraphics{
+class of3dGraphics final {
 public:
 	/// \brief Construct a of3dGraphics object.
 	///

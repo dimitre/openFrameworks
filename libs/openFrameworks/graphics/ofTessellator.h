@@ -22,7 +22,7 @@ typedef struct TESSalloc TESSalloc;
 /// shown on the right.
 ///
 /// ![tessellation](graphics/tessellation.jpg)
-class ofTessellator
+class ofTessellator final
 {
 public:
 	ofTessellator();

@@ -163,14 +163,14 @@ LIBADDONS=(
 	#	 ;;
 
 # REMOVED brotli freetype libpng
-CORELIBS=( mango yaml-cpp freetype glew glfw glm json pugixml rtAudio tess2 uriparser utfcpp zlib-ng )
+CORELIBS=( mango yaml-cpp fmt freetype glew glfw glm json pugixml rtAudio tess2 uriparser utfcpp zlib-ng )
 
 
 case "$PLATFORM" in
     emscripten)
         # remove glew from list
         # CORELIBS=( "${CORELIBS[@]/glew}" )
-        CORELIBS=( mango yaml-cpp freetype glfw glm json pugixml rtAudio tess2 uriparser utfcpp zlib-ng )
+        CORELIBS=( mango yaml-cpp fmt freetype glfw glm json pugixml rtAudio tess2 uriparser utfcpp zlib-ng )
         ADDONLIBS=( assimp opencv libusb )
         LIBADDONS=(
 	"assimp:ofxAssimp"
