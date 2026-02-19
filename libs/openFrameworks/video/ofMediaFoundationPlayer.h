@@ -277,4 +277,9 @@ protected:
     std::atomic_bool mBIsClosedAtomic;
     std::condition_variable mWaitCondition;
 
+    // Playback range
+    float mPlaybackRangeStart = 0.0f;
+    float mPlaybackRangeEnd = 1.0f;
+    bool mBHasPlaybackRange = false;
+
 };

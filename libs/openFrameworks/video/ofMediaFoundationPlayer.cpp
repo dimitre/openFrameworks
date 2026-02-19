@@ -33,6 +33,7 @@
 #include "ofMediaFoundationPlayer.h"
 #include "ofLog.h"
 #include <string.h>
+#include <algorithm>
 #include <mfapi.h>
 #include <mferror.h>
 #include "ofTexture.h"
@@ -890,6 +891,15 @@ void ofMediaFoundationPlayer::OnMediaEngineEvent(DWORD aEvent, DWORD_PTR param1,
 void ofMediaFoundationPlayer::update() {
     mBNewFrame = false;
     mBDone = false;
+    
+    // Check playback range - if we've passed the end, loop back to start
+    if (mBHasPlaybackRange && mBPlaying && mLoopType == OF_LOOP_NORMAL && m_spMediaEngine) {
+        float currentPos = getPosition();
+        if (currentPos >= mPlaybackRangeEnd) {
+            setPosition(mPlaybackRangeStart);
+        }
+    }
+    
     if (mBLoaded && hasVideo() ) {
         LONGLONG time;
         if(m_spMediaEngine->OnVideoStreamTick(&time) == S_OK) {
@@ -987,7 +997,9 @@ void ofMediaFoundationPlayer::play() {
 void ofMediaFoundationPlayer::stop() {
     if (m_spMediaEngine) {
         if (isPlaying()) {
-            setPosition(0.f);
+            // When playback range is set, stop goes to range start, otherwise to video start
+            float stopPos = mBHasPlaybackRange ? mPlaybackRangeStart : 0.0f;
+            setPosition(stopPos);
             setPaused(true);
             mBDone = false;
         }
@@ -1118,7 +1130,9 @@ int ofMediaFoundationPlayer::getTotalNumFrames() const {
 void ofMediaFoundationPlayer::setLoopState(ofLoopType state) {
     if (state == OF_LOOP_NONE || state == OF_LOOP_NORMAL ) {
         if (m_spMediaEngine) {
-            BOOL loop = (state == OF_LOOP_NORMAL) ? TRUE : FALSE;
+            // When playback range is set, we handle looping manually
+            // Otherwise use Media Engine's built-in looping
+            BOOL loop = (state == OF_LOOP_NORMAL && !mBHasPlaybackRange) ? TRUE : FALSE;
             m_spMediaEngine->SetLoop( loop );
         }
         mLoopType = state;
@@ -1181,7 +1195,9 @@ bool ofMediaFoundationPlayer::hasVideo() {
 
 //----------------------------------------------
 void ofMediaFoundationPlayer::firstFrame() {
-    setPosition(0.0f);
+    // When playback range is set, firstFrame goes to range start
+    float startPos = mBHasPlaybackRange ? mPlaybackRangeStart : 0.0f;
+    setPosition(startPos);
 }
 
 //----------------------------------------------
@@ -1200,37 +1216,91 @@ void ofMediaFoundationPlayer::previousFrame() {
 
 //----------------------------------------------
 void ofMediaFoundationPlayer::setPlaybackRange(float startPosition, float endPosition) {
-    // Stub implementation - playback range not supported in Media Foundation player
+    // Clamp values to valid range
+    startPosition = std::max(0.0f, std::min(1.0f, startPosition));
+    endPosition = std::max(0.0f, std::min(1.0f, endPosition));
+    
+    // Ensure start < end
+    if (startPosition >= endPosition) {
+        ofLogWarning("ofMediaFoundationPlayer") << "setPlaybackRange: startPosition must be less than endPosition";
+        return;
+    }
+    
+    mPlaybackRangeStart = startPosition;
+    mPlaybackRangeEnd = endPosition;
+    mBHasPlaybackRange = true;
+    
+    // Disable built-in looping when using playback range
+    if (m_spMediaEngine && mLoopType == OF_LOOP_NORMAL) {
+        m_spMediaEngine->SetLoop(FALSE);
+    }
+    
+    // If current position is outside the new range, seek to start
+    float currentPos = getPosition();
+    if (currentPos < mPlaybackRangeStart || currentPos > mPlaybackRangeEnd) {
+        setPosition(mPlaybackRangeStart);
+    }
 }
 
 //----------------------------------------------
 float ofMediaFoundationPlayer::getPlaybackStart() const {
-    return 0.0f;
+    return mBHasPlaybackRange ? mPlaybackRangeStart : 0.0f;
 }
 
 //----------------------------------------------
 float ofMediaFoundationPlayer::getPlaybackEnd() const {
-    return 1.0f;
+    return mBHasPlaybackRange ? mPlaybackRangeEnd : 1.0f;
 }
 
 //----------------------------------------------
 void ofMediaFoundationPlayer::clearPlaybackRange() {
-    // Stub implementation - playback range not supported in Media Foundation player
+    mPlaybackRangeStart = 0.0f;
+    mPlaybackRangeEnd = 1.0f;
+    mBHasPlaybackRange = false;
+    
+    // Restore built-in looping if loop state is NORMAL
+    if (m_spMediaEngine && mLoopType == OF_LOOP_NORMAL) {
+        m_spMediaEngine->SetLoop(TRUE);
+    }
 }
 
 //----------------------------------------------
 void ofMediaFoundationPlayer::setPlaybackRangeFrames(int startFrame, int endFrame) {
-    // Stub implementation - playback range not supported in Media Foundation player
+    int totalFrames = getTotalNumFrames();
+    if (totalFrames <= 0) {
+        return;
+    }
+    
+    // Clamp to valid frame range
+    startFrame = std::max(0, std::min(totalFrames - 1, startFrame));
+    endFrame = std::max(0, std::min(totalFrames - 1, endFrame));
+    
+    // Ensure start < end
+    if (startFrame >= endFrame) {
+        ofLogWarning("ofMediaFoundationPlayer") << "setPlaybackRangeFrames: startFrame must be less than endFrame";
+        return;
+    }
+    
+    float startPos = startFrame / (float)totalFrames;
+    float endPos = endFrame / (float)totalFrames;
+    
+    setPlaybackRange(startPos, endPos);
 }
 
 //----------------------------------------------
 int ofMediaFoundationPlayer::getPlaybackStartFrame() const {
-    return 0;
+    if (!mBHasPlaybackRange) {
+        return 0;
+    }
+    return (int)(mPlaybackRangeStart * getTotalNumFrames());
 }
 
 //----------------------------------------------
 int ofMediaFoundationPlayer::getPlaybackEndFrame() const {
-    return getTotalNumFrames() - 1;
+    if (!mBHasPlaybackRange) {
+        return getTotalNumFrames() - 1;
+    }
+    return (int)(mPlaybackRangeEnd * getTotalNumFrames());
 }
 
 //----------------------------------------------
@@ -1407,6 +1477,12 @@ void ofMediaFoundationPlayer::handleMEEvent(DWORD aevent) {
         case MF_MEDIA_ENGINE_EVENT_ENDED:
         {
             mBDone = true;
+            // Handle playback range looping
+            if (mBHasPlaybackRange && mLoopType == OF_LOOP_NORMAL) {
+                mBDone = false;
+                setPosition(mPlaybackRangeStart);
+                play();
+            }
             break;
         }
         case MF_MEDIA_ENGINE_EVENT_TIMEUPDATE:
@@ -1424,6 +1500,12 @@ void ofMediaFoundationPlayer::handleMEEvent(DWORD aevent) {
             // looping videos don't fire off an ended event, so try here
             if (ctime < 0.1 && (ctime - mTimeStartedSeek < 0.05)) {
                 mBDone = true;
+                // Handle playback range looping
+                if (mBHasPlaybackRange && mLoopType == OF_LOOP_NORMAL) {
+                    mBDone = false;
+                    setPosition(mPlaybackRangeStart);
+                    play();
+                }
             }
 
             break;
