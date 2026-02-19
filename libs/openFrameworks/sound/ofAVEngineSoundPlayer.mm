@@ -1091,6 +1091,43 @@ void * ofAVEngineSoundPlayer::getAVEnginePlayer() {
 	return (__bridge void *)soundPlayer;
 }
 
+//------------------------------------------------------------
+bool ofAVEngineSoundPlayer::getCurrentBuffer(std::vector<float>& buffer) {
+	if (soundPlayer == NULL) {
+		return false;
+	}
+	
+	// Install tap on first call if not already installed
+	if (!bufferTapInstalled) {
+		AVAudioMixerNode* mixer = [(AVEnginePlayer*)soundPlayer mainMixer];
+		if (mixer == nullptr) {
+			ofLogError("ofAVEngineSoundPlayer") << "getCurrentBuffer(): mixer is null";
+			return false;
+		}
+		
+		[mixer installTapOnBus:0 bufferSize:2048 format:[mixer outputFormatForBus:0] block:^(AVAudioPCMBuffer *buffer, AVAudioTime * /* when */) {
+			if (buffer.frameLength > 0 && buffer.floatChannelData != nullptr && buffer.format.channelCount > 0) {
+				float* data = buffer.floatChannelData[0];
+				int frameLength = (int)buffer.frameLength;
+				
+				std::lock_guard<std::mutex> lock(bufferMutex);
+				currentBuffer.assign(data, data + frameLength);
+			}
+		}];
+		
+		bufferTapInstalled = true;
+		ofLogVerbose("ofAVEngineSoundPlayer") << "getCurrentBuffer(): buffer tap installed";
+	}
+	
+	std::lock_guard<std::mutex> lock(bufferMutex);
+	if (currentBuffer.empty()) {
+		return false;
+	}
+	
+	buffer = currentBuffer;
+	return true;
+}
+
 void ofAVEngineSoundPlayer::installFFTOnMixer() {
 	if (soundPlayer == NULL) {
 		ofLogWarning("ofAVEngineSoundPlayer") << "installFFTOnMixer(): soundPlayer is NULL";

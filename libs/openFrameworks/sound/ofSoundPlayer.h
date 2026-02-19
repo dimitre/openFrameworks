@@ -135,6 +135,12 @@ public:
 	/// \brief Gets duration in milliseconds.
 	/// \return duration in milliseconds.
 	unsigned int getDurationMS() const override;
+	
+	/// \brief Gets the current audio buffer being played.
+	/// \param buffer Vector to fill with current audio samples (mono).
+	/// \return true if buffer was filled, false if not available.
+	/// \note This requires platform-specific support. Currently works with AV_ENGINE.
+	bool getCurrentBuffer(std::vector<float>& buffer) override;
 
 protected:
     std::shared_ptr<ofBaseSoundPlayer> player;

@@ -306,3 +306,11 @@ unsigned int ofSoundPlayer::getDurationMS() const {
 		return 0;
 	}
 }
+
+//--------------------------------------------------------------------
+bool ofSoundPlayer::getCurrentBuffer(std::vector<float>& buffer) {
+	if( player ){
+		return player->getCurrentBuffer(buffer);
+	}
+	return false;
+}

@@ -291,7 +291,7 @@ int	ofxUDPManager::Send(const char* pBuff,	const int iSize)
 		}
 	}
 
-	int ret = sendto(m_hSocket, (char*)pBuff,	iSize, 0, (sockaddr *)&saClient, sizeof(sockaddr));
+	int ret = (int)sendto(m_hSocket, (char*)pBuff,	iSize, 0, (sockaddr *)&saClient, sizeof(sockaddr));
 	if(ret==-1) ofxNetworkLogLastError();
 	return ret;
 	//	return(send(m_hSocket, pBuff, iSize, 0));
@@ -318,7 +318,7 @@ int	ofxUDPManager::SendAll(const char*	pBuff, const int iSize)
 				return ret;
 			}
 		}
-		ret = sendto(m_hSocket, (char*)pBuff,	iSize, 0, (sockaddr *)&saClient, sizeof(sockaddr));
+		ret = (int)sendto(m_hSocket, (char*)pBuff,	iSize, 0, (sockaddr *)&saClient, sizeof(sockaddr));
 		if (ret == SOCKET_ERROR) {
 			return SOCKET_ERROR;
 		}
@@ -406,7 +406,7 @@ int	ofxUDPManager::Receive(char* pBuff, const int iSize)
 	int	ret=0;
 
 	memset(pBuff, 0, iSize);
-	ret= recvfrom(m_hSocket, pBuff,	iSize, 0, (sockaddr *)&saClient, &nLen);
+	ret= (int)recvfrom(m_hSocket, pBuff,	iSize, 0, (sockaddr *)&saClient, &nLen);
 
 	if (ret	> 0)
 	{
@@ -437,11 +437,11 @@ void ofxUDPManager::SetTimeoutReceive(int timeoutInSeconds)
 }
 int	ofxUDPManager::GetTimeoutSend()
 {
-	return m_dwTimeoutSend;
+	return (int)m_dwTimeoutSend;
 }
 int	ofxUDPManager::GetTimeoutReceive()
 {
-	return m_dwTimeoutReceive;
+	return (int)m_dwTimeoutReceive;
 }
 
 //--------------------------------------------------------------------------------

@@ -13,6 +13,8 @@
 #ifdef OF_SOUND_PLAYER_AV_ENGINE
 
 #include "ofSoundBaseTypes.h"
+#include <mutex>
+#include <vector>
 class ofEventArgs;
 
 // FIXME: some can be moved to .mm
@@ -71,11 +73,18 @@ public:
 
 	float getDuration() const override;
 	unsigned int getDurationMS() const override;
+	
+	bool getCurrentBuffer(std::vector<float>& buffer) override;
 
 	void * getAVEnginePlayer();
 
 private:
 	ofSoundFFT fft;
+	
+	// Current audio buffer storage for external access
+	std::vector<float> currentBuffer;
+	std::mutex bufferMutex;
+	bool bufferTapInstalled = false;
 	
 	// Static members for system-wide FFT
 	static ofSoundFFT systemFFT;
