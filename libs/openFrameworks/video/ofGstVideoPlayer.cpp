@@ -424,6 +424,34 @@ void ofGstVideoPlayer::close(){
 	videoUtils.close();
 }
 
+void ofGstVideoPlayer::setPlaybackRange(float startPosition, float endPosition){
+	// Stub implementation - playback range not supported in GStreamer player
+}
+
+float ofGstVideoPlayer::getPlaybackStart() const{
+	return 0.0f;
+}
+
+float ofGstVideoPlayer::getPlaybackEnd() const{
+	return 1.0f;
+}
+
+void ofGstVideoPlayer::clearPlaybackRange(){
+	// Stub implementation - playback range not supported in GStreamer player
+}
+
+void ofGstVideoPlayer::setPlaybackRangeFrames(int startFrame, int endFrame){
+	// Stub implementation - playback range not supported in GStreamer player
+}
+
+int ofGstVideoPlayer::getPlaybackStartFrame() const{
+	return 0;
+}
+
+int ofGstVideoPlayer::getPlaybackEndFrame() const{
+	return getTotalNumFrames() - 1;
+}
+
 bool ofGstVideoPlayer::isFrameNew() const {
 	return videoUtils.isFrameNew();
 }

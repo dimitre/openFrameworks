@@ -158,6 +158,45 @@ void ofBaseVideoPlayer::previousFrame(){
 }
 
 //---------------------------------------------------------------------------
+void ofBaseVideoPlayer::setPlaybackRange(float startPosition, float endPosition){
+	ofLogWarning("ofBaseVideoPlayer") << "setPlaybackRange() not implemented";
+}
+
+//---------------------------------------------------------------------------
+float ofBaseVideoPlayer::getPlaybackStart() const{
+	ofLogWarning("ofBaseVideoPlayer") << "getPlaybackStart() not implemented";
+	return 0.0f;
+}
+
+//---------------------------------------------------------------------------
+float ofBaseVideoPlayer::getPlaybackEnd() const{
+	ofLogWarning("ofBaseVideoPlayer") << "getPlaybackEnd() not implemented";
+	return 1.0f;
+}
+
+//---------------------------------------------------------------------------
+void ofBaseVideoPlayer::clearPlaybackRange(){
+	ofLogWarning("ofBaseVideoPlayer") << "clearPlaybackRange() not implemented";
+}
+
+//---------------------------------------------------------------------------
+void ofBaseVideoPlayer::setPlaybackRangeFrames(int startFrame, int endFrame){
+	ofLogWarning("ofBaseVideoPlayer") << "setPlaybackRangeFrames() not implemented";
+}
+
+//---------------------------------------------------------------------------
+int ofBaseVideoPlayer::getPlaybackStartFrame() const{
+	ofLogWarning("ofBaseVideoPlayer") << "getPlaybackStartFrame() not implemented";
+	return 0;
+}
+
+//---------------------------------------------------------------------------
+int ofBaseVideoPlayer::getPlaybackEndFrame() const{
+	ofLogWarning("ofBaseVideoPlayer") << "getPlaybackEndFrame() not implemented";
+	return getTotalNumFrames() - 1;
+}
+
+//---------------------------------------------------------------------------
 glm::mat4 ofBaseRenderer::getCurrentOrientationMatrix() const {
 	ofLogWarning() << "getCurrentOrientationMatrix() Not implemented for this renderer. Returning Identity matrix.";
 	return glm::mat4{ 1.0f };

@@ -403,4 +403,50 @@ public:
 	/// This allows the user to advance backward through the video manually one
 	/// frame at a time without calling play().
 	virtual void previousFrame();
+
+	/// \brief Set a playback range for the video.
+	///
+	/// When a playback range is set, the video will be constrained to play
+	/// within the specified start and end positions. If the video reaches
+	/// the end of the range, it will behave according to the current loop state:
+	/// - OF_LOOP_NONE: Stop at end position
+	/// - OF_LOOP_NORMAL: Jump to start position
+	/// - OF_LOOP_PALINDROME: Reverse playback direction
+	///
+	/// \param startPosition The start position (0.0 to 1.0).
+	/// \param endPosition The end position (0.0 to 1.0).
+	/// \sa clearPlaybackRange()
+	virtual void setPlaybackRange(float startPosition, float endPosition);
+
+	/// \brief Get the start position of the current playback range.
+	///
+	/// \return The start position (0.0 to 1.0), or 0.0 if no range is set.
+	virtual float getPlaybackStart() const;
+
+	/// \brief Get the end position of the current playback range.
+	///
+	/// \return The end position (0.0 to 1.0), or 1.0 if no range is set.
+	virtual float getPlaybackEnd() const;
+
+	/// \brief Clear the playback range and restore full video playback.
+	///
+	/// This resets the playback range to the full video (0.0 to 1.0).
+	virtual void clearPlaybackRange();
+
+	/// \brief Set a playback range using frame numbers.
+	///
+	/// \param startFrame The start frame number.
+	/// \param endFrame The end frame number.
+	/// \sa setPlaybackRange(float, float)
+	virtual void setPlaybackRangeFrames(int startFrame, int endFrame);
+
+	/// \brief Get the start frame of the current playback range.
+	///
+	/// \return The start frame number, or 0 if no range is set.
+	virtual int getPlaybackStartFrame() const;
+
+	/// \brief Get the end frame of the current playback range.
+	///
+	/// \return The end frame number, or getTotalNumFrames() - 1 if no range is set.
+	virtual int getPlaybackEndFrame() const;
 };

@@ -1347,3 +1347,31 @@ void ofDirectShowPlayer::previousFrame(){
         player->preFrame();
     }
 }
+
+void ofDirectShowPlayer::setPlaybackRange(float startPosition, float endPosition){
+    // Stub implementation - playback range not supported in DirectShow player
+}
+
+float ofDirectShowPlayer::getPlaybackStart() const{
+    return 0.0f;
+}
+
+float ofDirectShowPlayer::getPlaybackEnd() const{
+    return 1.0f;
+}
+
+void ofDirectShowPlayer::clearPlaybackRange(){
+    // Stub implementation - playback range not supported in DirectShow player
+}
+
+void ofDirectShowPlayer::setPlaybackRangeFrames(int startFrame, int endFrame){
+    // Stub implementation - playback range not supported in DirectShow player
+}
+
+int ofDirectShowPlayer::getPlaybackStartFrame() const{
+    return 0;
+}
+
+int ofDirectShowPlayer::getPlaybackEndFrame() const{
+    return getTotalNumFrames() - 1;
+}

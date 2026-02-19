@@ -144,6 +144,14 @@ public:
     void				nextFrame() override;
     void				previousFrame() override;
 
+    void setPlaybackRange(float startPosition, float endPosition) override;
+    float getPlaybackStart() const override;
+    float getPlaybackEnd() const override;
+    void clearPlaybackRange() override;
+    void setPlaybackRangeFrames(int startFrame, int endFrame) override;
+    int getPlaybackStartFrame() const override;
+    int getPlaybackEndFrame() const override;
+
     bool                setPixelFormat(ofPixelFormat pixelFormat) override;
     ofPixelFormat       getPixelFormat() const override;
 

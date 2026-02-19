@@ -47,6 +47,14 @@ public:
 	void 	setSpeed(float speed) override;
 	void 	close() override;
 
+	void setPlaybackRange(float startPosition, float endPosition) override;
+	float getPlaybackStart() const override;
+	float getPlaybackEnd() const override;
+	void clearPlaybackRange() override;
+	void setPlaybackRangeFrames(int startFrame, int endFrame) override;
+	int getPlaybackStartFrame() const override;
+	int getPlaybackEndFrame() const override;
+
 	bool 			isFrameNew() const override;
 
 	ofPixels&		getPixels() override;

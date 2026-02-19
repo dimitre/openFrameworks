@@ -76,6 +76,11 @@ typedef enum _playerLoopType{
 
 	NSLock* asyncLock;
 	NSCondition* deallocCond;
+	
+	// Playback range
+	float playbackRangeStart;
+	float playbackRangeEnd;
+	BOOL bHasPlaybackRange;
 }
 
 @property (nonatomic, strong) AVPlayer * player;
@@ -156,6 +161,14 @@ typedef enum _playerLoopType{
 - (void)setWillBeUpdatedExternally:(BOOL)value;
 - (void)close;
 - (void)setStreaming:(BOOL)value;
+
+- (void)setPlaybackRangeStart:(float)startPosition end:(float)endPosition;
+- (float)getPlaybackRangeStart;
+- (float)getPlaybackRangeEnd;
+- (void)clearPlaybackRange;
+- (void)setPlaybackRangeFramesStart:(int)startFrame end:(int)endFrame;
+- (int)getPlaybackRangeStartFrame;
+- (int)getPlaybackRangeEndFrame;
 
 
 @end

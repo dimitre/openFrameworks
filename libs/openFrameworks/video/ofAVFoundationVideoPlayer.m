@@ -76,6 +76,11 @@ static const void *PlayerRateContext = &ItemStatusContext;
 		bSampleAudio = NO;
 		
 		bStream = NO;
+		
+		// Playback range initialization
+		playbackRangeStart = 0.0f;
+		playbackRangeEnd = 1.0f;
+		bHasPlaybackRange = NO;
 	}
 	return self;
 }
@@ -401,10 +406,14 @@ static const void *PlayerRateContext = &ItemStatusContext;
 	currentTime = kCMTimeZero;
 	
 	videoWidth = 0;
-	videoHeight = 0;
-	
-
-	// a reference to all the variables for the block
+		videoHeight = 0;
+		
+		// Reset playback range
+		playbackRangeStart = 0.0f;
+		playbackRangeEnd = 1.0f;
+		bHasPlaybackRange = NO;
+		
+		// a reference to all the variables for the block
 	__block AVAsset* currentAsset = _asset;
 	__block AVAssetReader* currentReader = _assetReader;
 	__block AVAssetReaderTrackOutput* currentVideoTrack = _assetReaderVideoTrackOutput;
@@ -797,7 +806,12 @@ static const void *PlayerRateContext = &ItemStatusContext;
 	if (speed > 0.0) {
 		// playing forward
 		if (loop == LOOP_NORMAL) {
-			[self seekToStart];
+			// If playback range is set, loop to range start, otherwise to video start
+			if (bHasPlaybackRange) {
+				[self setPosition:playbackRangeStart];
+			} else {
+				[self seekToStart];
+			}
 			[self play];
 		} else if (loop == LOOP_PALINDROME) {
 			[self setSpeed:-speed];
@@ -807,7 +821,12 @@ static const void *PlayerRateContext = &ItemStatusContext;
 	} else if (speed < 0.0) {
 		// playing backwards
 		if (loop == LOOP_NORMAL) {
-			[self seekToEnd];
+			// If playback range is set, loop to range end, otherwise to video end
+			if (bHasPlaybackRange) {
+				[self setPosition:playbackRangeEnd];
+			} else {
+				[self seekToEnd];
+			}
 			[self play];
 		} else if (loop == LOOP_PALINDROME) {
 			[self setSpeed:-speed];
@@ -965,6 +984,23 @@ static const void *PlayerRateContext = &ItemStatusContext;
 	
 	BOOL bTimeChanged = CMTimeCompare(time, currentTime) != 0;
 	currentTime = time;
+	
+	// Check playback range
+	if (bHasPlaybackRange && bPlaying && loop > LOOP_NONE) {
+		float currentPos = CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration);
+		
+		if (speed > 0.0f && currentPos >= playbackRangeEnd) {
+			// Reached end of playback range while playing forward
+			[self setPosition:playbackRangeStart];
+			bNewFrame = NO;
+			return;
+		} else if (speed < 0.0f && currentPos <= playbackRangeStart) {
+			// Reached start of playback range while playing backward
+			[self setPosition:playbackRangeEnd];
+			bNewFrame = NO;
+			return;
+		}
+	}
 	
 	if(bUpdateFirstFrame) {
 		
@@ -1153,7 +1189,12 @@ static const void *PlayerRateContext = &ItemStatusContext;
 }
 
 - (void)stop {
-	[self setPosition:0];
+	// When playback range is set, stop goes to range start, otherwise to video start
+	if (bHasPlaybackRange) {
+		[self setPosition:playbackRangeStart];
+	} else {
+		[self setPosition:0];
+	}
 	[self pause];
 	bIsStopped = YES;
 }
@@ -1198,11 +1239,21 @@ static const void *PlayerRateContext = &ItemStatusContext;
 
 //---------------------------------------------------------- seek.
 - (void)seekToStart {
-	[self seekToTime:kCMTimeZero withTolerance:kCMTimeZero];
+	// When playback range is set, seek to range start, otherwise to video start
+	if (bHasPlaybackRange) {
+		[self setPosition:playbackRangeStart];
+	} else {
+		[self seekToTime:kCMTimeZero withTolerance:kCMTimeZero];
+	}
 }
 
 - (void)seekToEnd {
-	[self seekToTime:duration withTolerance:kCMTimeZero];
+	// When playback range is set, seek to range end, otherwise to video end
+	if (bHasPlaybackRange) {
+		[self setPosition:playbackRangeEnd];
+	} else {
+		[self seekToTime:duration withTolerance:kCMTimeZero];
+	}
 }
 
 - (void)seekToTime:(CMTime)time {
@@ -1480,6 +1531,80 @@ static const void *PlayerRateContext = &ItemStatusContext;
 
 - (void)setStreaming:(BOOL)value {
 	bStream = value;
+}
+
+#pragma mark - Playback Range
+
+- (void)setPlaybackRangeStart:(float)startPosition end:(float)endPosition {
+	// Clamp values to valid range
+	startPosition = MAX(0.0f, MIN(1.0f, startPosition));
+	endPosition = MAX(0.0f, MIN(1.0f, endPosition));
+	
+	// Ensure start < end
+	if (startPosition >= endPosition) {
+		NSLog(@"setPlaybackRange: startPosition must be less than endPosition");
+		return;
+	}
+	
+	playbackRangeStart = startPosition;
+	playbackRangeEnd = endPosition;
+	bHasPlaybackRange = YES;
+	
+	// If current position is outside the new range, seek to start
+	float currentPos = [self getPosition];
+	if (currentPos < playbackRangeStart || currentPos > playbackRangeEnd) {
+		[self setPosition:playbackRangeStart];
+	}
+}
+
+- (float)getPlaybackRangeStart {
+	return bHasPlaybackRange ? playbackRangeStart : 0.0f;
+}
+
+- (float)getPlaybackRangeEnd {
+	return bHasPlaybackRange ? playbackRangeEnd : 1.0f;
+}
+
+- (void)clearPlaybackRange {
+	playbackRangeStart = 0.0f;
+	playbackRangeEnd = 1.0f;
+	bHasPlaybackRange = NO;
+}
+
+- (void)setPlaybackRangeFramesStart:(int)startFrame end:(int)endFrame {
+	int totalFrames = [self getDurationInFrames];
+	if (totalFrames <= 0) {
+		return;
+	}
+	
+	// Clamp to valid frame range
+	startFrame = MAX(0, MIN(totalFrames - 1, startFrame));
+	endFrame = MAX(0, MIN(totalFrames - 1, endFrame));
+	
+	// Ensure start < end
+	if (startFrame >= endFrame) {
+		NSLog(@"setPlaybackRangeFrames: startFrame must be less than endFrame");
+		return;
+	}
+	
+	float startPos = startFrame / (float)totalFrames;
+	float endPos = endFrame / (float)totalFrames;
+	
+	[self setPlaybackRangeStart:startPos end:endPos];
+}
+
+- (int)getPlaybackRangeStartFrame {
+	if (!bHasPlaybackRange) {
+		return 0;
+	}
+	return (int)(playbackRangeStart * [self getDurationInFrames]);
+}
+
+- (int)getPlaybackRangeEndFrame {
+	if (!bHasPlaybackRange) {
+		return [self getDurationInFrames] - 1;
+	}
+	return (int)(playbackRangeEnd * [self getDurationInFrames]);
 }
 
 @end

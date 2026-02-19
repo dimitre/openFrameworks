@@ -725,7 +725,9 @@ void ofAVFoundationPlayer::firstFrame() {
         return;
     }
 
-    [videoPlayer setPosition:0];
+    // When playback range is set, firstFrame goes to range start
+    float startPos = [videoPlayer getPlaybackRangeStart];
+    [videoPlayer setPosition:startPos];
 }
 
 //--------------------------------------------------------------
@@ -744,6 +746,62 @@ void ofAVFoundationPlayer::previousFrame() {
     }
 
     [videoPlayer stepByCount:-1];
+}
+
+//--------------------------------------------------------------
+void ofAVFoundationPlayer::setPlaybackRange(float startPosition, float endPosition) {
+    if(videoPlayer == nullptr) {
+        return;
+    }
+    [videoPlayer setPlaybackRangeStart:startPosition end:endPosition];
+}
+
+//--------------------------------------------------------------
+float ofAVFoundationPlayer::getPlaybackStart() const {
+    if(videoPlayer == nullptr) {
+        return 0.0f;
+    }
+    return [videoPlayer getPlaybackRangeStart];
+}
+
+//--------------------------------------------------------------
+float ofAVFoundationPlayer::getPlaybackEnd() const {
+    if(videoPlayer == nullptr) {
+        return 1.0f;
+    }
+    return [videoPlayer getPlaybackRangeEnd];
+}
+
+//--------------------------------------------------------------
+void ofAVFoundationPlayer::clearPlaybackRange() {
+    if(videoPlayer == nullptr) {
+        return;
+    }
+    [videoPlayer clearPlaybackRange];
+}
+
+//--------------------------------------------------------------
+void ofAVFoundationPlayer::setPlaybackRangeFrames(int startFrame, int endFrame) {
+    if(videoPlayer == nullptr) {
+        return;
+    }
+    [videoPlayer setPlaybackRangeFramesStart:startFrame end:endFrame];
+}
+
+//--------------------------------------------------------------
+int ofAVFoundationPlayer::getPlaybackStartFrame() const {
+    if(videoPlayer == nullptr) {
+        return 0;
+    }
+    return [videoPlayer getPlaybackRangeStartFrame];
+}
+
+//--------------------------------------------------------------
+int ofAVFoundationPlayer::getPlaybackEndFrame() const {
+    if(videoPlayer == nullptr) {
+        return 0;
+    }
+    return [videoPlayer getPlaybackRangeEndFrame];
 }
 
 //--------------------------------------------------------------

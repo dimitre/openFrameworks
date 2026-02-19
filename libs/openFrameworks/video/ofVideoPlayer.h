@@ -97,6 +97,14 @@ public:
 	void				nextFrame();
 	void				previousFrame();
 
+	void				setPlaybackRange(float startPosition, float endPosition);
+	float				getPlaybackStart() const;
+	float				getPlaybackEnd() const;
+	void				clearPlaybackRange();
+	void				setPlaybackRangeFrames(int startFrame, int endFrame);
+	int					getPlaybackStartFrame() const;
+	int					getPlaybackEndFrame() const;
+
 	float 				getHeight() const override;
 	float 				getWidth() const override;
 

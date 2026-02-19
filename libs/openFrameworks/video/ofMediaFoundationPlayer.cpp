@@ -1199,6 +1199,41 @@ void ofMediaFoundationPlayer::previousFrame() {
 }
 
 //----------------------------------------------
+void ofMediaFoundationPlayer::setPlaybackRange(float startPosition, float endPosition) {
+    // Stub implementation - playback range not supported in Media Foundation player
+}
+
+//----------------------------------------------
+float ofMediaFoundationPlayer::getPlaybackStart() const {
+    return 0.0f;
+}
+
+//----------------------------------------------
+float ofMediaFoundationPlayer::getPlaybackEnd() const {
+    return 1.0f;
+}
+
+//----------------------------------------------
+void ofMediaFoundationPlayer::clearPlaybackRange() {
+    // Stub implementation - playback range not supported in Media Foundation player
+}
+
+//----------------------------------------------
+void ofMediaFoundationPlayer::setPlaybackRangeFrames(int startFrame, int endFrame) {
+    // Stub implementation - playback range not supported in Media Foundation player
+}
+
+//----------------------------------------------
+int ofMediaFoundationPlayer::getPlaybackStartFrame() const {
+    return 0;
+}
+
+//----------------------------------------------
+int ofMediaFoundationPlayer::getPlaybackEndFrame() const {
+    return getTotalNumFrames() - 1;
+}
+
+//----------------------------------------------
 bool ofMediaFoundationPlayer::setPixelFormat(ofPixelFormat pixelFormat) {
     if (pixelFormat == OF_PIXELS_BGRA || pixelFormat == OF_PIXELS_BGR ) {
         m_d3dFormat = DXGI_FORMAT_B8G8R8A8_UNORM;

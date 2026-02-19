@@ -396,6 +396,59 @@ void ofVideoPlayer::previousFrame(){
 }
 
 //---------------------------------------------------------------------------
+void ofVideoPlayer::setPlaybackRange(float startPosition, float endPosition){
+	if( player ){
+		player->setPlaybackRange(startPosition, endPosition);
+	}
+}
+
+//---------------------------------------------------------------------------
+float ofVideoPlayer::getPlaybackStart() const{
+	if( player ){
+		return player->getPlaybackStart();
+	}
+	return 0.0f;
+}
+
+//---------------------------------------------------------------------------
+float ofVideoPlayer::getPlaybackEnd() const{
+	if( player ){
+		return player->getPlaybackEnd();
+	}
+	return 1.0f;
+}
+
+//---------------------------------------------------------------------------
+void ofVideoPlayer::clearPlaybackRange(){
+	if( player ){
+		player->clearPlaybackRange();
+	}
+}
+
+//---------------------------------------------------------------------------
+void ofVideoPlayer::setPlaybackRangeFrames(int startFrame, int endFrame){
+	if( player ){
+		player->setPlaybackRangeFrames(startFrame, endFrame);
+	}
+}
+
+//---------------------------------------------------------------------------
+int ofVideoPlayer::getPlaybackStartFrame() const{
+	if( player ){
+		return player->getPlaybackStartFrame();
+	}
+	return 0;
+}
+
+//---------------------------------------------------------------------------
+int ofVideoPlayer::getPlaybackEndFrame() const{
+	if( player ){
+		return player->getPlaybackEndFrame();
+	}
+	return 0;
+}
+
+//---------------------------------------------------------------------------
 void ofVideoPlayer::setSpeed(float _speed){
 	if( player ){
 		player->setSpeed(_speed);
