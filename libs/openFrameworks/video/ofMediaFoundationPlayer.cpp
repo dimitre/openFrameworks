@@ -893,10 +893,17 @@ void ofMediaFoundationPlayer::update() {
     mBDone = false;
     
     // Check playback range - if we've passed the end, loop back to start
-    if (mBHasPlaybackRange && mBPlaying && mLoopType == OF_LOOP_NORMAL && m_spMediaEngine) {
+    if (mBHasPlaybackRange && mLoopType == OF_LOOP_NORMAL && m_spMediaEngine) {
         float currentPos = getPosition();
-        if (currentPos >= mPlaybackRangeEnd) {
+        // Add a small buffer to ensure we catch the end (position checks can be imprecise)
+        float effectiveEnd = mPlaybackRangeEnd - 0.001f;
+        if (currentPos >= effectiveEnd) {
             setPosition(mPlaybackRangeStart);
+            // Always play() to ensure playback continues after seeking
+            // The Media Engine may have paused when reaching the end
+            play();
+            // Explicitly set playing state (event might not fire immediately)
+            mBPlaying = true;
         }
     }
     
@@ -986,7 +993,9 @@ bool ofMediaFoundationPlayer::isFrameNew() const {
 void ofMediaFoundationPlayer::play() {
     if (m_spMediaEngine) {
         if (mBDone) {
-            setPosition(0.f);
+            // When playback range is set, go to range start, otherwise to video start
+            float startPos = mBHasPlaybackRange ? mPlaybackRangeStart : 0.0f;
+            setPosition(startPos);
         }
         m_spMediaEngine->Play();
         mBDone = false;
@@ -1477,11 +1486,13 @@ void ofMediaFoundationPlayer::handleMEEvent(DWORD aevent) {
         case MF_MEDIA_ENGINE_EVENT_ENDED:
         {
             mBDone = true;
+            mBPlaying = false;
             // Handle playback range looping
             if (mBHasPlaybackRange && mLoopType == OF_LOOP_NORMAL) {
                 mBDone = false;
                 setPosition(mPlaybackRangeStart);
                 play();
+                mBPlaying = true;
             }
             break;
         }
@@ -1498,14 +1509,9 @@ void ofMediaFoundationPlayer::handleMEEvent(DWORD aevent) {
         {
             auto ctime = m_spMediaEngine->GetCurrentTime();
             // looping videos don't fire off an ended event, so try here
-            if (ctime < 0.1 && (ctime - mTimeStartedSeek < 0.05)) {
+            // Only detect loop if we're not using playback range (range is handled in update())
+            if (!mBHasPlaybackRange && ctime < 0.1 && (ctime - mTimeStartedSeek < 0.05)) {
                 mBDone = true;
-                // Handle playback range looping
-                if (mBHasPlaybackRange && mLoopType == OF_LOOP_NORMAL) {
-                    mBDone = false;
-                    setPosition(mPlaybackRangeStart);
-                    play();
-                }
             }
 
             break;
