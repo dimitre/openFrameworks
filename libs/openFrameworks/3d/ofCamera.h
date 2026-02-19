@@ -19,7 +19,7 @@ public:
 	ofCamera();
 
 	/// \brief Destroy the camera.
-	virtual ~ofCamera();
+	virtual ~ofCamera() override;
 
 	/// \}
 	/// \name Camera Settings
@@ -149,13 +149,13 @@ public:
 	///     camera.end();
 	/// }
 	/// ~~~~
-	virtual void begin() {
+	void begin() {
 		begin(getViewport());
 	}
-	virtual void begin(const ofRectangle & viewport);
+	void begin(const ofRectangle & viewport);
 
 	/// \brief Ends rendering with the camera.
-	virtual void end();
+	void end();
 
 	/// \}
 	/// \name OpenGL Matrix

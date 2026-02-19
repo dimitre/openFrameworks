@@ -20,8 +20,8 @@ public:
 	/// \returns A path to the loaded video or an empty string if not loaded.
 	fs::path				getMoviePath() const;
 
-	bool				setPixelFormat(ofPixelFormat pixelFormat);
-	ofPixelFormat		getPixelFormat() const;
+	bool				setPixelFormat(ofPixelFormat pixelFormat) override;
+	ofPixelFormat		getPixelFormat() const override;
 
 	/// \brief Closes the movie file and releases its resources.
 	///
@@ -34,19 +34,19 @@ public:
 	/// This is an alias for closeMovie().
 	///
 	/// \sa closeMovie()
-	void 				close();
+	void 				close() override;
 
 	/// \brief Update the video player's internal state to continue playback.
 	///
 	/// If normal video playback is desired, this method is usually called
 	/// once per animation frame inside of ofApp::update().
-	void				update();
+	void				update() override;
 	void 				play();
 	void 				stop();
 
-	bool 				isFrameNew() const;
-	ofPixels& 			getPixels();
-	const ofPixels&		getPixels() const;
+	bool 				isFrameNew() const override;
+	ofPixels& 			getPixels() override;
+	const ofPixels&		getPixels() const override;
 	float 				getPosition() const;
 	float 				getSpeed() const;
 	float 				getDuration() const;
@@ -59,14 +59,14 @@ public:
 	void   				setSpeed(float speed);
 	void				setFrame(int frame);
 
-	void 				setUseTexture(bool bUse);
-	bool 				isUsingTexture() const;
-	ofTexture &			getTexture();
-	const ofTexture &	getTexture() const;
-	std::vector<ofTexture> & getTexturePlanes();
-	const std::vector<ofTexture> & getTexturePlanes() const;
-	void 				draw(float x, float y, float w, float h) const;
-	void 				draw(float x, float y) const;
+	void 				setUseTexture(bool bUse) override;
+	bool 				isUsingTexture() const override;
+	ofTexture &			getTexture() override;
+	const ofTexture &	getTexture() const override;
+	std::vector<ofTexture> & getTexturePlanes() override;
+	const std::vector<ofTexture> & getTexturePlanes() const override;
+	void 				draw(float x, float y, float w, float h) const override;
+	void 				draw(float x, float y) const override;
 	using ofBaseDraws::draw;
 	/// \brief Binds the video texture to the current rendering context.
 	///
@@ -84,9 +84,9 @@ public:
 	/// \sa ofTexture::unbind()
 	void 				unbind() const;
 
-	void				setAnchorPercent(float xPct, float yPct);
-	void				setAnchorPoint(float x, float y);
-	void				resetAnchor();
+	void				setAnchorPercent(float xPct, float yPct) override;
+	void				setAnchorPoint(float x, float y) override;
+	void				resetAnchor() override;
 
 	void 				setPaused(bool bPause);
 
@@ -97,13 +97,13 @@ public:
 	void				nextFrame();
 	void				previousFrame();
 
-	float 				getHeight() const;
-	float 				getWidth() const;
+	float 				getHeight() const override;
+	float 				getWidth() const override;
 
 	bool				isPaused() const;
 	bool				isLoaded() const;
 	bool				isPlaying() const;
-	bool 				isInitialized() const;
+	bool 				isInitialized() const override;
 
 	/// \brief Set the internal video player implementation.
 	///

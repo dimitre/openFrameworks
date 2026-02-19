@@ -815,7 +815,7 @@ static const void *PlayerRateContext = &ItemStatusContext;
 		}
 	}
 	
-	
+	// Keep bFinished = NO for looping modes, allow manual control when LOOP_NONE
 	if(loop > LOOP_NONE) {
 		bFinished = NO;
 	}
@@ -1333,6 +1333,9 @@ static const void *PlayerRateContext = &ItemStatusContext;
 }
 
 - (double)getCurrentTimeInSec {
+	if (CMTIME_IS_NEGATIVE_INFINITY(videoSampleTime)) {
+		return 0.0;
+	}
 	return CMTimeGetSeconds(videoSampleTime);
 }
 
@@ -1377,7 +1380,11 @@ static const void *PlayerRateContext = &ItemStatusContext;
 }
 
 - (float)getPosition {
-	return ([self getCurrentTimeInSec] / [self getDurationInSec]);
+	double duration = [self getDurationInSec];
+	if (duration <= 0.0) {
+		return 0.0;
+	}
+	return ([self getCurrentTimeInSec] / duration);
 }
 
 - (void)setVolume:(float)value {

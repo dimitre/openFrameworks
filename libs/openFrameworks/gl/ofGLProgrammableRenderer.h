@@ -21,74 +21,74 @@ public:
 	void setup(int glVersionMajor, int glVersionMinor);
 
     static const std::string TYPE;
-	const std::string & getType(){ return TYPE; }
+	const std::string & getType() override { return TYPE; }
 
-    void startRender();
-    void finishRender();
+    void startRender() override;
+    void finishRender() override;
 
 	using ofBaseRenderer::draw;
 	using ofBaseGLRenderer::draw;
-	void draw(const ofMesh & vertexData, ofPolyRenderMode renderType, bool useColors, bool useTextures, bool useNormals) const;
-    void draw(const of3dPrimitive& model, ofPolyRenderMode renderType) const;
-    void draw(const ofNode& node) const;
-	void draw(const ofPolyline & poly) const;
-	void draw(const ofPath & path) const;
-	void draw(const ofImage & image, float x, float y, float z, float w, float h, float sx, float sy, float sw, float sh) const;
-	void draw(const ofFloatImage & image, float x, float y, float z, float w, float h, float sx, float sy, float sw, float sh) const;
-	void draw(const ofShortImage & image, float x, float y, float z, float w, float h, float sx, float sy, float sw, float sh) const;
-	void draw(const ofTexture & image, float x, float y, float z, float w, float h, float sx, float sy, float sw, float sh) const;
-    void draw(const ofBaseVideoDraws & video, float x, float y, float w, float h) const;
-	void draw(const ofVbo & vbo, GLuint drawMode, int first, int total) const;
-	void drawElements(const ofVbo & vbo, GLuint drawMode, int amt, int offsetelements = 0) const;
-	void drawInstanced(const ofVbo & vbo, GLuint drawMode, int first, int total, int primCount) const;
-	void drawElementsInstanced(const ofVbo & vbo, GLuint drawMode, int amt, int primCount) const;
-	void draw(const ofVboMesh & mesh, ofPolyRenderMode renderType) const;
-	void drawInstanced(const ofVboMesh & mesh, ofPolyRenderMode renderType, int primCount) const;
-    ofPath & getPath();
+	void draw(const ofMesh & vertexData, ofPolyRenderMode renderType, bool useColors, bool useTextures, bool useNormals) const override;
+    void draw(const of3dPrimitive& model, ofPolyRenderMode renderType) const override;
+    void draw(const ofNode& node) const override;
+	void draw(const ofPolyline & poly) const override;
+	void draw(const ofPath & path) const override;
+	void draw(const ofImage & image, float x, float y, float z, float w, float h, float sx, float sy, float sw, float sh) const override;
+	void draw(const ofFloatImage & image, float x, float y, float z, float w, float h, float sx, float sy, float sw, float sh) const override;
+	void draw(const ofShortImage & image, float x, float y, float z, float w, float h, float sx, float sy, float sw, float sh) const override;
+	void draw(const ofTexture & image, float x, float y, float z, float w, float h, float sx, float sy, float sw, float sh) const override;
+    void draw(const ofBaseVideoDraws & video, float x, float y, float w, float h) const override;
+	void draw(const ofVbo & vbo, GLuint drawMode, int first, int total) const override;
+	void drawElements(const ofVbo & vbo, GLuint drawMode, int amt, int offsetelements = 0) const override;
+	void drawInstanced(const ofVbo & vbo, GLuint drawMode, int first, int total, int primCount) const override;
+	void drawElementsInstanced(const ofVbo & vbo, GLuint drawMode, int amt, int primCount) const override;
+	void draw(const ofVboMesh & mesh, ofPolyRenderMode renderType) const override;
+	void drawInstanced(const ofVboMesh & mesh, ofPolyRenderMode renderType, int primCount) const override;
+    ofPath & getPath() override;
 
 
 
 	//--------------------------------------------
 	// transformations
-	void pushView();
-    void popView();
+	void pushView() override;
+    void popView() override;
 
 	// setup matrices and viewport (upto you to push and pop view before and after)
 	// if width or height are 0, assume windows dimensions (ofGetWidth(), ofGetHeight())
 	// if nearDist or farDist are 0 assume defaults (calculated based on width / height)
-	void viewport(ofRectangle viewport);
-	void viewport(float x = 0, float y = 0, float width = -1, float height = -1, bool vflip=true);
-	void setupScreenPerspective(float width = -1, float height = -1, float fov = 60, float nearDist = 0, float farDist = 0);
-	void setupScreenOrtho(float width = -1, float height = -1, float nearDist = -1, float farDist = 1);
-	void setOrientation(ofOrientation orientation, bool vFlip);
-	ofRectangle getCurrentViewport() const;
-	ofRectangle getNativeViewport() const;
-	int getViewportWidth() const;
-	int getViewportHeight() const;
-	bool isVFlipped() const;
+	void viewport(ofRectangle viewport) override;
+	void viewport(float x = 0, float y = 0, float width = -1, float height = -1, bool vflip=true) override;
+	void setupScreenPerspective(float width = -1, float height = -1, float fov = 60, float nearDist = 0, float farDist = 0) override;
+	void setupScreenOrtho(float width = -1, float height = -1, float nearDist = -1, float farDist = 1) override;
+	void setOrientation(ofOrientation orientation, bool vFlip) override;
+	ofRectangle getCurrentViewport() const override;
+	ofRectangle getNativeViewport() const override;
+	int getViewportWidth() const override;
+	int getViewportHeight() const override;
+	bool isVFlipped() const override;
 
-	void setCoordHandedness(ofHandednessType handedness);
-	ofHandednessType getCoordHandedness() const;
+	void setCoordHandedness(ofHandednessType handedness) override;
+	ofHandednessType getCoordHandedness() const override;
 
 	//our openGL wrappers
-	void pushMatrix();
-	void popMatrix();
-	void translate(float x, float y, float z = 0);
-	void translate(const glm::vec3 & p);
-	void scale(float xAmnt, float yAmnt, float zAmnt = 1);
-	void rotateRad(float radians, float vecX, float vecY, float vecZ);
-	void rotateXRad(float radians);
-	void rotateYRad(float radians);
-	void rotateZRad(float radians);
-	void rotateRad(float radians);
-	void matrixMode(ofMatrixMode mode);
-	void loadIdentityMatrix (void);
-	void loadMatrix (const glm::mat4 & m);
-	void loadMatrix (const float * m);
-	void multMatrix (const glm::mat4 & m);
-	void multMatrix (const float * m);
-	void loadViewMatrix(const glm::mat4 & m);
-	void multViewMatrix(const glm::mat4 & m);
+	void pushMatrix() override;
+	void popMatrix() override;
+	void translate(float x, float y, float z = 0) override;
+	void translate(const glm::vec3 & p) override;
+	void scale(float xAmnt, float yAmnt, float zAmnt = 1) override;
+	void rotateRad(float radians, float vecX, float vecY, float vecZ) override;
+	void rotateXRad(float radians) override;
+	void rotateYRad(float radians) override;
+	void rotateZRad(float radians) override;
+	void rotateRad(float radians) override;
+	void matrixMode(ofMatrixMode mode) override;
+	void loadIdentityMatrix (void) override;
+	void loadMatrix (const glm::mat4 & m) override;
+	void loadMatrix (const float * m) override;
+	void multMatrix (const glm::mat4 & m) override;
+	void multMatrix (const float * m) override;
+	void loadViewMatrix(const glm::mat4 & m) override;
+	void multViewMatrix(const glm::mat4 & m) override;
 
     /// \brief Queries the current OpenGL matrix state
     ///
@@ -105,33 +105,33 @@ public:
     /// \param	matrixMode_ Which matrix mode to query
     /// \note   If an invalid matrixMode is queried, this method will return the
     ///         identity matrix, and print an error message.
-	glm::mat4 getCurrentMatrix(ofMatrixMode matrixMode_) const;
-	glm::mat4 getCurrentOrientationMatrix() const;
-	glm::mat4 getCurrentViewMatrix() const;
-	glm::mat4 getCurrentNormalMatrix() const;
+	glm::mat4 getCurrentMatrix(ofMatrixMode matrixMode_) const override;
+	glm::mat4 getCurrentOrientationMatrix() const override;
+	glm::mat4 getCurrentViewMatrix() const override;
+	glm::mat4 getCurrentNormalMatrix() const override;
 	glm::mat4 getCurrentModelMatrix() const;
 
 	glm::vec3 getCurrentEyePosition() const;
 
 	// screen coordinate things / default gl values
-	void setupGraphicDefaults();
-	void setupScreen();
+	void setupGraphicDefaults() override;
+	void setupScreen() override;
 
 	// drawing modes
-	void setFillMode(ofFillFlag fill);
-	ofFillFlag getFillMode();
-	void setCircleResolution(int res);
-	void setRectMode(ofRectMode mode);
-	ofRectMode getRectMode();
-	void setLineWidth(float lineWidth);
-	void setPointSize(float pointSize);
-	void setDepthTest(bool depthTest);
-	void setLineSmoothing(bool smooth);
-	void setBlendMode(ofBlendMode blendMode);
-	void enablePointSprites();
-	void disablePointSprites();
-	void enableAntiAliasing();
-	void disableAntiAliasing();
+	void setFillMode(ofFillFlag fill) override;
+	ofFillFlag getFillMode() override;
+	void setCircleResolution(int res) override;
+	void setRectMode(ofRectMode mode) override;
+	ofRectMode getRectMode() override;
+	void setLineWidth(float lineWidth) override;
+	void setPointSize(float pointSize) override;
+	void setDepthTest(bool depthTest) override;
+	void setLineSmoothing(bool smooth) override;
+	void setBlendMode(ofBlendMode blendMode) override;
+	void enablePointSprites() override;
+	void disablePointSprites() override;
+	void enableAntiAliasing() override;
+	void disableAntiAliasing() override;
 
 	/// \brief Enable size attenuation for line widths. Width changes based on distance from camera.
 	void enableLineSizeAttenuation();
@@ -144,90 +144,90 @@ public:
 	bool areLinesShadersEnabled() const;
 
 	// color options
-	void setColor(float r, float g, float b); // 0-1
-	void setColor(float r, float g, float b, float a); // 0-1
-	void setColor(const ofFloatColor & color);
-	void setColor(const ofFloatColor & color, float _a);
-	void setColor(float gray); // new set a color as grayscale with one argument
-	void setHexColor( int hexColor ); // hex, like web 0xFF0033;
+	void setColor(float r, float g, float b) override; // 0-1
+	void setColor(float r, float g, float b, float a) override; // 0-1
+	void setColor(const ofFloatColor & color) override;
+	void setColor(const ofFloatColor & color, float _a) override;
+	void setColor(float gray) override; // new set a color as grayscale with one argument
+	void setHexColor( int hexColor ) override; // hex, like web 0xFF0033;
 
-	void setBitmapTextMode(ofDrawBitmapMode mode);
+	void setBitmapTextMode(ofDrawBitmapMode mode) override;
 
 	// bg color
-	ofFloatColor getBackgroundColor();
-	void setBackgroundColor(const ofFloatColor & c);
-	void background(const ofFloatColor & c);
-	void background(float brightness);
-	void background(int hexColor, int _a=255);
-	void background(float r, float g, float b, float a=1.f);
+	ofFloatColor getBackgroundColor() override;
+	void setBackgroundColor(const ofFloatColor & c) override;
+	void background(const ofFloatColor & c) override;
+	void background(float brightness) override;
+	void background(int hexColor, int _a=255) override;
+	void background(float r, float g, float b, float a=1.f) override;
 
-	bool getBackgroundAuto();
-	void setBackgroundAuto(bool bManual);		// default is true
+	bool getBackgroundAuto() override;
+	void setBackgroundAuto(bool bManual) override;		// default is true
 
-	void clear();
-	void clear(float r, float g, float b, float a=0.f);
-	void clear(float brightness, float a=0.f);
-	void clearAlpha();
+	void clear() override;
+	void clear(float r, float g, float b, float a=0.f) override;
+	void clear(float brightness, float a=0.f) override;
+	void clearAlpha() override;
 
 
 	// drawing
-	void drawLine(float x1, float y1, float z1, float x2, float y2, float z2) const;
-	void drawRectangle(float x, float y, float z, float w, float h) const;
-	void drawTriangle(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3) const;
-	void drawCircle(float x, float y, float z, float radius) const;
-	void drawEllipse(float x, float y, float z, float width, float height) const;
-	void drawString(std::string text, float x, float y, float z) const;
-	void drawString(const ofTrueTypeFont & font, std::string text, float x, float y) const;
+	void drawLine(float x1, float y1, float z1, float x2, float y2, float z2) const override;
+	void drawRectangle(float x, float y, float z, float w, float h) const override;
+	void drawTriangle(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3) const override;
+	void drawCircle(float x, float y, float z, float radius) const override;
+	void drawEllipse(float x, float y, float z, float width, float height) const override;
+	void drawString(std::string text, float x, float y, float z) const override;
+	void drawString(const ofTrueTypeFont & font, std::string text, float x, float y) const override;
 
 
-	void enableTextureTarget(const ofTexture & tex, int textureLocation);
-	void disableTextureTarget(int textureTarget, int textureLocation);
-	void setAlphaMaskTex(const ofTexture & tex);
-	void disableAlphaMask();
+	void enableTextureTarget(const ofTexture & tex, int textureLocation) override;
+	void disableTextureTarget(int textureTarget, int textureLocation) override;
+	void setAlphaMaskTex(const ofTexture & tex) override;
+	void disableAlphaMask() override;
 	GLenum getCurrentTextureTarget();
 
 	const ofShader & getCurrentShader() const;
 
-	void bind(const ofBaseMaterial & material);
-	void bind(const ofShadow & shadow);
-	void bind(const ofShadow & shadow, GLenum aCubeFace);
-	void bind(const ofShader & shader);
-	void bind(const ofTexture & texture, int location);
-	void bind(const ofBaseVideoDraws & video);
-	void bind(const ofCamera & camera, const ofRectangle & viewport);
-	void unbind(const ofBaseMaterial & material);
-	void unbind(const ofShadow & shadow);
-	void unbind(const ofShadow & shadow, GLenum aCubeFace);
-	void unbind(const ofShader & shader);
-	void unbind(const ofTexture & texture, int location);
-	void unbind(const ofBaseVideoDraws & video);
-	void unbind(const ofCamera & camera);
+	void bind(const ofBaseMaterial & material) override;
+	void bind(const ofShadow & shadow) override;
+	void bind(const ofShadow & shadow, GLenum aCubeFace) override;
+	void bind(const ofShader & shader) override;
+	void bind(const ofTexture & texture, int location) override;
+	void bind(const ofBaseVideoDraws & video) override;
+	void bind(const ofCamera & camera, const ofRectangle & viewport) override;
+	void unbind(const ofBaseMaterial & material) override;
+	void unbind(const ofShadow & shadow) override;
+	void unbind(const ofShadow & shadow, GLenum aCubeFace) override;
+	void unbind(const ofShader & shader) override;
+	void unbind(const ofTexture & texture, int location) override;
+	void unbind(const ofBaseVideoDraws & video) override;
+	void unbind(const ofCamera & camera) override;
 
-	void bind(const ofFbo & fbo);
+	void bind(const ofFbo & fbo) override;
 #ifndef TARGET_OPENGLES
-	void bindForBlitting(const ofFbo & fboSrc, ofFbo & fboDst, int attachmentPoint);
+	void bindForBlitting(const ofFbo & fboSrc, ofFbo & fboDst, int attachmentPoint) override;
 #endif
-	void unbind(const ofFbo & fbo);
+	void unbind(const ofFbo & fbo) override;
 
-    void begin(const ofFbo & fbo, ofFboMode mode);
-	void end(const ofFbo & fbo);
+    void begin(const ofFbo & fbo, ofFboMode mode) override;
+	void end(const ofFbo & fbo) override;
 
-	ofStyle getStyle() const;
-	void pushStyle();
-	void popStyle();
-	void setStyle(const ofStyle & style);
-	void setCurveResolution(int resolution);
-	void setPolyMode(ofPolyWindingMode mode);
+	ofStyle getStyle() const override;
+	void pushStyle() override;
+	void popStyle() override;
+	void setStyle(const ofStyle & style) override;
+	void setCurveResolution(int resolution) override;
+	void setPolyMode(ofPolyWindingMode mode) override;
 
 	const ofShader * getVideoShader(const ofBaseVideoDraws & video) const;
 	void setVideoShaderUniforms(const ofBaseVideoDraws & video, const ofShader & shader) const;
 
-    void enableLighting();
-    void disableLighting();
-    bool getLightingEnabled();
+    void enableLighting() override;
+    void disableLighting() override;
+    bool getLightingEnabled() override;
 
-    void enableLight(int lightIndex);
-    void disableLight(int lightIndex);
+    void enableLight(int lightIndex) override;
+    void disableLight(int lightIndex) override;
 
     //    void enableSeparateSpecularLight(){}
     //    void disableSeparateSpecularLight(){}
@@ -246,14 +246,14 @@ public:
 	std::string defaultVertexShaderHeader(GLenum textureTarget);
 	std::string defaultFragmentShaderHeader(GLenum textureTarget);
 
-	int getGLVersionMajor();
-	int getGLVersionMinor();
+	int getGLVersionMajor() override;
+	int getGLVersionMinor() override;
 
-	void saveScreen(int x, int y, int w, int h, ofPixels & pixels);
-	void saveFullViewport(ofPixels & pixels);
+	void saveScreen(int x, int y, int w, int h, ofPixels & pixels) override;
+	void saveFullViewport(ofPixels & pixels) override;
 
-	const of3dGraphics & get3dGraphics() const;
-	of3dGraphics & get3dGraphics();
+	const of3dGraphics & get3dGraphics() const override;
+	of3dGraphics & get3dGraphics() override;
 
 private:
 

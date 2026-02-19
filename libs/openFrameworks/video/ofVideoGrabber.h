@@ -11,36 +11,36 @@ class ofVideoGrabber : public ofBaseVideoGrabber, public ofBaseVideoDraws {
 public:
 
 	ofVideoGrabber();
-	virtual ~ofVideoGrabber();
+	virtual ~ofVideoGrabber() override;
 	
-	void getDevicesInfo() const;
+	void getDevicesInfo() const override;
 	
-	std::vector<ofVideoDevice> listDevices() const;
-	bool				isFrameNew() const;
-	void				update();
-	void				close();
-	bool				setup(int w, int h){return setup(w,h,bUseTexture);}
+	std::vector<ofVideoDevice> listDevices() const override;
+	bool				isFrameNew() const override;
+	void				update() override;
+	void				close() override;
+	bool				setup(int w, int h) override {return setup(w,h,bUseTexture);}
 	bool				setup(int w, int h, bool bTexture);
 
-	bool				setPixelFormat(ofPixelFormat pixelFormat);
-	ofPixelFormat 		getPixelFormat() const;
+	bool				setPixelFormat(ofPixelFormat pixelFormat) override;
+	ofPixelFormat 		getPixelFormat() const override;
 
-	void				videoSettings();
-	ofPixels& 			getPixels();
-	const ofPixels&		getPixels() const;
-	ofTexture &			getTexture();
-	const ofTexture &	getTexture() const;
-	std::vector<ofTexture> & getTexturePlanes();
-	const std::vector<ofTexture> & getTexturePlanes() const;
-	void				setVerbose(bool bTalkToMe);
-	void				setDeviceID(int _deviceID);
+	void				videoSettings() override;
+	ofPixels& 			getPixels() override;
+	const ofPixels&		getPixels() const override;
+	ofTexture &			getTexture() override;
+	const ofTexture &	getTexture() const override;
+	std::vector<ofTexture> & getTexturePlanes() override;
+	const std::vector<ofTexture> & getTexturePlanes() const override;
+	void				setVerbose(bool bTalkToMe) override;
+	void				setDeviceID(int _deviceID) override;
 	bool setDeviceByName(const std::string & name);
 	bool setDeviceByNames(const std::vector<std::string> & names);
-	void				setDesiredFrameRate(int framerate);
-	void				setUseTexture(bool bUse);
-	bool 				isUsingTexture() const;
-	void				draw(float x, float y, float w, float h) const;
-	void				draw(float x, float y) const;
+	void				setDesiredFrameRate(int framerate) override;
+	void				setUseTexture(bool bUse) override;
+	bool 				isUsingTexture() const override;
+	void				draw(float x, float y, float w, float h) const override;
+	void				draw(float x, float y) const override;
 	using ofBaseDraws::draw;
 
 	void 				bind() const;
@@ -48,14 +48,14 @@ public:
 
 	//the anchor is the point the image is drawn around.
 	//this can be useful if you want to rotate an image around a particular point.
-	void				setAnchorPercent(float xPct, float yPct);	//set the anchor as a percentage of the image width/height ( 0.0-1.0 range )
-	void				setAnchorPoint(float x, float y);				//set the anchor point in pixels
-	void				resetAnchor();								//resets the anchor to (0, 0)
+	void				setAnchorPercent(float xPct, float yPct) override;	//set the anchor as a percentage of the image width/height ( 0.0-1.0 range )
+	void				setAnchorPoint(float x, float y) override;				//set the anchor point in pixels
+	void				resetAnchor() override;								//resets the anchor to (0, 0)
 
-	float				getHeight() const;
-	float				getWidth() const;
+	float				getHeight() const override;
+	float				getWidth() const override;
 
-	bool				isInitialized() const;
+	bool				isInitialized() const override;
 
 	void					setGrabber(std::shared_ptr<ofBaseVideoGrabber> newGrabber);
 	std::shared_ptr<ofBaseVideoGrabber> getGrabber();

@@ -119,13 +119,13 @@ private:
 		{
 		}
 
-		virtual ~ofGstMainLoopThread(){};
+		~ofGstMainLoopThread() override {};
 
 		void start(){
 			main_loop = g_main_loop_new (NULL, FALSE);
 			startThread();
 		}
-		void threadedFunction(){
+		void threadedFunction() override {
 			g_main_loop_run (main_loop);
 		}
 
@@ -158,7 +158,7 @@ class ofGstVideoUtils final: public ofBaseVideo, public ofGstUtils{
 public:
 
 	ofGstVideoUtils();
-	~ofGstVideoUtils();
+	~ofGstVideoUtils() override;
 
 	bool 			setPipeline(std::string pipeline, ofPixelFormat pixelFormat=OF_PIXELS_RGB, bool isStream=false, int w=-1, int h=-1);
 

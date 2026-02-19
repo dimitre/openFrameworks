@@ -20,8 +20,8 @@ public:
 	/// \name Rendering
 	/// \{
 
-	void begin(const ofRectangle & viewport) override;
-	void begin() override {
+	void begin(const ofRectangle & viewport);
+	void begin() {
 		begin(getViewport());
 	}
 

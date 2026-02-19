@@ -47,94 +47,94 @@ public:
     ///
     /// \param fileName Path to the sound file, relative to your app's data folder.
     /// \param stream set "true" to enable streaming from disk (for large files).
-    bool load(const fs::path & fileName, bool stream = false);
+    bool load(const fs::path & fileName, bool stream = false) override;
     [[deprecated("Use load")]]
 	bool loadSound(const fs::path & fileName, bool stream = false);
 
     /// \brief Stops and unloads the current sound.
-    void unload();
+    void unload() override;
 	[[deprecated("Use unload")]]
 	void unloadSound();
 
     /// \brief Starts playback.
-    void play();
+    void play() override;
 
     /// \brief Stops playback.
-    void stop();
+    void stop() override;
 
     /// \brief Sets playback volume.
     /// \param vol range is 0 to 1.
-    void setVolume(float vol);
+    void setVolume(float vol) override;
 
     /// \brief Sets stereo pan.
     /// \param pan range is -1 to 1 (-1 is full left, 1 is full right).
-    void setPan(float pan);
+    void setPan(float pan) override;
 
     /// \brief Sets playback speed.
     /// \param speed set > 1 for faster playback, < 1 for slower playback.
-    void setSpeed(float speed);
+    void setSpeed(float speed) override;
 
     /// \brief Enables pause / resume.
     /// \param paused "true" to pause, "false" to resume.
-    void setPaused(bool paused);
+    void setPaused(bool paused) override;
 
     /// \brief Sets whether to loop once the end of the file is reached.
     /// \param loop "true" to loop, default is false.
-    void setLoop(bool loop);
+    void setLoop(bool loop) override;
 
     /// \brief Enables playing multiple simultaneous copies of the sound.
     /// \param multiplay "true" to enable, default is false.
-    void setMultiPlay(bool multiplay);
+    void setMultiPlay(bool multiplay) override;
 
     /// \brief Sets position of the playhead within the file (aka "seeking").
     /// \param percent range is 0 (beginning of file) to 1 (end of file).
-    void setPosition(float percent);
+    void setPosition(float percent) override;
 
     /// \brief Sets position of the playhead within the file (aka "seeking").
     /// \param ms number of milliseconds from the start of the file.
-    void setPositionMS(int ms);
+    void setPositionMS(int ms) override;
 
     /// \brief Gets position of the playhead.
     /// \return playhead position in milliseconds.
-    int getPositionMS() const;
+    int getPositionMS() const override;
 
     /// \brief Gets position of the playhead.
     /// \return playhead position as a float between 0 and 1.
-    float getPosition() const;
+    float getPosition() const override;
 
     /// \brief Gets current playback state.
     /// \return true if the player is currently playing a file.
-    bool isPlaying() const;
+    bool isPlaying() const override;
     [[deprecated("Use isPlaying")]]
 	bool getIsPlaying() const;
 
     /// \brief Gets playback speed.
     /// \return playback speed (see ofSoundPlayer::setSpeed()).
-    float getSpeed() const;
+    float getSpeed() const override;
 
     /// \brief Gets stereo pan.
     /// \return stereo pan in the range -1 to 1.
-    float getPan() const;
+    float getPan() const override;
 
     /// \brief Gets current volume.
     /// \return current volume in the range 0 to 1.
-    float getVolume() const;
+    float getVolume() const override;
 
     /// \brief Queries the player to see if its file was loaded successfully.
     /// \return whether or not the player is ready to begin playback.
-    bool isLoaded() const;
+    bool isLoaded() const override;
 
     /// \brief Queries the player to see if it is paused.
     /// \return whether or not the player is paused.
-    bool isPaused() const;
+    bool isPaused() const override;
 
 	/// \brief Gets duration in seconds.
 	/// \return duration in seconds.
-	float getDuration() const;
+	float getDuration() const override;
 
 	/// \brief Gets duration in milliseconds.
 	/// \return duration in milliseconds.
-	unsigned int getDurationMS() const;
+	unsigned int getDurationMS() const override;
 
 protected:
     std::shared_ptr<ofBaseSoundPlayer> player;

@@ -10,25 +10,25 @@ public:
 	ofVboMesh();
 	ofVboMesh(const ofMesh & mom);
     void operator=(const ofMesh & mom);
-	virtual ~ofVboMesh();
+	~ofVboMesh() override;
 	void setUsage(int usage);
 
-    void enableColors();
-    void enableTextures();
-    void enableNormals();
-    void enableIndices();
+    void enableColors() override;
+    void enableTextures() override;
+    void enableNormals() override;
+    void enableIndices() override;
 
-    void disableColors();
-    void disableTextures();
-    void disableNormals();
-    void disableIndices();
+    void disableColors() override;
+    void disableTextures() override;
+    void disableNormals() override;
+    void disableIndices() override;
 
-    virtual bool usingColors() const;
-    virtual bool usingTextures() const;
-    virtual bool usingNormals() const;
-    virtual bool usingIndices() const;
+    bool usingColors() const override;
+    bool usingTextures() const override;
+    bool usingNormals() const override;
+    bool usingIndices() const override;
 
-	void draw(ofPolyRenderMode drawMode) const;
+	void draw(ofPolyRenderMode drawMode) const override;
 	void drawInstanced(ofPolyRenderMode drawMode, int primCount) const;
 	
 	ofVbo & getVbo();

@@ -166,7 +166,7 @@ struct ofMaterialSettings {
 class ofMaterial : public ofBaseMaterial {
 public:
 	ofMaterial();
-	virtual ~ofMaterial() {};
+	virtual ~ofMaterial() override {};
 
 	/// \brief get the shader uniform name for the material texture type.
 	/// \param aMaterialTextureType the material texture type to query
@@ -202,7 +202,7 @@ public:
 
 	/// \brief used by shadows to determine if this material has a unique depth shader.
 	/// \return if material has a unique depth shader.
-	bool hasDepthShader() const;
+	bool hasDepthShader() const override;
 
 	/// \brief Set all material colors: reflectance type & light intensity. (Phong)
 	/// \param oDiffuse the diffuse reflectance
@@ -326,11 +326,11 @@ public:
 	//--! PBR properties !--//
 
 	// documented in ofBaseMaterial
-	ofFloatColor getDiffuseColor() const;
-	ofFloatColor getAmbientColor() const;
-	ofFloatColor getSpecularColor() const;
-	ofFloatColor getEmissiveColor() const;
-	float getShininess() const;
+	ofFloatColor getDiffuseColor() const override;
+	ofFloatColor getAmbientColor() const override;
+	ofFloatColor getSpecularColor() const override;
+	ofFloatColor getEmissiveColor() const override;
+	float getShininess() const override;
 
 	float getMetallic() const;
 	float getRoughness() const;
@@ -352,10 +352,10 @@ public:
 	void setData(const ofMaterial::Data & data);
 
 	// documented in ofBaseMaterial
-	void begin() const;
-	void end() const;
+	void begin() const override;
+	void end() const override;
 
-	virtual void uploadMatrices(const ofShader & shader, ofGLProgrammableRenderer & renderer) const;
+	void uploadMatrices(const ofShader & shader, ofGLProgrammableRenderer & renderer) const override;
 
 	/// \brief set custom uniforms to be used by the shader. as of 0.12.0 onwards these are added to the fragment shader header
 	void setCustomUniform1f(const std::string & name, float value);
@@ -385,7 +385,7 @@ public:
 	/// \return string containing all defines.
 	const std::string getDefinesString() const;
 
-	void setCustomShader(std::shared_ptr<ofShader> aCustomShader);
+	void setCustomShader(std::shared_ptr<ofShader> aCustomShader) override;
 
 
 	struct PbrLightData {
@@ -419,7 +419,7 @@ public:
 
 protected:
 	/// \brief unbind the material, override the default so we can set current shader to nullptr
-	void unbind(ofGLProgrammableRenderer & renderer) const;
+	void unbind(ofGLProgrammableRenderer & renderer) const override;
 
 private:
 	void mergeCustomUniformTextures();
@@ -429,14 +429,14 @@ private:
 	const std::string getDepthShaderStringId() const;
 
 	void initDepthShaders(ofGLProgrammableRenderer& renderer) const;
-	const ofShader & getShadowDepthShader( const ofShadow& ashadow, ofGLProgrammableRenderer & renderer ) const;
+	const ofShader & getShadowDepthShader( const ofShadow& ashadow, ofGLProgrammableRenderer & renderer ) const override;
 
 	void initShaders(ofGLProgrammableRenderer & renderer) const;
-	const ofShader & getShader(int textureTarget, bool geometryHasColor, ofGLProgrammableRenderer & renderer) const;
-	void updateMaterial(const ofShader & shader, ofGLProgrammableRenderer & renderer) const;
-	void updateLights(const ofShader & shader, ofGLProgrammableRenderer & renderer) const;
-	void updateShadows(const ofShader & shader, ofGLProgrammableRenderer & renderer) const;
-	void updateEnvironmentMaps(const ofShader & shader, ofGLProgrammableRenderer & renderer) const;
+	const ofShader & getShader(int textureTarget, bool geometryHasColor, ofGLProgrammableRenderer & renderer) const override;
+	void updateMaterial(const ofShader & shader, ofGLProgrammableRenderer & renderer) const override;
+	void updateLights(const ofShader & shader, ofGLProgrammableRenderer & renderer) const override;
+	void updateShadows(const ofShader & shader, ofGLProgrammableRenderer & renderer) const override;
+	void updateEnvironmentMaps(const ofShader & shader, ofGLProgrammableRenderer & renderer) const override;
 
 	ofMaterialSettings data;
 

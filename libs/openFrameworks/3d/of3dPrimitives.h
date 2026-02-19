@@ -12,7 +12,7 @@ class ofRectangle;
 class of3dPrimitive : public ofNode {
 public:
     of3dPrimitive();
-    virtual ~of3dPrimitive();
+    virtual ~of3dPrimitive() override;
 
     of3dPrimitive(const ofMesh & mesh);
     of3dPrimitive(const of3dPrimitive & mom);
@@ -54,7 +54,7 @@ public:
     void drawWireframe() const;
     void drawFaces() const;
     void draw(ofPolyRenderMode renderType) const;
-    void draw() const;
+    void draw() const override;
     void drawNormals( float length, bool bFaceNormals=false ) const;
     void drawAxes(float a_size) const;
 
