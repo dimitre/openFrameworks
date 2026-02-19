@@ -158,7 +158,7 @@ void ofBaseVideoPlayer::previousFrame(){
 }
 
 //---------------------------------------------------------------------------
-void ofBaseVideoPlayer::setPlaybackRange(float startPosition, float endPosition){
+void ofBaseVideoPlayer::setPlaybackRange(float /*startPosition*/, float /*endPosition*/){
 	ofLogWarning("ofBaseVideoPlayer") << "setPlaybackRange() not implemented";
 }
 
@@ -180,7 +180,7 @@ void ofBaseVideoPlayer::clearPlaybackRange(){
 }
 
 //---------------------------------------------------------------------------
-void ofBaseVideoPlayer::setPlaybackRangeFrames(int startFrame, int endFrame){
+void ofBaseVideoPlayer::setPlaybackRangeFrames(int /*startFrame*/, int /*endFrame*/){
 	ofLogWarning("ofBaseVideoPlayer") << "setPlaybackRangeFrames() not implemented";
 }
 

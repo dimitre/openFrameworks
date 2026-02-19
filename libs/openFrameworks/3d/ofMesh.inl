@@ -1523,7 +1523,7 @@ const std::vector<ofMeshFace_<V, N, C, T>> & ofMesh_<V, N, C, T>::getUniqueFaces
 		bool bHasTexcoords = hasTexCoords();
 
 		if (getMode() == OF_PRIMITIVE_TRIANGLES) {
-			for (auto j = 0; j < indices.size(); j += 3) {
+			for (int j = 0; j < (int)indices.size(); j += 3) {
 				ofMeshFace_<V, N, C, T> & tri = faces[triindex];
 				for (std::size_t k = 0; k < 3; k++) {
 					index = indices[j + k];
