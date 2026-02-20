@@ -698,6 +698,8 @@ bool ofMediaFoundationPlayer::_load(const fs::path & fileName, bool abAsync) {
     }
 
 
+	cout << "TEST ofMediaFoundationPlayer " << absPath << endl;
+	
     EnterCriticalSection(&m_critSec);
 
     // init device manager if not created
@@ -1369,14 +1371,16 @@ void ofMediaFoundationPlayer::handleMEEvent(DWORD aevent) {
         {
             //mDuration = static_cast<float>(m_spMediaEngine->GetDuration());
             updateDuration();
+            
+            // Check seeking capability regardless of duration validity
+            DWORD caps = 0;
+            if (m_spEngineEx) {
+                m_spEngineEx->GetResourceCharacteristics(&caps);
+                mBCanSeek = (caps & MFMEDIASOURCE_CAN_SEEK) > 0;
+            }
+            
             if (mDuration != mDuration || mDuration == std::numeric_limits<float>::infinity()) {
                 mDuration = 0.f;
-            } else {
-                DWORD caps = 0;
-                if (m_spEngineEx) {
-                    m_spEngineEx->GetResourceCharacteristics(&caps);
-                    mBCanSeek = (caps & MFMEDIASOURCE_CAN_SEEK) > 0;
-                }
             }
             mBDone = false;
             //mWidth = 0.f;

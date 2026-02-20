@@ -22,7 +22,7 @@ abstracts:*:
 
     compileOptions[:macos]:
       - -fobjc-arc
-      - -mmacosx-version-min=12.0 # Add this line
+      - -mmacosx-version-min=11.0 # Add this line
 
     compileOptions[toolchain:msvc]:
       # FIXME: Test removing this
@@ -62,7 +62,7 @@ abstracts:*:
     # - OF_USING_STD_FS=1
 
     linkerOptions[:macos]:
-      - -mmacosx-version-min=12.0
+      - -mmacosx-version-min=11.0
 
     defines[toolchain:msvc]:
       - _CRT_SECURE_NO_WARNINGS
@@ -367,7 +367,7 @@ distribution:
         CFBundleSignature: ????
         CFBundleShortVersionString: ${version}
         CFBundleVersion: ${version}
-        LSMinimumSystemVersion: "11.6.0"
+        LSMinimumSystemVersion: "11.0.0"
         NSHighResolutionCapable: true
         NSCameraUsageDescription: This app needs to access the camera
         NSMicrophoneUsageDescription: This app needs to access the microphone
