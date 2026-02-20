@@ -689,7 +689,7 @@ bool ofMediaFoundationPlayer::_load(const fs::path & fileName, bool abAsync) {
 	fs::path absPath { fileName };
 
     if (!bStream) {
-        if (fs::exist(ofToDataPath(absPath))) {
+        if (fs::exists(ofToDataPath(absPath))) {
             absPath = fs::absolute(absPath);
         } else {
             ofLogError("ofMediaFoundationPlayer") << " file does not exist! " << absPath;
