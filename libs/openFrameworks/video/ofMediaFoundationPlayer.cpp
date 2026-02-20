@@ -676,23 +676,32 @@ bool ofMediaFoundationPlayer::_load(const fs::path & fileName, bool abAsync) {
 
 	mBLoadAsync = abAsync;
 
+	std::string name { ofPathToString(fileName) };
+	
+	bool bStream = false;
+	bStream = bStream || ofIsStringInString(name, "http://");
+	bStream = bStream || ofIsStringInString(name, "https://");
+	bStream = bStream || ofIsStringInString(name, "rtsp://");
+	bStream = bStream || ofIsStringInString(name, "rtmp://");
+//    bool bStream = false;
+//	{
+//		std::string name { ofPathToString(fileName) };
+//		bStream = bStream || ofIsStringInString(name, "http://");
+//		bStream = bStream || ofIsStringInString(name, "https://");
+//		bStream = bStream || ofIsStringInString(name, "rtsp://");
+//		bStream = bStream || ofIsStringInString(name, "rtmp://");
+//	}
 
-    bool bStream = false;
-	{
-		std::string name { ofPathToString(fileName) };
-		bStream = bStream || ofIsStringInString(name, "http://");
-		bStream = bStream || ofIsStringInString(name, "https://");
-		bStream = bStream || ofIsStringInString(name, "rtsp://");
-		bStream = bStream || ofIsStringInString(name, "rtmp://");
-	}
+//	fs::path absPath { fileName };
 
-	fs::path absPath { fileName };
 
-    if (!bStream) {
-        if (fs::exists(ofToDataPath(absPath))) {
-            absPath = fs::absolute(absPath);
-        } else {
-            ofLogError("ofMediaFoundationPlayer") << " file does not exist! " << absPath;
+	fs::path absPath = fileName;
+
+	if (!bStream) {
+		if (ofFile::doesFileExist(absPath)) {
+			absPath = ofFilePath::getAbsolutePath(absPath, true);
+		} else {
+			ofLogError("ofMediaFoundationPlayer") << " file does not exist! " << absPath;
             return false;
         }
     }
