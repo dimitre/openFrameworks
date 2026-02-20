@@ -4,6 +4,9 @@
 // MARK: ofConstants FS
 #include "ofConstants.h"
 
+// Forward declaration
+class ofSoundStream;
+
 /// \brief Stops all active sound players on FMOD-based systems (windows, osx).
 void ofSoundStopAll();
 
@@ -137,12 +140,35 @@ public:
 	unsigned int getDurationMS() const override;
 	
 	/// \brief Gets the current audio buffer being played.
-	/// \param buffer Vector to fill with current audio samples (mono).
+	/// \param buffer Vector to fill with current audio samples.
 	/// \return true if buffer was filled, false if not available.
-	/// \note This requires platform-specific support. Currently works with AV_ENGINE.
 	bool getCurrentBuffer(std::vector<float>& buffer) override;
+	
+	/// \brief Gets the frequency spectrum of the currently playing sound.
+	/// \param nBands number of spectrum bands to return, max 512.
+	/// \return pointer to an FFT sample, sample size is equal to the nBands parameter.
+	/// \note This returns the system-wide spectrum (all playing sounds mixed).
+	float * getSpectrum(int nBands);
+	
+	/// \brief Analyzes the audio file and stores spectrum data for smooth visualization.
+	/// Call this after load() to enable getAnalyzedSpectrum() for smooth 60fps playback.
+	/// \param fftSize FFT size for analysis (e.g., 512, 1024).
+	/// \param hopSize hop size between analysis windows (smaller = more data points).
+	/// \return true if analysis succeeded.
+	bool analyzeAudio(int fftSize = 512, int hopSize = 256);
+	
+	/// \brief Gets pre-analyzed spectrum at current playback position.
+	/// This gives smooth 60fps visualization independent of audio buffer callbacks.
+	/// \return pointer to spectrum values, or nullptr if analyzeAudio() wasn't called.
+	/// \note Call analyzeAudio() first. Returns nullptr if not available.
+	const float * getAnalyzedSpectrum() const;
 
 protected:
+	// Pre-analyzed spectrum data
+	std::vector<std::vector<float>> analyzedSpectra;
+	std::vector<float> analyzedTimes;
+	int analyzedFftSize = 0;
+	mutable std::vector<float> currentSpectrum;
     std::shared_ptr<ofBaseSoundPlayer> player;
 
 };

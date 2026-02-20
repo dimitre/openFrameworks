@@ -10,6 +10,8 @@
 #include "ofRectangle.h"
 #include "ofGLUtils.h"
 
+#include "ofFileUtils.h"
+
 #ifdef TARGET_OSX
 	#include "ofTexture.h"
 #endif

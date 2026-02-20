@@ -2,6 +2,8 @@
 #include "ofAppRunner.h"
 #include "ofPixels.h"
 
+#include "ofFileUtils.h"
+
 //#ifdef OFXURL
 //#include "ofURLFileLoader.h"
 //#endif
@@ -9,6 +11,7 @@
 #if defined(TARGET_ANDROID)
 	#include "ofxAndroidUtils.h"
 #endif
+
 
 //#include <uriparser/Uri.h>
 

@@ -81,15 +81,12 @@ public:
 private:
 	ofSoundFFT fft;
 	
-	// Current audio buffer storage for external access
-	std::vector<float> currentBuffer;
-	std::mutex bufferMutex;
-	bool bufferTapInstalled = false;
-	
-	// Static members for system-wide FFT
+	// Static members for system-wide FFT and buffer access
 	static ofSoundFFT systemFFT;
 	static std::vector<float> systemBins;
 	static bool systemFFTInstalled;
+	static std::vector<float> systemBuffer;
+	static std::mutex systemBufferMutex;
 	
 protected:
 

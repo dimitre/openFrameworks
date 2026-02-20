@@ -207,7 +207,7 @@ public:
 	static float * getSystemSpectrum(int bands);
 	
 	/// \brief Gets the current audio buffer being played.
-	/// \param buffer Vector to fill with current audio samples (mono).
+	/// \param buffer Vector to fill with current audio samples.
 	/// \return true if buffer was filled, false if not available.
 	/// \note Not all platforms support this. Currently implemented for AV_ENGINE.
 	virtual bool getCurrentBuffer(std::vector<float>& /* buffer */) { return false; }

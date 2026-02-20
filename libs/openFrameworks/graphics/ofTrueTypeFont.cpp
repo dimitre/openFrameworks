@@ -3,6 +3,8 @@
 #include "ofPixels.h"
 #include "ofPath.h"
 
+#include "ofFileUtils.h"
+
 #include <freetype2/ft2build.h>
 //#include <algorithm>
 #include <numeric>

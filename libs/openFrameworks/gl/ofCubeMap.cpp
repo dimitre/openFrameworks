@@ -10,6 +10,10 @@
 #include "ofTexture.h"
 #include "ofMaterial.h"
 
+// Temporary
+#include "ofFileUtils.h"
+
+
 #ifdef TARGET_ANDROID
 #include "ofAppAndroidWindow.h"
 #endif

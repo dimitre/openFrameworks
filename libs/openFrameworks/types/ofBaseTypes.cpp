@@ -4,6 +4,8 @@
 #include "ofSoundBuffer.h"
 #include "ofMesh.h"
 
+#include "ofFileUtils.h"
+
 //---------------------------------------------------------------------------
 ofBaseVideoGrabber::~ofBaseVideoGrabber(){
 

@@ -314,3 +314,56 @@ bool ofSoundPlayer::getCurrentBuffer(std::vector<float>& buffer) {
 	}
 	return false;
 }
+
+//--------------------------------------------------------------------
+float * ofSoundPlayer::getSpectrum(int nBands) {
+	return ofSoundGetSpectrum(nBands);
+}
+
+//--------------------------------------------------------------------
+bool ofSoundPlayer::analyzeAudio(int fftSize, int hopSize) {
+	// This would decode the audio file and run FFT on each window
+	// For now, return false - implementation depends on platform
+	ofLogWarning("ofSoundPlayer") << "analyzeAudio() not yet implemented";
+	return false;
+}
+
+//--------------------------------------------------------------------
+const float * ofSoundPlayer::getAnalyzedSpectrum() const {
+	if (analyzedSpectra.empty() || !player) {
+		return nullptr;
+	}
+	
+	// Find spectrum for current playback position
+	float position = player->getPosition();  // 0.0 - 1.0
+	float duration = player->getDuration();
+	float currentTime = position * duration;
+	
+	// Find closest analyzed time point
+	size_t idx = 0;
+	for (size_t i = 0; i < analyzedTimes.size(); i++) {
+		if (analyzedTimes[i] <= currentTime) {
+			idx = i;
+		} else {
+			break;
+		}
+	}
+	
+	// Interpolate between adjacent spectra for smoothness
+	if (idx + 1 < analyzedSpectra.size()) {
+		float t1 = analyzedTimes[idx];
+		float t2 = analyzedTimes[idx + 1];
+		float frac = (currentTime - t1) / (t2 - t1);
+		
+		const auto& spec1 = analyzedSpectra[idx];
+		const auto& spec2 = analyzedSpectra[idx + 1];
+		
+		currentSpectrum.resize(spec1.size());
+		for (size_t i = 0; i < spec1.size(); i++) {
+			currentSpectrum[i] = spec1[i] * (1 - frac) + spec2[i] * frac;
+		}
+		return currentSpectrum.data();
+	}
+	
+	return analyzedSpectra[idx].data();
+}

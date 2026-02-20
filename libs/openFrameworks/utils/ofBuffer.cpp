@@ -14,6 +14,12 @@ ofBuffer::ofBuffer()
 :currentLine(end(),end()){
 }
 
+ofBuffer::ofBuffer( const fs::path & fileName ) 
+	:currentLine(end(),end()){
+	std::ifstream fileFrom(ofCore.toDataPath(fileName));
+	set(fileFrom);
+}
+
 //--------------------------------------------------
 ofBuffer::ofBuffer(const char * buffer, std::size_t size)
 :buffer(buffer,buffer+size)
@@ -388,24 +394,15 @@ std::istream & operator>>(std::istream & istr, ofBuffer & buf){
 
 //--------------------------------------------------
 // FIXME: WHY? bool binary
+// FIXME: removed from core; deprecate?
 ofBuffer ofBufferFromFile(const fs::path & path, bool ){
-//	cout << "ofBufferFromFile " << path << endl;
-//	if (!fs::exists(ofCore.toDataPath(path))) {
-//		cout << "ERROR ofBufferFromFile file not found " << path << " : " << ofCore.toDataPath(path) << endl;
-//	}
 	std::ifstream fileFrom(ofCore.toDataPath(path));
 	return ofBuffer(fileFrom);
-
-//	ofFile f(path,ofFile::ReadOnly, binary);
-//	return ofBuffer(f);
 }
 
 //--------------------------------------------------
 // FIXME: WHY? bool binary
 bool ofBufferToFile(const fs::path & path, const ofBuffer& buffer, bool ){
-//	ofFile f(path, ofFile::WriteOnly, binary);
-//	return buffer.writeTo(f);
-	
 	std::ofstream fileOut(ofCore.toDataPath(path));
 	return buffer.writeTo(fileOut);
 }

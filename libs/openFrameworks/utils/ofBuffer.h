@@ -33,7 +33,7 @@ public:
 
 	
 	// FIXME: make an ofBuffer initializer using fs::path as a parameter
-//	ofBuffer(const fs::path & fileName);
+	ofBuffer(const fs::path & fileName);
 
 	
 	/// Set the contents of the buffer from a raw byte pointer.
@@ -281,6 +281,8 @@ private:
 /// \param path file to open
 /// \param binary set to false if you are reading a text file & want lines
 /// split at endline characters automatically
+///
+// FIXME: removed from core; deprecate?
 ofBuffer ofBufferFromFile(const fs::path & path, bool binary = true);
 
 //--------------------------------------------------

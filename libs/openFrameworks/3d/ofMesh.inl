@@ -4,8 +4,7 @@
 // 	#include "ofMesh.h"
 // #endif
 
-#include "ofFileUtils.h" //ofFile
-
+//#include "ofFileUtils.h" //ofFile
 
 #include "ofAppRunner.h"
 #include "ofColor.h"
@@ -947,11 +946,12 @@ void ofMesh_<V, N, C, T>::append(const ofMesh_<V, N, C, T> & mesh) {
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
 void ofMesh_<V, N, C, T>::load(const fs::path & path) {
-	ofFile is = { path, ofFile::ReadOnly };
+//	ofFile is = { path, ofFile::ReadOnly };
 	auto & data = *this;
 
 	std::string error;
-	ofBuffer buffer(is);
+//	ofBuffer buffer(is);
+	ofBuffer buffer { path };
 	auto backup = data;
 
 	int orderVertices = -1;

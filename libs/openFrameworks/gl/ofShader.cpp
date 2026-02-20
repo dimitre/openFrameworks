@@ -293,33 +293,40 @@ bool ofShader::setup(const TransformFeedbackSettings & settings) {
 
 //--------------------------------------------------------------
 bool ofShader::setupShaderFromFile(GLenum type, const fs::path & filename) {
-    ofBuffer buffer = ofBufferFromFile(filename);
+//	ofBuffer buffer { ofBufferFromFile(filename) };
+	ofBuffer buffer { filename };
     // we need to make absolutely sure to have an absolute path here, so that any #includes
     // within the shader files have a root directory to traverse from.
-    auto absoluteFilePath = ofFilePath::getAbsolutePath(filename, true);
-    auto sourceDirectoryPath = ofFilePath::getEnclosingDirectory(absoluteFilePath, false);
-    if (buffer.size()) {
+//    auto absoluteFilePath = ofFilePath::getAbsolutePath(filename, true);
+//    auto sourceDirectoryPath = ofFilePath::getEnclosingDirectory(absoluteFilePath, false);
+	fs::path sourceDirectoryPath { fs::absolute(filename).parent_path() };
+  
+	if (buffer.size()) {
         return setupShaderFromSource(type, buffer.getText(), sourceDirectoryPath);
     } else {
         ofLogError("ofShader") << "setupShaderFromFile(): couldn't load " << nameForType(type) << " shader "
-                               << " from \"" << absoluteFilePath << "\"";
+                               << " from " << sourceDirectoryPath;
         return false;
     }
 }
 
 //--------------------------------------------------------------
 ofShader::Source ofShader::sourceFromFile(GLenum type, const fs::path & filename) {
-    ofBuffer buffer = ofBufferFromFile(filename);
+//	ofBuffer buffer { ofBufferFromFile(filename) };
+	ofBuffer buffer { filename };
+
     // we need to make absolutely sure to have an absolute path here, so that any #includes
     // within the shader files have a root directory to traverse from.
-    auto absoluteFilePath = ofFilePath::getAbsolutePath(filename, true);
-    auto sourceDirectoryPath = ofFilePath::getEnclosingDirectory(absoluteFilePath, false);
+//    auto absoluteFilePath = ofFilePath::getAbsolutePath(filename, true);
+//    auto sourceDirectoryPath = ofFilePath::getEnclosingDirectory(absoluteFilePath, false);
+	fs::path sourceDirectoryPath { fs::absolute(filename).parent_path() };
+
     if (buffer.size()) {
         // return Source{type, buffer.getText(), sourceDirectoryPath.string() };
         return Source { type, buffer.getText(), sourceDirectoryPath };
     } else {
         ofLogError("ofShader") << "setupShaderFromFile(): couldn't load " << nameForType(type) << " shader "
-                               << " from \"" << absoluteFilePath << "\"";
+                               << " from " << sourceDirectoryPath;
         return Source {};
     }
 }
@@ -508,7 +515,9 @@ string ofShader::parseForIncludes(const string & source, vector<fs::path> & incl
         // we store the absolute paths so as have (more) unique file identifiers.
         included.push_back(includeFSAbsolute);
 
-        ofBuffer buffer { ofBufferFromFile(includeFS) };
+//        ofBuffer buffer { ofBufferFromFile(includeFS) };
+		ofBuffer buffer { includeFS };
+
         if (!buffer.size()) {
             ofLogError("ofShader") << "Could not open glsl include file " << includeFS;
             continue;

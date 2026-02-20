@@ -606,15 +606,22 @@ static NSString *kShouldEnginePauseNotification = @"kShouldEnginePauseNotificati
 	}
 
 	__weak AVEnginePlayer * weakSelf = self;
-
+	
+	// Get current frame position and remaining length
+	AVAudioFramePosition startFrame = self.soundFile.framePosition;
+	AVAudioFrameCount frameCount = (AVAudioFrameCount)(self.soundFile.length - startFrame);
+	
 	if(self.mShouldLoop) {
-		[self.soundPlayer scheduleFile:self.soundFile atTime:nil completionHandler:^{
+		// For looping, we schedule from current position to end
+		[self.soundPlayer scheduleSegment:self.soundFile startingFrame:startFrame frameCount:frameCount atTime:nil completionHandler:^{
 			if(weakSelf.mShouldLoop && weakSelf.soundPlayer.isPlaying) {
+				// Reset to beginning for next loop
+				weakSelf.soundFile.framePosition = 0;
 				[weakSelf scheduleFile];
 			}
 		}];
 	} else {
-		[self.soundPlayer scheduleFile:self.soundFile atTime:nil completionHandler:^{
+		[self.soundPlayer scheduleSegment:self.soundFile startingFrame:startFrame frameCount:frameCount atTime:nil completionHandler:^{
 			weakSelf.bIsPlaying = false;
 		}];
 	}
@@ -830,6 +837,8 @@ using namespace std;
 ofSoundFFT ofAVEngineSoundPlayer::systemFFT;
 std::vector<float> ofAVEngineSoundPlayer::systemBins;
 bool ofAVEngineSoundPlayer::systemFFTInstalled = false;
+std::vector<float> ofAVEngineSoundPlayer::systemBuffer;
+std::mutex ofAVEngineSoundPlayer::systemBufferMutex;
 
 ofAVEngineSoundPlayer::ofAVEngineSoundPlayer() {
 	soundPlayer = NULL;
@@ -1093,38 +1102,14 @@ void * ofAVEngineSoundPlayer::getAVEnginePlayer() {
 
 //------------------------------------------------------------
 bool ofAVEngineSoundPlayer::getCurrentBuffer(std::vector<float>& buffer) {
-	if (soundPlayer == NULL) {
+	// Return the system-wide audio buffer
+	// This is filled by the system FFT tap installed on the main mixer
+	std::lock_guard<std::mutex> lock(systemBufferMutex);
+	if (systemBuffer.empty()) {
 		return false;
 	}
 	
-	// Install tap on first call if not already installed
-	if (!bufferTapInstalled) {
-		AVAudioMixerNode* mixer = [(AVEnginePlayer*)soundPlayer mainMixer];
-		if (mixer == nullptr) {
-			ofLogError("ofAVEngineSoundPlayer") << "getCurrentBuffer(): mixer is null";
-			return false;
-		}
-		
-		[mixer installTapOnBus:0 bufferSize:2048 format:[mixer outputFormatForBus:0] block:^(AVAudioPCMBuffer *buffer, AVAudioTime * /* when */) {
-			if (buffer.frameLength > 0 && buffer.floatChannelData != nullptr && buffer.format.channelCount > 0) {
-				float* data = buffer.floatChannelData[0];
-				int frameLength = (int)buffer.frameLength;
-				
-				std::lock_guard<std::mutex> lock(bufferMutex);
-				currentBuffer.assign(data, data + frameLength);
-			}
-		}];
-		
-		bufferTapInstalled = true;
-		ofLogVerbose("ofAVEngineSoundPlayer") << "getCurrentBuffer(): buffer tap installed";
-	}
-	
-	std::lock_guard<std::mutex> lock(bufferMutex);
-	if (currentBuffer.empty()) {
-		return false;
-	}
-	
-	buffer = currentBuffer;
+	buffer = systemBuffer;
 	return true;
 }
 
@@ -1247,7 +1232,8 @@ void ofAVEngineSoundPlayer::installSystemFFT() {
 
 	// Calculate buffer size based on FFT size
 	int fftSize = (int)(systemFFT.getSpectrum().size() - 1) * 2;
-	AVAudioFrameCount bufferSize = fftSize;
+	// Use a smaller buffer size for more frequent callbacks (smoother visualization)
+	AVAudioFrameCount bufferSize = 256;  // Smaller = more frequent updates
 
 	ofLogVerbose("ofAVEngineSoundPlayer") << "installSystemFFT(): installing tap with buffer size " << bufferSize;
 
@@ -1256,6 +1242,12 @@ void ofAVEngineSoundPlayer::installSystemFFT() {
 			float* data = buffer.floatChannelData[0];
 			int frameLength = (int)buffer.frameLength;
 			int fftSize = (int)(systemFFT.getSpectrum().size() - 1) * 2;
+
+			// Store buffer for external access (system-wide audio)
+			{
+				std::lock_guard<std::mutex> lock(systemBufferMutex);
+				systemBuffer.assign(data, data + frameLength);
+			}
 
 			// Debug: check if we're receiving audio
 			static int debugCounter = 0;
