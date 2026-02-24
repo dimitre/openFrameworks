@@ -108,8 +108,8 @@ public:
 	typedef struct _XIM * XIM;
 	typedef struct _XIC * XIC;
 
-	[[nodiscard]] Display * getX11Display() const override;
-	[[nodiscard]] Window getX11Window() const override;
+	[[nodiscard]] Display * getX11Display() const noexcept override;
+	[[nodiscard]] Window getX11Window() const noexcept override;
 	[[nodiscard]] XIC getX11XIC() const;
 
 	void setWindowIcon(const fs::path & path);
@@ -117,7 +117,7 @@ public:
 	#endif
 
 	#if defined(TARGET_LINUX) && !defined(TARGET_OPENGLES)
-	[[nodiscard]] GLXContext getGLXContext() const override;
+	[[nodiscard]] GLXContext getGLXContext() const noexcept override;
 	#endif
 
 	#if defined(TARGET_LINUX) && defined(TARGET_OPENGLES)
@@ -132,8 +132,8 @@ public:
 	#endif
 
 	#if defined(TARGET_WIN32)
-	[[nodiscard]] HGLRC getWGLContext() const override;
-	[[nodiscard]] HWND getWin32Window() const override;
+	[[nodiscard]] HGLRC getWGLContext() const noexcept override;
+	[[nodiscard]] HWND getWin32Window() const noexcept override;
 	#endif
 
 private:

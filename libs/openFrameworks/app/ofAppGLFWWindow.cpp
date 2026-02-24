@@ -1651,11 +1651,11 @@ void ofAppGLFWWindow::makeCurrent() {
 }
 
 #if defined(TARGET_LINUX)
-	Display * ofAppGLFWWindow::getX11Display() const {
+	Display * ofAppGLFWWindow::getX11Display() const noexcept {
 		return glfwGetX11Display();
 	}
 
-	Window ofAppGLFWWindow::getX11Window() const {
+	Window ofAppGLFWWindow::getX11Window() const noexcept {
 		return glfwGetX11Window(windowP);
 	}
 
@@ -1665,7 +1665,7 @@ void ofAppGLFWWindow::makeCurrent() {
 #endif
 
 #if defined(TARGET_LINUX) && !defined(TARGET_OPENGLES)
-	GLXContext ofAppGLFWWindow::getGLXContext() const {
+	GLXContext ofAppGLFWWindow::getGLXContext() const noexcept {
 		return glfwGetGLXContext(windowP);
 	}
 #endif
@@ -1695,11 +1695,11 @@ void ofAppGLFWWindow::makeCurrent() {
 #endif
 
 #if defined(TARGET_WIN32)
-	HGLRC ofAppGLFWWindow::getWGLContext() const {
+	HGLRC ofAppGLFWWindow::getWGLContext() const noexcept {
 		return glfwGetWGLContext(windowP);
 	}
 
-	HWND ofAppGLFWWindow::getWin32Window() const {
+	HWND ofAppGLFWWindow::getWin32Window() const noexcept {
 		return glfwGetWin32Window(windowP);
 	}
 
