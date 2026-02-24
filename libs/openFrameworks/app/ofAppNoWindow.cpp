@@ -218,13 +218,13 @@ private:
 const std::string ofNoopRenderer::TYPE="NOOP";
 
 //----------------------------------------------------------
-ofAppNoWindow::ofAppNoWindow()
-:coreEvents(new ofCoreEvents)
-,currentRenderer(new ofNoopRenderer){
-	ofAppPtr = nullptr;
+ofAppNoWindow::ofAppNoWindow() noexcept
+	: width(0)
+	, height(0)
+	, ofAppPtr(nullptr)
+	, coreEvents(std::make_unique<ofCoreEvents>())
+	, currentRenderer(std::make_shared<ofNoopRenderer>()) {
     ofInit();
-	width = 0;
-	height = 0;
 }
 
 
@@ -286,28 +286,28 @@ void ofAppNoWindow::exitApp(){
 }
 
 //----------------------------------------------------------
-glm::ivec2 ofAppNoWindow::getWindowPosition(){
-	return {0.f, 0.f};
+glm::ivec2 ofAppNoWindow::getWindowPosition() const {
+	return {0, 0};
 }
 
 //----------------------------------------------------------
-glm::ivec2 ofAppNoWindow::getWindowSize(){
+glm::ivec2 ofAppNoWindow::getWindowSize() const {
 	return {width, height};
 }
 
 //----------------------------------------------------------
-glm::ivec2 ofAppNoWindow::getScreenSize(){
+glm::ivec2 ofAppNoWindow::getScreenSize() const {
 	return { width, height };
 }
 
 
 //----------------------------------------------------------
-int	ofAppNoWindow::getWidth(){
+int	ofAppNoWindow::getWidth() const noexcept {
 	return width;
 }
 
 //----------------------------------------------------------
-int	ofAppNoWindow::getHeight(){
+int	ofAppNoWindow::getHeight() const noexcept {
 	return height;
 }
 
@@ -317,7 +317,7 @@ ofCoreEvents & ofAppNoWindow::events(){
 	return *coreEvents;
 }
 
-std::shared_ptr<ofBaseRenderer> & ofAppNoWindow::renderer(){
+std::shared_ptr<ofBaseRenderer> & ofAppNoWindow::renderer() noexcept {
 	return currentRenderer;
 }
 

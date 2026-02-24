@@ -38,12 +38,12 @@ protected:
 	int nTicks = 0;
 
 public:
-	void setTargetFps(double f) {
+	void setTargetFps(double f) noexcept {
 		interval = onesec / f;
 		accum = onesec / f;
 	}
 
-	void tick() {
+	void tick() noexcept {
 		if (nTicks == 0) {
 			nTicks ++;
 			lastTick = steady_clock::now();
@@ -62,7 +62,7 @@ public:
 		}
 	}
 
-	double get() {
+	[[nodiscard]] double get() const noexcept {
 //		cout << "get" << endl;
 //		cout << onesec << endl;
 //		cout << accum << endl;
@@ -90,19 +90,19 @@ public:
 
 	typedef std::chrono::duration<float> float_seconds;
 
-	float getElapsedTimef() {
+	[[nodiscard]] float getElapsedTimef() const {
 		return duration_cast<float_seconds>(std::chrono::steady_clock::now() - timeStart).count();
 	}
 
-	void resetElapsedTimeCounter() {
+	void resetElapsedTimeCounter() noexcept {
 		timeStart = std::chrono::steady_clock::now();
 	}
 
-	uint64_t getElapsedTimeMillis() {
+	[[nodiscard]] uint64_t getElapsedTimeMillis() const {
 		return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - timeStart).count();
 	}
 
-	uint64_t getElapsedTimeMicros() {
+	[[nodiscard]] uint64_t getElapsedTimeMicros() const {
 		return std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - timeStart).count();
 	}
 };
@@ -224,7 +224,7 @@ public:
 		defaultWorkingDirectory = fs::absolute(fs::current_path());
 	}
 
-	std::shared_ptr<ofAppBaseWindow> getCurrentWindow(){
+	[[nodiscard]] std::shared_ptr<ofAppBaseWindow> getCurrentWindow() const {
 //		if (mainLoop) //mainLoop is always present. is it?
 		{
 			return mainLoop.currentWindow.lock();

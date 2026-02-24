@@ -1238,7 +1238,27 @@ ofMesh ofTexture::getQuad(const glm::vec3 & p1, const glm::vec3 & p2, const glm:
 //----------------------------------------------------------
 void ofTexture::readToPixels(ofPixels & pixels) const {
 #ifndef TARGET_OPENGLES
-	pixels.allocate(texData.width, texData.height, ofGetImageTypeFromGLType(texData.glInternalFormat));
+	if (!texData.bAllocated || texData.textureID == 0 || texData.width == 0 || texData.height == 0) {
+		ofLogError("ofTexture") << "readToPixels(): texture is not allocated";
+		return;
+	}
+	
+	ofImageType imageType = ofGetImageTypeFromGLType(texData.glInternalFormat);
+	if (imageType == OF_IMAGE_UNDEFINED) {
+		ofLogError("ofTexture") << "readToPixels(): unsupported texture format " << texData.glInternalFormat;
+		return;
+	}
+	
+	pixels.allocate(texData.width, texData.height, imageType);
+	if (!pixels.isAllocated()) {
+		ofLogError("ofTexture") << "readToPixels(): failed to allocate pixels";
+		return;
+	}
+	
+	// Ensure all pending GL operations are complete before reading texture data
+	// This helps prevent crashes in Apple's Metal/OpenGL translation layer
+	glFinish();
+	
 	ofSetPixelStoreiAlignment(GL_PACK_ALIGNMENT, pixels.getWidth(), pixels.getBytesPerChannel(), pixels.getNumChannels());
 	glBindTexture(texData.textureTarget, texData.textureID);
 	glGetTexImage(texData.textureTarget, 0, ofGetGLFormat(pixels), GL_UNSIGNED_BYTE, pixels.getData());
@@ -1249,7 +1269,27 @@ void ofTexture::readToPixels(ofPixels & pixels) const {
 //----------------------------------------------------------
 void ofTexture::readToPixels(ofShortPixels & pixels) const {
 #ifndef TARGET_OPENGLES
-	pixels.allocate(texData.width, texData.height, ofGetImageTypeFromGLType(texData.glInternalFormat));
+	if (!texData.bAllocated || texData.textureID == 0 || texData.width == 0 || texData.height == 0) {
+		ofLogError("ofTexture") << "readToPixels(): texture is not allocated";
+		return;
+	}
+	
+	ofImageType imageType = ofGetImageTypeFromGLType(texData.glInternalFormat);
+	if (imageType == OF_IMAGE_UNDEFINED) {
+		ofLogError("ofTexture") << "readToPixels(): unsupported texture format " << texData.glInternalFormat;
+		return;
+	}
+	
+	pixels.allocate(texData.width, texData.height, imageType);
+	if (!pixels.isAllocated()) {
+		ofLogError("ofTexture") << "readToPixels(): failed to allocate pixels";
+		return;
+	}
+	
+	// Ensure all pending GL operations are complete before reading texture data
+	// This helps prevent crashes in Apple's Metal/OpenGL translation layer
+	glFinish();
+	
 	ofSetPixelStoreiAlignment(GL_PACK_ALIGNMENT, pixels.getWidth(), pixels.getBytesPerChannel(), pixels.getNumChannels());
 	glBindTexture(texData.textureTarget, texData.textureID);
 	glGetTexImage(texData.textureTarget, 0, ofGetGLFormat(pixels), GL_UNSIGNED_SHORT, pixels.getData());
@@ -1259,7 +1299,27 @@ void ofTexture::readToPixels(ofShortPixels & pixels) const {
 
 void ofTexture::readToPixels(ofFloatPixels & pixels) const {
 #ifndef TARGET_OPENGLES
-	pixels.allocate(texData.width, texData.height, ofGetImageTypeFromGLType(texData.glInternalFormat));
+	if (!texData.bAllocated || texData.textureID == 0 || texData.width == 0 || texData.height == 0) {
+		ofLogError("ofTexture") << "readToPixels(): texture is not allocated";
+		return;
+	}
+	
+	ofImageType imageType = ofGetImageTypeFromGLType(texData.glInternalFormat);
+	if (imageType == OF_IMAGE_UNDEFINED) {
+		ofLogError("ofTexture") << "readToPixels(): unsupported texture format " << texData.glInternalFormat;
+		return;
+	}
+	
+	pixels.allocate(texData.width, texData.height, imageType);
+	if (!pixels.isAllocated()) {
+		ofLogError("ofTexture") << "readToPixels(): failed to allocate pixels";
+		return;
+	}
+	
+	// Ensure all pending GL operations are complete before reading texture data
+	// This helps prevent crashes in Apple's Metal/OpenGL translation layer
+	glFinish();
+	
 	ofSetPixelStoreiAlignment(GL_PACK_ALIGNMENT, pixels.getWidth(), pixels.getBytesPerChannel(), pixels.getNumChannels());
 	glBindTexture(texData.textureTarget, texData.textureID);
 	glGetTexImage(texData.textureTarget, 0, ofGetGLFormat(pixels), GL_FLOAT, pixels.getData());

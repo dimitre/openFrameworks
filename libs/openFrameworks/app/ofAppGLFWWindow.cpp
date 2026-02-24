@@ -41,19 +41,16 @@ using std::cout;
 using std::endl;
 
 //-------------------------------------------------------
-ofAppGLFWWindow::ofAppGLFWWindow() : coreEvents(new ofCoreEvents){
-	bEnableSetupScreen = true;
-	buttonInUse = 0;
-	buttonPressed = false;
-	bWindowNeedsShowing = true;
-
-	targetWindowMode = OF_WINDOW;
-
-	ofAppPtr = nullptr;
-
-	iconSet = false;
-	windowP = nullptr;
-
+ofAppGLFWWindow::ofAppGLFWWindow() noexcept
+	: coreEvents(std::make_unique<ofCoreEvents>())
+	, targetWindowMode(OF_WINDOW)
+	, bEnableSetupScreen(true)
+	, buttonInUse(0)
+	, buttonPressed(false)
+	, bWindowNeedsShowing(true)
+	, windowP(nullptr)
+	, ofAppPtr(nullptr)
+	, iconSet(false) {
 	glfwSetErrorCallback(error_cb);
 }
 
@@ -62,7 +59,7 @@ ofAppGLFWWindow::~ofAppGLFWWindow() {
 	close();
 }
 
-void ofAppGLFWWindow::close() {
+void ofAppGLFWWindow::close() noexcept {
 //	cout << "ofAppGLFWWindow::close! " << settings.windowName << endl;
 
 	if (windowP) {
@@ -574,12 +571,12 @@ void ofAppGLFWWindow::finishRender() {
 }
 
 //--------------------------------------------
-bool ofAppGLFWWindow::getWindowShouldClose() {
+bool ofAppGLFWWindow::getWindowShouldClose() const noexcept {
 	return glfwWindowShouldClose(windowP);
 }
 
 //--------------------------------------------
-void ofAppGLFWWindow::setWindowShouldClose() {
+void ofAppGLFWWindow::setWindowShouldClose() noexcept {
 	glfwSetWindowShouldClose(windowP, 1);
 }
 
@@ -590,7 +587,7 @@ void ofAppGLFWWindow::setWindowTitle(const std::string & title) {
 }
 
 //------------------------------------------------------------
-int ofAppGLFWWindow::getPixelScreenCoordScale() {
+int ofAppGLFWWindow::getPixelScreenCoordScale() const {
 	// FIXME: cache?
 	glm::vec2 contentScale;
 	glfwGetWindowContentScale(windowP, &contentScale.x, &contentScale.y);
@@ -598,7 +595,7 @@ int ofAppGLFWWindow::getPixelScreenCoordScale() {
 }
 
 //------------------------------------------------------------
-ofRectangle ofAppGLFWWindow::getWindowRect() {
+ofRectangle ofAppGLFWWindow::getWindowRect() const {
 //	return windowRect;
 
 	glm::ivec2 pos;
@@ -616,14 +613,14 @@ ofRectangle ofAppGLFWWindow::getWindowRect() {
 }
 
 //------------------------------------------------------------
-glm::ivec2 ofAppGLFWWindow::getWindowSize() {
+glm::ivec2 ofAppGLFWWindow::getWindowSize() const {
 	glm::ivec2 size;
 	glfwGetWindowSize(windowP, &size.x, &size.y);
 	return size;
 }
 
 //------------------------------------------------------------
-glm::ivec2 ofAppGLFWWindow::getWindowPosition() {
+glm::ivec2 ofAppGLFWWindow::getWindowPosition() const {
 	glm::ivec2 pos;
 #if defined(TARGET_LINUX)
 	// Wayland does not support getting window position
@@ -637,7 +634,7 @@ glm::ivec2 ofAppGLFWWindow::getWindowPosition() {
 }
 
 //------------------------------------------------------------
-glm::ivec2 ofAppGLFWWindow::getFramebufferSize() {
+glm::ivec2 ofAppGLFWWindow::getFramebufferSize() const {
 	// FIXME: cache size and handle in framebuffer_size_cb
 	glm::ivec2 size;
 	glfwGetFramebufferSize(windowP, &size.x, &size.y);
@@ -645,31 +642,31 @@ glm::ivec2 ofAppGLFWWindow::getFramebufferSize() {
 }
 
 //------------------------------------------------------------
-glm::ivec2 ofAppGLFWWindow::getScreenSize() {
+glm::ivec2 ofAppGLFWWindow::getScreenSize() const {
 	// it will return the monitor/screen size where the windows sit.
 	windowRect = getWindowRect();
 	return allMonitors.getRectMonitorForScreenRect(windowRect).getSize();
 }
 
 //------------------------------------------------------------
-int ofAppGLFWWindow::getWidth() {
+int ofAppGLFWWindow::getWidth() const noexcept {
 	windowRect = getWindowRect();
 	return windowRect.width;
 }
 
 //------------------------------------------------------------
-int ofAppGLFWWindow::getHeight() {
+int ofAppGLFWWindow::getHeight() const noexcept {
 	windowRect = getWindowRect();
 	return windowRect.height;
 }
 
 //------------------------------------------------------------
-GLFWwindow * ofAppGLFWWindow::getGLFWWindow() {
+GLFWwindow * ofAppGLFWWindow::getGLFWWindow() const {
 	return windowP;
 }
 
 //------------------------------------------------------------
-void ofAppGLFWWindow::setWindowRect(const ofRectangle & rect) {
+void ofAppGLFWWindow::setWindowRect(const ofRectangle & rect) noexcept {
 //	cout << settings.windowName << " setWindowRect " << rect << endl;
 	windowRect = rect;
 #if defined(TARGET_LINUX)
@@ -686,7 +683,7 @@ void ofAppGLFWWindow::setWindowRect(const ofRectangle & rect) {
 }
 
 //------------------------------------------------------------
-void ofAppGLFWWindow::setWindowPosition(int x, int y) {
+void ofAppGLFWWindow::setWindowPosition(int x, int y) noexcept {
 #if defined(TARGET_LINUX)
 	// Wayland does not support setting window position
 	if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
@@ -698,13 +695,13 @@ void ofAppGLFWWindow::setWindowPosition(int x, int y) {
 }
 
 //------------------------------------------------------------
-void ofAppGLFWWindow::setWindowShape(int w, int h) {
+void ofAppGLFWWindow::setWindowShape(int w, int h) noexcept {
 //	cout << "setWindowShape " << w << " : " <<  h << endl;
 	glfwSetWindowSize(windowP, w, h);
 }
 
 //------------------------------------------------------------
-void ofAppGLFWWindow::hideCursor() {
+void ofAppGLFWWindow::hideCursor() noexcept {
 	if (settings.windowMode == OF_FULLSCREEN || settings.windowMode == OF_GAME_MODE) {
 		glfwSetInputMode(windowP, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	} else {
@@ -713,7 +710,7 @@ void ofAppGLFWWindow::hideCursor() {
 };
 
 //------------------------------------------------------------
-void ofAppGLFWWindow::showCursor() {
+void ofAppGLFWWindow::showCursor() noexcept {
 	glfwSetInputMode(windowP, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 };
 
@@ -1590,7 +1587,7 @@ void ofAppGLFWWindow::setClipboardString(const std::string & text) {
 }
 
 //------------------------------------------------------------
-std::string ofAppGLFWWindow::getClipboardString() {
+std::string ofAppGLFWWindow::getClipboardString() const {
 	const char * clipboard = glfwGetClipboardString(ofAppGLFWWindow::windowP);
 
 	if (clipboard) {
@@ -1626,18 +1623,18 @@ void ofAppGLFWWindow::listMonitors() {
 }
 
 //------------------------------------------------------------
-bool ofAppGLFWWindow::isWindowIconified() {
+bool ofAppGLFWWindow::isWindowIconified() const {
 	return glfwGetWindowAttrib(windowP, GLFW_ICONIFIED);
 }
 
 //------------------------------------------------------------
-bool ofAppGLFWWindow::isWindowActive() {
+bool ofAppGLFWWindow::isWindowActive() const {
 	//	return glfwGetWindowParam(GLFW_ACTIVE);
 	return true;
 }
 
 //------------------------------------------------------------
-bool ofAppGLFWWindow::isWindowResizeable() {
+bool ofAppGLFWWindow::isWindowResizeable() const {
 	return !glfwGetWindowAttrib(windowP, GLFW_RESIZABLE);
 }
 
@@ -1654,55 +1651,55 @@ void ofAppGLFWWindow::makeCurrent() {
 }
 
 #if defined(TARGET_LINUX)
-	Display * ofAppGLFWWindow::getX11Display() {
+	Display * ofAppGLFWWindow::getX11Display() const {
 		return glfwGetX11Display();
 	}
 
-	Window ofAppGLFWWindow::getX11Window() {
+	Window ofAppGLFWWindow::getX11Window() const {
 		return glfwGetX11Window(windowP);
 	}
 
-	XIC ofAppGLFWWindow::getX11XIC() {
+	XIC ofAppGLFWWindow::getX11XIC() const {
 		return xic;
 	}
 #endif
 
 #if defined(TARGET_LINUX) && !defined(TARGET_OPENGLES)
-	GLXContext ofAppGLFWWindow::getGLXContext() {
+	GLXContext ofAppGLFWWindow::getGLXContext() const {
 		return glfwGetGLXContext(windowP);
 	}
 #endif
 
 #if defined(TARGET_LINUX) && defined(TARGET_OPENGLES)
-	EGLDisplay ofAppGLFWWindow::getEGLDisplay() {
+	EGLDisplay ofAppGLFWWindow::getEGLDisplay() const noexcept {
 		return glfwGetEGLDisplay();
 	}
 
-	EGLContext ofAppGLFWWindow::getEGLContext() {
+	EGLContext ofAppGLFWWindow::getEGLContext() const noexcept {
 		return glfwGetEGLContext(windowP);
 	}
 
-	EGLSurface ofAppGLFWWindow::getEGLSurface() {
+	EGLSurface ofAppGLFWWindow::getEGLSurface() const noexcept {
 		return glfwGetEGLSurface(windowP);
 	}
 #endif
 
 #if defined(TARGET_OSX)
-	void * ofAppGLFWWindow::getNSGLContext() {
+	void * ofAppGLFWWindow::getNSGLContext() const noexcept {
 		return (__bridge void *)glfwGetNSGLContext(windowP);
 	}
 
-	void * ofAppGLFWWindow::getCocoaWindow() {
+	void * ofAppGLFWWindow::getCocoaWindow() const noexcept {
 		return (__bridge void *)glfwGetCocoaWindow(windowP);
 	}
 #endif
 
 #if defined(TARGET_WIN32)
-	HGLRC ofAppGLFWWindow::getWGLContext() {
+	HGLRC ofAppGLFWWindow::getWGLContext() const {
 		return glfwGetWGLContext(windowP);
 	}
 
-	HWND ofAppGLFWWindow::getWin32Window() {
+	HWND ofAppGLFWWindow::getWin32Window() const {
 		return glfwGetWin32Window(windowP);
 	}
 

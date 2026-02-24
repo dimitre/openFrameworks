@@ -43,12 +43,14 @@
 	typedef ofAppRGFWWindow ofWindow;
 #endif
 
-ofMainLoop::ofMainLoop() : bShouldClose(false), status(0), allowMultiWindow(true), escapeQuits(true) {
+ofMainLoop::ofMainLoop() noexcept
+	: bShouldClose(false)
+	, status(0)
+	, allowMultiWindow(true)
+	, escapeQuits(true) {
 }
 
-ofMainLoop::~ofMainLoop() {
-
-}
+ofMainLoop::~ofMainLoop() noexcept = default;
 
 std::shared_ptr<ofAppBaseWindow> ofMainLoop::createWindow(const ofWindowSettings & settings){
 	std::shared_ptr<ofWindow> window { std::make_shared<ofWindow>() };
@@ -267,7 +269,7 @@ void ofMainLoop::exit(){
 	windows.clear();
 }
 
-std::shared_ptr<ofAppBaseWindow> ofMainLoop::getCurrentWindow(){
+std::shared_ptr<ofAppBaseWindow> ofMainLoop::getCurrentWindow() const {
 	return currentWindow.lock();
 }
 
@@ -294,7 +296,7 @@ void ofMainLoop::setCurrentWindow(ofAppBaseWindow * window){
 //	}
 }
 
-std::shared_ptr<ofBaseApp> ofMainLoop::getCurrentApp(){
+std::shared_ptr<ofBaseApp> ofMainLoop::getCurrentApp() const {
 //	return windowsApps[currentWindow.lock()];
 	return mainApp;
 }

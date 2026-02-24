@@ -9,14 +9,14 @@ class ofBaseRenderer;
 class ofAppNoWindow final : public ofAppBaseWindow {
 
 public:
-	ofAppNoWindow();
-	~ofAppNoWindow() override {}
+	ofAppNoWindow() noexcept;
+	~ofAppNoWindow() noexcept override = default;
 
-	static bool doesLoop(){ return false; }
-	static bool allowsMultiWindow(){ return false; }
-	static void loop(){};
-	static bool needsPolling(){ return false; }
-	static void pollEvents(){};
+	[[nodiscard]] static bool doesLoop() noexcept { return false; }
+	[[nodiscard]] static bool allowsMultiWindow() noexcept { return false; }
+	static void loop() noexcept {}
+	[[nodiscard]] static bool needsPolling() noexcept { return false; }
+	static void pollEvents() noexcept {}
 
 	void run(ofBaseApp * appPtr);
 
@@ -25,20 +25,21 @@ public:
 	void update() override;
 	void draw() override;
 
-	glm::ivec2 getWindowPosition() override;
-	glm::ivec2 getWindowSize() override;
-	glm::ivec2 getScreenSize() override;
+	[[nodiscard]] glm::ivec2 getWindowPosition() const override;
+	[[nodiscard]] glm::ivec2 getWindowSize() const override;
+	[[nodiscard]] glm::ivec2 getScreenSize() const override;
 
-	int			getWidth() override;
-	int			getHeight() override;
+	[[nodiscard]] int getWidth() const noexcept override;
+	[[nodiscard]] int getHeight() const noexcept override;
 
 	ofCoreEvents & events() override;
-	std::shared_ptr<ofBaseRenderer> & renderer() override;
+	[[nodiscard]] std::shared_ptr<ofBaseRenderer> & renderer() noexcept override;
 
 private:
-	int width, height;
+	int width = 0;
+	int height = 0;
 
-    ofBaseApp *		ofAppPtr;
+    ofBaseApp * ofAppPtr = nullptr;
 	std::unique_ptr<ofCoreEvents> coreEvents;
     std::shared_ptr<ofBaseRenderer> currentRenderer;
 };

@@ -267,6 +267,15 @@ private:
 	mutable ofVbo meshVbo;
 	mutable ofMesh polylineMesh;
 
+	// Static unit quad VBO for efficient texture drawing
+	struct StaticQuadVBO {
+		ofVbo vbo;
+		bool initialized = false;
+		
+		void init();
+	};
+	mutable StaticQuadVBO staticQuadVBO;
+
 	// when adding more draw modes, POINTS, LINES, etc.
 	// store in a structure so we don't have to create a lot of variables
 	// this structure if based on the one from ofMaterial

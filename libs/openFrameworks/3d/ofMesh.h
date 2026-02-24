@@ -238,7 +238,7 @@ public:
 	[[nodiscard]] V getVertex(ofIndexType i) const;
 
 	/// \returns the vector that contains all of the vertices of the mesh.
-	[[nodiscard]] std::vector<V> & getVertices() noexcept;
+	std::vector<V> & getVertices() noexcept;
 
 	/// \returns the vector that contains all of the vertices of the mesh.
 	[[nodiscard]] const std::vector<V> & getVertices() const noexcept;
@@ -314,7 +314,7 @@ public:
 	/// will force a reset of the cache.
 	/// \returns the vector that contains all of the normals of the mesh,
 	/// if it has any.
-	[[nodiscard]] std::vector<N> & getNormals() noexcept;
+	std::vector<N> & getNormals() noexcept;
 
 	/// \returns the vector that contains all of the normals of the mesh, if
 	/// it has any. (read only)
@@ -399,7 +399,7 @@ public:
 
 	/// Use this if you plan to change the colors as part of this call as it will force a reset of the cache.
 	/// \returns the vector that contains all of the colors of the mesh, if it has any.
-	[[nodiscard]] std::vector<C> & getColors() noexcept;
+	std::vector<C> & getColors() noexcept;
 
 	/// \returns the vector that contains all of the colors of the mesh, if it has any. (read only)
 	[[nodiscard]] const std::vector<C> & getColors() const noexcept;
@@ -471,7 +471,7 @@ public:
 	/// Use this if you plan to change the texture coordinates as part of this
 	/// call as it will force a reset of the cache.
 	/// \returns a vector of Vec2f representing the texture coordinates for the whole mesh.
-	[[nodiscard]] std::vector<T> & getTexCoords() noexcept;
+	std::vector<T> & getTexCoords() noexcept;
 
 	/// Because OF uses ARB textures these are in pixels rather than 0-1 normalized coordinates.
 	/// \returns a vector of Vec2f representing the texture coordinates for the whole mesh. (read only)
@@ -502,7 +502,7 @@ public:
 	/// \brief Use this if you plan to change the indices as part of this call as it
 	/// will force a reset of the cache.
 	/// \returns the vector that contains all of the indices of the mesh, if it has any.
-	[[nodiscard]] std::vector<ofIndexType> & getIndices() noexcept;
+	std::vector<ofIndexType> & getIndices() noexcept;
 
 
 	/// \returns the index from the index vector. Each index represents the index of the vertex in the vertices vector. This determines the way that the vertices are connected into the polgoynon type set in the primitiveMode.
@@ -638,19 +638,19 @@ public:
 protected:
 
 	/// \returns If the vertices of the mesh have changed, been added or removed.
-	[[nodiscard]] bool haveVertsChanged();
+	bool haveVertsChanged();
 
 	/// \returns If the normals of the mesh have changed, been added or removed.
-	[[nodiscard]] bool haveNormalsChanged();
+	bool haveNormalsChanged();
 
 	/// \returns If the colors of the mesh have changed, been added or removed.
-	[[nodiscard]] bool haveColorsChanged();
+	bool haveColorsChanged();
 
 	/// \returns If the texture coords of the mesh have changed, been added or removed.
-	[[nodiscard]] bool haveTexCoordsChanged();
+	bool haveTexCoordsChanged();
 
 	/// \returns If the indices of the mesh have changed, been added or removed.
-	[[nodiscard]] bool haveIndicesChanged();
+	bool haveIndicesChanged();
 
 private:
 

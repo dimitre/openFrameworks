@@ -9,6 +9,7 @@
 #include "ofLog.h"
 #include "ofGraphicsConstants.h"
 #include <set>
+#include <iomanip>
 
 using std::shared_ptr;
 using std::vector;
@@ -434,7 +435,36 @@ ofImageType ofGetImageTypeFromGLType(int glType){
 	case GL_RGBA32UI:
 #endif
 		return OF_IMAGE_COLOR_ALPHA;
+
+	case GL_LUMINANCE_ALPHA:
+#if !defined(TARGET_OPENGLES) || defined(TARGET_EMSCRIPTEN)
+	case GL_LUMINANCE8_ALPHA8:
+	case GL_LUMINANCE16_ALPHA16:
+	case GL_LUMINANCE_ALPHA32F_ARB:
+#endif
+		return OF_IMAGE_COLOR_ALPHA;
+
+	case GL_ALPHA:
+#if !defined(TARGET_OPENGLES) || defined(TARGET_EMSCRIPTEN)
+	case GL_ALPHA8:
+#endif
+		return OF_IMAGE_GRAYSCALE;
+
+#if !defined(TARGET_OPENGLES) || defined(TARGET_EMSCRIPTEN)
+	// 2-channel RG formats - map to grayscale as OF doesn't have a native 2-channel image type
+	// This allows readToPixels to work with RG textures without crashing
+	case GL_RG8:
+	case GL_RG16:
+	case GL_RG16F:
+	case GL_RG16I:
+	case GL_RG16UI:
+	case GL_RG32F:
+	case GL_RG32I:
+	case GL_RG32UI:
+		return OF_IMAGE_GRAYSCALE;
+#endif
 	}
+	ofLogWarning("ofGLUtils") << "ofGetImageTypeFromGLType(): unknown GL type 0x" << std::hex << glType << std::dec << ", returning OF_IMAGE_UNDEFINED";
 	return OF_IMAGE_UNDEFINED;
 }
 

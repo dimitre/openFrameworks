@@ -24,91 +24,90 @@ typedef struct _XDisplay Display;
 class ofAppBaseWindow {
 public:
 
-	ofAppBaseWindow(){}
-	virtual ~ofAppBaseWindow(){}
-//	~ofAppBaseWindow(){}
+	ofAppBaseWindow() noexcept = default;
+	virtual ~ofAppBaseWindow() noexcept = default;
 
 	virtual void setup(const ofWindowSettings & settings)=0;
 	virtual void update()=0;
 	virtual void draw()=0;
-	virtual std::shared_ptr<ofBaseRenderer> & renderer() { return currentRenderer; }
+	[[nodiscard]] virtual std::shared_ptr<ofBaseRenderer> & renderer() noexcept { return currentRenderer; }
 	virtual ofCoreEvents & events() = 0;
 
-	virtual bool getWindowShouldClose(){
+	[[nodiscard]] virtual bool getWindowShouldClose() const noexcept {
 		return false;
 	}
-	virtual void setWindowShouldClose(){}
-	virtual void close(){}
+	virtual void setWindowShouldClose() noexcept {}
+	virtual void close() noexcept {}
 
-	virtual void hideCursor(){}
-	virtual void showCursor(){}
+	virtual void hideCursor() noexcept {}
+	virtual void showCursor() noexcept {}
 
-	virtual void setWindowPosition(int, int){}
-	virtual void setWindowShape(int, int){}
-	virtual void setWindowRect(const ofRectangle & ){}
+	virtual void setWindowPosition(int, int) noexcept {}
+	virtual void setWindowShape(int, int) noexcept {}
+	virtual void setWindowRect(const ofRectangle & ) noexcept {}
 
-	virtual glm::ivec2 getWindowPosition() { return {}; }
-	virtual glm::ivec2 getWindowSize() { return glm::ivec2(); }
-	virtual glm::ivec2 getFramebufferSize() { return glm::ivec2(); }
-	virtual glm::ivec2 getScreenSize() { return glm::ivec2(); }
-	virtual ofRectangle getWindowRect() { return ofRectangle(); }
+	[[nodiscard]] virtual glm::ivec2 getWindowPosition() const { return {}; }
+	[[nodiscard]] virtual glm::ivec2 getWindowSize() const { return glm::ivec2(); }
+	[[nodiscard]] virtual glm::ivec2 getFramebufferSize() const { return glm::ivec2(); }
+	[[nodiscard]] virtual glm::ivec2 getScreenSize() const { return glm::ivec2(); }
+	[[nodiscard]] virtual ofRectangle getWindowRect() const { return ofRectangle(); }
 
-	virtual void setOrientation(ofOrientation orientationIn) { orientation = orientationIn; }
-	virtual ofOrientation getOrientation() { return orientation; }
-	virtual bool doesHWOrientation(){ return false; }
+	virtual void setOrientation(ofOrientation orientationIn) noexcept { orientation = orientationIn; }
+	[[nodiscard]] virtual ofOrientation getOrientation() const noexcept { return orientation; }
+	[[nodiscard]] virtual bool doesHWOrientation() const noexcept { return false; }
 
 	//this is used by ofGetWidth and now determines the window width based on orientation
-	virtual int getWidth(){ return 0; }
-	virtual int getHeight(){ return 0; }
+	[[nodiscard]] virtual int getWidth() const noexcept { return 0; }
+	[[nodiscard]] virtual int getHeight() const noexcept { return 0; }
 
-	virtual void setWindowTitle(const std::string & ){}
+	virtual void setWindowTitle(const std::string & ) {}
 
-	virtual ofWindowMode getWindowMode() { return settings.windowMode; }
+	[[nodiscard]] virtual ofWindowMode getWindowMode() const noexcept { return settings.windowMode; }
 
-	virtual void setFullscreen(bool ){}
-	virtual void toggleFullscreen(){}
-	virtual void setWindowMousePassthrough(bool ){}
+	virtual void setFullscreen(bool ) {}
+	virtual void toggleFullscreen() {}
+	virtual void setWindowMousePassthrough(bool ) {}
 
-	virtual void enableSetupScreen(){}
-	virtual void disableSetupScreen(){}
+	virtual void enableSetupScreen() {}
+	virtual void disableSetupScreen() {}
 
-	virtual void setVerticalSync(bool ){}
-	virtual void setClipboardString(const std::string& ){}
-	virtual std::string getClipboardString(){ return ""; }
+	virtual void setVerticalSync(bool ) {}
+	virtual void setClipboardString(const std::string& ) {}
+	[[nodiscard]] virtual std::string getClipboardString() const { return ""; }
 
-	virtual void makeCurrent(){}
-	virtual void swapBuffers(){}
-	virtual void startRender(){}
-	virtual void finishRender(){}
+	virtual void makeCurrent() {}
+	virtual void swapBuffers() {}
+	virtual void startRender() {}
+	virtual void finishRender() {}
 
-	virtual void * getWindowContext(){ return nullptr; }
+	[[nodiscard]] virtual void * getWindowContext() const noexcept { return nullptr; }
 
-	virtual void beginDraw(){}
-	virtual void endDraw(){}
+	virtual void beginDraw() {}
+	virtual void endDraw() {}
 
 #if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI_LEGACY)
-	virtual Display* getX11Display(){ return nullptr; }
-	virtual Window  getX11Window(){ return 0; }
+	[[nodiscard]] virtual Display* getX11Display() const noexcept { return nullptr; }
+	[[nodiscard]] virtual Window  getX11Window() const noexcept { return 0; }
 #endif
 
 #if defined(TARGET_LINUX) && !defined(TARGET_OPENGLES)
-	virtual GLXContext getGLXContext(){ return 0; }
+	[[nodiscard]] virtual GLXContext getGLXContext() const noexcept { return 0; }
 #endif
 
 #if defined(TARGET_LINUX) && defined(TARGET_OPENGLES)
-	virtual EGLDisplay getEGLDisplay(){ return 0; }
-	virtual EGLContext getEGLContext(){ return 0; }
-	virtual EGLSurface getEGLSurface(){ return 0; }
+	[[nodiscard]] virtual EGLDisplay getEGLDisplay() const noexcept { return 0; }
+	[[nodiscard]] virtual EGLContext getEGLContext() const noexcept { return 0; }
+	[[nodiscard]] virtual EGLSurface getEGLSurface() const noexcept { return 0; }
 #endif
 
 #if defined(TARGET_OSX)
-	virtual void * getNSGLContext(){ return nullptr; }
-	virtual void * getCocoaWindow(){ return nullptr; }
+	[[nodiscard]] virtual void * getNSGLContext() const noexcept { return nullptr; }
+	[[nodiscard]] virtual void * getCocoaWindow() const noexcept { return nullptr; }
 #endif
 
 #if defined(TARGET_WIN32)
-	virtual HGLRC getWGLContext(){ return 0; }
-	virtual HWND getWin32Window(){ return 0; }
+	[[nodiscard]] virtual HGLRC getWGLContext() const noexcept { return 0; }
+	[[nodiscard]] virtual HWND getWin32Window() const noexcept { return 0; }
 #endif
 
 	ofWindowSettings settings;

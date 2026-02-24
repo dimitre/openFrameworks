@@ -24,19 +24,19 @@ typedef ofPixels_<unsigned char> ofPixels;
 
 class ofAppGLFWWindow final : public ofAppBaseWindow {
 public:
-	ofAppGLFWWindow();
+	ofAppGLFWWindow() noexcept;
 	~ofAppGLFWWindow() override;
 
 	//	ofWindowMode getWindowMode() { return settings.windowMode; }
 
 	// Can't be copied, use shared_ptr
-	ofAppGLFWWindow(ofAppGLFWWindow & w) = delete;
-	ofAppGLFWWindow & operator=(ofAppGLFWWindow & w) = delete;
+	ofAppGLFWWindow(const ofAppGLFWWindow & w) = delete;
+	ofAppGLFWWindow & operator=(const ofAppGLFWWindow & w) = delete;
 
-	static void loop() {};
-	static bool doesLoop() { return false; }
-	static bool allowsMultiWindow() { return true; }
-	static bool needsPolling() { return true; }
+	static void loop() noexcept {}
+	[[nodiscard]] static bool doesLoop() noexcept { return false; }
+	[[nodiscard]] static bool allowsMultiWindow() noexcept { return true; }
+	[[nodiscard]] static bool needsPolling() noexcept { return true; }
 	static void pollEvents();
 
 	// this functions are only meant to be called from inside OF don't call them from your code
@@ -45,35 +45,35 @@ public:
 	void setup(const ofWindowSettings & settings) override final;
 	void update() override final;
 	void draw() override final;
-	bool getWindowShouldClose() override final;
-	void setWindowShouldClose() override final;
+	[[nodiscard]] bool getWindowShouldClose() const noexcept override final;
+	void setWindowShouldClose() noexcept override final;
 
-	void hideCursor() override final;
-	void showCursor() override final;
+	void hideCursor() noexcept override final;
+	void showCursor() noexcept override final;
 
-	int getHeight() override final;
-	int getWidth() override final;
+	[[nodiscard]] int getHeight() const noexcept override final;
+	[[nodiscard]] int getWidth() const noexcept override final;
 
 	ofCoreEvents & events() override final;
 //	std::shared_ptr<ofBaseRenderer> & renderer() override;
 
-	GLFWwindow * getGLFWWindow();
-	void * getWindowContext() override final { return getGLFWWindow(); }
-	ofWindowSettings getSettings() { return settings; }
+	[[nodiscard]] GLFWwindow * getGLFWWindow() const;
+	[[nodiscard]] void * getWindowContext() const noexcept override final { return getGLFWWindow(); }
+	[[nodiscard]] ofWindowSettings getSettings() const { return settings; }
 
-	glm::ivec2 getScreenSize() override final;
+	[[nodiscard]] glm::ivec2 getScreenSize() const override final;
 
-	ofRectangle getWindowRect() override final;
-	glm::ivec2 getWindowPosition() override final;
-	glm::ivec2 getWindowSize() override final;
+	[[nodiscard]] ofRectangle getWindowRect() const override final;
+	[[nodiscard]] glm::ivec2 getWindowPosition() const override final;
+	[[nodiscard]] glm::ivec2 getWindowSize() const override final;
 
-	glm::ivec2 getFramebufferSize() override final;
+	[[nodiscard]] glm::ivec2 getFramebufferSize() const override final;
 
 	void setWindowTitle(const std::string & title) override final;
 
-	void setWindowRect(const ofRectangle & rect) override final;
-	void setWindowPosition(int x, int y) override final;
-	void setWindowShape(int w, int h) override final;
+	void setWindowRect(const ofRectangle & rect) noexcept override final;
+	void setWindowPosition(int x, int y) noexcept override final;
+	void setWindowShape(int w, int h) noexcept override final;
 
 	void setFullscreen(bool fullscreen) override final;
 	void toggleFullscreen() override final;
@@ -87,10 +87,10 @@ public:
 	void setVerticalSync(bool bSync) override final;
 
 	void setClipboardString(const std::string & text) override final;
-	std::string getClipboardString() override final;
+	[[nodiscard]] std::string getClipboardString() const override final;
 
 	// MARK: WOW not override
-	int getPixelScreenCoordScale();
+	[[nodiscard]] int getPixelScreenCoordScale() const;
 
 	void makeCurrent() override final;
 	void swapBuffers() override final;
@@ -99,41 +99,41 @@ public:
 
 	static void listVideoModes();
 	static void listMonitors();
-	bool isWindowIconified();
-	bool isWindowActive();
-	bool isWindowResizeable();
+	[[nodiscard]] bool isWindowIconified() const;
+	[[nodiscard]] bool isWindowActive() const;
+	[[nodiscard]] bool isWindowResizeable() const;
 	void iconify(bool bIconify);
 
 	#if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI_LEGACY)
 	typedef struct _XIM * XIM;
 	typedef struct _XIC * XIC;
 
-	Display * getX11Display() override;
-	Window getX11Window() override;
-	XIC getX11XIC();
+	[[nodiscard]] Display * getX11Display() const override;
+	[[nodiscard]] Window getX11Window() const override;
+	[[nodiscard]] XIC getX11XIC() const;
 
 	void setWindowIcon(const fs::path & path);
 	void setWindowIcon(const ofPixels & iconPixels);
 	#endif
 
 	#if defined(TARGET_LINUX) && !defined(TARGET_OPENGLES)
-	GLXContext getGLXContext() override;
+	[[nodiscard]] GLXContext getGLXContext() const override;
 	#endif
 
 	#if defined(TARGET_LINUX) && defined(TARGET_OPENGLES)
-	EGLDisplay getEGLDisplay() override;
-	EGLContext getEGLContext() override;
-	EGLSurface getEGLSurface() override;
+	[[nodiscard]] EGLDisplay getEGLDisplay() const noexcept override;
+	[[nodiscard]] EGLContext getEGLContext() const noexcept override;
+	[[nodiscard]] EGLSurface getEGLSurface() const noexcept override;
 	#endif
 
 	#if defined(TARGET_OSX)
-	void * getNSGLContext() override final;
-	void * getCocoaWindow() override final;
+	[[nodiscard]] void * getNSGLContext() const noexcept override final;
+	[[nodiscard]] void * getCocoaWindow() const noexcept override final;
 	#endif
 
 	#if defined(TARGET_WIN32)
-	HGLRC getWGLContext() override;
-	HWND getWin32Window() override;
+	[[nodiscard]] HGLRC getWGLContext() const override;
+	[[nodiscard]] HWND getWin32Window() const override;
 	#endif
 
 private:
@@ -154,33 +154,33 @@ private:
 	static void refresh_cb(GLFWwindow * windowP_);
 	static void monitor_cb(GLFWmonitor * monitor, int event);
 
-	void close() override final;
+	void close() noexcept override final;
 
 	#if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI_LEGACY)
-	XIM xim;
-	XIC xic;
+	XIM xim = nullptr;
+	XIC xic = nullptr;
 	#endif
 
 	std::unique_ptr<ofCoreEvents> coreEvents;
 
-	ofWindowMode targetWindowMode;
+	ofWindowMode targetWindowMode = OF_WINDOW;
 
-	bool bEnableSetupScreen;
+	bool bEnableSetupScreen = true;
 
-	ofRectangle windowRect { 20, 20, 800, 600 };
+	mutable ofRectangle windowRect { 20, 20, 800, 600 };
 	ofRectangle windowRectBackup;
 	void setFSTarget(ofWindowMode targetWindowMode);
 
-	int buttonInUse;
-	bool buttonPressed;
+	int buttonInUse = 0;
+	bool buttonPressed = false;
 
 	//	int nFramesSinceWindowResized;
-	bool bWindowNeedsShowing;
+	bool bWindowNeedsShowing = false;
 
-	GLFWwindow * windowP;
-	ofBaseApp * ofAppPtr;
+	GLFWwindow * windowP = nullptr;
+	ofBaseApp * ofAppPtr = nullptr;
 
-	bool iconSet;
+	bool iconSet = false;
 
 	void beginDraw() override final;
 	void endDraw() override final;
@@ -210,13 +210,20 @@ private:
 
 inline struct ofMonitors {
 public:
-	ofMonitors() { }
-	~ofMonitors() { }
+	ofMonitors() = default;
+	~ofMonitors() = default;
+	
+	// Delete copy to prevent accidental copying of monitor handles
+	ofMonitors(const ofMonitors&) = delete;
+	ofMonitors& operator=(const ofMonitors&) = delete;
+	ofMonitors(ofMonitors&&) = default;
+	ofMonitors& operator=(ofMonitors&&) = default;
+	
 	std::vector<ofRectangle> rects;
 	ofRectangle allMonitorsRect { 0, 0, 0, 0 };
-	GLFWmonitor ** monitors;
+	GLFWmonitor ** monitors = nullptr;
 
-	ofRectangle getRectMonitorForScreenRect(const ofRectangle & rect) {
+	[[nodiscard]] ofRectangle getRectMonitorForScreenRect(const ofRectangle & rect) {
 		update();
 		for (unsigned int a = 0; a < rects.size(); a++) {
 			if (rects[a].inside(rect.getCenter())) {
@@ -227,7 +234,7 @@ public:
 		return { 0, 0, 0, 0 };
 	}
 
-	ofRectangle getRectForAllMonitors() {
+	[[nodiscard]] ofRectangle getRectForAllMonitors() const {
 		return allMonitorsRect;
 	}
 
@@ -252,7 +259,7 @@ public:
 		}
 	}
 
-	ofRectangle getRectFromMonitors(const std::vector<int> monitors) {
+	[[nodiscard]] ofRectangle getRectFromMonitors(const std::vector<int>& monitors) {
 		bool first = true;
 		ofRectangle r;
 		std::string str { "" };

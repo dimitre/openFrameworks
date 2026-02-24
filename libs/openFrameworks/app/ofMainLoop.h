@@ -9,12 +9,12 @@ class ofWindowSettings;
 
 class ofMainLoop final : public std::enable_shared_from_this<ofMainLoop> {
 public:
-	ofMainLoop();
-	~ofMainLoop();
+	ofMainLoop() noexcept;
+	~ofMainLoop() noexcept;
 
-	std::shared_ptr<ofAppBaseWindow> createWindow(const ofWindowSettings & settings);
+	[[nodiscard]] std::shared_ptr<ofAppBaseWindow> createWindow(const ofWindowSettings & settings);
 
-	std::shared_ptr<ofMainLoop> getPtr() {
+	[[nodiscard]] std::shared_ptr<ofMainLoop> getPtr() {
 		return shared_from_this();
 	}
 	
@@ -44,19 +44,19 @@ public:
 	void pollEvents();
 	void exit();
 	void shouldClose(int status);
-	std::shared_ptr<ofAppBaseWindow> getCurrentWindow();
+	[[nodiscard]] std::shared_ptr<ofAppBaseWindow> getCurrentWindow() const;
 	void setCurrentWindow(const std::shared_ptr<ofAppBaseWindow> & window);
 	void setCurrentWindow(ofAppBaseWindow * window);
-	std::shared_ptr<ofBaseApp> getCurrentApp();
+	[[nodiscard]] std::shared_ptr<ofBaseApp> getCurrentApp() const;
 	void setEscapeQuitsLoop(bool quits);
 
 	ofEvent<void> exitEvent;
 	ofEvent<void> loopEvent;
 
-	std::thread::id get_thread_id() { return thread_id; };
+	[[nodiscard]] std::thread::id get_thread_id() const noexcept { return thread_id; }
 
 	// Testing
-	std::vector<std::shared_ptr<ofAppBaseWindow>> getWindows() { return windows; }
+	[[nodiscard]] const std::vector<std::shared_ptr<ofAppBaseWindow>> & getWindows() const noexcept { return windows; }
 
 	void ofBeginWindow(int n);
 	void ofEndWindow();
@@ -73,10 +73,10 @@ private:
 	std::vector<std::shared_ptr<ofAppBaseWindow>> windows;
 	std::shared_ptr<ofBaseApp> mainApp;
 
-	bool bShouldClose;
-	int status;
-	bool allowMultiWindow;
+	bool bShouldClose = false;
+	int status = 0;
+	bool allowMultiWindow = true;
 	std::function<void()> windowLoop;
 	std::function<void()> windowPollEvents;
-	bool escapeQuits;
+	bool escapeQuits = true;
 };

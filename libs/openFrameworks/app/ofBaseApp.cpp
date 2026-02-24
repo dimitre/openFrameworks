@@ -1,12 +1,12 @@
 #include "ofBaseApp.h"
 #include "ofEvents.h"
 
-ofBaseApp::ofBaseApp() {
-	mouseX = mouseY = 0;
+ofBaseApp::ofBaseApp() noexcept
+	: mouseX(0)
+	, mouseY(0) {
 }
 
-ofBaseApp::~ofBaseApp(){
-}
+ofBaseApp::~ofBaseApp() noexcept = default;
 
 void ofBaseApp::setup() {}
 void ofBaseApp::update() {}

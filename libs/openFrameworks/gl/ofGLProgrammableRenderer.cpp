@@ -542,11 +542,67 @@ void ofGLProgrammableRenderer::draw(const ofShortImage & image, float x, float y
 }
 
 //----------------------------------------------------------
+void ofGLProgrammableRenderer::StaticQuadVBO::init() {
+	glm::vec2 verts[4] = {{0,0}, {1,0}, {1,1}, {0,1}};
+	glm::vec2 texcoords[4] = {{0,0}, {1,0}, {1,1}, {0,1}};
+	
+	vbo.setVertexData(verts, 4, GL_STATIC_DRAW);
+	vbo.setTexCoordData(texcoords, 4, GL_STATIC_DRAW);
+	initialized = true;
+}
+
+//----------------------------------------------------------
 void ofGLProgrammableRenderer::draw(const ofTexture & tex, float x, float y, float z, float w, float h, float sx, float sy, float sw, float sh) const {
 	const_cast<ofGLProgrammableRenderer *>(this)->setAttributes(true, false, true, false, GL_TRIANGLES);
 	if (tex.isAllocated()) {
 		const_cast<ofGLProgrammableRenderer *>(this)->bind(tex, 0);
-		draw(tex.getMeshForSubsection(x, y, z, w, h, sx, sy, sw, sh, isVFlipped(), currentStyle.rectMode), OF_MESH_FILL, false, true, false);
+		
+		// Initialize static VBO on first use
+		if (!staticQuadVBO.initialized) {
+			const_cast<ofGLProgrammableRenderer *>(this)->staticQuadVBO.init();
+		}
+		
+		// Calculate texture coordinates for subsection
+		float texWidth = tex.getWidth();
+		float texHeight = tex.getHeight();
+		float texX1 = sx / texWidth;
+		float texY1 = sy / texHeight;
+		float texX2 = (sx + sw) / texWidth;
+		float texY2 = (sy + sh) / texHeight;
+		
+		// Handle vertical flip
+		if (isVFlipped()) {
+			swap(texY1, texY2);
+		}
+		
+		// Update texture coordinates in VBO for this subsection
+		glm::vec2 texcoords[4] = {
+			{texX1, texY1},
+			{texX2, texY1},
+			{texX2, texY2},
+			{texX1, texY2}
+		};
+		staticQuadVBO.vbo.updateTexCoordData(texcoords, 4);
+		
+		// Adjust position for rectMode
+		float drawX = x;
+		float drawY = y;
+		if (currentStyle.rectMode == OF_RECTMODE_CENTER) {
+			drawX -= w * 0.5f;
+			drawY -= h * 0.5f;
+		}
+		
+		// Use matrix stack to position and scale the unit quad
+		const_cast<ofGLProgrammableRenderer *>(this)->pushMatrix();
+		const_cast<ofGLProgrammableRenderer *>(this)->translate(drawX, drawY, z);
+		const_cast<ofGLProgrammableRenderer *>(this)->scale(w, h, 1.0f);
+		
+		// Draw the static unit quad
+		staticQuadVBO.vbo.bind();
+		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+		staticQuadVBO.vbo.unbind();
+		
+		const_cast<ofGLProgrammableRenderer *>(this)->popMatrix();
 		const_cast<ofGLProgrammableRenderer *>(this)->unbind(tex, 0);
 	} else {
 		ofLogWarning("ofGLProgrammableRenderer") << "draw(): texture is not allocated";

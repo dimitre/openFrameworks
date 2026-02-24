@@ -14,9 +14,9 @@ class ofTouchEventArgs;
 class ofBaseApp : public ofBaseSoundInput, public ofBaseSoundOutput{
 
 	public:
-		ofBaseApp();
+		ofBaseApp() noexcept;
 
-		virtual ~ofBaseApp();
+		virtual ~ofBaseApp() noexcept;
 
 		virtual void setup();
 		virtual void update();
@@ -61,7 +61,7 @@ class ofBaseApp : public ofBaseSoundInput, public ofBaseSoundOutput{
 		virtual void dragEvent(ofDragInfo dragInfo);
 		virtual void gotMessage(ofMessage msg);
 		
-		int mouseX, mouseY;			// for processing heads
+		int mouseX = 0, mouseY = 0;		// for processing heads
 
 		virtual void setup(ofEventArgs & args);
 		virtual void update(ofEventArgs & args);
@@ -95,5 +95,3 @@ class ofBaseApp : public ofBaseSoundInput, public ofBaseSoundOutput{
 		virtual void touchDoubleTap(ofTouchEventArgs & touch);
 		virtual void touchCancelled(ofTouchEventArgs & touch);
 };
-
-

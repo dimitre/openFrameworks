@@ -43,8 +43,8 @@ enum ofOrientation: short{
 
 class ofWindowSettings {
 public:
-	ofWindowSettings(){}
-	virtual ~ofWindowSettings(){};
+	ofWindowSettings() noexcept = default;
+	virtual ~ofWindowSettings() noexcept = default;
 	
 	std::string title;
 	std::string windowName { "main" };
@@ -57,43 +57,43 @@ public:
 //		setSize(rect.width, rect.height);
 //	}
 	
-	void setPosition(const glm::ivec2 & position) {
+	void setPosition(const glm::ivec2 & position) noexcept {
 		this->position = position;
 		this->positionSet = true;
 	}
 
-	void setSize(int width, int height) {
+	void setSize(int width, int height) noexcept {
 		this->width = width;
 		this->height = height;
 		this->sizeSet = true;
 	}
 
-	bool isSizeSet() const {
+	[[nodiscard]] bool isSizeSet() const noexcept {
 		return sizeSet;
 	}
 
-	int getWidth() const {
+	[[nodiscard]] int getWidth() const noexcept {
 		return width;
 	}
 
-	int getHeight() const {
+	[[nodiscard]] int getHeight() const noexcept {
 		return height;
 	}
 
-	const glm::ivec2 & getPosition() const {
+	[[nodiscard]] const glm::ivec2 & getPosition() const noexcept {
 		return position;
 	}
 
-	bool isPositionSet() const {
+	[[nodiscard]] bool isPositionSet() const noexcept {
 		return positionSet;
 	}
 
-	void setGLVersion(int major, int minor) {
+	void setGLVersion(int major, int minor) noexcept {
 		glVersionMajor = major;
 		glVersionMinor = minor;
 	}
 	
-	void setGLESVersion(int version){
+	void setGLESVersion(int version) noexcept {
 		glesVersion = version;
 	}
 
