@@ -911,6 +911,28 @@ class ofTexture : public ofBaseDraws {
 	                       ///< For backwards compatibility.
 	mutable ofMesh quad;
 
+private:
+	/// \brief Cached mesh data for efficient repeated drawing
+	struct MeshCache {
+		ofMesh mesh;
+		float x = 0, y = 0, z = 0, w = 0, h = 0;
+		float sx = 0, sy = 0, sw = 0, sh = 0;
+		bool vflipped = false;
+		ofRectMode rectMode = OF_RECTMODE_CORNER;
+		float anchorX = 0, anchorY = 0;
+		bool anchorIsPct = false;
+		bool valid = false;
+		
+		bool matches(float x_, float y_, float z_, float w_, float h_,
+		             float sx_, float sy_, float sw_, float sh_,
+		             bool vflipped_, ofRectMode rectMode_,
+		             float anchorX_, float anchorY_, bool anchorIsPct_) const;
+		void update(float x_, float y_, float z_, float w_, float h_,
+		            float sx_, float sy_, float sw_, float sh_,
+		            bool vflipped_, ofRectMode rectMode_,
+		            float anchorX_, float anchorY_, bool anchorIsPct_);
+	};
+	mutable MeshCache meshCache;
 
 protected:
 

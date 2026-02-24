@@ -1058,6 +1058,30 @@ void ofTexture::drawSubsection(float x, float y, float z, float w, float h, floa
 }
 
 //------------------------------------
+// MeshCache implementation
+bool ofTexture::MeshCache::matches(float x_, float y_, float z_, float w_, float h_,
+                                   float sx_, float sy_, float sw_, float sh_,
+                                   bool vflipped_, ofRectMode rectMode_,
+                                   float anchorX_, float anchorY_, bool anchorIsPct_) const {
+	return valid &&
+	       x == x_ && y == y_ && z == z_ && w == w_ && h == h_ &&
+	       sx == sx_ && sy == sy_ && sw == sw_ && sh == sh_ &&
+	       vflipped == vflipped_ && rectMode == rectMode_ &&
+	       anchorX == anchorX_ && anchorY == anchorY_ && anchorIsPct == anchorIsPct_;
+}
+
+void ofTexture::MeshCache::update(float x_, float y_, float z_, float w_, float h_,
+                                  float sx_, float sy_, float sw_, float sh_,
+                                  bool vflipped_, ofRectMode rectMode_,
+                                  float anchorX_, float anchorY_, bool anchorIsPct_) {
+	x = x_; y = y_; z = z_; w = w_; h = h_;
+	sx = sx_; sy = sy_; sw = sw_; sh = sh_;
+	vflipped = vflipped_;
+	rectMode = rectMode_;
+	anchorX = anchorX_; anchorY = anchorY_; anchorIsPct = anchorIsPct_;
+}
+
+//------------------------------------
 ofMesh ofTexture::getMeshForSubsection(float x, float y, float z, float w, float h, float sx, float sy, float sw, float sh, bool vflipped, ofRectMode rectMode) const {
 	if (!texData.bAllocated) {
 		return {};
@@ -1104,6 +1128,16 @@ ofMesh ofTexture::getMeshForSubsection(float x, float y, float z, float w, float
 	px1 -= anchorX;
 	py1 -= anchorY;
 
+	// Calculate anchor values for cache key
+	float anchorXVal = bAnchorIsPct ? anchor.x * w : anchor.x;
+	float anchorYVal = bAnchorIsPct ? anchor.y * h : anchor.y;
+
+	// Check if cached mesh is still valid
+	if (meshCache.matches(x, y, z, w, h, sx, sy, sw, sh, vflipped, rectMode,
+	                      anchorXVal, anchorYVal, bAnchorIsPct)) {
+		return meshCache.mesh;
+	}
+
 	// -------------------------------------------------
 	// complete hack to remove border artifacts.
 	// slightly, slightly alters an image, scaling...
@@ -1129,8 +1163,8 @@ ofMesh ofTexture::getMeshForSubsection(float x, float y, float z, float w, float
 	GLfloat tx1 { bottomRight.x - offsetw };
 	GLfloat ty1 { bottomRight.y - offseth };
 
-	//	ofMesh quad;
-	return { OF_PRIMITIVE_TRIANGLE_FAN, {
+	// Build and cache the mesh
+	meshCache.mesh = { OF_PRIMITIVE_TRIANGLE_FAN, {
 											{ px0, py0, z },
 											{ px1, py0, z },
 											{ px1, py1, z },
@@ -1143,7 +1177,11 @@ ofMesh ofTexture::getMeshForSubsection(float x, float y, float z, float w, float
 			{ tx0, ty1 },
 		} };
 
-	//	return quad;
+	meshCache.update(x, y, z, w, h, sx, sy, sw, sh, vflipped, rectMode,
+	                 anchorX, anchorY, bAnchorIsPct);
+	meshCache.valid = true;
+
+	return meshCache.mesh;
 }
 
 // ROGER

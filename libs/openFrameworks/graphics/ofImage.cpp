@@ -286,12 +286,12 @@ static bool loadImage(ofPixels_<PixelType> & pix, const fs::path & _fileName, co
 			bitsPerChannel = bitsPerPixel / numChannels;
 		}
 
-		ofLogNotice("ofImage") << "loadImage(): bitmap: " << bitmap.width << "x" << bitmap.height 
-							  << " format.bits=" << bitsPerPixel 
-							  << " stride=" << bitmap.stride
-							  << " sizeof(PixelType)=" << sizeof(PixelType)
-							  << " numChannels=" << numChannels
-							  << " bitsPerChannel=" << bitsPerChannel;
+//		ofLogNotice("ofImage") << "loadImage(): bitmap: " << bitmap.width << "x" << bitmap.height 
+//							  << " format.bits=" << bitsPerPixel 
+//							  << " stride=" << bitmap.stride
+//							  << " sizeof(PixelType)=" << sizeof(PixelType)
+//							  << " numChannels=" << numChannels
+//							  << " bitsPerChannel=" << bitsPerChannel;
 
 		// Allocate ofPixels with detected dimensions and channels
 		pix.allocate(bitmap.width, bitmap.height, numChannels);
@@ -330,13 +330,14 @@ static bool loadImage(ofPixels_<PixelType> & pix, const fs::path & _fileName, co
 					srcPtr += srcStrideBytes;
 				}
 			} else if (bitsPerChannel == 8 && dstBitsPerChannel == 16) {
-				// Convert 8-bit to 16-bit (upsample)
+				// Convert 8-bit to 16-bit (upsample with full range)
+				// Using bit manipulation: 0xAB -> 0xABAB for full 0-65535 range
 				for (int y = 0; y < bitmap.height; ++y) {
 					const uint8_t * srcRow = srcPtr;
 					uint16_t * dstRow = reinterpret_cast<uint16_t *>(dstPtr);
 					for (int x = 0; x < bitmap.width * numChannels; ++x) {
-						// Convert 8-bit to 16-bit (shift left 8 bits, or multiply by 256)
-						dstRow[x] = static_cast<uint16_t>(srcRow[x]) << 8;
+						uint16_t v = static_cast<uint16_t>(srcRow[x]);
+						dstRow[x] = (v << 8) | v;  // 0xAB -> 0xABAB
 					}
 					dstPtr += bitmap.width * numChannels;
 					srcPtr += srcStrideBytes;
