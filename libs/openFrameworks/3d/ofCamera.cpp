@@ -8,7 +8,7 @@
 using std::shared_ptr;
 
 //----------------------------------------
-ofCamera::ofCamera() :
+ofCamera::ofCamera() noexcept :
 isOrtho(false),
 fov(60),
 nearClip(0),
@@ -21,7 +21,7 @@ vFlip(false)
 }
 
 //----------------------------------------
-ofCamera::~ofCamera() {}
+ofCamera::~ofCamera() noexcept {}
 
 //----------------------------------------
 void ofCamera::setFov(float f) {
@@ -107,7 +107,7 @@ void ofCamera::setVFlip(bool vflip){
 }
 
 //----------------------------------------
-bool ofCamera::isVFlipped() const{
+bool ofCamera::isVFlipped() const noexcept {
 	return vFlip;
 }
 
@@ -122,7 +122,7 @@ void ofCamera::disableOrtho() {
 }
 
 //----------------------------------------
-bool ofCamera::getOrtho() const {
+bool ofCamera::getOrtho() const noexcept {
 	return isOrtho;
 }
 

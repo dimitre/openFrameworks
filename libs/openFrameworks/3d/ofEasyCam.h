@@ -14,7 +14,7 @@ public:
 	/// \{
 
 	/// \brief Create a default camera.
-	ofEasyCam();
+	ofEasyCam() noexcept;
 
 	/// \}
 	/// \name Rendering
@@ -42,7 +42,7 @@ public:
 
 	/// \brief Get the camera's target node reference.
 	/// \returns a reference the the camera's target node.
-	const ofNode & getTarget() const;
+	[[nodiscard]] const ofNode & getTarget() const noexcept;
 
 	/// \}
 	/// \name Getters and Setters
@@ -54,7 +54,7 @@ public:
 
 	/// \brief Get the distance to the target.
 	/// \returns the distance to the target.
-	float getDistance() const;
+	[[nodiscard]] float getDistance() const;
 
 	/// \brief Set the camera's drag coefficient.
 	///
@@ -66,7 +66,7 @@ public:
 
 	/// \brief Get the camera's drag coefficient.
 	/// \returns the camera's drag coefficient.
-	float getDrag() const;
+	[[nodiscard]] float getDrag() const noexcept;
 
 	/// \brief Enable or disable camera autodistance.
 	///
@@ -101,7 +101,7 @@ public:
 
 	/// \brief Get the current translation key code.
 	/// \returns the current translation key code.
-	char getTranslationKey() const;
+	[[nodiscard]] char getTranslationKey() const noexcept;
 
 	/// \}
 	/// \name Mouse Input
@@ -116,7 +116,7 @@ public:
 	/// \brief Determine if mouse camera control is enabled.
 	/// \todo Rename to isMouseInputEnabled().
 	/// \returns true iff mouse camera control is enabled.
-	bool getMouseInputEnabled() const;
+	[[nodiscard]] bool getMouseInputEnabled() const noexcept;
 
 	/// \brief Enable the mouse's middle button for camera control.
 	void enableMouseMiddleButton();
@@ -127,7 +127,7 @@ public:
 	/// \brief Determine if the middle mouse button is enabled.
 	/// \todo Rename to isMouseMiddleButtonEnabled().
 	/// \returns true iff the mouse's middle button is enabled.
-	bool getMouseMiddleButtonEnabled() const;
+	[[nodiscard]] bool getMouseMiddleButtonEnabled() const noexcept;
 
 	/// \}
 
@@ -140,20 +140,20 @@ public:
 
 	/// Determine if the Y axis is set to be relative to the
 	/// camera orientation
-	bool getRelativeYAxis() const;
+	[[nodiscard]] bool getRelativeYAxis() const noexcept;
 
 	/// Set the camera fixed up axis for interactive
 	/// manipulation.
 	void setUpAxis(const glm::vec3 & up);
 
 	/// Get the up axis.
-	const glm::vec3 & getUpAxis() const;
+	[[nodiscard]] const glm::vec3 & getUpAxis() const noexcept;
 
 	void enableInertia();
 	void disableInertia();
 
 	/// Determine if intertia is enabled.
-	bool getInertiaEnabled() const;
+	[[nodiscard]] bool getInertiaEnabled() const noexcept;
 
 	/// Set the area bounds for mouse control.
 	/// Uses the full viewport by default.
@@ -164,7 +164,7 @@ public:
 	void clearControlArea();
 
 	/// Returns the area bounds used for mouse control.
-	ofRectangle getControlArea() const;
+	[[nodiscard]] ofRectangle getControlArea() const;
 
 	/// Transformation types available for mouse interaction.
 	enum TransformType {
@@ -177,8 +177,8 @@ public:
 
 	void addInteraction(TransformType type, int mouseButton, int key = -1);
 	void removeInteraction(TransformType type, int mouseButton, int key = -1);
-	bool hasInteraction(TransformType type, int mouseButton, int key = -1);
-	bool hasInteraction(int mouseButton, int key);
+	[[nodiscard]] bool hasInteraction(TransformType type, int mouseButton, int key = -1);
+	[[nodiscard]] bool hasInteraction(int mouseButton, int key);
 	void removeAllInteractions();
 
 protected:
@@ -229,7 +229,7 @@ private:
 	void mouseScrolled(ofMouseEventArgs & mouse);
 	void updateMouse(const glm::ivec2 & mouse);
 	/// \brief Returns the up axis vector;
-	glm::vec3 up() const;
+	[[nodiscard]] glm::vec3 up() const;
 
 	/// \brief The key used to differentiate between translation and rotation.
 	char doTranslationKey = 'm';
@@ -268,14 +268,14 @@ private:
 
 	glm::ivec2 mouseAtScroll;
 
-	TransformType currentTransformType;
+	TransformType currentTransformType = TRANSFORM_NONE;
 	/// \brief This struct holds the combination of mouse button and key press that will trigger a specific interaction.
 	struct interaction {
-		interaction()
+		interaction() noexcept
 			: mouseButton(0)
 			, key(-1)
 			, transformType(TRANSFORM_NONE) { }
-		interaction(TransformType type, int _mouseButton, int _key = -1)
+		interaction(TransformType type, int _mouseButton, int _key = -1) noexcept
 			: mouseButton(_mouseButton)
 			, key(_key)
 			, transformType(type) { }

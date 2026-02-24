@@ -11,12 +11,12 @@ class ofRectangle;
 /// \brief A class representing a 3d primitive.
 class of3dPrimitive : public ofNode {
 public:
-    of3dPrimitive();
-    virtual ~of3dPrimitive() override;
+    of3dPrimitive() noexcept;
+    virtual ~of3dPrimitive() noexcept override;
 
-    of3dPrimitive(const ofMesh & mesh);
-    of3dPrimitive(const of3dPrimitive & mom);
-    of3dPrimitive & operator=(const of3dPrimitive & mom);
+    explicit of3dPrimitive(const ofMesh & mesh);
+    of3dPrimitive(const of3dPrimitive & mom) noexcept;
+    of3dPrimitive & operator=(const of3dPrimitive & mom) noexcept;
 
     void mapTexCoords( float u1, float v1, float u2, float v2 );
     //void setTexCoords( int meshindex, float u1, float v1, float u2, float v2 );
@@ -26,20 +26,20 @@ public:
     void mapTexCoordsFromTexture( const ofTexture& inTexture );
 
 
-    ofMesh* getMeshPtr();
-    ofMesh& getMesh();
+    [[nodiscard]] ofMesh* getMeshPtr() noexcept;
+    [[nodiscard]] ofMesh& getMesh() noexcept;
 
-    const ofMesh* getMeshPtr() const;
-    const ofMesh& getMesh() const;
+    [[nodiscard]] const ofMesh* getMeshPtr() const noexcept;
+    [[nodiscard]] const ofMesh& getMesh() const noexcept;
 
-	glm::vec4* getTexCoordsPtr();
-	glm::vec4& getTexCoords();
+	[[nodiscard]] glm::vec4* getTexCoordsPtr() noexcept;
+	[[nodiscard]] glm::vec4& getTexCoords() noexcept;
 
-	const glm::vec4* getTexCoordsPtr() const;
-	const glm::vec4& getTexCoords() const;
+	[[nodiscard]] const glm::vec4* getTexCoordsPtr() const noexcept;
+	[[nodiscard]] const glm::vec4& getTexCoords() const noexcept;
 
-    bool hasScaling() const;
-    bool hasNormalsEnabled() const;
+    [[nodiscard]] bool hasScaling() const noexcept;
+    [[nodiscard]] bool hasNormalsEnabled() const noexcept;
 
     void enableNormals();
     void enableTextures();
@@ -59,19 +59,19 @@ public:
     void drawAxes(float a_size) const;
 
     void setUseVbo(bool useVbo);
-    bool isUsingVbo() const;
-    ofBoundingBox getBoundingBox() const;
+    [[nodiscard]] bool isUsingVbo() const noexcept;
+    [[nodiscard]] ofBoundingBox getBoundingBox() const;
 protected:
 
     // useful when creating a new model, since it uses normalized tex coords //
     void normalizeAndApplySavedTexCoords();
 
-	glm::vec4 texCoords;
-    bool usingVbo;
+	glm::vec4 texCoords {0.f, 0.f, 1.f, 1.f};
+    bool usingVbo = true;
     std::shared_ptr<ofMesh>  mesh;
     mutable ofMesh normalsMesh;
 
-    std::vector<ofIndexType> getIndices( int startIndex, int endIndex ) const;
+    [[nodiscard]] std::vector<ofIndexType> getIndices( int startIndex, int endIndex ) const;
 
 };
 
@@ -123,7 +123,7 @@ public:
     ofPlanePrimitive();
     ofPlanePrimitive( float width, float height, int columns, int rows,
         ofPrimitiveMode mode=OF_PRIMITIVE_TRIANGLE_STRIP );
-    ~ofPlanePrimitive();
+    ~ofPlanePrimitive() noexcept override;
 
     void set(float width, float height, int columns, int rows,
         ofPrimitiveMode mode=OF_PRIMITIVE_TRIANGLE_STRIP );
@@ -137,18 +137,18 @@ public:
     void setResolution( int columns, int rows );
     void setMode( ofPrimitiveMode mode );
 
-    int getNumColumns() const;
-    int getNumRows() const;
+    [[nodiscard]] int getNumColumns() const noexcept;
+    [[nodiscard]] int getNumRows() const noexcept;
     // x = columns, y = rows //
-	glm::vec2 getResolution() const;
+	[[nodiscard]] glm::vec2 getResolution() const noexcept;
 
-    float getWidth() const;
-    float getHeight() const;
+    [[nodiscard]] float getWidth() const noexcept;
+    [[nodiscard]] float getHeight() const noexcept;
 
 protected:
-    float width;
-    float height;
-	glm::vec2 resolution;
+    float width = 200.0f;
+    float height = 100.0f;
+	glm::vec2 resolution {6.0f, 3.0f};
 };
 
 
@@ -207,7 +207,7 @@ public:
     ofSpherePrimitive();
     ofSpherePrimitive( float radius, int res,
         ofPrimitiveMode mode=OF_PRIMITIVE_TRIANGLE_STRIP );
-    ~ofSpherePrimitive();
+    ~ofSpherePrimitive() noexcept override;
 
     void set( float radius, int resolution,
         ofPrimitiveMode mode=OF_PRIMITIVE_TRIANGLE_STRIP );
@@ -215,12 +215,12 @@ public:
     void setRadius(float radius);
     void setMode( ofPrimitiveMode mode );
 
-    float getRadius() const;
-    int getResolution() const;
+    [[nodiscard]] float getRadius() const noexcept;
+    [[nodiscard]] int getResolution() const noexcept;
 
 protected:
-    float radius;
-    int resolution;
+    float radius = 20.0f;
+    int resolution = 16;
 };
 
 /// \brief The ofIcoSpherePrimitive allows you to create an icosphere.
@@ -258,19 +258,19 @@ class ofIcoSpherePrimitive final : public of3dPrimitive {
 public:
     ofIcoSpherePrimitive();
     ofIcoSpherePrimitive( float radius, int iterations );
-    ~ofIcoSpherePrimitive();
+    ~ofIcoSpherePrimitive() noexcept override;
 
     void set( float radius, int res );
     void setResolution( int iterations );
     void setRadius( float radius );
     void setMode( ofPrimitiveMode mode );
 
-    float getRadius() const;
-    int getResolution() const;
+    [[nodiscard]] float getRadius() const noexcept;
+    [[nodiscard]] int getResolution() const noexcept;
 
 protected:
-    float radius;
-    int resolution;
+    float radius = 20.0f;
+    int resolution = 2;
 };
 
 
@@ -320,7 +320,7 @@ public:
     ofCylinderPrimitive( float radius, float height, int radiusSegments,
         int heightSegments, int capSegments=2, bool bCapped = true,
         ofPrimitiveMode mode=OF_PRIMITIVE_TRIANGLE_STRIP );
-    ~ofCylinderPrimitive();
+    ~ofCylinderPrimitive() noexcept override;
 
     void set( float radius, float height, int radiusSegments,
         int heightSegments, int capSegments=2, bool bCapped=true,
@@ -340,27 +340,27 @@ public:
     void setCylinderColor( ofColor color );
     void setBottomCapColor( ofColor color );
 
-    std::vector<ofIndexType> getTopCapIndices() const;
-    ofMesh getTopCapMesh() const;
-    std::vector<ofIndexType> getCylinderIndices() const;
-    ofMesh getCylinderMesh() const;
-    std::vector<ofIndexType> getBottomCapIndices() const;
-    ofMesh getBottomCapMesh() const;
+    [[nodiscard]] std::vector<ofIndexType> getTopCapIndices() const;
+    [[nodiscard]] ofMesh getTopCapMesh() const;
+    [[nodiscard]] std::vector<ofIndexType> getCylinderIndices() const;
+    [[nodiscard]] ofMesh getCylinderMesh() const;
+    [[nodiscard]] std::vector<ofIndexType> getBottomCapIndices() const;
+    [[nodiscard]] ofMesh getBottomCapMesh() const;
 
-    int getResolutionRadius() const;
-    int getResolutionHeight() const;
-    int getResolutionCap() const;
-	glm::vec3 getResolution() const;
+    [[nodiscard]] int getResolutionRadius() const noexcept;
+    [[nodiscard]] int getResolutionHeight() const noexcept;
+    [[nodiscard]] int getResolutionCap() const noexcept;
+	[[nodiscard]] glm::vec3 getResolution() const noexcept;
 
-    float getHeight() const;
-    float getRadius() const;
-    bool getCapped() const;
+    [[nodiscard]] float getHeight() const noexcept;
+    [[nodiscard]] float getRadius() const noexcept;
+    [[nodiscard]] bool getCapped() const noexcept;
 protected:
-    float radius;
-    float height;
-    bool bCapped;
-    int strides[3][2];
-	glm::vec3 resolution;
+    float radius = 60.0f;
+    float height = 80.0f;
+    bool bCapped = true;
+    int strides[3][2] = {{0, 0}, {0, 0}, {0, 0}};
+	glm::vec3 resolution {6.0f, 3.0f, 2.0f};
 };
 
 /// \brief The ofConePrimitive allows you to create a 3D cone.
@@ -412,7 +412,7 @@ public:
     ofConePrimitive( float radius, float height, int radiusSegments,
         int heightSegments, int capSegments=2,
         ofPrimitiveMode mode=OF_PRIMITIVE_TRIANGLE_STRIP );
-    ~ofConePrimitive();
+    ~ofConePrimitive() noexcept override;
 
     void set( float radius, float height, int radiusSegments, int heightSegments,
         int capSegments=2, ofPrimitiveMode mode=OF_PRIMITIVE_TRIANGLE_STRIP );
@@ -430,39 +430,39 @@ public:
     void setCapColor( ofColor color );
 
     /// \return a vector of the indices of vertices that make up the cone (as opposed to the cap indices).
-    std::vector<ofIndexType> getConeIndices() const;
+    [[nodiscard]] std::vector<ofIndexType> getConeIndices() const;
 
     /// \return This returns an ofMesh made up of the cone (as opposed to the cap).
-    ofMesh getConeMesh() const;
+    [[nodiscard]] ofMesh getConeMesh() const;
 
     /// \return a vector of the indices of vertices that make up the cap (as opposed to the cone indices).
-    std::vector<ofIndexType> getCapIndices() const;
+    [[nodiscard]] std::vector<ofIndexType> getCapIndices() const;
 
     /// \return an ofMesh made up of the cap (as opposed to the cone).
-    ofMesh getCapMesh() const;
+    [[nodiscard]] ofMesh getCapMesh() const;
 
-    int getResolutionRadius() const;
-    int getResolutionHeight() const;
+    [[nodiscard]] int getResolutionRadius() const noexcept;
+    [[nodiscard]] int getResolutionHeight() const noexcept;
 
     /// \return the resolution of the cap (rather than the cone).
-    int getResolutionCap() const;
+    [[nodiscard]] int getResolutionCap() const noexcept;
 
     /// \return the resolution of the cone (rather than the cap).
-	glm::vec3 getResolution() const;
+	[[nodiscard]] glm::vec3 getResolution() const noexcept;
 
     /// \return the radius of the cap.
-    float getRadius() const;
+    [[nodiscard]] float getRadius() const noexcept;
 
     /// \return the height of the cone.
-    float getHeight() const;
+    [[nodiscard]] float getHeight() const noexcept;
 
 protected:
-    float radius;
-    float height;
+    float radius = 20.0f;
+    float height = 70.0f;
 
-	glm::vec3 resolution;
+	glm::vec3 resolution {8.0f, 3.0f, 2.0f};
 
-    int strides[2][2];
+    int strides[2][2] = {{0, 0}, {0, 0}};
 };
 
 
@@ -522,7 +522,7 @@ public:
     ofBoxPrimitive();
     ofBoxPrimitive( float width, float height, float depth, int resWidth=2,
         int resHeight=2, int resDepth=2 );
-    ~ofBoxPrimitive();
+    ~ofBoxPrimitive() noexcept override;
 
     void set( float width, float height, float depth, int resWidth,
         int resHeight, int resDepth);
@@ -535,8 +535,8 @@ public:
 
     void resizeToTexture( ofTexture& inTexture );
 
-    std::vector<ofIndexType> getSideIndices( int sideIndex ) const;
-    ofMesh getSideMesh( int sideIndex ) const;
+    [[nodiscard]] std::vector<ofIndexType> getSideIndices( int sideIndex ) const;
+    [[nodiscard]] ofMesh getSideMesh( int sideIndex ) const;
 
     void setResolution( int res ); // same resolution for all sides //
     void setResolutionWidth( int widthRes );
@@ -547,18 +547,18 @@ public:
     void setMode( ofPrimitiveMode mode );
     void setSideColor( int sideIndex, ofColor color );
 
-    int getResolutionWidth() const;
-    int getResolutionHeight() const;
-    int getResolutionDepth() const;
-	glm::vec3 getResolution() const;
+    [[nodiscard]] int getResolutionWidth() const noexcept;
+    [[nodiscard]] int getResolutionHeight() const noexcept;
+    [[nodiscard]] int getResolutionDepth() const noexcept;
+	[[nodiscard]] glm::vec3 getResolution() const noexcept;
 
-    float getWidth() const;
-    float getHeight() const;
-    float getDepth() const;
-	glm::vec3 getSize() const;
+    [[nodiscard]] float getWidth() const noexcept;
+    [[nodiscard]] float getHeight() const noexcept;
+    [[nodiscard]] float getDepth() const noexcept;
+	[[nodiscard]] glm::vec3 getSize() const noexcept;
 protected:
-	glm::vec3 size;
-	glm::vec3 resolution;
+	glm::vec3 size {100.0f, 100.0f, 100.0f};
+	glm::vec3 resolution {2.0f, 2.0f, 2.0f};
     // indices strides for faces //
-    int strides[6][2];
+    int strides[6][2] = {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}};
 };

@@ -15,13 +15,13 @@ class ofNode {
 public:
 	/// \cond INTERNAL
 
-	ofNode();
-	virtual ~ofNode();
+	ofNode() noexcept;
+	virtual ~ofNode() noexcept;
 
-	ofNode(const ofNode & node);
-	ofNode(ofNode && node);
-	ofNode & operator=(const ofNode & node);
-	ofNode & operator=(ofNode && node);
+	ofNode(const ofNode & node) noexcept;
+	ofNode(ofNode && node) noexcept;
+	ofNode & operator=(const ofNode & node) noexcept;
+	ofNode & operator=(ofNode && node) noexcept;
 
 	/// \endcond
 
@@ -44,7 +44,7 @@ public:
 	/// \brief Get the parent node of this node.
 	///
 	/// \returns Pointer to parent ofNode.
-	ofNode* getParent() const;
+	[[nodiscard]] ofNode* getParent() const noexcept;
 
 	/// \}
 	/// \name Getters
@@ -53,137 +53,99 @@ public:
 	/// \brief Get node's local position as a 3D vector.
 	///
 	/// \returns A 3D vector with the local coordinates.
-	glm::vec3 getPosition() const;
+	[[nodiscard]] glm::vec3 getPosition() const noexcept;
 
 	/// \brief Get node's local x position.
 	///
 	/// \returns Local x coordinate as a float.
-	float getX() const;
+	[[nodiscard]] float getX() const noexcept;
 
 	/// \brief Get node's local y position.
 	///
 	/// \returns Local y coordinate as a float.
-	float getY() const;
+	[[nodiscard]] float getY() const noexcept;
 
 	/// \brief Get node's local z position.
 	///
 	/// \returns Local z coordinate as a float.
-	float getZ() const;
+	[[nodiscard]] float getZ() const noexcept;
 
 	/// \brief Get the node's local x axis as 3d vector.
 	///
 	/// \returns A normalized 3D vector of the node's local x axis direction.
-	glm::vec3 getXAxis() const;
+	[[nodiscard]] glm::vec3 getXAxis() const noexcept;
 
 	/// \brief Get the node's local y axis as 3d vector.
 	///
 	/// \returns A normalized 3D vector of the node's local y axis direction.
-	glm::vec3 getYAxis() const;
+	[[nodiscard]] glm::vec3 getYAxis() const noexcept;
 
 	/// \brief Get the node's local z axis as 3d vector.
 	///
 	/// \returns A normalized 3D vector of the node's local z axis direction.
-	glm::vec3 getZAxis() const;
+	[[nodiscard]] glm::vec3 getZAxis() const noexcept;
 
 	/// \brief Get direction of node's side aka local x axis, as 3d vector.
 	///
 	/// \returns A normalized 3D vector of the node's local x axis direction.
-	glm::vec3 getSideDir() const;
+	[[nodiscard]] glm::vec3 getSideDir() const noexcept;
 
 	/// \brief Get direction the node looks at aka local -z axis, as 3d vector.
 	///
 	/// \returns A normalized 3D vector of the node's local -z axis direction.
-	glm::vec3 getLookAtDir()const;
+	[[nodiscard]] glm::vec3 getLookAtDir() const noexcept;
 
 	/// \brief Get direction of node's top aka local y axis, as 3d vector.
 	///
 	/// \returns A normalized 3D vector of the node's local y axis direction.
-	glm::vec3 getUpDir() const;
-
-// #ifdef USEDEPRECATED
-// 	[[deprecated ("Use Deg/Rad versions.")]]
-// 	float getPitch() const;
-
-// 	[[deprecated ("Use Deg/Rad versions.")]]
-// 	float getHeading() const;
-
-// 	[[deprecated ("Use Deg/Rad versions.")]]
-// 	float getRoll() const;
-
-// 	[[deprecated ("Use Deg/Rad versions.")]]
-// 	glm::vec3 getOrientationEuler() const;
-
-// 	[[deprecated ("Use Deg/Rad versions.")]]
-// 	void tilt(float degrees);
-
-// 	[[deprecated ("Use Deg/Rad versions.")]]
-// 	void pan(float degrees);
-
-// 	[[deprecated ("Use Deg/Rad versions.")]]
-// 	void roll(float degrees);
-
-// 	[[deprecated ("Use Deg/Rad versions.")]]
-// 	void rotate(float degrees, const glm::vec3& v);
-
-// 	[[deprecated ("Use Deg/Rad versions.")]]
-// 	void rotate(float degrees, float vx, float vy, float vz);
-
-// 	[[deprecated ("Use Deg/Rad versions.")]]
-// 	void rotateAround(float degrees, const glm::vec3& axis, const glm::vec3& point);
-
-// 	[[deprecated ("Use Deg/Rad versions.")]]
-// 	void orbit(float longitude, float latitude, float radius, const glm::vec3& centerPoint = glm::vec3(0, 0, 0));
-
-// 	[[deprecated ("Use Deg/Rad versions.")]]
-// 	void orbit(float longitude, float latitude, float radius, ofNode& centerNode);
-// #endif
+	[[nodiscard]] glm::vec3 getUpDir() const noexcept;
 
 	/// \brief Get pitch of node, aka the rotation along local x axis.
 	/// \returns The rotation around the local x axis in degrees, as a float.
-	float getPitchDeg() const;
+	[[nodiscard]] float getPitchDeg() const;
 
 	/// \brief Get heading of node, aka the rotation along local y axis.
 	/// \returns The rotation around the local y axis in degrees, as a float.
-	float getHeadingDeg() const;
+	[[nodiscard]] float getHeadingDeg() const;
 
 	/// \brief Get roll of node, aka the rotation along local z axis.
 	/// \returns The rotation around the local z axis in degrees, as a float.
-	float getRollDeg() const;
+	[[nodiscard]] float getRollDeg() const;
 
 	/// \brief Get pitch of node, aka the rotation along local x axis.
 	/// \returns The rotation around the local x axis in degrees, as a float.
-	float getPitchRad() const;
+	[[nodiscard]] float getPitchRad() const;
 
 	/// \brief Get heading of node, aka the rotation along local y axis.
 	/// \returns The rotation around the local y axis in degrees, as a float.
-	float getHeadingRad() const;
+	[[nodiscard]] float getHeadingRad() const;
 
 	/// \brief Get roll of node, aka the rotation along local z axis.
 	/// \returns The rotation around the local z axis in degrees, as a float.
-	float getRollRad() const;
+	[[nodiscard]] float getRollRad() const;
 
 	/// \brief Get the local orientation of the node as a quaternion.
 	/// \returns A quaternion of local orientation (useful for complex rotations)
-	glm::quat getOrientationQuat() const;
+	[[nodiscard]] glm::quat getOrientationQuat() const noexcept;
 
 	/// \brief Get local orientation of node in degrees around x, y, and z axes.
 	/// \returns The local x, y and z axes orientation in degrees, as a 3D vector.
-	glm::vec3 getOrientationEulerDeg() const;
+	[[nodiscard]] glm::vec3 getOrientationEulerDeg() const;
 
 	/// \brief Get local orientation of node in degrees around x, y, and z axes.
 	/// \returns The local x, y and z axes orientation in degrees, as a 3D vector.
-	glm::vec3 getOrientationEulerRad() const;
+	[[nodiscard]] glm::vec3 getOrientationEulerRad() const;
 
 	/// \brief Get local scale of node in xyz axes where 1 is default.
 	///
 	/// \returns The local scale in the xyz axes where 1 = 100% of size.
-	glm::vec3 getScale() const;
+	[[nodiscard]] glm::vec3 getScale() const noexcept;
 
 	/// \brief Get node's local transformations (position, orientation, scale).
 	///
 	/// \returns A refrence to mat4 containing node's local transformations.
 	/// \sa https://open.gl/transformations
-	const glm::mat4& getLocalTransformMatrix() const;
+	[[nodiscard]] const glm::mat4& getLocalTransformMatrix() const noexcept;
 
 	// TODO: optimize and cache these
 	// (parent would need to know about its children so it can inform them
@@ -192,20 +154,20 @@ public:
 	/// \brief Get node's global transformations (position, orientation, scale).
 	/// \returns A refrence to mat4 containing node's global transformations.
 	/// \sa https://open.gl/transformations
-	glm::mat4 getGlobalTransformMatrix() const;
+	[[nodiscard]] glm::mat4 getGlobalTransformMatrix() const;
 
 	/// \brief Get node's global position as a 3D vector.
 	/// \returns A 3D vector with the global coordinates.
-	glm::vec3 getGlobalPosition() const;
+	[[nodiscard]] glm::vec3 getGlobalPosition() const;
 
 	/// \brief Get the global orientation of the node as a quaternion.
 	/// \returns An quaternion of the global orientations(useful for complex rotations)
-	glm::quat getGlobalOrientation() const;
+	[[nodiscard]] glm::quat getGlobalOrientation() const;
 
 	/// \brief Get global scale of node in xyz axes where 1 is default.
 	///
 	/// \returns The global scale in the xyz axes where 1 = 100% of size.
-	glm::vec3 getGlobalScale() const;
+	[[nodiscard]] glm::vec3 getGlobalScale() const;
 
 	/// \}
 	/// \name Setters
@@ -281,7 +243,7 @@ public:
 	/// \param p Desired local xyz coordinates as ref to 3D vector.
 	/// \param q Desired local orientation as ref to an glm::quat.
 	/// \param s Desired local scale for all axes as float where 1 = 100%.
-	void setPositionOrientationScale(const glm::vec3& p, const glm::quat& q, const float& s );
+	void setPositionOrientationScale(const glm::vec3& p, const glm::quat& q, float s );
 
 	/// \brief Set the local position, rotation and scale of the node.
 	///
@@ -297,7 +259,7 @@ public:
 	/// \param eulerAnglesDeg Desired local xyz angles in degrees, as ref to 3D vector.
 	/// \param s Desired local scale for all axes as ref to 3D vector where 1 = 100%.
 	/// \note Using euler angles can cause gimbal lock.
-	void setPositionOrientationScale( const glm::vec3& p, const glm::vec3& eulerAnglesDeg, const float& s );
+	void setPositionOrientationScale( const glm::vec3& p, const glm::vec3& eulerAnglesDeg, float s );
 
 
 	/// \}
@@ -508,7 +470,6 @@ public:
 	/// \note do NOT override this.
 	/// It transforms the node to its position+orientation+scale
 	/// and calls the virtual 'customDraw' method above which you CAN override.
-//	virtual void drawNode() const;
 	virtual void draw() const;
 
 	/// \}
@@ -543,10 +504,9 @@ private:
 	std::array<glm::vec3,3> axis;
 
 	glm::mat4 localTransformMatrix { 1.0f };
-	bool legacyCustomDrawOverrided;
+	bool legacyCustomDrawOverrided = false;
 	std::set<ofNode*> children;
 
 	void addListener(ofNode & node);
 	void removeListener(ofNode & node);
-//	glm::mat4 globalTransformMatrix;
 };

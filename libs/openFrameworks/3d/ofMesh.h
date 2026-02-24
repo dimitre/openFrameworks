@@ -13,7 +13,7 @@
 /// \param str The string value to convert to a give type.
 /// \returns the string converted to the type.
 template <typename T>
-T ofTo(const std::string & str) {
+[[nodiscard]] T ofTo(const std::string & str) {
 	T x;
 	std::istringstream cur(str);
 	cur >> x;
@@ -101,7 +101,7 @@ public:
 
 	/// \brief This creates the mesh,
 	/// using OF_PRIMITIVE_TRIANGLES without any initial vertices.
-	ofMesh_();
+	ofMesh_() noexcept;
 
 	/// \brief This allows to you to use one of the other ofPrimitiveModes:
 	/// OF_PRIMITIVE_TRIANGLES, OF_PRIMITIVE_TRIANGLE_STRIP,
@@ -112,7 +112,7 @@ public:
 
 	ofMesh_(ofPrimitiveMode mode, const std::vector<V>& verts, const std::vector<T>& tCoords);
 
-	virtual ~ofMesh_(){}
+	virtual ~ofMesh_() noexcept = default;
 
 	void setFromTriangles( const std::vector<ofMeshFace_<V,N,C,T>>& tris, bool bUseFaceNormal=false );
 
@@ -128,17 +128,17 @@ public:
 	void setMode(ofPrimitiveMode mode);
 
 	/// \\returns the primitive mode that the mesh is using.
-	ofPrimitiveMode getMode() const;
+	[[nodiscard]] ofPrimitiveMode getMode() const noexcept;
 
 	/// \}
 	/// \name Primitive constructor helper methods
 	/// \{
-	static ofMesh_ plane(float width, float height, int columns=2, int rows=2,
+	[[nodiscard]] static ofMesh_ plane(float width, float height, int columns=2, int rows=2,
 		ofPrimitiveMode mode=OF_PRIMITIVE_TRIANGLE_STRIP);
-	static ofMesh_ sphere(float radius, int res=12,
+	[[nodiscard]] static ofMesh_ sphere(float radius, int res=12,
 		ofPrimitiveMode mode=OF_PRIMITIVE_TRIANGLE_STRIP);
-	static ofMesh_ icosahedron(float radius);
-	static ofMesh_ icosphere(float radius, std::size_t iterations=2);
+	[[nodiscard]] static ofMesh_ icosahedron(float radius);
+	[[nodiscard]] static ofMesh_ icosphere(float radius, std::size_t iterations=2);
 	///
 	///	\brief A helper method that returns a cylinder made of triangles.
 	/// The resolution settings for the radius, height, and cap are optional
@@ -153,7 +153,7 @@ public:
 	///
 	///	![image of a simple cylinder](3d/cylinder.jpg)
 	///
-	static ofMesh_ cylinder(float radius, float height, int radiusSegments=12,
+	[[nodiscard]] static ofMesh_ cylinder(float radius, float height, int radiusSegments=12,
 		int heightSegments=6, int numCapSegments=2, bool bCapped = true,
 		ofPrimitiveMode mode=OF_PRIMITIVE_TRIANGLE_STRIP);
 
@@ -168,7 +168,7 @@ public:
 	/// ~~~~
 	///
 	/// ![image of a simple cone](3d/cone.jpg)
-	static ofMesh_ cone(float radius, float height, int radiusSegments=12,
+	[[nodiscard]] static ofMesh_ cone(float radius, float height, int radiusSegments=12,
 		int heightSegments=6, int capSegments=2,
 		ofPrimitiveMode mode=OF_PRIMITIVE_TRIANGLE_STRIP);
 
@@ -181,11 +181,11 @@ public:
 	/// ~~~~
 	///
 	/// ![image of a simple box](3d/box.jpg)
-	static ofMesh_ box(float width, float height, float depth, int resX=2,
+	[[nodiscard]] static ofMesh_ box(float width, float height, float depth, int resX=2,
 		int resY=2, int resZ=2);
 
 	/// \returns an ofMesh representing an XYZ coordinate system.
-	static ofMesh_ axis(float size=1.0);
+	[[nodiscard]] static ofMesh_ axis(float size=1.0);
 
 	/// \}
 	/// \name Vertices
@@ -226,25 +226,25 @@ public:
 
 	/// \returns the size of the vertices vector for the mesh.
 	/// This will tell you how many vertices are contained in the mesh.
-	std::size_t getNumVertices() const;
+	[[nodiscard]] std::size_t getNumVertices() const noexcept;
 
 	/// \returns a pointer to the vertices that the mesh contains.
-	V* getVerticesPointer();
+	[[nodiscard]] V* getVerticesPointer() noexcept;
 
 	/// \returns a pointer to the vertices that the mesh contains.
-	const V* getVerticesPointer() const;
+	[[nodiscard]] const V* getVerticesPointer() const noexcept;
 
 	/// \returns the vertex at the index.
-	V getVertex(ofIndexType i) const;
+	[[nodiscard]] V getVertex(ofIndexType i) const;
 
 	/// \returns the vector that contains all of the vertices of the mesh.
-	std::vector<V> & getVertices();
+	[[nodiscard]] std::vector<V> & getVertices() noexcept;
 
 	/// \returns the vector that contains all of the vertices of the mesh.
-	const std::vector<V> & getVertices() const;
+	[[nodiscard]] const std::vector<V> & getVertices() const noexcept;
 
 	/// \returns Whether the mesh has any vertices.
-	bool hasVertices() const;
+	[[nodiscard]] bool hasVertices() const noexcept;
 
 	/// \brief Add the vertices, normals, texture coordinates and indices of one mesh onto another mesh.
 	/// Everything from the referenced mesh is simply added at the end
@@ -254,7 +254,7 @@ public:
 	void mergeDuplicateVertices();
 
 	/// \returns a glm::vec3 defining the centroid of all the vetices in the mesh.
-	V getCentroid() const;
+	[[nodiscard]] V getCentroid() const;
 
 
 	/// \}
@@ -263,7 +263,7 @@ public:
 	/// \{
 
 	/// \\returns the normal at the index in the normals vector.
-	N getNormal(ofIndexType i) const;
+	[[nodiscard]] N getNormal(ofIndexType i) const;
 
 	/// \brief Add a normal to the mesh as a 3D vector,
 	/// typically perpendicular to the plane of the face. A normal is a vector
@@ -302,26 +302,26 @@ public:
 
 	/// \brief This will tell you how many normals are contained in the mesh.
 	/// \returns the size of the normals vector for the mesh.
-	std::size_t getNumNormals() const;
+	[[nodiscard]] std::size_t getNumNormals() const noexcept;
 
 	/// \returns a pointer to the normals that the mesh contains.
-	N* getNormalsPointer();
+	[[nodiscard]] N* getNormalsPointer() noexcept;
 
 	/// \returns a pointer to the normals that the mesh contains.
-	const N* getNormalsPointer() const;
+	[[nodiscard]] const N* getNormalsPointer() const noexcept;
 
 	/// Use this if you plan to change the normals as part of this call as it
 	/// will force a reset of the cache.
 	/// \returns the vector that contains all of the normals of the mesh,
 	/// if it has any.
-	std::vector<N> & getNormals();
+	[[nodiscard]] std::vector<N> & getNormals() noexcept;
 
 	/// \returns the vector that contains all of the normals of the mesh, if
 	/// it has any. (read only)
-	const std::vector<N> & getNormals() const;
+	[[nodiscard]] const std::vector<N> & getNormals() const noexcept;
 
 	/// /returnsWhether the mesh has any normals.
-	bool hasNormals() const;
+	[[nodiscard]] bool hasNormals() const noexcept;
 
 	/// \brief Enable mesh normals.
 	/// Use disableNormals() to turn normals off.
@@ -330,7 +330,7 @@ public:
 	/// \brief Disable mesh normals.
 	/// Use enableNormals() to turn normals back on.
 	virtual void disableNormals();
-	virtual bool usingNormals() const;
+	[[nodiscard]] virtual bool usingNormals() const noexcept;
 
 	void smoothNormals( float angle );
 
@@ -342,18 +342,18 @@ public:
 	/// \{
 
 	/// \returns the vector that contains all of the faces of the mesh. This isn't currently implemented.
-	ofMeshFace_<V,N,C,T> getFace(ofIndexType faceId) const;
+	[[nodiscard]] ofMeshFace_<V,N,C,T> getFace(ofIndexType faceId) const;
 
 	/// \brief Get normals for each face
 	/// As a default it only calculates the normal for the face as a whole but
 	/// by setting (perVertex = true) it will return the same normal value for
 	/// each of the three vertices making up a face.
 	/// \returns a vector containing the calculated normals of each face in the mesh.
-	std::vector<N> getFaceNormals( bool perVetex=false) const;
+	[[nodiscard]] std::vector<N> getFaceNormals( bool perVetex=false) const;
 
 	/// \returns the mesh as a vector of unique ofMeshFace_s
 	/// a list of triangles that do not share vertices or indices
-	const std::vector<ofMeshFace_<V,N,C,T>> & getUniqueFaces() const;
+	[[nodiscard]] const std::vector<ofMeshFace_<V,N,C,T>> & getUniqueFaces() const noexcept;
 
 	/// \}
 	/// \name Colors
@@ -361,7 +361,7 @@ public:
 
 	/// \brief Get the color at the index in the colors vector.
 	/// \returns the color at the index in the colors vector.
-	C getColor(ofIndexType i) const;
+	[[nodiscard]] C getColor(ofIndexType i) const;
 
 	/// \brief This adds a color to the mesh,
 	/// the color will be associated with the vertex in the same position.
@@ -388,24 +388,24 @@ public:
 
 	/// \returns the size of the colors vector for the mesh.
 	/// This will tell you how many colors are contained in the mesh.
-	std::size_t getNumColors() const;
+	[[nodiscard]] std::size_t getNumColors() const noexcept;
 
 	/// Use this if you plan to change the colors as part of this call as it will force a reset of the cache.
 	/// \returns a pointer that contains all of the colors of the mesh, if it has any.
-	C* getColorsPointer();
+	[[nodiscard]] C* getColorsPointer() noexcept;
 
 	/// \returns a pointer that contains all of the colors of the mesh, if it has any. (read only)
-	const C* getColorsPointer() const;
+	[[nodiscard]] const C* getColorsPointer() const noexcept;
 
 	/// Use this if you plan to change the colors as part of this call as it will force a reset of the cache.
 	/// \returns the vector that contains all of the colors of the mesh, if it has any.
-	std::vector<C> & getColors();
+	[[nodiscard]] std::vector<C> & getColors() noexcept;
 
 	/// \returns the vector that contains all of the colors of the mesh, if it has any. (read only)
-	const std::vector<C> & getColors() const;
+	[[nodiscard]] const std::vector<C> & getColors() const noexcept;
 
 	/// /returns Whether the mesh has any colors.
-	bool hasColors() const;
+	[[nodiscard]] bool hasColors() const noexcept;
 
 	/// \brief Enable mesh colors.
 	/// Use disableColors() to turn colors off.
@@ -415,7 +415,7 @@ public:
 	/// \brief Disable mesh colors.
 	/// Use enableColors() to turn colors back on.
 	virtual void disableColors();
-	virtual bool usingColors() const;
+	[[nodiscard]] virtual bool usingColors() const noexcept;
 
 	/// \}
 
@@ -426,7 +426,7 @@ public:
 	/// \returns the Vec2f representing the texture coordinate.
 	/// Because OF uses ARB textures these are in pixels rather than
 	/// 0-1 normalized coordinates.
-	T getTexCoord(ofIndexType i) const;
+	[[nodiscard]] T getTexCoord(ofIndexType i) const;
 
 	/// \brief Add a Vec2f representing the texture coordinate.
 	/// Because OF uses ARB textures these are in pixels rather than
@@ -458,27 +458,27 @@ public:
 
 	/// \brief This will tell you how many texture coordinates are contained in the mesh.
 	/// \returns the size of the texture coordinates vector for the mesh.
-	std::size_t getNumTexCoords() const;
+	[[nodiscard]] std::size_t getNumTexCoords() const noexcept;
 
 	/// \returns a pointer to the texture coords that the mesh contains.
-	T* getTexCoordsPointer();
+	[[nodiscard]] T* getTexCoordsPointer() noexcept;
 
 	/// \brief Get a pointer to the glm::vec2 texture coordinates that the mesh contains.
-	const T* getTexCoordsPointer() const;
+	[[nodiscard]] const T* getTexCoordsPointer() const noexcept;
 
 	/// \brief Get a vector representing the texture coordinates of the mesh
 	/// Because OF uses ARB textures these are in pixels rather than 0-1 normalized coordinates.
 	/// Use this if you plan to change the texture coordinates as part of this
 	/// call as it will force a reset of the cache.
 	/// \returns a vector of Vec2f representing the texture coordinates for the whole mesh.
-	std::vector<T> & getTexCoords();
+	[[nodiscard]] std::vector<T> & getTexCoords() noexcept;
 
 	/// Because OF uses ARB textures these are in pixels rather than 0-1 normalized coordinates.
 	/// \returns a vector of Vec2f representing the texture coordinates for the whole mesh. (read only)
-	const std::vector<T> & getTexCoords() const;
+	[[nodiscard]] const std::vector<T> & getTexCoords() const noexcept;
 
 	/// /returns Whether the mesh has any textures assigned to it.
-	bool hasTexCoords() const;
+	[[nodiscard]] bool hasTexCoords() const noexcept;
 
 	/// \brief Enable mesh textures.
 	/// Use disableTextures() to turn textures off.
@@ -488,7 +488,7 @@ public:
 	/// \brief Disable mesh textures.
 	/// Use enableTextures() to turn textures back on.
 	virtual void disableTextures();
-	virtual bool usingTextures() const;
+	[[nodiscard]] virtual bool usingTextures() const noexcept;
 
 
 	/// \}
@@ -502,11 +502,11 @@ public:
 	/// \brief Use this if you plan to change the indices as part of this call as it
 	/// will force a reset of the cache.
 	/// \returns the vector that contains all of the indices of the mesh, if it has any.
-	std::vector<ofIndexType> & getIndices();
+	[[nodiscard]] std::vector<ofIndexType> & getIndices() noexcept;
 
 
 	/// \returns the index from the index vector. Each index represents the index of the vertex in the vertices vector. This determines the way that the vertices are connected into the polgoynon type set in the primitiveMode.
-	ofIndexType getIndex(ofIndexType i) const;
+	[[nodiscard]] ofIndexType getIndex(ofIndexType i) const;
 
 
 	/// Add an index to the index vector. Each index represents the order of
@@ -553,20 +553,20 @@ public:
 
 	/// \brief This will tell you how many indices are contained in the mesh.
 	/// \returns the size of the indices vector for the mesh.
-	std::size_t getNumIndices() const;
+	[[nodiscard]] std::size_t getNumIndices() const noexcept;
 
 	/// \returns a pointer to the indices that the mesh contains.
-	ofIndexType* getIndexPointer();
+	[[nodiscard]] ofIndexType* getIndexPointer() noexcept;
 
 	/// \returns a pointer to the indices that the mesh contains.
-	const ofIndexType* getIndexPointer() const;
+	[[nodiscard]] const ofIndexType* getIndexPointer() const noexcept;
 
 
 	/// \returns the vector that contains all of the indices of the mesh, if it has any. (read only)
-	const std::vector<ofIndexType> & getIndices() const;
+	[[nodiscard]] const std::vector<ofIndexType> & getIndices() const noexcept;
 
 	/// /returns Whether the mesh has any indices assigned to it.
-	bool hasIndices() const;
+	[[nodiscard]] bool hasIndices() const noexcept;
 
 	/// \brief Adding a triangle means using three of the vertices that have already been added to create a triangle.
 	/// This is an easy way to create triangles in the mesh. The indices refer to the index of the vertex in the vector of vertices.
@@ -580,14 +580,14 @@ public:
 	/// \brief Disable mesh indices.
 	/// Use enableIndices() to turn indices back on.
 	virtual void disableIndices();
-	virtual bool usingIndices() const;
+	[[nodiscard]] virtual bool usingIndices() const noexcept;
 
 	void setColorForIndices( ofIndexType startIndex, ofIndexType endIndex, C color );
 
 	/// The new mesh includes the mesh mode, colors, textures, and normals of the original mesh (assuming any were added).
 	/// \returns a mesh made up of a range of indices from startIndex to the endIndex.
-	ofMesh_<V,N,C,T> getMeshForIndices( ofIndexType startIndex, ofIndexType endIndex ) const;
-	ofMesh_<V,N,C,T> getMeshForIndices( ofIndexType startIndex, ofIndexType endIndex, ofIndexType startVertIndex, ofIndexType endVertIndex ) const;
+	[[nodiscard]] ofMesh_<V,N,C,T> getMeshForIndices( ofIndexType startIndex, ofIndexType endIndex ) const;
+	[[nodiscard]] ofMesh_<V,N,C,T> getMeshForIndices( ofIndexType startIndex, ofIndexType endIndex, ofIndexType startVertIndex, ofIndexType endVertIndex ) const;
 
 
 	/// \}
@@ -638,19 +638,19 @@ public:
 protected:
 
 	/// \returns If the vertices of the mesh have changed, been added or removed.
-	bool haveVertsChanged();
+	[[nodiscard]] bool haveVertsChanged();
 
 	/// \returns If the normals of the mesh have changed, been added or removed.
-	bool haveNormalsChanged();
+	[[nodiscard]] bool haveNormalsChanged();
 
 	/// \returns If the colors of the mesh have changed, been added or removed.
-	bool haveColorsChanged();
+	[[nodiscard]] bool haveColorsChanged();
 
 	/// \returns If the texture coords of the mesh have changed, been added or removed.
-	bool haveTexCoordsChanged();
+	[[nodiscard]] bool haveTexCoordsChanged();
 
 	/// \returns If the indices of the mesh have changed, been added or removed.
-	bool haveIndicesChanged();
+	[[nodiscard]] bool haveIndicesChanged();
 
 private:
 
@@ -663,18 +663,17 @@ private:
 	// this variables are only caches and returned always as const
 	// mutable allows to change them from const methods
 	mutable std::vector<ofMeshFace_<V,N,C,T>> faces;
-	mutable bool bFacesDirty;
+	mutable bool bFacesDirty = true;
 
-	bool bVertsChanged, bColorsChanged, bNormalsChanged, bTexCoordsChanged,
-		bIndicesChanged;
-	ofPrimitiveMode mode;
+	bool bVertsChanged = true, bColorsChanged = true, bNormalsChanged = true, bTexCoordsChanged = true,
+		bIndicesChanged = true;
+	ofPrimitiveMode mode = OF_PRIMITIVE_TRIANGLES;
 
-	bool useColors;
-	bool useTextures;
-	bool useNormals;
-	bool useIndices;
+	bool useColors = false;
+	bool useTextures = false;
+	bool useNormals = false;
+	bool useIndices = false;
 
-//	ofMaterial *mat;
 };
 
 
@@ -696,37 +695,37 @@ private:
 template<class V, class N, class C, class T>
 class ofMeshFace_ {
 public:
-	ofMeshFace_();
+	ofMeshFace_() noexcept;
 
-	const N & getFaceNormal() const;
+	[[nodiscard]] const N & getFaceNormal() const;
 
 	void setVertex( ofIndexType index, const V& v );
-	const V& getVertex( ofIndexType index ) const;
+	[[nodiscard]] const V& getVertex( ofIndexType index ) const;
 
 	void setNormal( ofIndexType index, const N& n );
-	const N& getNormal( ofIndexType  index ) const;
+	[[nodiscard]] const N& getNormal( ofIndexType  index ) const;
 
 	void setColor( ofIndexType index, const C& color );
-	const C& getColor(ofIndexType  index) const;
+	[[nodiscard]] const C& getColor(ofIndexType  index) const;
 
 	void setTexCoord( ofIndexType index, const T& tCoord );
-	const T& getTexCoord( ofIndexType index ) const;
+	[[nodiscard]] const T& getTexCoord( ofIndexType index ) const;
 
-	void setHasColors( bool bColors );
-	void setHasNormals( bool bNormals );
-	void setHasTexcoords( bool bTexcoords );
+	void setHasColors( bool bColors ) noexcept;
+	void setHasNormals( bool bNormals ) noexcept;
+	void setHasTexcoords( bool bTexcoords ) noexcept;
 
-	bool hasColors() const;
-	bool hasNormals() const;
-	bool hasTexcoords() const;
+	[[nodiscard]] bool hasColors() const noexcept;
+	[[nodiscard]] bool hasNormals() const noexcept;
+	[[nodiscard]] bool hasTexcoords() const noexcept;
 
 private:
 	void calculateFaceNormal() const;
-	bool bHasNormals, bHasColors, bHasTexcoords;
+	bool bHasNormals = false, bHasColors = false, bHasTexcoords = false;
 
 	// this variables are only caches and returned always as const
 	// mutable allows to change them from const methods
-	mutable bool bFaceNormalDirty;
+	mutable bool bFaceNormalDirty = true;
 	mutable N faceNormal;
 	V vertices[3];
 	N normals[3];

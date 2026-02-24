@@ -26,7 +26,7 @@
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-ofMesh_<V, N, C, T>::ofMesh_() {
+ofMesh_<V, N, C, T>::ofMesh_() noexcept {
 	mode = OF_PRIMITIVE_TRIANGLES;
 	bVertsChanged = false;
 	bColorsChanged = false;
@@ -152,31 +152,31 @@ bool ofMesh_<V, N, C, T>::haveIndicesChanged() {
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-bool ofMesh_<V, N, C, T>::hasVertices() const {
+bool ofMesh_<V, N, C, T>::hasVertices() const noexcept {
 	return !vertices.empty();
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-bool ofMesh_<V, N, C, T>::hasColors() const {
+bool ofMesh_<V, N, C, T>::hasColors() const noexcept {
 	return !colors.empty();
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-bool ofMesh_<V, N, C, T>::hasNormals() const {
+bool ofMesh_<V, N, C, T>::hasNormals() const noexcept {
 	return !normals.empty();
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-bool ofMesh_<V, N, C, T>::hasTexCoords() const {
+bool ofMesh_<V, N, C, T>::hasTexCoords() const noexcept {
 	return !texCoords.empty();
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-bool ofMesh_<V, N, C, T>::hasIndices() const {
+bool ofMesh_<V, N, C, T>::hasIndices() const noexcept {
 	return !indices.empty();
 }
 
@@ -439,7 +439,7 @@ void ofMesh_<V, N, C, T>::removeIndices(ofIndexType startIndex, ofIndexType endI
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-ofPrimitiveMode ofMesh_<V, N, C, T>::getMode() const {
+ofPrimitiveMode ofMesh_<V, N, C, T>::getMode() const noexcept {
 	return mode;
 }
 
@@ -469,31 +469,31 @@ T ofMesh_<V, N, C, T>::getTexCoord(ofIndexType i) const {
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-std::size_t ofMesh_<V, N, C, T>::getNumVertices() const {
+std::size_t ofMesh_<V, N, C, T>::getNumVertices() const noexcept {
 	return vertices.size();
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-std::size_t ofMesh_<V, N, C, T>::getNumColors() const {
+std::size_t ofMesh_<V, N, C, T>::getNumColors() const noexcept {
 	return colors.size();
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-std::size_t ofMesh_<V, N, C, T>::getNumNormals() const {
+std::size_t ofMesh_<V, N, C, T>::getNumNormals() const noexcept {
 	return normals.size();
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-std::size_t ofMesh_<V, N, C, T>::getNumTexCoords() const {
+std::size_t ofMesh_<V, N, C, T>::getNumTexCoords() const noexcept {
 	return texCoords.size();
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-std::size_t ofMesh_<V, N, C, T>::getNumIndices() const {
+std::size_t ofMesh_<V, N, C, T>::getNumIndices() const noexcept {
 	return indices.size();
 }
 
@@ -517,67 +517,67 @@ int ofPrimitive::getNumIndicesWire(){
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-V * ofMesh_<V, N, C, T>::getVerticesPointer() {
+V * ofMesh_<V, N, C, T>::getVerticesPointer() noexcept {
 	return vertices.data();
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-C * ofMesh_<V, N, C, T>::getColorsPointer() {
+C * ofMesh_<V, N, C, T>::getColorsPointer() noexcept {
 	return colors.data();
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-N * ofMesh_<V, N, C, T>::getNormalsPointer() {
+N * ofMesh_<V, N, C, T>::getNormalsPointer() noexcept {
 	return normals.data();
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-T * ofMesh_<V, N, C, T>::getTexCoordsPointer() {
+T * ofMesh_<V, N, C, T>::getTexCoordsPointer() noexcept {
 	return texCoords.data();
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-ofIndexType * ofMesh_<V, N, C, T>::getIndexPointer() {
+ofIndexType * ofMesh_<V, N, C, T>::getIndexPointer() noexcept {
 	return indices.data();
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-const V * ofMesh_<V, N, C, T>::getVerticesPointer() const {
+const V * ofMesh_<V, N, C, T>::getVerticesPointer() const noexcept {
 	return vertices.data();
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-const C * ofMesh_<V, N, C, T>::getColorsPointer() const {
+const C * ofMesh_<V, N, C, T>::getColorsPointer() const noexcept {
 	return colors.data();
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-const N * ofMesh_<V, N, C, T>::getNormalsPointer() const {
+const N * ofMesh_<V, N, C, T>::getNormalsPointer() const noexcept {
 	return normals.data();
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-const T * ofMesh_<V, N, C, T>::getTexCoordsPointer() const {
+const T * ofMesh_<V, N, C, T>::getTexCoordsPointer() const noexcept {
 	return texCoords.data();
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-const ofIndexType * ofMesh_<V, N, C, T>::getIndexPointer() const {
+const ofIndexType * ofMesh_<V, N, C, T>::getIndexPointer() const noexcept {
 	return indices.data();
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-std::vector<V> & ofMesh_<V, N, C, T>::getVertices() {
+std::vector<V> & ofMesh_<V, N, C, T>::getVertices() noexcept {
 	bVertsChanged = true;
 	bFacesDirty = true;
 	return vertices;
@@ -585,7 +585,7 @@ std::vector<V> & ofMesh_<V, N, C, T>::getVertices() {
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-std::vector<C> & ofMesh_<V, N, C, T>::getColors() {
+std::vector<C> & ofMesh_<V, N, C, T>::getColors() noexcept {
 	bColorsChanged = true;
 	bFacesDirty = true;
 	return colors;
@@ -593,7 +593,7 @@ std::vector<C> & ofMesh_<V, N, C, T>::getColors() {
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-std::vector<N> & ofMesh_<V, N, C, T>::getNormals() {
+std::vector<N> & ofMesh_<V, N, C, T>::getNormals() noexcept {
 	bNormalsChanged = true;
 	bFacesDirty = true;
 	return normals;
@@ -601,7 +601,7 @@ std::vector<N> & ofMesh_<V, N, C, T>::getNormals() {
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-std::vector<T> & ofMesh_<V, N, C, T>::getTexCoords() {
+std::vector<T> & ofMesh_<V, N, C, T>::getTexCoords() noexcept {
 	bTexCoordsChanged = true;
 	bFacesDirty = true;
 	return texCoords;
@@ -609,7 +609,7 @@ std::vector<T> & ofMesh_<V, N, C, T>::getTexCoords() {
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-std::vector<ofIndexType> & ofMesh_<V, N, C, T>::getIndices() {
+std::vector<ofIndexType> & ofMesh_<V, N, C, T>::getIndices() noexcept {
 	bIndicesChanged = true;
 	bFacesDirty = true;
 	return indices;
@@ -617,31 +617,31 @@ std::vector<ofIndexType> & ofMesh_<V, N, C, T>::getIndices() {
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-const std::vector<V> & ofMesh_<V, N, C, T>::getVertices() const {
+const std::vector<V> & ofMesh_<V, N, C, T>::getVertices() const noexcept {
 	return vertices;
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-const std::vector<C> & ofMesh_<V, N, C, T>::getColors() const {
+const std::vector<C> & ofMesh_<V, N, C, T>::getColors() const noexcept {
 	return colors;
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-const std::vector<N> & ofMesh_<V, N, C, T>::getNormals() const {
+const std::vector<N> & ofMesh_<V, N, C, T>::getNormals() const noexcept {
 	return normals;
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-const std::vector<T> & ofMesh_<V, N, C, T>::getTexCoords() const {
+const std::vector<T> & ofMesh_<V, N, C, T>::getTexCoords() const noexcept {
 	return texCoords;
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-const std::vector<ofIndexType> & ofMesh_<V, N, C, T>::getIndices() const {
+const std::vector<ofIndexType> & ofMesh_<V, N, C, T>::getIndices() const noexcept {
 	return indices;
 }
 
@@ -898,25 +898,25 @@ void ofMesh_<V, N, C, T>::disableIndices() {
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-bool ofMesh_<V, N, C, T>::usingColors() const {
+bool ofMesh_<V, N, C, T>::usingColors() const noexcept {
 	return useColors;
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-bool ofMesh_<V, N, C, T>::usingTextures() const {
+bool ofMesh_<V, N, C, T>::usingTextures() const noexcept {
 	return useTextures;
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-bool ofMesh_<V, N, C, T>::usingNormals() const {
+bool ofMesh_<V, N, C, T>::usingNormals() const noexcept {
 	return useNormals;
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-bool ofMesh_<V, N, C, T>::usingIndices() const {
+bool ofMesh_<V, N, C, T>::usingIndices() const noexcept {
 	return useIndices;
 }
 
@@ -1509,7 +1509,7 @@ ofMeshFace_<V, N, C, T> ofMesh_<V, N, C, T>::getFace(ofIndexType faceId) const {
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-const std::vector<ofMeshFace_<V, N, C, T>> & ofMesh_<V, N, C, T>::getUniqueFaces() const {
+const std::vector<ofMeshFace_<V, N, C, T>> & ofMesh_<V, N, C, T>::getUniqueFaces() const noexcept {
 	if (bFacesDirty) {
 		// if we are doing triangles, we have to use a vert and normal for each triangle
 		// that way we can calculate face normals and use getFaceNormal();
@@ -2774,7 +2774,7 @@ ofMesh_<V, N, C, T> ofMesh_<V, N, C, T>::axis(float size) {
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-ofMeshFace_<V, N, C, T>::ofMeshFace_()
+ofMeshFace_<V, N, C, T>::ofMeshFace_() noexcept
 	: bHasNormals(false)
 	, bHasColors(false)
 	, bHasTexcoords(false)
@@ -2855,36 +2855,36 @@ const T & ofMeshFace_<V, N, C, T>::getTexCoord(ofIndexType index) const {
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-void ofMeshFace_<V, N, C, T>::setHasColors(bool bColors) {
+void ofMeshFace_<V, N, C, T>::setHasColors(bool bColors) noexcept {
 	bHasColors = bColors;
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-void ofMeshFace_<V, N, C, T>::setHasNormals(bool bNormals) {
+void ofMeshFace_<V, N, C, T>::setHasNormals(bool bNormals) noexcept {
 	bHasNormals = bNormals;
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-void ofMeshFace_<V, N, C, T>::setHasTexcoords(bool bTexcoords) {
+void ofMeshFace_<V, N, C, T>::setHasTexcoords(bool bTexcoords) noexcept {
 	bHasTexcoords = bTexcoords;
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-bool ofMeshFace_<V, N, C, T>::hasColors() const {
+bool ofMeshFace_<V, N, C, T>::hasColors() const noexcept {
 	return bHasColors;
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-bool ofMeshFace_<V, N, C, T>::hasNormals() const {
+bool ofMeshFace_<V, N, C, T>::hasNormals() const noexcept {
 	return bHasNormals;
 }
 
 //--------------------------------------------------------------
 template <class V, class N, class C, class T>
-bool ofMeshFace_<V, N, C, T>::hasTexcoords() const {
+bool ofMeshFace_<V, N, C, T>::hasTexcoords() const noexcept {
 	return bHasTexcoords;
 }

@@ -4,7 +4,7 @@
 #include <glm/mat4x4.hpp>
 
 //----------------------------------------
-ofNode::ofNode()
+ofNode::ofNode() noexcept
 :parent(nullptr)
 ,localTransformMatrix(1)
 ,legacyCustomDrawOverrided(true){
@@ -17,7 +17,7 @@ ofNode::ofNode()
 }
 
 //----------------------------------------
-ofNode::~ofNode(){
+ofNode::~ofNode() noexcept {
 	if(parent){
 		parent->removeListener(*this);
 	}
@@ -32,7 +32,7 @@ ofNode::~ofNode(){
 }
 
 //----------------------------------------
-ofNode::ofNode(const ofNode & node)
+ofNode::ofNode(const ofNode & node) noexcept
 :parent(node.parent)
 ,axis(node.axis)
 ,localTransformMatrix(node.localTransformMatrix)
@@ -49,7 +49,7 @@ ofNode::ofNode(const ofNode & node)
 }
 
 //----------------------------------------
-ofNode::ofNode(ofNode && node)
+ofNode::ofNode(ofNode && node) noexcept
 :parent(node.parent)
 ,position(std::move(node.position))
 ,orientation(std::move(node.orientation))
@@ -64,7 +64,7 @@ ofNode::ofNode(ofNode && node)
 }
 
 //----------------------------------------
-ofNode & ofNode::operator=(const ofNode & node){
+ofNode & ofNode::operator=(const ofNode & node) noexcept {
 	if(this == &node) return *this;
 	parent = node.parent;
 	position = node.position;
@@ -83,7 +83,7 @@ ofNode & ofNode::operator=(const ofNode & node){
 }
 
 //----------------------------------------
-ofNode & ofNode::operator=(ofNode && node){
+ofNode & ofNode::operator=(ofNode && node) noexcept {
 	if(this == &node) return *this;
 	parent = node.parent;
 	position = std::move(node.position);
@@ -167,7 +167,7 @@ void ofNode::clearParent(bool bMaintainGlobalTransform) {
 }
 
 //----------------------------------------
-ofNode* ofNode::getParent() const {
+ofNode* ofNode::getParent() const noexcept {
 	return parent;
 }
 
@@ -199,22 +199,22 @@ void ofNode::setGlobalPosition(const glm::vec3& p) {
 }
 
 //----------------------------------------
-glm::vec3 ofNode::getPosition() const {
+glm::vec3 ofNode::getPosition() const noexcept {
 	return position;
 }
 
 //----------------------------------------
-float ofNode::getX() const {
+float ofNode::getX() const noexcept {
 	return position->x;
 }
 
 //----------------------------------------
-float ofNode::getY() const {
+float ofNode::getY() const noexcept {
 	return position->y;
 }
 
 //----------------------------------------
-float ofNode::getZ() const {
+float ofNode::getZ() const noexcept {
 	return position->z;
 }
 
@@ -243,7 +243,7 @@ void ofNode::setGlobalOrientation(const glm::quat& q) {
 }
 
 //----------------------------------------
-glm::quat ofNode::getOrientationQuat() const {
+glm::quat ofNode::getOrientationQuat() const noexcept {
 	return orientation;
 }
 
@@ -276,7 +276,7 @@ void ofNode::setScale(const glm::vec3& s) {
 }
 
 //----------------------------------------
-glm::vec3 ofNode::getScale() const {
+glm::vec3 ofNode::getScale() const noexcept {
 	return scale;
 }
 
@@ -292,7 +292,7 @@ void ofNode::setPositionOrientationScale( const glm::vec3& p, const glm::quat& q
 }
 
 //----------------------------------------
-void ofNode::setPositionOrientationScale( const glm::vec3& p, const glm::quat& q, const float& s ) {
+void ofNode::setPositionOrientationScale( const glm::vec3& p, const glm::quat& q, float s ) {
 	setPositionOrientationScale( p, q, {s,s,s} );
 }
 
@@ -309,7 +309,7 @@ void ofNode::setPositionOrientationScale( const glm::vec3& p, const glm::vec3& e
 }
 
 //----------------------------------------
-void ofNode::setPositionOrientationScale( const glm::vec3& p, const glm::vec3& eulerAnglesDeg, const float& s ) {
+void ofNode::setPositionOrientationScale( const glm::vec3& p, const glm::vec3& eulerAnglesDeg, float s ) {
 	setPositionOrientationScale( p, eulerAnglesDeg, {s,s,s} );
 }
 
@@ -382,11 +382,6 @@ void ofNode::rotateRad(float radians, const glm::vec3& v) {
 }
 
 //----------------------------------------
-// void ofNode::rotate(float degrees, float vx, float vy, float vz) {
-// 	rotateDeg(degrees, vx, vy, vz);
-// }
-
-//----------------------------------------
 void ofNode::rotateDeg(float degrees, float vx, float vy, float vz) {
 	rotate(glm::angleAxis(glm::radians(degrees), glm::vec3(vx, vy, vz)));
 }
@@ -395,11 +390,6 @@ void ofNode::rotateDeg(float degrees, float vx, float vy, float vz) {
 void ofNode::rotateRad(float radians, float vx, float vy, float vz) {
 	rotate(glm::angleAxis(radians, glm::vec3(vx, vy, vz)));
 }
-
-//----------------------------------------
-// void ofNode::rotateAround(float degrees, const glm::vec3& axis, const glm::vec3& point) {
-// 	rotateAroundDeg(degrees, axis, point);
-// }
 
 //----------------------------------------
 void ofNode::rotateAroundDeg(float degrees, const glm::vec3& axis, const glm::vec3& point) {
@@ -457,70 +447,34 @@ void ofNode::updateAxis() {
 }
 
 //----------------------------------------
-glm::vec3 ofNode::getXAxis() const {
+glm::vec3 ofNode::getXAxis() const noexcept {
 	return axis[0];
 }
 
 //----------------------------------------
-glm::vec3 ofNode::getYAxis() const {
+glm::vec3 ofNode::getYAxis() const noexcept {
 	return axis[1];
 }
 
 //----------------------------------------
-glm::vec3 ofNode::getZAxis() const {
+glm::vec3 ofNode::getZAxis() const noexcept {
 	return axis[2];
 }
 
 //----------------------------------------
-glm::vec3 ofNode::getSideDir() const {
+glm::vec3 ofNode::getSideDir() const noexcept {
 	return getXAxis();
 }
 
 //----------------------------------------
-glm::vec3 ofNode::getLookAtDir() const {
+glm::vec3 ofNode::getLookAtDir() const noexcept {
 	return -getZAxis();
 }
 
 //----------------------------------------
-glm::vec3 ofNode::getUpDir() const {
+glm::vec3 ofNode::getUpDir() const noexcept {
 	return getYAxis();
 }
-
-// #ifdef USEDEPRECATED
-// //----------------------------------------
-// float ofNode::getPitch() const {
-// 	return getPitchDeg();
-// }
-
-// //----------------------------------------
-// float ofNode::getHeading() const {
-// 	return getHeadingDeg();
-// }
-
-// //----------------------------------------
-// float ofNode::getRoll() const {
-// 	return getRollDeg();
-// }
-
-// //----------------------------------------
-// glm::vec3 ofNode::getOrientationEuler() const {
-// 	return getOrientationEulerDeg();
-// }
-
-// //----------------------------------------
-// void ofNode::tilt(float degrees) {
-// 	rotateDeg(degrees, getXAxis());
-// }
-
-// //----------------------------------------
-// void ofNode::pan(float degrees) {
-// 	rotateDeg(degrees, getYAxis());
-// }
-
-// //----------------------------------------
-// void ofNode::roll(float degrees) {
-// 	rotateDeg(degrees, getZAxis());
-// }
 
 //----------------------------------------
 void ofNode::rotate(const glm::quat& q) {
@@ -529,34 +483,13 @@ void ofNode::rotate(const glm::quat& q) {
 	onOrientationChanged();
 }
 
-// //----------------------------------------
-// void ofNode::rotate(float degrees, const glm::vec3& v) {
-// 	rotateDeg(degrees, v);
-// }
-
 //----------------------------------------
 void ofNode::rotateAround(const glm::quat& q, const glm::vec3& point) {
-	//	ofLogVerbose("ofNode") << "rotateAround(const glm::quat& q, const glm::vec3& point) not implemented yet";
-	//	glm::mat4 m = getLocalTransformMatrix();
-	//	m.setTranslation(point);
-	//	m.rotate(q);
-
 	setGlobalPosition(q * (getGlobalPosition() - point) + point);
 
 	onOrientationChanged();
 	onPositionChanged();
 }
-
-// //----------------------------------------
-// void ofNode::orbit(float longitude, float latitude, float radius, const glm::vec3& centerPoint) {
-// 	orbitDeg(longitude, latitude, radius, centerPoint);
-// }
-
-// //----------------------------------------
-// void ofNode::orbit(float longitude, float latitude, float radius, ofNode& centerNode) {
-// 	orbitDeg(longitude, latitude, radius, centerNode);
-// }
-// #endif
 
 //----------------------------------------
 float ofNode::getPitchDeg() const {
@@ -589,7 +522,7 @@ float ofNode::getRollRad() const {
 }
 
 //----------------------------------------
-const glm::mat4& ofNode::getLocalTransformMatrix() const {
+const glm::mat4& ofNode::getLocalTransformMatrix() const noexcept {
 	return localTransformMatrix;
 }
 
@@ -632,7 +565,6 @@ void ofNode::orbitDeg(float longitude, float latitude, float radius, const glm::
 	p = q * p;							   // rotate p on unit sphere based on quaternion
 	p = p * radius;						   // scale p by radius from its position on unit sphere
 
-//	setGlobalPosition(centerPoint + p);
 	setGlobalPosition(centerPoint + glm::vec3{p.x, p.y, p.z} );
 	setOrientation(q);
 
@@ -656,7 +588,6 @@ void ofNode::orbitRad(float longitude, float latitude, float radius, const glm::
 	p = q * p;							   // rotate p on unit sphere based on quaternion
 	p = p * radius;						   // scale p by radius from its position on unit sphere
 
-//	setGlobalPosition(centerPoint + p);
 	setGlobalPosition(centerPoint + glm::vec3{p.x, p.y, p.z} );
 
 	setOrientation(q);
@@ -671,11 +602,6 @@ void ofNode::resetTransform() {
 	setOrientation({0.f,0.f,0.f});
     setScale({1.f,1.f,1.f});
 }
-
-
-////----------------------------------------
-//void ofNode::draw() {
-//}
 
 //----------------------------------------
 void ofNode::draw()  const{

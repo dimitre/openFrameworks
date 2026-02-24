@@ -23,10 +23,10 @@ public:
     void disableNormals() override;
     void disableIndices() override;
 
-    bool usingColors() const override;
-    bool usingTextures() const override;
-    bool usingNormals() const override;
-    bool usingIndices() const override;
+    bool usingColors() const noexcept override;
+    bool usingTextures() const noexcept override;
+    bool usingNormals() const noexcept override;
+    bool usingIndices() const noexcept override;
 
 	void draw(ofPolyRenderMode drawMode) const override;
 	void drawInstanced(ofPolyRenderMode drawMode, int primCount) const;

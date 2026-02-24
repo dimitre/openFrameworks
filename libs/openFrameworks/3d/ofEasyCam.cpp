@@ -13,7 +13,7 @@ static const float minDifference = 0.1e-5f;
 static const unsigned long doubleclickTime = 200;
 
 //----------------------------------------
-ofEasyCam::ofEasyCam(){
+ofEasyCam::ofEasyCam() noexcept {
 	reset();
 	sensitivityTranslate = {1,1,1};
 	sensitivityRot = {1,1,1};
@@ -88,7 +88,7 @@ void ofEasyCam::setTarget(ofNode& targetNode){
 }
 
 //----------------------------------------
-const ofNode& ofEasyCam::getTarget() const{
+const ofNode& ofEasyCam::getTarget() const noexcept {
 	return target;
 }
 
@@ -127,7 +127,7 @@ void ofEasyCam::setDrag(float drag){
 }
 
 //----------------------------------------
-float ofEasyCam::getDrag() const{
+float ofEasyCam::getDrag() const noexcept {
 	return drag;
 }
 
@@ -137,7 +137,7 @@ void ofEasyCam::setTranslationKey(char key){
 }
 
 //----------------------------------------
-char ofEasyCam::getTranslationKey() const{
+char ofEasyCam::getTranslationKey() const noexcept {
 	return doTranslationKey;
 }
 
@@ -170,7 +170,7 @@ void ofEasyCam::disableMouseInput(){
 	// to enable the mouse input once the camera is fully loaded.
 }
 //----------------------------------------
-bool ofEasyCam::getMouseInputEnabled() const{
+bool ofEasyCam::getMouseInputEnabled() const noexcept {
 	return bMouseInputEnabled;
 }
 
@@ -222,7 +222,7 @@ void ofEasyCam::disableMouseMiddleButton(){
 }
 
 //----------------------------------------
-bool ofEasyCam::getMouseMiddleButtonEnabled() const{
+bool ofEasyCam::getMouseMiddleButtonEnabled() const noexcept {
 	return bEnableMouseMiddleButton;
 }
 
@@ -245,7 +245,7 @@ void ofEasyCam::setRelativeYAxis(bool relative){
 }
 
 //----------------------------------------
-bool ofEasyCam::getRelativeYAxis() const{
+bool ofEasyCam::getRelativeYAxis() const noexcept {
 	return bRelativeYAxis;
 }
 
@@ -255,7 +255,7 @@ void ofEasyCam::setUpAxis(const glm::vec3 & _up){
 }
 
 //----------------------------------------
-const glm::vec3 & ofEasyCam::getUpAxis() const{
+const glm::vec3 & ofEasyCam::getUpAxis() const noexcept {
 	return upAxis;
 }
 
@@ -270,7 +270,7 @@ void ofEasyCam::disableInertia(){
 }
 
 //----------------------------------------
-bool ofEasyCam::getInertiaEnabled() const{
+bool ofEasyCam::getInertiaEnabled() const noexcept {
 	return doInertia;
 }
 

@@ -19,7 +19,7 @@
 using std::vector;
 using std::shared_ptr;
 
-of3dPrimitive::of3dPrimitive()
+of3dPrimitive::of3dPrimitive() noexcept
 :usingVbo(true)
 ,mesh(new ofVboMesh)
 {
@@ -27,12 +27,12 @@ of3dPrimitive::of3dPrimitive()
 }
 
 //----------------------------------------------------------
-of3dPrimitive::~of3dPrimitive() {
+of3dPrimitive::~of3dPrimitive() noexcept {
 //	ofNode::~ofNode();
 }
 
 //----------------------------------------------------------
-of3dPrimitive::of3dPrimitive(const of3dPrimitive & mom):ofNode(mom){
+of3dPrimitive::of3dPrimitive(const of3dPrimitive & mom) noexcept : ofNode(mom) {
     texCoords = mom.texCoords;
     usingVbo = mom.usingVbo;
 	if(usingVbo){
@@ -51,7 +51,7 @@ of3dPrimitive::of3dPrimitive(const ofMesh & mesh)
 }
 
 //----------------------------------------------------------
-of3dPrimitive & of3dPrimitive::operator=(const of3dPrimitive & mom){
+of3dPrimitive & of3dPrimitive::operator=(const of3dPrimitive & mom) noexcept {
 	if(&mom!=this){
 		(*(ofNode*)this)=mom;
 		texCoords = mom.texCoords;
@@ -63,42 +63,42 @@ of3dPrimitive & of3dPrimitive::operator=(const of3dPrimitive & mom){
 
 // GETTERS //
 //----------------------------------------------------------
-ofMesh* of3dPrimitive::getMeshPtr() {
+ofMesh* of3dPrimitive::getMeshPtr() noexcept {
     return mesh.get();
 }
 
 //----------------------------------------------------------
-ofMesh& of3dPrimitive::getMesh() {
+ofMesh& of3dPrimitive::getMesh() noexcept {
     return *mesh;
 }
 
 //----------------------------------------------------------
-const ofMesh* of3dPrimitive::getMeshPtr() const{
+const ofMesh* of3dPrimitive::getMeshPtr() const noexcept {
     return mesh.get();
 }
 
 //----------------------------------------------------------
-const ofMesh& of3dPrimitive::getMesh() const{
+const ofMesh& of3dPrimitive::getMesh() const noexcept {
     return *mesh;
 }
 
 //----------------------------------------------------------
-glm::vec4* of3dPrimitive::getTexCoordsPtr() {
+glm::vec4* of3dPrimitive::getTexCoordsPtr() noexcept {
     return& texCoords;
 }
 
 //----------------------------------------------------------
-glm::vec4& of3dPrimitive::getTexCoords() {
+glm::vec4& of3dPrimitive::getTexCoords() noexcept {
     return texCoords;
 }
 
 //----------------------------------------------------------
-const glm::vec4* of3dPrimitive::getTexCoordsPtr() const{
+const glm::vec4* of3dPrimitive::getTexCoordsPtr() const noexcept {
     return& texCoords;
 }
 
 //----------------------------------------------------------
-const glm::vec4& of3dPrimitive::getTexCoords() const{
+const glm::vec4& of3dPrimitive::getTexCoords() const noexcept {
     return texCoords;
 }
 
@@ -111,12 +111,12 @@ vector<ofIndexType> of3dPrimitive::getIndices( int startIndex, int endIndex ) co
 
 
 //----------------------------------------------------------
-bool of3dPrimitive::hasScaling()  const{
+bool of3dPrimitive::hasScaling() const noexcept {
 	glm::vec3 scale = getScale();
     return (scale.x != 1.f || scale.y != 1.f || scale.z != 1.f);
 }
 //----------------------------------------------------------
-bool of3dPrimitive::hasNormalsEnabled() const {
+bool of3dPrimitive::hasNormalsEnabled() const noexcept {
     return getMesh().hasNormals();
 }
 
@@ -300,7 +300,7 @@ void of3dPrimitive::setUseVbo(bool useVbo){
 }
 
 //--------------------------------------------------------------
-bool of3dPrimitive::isUsingVbo() const{
+bool of3dPrimitive::isUsingVbo() const noexcept {
 	return usingVbo;
 }
 
@@ -318,7 +318,7 @@ ofPlanePrimitive::ofPlanePrimitive(float width, float height, int columns, int r
 }
 
 //--------------------------------------------------------------
-ofPlanePrimitive::~ofPlanePrimitive() {}
+ofPlanePrimitive::~ofPlanePrimitive() noexcept {}
 
 //--------------------------------------------------------------
 void ofPlanePrimitive::set(float _width, float _height, int columns, int rows, ofPrimitiveMode mode) {
@@ -384,27 +384,27 @@ void ofPlanePrimitive::setMode(ofPrimitiveMode mode) {
 }
 
 //--------------------------------------------------------------
-int ofPlanePrimitive::getNumColumns() const {
+int ofPlanePrimitive::getNumColumns() const noexcept {
     return (int)resolution.x;
 }
 
 //--------------------------------------------------------------
-int ofPlanePrimitive::getNumRows() const {
+int ofPlanePrimitive::getNumRows() const noexcept {
     return (int)resolution.y;
 }
 
 //--------------------------------------------------------------
-glm::vec2 ofPlanePrimitive::getResolution() const {
+glm::vec2 ofPlanePrimitive::getResolution() const noexcept {
     return resolution;
 }
 
 //--------------------------------------------------------------
-float ofPlanePrimitive::getWidth() const {
+float ofPlanePrimitive::getWidth() const noexcept {
     return width;
 }
 
 //--------------------------------------------------------------
-float ofPlanePrimitive::getHeight() const {
+float ofPlanePrimitive::getHeight() const noexcept {
     return height;
 }
 
@@ -430,7 +430,7 @@ ofSpherePrimitive::ofSpherePrimitive( float _radius, int res, ofPrimitiveMode  )
 }
 
 //----------------------------------------------------------
-ofSpherePrimitive::~ofSpherePrimitive() {
+ofSpherePrimitive::~ofSpherePrimitive() noexcept {
     
 }
 
@@ -467,12 +467,12 @@ void ofSpherePrimitive::setRadius(float _radius) {
 }
 
 //----------------------------------------------------------
-float ofSpherePrimitive::getRadius() const {
+float ofSpherePrimitive::getRadius() const noexcept {
     return radius;
 }
 
 //----------------------------------------------------------
-int ofSpherePrimitive::getResolution() const {
+int ofSpherePrimitive::getResolution() const noexcept {
     return resolution;
 }
 
@@ -493,7 +493,7 @@ ofIcoSpherePrimitive::ofIcoSpherePrimitive( float _radius, int iterations ) {
 }
 
 //----------------------------------------------------------
-ofIcoSpherePrimitive::~ofIcoSpherePrimitive() {
+ofIcoSpherePrimitive::~ofIcoSpherePrimitive() noexcept {
     
 }
 
@@ -527,12 +527,12 @@ void ofIcoSpherePrimitive::setRadius(float _radius) {
 }
 
 //----------------------------------------------------------
-float ofIcoSpherePrimitive::getRadius() const {
+float ofIcoSpherePrimitive::getRadius() const noexcept {
     return radius;
 }
 
 //----------------------------------------------------------
-int ofIcoSpherePrimitive::getResolution() const {
+int ofIcoSpherePrimitive::getResolution() const noexcept {
     return resolution;
 }
 
@@ -551,7 +551,7 @@ ofCylinderPrimitive::ofCylinderPrimitive( float radius, float height, int radius
 }
 
 //--------------------------------------------------------------
-ofCylinderPrimitive::~ofCylinderPrimitive() {}
+ofCylinderPrimitive::~ofCylinderPrimitive() noexcept {}
 
 //--------------------------------------------------------------
 void ofCylinderPrimitive::set(float _radius, float _height, int radiusSegments, int heightSegments, int capSegments, bool _bCapped, ofPrimitiveMode mode) {
@@ -717,37 +717,37 @@ ofMesh ofCylinderPrimitive::getBottomCapMesh() const {
 }
 
 //--------------------------------------------------------------
-int ofCylinderPrimitive::getResolutionRadius() const {
+int ofCylinderPrimitive::getResolutionRadius() const noexcept {
     return (int)resolution.x;
 }
 
 //--------------------------------------------------------------
-int ofCylinderPrimitive::getResolutionHeight() const {
+int ofCylinderPrimitive::getResolutionHeight() const noexcept {
     return (int)resolution.y;
 }
 
 //--------------------------------------------------------------
-int ofCylinderPrimitive::getResolutionCap() const {
+int ofCylinderPrimitive::getResolutionCap() const noexcept {
     return (int)resolution.z;
 }
 
 //--------------------------------------------------------------
-glm::vec3 ofCylinderPrimitive::getResolution() const {
+glm::vec3 ofCylinderPrimitive::getResolution() const noexcept {
     return resolution;
 }
 
 //--------------------------------------------------------------
-float ofCylinderPrimitive::getHeight() const {
+float ofCylinderPrimitive::getHeight() const noexcept {
     return height;
 }
 
 //--------------------------------------------------------------
-float ofCylinderPrimitive::getRadius() const {
+float ofCylinderPrimitive::getRadius() const noexcept {
     return radius;
 }
 
 //--------------------------------------------------------------
-bool ofCylinderPrimitive::getCapped() const {
+bool ofCylinderPrimitive::getCapped() const noexcept {
     return bCapped;
 }
 
@@ -769,7 +769,7 @@ ofConePrimitive::ofConePrimitive( float radius, float height, int radiusSegments
 }
 
 //--------------------------------------------------------------
-ofConePrimitive::~ofConePrimitive() {}
+ofConePrimitive::~ofConePrimitive() noexcept {}
 
 //--------------------------------------------------------------
 void ofConePrimitive::set( float _radius, float _height, int radiusSegments, int heightSegments, int capSegments, ofPrimitiveMode mode ) {
@@ -891,32 +891,32 @@ ofMesh ofConePrimitive::getCapMesh() const {
 }
 
 //--------------------------------------------------------------
-int ofConePrimitive::getResolutionRadius() const {
+int ofConePrimitive::getResolutionRadius() const noexcept {
     return (int)resolution.x;
 }
 
 //--------------------------------------------------------------
-int ofConePrimitive::getResolutionHeight() const {
+int ofConePrimitive::getResolutionHeight() const noexcept {
     return (int)resolution.y;
 }
 
 //--------------------------------------------------------------
-int ofConePrimitive::getResolutionCap() const {
+int ofConePrimitive::getResolutionCap() const noexcept {
     return (int)resolution.z;
 }
 
 //--------------------------------------------------------------
-glm::vec3 ofConePrimitive::getResolution() const {
+glm::vec3 ofConePrimitive::getResolution() const noexcept {
     return resolution;
 }
 
 //--------------------------------------------------------------
-float ofConePrimitive::getRadius() const {
+float ofConePrimitive::getRadius() const noexcept {
     return radius;
 }
 
 //--------------------------------------------------------------
-float ofConePrimitive::getHeight() const {
+float ofConePrimitive::getHeight() const noexcept {
     return height;
 }
 
@@ -938,7 +938,7 @@ ofBoxPrimitive::ofBoxPrimitive( float width, float height, float depth, int resW
 }
 
 //--------------------------------------------------------------
-ofBoxPrimitive::~ofBoxPrimitive() {}
+ofBoxPrimitive::~ofBoxPrimitive() noexcept {}
 
 //--------------------------------------------------------------
 void ofBoxPrimitive::set( float width, float height, float depth, int resWidth, int resHeight, int resDepth) {
@@ -1079,41 +1079,41 @@ void ofBoxPrimitive::setSideColor( int sideIndex, ofColor color ) {
 }
 
 //--------------------------------------------------------------
-int ofBoxPrimitive::getResolutionWidth() const {
+int ofBoxPrimitive::getResolutionWidth() const noexcept {
     return (int)resolution.x;
 }
 
 //--------------------------------------------------------------
-int ofBoxPrimitive::getResolutionHeight() const {
+int ofBoxPrimitive::getResolutionHeight() const noexcept {
     return (int)resolution.y;
 }
 
 //--------------------------------------------------------------
-int ofBoxPrimitive::getResolutionDepth() const {
+int ofBoxPrimitive::getResolutionDepth() const noexcept {
     return (int)resolution.z;
 }
 
 //--------------------------------------------------------------
-glm::vec3 ofBoxPrimitive::getResolution() const {
+glm::vec3 ofBoxPrimitive::getResolution() const noexcept {
     return resolution;
 }
 
 //--------------------------------------------------------------
-float ofBoxPrimitive::getWidth() const {
+float ofBoxPrimitive::getWidth() const noexcept {
     return size.x;
 }
 
 //--------------------------------------------------------------
-float ofBoxPrimitive::getHeight() const {
+float ofBoxPrimitive::getHeight() const noexcept {
     return size.y;
 }
 
 //--------------------------------------------------------------
-float ofBoxPrimitive::getDepth() const {
+float ofBoxPrimitive::getDepth() const noexcept {
     return size.z;
 }
 
 //--------------------------------------------------------------
-glm::vec3 ofBoxPrimitive::getSize() const {
+glm::vec3 ofBoxPrimitive::getSize() const noexcept {
     return size;
 }

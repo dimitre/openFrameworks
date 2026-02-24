@@ -16,10 +16,10 @@ public:
 	/// \{
 
 	/// \brief Construct a default camera.
-	ofCamera();
+	ofCamera() noexcept;
 
 	/// \brief Destroy the camera.
-	virtual ~ofCamera() override;
+	virtual ~ofCamera() noexcept override;
 
 	/// \}
 	/// \name Camera Settings
@@ -78,11 +78,11 @@ public:
 	/// meaningful for perspective cameras.
 	///
 	/// \returns The camera's field of view, in degrees.
-	float getFov() const { return fov; };
+	[[nodiscard]] float getFov() const noexcept { return fov; }
 
-	float getNearClip() const { return nearClip; };
+	[[nodiscard]] float getNearClip() const noexcept { return nearClip; }
 
-	float getFarClip() const { return farClip; };
+	[[nodiscard]] float getFarClip() const noexcept { return farClip; }
 
 	/// \brief Get the "lens offset" applied to this camera, encoded as an glm::vec2.
 	///
@@ -95,12 +95,12 @@ public:
 	/// more information see http://www.orthostereo.com/geometryopengl.html.
 	///
 	/// \returns The "lens offset" applied to this camera, encoded in an glm::vec2.
-	glm::vec2 getLensOffset() const { return lensOffset; };
+	[[nodiscard]] glm::vec2 getLensOffset() const noexcept { return lensOffset; }
 
 	/// \brief Get the boolean state which indicates whether the aspect ratio of this camera is forced to a non-default setting.
 	///
 	/// \returns A boolean: whether or not this camera's aspect ratio is set to a non-default value.
-	bool getForceAspectRatio() const { return forceAspectRatio; };
+	[[nodiscard]] bool getForceAspectRatio() const noexcept { return forceAspectRatio; }
 
 	/// \brief Get the aspect ratio of this camera's viewport.
 	///
@@ -109,7 +109,7 @@ public:
 	/// perspective cameras.
 	///
 	/// \returns The aspect ratio of this camera's viewport.
-	float getAspectRatio() const { return aspectRatio; };
+	[[nodiscard]] float getAspectRatio() const noexcept { return aspectRatio; }
 
 	/// \}
 	/// \name OpenGL Setup
@@ -121,15 +121,15 @@ public:
 
 	void setVFlip(bool vflip);
 
-	bool isVFlipped() const;
+	[[nodiscard]] bool isVFlipped() const noexcept;
 
 	void enableOrtho();
 
 	void disableOrtho();
 
-	bool getOrtho() const;
+	[[nodiscard]] bool getOrtho() const noexcept;
 
-	float getImagePlaneDistance(const ofRectangle & viewport = ofRectangle()) const;
+	[[nodiscard]] float getImagePlaneDistance(const ofRectangle & viewport = ofRectangle()) const;
 
 	/// \}
 	/// \name Rendering
@@ -163,18 +163,18 @@ public:
 
 	/// \brief Access the projection matrix.
 	/// \returns the current 4x4 projection matrix.
-	glm::mat4 getProjectionMatrix() const {
+	[[nodiscard]] glm::mat4 getProjectionMatrix() const {
 		return getProjectionMatrix(getViewport());
 	}
-	glm::mat4 getProjectionMatrix(const ofRectangle & viewport) const;
+	[[nodiscard]] glm::mat4 getProjectionMatrix(const ofRectangle & viewport) const;
 
 	/// \brief Access the model view matrix.
 	/// \returns the current 4x4 model view matrix.
-	glm::mat4 getModelViewMatrix() const;
+	[[nodiscard]] glm::mat4 getModelViewMatrix() const;
 
 	/// \todo getModelViewProjectionMatrix()
-	glm::mat4 getModelViewProjectionMatrix(const ofRectangle & viewport) const;
-	glm::mat4 getModelViewProjectionMatrix() const {
+	[[nodiscard]] glm::mat4 getModelViewProjectionMatrix(const ofRectangle & viewport) const;
+	[[nodiscard]] glm::mat4 getModelViewProjectionMatrix() const {
 		return getModelViewProjectionMatrix(getViewport());
 	}
 
@@ -192,8 +192,8 @@ public:
 	/// \param WorldXYZ A 3D point in the world, whose screen coordinates you wish to know.
 	/// \param viewport (Optional) A viewport. The default is ofGetCurrentViewport().
 	/// \returns An glm::vec3 containing the screen coordinates of your 3D point of interest.
-	glm::vec3 worldToScreen(glm::vec3 WorldXYZ, const ofRectangle & viewport) const;
-	glm::vec3 worldToScreen(glm::vec3 WorldXYZ) const {
+	[[nodiscard]] glm::vec3 worldToScreen(glm::vec3 WorldXYZ, const ofRectangle & viewport) const;
+	[[nodiscard]] glm::vec3 worldToScreen(glm::vec3 WorldXYZ) const {
 		return worldToScreen(WorldXYZ, getViewport());
 	}
 
@@ -205,20 +205,20 @@ public:
 	/// This Z value is interpreted as a distance into or away from the screen.
 	///
 	/// \param ScreenXYZ A point on your screen, whose 3D world coordinates you wish to know.
-	glm::vec3 screenToWorld(glm::vec3 ScreenXYZ, const ofRectangle & viewport) const;
-	glm::vec3 screenToWorld(glm::vec3 ScreenXYZ) const {
+	[[nodiscard]] glm::vec3 screenToWorld(glm::vec3 ScreenXYZ, const ofRectangle & viewport) const;
+	[[nodiscard]] glm::vec3 screenToWorld(glm::vec3 ScreenXYZ) const {
 		return screenToWorld(ScreenXYZ, getViewport());
 	}
 
 	/// \todo worldToCamera()
-	glm::vec3 worldToCamera(glm::vec3 WorldXYZ, const ofRectangle & viewport) const;
-	glm::vec3 worldToCamera(glm::vec3 WorldXYZ) const {
+	[[nodiscard]] glm::vec3 worldToCamera(glm::vec3 WorldXYZ, const ofRectangle & viewport) const;
+	[[nodiscard]] glm::vec3 worldToCamera(glm::vec3 WorldXYZ) const {
 		return worldToCamera(WorldXYZ, getViewport());
 	}
 
 	/// \todo cameraToWorld()
-	glm::vec3 cameraToWorld(glm::vec3 CameraXYZ, const ofRectangle & viewport) const;
-	glm::vec3 cameraToWorld(glm::vec3 CameraXYZ) const {
+	[[nodiscard]] glm::vec3 cameraToWorld(glm::vec3 CameraXYZ, const ofRectangle & viewport) const;
+	[[nodiscard]] glm::vec3 cameraToWorld(glm::vec3 CameraXYZ) const {
 		return cameraToWorld(CameraXYZ, getViewport());
 	}
 
@@ -239,18 +239,18 @@ public:
 	}
 
 protected:
-	ofRectangle getViewport() const;
-	std::shared_ptr<ofBaseRenderer> getRenderer() const;
+	[[nodiscard]] ofRectangle getViewport() const;
+	[[nodiscard]] std::shared_ptr<ofBaseRenderer> getRenderer() const;
 	void calcClipPlanes(const ofRectangle & viewport) const;
 
 private:
-	bool isOrtho;
-	float fov;
-	mutable float nearClip;
-	mutable float farClip;
-	glm::vec2 lensOffset;
-	bool forceAspectRatio;
-	float aspectRatio; // only used when forceAspect=true, = w / h
-	bool vFlip;
+	bool isOrtho = false;
+	float fov = 60.0f;
+	mutable float nearClip = 0.0f;
+	mutable float farClip = 0.0f;
+	glm::vec2 lensOffset {0.0f, 0.0f};
+	bool forceAspectRatio = false;
+	float aspectRatio = 4.0f/3.0f;
+	bool vFlip = true;
 	std::shared_ptr<ofBaseRenderer> renderer;
 };

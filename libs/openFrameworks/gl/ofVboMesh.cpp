@@ -77,19 +77,19 @@ void ofVboMesh::disableIndices(){
 	vbo.disableIndices();
 }
 
-bool ofVboMesh::usingColors() const {
+bool ofVboMesh::usingColors() const noexcept {
 	return vbo.getUsingColors();
 }
 
-bool ofVboMesh::usingTextures() const {
+bool ofVboMesh::usingTextures() const noexcept {
 	return vbo.getUsingTexCoords();
 }
 
-bool ofVboMesh::usingNormals() const {
+bool ofVboMesh::usingNormals() const noexcept {
 	return vbo.getUsingNormals();
 }
 
-bool ofVboMesh::usingIndices() const {
+bool ofVboMesh::usingIndices() const noexcept {
 	return vbo.getUsingIndices();
 }
 
