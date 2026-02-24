@@ -208,7 +208,7 @@ private:
 	#include "ofUtils.h" // ofToString
 	#include <vector>
 
-static struct ofMonitors {
+inline struct ofMonitors {
 public:
 	ofMonitors() { }
 	~ofMonitors() { }

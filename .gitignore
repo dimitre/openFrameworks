@@ -9,3 +9,9 @@ libs/openFrameworksCompiled/lib/
 .cache/
 libs/macos
 examples/*
+addons/*
+ofGen/dist
+ofGen/.chaletrc
+addons/ofxAssimp/libs/
+apps/*
+libs/**/

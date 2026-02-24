@@ -3,6 +3,7 @@
 #include <regex>
 #include "ofGraphics.h"
 #include "ofxSvgUtils.h"
+#include "ofFileUtils.h"
 
 using std::string;
 using std::vector;

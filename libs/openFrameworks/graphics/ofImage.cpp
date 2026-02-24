@@ -253,32 +253,120 @@ static bool loadImage(ofPixels_<PixelType> & pix, const fs::path & _fileName, co
 			return false;
 		}
 
-		// Calculate number of channels from the loaded bitmap
-		int numChannels = bitmap.format.bits / (sizeof(PixelType) * 8);
+		// Calculate bits per channel from the loaded bitmap
+		int bitsPerPixel = bitmap.format.bits;
+		int bitsPerChannel = bitsPerPixel;
+		int numChannels = 1;
+		
+		// Determine number of channels based on format
+		// For common formats: 8=gray, 16=gray16, 24=RGB8, 32=RGBA8, 48=RGB16, 64=RGBA16
+		if (bitsPerPixel == 8) {
+			numChannels = 1;
+			bitsPerChannel = 8;
+		} else if (bitsPerPixel == 16) {
+			numChannels = 1;
+			bitsPerChannel = 16;
+		} else if (bitsPerPixel == 24) {
+			numChannels = 3;
+			bitsPerChannel = 8;
+		} else if (bitsPerPixel == 32) {
+			numChannels = 4;
+			bitsPerChannel = 8;
+		} else if (bitsPerPixel == 48) {
+			numChannels = 3;
+			bitsPerChannel = 16;
+		} else if (bitsPerPixel == 64) {
+			numChannels = 4;
+			bitsPerChannel = 16;
+		} else {
+			// Fallback: try to derive from pixel type size
+			numChannels = bitsPerPixel / (sizeof(PixelType) * 8);
+			if (numChannels < 1) numChannels = 1;
+			if (numChannels > 4) numChannels = 4;
+			bitsPerChannel = bitsPerPixel / numChannels;
+		}
 
-		// Clamp to valid range
-		if (numChannels < 1) numChannels = 1;
-		if (numChannels > 4) numChannels = 4;
+		ofLogNotice("ofImage") << "loadImage(): bitmap: " << bitmap.width << "x" << bitmap.height 
+							  << " format.bits=" << bitsPerPixel 
+							  << " stride=" << bitmap.stride
+							  << " sizeof(PixelType)=" << sizeof(PixelType)
+							  << " numChannels=" << numChannels
+							  << " bitsPerChannel=" << bitsPerChannel;
 
 		// Allocate ofPixels with detected dimensions and channels
 		pix.allocate(bitmap.width, bitmap.height, numChannels);
 
-		// Copy pixel data
-		const size_t bytesPerRow = bitmap.width * numChannels * sizeof(PixelType);
+		// Check if we need to convert bit depth
+		int dstBitsPerChannel = sizeof(PixelType) * 8;
+		bool needsConversion = (bitsPerChannel != dstBitsPerChannel);
 
-		if (bitmap.stride == bytesPerRow) {
-			// Direct memory copy if stride matches
-			const size_t totalBytes = bitmap.height * bytesPerRow;
-			std::memcpy(pix.getData(), bitmap.image, totalBytes);
-		} else {
-			// Row-by-row copy if stride differs
+		// Determine source stride in bytes
+		size_t srcStrideBytes = bitmap.stride;
+		// If stride seems to be in pixels (elements), convert to bytes
+		if (bitmap.stride == bitmap.width * numChannels) {
+			srcStrideBytes = bitmap.stride * (bitsPerChannel / 8);
+		}
+
+		const size_t dstBytesPerRow = bitmap.width * numChannels * sizeof(PixelType);
+
+		if (needsConversion) {
+			// Need to convert bit depth (e.g., 16-bit to 8-bit or vice versa)
+			ofLogNotice("ofImage") << "loadImage(): Converting from " << bitsPerChannel 
+								<< " bits to " << dstBitsPerChannel << " bits per channel (image: " 
+								<< _fileName << ")";
+			
 			PixelType * dstPtr = pix.getData();
 			const uint8_t * srcPtr = static_cast<const uint8_t *>(bitmap.image);
+			
+			if (bitsPerChannel == 16 && dstBitsPerChannel == 8) {
+				// Convert 16-bit to 8-bit (downsample)
+				for (int y = 0; y < bitmap.height; ++y) {
+					const uint16_t * srcRow = reinterpret_cast<const uint16_t *>(srcPtr);
+					for (int x = 0; x < bitmap.width * numChannels; ++x) {
+						// Convert 16-bit to 8-bit (shift right 8 bits, or divide by 256)
+						dstPtr[x] = static_cast<PixelType>(srcRow[x] >> 8);
+					}
+					dstPtr += bitmap.width * numChannels;
+					srcPtr += srcStrideBytes;
+				}
+			} else if (bitsPerChannel == 8 && dstBitsPerChannel == 16) {
+				// Convert 8-bit to 16-bit (upsample)
+				for (int y = 0; y < bitmap.height; ++y) {
+					const uint8_t * srcRow = srcPtr;
+					uint16_t * dstRow = reinterpret_cast<uint16_t *>(dstPtr);
+					for (int x = 0; x < bitmap.width * numChannels; ++x) {
+						// Convert 8-bit to 16-bit (shift left 8 bits, or multiply by 256)
+						dstRow[x] = static_cast<uint16_t>(srcRow[x]) << 8;
+					}
+					dstPtr += bitmap.width * numChannels;
+					srcPtr += srcStrideBytes;
+				}
+			} else {
+				// Unsupported conversion, just copy as-is (may look wrong)
+				ofLogWarning("ofImage") << "loadImage(): Unsupported bit depth conversion from " 
+									<< bitsPerChannel << " to " << dstBitsPerChannel;
+				for (int y = 0; y < bitmap.height; ++y) {
+					std::memcpy(dstPtr, srcPtr, dstBytesPerRow);
+					dstPtr += bitmap.width * numChannels;
+					srcPtr += srcStrideBytes;
+				}
+			}
+		} else {
+			// No conversion needed, just copy
+			if (srcStrideBytes == dstBytesPerRow) {
+				// Direct memory copy if stride matches
+				const size_t totalBytes = bitmap.height * dstBytesPerRow;
+				std::memcpy(pix.getData(), bitmap.image, totalBytes);
+			} else {
+				// Row-by-row copy if stride differs
+				PixelType * dstPtr = pix.getData();
+				const uint8_t * srcPtr = static_cast<const uint8_t *>(bitmap.image);
 
-			for (int y = 0; y < bitmap.height; ++y) {
-				std::memcpy(dstPtr, srcPtr, bytesPerRow);
-				dstPtr += bitmap.width * numChannels;
-				srcPtr += bitmap.stride;
+				for (int y = 0; y < bitmap.height; ++y) {
+					std::memcpy(dstPtr, srcPtr, dstBytesPerRow);
+					dstPtr += bitmap.width * numChannels;
+					srcPtr += srcStrideBytes;
+				}
 			}
 		}
 		return true;

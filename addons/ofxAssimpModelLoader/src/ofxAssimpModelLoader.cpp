@@ -6,6 +6,7 @@
 #include "ofGraphics.h"
 #include "ofConstants.h"
 #include "ofUtils.h" // ofGetElapsedTimef
+#include "ofFileUtils.h" // ofGetElapsedTimef
 
 #include <assimp/cimport.h>
 #include <assimp/scene.h>
@@ -55,8 +56,8 @@ bool ofxAssimpModelLoader::loadModel(ofBuffer & buffer, bool optimize, const cha
 
 //------------------------------------------
 bool ofxAssimpModelLoader::load(const of::filesystem::path & fileName, int assimpOptimizeFlags){
-	file = ofToDataPath(fileName);
-	if (!of::filesystem::exists(file)) {
+	auto f { ofToDataPath(fileName) };
+	if (!of::filesystem::exists(f)) {
 		ofLogVerbose("ofxAssimpModelLoader") << "load(): model does not exist: " << fileName ;
 		return false;
 	}
@@ -80,7 +81,7 @@ bool ofxAssimpModelLoader::load(const of::filesystem::path & fileName, int assim
 	//	}
 
 	// loads scene from file
-	const aiScene * scenePtr = importer.ReadFile(ofPathToString(file), flags);
+	const aiScene * scenePtr = importer.ReadFile(ofPathToString(f), flags);
 
 	//this is funky but the scenePtr is managed by assimp and so we can't put it in our shared_ptr without disabling the deleter with: [](const aiScene*){}
 	scene = shared_ptr<const aiScene>(scenePtr,[](const aiScene*){});

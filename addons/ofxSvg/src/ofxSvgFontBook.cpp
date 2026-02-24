@@ -1,4 +1,5 @@
 #include "ofxSvgFontBook.h"
+#include "ofFileUtils.h"
 
 using std::string;
 

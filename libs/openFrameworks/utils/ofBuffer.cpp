@@ -16,6 +16,12 @@ ofBuffer::ofBuffer()
 
 ofBuffer::ofBuffer( const fs::path & fileName ) 
 	:currentLine(end(),end()){
+		if (fs::exists( ofCore.toDataPath(fileName) )) {
+			cout << "exists " << ofCore.toDataPath(fileName) << endl;
+		} else {
+			cout << "!exists " << ofCore.toDataPath(fileName) << endl;
+		}
+
 	std::ifstream fileFrom(ofCore.toDataPath(fileName));
 	set(fileFrom);
 }
@@ -396,6 +402,12 @@ std::istream & operator>>(std::istream & istr, ofBuffer & buf){
 // FIXME: WHY? bool binary
 // FIXME: removed from core; deprecate?
 ofBuffer ofBufferFromFile(const fs::path & path, bool ){
+//	if (!fs::exists(ofCore.toDataPath(path))) {
+//		cout << "!exists " << ofCore.toDataPath(path) << endl;
+//		std::exit(0);
+//	} else {
+//		cout << "exists " << ofCore.toDataPath(path) << endl;
+//	}
 	std::ifstream fileFrom(ofCore.toDataPath(path));
 	return ofBuffer(fileFrom);
 }
