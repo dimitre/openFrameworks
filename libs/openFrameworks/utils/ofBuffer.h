@@ -283,7 +283,7 @@ private:
 /// split at endline characters automatically
 ///
 // FIXME: removed from core; deprecate?
-[[deprecated ("Use ofBuffer(const fs::path & path instead")]]
+//[[deprecated ("Use ofBuffer(const fs::path & path instead")]]
 ofBuffer ofBufferFromFile(const fs::path & path, bool binary = true);
 
 //--------------------------------------------------
