@@ -500,29 +500,8 @@ void ofAppGLFWWindow::update() {
 	events().notifyUpdate();
 	
 #if defined(TARGET_LINUX)
-	// On Wayland, poll cursor position directly since motion_cb may not fire
-	// when the cursor is visible but not captured
-	bool isWayland = false;
-	#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4)
-	isWayland = (windowP && glfwGetPlatform() == GLFW_PLATFORM_WAYLAND);
-	#else
-	// Fallback for older GLFW: check environment variables
-	const char* waylandDisplay = getenv("WAYLAND_DISPLAY");
-	isWayland = (waylandDisplay != nullptr);
-	#endif
-	if (isWayland) {
-		double x, y;
-		glfwGetCursorPos(windowP, &x, &y);
-		// Only update if position changed
-		if (x != events().getMouseX() || y != events().getMouseY()) {
-			ofMouseEventArgs args(ofMouseEventArgs::Moved, x, y, buttonInUse, events().getModifiers());
-			events().notifyMouseEvent(args);
-		}
-		
-		// NOTE: Keyboard polling disabled for now - rely on GLFW callbacks
-		// The polling code was causing segfaults. If keyboard doesn't work on Wayland,
-		// we need to debug why the callbacks aren't firing instead of polling.
-	}
+	// Wayland polling disabled for now - causing segfaults
+	// Need to debug further
 #endif  // TARGET_LINUX
 	
 	//show the window right before the first draw call.
