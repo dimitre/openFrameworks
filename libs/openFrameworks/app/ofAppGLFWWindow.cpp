@@ -494,6 +494,21 @@ ofCoreEvents & ofAppGLFWWindow::events() {
 //--------------------------------------------
 void ofAppGLFWWindow::update() {
 	events().notifyUpdate();
+	
+#if defined(TARGET_LINUX)
+	// On Wayland, poll cursor position directly since motion_cb may not fire
+	// when the cursor is visible but not captured
+	if (windowP && glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
+		double x, y;
+		glfwGetCursorPos(windowP, &x, &y);
+		// Only update if position changed
+		if (x != events().getMouseX() || y != events().getMouseY()) {
+			ofMouseEventArgs args(ofMouseEventArgs::Moved, x, y, buttonInUse, events().getModifiers());
+			events().notifyMouseEvent(args);
+		}
+	}
+#endif
+	
 	//show the window right before the first draw call.
 	if (bWindowNeedsShowing && windowP) {
 		// not working.
@@ -520,6 +535,16 @@ void ofAppGLFWWindow::update() {
 
 //		cout << "SHOW WINDOW! " << settings.windowName << endl;
 		glfwShowWindow(windowP);
+		
+#if defined(TARGET_LINUX)
+		// On Wayland, set cursor after window is shown
+		if (!standardCursor && glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
+			standardCursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+			if (standardCursor) {
+				glfwSetCursor(windowP, standardCursor);
+			}
+		}
+#endif
 
 //		cout << "after show window rect " << getWindowRect() << endl;
 	}
