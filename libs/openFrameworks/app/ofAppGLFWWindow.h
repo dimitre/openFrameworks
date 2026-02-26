@@ -161,6 +161,12 @@ private:
 	XIM xim = nullptr;
 	XIC xic = nullptr;
 	#endif
+	
+	#if defined(TARGET_LINUX)
+	// Wayland keyboard polling - track key states since callbacks may not fire
+	std::vector<int> waylandKeyStates;
+	static constexpr int WAYLAND_KEY_COUNT = 512; // GLFW_KEY_LAST + 1
+	#endif
 
 	std::unique_ptr<ofCoreEvents> coreEvents;
 

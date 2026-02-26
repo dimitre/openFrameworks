@@ -3507,6 +3507,10 @@ void ofGLProgrammableRenderer::setup(int _major, int _minor) {
 	setupGraphicDefaults();
 	viewport();
 	setupScreenPerspective();
+	// Enable alpha blending by default for cross-platform consistency
+	// (macOS enables it by default, but Linux/EGL does not)
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 const ofShader * ofGLProgrammableRenderer::getVideoShader(const ofBaseVideoDraws & video) const {

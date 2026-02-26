@@ -36,7 +36,7 @@
 
 // using std::numeric_limits;
 // using std::shared_ptr;
-// using std::vector;
+using std::vector;
 using std::cout;
 using std::endl;
 
@@ -394,8 +394,17 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 	glfwSetMouseButtonCallback(windowP, mouse_cb);
 	glfwSetCursorPosCallback(windowP, motion_cb);
 	glfwSetCursorEnterCallback(windowP, entry_cb);
+#if defined(TARGET_LINUX)
+	// On Wayland, we poll keyboard state in update() instead of using callbacks
+	// because GLFW keyboard callbacks don't fire reliably on Wayland
+	if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
+		glfwSetKeyCallback(windowP, keyboard_cb);
+		glfwSetCharCallback(windowP, char_cb);
+	}
+#else
 	glfwSetKeyCallback(windowP, keyboard_cb);
 	glfwSetCharCallback(windowP, char_cb);
+#endif
 	glfwSetWindowSizeCallback(windowP, resize_cb);
 #if defined(TARGET_LINUX)
 	// Wayland does not support window position callbacks
@@ -498,6 +507,36 @@ void ofAppGLFWWindow::update() {
 		if (x != events().getMouseX() || y != events().getMouseY()) {
 			ofMouseEventArgs args(ofMouseEventArgs::Moved, x, y, buttonInUse, events().getModifiers());
 			events().notifyMouseEvent(args);
+		}
+		
+		// On Wayland, poll keyboard state directly since keyboard_cb may not fire reliably
+		// Initialize key state tracking on first call
+		if (waylandKeyStates.empty()) {
+			waylandKeyStates.resize(WAYLAND_KEY_COUNT, GLFW_RELEASE);
+		}
+		
+		// Poll all possible keys
+		for (int keycode = GLFW_KEY_SPACE; keycode < WAYLAND_KEY_COUNT; keycode++) {
+			int state = glfwGetKey(windowP, keycode);
+			int prevState = waylandKeyStates[keycode];
+			
+			if (state != prevState) {
+				waylandKeyStates[keycode] = state;
+				
+				// Get modifiers
+				int mods = 0;
+				if (glfwGetKey(windowP, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS || glfwGetKey(windowP, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS)
+					mods |= GLFW_MOD_SHIFT;
+				if (glfwGetKey(windowP, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS || glfwGetKey(windowP, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS)
+					mods |= GLFW_MOD_CONTROL;
+				if (glfwGetKey(windowP, GLFW_KEY_LEFT_ALT) == GLFW_PRESS || glfwGetKey(windowP, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS)
+					mods |= GLFW_MOD_ALT;
+				if (glfwGetKey(windowP, GLFW_KEY_LEFT_SUPER) == GLFW_PRESS || glfwGetKey(windowP, GLFW_KEY_RIGHT_SUPER) == GLFW_PRESS)
+					mods |= GLFW_MOD_SUPER;
+				
+				// Call keyboard callback to handle the event
+				keyboard_cb(windowP, keycode, glfwGetKeyScancode(windowP, keycode), state, mods);
+			}
 		}
 	}
 #endif
