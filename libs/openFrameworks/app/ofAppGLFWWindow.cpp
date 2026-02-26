@@ -105,6 +105,7 @@ void ofAppGLFWWindow::close() noexcept {
 
 //------------------------------------------------------------
 void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
+	std::cout << "[ofAppGLFWWindow] setup() started" << std::endl;
 //	cout << "yes recompile OK" << endl;
 	if (windowP) {
 		ofLogError() << "window already setup, probably you are mixing old and new style setup";
@@ -135,6 +136,7 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 		ofLogError("ofAppGLFWWindow") << "couldn't init GLFW";
 		return;
 	}
+	std::cout << "[ofAppGLFWWindow] GLFW initialized" << std::endl;
 
 #if defined(__linux__)
 	// Verify which platform was actually initialized
@@ -145,6 +147,7 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 		ofLogNotice("ofAppGLFWWindow") << "GLFW initialized with X11 backend";
 	}
 #endif
+	std::cout << "[ofAppGLFWWindow] Platform check done" << std::endl;
 
 	glfwDefaultWindowHints();
 
@@ -274,6 +277,7 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 	}
 
 //	cout << "glfw displayok " << displayOK << endl;
+	std::cout << "[ofAppGLFWWindow] Creating window..." << std::endl;
 	windowP = glfwCreateWindow(settings.getWidth(), settings.getHeight(), settings.title.c_str(), monitor, sharedContext);
 
 	if (displayOK) {
@@ -290,6 +294,7 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 		ofLogError("ofAppGLFWWindow") << "couldn't create GLFW window";
 		return;
 	}
+	std::cout << "[ofAppGLFWWindow] Window created" << std::endl;
 
 	// saves window rectangle just created.
 	windowRect = getWindowRect();
@@ -357,8 +362,10 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 //		cout << "HIDE U" << endl;
 	}
 
+	std::cout << "[ofAppGLFWWindow] Setting up window..." << std::endl;
 	glfwSetWindowUserPointer(windowP, this);
 	glfwMakeContextCurrent(windowP);
+	std::cout << "[ofAppGLFWWindow] Context made current" << std::endl;
 
 //	windowMode = settings.windowMode;
 
@@ -375,6 +382,7 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 	
 	static bool inited = false;
 	if (!inited && !skipGlew) {
+		std::cout << "[ofAppGLFWWindow] Initializing GLEW..." << std::endl;
 		glewExperimental = GL_TRUE;
 		GLenum err = glewInit();
 		if (GLEW_OK != err) {
@@ -383,10 +391,18 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 			return;
 		}
 		inited = true;
+		std::cout << "[ofAppGLFWWindow] GLEW initialized" << std::endl;
+	} else if (skipGlew) {
+		std::cout << "[ofAppGLFWWindow] Skipped GLEW init on Wayland" << std::endl;
 	}
 #endif
 
-	ofLogVerbose() << "GL Version: " << glGetString(GL_VERSION);
+	std::cout << "[ofAppGLFWWindow] GL Version: " << (glGetString(GL_VERSION) ? (const char*)glGetString(GL_VERSION) : "unknown") << std::endl;
+
+	if (!currentRenderer) {
+		ofLogError("ofAppGLFWWindow") << "currentRenderer is null!";
+		return;
+	}
 
 	if (currentRenderer->getType() == ofGLProgrammableRenderer::TYPE) {
 #ifndef TARGET_OPENGLES
