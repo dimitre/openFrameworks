@@ -562,18 +562,15 @@ void ofGLProgrammableRenderer::draw(const ofTexture & tex, float x, float y, flo
 			const_cast<ofGLProgrammableRenderer *>(this)->staticQuadVBO.init();
 		}
 		
-		// Calculate texture coordinates for subsection
-		float texWidth = tex.getWidth();
-		float texHeight = tex.getHeight();
-		float texX1 = sx / texWidth;
-		float texY1 = sy / texHeight;
-		float texX2 = (sx + sw) / texWidth;
-		float texY2 = (sy + sh) / texHeight;
+		// Calculate texture coordinates for subsection using getCoordFromPoint
+		// to properly handle GL_TEXTURE_RECTANGLE_ARB and power-of-two padding
+		auto topLeft = tex.getCoordFromPoint(sx, sy);
+		auto bottomRight = tex.getCoordFromPoint(sx + sw, sy + sh);
 		
-		// Handle vertical flip
-		if (isVFlipped()) {
-			swap(texY1, texY2);
-		}
+		float texX1 = topLeft.x;
+		float texY1 = topLeft.y;
+		float texX2 = bottomRight.x;
+		float texY2 = bottomRight.y;
 		
 		// Update texture coordinates in VBO for this subsection
 		glm::vec2 texcoords[4] = {
@@ -592,10 +589,17 @@ void ofGLProgrammableRenderer::draw(const ofTexture & tex, float x, float y, flo
 			drawY -= h * 0.5f;
 		}
 		
+		// Calculate scale factors - handle vertical flip when texture flip matches renderer vflip
+		float scaleY = h;
+		if (tex.getTextureData().bFlipTexture == isVFlipped()) {
+			scaleY = -h;
+			drawY += h; // Adjust position to account for negative scale
+		}
+		
 		// Use matrix stack to position and scale the unit quad
 		const_cast<ofGLProgrammableRenderer *>(this)->pushMatrix();
 		const_cast<ofGLProgrammableRenderer *>(this)->translate(drawX, drawY, z);
-		const_cast<ofGLProgrammableRenderer *>(this)->scale(w, h, 1.0f);
+		const_cast<ofGLProgrammableRenderer *>(this)->scale(w, scaleY, 1.0f);
 		
 		// Draw the static unit quad
 		staticQuadVBO.vbo.bind();
