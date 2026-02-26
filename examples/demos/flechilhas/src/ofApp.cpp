@@ -3,6 +3,7 @@
 void ofApp::setup() {
 	ofSetWindowTitle("ofWorks install is complete");
 	ofSetFrameRate(60);
+	ofEnableAlphaBlending();
 	//	writer.setFps(60);
 	for (int a = 0; a < 3600; a++) {
 		poeiras.emplace_back();
