@@ -491,8 +491,47 @@ void ofAppGLFWWindow::update() {
 	events().notifyUpdate();
 	
 #if defined(TARGET_LINUX)
-	// Wayland polling disabled for now - causing segfaults
-	// Need to debug further
+	// On Wayland, poll keyboard state directly since keyboard_cb may not fire reliably
+	#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4)
+	if (windowP && glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
+		// Initialize key state tracking on first call
+		if (waylandKeyStates.empty()) {
+			waylandKeyStates.resize(WAYLAND_KEY_COUNT, GLFW_RELEASE);
+		}
+		
+		// Poll all possible keys
+		for (int keycode = GLFW_KEY_SPACE; keycode < WAYLAND_KEY_COUNT && keycode < (int)waylandKeyStates.size(); keycode++) {
+			int state = glfwGetKey(windowP, keycode);
+			int prevState = waylandKeyStates[keycode];
+			
+			if (state != prevState) {
+				waylandKeyStates[keycode] = state;
+				
+				// Only process press/release
+				if (state == GLFW_PRESS || state == GLFW_RELEASE) {
+					// Get modifiers
+					int mods = 0;
+					if (glfwGetKey(windowP, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS || glfwGetKey(windowP, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS)
+						mods |= GLFW_MOD_SHIFT;
+					if (glfwGetKey(windowP, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS || glfwGetKey(windowP, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS)
+						mods |= GLFW_MOD_CONTROL;
+					if (glfwGetKey(windowP, GLFW_KEY_LEFT_ALT) == GLFW_PRESS || glfwGetKey(windowP, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS)
+						mods |= GLFW_MOD_ALT;
+					if (glfwGetKey(windowP, GLFW_KEY_LEFT_SUPER) == GLFW_PRESS || glfwGetKey(windowP, GLFW_KEY_RIGHT_SUPER) == GLFW_PRESS)
+						mods |= GLFW_MOD_SUPER;
+					
+					// Call keyboard callback to handle the event
+					#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 3)
+					int scancode = glfwGetKeyScancode(keycode);
+					#else
+					int scancode = keycode;
+					#endif
+					keyboard_cb(windowP, keycode, scancode, state, mods);
+				}
+			}
+		}
+	}
+	#endif  // GLFW 3.4+
 #endif  // TARGET_LINUX
 	
 	//show the window right before the first draw call.
