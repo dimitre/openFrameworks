@@ -72,8 +72,11 @@ void ofAppGLFWWindow::close() noexcept {
 		glfwSetWindowSizeCallback( windowP, nullptr );
 #if defined(TARGET_LINUX)
 		// Wayland does not support window position callbacks
-		if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
-			glfwSetWindowPosCallback(windowP, nullptr);
+		// Only call glfwGetPlatform() if GLFW is still initialized
+		if (glfwGetError(nullptr) != GLFW_NOT_INITIALIZED) {
+			if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
+				glfwSetWindowPosCallback(windowP, nullptr);
+			}
 		}
 #else
 		glfwSetWindowPosCallback(windowP, nullptr);
@@ -93,10 +96,11 @@ void ofAppGLFWWindow::close() noexcept {
 		currentRenderer.reset();
 
 		// Destroy the cursor if we created one (Wayland)
-		if (standardCursor) {
+		// Only call glfwDestroyCursor if GLFW is still initialized
+		if (standardCursor && glfwGetError(nullptr) != GLFW_NOT_INITIALIZED) {
 			glfwDestroyCursor(standardCursor);
-			standardCursor = nullptr;
 		}
+		standardCursor = nullptr;
 		
 		glfwDestroyWindow(windowP);
 		windowP = nullptr;
@@ -1060,6 +1064,12 @@ namespace {
 
 unsigned long keycodeToUnicode([[maybe_unused]] ofAppGLFWWindow * window, int scancode, int modifier) {
 #ifdef TARGET_LINUX
+	// On Wayland, we don't use X11 for keyboard input
+	// GLFW handles text input via the char callback
+	if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
+		return 0;
+	}
+	
 	XkbStateRec xkb_state = {};
 	XkbGetState(window->getX11Display(), XkbUseCoreKbd, &xkb_state);
 	XEvent ev = { 0 };
