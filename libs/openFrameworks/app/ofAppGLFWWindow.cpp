@@ -359,20 +359,16 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 //	windowMode = settings.windowMode;
 
 #ifndef TARGET_OPENGLES
-	// GLEW requires GLX which is not available on Wayland
-	// On Wayland with desktop OpenGL, EGL is used instead
-	if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
-		static bool inited = false;
-		if (!inited) {
-			glewExperimental = GL_TRUE;
-			GLenum err = glewInit();
-			if (GLEW_OK != err) {
-				/* Problem: glewInit failed, something is seriously wrong. */
-				ofLogError("ofAppRunner") << "couldn't init GLEW: " << glewGetErrorString(err);
-				return;
-			}
-			inited = true;
+	static bool inited = false;
+	if (!inited) {
+		glewExperimental = GL_TRUE;
+		GLenum err = glewInit();
+		if (GLEW_OK != err) {
+			/* Problem: glewInit failed, something is seriously wrong. */
+			ofLogError("ofAppRunner") << "couldn't init GLEW: " << glewGetErrorString(err);
+			return;
 		}
+		inited = true;
 	}
 #endif
 
