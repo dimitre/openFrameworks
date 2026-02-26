@@ -14,6 +14,7 @@ typedef struct _XIC * XIC;
 class ofBaseApp;
 struct GLFWwindow;
 struct GLFWmonitor;
+struct GLFWcursor;
 class ofCoreEvents;
 
 template <typename T>
@@ -179,6 +180,7 @@ private:
 
 	GLFWwindow * windowP = nullptr;
 	ofBaseApp * ofAppPtr = nullptr;
+	GLFWcursor * standardCursor = nullptr;
 
 	bool iconSet = false;
 
