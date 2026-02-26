@@ -363,8 +363,18 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 //	windowMode = settings.windowMode;
 
 #ifndef TARGET_OPENGLES
+	// GLEW requires GLX which is not available on Wayland
+	// On Wayland with desktop OpenGL, we use EGL instead
+	bool skipGlew = false;
+	#if defined(TARGET_LINUX)
+	if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
+		skipGlew = true;
+		ofLogNotice("ofAppGLFWWindow") << "Skipping GLEW init on Wayland (using EGL)";
+	}
+	#endif
+	
 	static bool inited = false;
-	if (!inited) {
+	if (!inited && !skipGlew) {
 		glewExperimental = GL_TRUE;
 		GLenum err = glewInit();
 		if (GLEW_OK != err) {
@@ -487,16 +497,6 @@ ofCoreEvents & ofAppGLFWWindow::events() {
 
 //--------------------------------------------
 void ofAppGLFWWindow::update() {
-	static bool firstUpdate = true;
-	if (firstUpdate) {
-		std::cout << "[ofAppGLFWWindow] update() called for first time" << std::endl;
-		#ifdef TARGET_LINUX
-			std::cout << "[ofAppGLFWWindow] TARGET_LINUX is defined" << std::endl;
-		#else
-			std::cout << "[ofAppGLFWWindow] TARGET_LINUX is NOT defined" << std::endl;
-		#endif
-		firstUpdate = false;
-	}
 	events().notifyUpdate();
 	
 #if defined(TARGET_LINUX)
@@ -504,22 +504,11 @@ void ofAppGLFWWindow::update() {
 	// when the cursor is visible but not captured
 	bool isWayland = false;
 	#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4)
-	static bool loggedPlatform = false;
-	if (!loggedPlatform && windowP) {
-		int platform = glfwGetPlatform();
-		std::cout << "[ofAppGLFWWindow] Platform: " << (platform == GLFW_PLATFORM_WAYLAND ? "Wayland" : (platform == GLFW_PLATFORM_X11 ? "X11" : "Other")) << std::endl;
-		loggedPlatform = true;
-	}
 	isWayland = (windowP && glfwGetPlatform() == GLFW_PLATFORM_WAYLAND);
 	#else
 	// Fallback for older GLFW: check environment variables
-	static bool loggedPlatform = false;
-	if (!loggedPlatform) {
-		const char* waylandDisplay = getenv("WAYLAND_DISPLAY");
-		isWayland = (waylandDisplay != nullptr);
-		ofLogNotice("ofAppGLFWWindow") << "Platform (env): " << (isWayland ? "Wayland" : "X11/Other");
-		loggedPlatform = true;
-	}
+	const char* waylandDisplay = getenv("WAYLAND_DISPLAY");
+	isWayland = (waylandDisplay != nullptr);
 	#endif
 	if (isWayland) {
 		double x, y;
@@ -534,15 +523,6 @@ void ofAppGLFWWindow::update() {
 		// Initialize key state tracking on first call
 		if (waylandKeyStates.empty()) {
 			waylandKeyStates.resize(WAYLAND_KEY_COUNT, GLFW_RELEASE);
-			std::cout << "[ofAppGLFWWindow] Wayland keyboard polling initialized, windowP=" << windowP << std::endl;
-		}
-		
-		// Check window focus - keyboard needs focus on Wayland
-		int focused = glfwGetWindowAttrib(windowP, GLFW_FOCUSED);
-		static bool loggedFocus = false;
-		if (!loggedFocus) {
-			std::cout << "[ofAppGLFWWindow] Window focused: " << focused << std::endl;
-			loggedFocus = true;
 		}
 		
 		// Poll all possible keys
@@ -551,7 +531,6 @@ void ofAppGLFWWindow::update() {
 			int prevState = waylandKeyStates[keycode];
 			
 			if (state != prevState) {
-				std::cout << "[ofAppGLFWWindow] Wayland key " << keycode << " state changed from " << prevState << " to " << state << std::endl;
 				waylandKeyStates[keycode] = state;
 				
 				// Get modifiers
@@ -1414,7 +1393,6 @@ void ofAppGLFWWindow::error_cb(int errorCode, const char * errorDescription) {
 
 //------------------------------------------------------------
 void ofAppGLFWWindow::keyboard_cb(GLFWwindow * windowP_, int keycode, int scancode, int action, int mods) {
-	std::cout << "[ofAppGLFWWindow] keyboard_cb called: keycode=" << keycode << " scancode=" << scancode << " action=" << action << std::endl;
 	int key = 0;
 	uint32_t codepoint = 0;
 	ofAppGLFWWindow * instance = setCurrent(windowP_);
