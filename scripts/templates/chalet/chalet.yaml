@@ -129,11 +129,14 @@ abstracts:*:
       - QuartzCore
 
     links[:linux]:
-      # - wayland-client
-      # - wayland-cursor
-      # - wayland-egl
-      # - xkbcommon
-      # - glfw
+      # Wayland support (needed for EGL context on Wayland)
+      - wayland-client
+      - wayland-cursor
+      - wayland-egl
+      - xkbcommon
+      # EGL for OpenGL context creation on Wayland
+      - EGL
+      # X11 support (keep for X11 fallback)
       - fontconfig
       - Xrandr
       - Xxf86vm

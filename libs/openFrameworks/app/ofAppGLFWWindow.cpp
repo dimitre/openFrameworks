@@ -211,6 +211,13 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 	}
 #else
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
+	// On Wayland with desktop OpenGL, we need to use EGL instead of GLX
+	// glfwGetPlatform() is available in GLFW 3.4+
+	#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4)
+		if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
+			glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+		}
+	#endif
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, settings.glVersionMajor);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, settings.glVersionMinor);
 	if ((settings.glVersionMajor == 3 && settings.glVersionMinor >= 2) || settings.glVersionMajor >= 4) {
