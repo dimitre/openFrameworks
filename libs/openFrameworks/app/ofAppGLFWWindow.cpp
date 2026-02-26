@@ -105,7 +105,6 @@ void ofAppGLFWWindow::close() noexcept {
 
 //------------------------------------------------------------
 void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
-	std::cout << "[ofAppGLFWWindow] setup() started" << std::endl;
 //	cout << "yes recompile OK" << endl;
 	if (windowP) {
 		ofLogError() << "window already setup, probably you are mixing old and new style setup";
@@ -136,7 +135,6 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 		ofLogError("ofAppGLFWWindow") << "couldn't init GLFW";
 		return;
 	}
-	std::cout << "[ofAppGLFWWindow] GLFW initialized" << std::endl;
 
 #if defined(__linux__)
 	// Verify which platform was actually initialized
@@ -147,7 +145,6 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 		ofLogNotice("ofAppGLFWWindow") << "GLFW initialized with X11 backend";
 	}
 #endif
-	std::cout << "[ofAppGLFWWindow] Platform check done" << std::endl;
 
 	glfwDefaultWindowHints();
 
@@ -187,20 +184,15 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 #else
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
 	// On Wayland with desktop OpenGL, use EGL instead of GLX
-	// Also force OpenGL 3.3+ core profile because ofGLRenderer (old fixed-function GL) requires GLEW which doesn't work on Wayland
-	bool isWayland = (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND);
-	if (isWayland) {
+	if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
 		glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
-		ofLogNotice("ofAppGLFWWindow") << "Wayland detected: forcing OpenGL 3.3 core profile";
 	}
-	int glVersionMajor = isWayland ? 3 : settings.glVersionMajor;
-	int glVersionMinor = isWayland ? 3 : settings.glVersionMinor;
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, glVersionMajor);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, glVersionMinor);
-	if ((glVersionMajor == 3 && glVersionMinor >= 2) || glVersionMajor >= 4 || isWayland) {
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, settings.glVersionMajor);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, settings.glVersionMinor);
+	if ((settings.glVersionMajor == 3 && settings.glVersionMinor >= 2) || settings.glVersionMajor >= 4) {
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	}
-	if (glVersionMajor >= 3) {
+	if (settings.glVersionMajor >= 3) {
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR > 2) || (GLFW_VERSION_MAJOR > 3)
 		glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, settings.transparent ? GLFW_TRUE : GLFW_FALSE);
@@ -282,7 +274,6 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 	}
 
 //	cout << "glfw displayok " << displayOK << endl;
-	std::cout << "[ofAppGLFWWindow] Creating window..." << std::endl;
 	windowP = glfwCreateWindow(settings.getWidth(), settings.getHeight(), settings.title.c_str(), monitor, sharedContext);
 
 	if (displayOK) {
@@ -299,7 +290,6 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 		ofLogError("ofAppGLFWWindow") << "couldn't create GLFW window";
 		return;
 	}
-	std::cout << "[ofAppGLFWWindow] Window created" << std::endl;
 
 	// saves window rectangle just created.
 	windowRect = getWindowRect();
@@ -367,26 +357,14 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 //		cout << "HIDE U" << endl;
 	}
 
-	std::cout << "[ofAppGLFWWindow] Setting up window..." << std::endl;
 	glfwSetWindowUserPointer(windowP, this);
 	glfwMakeContextCurrent(windowP);
-	std::cout << "[ofAppGLFWWindow] Context made current" << std::endl;
 
 //	windowMode = settings.windowMode;
 
 #ifndef TARGET_OPENGLES
-	// GLEW requires GLX which is not available on Wayland
-	// On Wayland with desktop OpenGL, we use EGL instead
-	bool skipGlew = false;
-	#if defined(TARGET_LINUX)
-	if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
-		skipGlew = true;
-		ofLogNotice("ofAppGLFWWindow") << "Skipping GLEW init on Wayland (using EGL)";
-	}
-	#endif
-	
 	static bool inited = false;
-	if (!inited && !skipGlew) {
+	if (!inited) {
 		std::cout << "[ofAppGLFWWindow] Initializing GLEW..." << std::endl;
 		glewExperimental = GL_TRUE;
 		GLenum err = glewInit();
@@ -397,48 +375,29 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 		}
 		inited = true;
 		std::cout << "[ofAppGLFWWindow] GLEW initialized" << std::endl;
-	} else if (skipGlew) {
-		std::cout << "[ofAppGLFWWindow] Skipped GLEW init on Wayland" << std::endl;
 	}
 #endif
 
-	std::cout << "[ofAppGLFWWindow] GL Version: " << (glGetString(GL_VERSION) ? (const char*)glGetString(GL_VERSION) : "unknown") << std::endl;
-
-	std::cout << "[ofAppGLFWWindow] Checking currentRenderer..." << std::endl;
-	if (!currentRenderer) {
-		ofLogError("ofAppGLFWWindow") << "currentRenderer is null!";
-		return;
-	}
-	std::cout << "[ofAppGLFWWindow] currentRenderer is valid" << std::endl;
-
-	std::cout << "[ofAppGLFWWindow] Checking renderer type..." << std::endl;
+	ofLogVerbose() << "GL Version: " << glGetString(GL_VERSION);
 	if (currentRenderer->getType() == ofGLProgrammableRenderer::TYPE) {
-		std::cout << "[ofAppGLFWWindow] Setting up ofGLProgrammableRenderer..." << std::endl;
 #ifndef TARGET_OPENGLES
 		static_cast<ofGLProgrammableRenderer *>(currentRenderer.get())->setup(settings.glVersionMajor, settings.glVersionMinor);
 #else
 		static_cast<ofGLProgrammableRenderer *>(currentRenderer.get())->setup(settings.glesVersion, 0);
 #endif
-		std::cout << "[ofAppGLFWWindow] ofGLProgrammableRenderer setup done" << std::endl;
 	} else {
-		std::cout << "[ofAppGLFWWindow] Setting up ofGLRenderer..." << std::endl;
 		static_cast<ofGLRenderer *>(currentRenderer.get())->setup();
-		std::cout << "[ofAppGLFWWindow] ofGLRenderer setup done" << std::endl;
 	}
 
 //	setVerticalSync(true);
-	std::cout << "[ofAppGLFWWindow] Setting up callbacks..." << std::endl;
 	glfwSetMonitorCallback( monitor_cb );
 
-	std::cout << "[ofAppGLFWWindow] Setting mouse callbacks..." << std::endl;
 	glfwSetMouseButtonCallback(windowP, mouse_cb);
 	glfwSetCursorPosCallback(windowP, motion_cb);
 	glfwSetCursorEnterCallback(windowP, entry_cb);
-	std::cout << "[ofAppGLFWWindow] Setting keyboard callbacks..." << std::endl;
-	// Always set keyboard callbacks - on Wayland they may not fire, but we also poll in update()
+	// Always set keyboard callbacks - on Wayland they may not fire
 	glfwSetKeyCallback(windowP, keyboard_cb);
 	glfwSetCharCallback(windowP, char_cb);
-	std::cout << "[ofAppGLFWWindow] Callbacks setup done" << std::endl;
 	glfwSetWindowSizeCallback(windowP, resize_cb);
 #if defined(TARGET_LINUX)
 	// Wayland does not support window position callbacks
