@@ -56,6 +56,9 @@ abstracts:*:
 
     linkerOptions[:linux]:
       - -pthread
+    
+    linkerOptions[:linux+architecture:aarch64]:
+      - -L/usr/lib/aarch64-linux-gnu
 
     # defines[:linux]:
     # - OF_USING_GTK
