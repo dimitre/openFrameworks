@@ -489,7 +489,12 @@ ofCoreEvents & ofAppGLFWWindow::events() {
 void ofAppGLFWWindow::update() {
 	static bool firstUpdate = true;
 	if (firstUpdate) {
-		ofLogNotice("ofAppGLFWWindow") << "update() called for first time";
+		std::cout << "[ofAppGLFWWindow] update() called for first time" << std::endl;
+		#ifdef TARGET_LINUX
+			std::cout << "[ofAppGLFWWindow] TARGET_LINUX is defined" << std::endl;
+		#else
+			std::cout << "[ofAppGLFWWindow] TARGET_LINUX is NOT defined" << std::endl;
+		#endif
 		firstUpdate = false;
 	}
 	events().notifyUpdate();
@@ -502,7 +507,7 @@ void ofAppGLFWWindow::update() {
 	static bool loggedPlatform = false;
 	if (!loggedPlatform && windowP) {
 		int platform = glfwGetPlatform();
-		ofLogNotice("ofAppGLFWWindow") << "Platform: " << (platform == GLFW_PLATFORM_WAYLAND ? "Wayland" : (platform == GLFW_PLATFORM_X11 ? "X11" : "Other"));
+		std::cout << "[ofAppGLFWWindow] Platform: " << (platform == GLFW_PLATFORM_WAYLAND ? "Wayland" : (platform == GLFW_PLATFORM_X11 ? "X11" : "Other")) << std::endl;
 		loggedPlatform = true;
 	}
 	isWayland = (windowP && glfwGetPlatform() == GLFW_PLATFORM_WAYLAND);
@@ -529,12 +534,16 @@ void ofAppGLFWWindow::update() {
 		// Initialize key state tracking on first call
 		if (waylandKeyStates.empty()) {
 			waylandKeyStates.resize(WAYLAND_KEY_COUNT, GLFW_RELEASE);
-			ofLogNotice("ofAppGLFWWindow") << "Wayland keyboard polling initialized, windowP=" << windowP;
+			std::cout << "[ofAppGLFWWindow] Wayland keyboard polling initialized, windowP=" << windowP << std::endl;
 		}
 		
 		// Check window focus - keyboard needs focus on Wayland
 		int focused = glfwGetWindowAttrib(windowP, GLFW_FOCUSED);
-		ofLogNotice("ofAppGLFWWindow") << "Window focused: " << focused;
+		static bool loggedFocus = false;
+		if (!loggedFocus) {
+			std::cout << "[ofAppGLFWWindow] Window focused: " << focused << std::endl;
+			loggedFocus = true;
+		}
 		
 		// Poll all possible keys
 		for (int keycode = GLFW_KEY_SPACE; keycode < WAYLAND_KEY_COUNT; keycode++) {
@@ -542,7 +551,7 @@ void ofAppGLFWWindow::update() {
 			int prevState = waylandKeyStates[keycode];
 			
 			if (state != prevState) {
-				ofLogNotice("ofAppGLFWWindow") << "Wayland key " << keycode << " state changed from " << prevState << " to " << state;
+				std::cout << "[ofAppGLFWWindow] Wayland key " << keycode << " state changed from " << prevState << " to " << state << std::endl;
 				waylandKeyStates[keycode] = state;
 				
 				// Get modifiers
@@ -1405,7 +1414,7 @@ void ofAppGLFWWindow::error_cb(int errorCode, const char * errorDescription) {
 
 //------------------------------------------------------------
 void ofAppGLFWWindow::keyboard_cb(GLFWwindow * windowP_, int keycode, int scancode, int action, int mods) {
-	ofLogNotice("ofAppGLFWWindow") << "keyboard_cb called: keycode=" << keycode << " scancode=" << scancode << " action=" << action;
+	std::cout << "[ofAppGLFWWindow] keyboard_cb called: keycode=" << keycode << " scancode=" << scancode << " action=" << action << std::endl;
 	int key = 0;
 	uint32_t codepoint = 0;
 	ofAppGLFWWindow * instance = setCurrent(windowP_);
