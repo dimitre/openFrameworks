@@ -14,6 +14,7 @@ typedef struct _XIC * XIC;
 class ofBaseApp;
 struct GLFWwindow;
 struct GLFWmonitor;
+struct GLFWcursor;
 class ofCoreEvents;
 
 template <typename T>
