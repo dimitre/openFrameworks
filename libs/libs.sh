@@ -338,7 +338,9 @@ case "$PLATFORM" in
 					libunwind \
 					glib2 glib2-devel \
 					gstreamer gst-plugins-base gst-plugins-bad gst-plugins-good gst-libav \
-					openal libsndfile
+					openal libsndfile \
+					# Wayland support
+					wayland libxkbcommon
 			else
 				# Check which packages are missing before installing
 				UBUNTU_PACKAGES=(
@@ -353,6 +355,8 @@ case "$PLATFORM" in
 					gstreamer1.0-x gstreamer1.0-plugins-bad gstreamer1.0-alsa
 					gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav
 					libopenal-dev libsndfile1-dev
+					# Wayland support
+					libwayland-dev libwayland-egl1-mesa libxkbcommon-dev
 				)
 
 				MISSING_PACKAGES=()

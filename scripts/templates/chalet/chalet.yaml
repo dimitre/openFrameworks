@@ -134,6 +134,7 @@ abstracts:*:
       - wayland-cursor
       - wayland-egl
       - xkbcommon
+      # Note: on Ubuntu/Debian, install: libwayland-dev libwayland-egl1-mesa libxkbcommon-dev
       # EGL for OpenGL context creation on Wayland
       - EGL
       # X11 support (keep for X11 fallback)
