@@ -183,6 +183,10 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 	}
 #else
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
+	// On Wayland with desktop OpenGL, use EGL instead of GLX
+	if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
+		glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+	}
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, settings.glVersionMajor);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, settings.glVersionMinor);
 	if ((settings.glVersionMajor == 3 && settings.glVersionMinor >= 2) || settings.glVersionMajor >= 4) {
@@ -390,17 +394,6 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 	glfwSetMouseButtonCallback(windowP, mouse_cb);
 	glfwSetCursorPosCallback(windowP, motion_cb);
 	glfwSetCursorEnterCallback(windowP, entry_cb);
-	
-#if defined(TARGET_LINUX)
-	// On Wayland, we need to explicitly set a cursor for it to be visible
-	if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
-		standardCursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
-		if (standardCursor) {
-			glfwSetCursor(windowP, standardCursor);
-		}
-	}
-#endif
-	
 	glfwSetKeyCallback(windowP, keyboard_cb);
 	glfwSetCharCallback(windowP, char_cb);
 	glfwSetWindowSizeCallback(windowP, resize_cb);
