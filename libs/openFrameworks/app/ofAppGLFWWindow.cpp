@@ -399,30 +399,41 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 
 	std::cout << "[ofAppGLFWWindow] GL Version: " << (glGetString(GL_VERSION) ? (const char*)glGetString(GL_VERSION) : "unknown") << std::endl;
 
+	std::cout << "[ofAppGLFWWindow] Checking currentRenderer..." << std::endl;
 	if (!currentRenderer) {
 		ofLogError("ofAppGLFWWindow") << "currentRenderer is null!";
 		return;
 	}
+	std::cout << "[ofAppGLFWWindow] currentRenderer is valid" << std::endl;
 
+	std::cout << "[ofAppGLFWWindow] Checking renderer type..." << std::endl;
 	if (currentRenderer->getType() == ofGLProgrammableRenderer::TYPE) {
+		std::cout << "[ofAppGLFWWindow] Setting up ofGLProgrammableRenderer..." << std::endl;
 #ifndef TARGET_OPENGLES
 		static_cast<ofGLProgrammableRenderer *>(currentRenderer.get())->setup(settings.glVersionMajor, settings.glVersionMinor);
 #else
 		static_cast<ofGLProgrammableRenderer *>(currentRenderer.get())->setup(settings.glesVersion, 0);
 #endif
+		std::cout << "[ofAppGLFWWindow] ofGLProgrammableRenderer setup done" << std::endl;
 	} else {
+		std::cout << "[ofAppGLFWWindow] Setting up ofGLRenderer..." << std::endl;
 		static_cast<ofGLRenderer *>(currentRenderer.get())->setup();
+		std::cout << "[ofAppGLFWWindow] ofGLRenderer setup done" << std::endl;
 	}
 
 //	setVerticalSync(true);
+	std::cout << "[ofAppGLFWWindow] Setting up callbacks..." << std::endl;
 	glfwSetMonitorCallback( monitor_cb );
 
+	std::cout << "[ofAppGLFWWindow] Setting mouse callbacks..." << std::endl;
 	glfwSetMouseButtonCallback(windowP, mouse_cb);
 	glfwSetCursorPosCallback(windowP, motion_cb);
 	glfwSetCursorEnterCallback(windowP, entry_cb);
+	std::cout << "[ofAppGLFWWindow] Setting keyboard callbacks..." << std::endl;
 	// Always set keyboard callbacks - on Wayland they may not fire, but we also poll in update()
 	glfwSetKeyCallback(windowP, keyboard_cb);
 	glfwSetCharCallback(windowP, char_cb);
+	std::cout << "[ofAppGLFWWindow] Callbacks setup done" << std::endl;
 	glfwSetWindowSizeCallback(windowP, resize_cb);
 #if defined(TARGET_LINUX)
 	// Wayland does not support window position callbacks
