@@ -487,12 +487,36 @@ ofCoreEvents & ofAppGLFWWindow::events() {
 
 //--------------------------------------------
 void ofAppGLFWWindow::update() {
+	static bool firstUpdate = true;
+	if (firstUpdate) {
+		ofLogNotice("ofAppGLFWWindow") << "update() called for first time";
+		firstUpdate = false;
+	}
 	events().notifyUpdate();
 	
 #if defined(TARGET_LINUX)
 	// On Wayland, poll cursor position directly since motion_cb may not fire
 	// when the cursor is visible but not captured
-	if (windowP && glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
+	bool isWayland = false;
+	#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4)
+	static bool loggedPlatform = false;
+	if (!loggedPlatform && windowP) {
+		int platform = glfwGetPlatform();
+		ofLogNotice("ofAppGLFWWindow") << "Platform: " << (platform == GLFW_PLATFORM_WAYLAND ? "Wayland" : (platform == GLFW_PLATFORM_X11 ? "X11" : "Other"));
+		loggedPlatform = true;
+	}
+	isWayland = (windowP && glfwGetPlatform() == GLFW_PLATFORM_WAYLAND);
+	#else
+	// Fallback for older GLFW: check environment variables
+	static bool loggedPlatform = false;
+	if (!loggedPlatform) {
+		const char* waylandDisplay = getenv("WAYLAND_DISPLAY");
+		isWayland = (waylandDisplay != nullptr);
+		ofLogNotice("ofAppGLFWWindow") << "Platform (env): " << (isWayland ? "Wayland" : "X11/Other");
+		loggedPlatform = true;
+	}
+	#endif
+	if (isWayland) {
 		double x, y;
 		glfwGetCursorPos(windowP, &x, &y);
 		// Only update if position changed
@@ -505,8 +529,12 @@ void ofAppGLFWWindow::update() {
 		// Initialize key state tracking on first call
 		if (waylandKeyStates.empty()) {
 			waylandKeyStates.resize(WAYLAND_KEY_COUNT, GLFW_RELEASE);
-			ofLogNotice("ofAppGLFWWindow") << "Wayland keyboard polling initialized";
+			ofLogNotice("ofAppGLFWWindow") << "Wayland keyboard polling initialized, windowP=" << windowP;
 		}
+		
+		// Check window focus - keyboard needs focus on Wayland
+		int focused = glfwGetWindowAttrib(windowP, GLFW_FOCUSED);
+		ofLogNotice("ofAppGLFWWindow") << "Window focused: " << focused;
 		
 		// Poll all possible keys
 		for (int keycode = GLFW_KEY_SPACE; keycode < WAYLAND_KEY_COUNT; keycode++) {
@@ -539,7 +567,7 @@ void ofAppGLFWWindow::update() {
 			}
 		}
 	}
-#endif
+#endif  // TARGET_LINUX
 	
 	//show the window right before the first draw call.
 	if (bWindowNeedsShowing && windowP) {
@@ -585,6 +613,13 @@ void ofAppGLFWWindow::update() {
 //--------------------------------------------
 void ofAppGLFWWindow::pollEvents() {
 	glfwPollEvents();
+	
+#if defined(TARGET_LINUX)
+	// On Wayland, after polling events, also poll keyboard state directly
+	// since keyboard_cb may not fire reliably
+	// This is a static function, so we need to get the window from the main loop
+	// For now, we'll rely on the polling in update() which has access to the window instance
+#endif
 }
 
 
