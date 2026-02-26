@@ -545,9 +545,9 @@ void ofAppGLFWWindow::update() {
 					mods |= GLFW_MOD_SUPER;
 				
 				// Call keyboard callback to handle the event
-				// glfwGetKeyScancode is available in GLFW 3.3+
+				// glfwGetKeyScancode is available in GLFW 3.3+ and takes just a key, not a window
 				#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 3)
-				int scancode = glfwGetKeyScancode(windowP, keycode);
+				int scancode = glfwGetKeyScancode(keycode);
 				#else
 				int scancode = keycode; // Fallback for older GLFW
 				#endif
