@@ -394,17 +394,9 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 	glfwSetMouseButtonCallback(windowP, mouse_cb);
 	glfwSetCursorPosCallback(windowP, motion_cb);
 	glfwSetCursorEnterCallback(windowP, entry_cb);
-#if defined(TARGET_LINUX)
-	// On Wayland, we poll keyboard state in update() instead of using callbacks
-	// because GLFW keyboard callbacks don't fire reliably on Wayland
-	if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
-		glfwSetKeyCallback(windowP, keyboard_cb);
-		glfwSetCharCallback(windowP, char_cb);
-	}
-#else
+	// Always set keyboard callbacks - on Wayland they may not fire, but we also poll in update()
 	glfwSetKeyCallback(windowP, keyboard_cb);
 	glfwSetCharCallback(windowP, char_cb);
-#endif
 	glfwSetWindowSizeCallback(windowP, resize_cb);
 #if defined(TARGET_LINUX)
 	// Wayland does not support window position callbacks
@@ -513,6 +505,7 @@ void ofAppGLFWWindow::update() {
 		// Initialize key state tracking on first call
 		if (waylandKeyStates.empty()) {
 			waylandKeyStates.resize(WAYLAND_KEY_COUNT, GLFW_RELEASE);
+			ofLogNotice("ofAppGLFWWindow") << "Wayland keyboard polling initialized";
 		}
 		
 		// Poll all possible keys
@@ -521,6 +514,7 @@ void ofAppGLFWWindow::update() {
 			int prevState = waylandKeyStates[keycode];
 			
 			if (state != prevState) {
+				ofLogNotice("ofAppGLFWWindow") << "Wayland key " << keycode << " state changed from " << prevState << " to " << state;
 				waylandKeyStates[keycode] = state;
 				
 				// Get modifiers
@@ -535,7 +529,13 @@ void ofAppGLFWWindow::update() {
 					mods |= GLFW_MOD_SUPER;
 				
 				// Call keyboard callback to handle the event
-				keyboard_cb(windowP, keycode, glfwGetKeyScancode(windowP, keycode), state, mods);
+				// glfwGetKeyScancode is available in GLFW 3.3+
+				#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 3)
+				int scancode = glfwGetKeyScancode(windowP, keycode);
+				#else
+				int scancode = keycode; // Fallback for older GLFW
+				#endif
+				keyboard_cb(windowP, keycode, scancode, state, mods);
 			}
 		}
 	}
@@ -1370,6 +1370,7 @@ void ofAppGLFWWindow::error_cb(int errorCode, const char * errorDescription) {
 
 //------------------------------------------------------------
 void ofAppGLFWWindow::keyboard_cb(GLFWwindow * windowP_, int keycode, int scancode, int action, int mods) {
+	ofLogNotice("ofAppGLFWWindow") << "keyboard_cb called: keycode=" << keycode << " scancode=" << scancode << " action=" << action;
 	int key = 0;
 	uint32_t codepoint = 0;
 	ofAppGLFWWindow * instance = setCurrent(windowP_);
