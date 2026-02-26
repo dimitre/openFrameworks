@@ -83,6 +83,13 @@ public:
     // Drawing (needed for YUV path)
     void draw(float x, float y) const;
     void draw(float x, float y, float w, float h) const;
+    
+    /// \brief Get the video rotation in degrees (0, 90, 180, 270)
+    /// This handles videos with rotation metadata (e.g., iPhone vertical videos)
+    float getRotation() const;
+    
+    /// \brief Check if video dimensions are swapped due to rotation
+    bool isRotated() const;
 
 private:
     class Impl;

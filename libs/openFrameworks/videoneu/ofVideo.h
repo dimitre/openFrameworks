@@ -170,6 +170,13 @@ public:
     /// \note Prefer using the texture directly for better performance.
     ofPixels& getPixels();
     const ofPixels& getPixels() const;
+    
+    /// \brief Get the video rotation in degrees (0, 90, 180, 270)
+    /// This handles videos with rotation metadata (e.g., iPhone vertical videos)
+    float getRotation() const;
+    
+    /// \brief Check if video dimensions are swapped due to rotation
+    bool isRotated() const;
 
 private:
     std::unique_ptr<ofVideoImpl> player;

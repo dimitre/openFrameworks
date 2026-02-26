@@ -1,9 +1,11 @@
 #include "ofAVFVideoPlayer.h"
 #include "ofLog.h"
 #include "ofUtils.h"
+#include "ofGraphics.h"
 
 #include "ofFileUtils.h"
 #include <unistd.h>
+#include <cmath>
 
 #import <AVFoundation/AVFoundation.h>
 #import <CoreVideo/CoreVideo.h>
@@ -24,6 +26,8 @@
 @property (nonatomic, readonly) CMTime duration;
 @property (nonatomic, assign) BOOL useYUV;
 @property (nonatomic, readonly) NSInteger loopState;
+@property (nonatomic, readonly) CGFloat rotationDegrees;
+@property (nonatomic, readonly) CGAffineTransform preferredTransform;
 
 - (BOOL)loadWithPath:(const fs::path&)path async:(BOOL)async;
 - (void)unload;
@@ -52,6 +56,8 @@
     BOOL _frameReady;
     BOOL _wasPlayingBeforeSeek;
     CMTime _currentFrameTime;
+    CGFloat _rotationDegrees;
+    CGAffineTransform _preferredTransform;
 }
 
 #pragma mark - Lifecycle
@@ -63,6 +69,8 @@
         _speed = 1.0f;
         _volume = 1.0f;
         _loopState = OF_LOOP_NORMAL;
+        _rotationDegrees = 0.0f;
+        _preferredTransform = CGAffineTransformIdentity;
         [self setupVideoOutput];
     }
     return self;
@@ -167,6 +175,15 @@
     if (videoTrack && !_isStream) {
         _videoSize = videoTrack.naturalSize;
         _frameRate = videoTrack.nominalFrameRate;
+        
+        // Get preferred transform to detect rotation
+        _preferredTransform = videoTrack.preferredTransform;
+        _rotationDegrees = [self rotationFromTransform:_preferredTransform];
+        
+        // Swap dimensions if rotated 90 or 270 degrees
+        if (std::fabs(std::fmod(_rotationDegrees, 180.0) - 90.0) < 1.0) {
+            _videoSize = CGSizeMake(_videoSize.height, _videoSize.width);
+        }
     }
 
     // Create player item
@@ -318,6 +335,20 @@
     return _loopState;
 }
 
+- (CGFloat)rotationFromTransform:(CGAffineTransform)transform {
+    // Extract rotation angle from transform matrix
+    // atan2(b, a) gives the rotation angle in radians
+    CGFloat angle = atan2(transform.b, transform.a);
+    CGFloat degrees = angle * (180.0 / M_PI);
+    
+    // Normalize to 0, 90, 180, 270
+    if (degrees < 0) degrees += 360.0;
+    
+    // Round to nearest 90 degrees
+    CGFloat rounded = round(degrees / 90.0) * 90.0;
+    return rounded;
+}
+
 @end
 
 // MARK: - C++ Implementation
@@ -334,6 +365,7 @@ public:
     bool bUpdateTexture = true;
     bool bTextureCache = true;
     bool bUseYUV = false;
+    float rotation = 0.0f;
 
 #if defined(TARGET_OSX)
     CVOpenGLTextureCacheRef textureCache = nullptr;
@@ -676,9 +708,34 @@ void ofAVFVideoPlayer::draw(float x, float y) const {
 }
 
 void ofAVFVideoPlayer::draw(float x, float y, float w, float h) const {
-    if (pImpl->bUseYUV && pImpl->yuvRenderer) {
-        pImpl->yuvRenderer->draw(x, y, w, h);
-    } else if (pImpl->texture.isAllocated()) {
-        pImpl->texture.draw(x, y, w, h);
+    float rotation = getRotation();
+    
+    ofPushMatrix();
+    ofTranslate(x + w * 0.5f, y + h * 0.5f);
+    ofRotateDeg(rotation);
+    
+    // When rotated 90 or 270, swap dimensions for drawing
+    if (isRotated()) {
+        std::swap(w, h);
     }
+    
+    if (pImpl->bUseYUV && pImpl->yuvRenderer) {
+        pImpl->yuvRenderer->draw(-w * 0.5f, -h * 0.5f, w, h);
+    } else if (pImpl->texture.isAllocated()) {
+        pImpl->texture.draw(-w * 0.5f, -h * 0.5f, w, h);
+    }
+    
+    ofPopMatrix();
+}
+
+float ofAVFVideoPlayer::getRotation() const {
+    if (pImpl->player) {
+        return pImpl->player.rotationDegrees;
+    }
+    return 0.0f;
+}
+
+bool ofAVFVideoPlayer::isRotated() const {
+    float rotation = getRotation();
+    return std::fabs(std::fmod(rotation, 180.0f) - 90.0f) < 1.0f;
 }

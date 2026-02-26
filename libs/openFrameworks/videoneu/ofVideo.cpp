@@ -339,3 +339,19 @@ const ofPixels& ofVideo::getPixels() const {
     }
     return pixels;
 }
+
+//---------------------------------------------
+float ofVideo::getRotation() const {
+    if (player) {
+        return player->getRotation();
+    }
+    return 0.0f;
+}
+
+//---------------------------------------------
+bool ofVideo::isRotated() const {
+    if (player) {
+        return player->isRotated();
+    }
+    return false;
+}

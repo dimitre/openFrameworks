@@ -179,6 +179,8 @@ private:
 
 	GLFWwindow * windowP = nullptr;
 	ofBaseApp * ofAppPtr = nullptr;
+	
+	GLFWcursor * standardCursor = nullptr;
 
 	bool iconSet = false;
 

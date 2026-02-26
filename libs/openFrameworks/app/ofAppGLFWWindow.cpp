@@ -11,6 +11,8 @@
 	#include "ofIcon.h"
 	#include "ofImage.h"
 	#define GLFW_EXPOSE_NATIVE_X11
+	// Note: For Wayland, we don't use GLX. EGL is used instead.
+	// Native access macros are defined at runtime based on the platform.
 	#ifndef TARGET_OPENGLES
 		#define GLFW_EXPOSE_NATIVE_GLX
 	#else
@@ -90,6 +92,12 @@ void ofAppGLFWWindow::close() noexcept {
 		// calls to OpenGL illegal.
 		currentRenderer.reset();
 
+		// Destroy the cursor if we created one (Wayland)
+		if (standardCursor) {
+			glfwDestroyCursor(standardCursor);
+			standardCursor = nullptr;
+		}
+		
 		glfwDestroyWindow(windowP);
 		windowP = nullptr;
 		events().disable();
@@ -353,16 +361,22 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 //	windowMode = settings.windowMode;
 
 #ifndef TARGET_OPENGLES
-	static bool inited = false;
-	if (!inited) {
-		glewExperimental = GL_TRUE;
-		GLenum err = glewInit();
-		if (GLEW_OK != err) {
-			/* Problem: glewInit failed, something is seriously wrong. */
-			ofLogError("ofAppRunner") << "couldn't init GLEW: " << glewGetErrorString(err);
-			return;
+	// GLEW requires GLX which is not available on Wayland
+	// On Wayland with desktop OpenGL, we use EGL instead
+	if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
+		static bool inited = false;
+		if (!inited) {
+			glewExperimental = GL_TRUE;
+			GLenum err = glewInit();
+			if (GLEW_OK != err) {
+				/* Problem: glewInit failed, something is seriously wrong. */
+				ofLogError("ofAppRunner") << "couldn't init GLEW: " << glewGetErrorString(err);
+				return;
+			}
+			inited = true;
 		}
-		inited = true;
+	} else {
+		ofLogNotice("ofAppGLFWWindow") << "Skipping GLEW init on Wayland (using EGL)";
 	}
 #endif
 
@@ -384,6 +398,17 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 	glfwSetMouseButtonCallback(windowP, mouse_cb);
 	glfwSetCursorPosCallback(windowP, motion_cb);
 	glfwSetCursorEnterCallback(windowP, entry_cb);
+	
+#if defined(TARGET_LINUX)
+	// On Wayland, we need to explicitly set a cursor for it to be visible
+	// X11 handles this automatically via the window manager
+	if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
+		standardCursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+		if (standardCursor) {
+			glfwSetCursor(windowP, standardCursor);
+		}
+	}
+#endif
 	glfwSetKeyCallback(windowP, keyboard_cb);
 	glfwSetCharCallback(windowP, char_cb);
 	glfwSetWindowSizeCallback(windowP, resize_cb);
