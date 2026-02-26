@@ -97,9 +97,15 @@ void ofAppGLFWWindow::close() noexcept {
 
 		// Destroy the cursor if we created one (Wayland)
 		// Only call glfwDestroyCursor if GLFW is still initialized
-		if (standardCursor && glfwGetError(nullptr) != GLFW_NOT_INITIALIZED) {
-			glfwDestroyCursor(standardCursor);
-		}
+		#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4)
+			if (standardCursor && glfwGetError(nullptr) != GLFW_NOT_INITIALIZED) {
+				glfwDestroyCursor(standardCursor);
+			}
+		#else
+			if (standardCursor) {
+				glfwDestroyCursor(standardCursor);
+			}
+		#endif
 		standardCursor = nullptr;
 		
 		glfwDestroyWindow(windowP);
@@ -127,11 +133,24 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 	// Check if actually running on Wayland
 	const char* waylandDisplay = getenv("WAYLAND_DISPLAY");
 	const char* sessionType = getenv("XDG_SESSION_TYPE");
+	bool isWaylandSession = (waylandDisplay != nullptr) ||
+		(sessionType && strcmp(sessionType, "wayland") == 0);
 	
-	if ((waylandDisplay != nullptr ||
-		 (sessionType && strcmp(sessionType, "wayland") == 0)) &&
-		glfwPlatformSupported(GLFW_PLATFORM_WAYLAND)) {
-		glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_WAYLAND);
+	// glfwPlatformSupported() can be called before glfwInit() in GLFW 3.4+
+	// Only set Wayland hint if we're in a Wayland session AND Wayland is supported
+	if (isWaylandSession) {
+		// Check if glfwPlatformSupported is available (GLFW 3.4+)
+		// If not, we'll rely on environment variable detection
+		#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4)
+			if (glfwPlatformSupported(GLFW_PLATFORM_WAYLAND)) {
+				glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_WAYLAND);
+			} else {
+				glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
+			}
+		#else
+			// For older GLFW, try Wayland but fallback to X11 if it fails
+			glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_WAYLAND);
+		#endif
 	} else {
 		glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
 	}
@@ -144,12 +163,15 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 
 #if defined(__linux__)
 	// Verify which platform was actually initialized
-	int platform = glfwGetPlatform();
-	if (platform == GLFW_PLATFORM_WAYLAND) {
-		ofLogNotice("ofAppGLFWWindow") << "GLFW initialized with Wayland backend";
-	} else if (platform == GLFW_PLATFORM_X11) {
-		ofLogNotice("ofAppGLFWWindow") << "GLFW initialized with X11 backend";
-	}
+	// glfwGetPlatform() is available in GLFW 3.4+
+	#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4)
+		int platform = glfwGetPlatform();
+		if (platform == GLFW_PLATFORM_WAYLAND) {
+			ofLogNotice("ofAppGLFWWindow") << "GLFW initialized with Wayland backend";
+		} else if (platform == GLFW_PLATFORM_X11) {
+			ofLogNotice("ofAppGLFWWindow") << "GLFW initialized with X11 backend";
+		}
+	#endif
 #endif
 
 	glfwDefaultWindowHints();
@@ -367,21 +389,36 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 #ifndef TARGET_OPENGLES
 	// GLEW requires GLX which is not available on Wayland
 	// On Wayland with desktop OpenGL, we use EGL instead
-	if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
+	// glfwGetPlatform() is available in GLFW 3.4+
+	#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4)
+		if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
+			static bool inited = false;
+			if (!inited) {
+				glewExperimental = GL_TRUE;
+				GLenum err = glewInit();
+				if (GLEW_OK != err) {
+					/* Problem: glewInit failed, something is seriously wrong. */
+					ofLogError("ofAppRunner") << "couldn't init GLEW: " << glewGetErrorString(err);
+					return;
+				}
+				inited = true;
+			}
+		} else {
+			ofLogNotice("ofAppGLFWWindow") << "Skipping GLEW init on Wayland (using EGL)";
+		}
+	#else
+		// For older GLFW, always try to init GLEW
 		static bool inited = false;
 		if (!inited) {
 			glewExperimental = GL_TRUE;
 			GLenum err = glewInit();
 			if (GLEW_OK != err) {
-				/* Problem: glewInit failed, something is seriously wrong. */
 				ofLogError("ofAppRunner") << "couldn't init GLEW: " << glewGetErrorString(err);
 				return;
 			}
 			inited = true;
 		}
-	} else {
-		ofLogNotice("ofAppGLFWWindow") << "Skipping GLEW init on Wayland (using EGL)";
-	}
+	#endif
 #endif
 
 	ofLogVerbose() << "GL Version: " << glGetString(GL_VERSION);
@@ -406,21 +443,29 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 #if defined(TARGET_LINUX)
 	// On Wayland, we need to explicitly set a cursor for it to be visible
 	// X11 handles this automatically via the window manager
-	if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
-		standardCursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
-		if (standardCursor) {
-			glfwSetCursor(windowP, standardCursor);
+	// glfwGetPlatform() is available in GLFW 3.4+
+	#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4)
+		if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
+			standardCursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+			if (standardCursor) {
+				glfwSetCursor(windowP, standardCursor);
+			}
 		}
-	}
+	#endif
 #endif
 	glfwSetKeyCallback(windowP, keyboard_cb);
 	glfwSetCharCallback(windowP, char_cb);
 	glfwSetWindowSizeCallback(windowP, resize_cb);
 #if defined(TARGET_LINUX)
 	// Wayland does not support window position callbacks
-	if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
+	// glfwGetPlatform() is available in GLFW 3.4+
+	#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4)
+		if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
+			glfwSetWindowPosCallback(windowP, position_cb);
+		}
+	#else
 		glfwSetWindowPosCallback(windowP, position_cb);
-	}
+	#endif
 #else
 	glfwSetWindowPosCallback(windowP, position_cb);
 #endif
@@ -433,7 +478,13 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 #if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI_LEGACY)
 	// Only initialize XIM/XIC when running on X11, not on Wayland
 	// On Wayland, GLFW handles input directly without XIM
-	if (glfwGetPlatform() == GLFW_PLATFORM_X11) {
+	// glfwGetPlatform() is available in GLFW 3.4+
+	#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4)
+		if (glfwGetPlatform() == GLFW_PLATFORM_X11) {
+	#else
+		// For older GLFW, assume X11
+		if (true) {
+	#endif
 		Display* display = getX11Display();
 		Window window = getX11Window();
 		
@@ -471,9 +522,12 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 	//------------------------------------------------------------
 	void ofAppGLFWWindow::setWindowIcon(const ofPixels & iconPixels) {
 		// Wayland does not support setting window icon via X11
-		if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
-			return;
-		}
+		// glfwGetPlatform() is available in GLFW 3.4+
+		#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4)
+			if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
+				return;
+			}
+		#endif
 		
 		iconSet = true;
 		int length = 2 + iconPixels.getWidth() * iconPixels.getHeight();
@@ -630,9 +684,14 @@ ofRectangle ofAppGLFWWindow::getWindowRect() const {
 	glm::ivec2 pos;
 #if defined(TARGET_LINUX)
 	// Wayland does not support getting window position
-	if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
+	// glfwGetPlatform() is available in GLFW 3.4+
+	#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4)
+		if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
+			glfwGetWindowPos(windowP, &pos.x, &pos.y);
+		}
+	#else
 		glfwGetWindowPos(windowP, &pos.x, &pos.y);
-	}
+	#endif
 #else
 	glfwGetWindowPos(windowP, &pos.x, &pos.y);
 #endif
@@ -653,9 +712,14 @@ glm::ivec2 ofAppGLFWWindow::getWindowPosition() const {
 	glm::ivec2 pos;
 #if defined(TARGET_LINUX)
 	// Wayland does not support getting window position
-	if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
+	// glfwGetPlatform() is available in GLFW 3.4+
+	#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4)
+		if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
+			glfwGetWindowPos(windowP, &pos.x, &pos.y);
+		}
+	#else
 		glfwGetWindowPos(windowP, &pos.x, &pos.y);
-	}
+	#endif
 #else
 	glfwGetWindowPos(windowP, &pos.x, &pos.y);
 #endif
@@ -700,12 +764,17 @@ void ofAppGLFWWindow::setWindowRect(const ofRectangle & rect) noexcept {
 	windowRect = rect;
 #if defined(TARGET_LINUX)
 	// Wayland does not support setting window position
-	if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
-		// Only set size on Wayland, position is controlled by compositor
-		glfwSetWindowSize(windowP, rect.width, rect.height);
-	} else {
+	// glfwGetPlatform() is available in GLFW 3.4+
+	#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4)
+		if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
+			// Only set size on Wayland, position is controlled by compositor
+			glfwSetWindowSize(windowP, rect.width, rect.height);
+		} else {
+			glfwSetWindowMonitor(windowP, NULL, rect.x, rect.y, rect.width, rect.height, GLFW_DONT_CARE);
+		}
+	#else
 		glfwSetWindowMonitor(windowP, NULL, rect.x, rect.y, rect.width, rect.height, GLFW_DONT_CARE);
-	}
+	#endif
 #else
 	glfwSetWindowMonitor(windowP, NULL, rect.x, rect.y, rect.width, rect.height, GLFW_DONT_CARE);
 #endif
@@ -715,9 +784,14 @@ void ofAppGLFWWindow::setWindowRect(const ofRectangle & rect) noexcept {
 void ofAppGLFWWindow::setWindowPosition(int x, int y) noexcept {
 #if defined(TARGET_LINUX)
 	// Wayland does not support setting window position
-	if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
+	// glfwGetPlatform() is available in GLFW 3.4+
+	#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4)
+		if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
+			glfwSetWindowPos(windowP, x, y);
+		}
+	#else
 		glfwSetWindowPos(windowP, x, y);
-	}
+	#endif
 #else
 	glfwSetWindowPos(windowP, x, y);
 #endif
@@ -1066,22 +1140,38 @@ unsigned long keycodeToUnicode([[maybe_unused]] ofAppGLFWWindow * window, int sc
 #ifdef TARGET_LINUX
 	// On Wayland, we don't use X11 for keyboard input
 	// GLFW handles text input via the char callback
-	if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
+	// glfwGetPlatform() is available in GLFW 3.4+
+	#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4)
+		if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
+			return 0;
+		}
+	#endif
+	
+	// Safety check: ensure X11 display is available
+	Display* display = window->getX11Display();
+	if (!display) {
 		return 0;
 	}
 	
 	XkbStateRec xkb_state = {};
-	XkbGetState(window->getX11Display(), XkbUseCoreKbd, &xkb_state);
+	XkbGetState(display, XkbUseCoreKbd, &xkb_state);
 	XEvent ev = { 0 };
 	ev.xkey.keycode = scancode;
 	ev.xkey.state = xkb_state.mods & ~ControlMask;
-	ev.xkey.display = window->getX11Display();
+	ev.xkey.display = display;
 	ev.xkey.type = KeyPress;
 	KeySym keysym = NoSymbol;
 	int status;
 	char buffer[32] = { 0 };
 	char * chars = buffer;
-	auto count = Xutf8LookupString(window->getX11XIC(), &ev.xkey, chars, sizeof(buffer) - 1, &keysym, &status);
+	
+	// Safety check: ensure XIC is available
+	XIC xic = window->getX11XIC();
+	if (!xic) {
+		return 0;
+	}
+	
+	auto count = Xutf8LookupString(xic, &ev.xkey, chars, sizeof(buffer) - 1, &keysym, &status);
 	if ((count > 0 && (status == XLookupChars || status == XLookupBoth)) || status == XLookupKeySym) {
 		char ** c = &chars;
 		unsigned int ch = 0, count = 0;
