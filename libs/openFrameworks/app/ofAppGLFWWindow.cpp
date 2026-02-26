@@ -187,15 +187,20 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 #else
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
 	// On Wayland with desktop OpenGL, use EGL instead of GLX
-	if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
+	// Also force OpenGL 3.3+ core profile because ofGLRenderer (old fixed-function GL) requires GLEW which doesn't work on Wayland
+	bool isWayland = (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND);
+	if (isWayland) {
 		glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+		ofLogNotice("ofAppGLFWWindow") << "Wayland detected: forcing OpenGL 3.3 core profile";
 	}
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, settings.glVersionMajor);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, settings.glVersionMinor);
-	if ((settings.glVersionMajor == 3 && settings.glVersionMinor >= 2) || settings.glVersionMajor >= 4) {
+	int glVersionMajor = isWayland ? 3 : settings.glVersionMajor;
+	int glVersionMinor = isWayland ? 3 : settings.glVersionMinor;
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, glVersionMajor);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, glVersionMinor);
+	if ((glVersionMajor == 3 && glVersionMinor >= 2) || glVersionMajor >= 4 || isWayland) {
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	}
-	if (settings.glVersionMajor >= 3) {
+	if (glVersionMajor >= 3) {
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR > 2) || (GLFW_VERSION_MAJOR > 3)
 		glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, settings.transparent ? GLFW_TRUE : GLFW_FALSE);
