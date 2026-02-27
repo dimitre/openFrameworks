@@ -25,8 +25,8 @@ jobs:
           - { os: windows-latest, platform: vs, shell: powershell }
           - {
               platform: rpi-aarch64,
-              # os: ubuntu-22.04-arm,
-              os: ubuntu-latest-arm,
+              os: ubuntu-22.04-arm,
+              # os: ubuntu-latest-arm,
               prefix: aarch64-linux-gnu,
               toolchain: aarch64-linux-gnu-gcc-12,
             }
