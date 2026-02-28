@@ -5,6 +5,8 @@ set -eu
 LIBSVERSION=v1.0
 OF_FOLDER=..
 CHALETVERSION=0.8.17
+OF_LIBS_REPO="ofWorks/ofLibs"
+OF_LIBS_COMMIT_FILE=".oflibs"
 WGET2VERSION=v2.2.1
 # check new versions here : https://github.com/rockdaboot/wget2/releases/
 
@@ -45,6 +47,58 @@ alert() {
 }
 
 section "💾 ofWorks will install ofLibs"
+
+# ============================================
+# Check Latest Commit from ofWorks/ofLibs
+# ============================================
+
+# Function to get the latest commit hash from the remote repository
+get_remote_commit() {
+	local commit_hash=""
+
+	# Try using gh CLI first (most reliable)
+	if command -v gh &>/dev/null; then
+		commit_hash=$(gh api repos/${OF_LIBS_REPO}/commits/main --jq '.sha' 2>/dev/null || true)
+	fi
+
+	# Fallback to curl if gh is not available or failed
+	if [[ -z "$commit_hash" ]]; then
+		commit_hash=$(curl -s "https://api.github.com/repos/${OF_LIBS_REPO}/commits/main" 2>/dev/null | grep -o '"sha": "[^"]*"' | head -1 | cut -d'"' -f4)
+	fi
+
+	# Truncate to 7 characters (standard short hash)
+	if [[ -n "$commit_hash" ]]; then
+		echo "${commit_hash:0:7}"
+	fi
+}
+
+# Read the stored commit hash if file exists
+STORED_COMMIT=""
+if [[ -f "$OF_LIBS_COMMIT_FILE" ]]; then
+	STORED_COMMIT=$(cat "$OF_LIBS_COMMIT_FILE" 2>/dev/null || true)
+	sectionOk "Stored commit: ${STORED_COMMIT:-none}"
+fi
+
+# Get the latest commit from remote
+section "Checking latest commit from ${OF_LIBS_REPO}..."
+REMOTE_COMMIT=$(get_remote_commit)
+
+if [[ -z "$REMOTE_COMMIT" ]]; then
+	alert "Could not fetch latest commit from remote. Proceeding with installation..."
+else
+	sectionOk "Remote commit: $REMOTE_COMMIT"
+
+	# Compare commits and skip if same
+	if [[ -n "$STORED_COMMIT" && "$STORED_COMMIT" == "$REMOTE_COMMIT" ]]; then
+		sectionOk "Libraries are up-to-date (commit: $REMOTE_COMMIT)"
+		sectionOk "Skipping installation. Delete $OF_LIBS_COMMIT_FILE to force reinstall."
+		exit 0
+	fi
+
+	if [[ -n "$STORED_COMMIT" ]]; then
+		section "New commit detected: $STORED_COMMIT -> $REMOTE_COMMIT"
+	fi
+fi
 
 # Determine if we need sudo
 if command -v sudo &> /dev/null; then
@@ -600,6 +654,12 @@ unzipAddons
 if [[ "$wipeDownloadsAfterInstall" == true && -d "${DOWNLOAD}" ]]; then
 	echo "Removing Downloaded and Installed Libraries"
 	rm -rf "${DOWNLOAD}"
+fi
+
+# Save the commit hash after successful installation
+if [[ -n "$REMOTE_COMMIT" ]]; then
+	echo "$REMOTE_COMMIT" > "$OF_LIBS_COMMIT_FILE"
+	sectionOk "Saved commit hash: $REMOTE_COMMIT"
 fi
 
 sectionOk "Install ofLibs done"
