@@ -352,46 +352,114 @@ void ofBitmapFont::init(){
 }
 		
 //---------------------------------------------------------------------
+// Decode UTF-8 and return Unicode codepoint.
+// Returns 0 for invalid/incomplete sequences.
+// Sets 'bytesConsumed' to the number of bytes in this UTF-8 sequence.
+static int decodeUtf8(const std::string& text, size_t i, size_t& bytesConsumed) {
+	bytesConsumed = 1; // Default to 1 byte (will be updated for multi-byte)
+	
+	if (i >= text.size()) return 0;
+	
+	unsigned char c = static_cast<unsigned char>(text[i]);
+	
+	// Single byte (ASCII): 0xxxxxxx
+	if ((c & 0x80) == 0) {
+		return c;
+	}
+	
+	// Multi-byte sequences
+	if ((c & 0xE0) == 0xC0) {
+		// 2-byte sequence: 110xxxxx 10xxxxxx
+		if (i + 1 >= text.size()) return 0;
+		unsigned char c2 = static_cast<unsigned char>(text[i + 1]);
+		if ((c2 & 0xC0) != 0x80) return 0;
+		bytesConsumed = 2;
+		return ((c & 0x1F) << 6) | (c2 & 0x3F);
+	}
+	
+	if ((c & 0xF0) == 0xE0) {
+		// 3-byte sequence: 1110xxxx 10xxxxxx 10xxxxxx
+		if (i + 2 >= text.size()) return 0;
+		unsigned char c2 = static_cast<unsigned char>(text[i + 1]);
+		unsigned char c3 = static_cast<unsigned char>(text[i + 2]);
+		if ((c2 & 0xC0) != 0x80 || (c3 & 0xC0) != 0x80) return 0;
+		bytesConsumed = 3;
+		return ((c & 0x0F) << 12) | ((c2 & 0x3F) << 6) | (c3 & 0x3F);
+	}
+	
+	if ((c & 0xF8) == 0xF0) {
+		// 4-byte sequence: 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+		if (i + 3 >= text.size()) return 0;
+		unsigned char c2 = static_cast<unsigned char>(text[i + 1]);
+		unsigned char c3 = static_cast<unsigned char>(text[i + 2]);
+		unsigned char c4 = static_cast<unsigned char>(text[i + 3]);
+		if ((c2 & 0xC0) != 0x80 || (c3 & 0xC0) != 0x80 || (c4 & 0xC0) != 0x80) return 0;
+		bytesConsumed = 4;
+		return ((c & 0x07) << 18) | ((c2 & 0x3F) << 12) | ((c3 & 0x3F) << 6) | (c4 & 0x3F);
+	}
+	
+	// Invalid UTF-8 lead byte - treat as single byte
+	return 0;
+}
+
+//---------------------------------------------------------------------
+static int mapUnicodeToFont(int codepoint) {
+	// Basic ASCII (0-127)
+	if (codepoint >= 0 && codepoint < 128) {
+		return codepoint;
+	}
+	
+	// Latin-1 Supplement (U+0080 to U+00FF) maps directly to extended ASCII (128-255)
+	if (codepoint >= 0x80 && codepoint <= 0xFF) {
+		return codepoint;
+	}
+	
+	// Character not supported by this font
+	return -1;
+}
+
+//---------------------------------------------------------------------
 static void addBitmapCharacter(ofMesh & charMesh, int & vertexCount, int character, int x , int y, bool vFlipped){
-	if (character < 128) {		
+	if (character < 0 || character > 255) {
+		return;
+	}
+	
+	float posTexW = (float)(character % 16)/16.0f;
+	float posTexH = ((int)(character / 16.0f))/16.0f;
 
-		float posTexW = (float)(character % 16)/16.0f;
-		float posTexH = ((int)(character / 16.0f))/16.0f;
+	float texY1 = posTexH;
+	float texY2 = posTexH+heightTex;
 
-		float texY1 = posTexH;
-		float texY2 = posTexH+heightTex;
+	//TODO: look into a better fix.
+	//old ofDrawBitmapString was 3 pixels higher, so this version renders text in a different position.
+	//3 pixel adjustment corrects that when y is flpped 5 when it's not.
+	int yOffset = 14;
+	if(!vFlipped){
+		y += 5;
+		y += yOffset;
+		yOffset *= -1;
+	}else{
+		y -= 3;
+	}
 
-		//TODO: look into a better fix.
-		//old ofDrawBitmapString was 3 pixels higher, so this version renders text in a different position.
-		//3 pixel adjustment corrects that when y is flpped 5 when it's not.
-		int yOffset = 14;
-		if(!vFlipped){
-			y += 5;
-			y += yOffset;
-			yOffset *= -1;
-		}else{
-			y -= 3;
-		}
+	size_t vC = vertexCount;
+	charMesh.getTexCoords()[vC] = {posTexW,texY1};
+	charMesh.getTexCoords()[vC+1] = {posTexW + widthTex,texY1};
+	charMesh.getTexCoords()[vC+2] = {posTexW+widthTex,texY2};
 
-		size_t vC = vertexCount;
-		charMesh.getTexCoords()[vC] = {posTexW,texY1};
-		charMesh.getTexCoords()[vC+1] = {posTexW + widthTex,texY1};
-		charMesh.getTexCoords()[vC+2] = {posTexW+widthTex,texY2};
+	charMesh.getTexCoords()[vC+3] = {posTexW + widthTex,texY2};
+	charMesh.getTexCoords()[vC+4] = {posTexW,texY2};
+	charMesh.getTexCoords()[vC+5] = {posTexW,texY1};
 
-		charMesh.getTexCoords()[vC+3] = {posTexW + widthTex,texY2};
-		charMesh.getTexCoords()[vC+4] = {posTexW,texY2};
-		charMesh.getTexCoords()[vC+5] = {posTexW,texY1};
+	charMesh.getVertices()[vC] = glm::vec3(x,y,0.f);
+	charMesh.getVertices()[vC+1] = glm::vec3(x+8,y,0.f);
+	charMesh.getVertices()[vC+2] = glm::vec3(x+8,y+yOffset,0.f);
 
-		charMesh.getVertices()[vC] = glm::vec3(x,y,0.f);
-		charMesh.getVertices()[vC+1] = glm::vec3(x+8,y,0.f);
-		charMesh.getVertices()[vC+2] = glm::vec3(x+8,y+yOffset,0.f);
+	charMesh.getVertices()[vC+3] = glm::vec3(x+8,y+yOffset,0.f);
+	charMesh.getVertices()[vC+4] = glm::vec3(x,y+yOffset,0.f);
+	charMesh.getVertices()[vC+5] = glm::vec3(x,y,0.f);
 
-		charMesh.getVertices()[vC+3] = glm::vec3(x+8,y+yOffset,0.f);
-		charMesh.getVertices()[vC+4] = glm::vec3(x,y+yOffset,0.f);
-		charMesh.getVertices()[vC+5] = glm::vec3(x,y,0.f);
-
-		vertexCount += 6;
-	}	
+	vertexCount += 6;
 }
 
 // FIXME: unused param mode
@@ -419,31 +487,36 @@ ofMesh ofBitmapFont::getMesh(const string & text, int x, int y, ofDrawBitmapMode
 	float sx = x;
 	float sy = y-fontSize;
 
-	for(int c = 0; c < len; c++){
-		if(text[c] == '\n'){
-
+	for(size_t c = 0; c < len; ){
+		size_t bytesConsumed = 1;
+		int codepoint = decodeUtf8(text, c, bytesConsumed);
+		
+		if (codepoint == '\n'){
 			sy += lineHeight*newLineDirection;
-//			if(mode == OF_BITMAPMODE_SIMPLE) {
-				sx = x;
-//			} else {
-//				sx = 0;
-//			}
-
+			sx = x;
 			column = 0;
-		} else if (text[c] == '\t'){
+			c += bytesConsumed;
+		} else if (codepoint == '\t'){
 			//move the cursor to the position of the next tab
 			//8 is the default tab spacing in osx terminal and windows	 command line
 			int out = column + 8 - (column % 8);
 			sx += fontSize * (out-column);
 			column = out;
-		} else if (text[c] >= 32){
+			c += bytesConsumed;
+		} else if (codepoint >= 32){
 			// < 32 = control characters - don't draw
 			// solves a bug with control characters
 			// getting drawn when they ought to not be
-			addBitmapCharacter(charMesh, vertexCount, text[c], (int)sx, (int)sy, vFlipped);
-
+			int fontIndex = mapUnicodeToFont(codepoint);
+			if (fontIndex >= 0) {
+				addBitmapCharacter(charMesh, vertexCount, fontIndex, (int)sx, (int)sy, vFlipped);
+			}
 			sx += fontSize;
 			column++;
+			c += bytesConsumed;
+		} else {
+			// Invalid or control character, skip
+			c += bytesConsumed;
 		}
 	}
 	//We do this because its way faster
