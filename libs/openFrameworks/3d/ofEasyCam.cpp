@@ -1,5 +1,6 @@
 #include "ofEasyCam.h"
 #include "ofGraphicsBaseTypes.h"
+#include "ofAppRunner.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/vector_angle.hpp>
@@ -30,6 +31,8 @@ void ofEasyCam::update(ofEventArgs & ){
 		viewport = getViewport();
 	}
 	if(!bDistanceSet && bAutoDistance){
+		// getImagePlaneDistance now uses logical window size internally
+		// for consistent camera distance on retina/high-DPI displays
 		setDistance(getImagePlaneDistance(viewport), true);
 	}
 	if(bMouseInputEnabled && events){

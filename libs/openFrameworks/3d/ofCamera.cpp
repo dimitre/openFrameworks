@@ -1,6 +1,7 @@
 #include "ofCamera.h"
 #include "ofGraphics.h"
 #include "of3dGraphics.h"
+#include "ofAppRunner.h"
 
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/quaternion.hpp>
@@ -56,9 +57,12 @@ void ofCamera::setForceAspectRatio(bool forceAspectRatio){
 
 //----------------------------------------
 void ofCamera::setupPerspective(bool _vFlip, float fov, float nearDist, float farDist, const glm::vec2 & lensOffset){
-	ofRectangle orientedViewport = getRenderer()->getNativeViewport();
-	float eyeX = orientedViewport.width * 0.5;
-	float eyeY = orientedViewport.height * 0.5f;
+	// Use logical window size (points) instead of pixel viewport size
+	// This ensures consistent camera positioning on retina/high-DPI displays
+	float viewW = ofGetWindowWidth();
+	float viewH = ofGetWindowHeight();
+	float eyeX = viewW * 0.5f;
+	float eyeY = viewH * 0.5f;
 	float halfFov = glm::pi<float>() * fov / 360.0f;
 	float theTan = std::tan(halfFov);
 	float dist = eyeY / theTan;
@@ -127,8 +131,11 @@ bool ofCamera::getOrtho() const noexcept {
 }
 
 //----------------------------------------
-float ofCamera::getImagePlaneDistance(const ofRectangle & viewport) const {
-	return viewport.height / (2.0f * std::tan(glm::pi<float>() * fov / 360.0f));
+float ofCamera::getImagePlaneDistance(const ofRectangle & /*viewport*/) const {
+	// Use logical window height for consistent camera distance on retina/high-DPI displays
+	// This ensures that objects appear the same size regardless of display pixel density
+	float logicalHeight = ofGetWindowHeight();
+	return logicalHeight / (2.0f * std::tan(glm::pi<float>() * fov / 360.0f));
 }
 
 //----------------------------------------
