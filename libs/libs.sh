@@ -52,16 +52,25 @@ section "💾 ofWorks will install ofLibs"
 # Check Latest Commit from ofWorks/ofLibs
 # ============================================
 
+# Function to check if gh CLI is authenticated
+gh_is_authenticated() {
+	if command -v gh &>/dev/null; then
+		gh auth status &>/dev/null 2>&1
+		return $?
+	fi
+	return 1
+}
+
 # Function to get the latest commit hash from the remote repository
 get_remote_commit() {
 	local commit_hash=""
 
-	# Try using gh CLI first (most reliable)
-	if command -v gh &>/dev/null; then
+	# Try using gh CLI first if authenticated (most reliable)
+	if gh_is_authenticated; then
 		commit_hash=$(gh api repos/${OF_LIBS_REPO}/commits/main --jq '.sha' 2>/dev/null || true)
 	fi
 
-	# Fallback to curl if gh is not available or failed
+	# Fallback to curl if gh is not available, not authenticated, or failed
 	if [[ -z "$commit_hash" ]]; then
 		commit_hash=$(curl -s "https://api.github.com/repos/${OF_LIBS_REPO}/commits/main" 2>/dev/null | grep -o '"sha": "[^"]*"' | head -1 | cut -d'"' -f4)
 	fi
@@ -524,7 +533,7 @@ ALLLIBS=("${CORELIBS[@]}" "${ADDONLIBS[@]}")
 # }
 
 getlink() {
-	if command -v gh &>/dev/null; then
+	if gh_is_authenticated; then
 		section "Downloading with GH (github command line)"
 		gh release download ${LIBSVERSION} -R ofWorks/ofLibs --pattern "ofLibs_*_${PLATFORM}.zip" -D "${DOWNLOAD}"
 
