@@ -5,6 +5,17 @@ cd "$(dirname "$0")"
 COLOR='\033[0;32m'
 NC='\033[0m' # No Color
 
+# Parse arguments
+FORCE=false
+for arg in "$@"; do
+    case $arg in
+        --force)
+            FORCE=true
+            shift
+            ;;
+    esac
+done
+
 section() {
 	printf "💻${COLOR} ${@} ${NC}\n\r"
 }
@@ -56,8 +67,12 @@ ofgen_latest_version=$(grep '^version:' chalet.yaml | awk '{print $2}')
 ofgen_installed_version=$(ofgen --version 2>/dev/null | tr -d '[:space:]' || true)
 
 if [ "$ofgen_installed_version" == "$ofgen_latest_version" ]; then
-	section "ofgen $ofgen_latest_version is already up to date, skipping build"
-	exit 0
+    if [ "$FORCE" = true ]; then
+        section "Forcing rebuild of ofgen $ofgen_latest_version..."
+    else
+        section "ofgen $ofgen_latest_version is already up to date, skipping build. Use --force to rebuild"
+        exit 0
+    fi
 elif [ -z "$ofgen_installed_version" ]; then
 	section "Installing ofgen $ofgen_latest_version..."
 else

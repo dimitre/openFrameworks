@@ -31,6 +31,7 @@ void ofAddon::scanFolder(const fs::path & path,
 			it.disable_recursion_pending();
 			continue;
 		}
+
 		auto ext = f.extension().string();
 
 		if (fs::is_directory(f)) {
@@ -44,7 +45,9 @@ void ofAddon::scanFolder(const fs::path & path,
 			} else {
 				// ADD To includes list, keep iterating
 				// FIXME: This is maybe unneded... test without it with multiple addons
-				if (!isProject) {
+				// Commented out this, trying to use nested folders inside project "src" folder
+				// if (!isProject)
+				{
 					filesMap["includes"].emplace_back(f);
 				}
 			}

@@ -11,6 +11,8 @@
 		033AD5522D85DA010095C094 /* ofTime.h in Headers */ = {isa = PBXBuildFile; fileRef = 033AD54F2D85DA010095C094 /* ofTime.h */; };
 		0353245D2BEFEC7B00B50A35 /* ofTimerFps.h in Headers */ = {isa = PBXBuildFile; fileRef = 0353245B2BEFEC7A00B50A35 /* ofTimerFps.h */; };
 		0353245E2BEFEC7B00B50A35 /* ofTimerFps.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0353245C2BEFEC7B00B50A35 /* ofTimerFps.cpp */; };
+		190880602F59D3E500F5F8F1 /* ofSimpleBoxPrimitive.h in Headers */ = {isa = PBXBuildFile; fileRef = 1908805E2F59D3E500F5F8F1 /* ofSimpleBoxPrimitive.h */; };
+		190880612F59D3E500F5F8F1 /* ofSimpleBoxPrimitive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1908805F2F59D3E500F5F8F1 /* ofSimpleBoxPrimitive.cpp */; };
 		19AEBABB2F1150E8000C95BB /* ofSoundFFT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19AEBABA2F1150E8000C95BB /* ofSoundFFT.cpp */; };
 		19AEBABC2F1150E8000C95BB /* ofSoundFFT.h in Headers */ = {isa = PBXBuildFile; fileRef = 19AEBAB92F1150E8000C95BB /* ofSoundFFT.h */; };
 		19B18F592EE0E14300449A9B /* ofBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 19B18F572EE0E14300449A9B /* ofBuffer.h */; };
@@ -157,6 +159,8 @@
 		033AD5502D85DA010095C094 /* ofTime.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofTime.cpp; sourceTree = "<group>"; };
 		0353245B2BEFEC7A00B50A35 /* ofTimerFps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofTimerFps.h; sourceTree = "<group>"; };
 		0353245C2BEFEC7B00B50A35 /* ofTimerFps.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofTimerFps.cpp; sourceTree = "<group>"; };
+		1908805E2F59D3E500F5F8F1 /* ofSimpleBoxPrimitive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofSimpleBoxPrimitive.h; sourceTree = "<group>"; };
+		1908805F2F59D3E500F5F8F1 /* ofSimpleBoxPrimitive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofSimpleBoxPrimitive.cpp; sourceTree = "<group>"; };
 		19AEBAB92F1150E8000C95BB /* ofSoundFFT.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofSoundFFT.h; sourceTree = "<group>"; };
 		19AEBABA2F1150E8000C95BB /* ofSoundFFT.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofSoundFFT.cpp; sourceTree = "<group>"; };
 		19B18F572EE0E14300449A9B /* ofBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofBuffer.h; sourceTree = "<group>"; };
@@ -474,6 +478,8 @@
 				E4F3BA6012F4C4BF002D19BB /* ofNode.h */,
 				2E6EA7051603AABD00B7ADF3 /* of3dPrimitives.h */,
 				2E6EA7071603AAD600B7ADF3 /* of3dPrimitives.cpp */,
+				1908805E2F59D3E500F5F8F1 /* ofSimpleBoxPrimitive.h */,
+				1908805F2F59D3E500F5F8F1 /* ofSimpleBoxPrimitive.cpp */,
 			);
 			name = 3d;
 			path = ../../../openFrameworks/3d;
@@ -610,6 +616,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				692C298E19DC5C5500C27C5D /* ofTimer.h in Headers */,
+				190880602F59D3E500F5F8F1 /* ofSimpleBoxPrimitive.h in Headers */,
 				E4F3BA6812F4C4BF002D19BB /* of3dUtils.h in Headers */,
 				30CC5385207A36FD008234AF /* ofMathConstants.h in Headers */,
 				E4F3BA6A12F4C4BF002D19BB /* ofCamera.h in Headers */,
@@ -753,6 +760,7 @@
 				033AD5512D85DA010095C094 /* ofTime.cpp in Sources */,
 				E4F3BA7312F4C4BF002D19BB /* ofNode.cpp in Sources */,
 				6944251F1FE4548B00770088 /* ofSoundBaseTypes.cpp in Sources */,
+				190880612F59D3E500F5F8F1 /* ofSimpleBoxPrimitive.cpp in Sources */,
 				2292E73E19E3049700DE9411 /* ofBufferObject.cpp in Sources */,
 				E4F3BA8A12F4C4C9002D19BB /* ofFmodSoundPlayer.cpp in Sources */,
 				E4F3BA8E12F4C4C9002D19BB /* ofSoundPlayer.cpp in Sources */,
