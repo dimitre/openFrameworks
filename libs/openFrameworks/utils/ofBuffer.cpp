@@ -16,11 +16,11 @@ ofBuffer::ofBuffer()
 
 ofBuffer::ofBuffer( const fs::path & fileName ) 
 	:currentLine(end(),end()){
-		if (fs::exists( ofCore.toDataPath(fileName) )) {
-			cout << "exists " << ofCore.toDataPath(fileName) << endl;
-		} else {
-			cout << "!exists " << ofCore.toDataPath(fileName) << endl;
-		}
+//		if (fs::exists( ofCore.toDataPath(fileName) )) {
+//			cout << "exists " << ofCore.toDataPath(fileName) << endl;
+//		} else {
+//			cout << "!exists " << ofCore.toDataPath(fileName) << endl;
+//		}
 
 	std::ifstream fileFrom(ofCore.toDataPath(fileName));
 	set(fileFrom);

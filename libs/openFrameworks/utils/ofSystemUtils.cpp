@@ -786,14 +786,20 @@ std::string ofSystemTextBoxDialog(std::string question, std::string text) {
 		if (Msg.message == WM_QUIT) {
 			PostQuitMessage(Msg.wParam);
 			if (!IsWindow(dialog)) {
-				EnableWindow(WindowFromDC(wglGetCurrentDC()), TRUE);
+				HWND hwndOwner = WindowFromDC(wglGetCurrentDC());
+				EnableWindow(hwndOwner, TRUE);
+				SetForegroundWindow(hwndOwner);
+				SetFocus(hwndOwner);
 				return text;
 			}
 			break;
 		}
 
 		if (!IsWindow(dialog)) {
-			EnableWindow(WindowFromDC(wglGetCurrentDC()), TRUE);
+			HWND hwndOwner = WindowFromDC(wglGetCurrentDC());
+			EnableWindow(hwndOwner, TRUE);
+			SetForegroundWindow(hwndOwner);
+			SetFocus(hwndOwner);
 			return text;
 		}
 
@@ -803,13 +809,19 @@ std::string ofSystemTextBoxDialog(std::string question, std::string text) {
 		if ((Msg.hwnd == okButton && Msg.message == WM_LBUTTONUP) || (Msg.message == WM_KEYUP && Msg.wParam == 13)) {
 			break;
 		} else if ((Msg.hwnd == cancelButton && Msg.message == WM_LBUTTONUP) || (Msg.message == WM_KEYUP && Msg.wParam == 27)) {
-			EnableWindow(WindowFromDC(wglGetCurrentDC()), TRUE);
+			HWND hwndOwner = WindowFromDC(wglGetCurrentDC());
+			EnableWindow(hwndOwner, TRUE);
+			SetForegroundWindow(hwndOwner);
+			SetFocus(hwndOwner);
 			DestroyWindow(dialog);
 			return "";
 		}
 
 		if (!IsWindow(dialog)) {
-			EnableWindow(WindowFromDC(wglGetCurrentDC()), TRUE);
+			HWND hwndOwner = WindowFromDC(wglGetCurrentDC());
+			EnableWindow(hwndOwner, TRUE);
+			SetForegroundWindow(hwndOwner);
+			SetFocus(hwndOwner);
 			return text;
 		}
 
@@ -824,7 +836,10 @@ std::string ofSystemTextBoxDialog(std::string question, std::string text) {
 	text = buf;
 
 	DestroyWindow(dialog);
-	EnableWindow(WindowFromDC(wglGetCurrentDC()), TRUE);
+	HWND hwndOwner = WindowFromDC(wglGetCurrentDC());
+	EnableWindow(hwndOwner, TRUE);
+	SetForegroundWindow(hwndOwner);
+	SetFocus(hwndOwner);
 
 #endif
 
