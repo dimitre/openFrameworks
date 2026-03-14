@@ -393,9 +393,9 @@ bool ofVideoGrabber::setDeviceByName(const std::string & name) {
 	return deviceID != -1;
 }
 
-bool ofVideoGrabber::setDeviceByID(const std::string & camID) {
-	
-}
+//bool ofVideoGrabber::setDeviceByID(const std::string & camID) {
+//	
+//}
 
 
 bool ofVideoGrabber::setDeviceByNames(const std::vector<std::string> & names) {

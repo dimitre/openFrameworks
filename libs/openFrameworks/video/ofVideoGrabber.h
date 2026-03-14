@@ -35,7 +35,7 @@ public:
 	void				setVerbose(bool bTalkToMe) override;
 	void				setDeviceID(int _deviceID) override;
 	bool setDeviceByName(const std::string & name);
-	bool setDeviceByID(const std::string & camID);
+//	bool setDeviceByID(const std::string & camID);
 	bool setDeviceByNames(const std::vector<std::string> & names);
 	void				setDesiredFrameRate(int framerate) override;
 	void				setUseTexture(bool bUse) override;
