@@ -354,6 +354,8 @@
 }
 
 -(std::vector <std::string>)listDevices{
+	cout << "---------------------------------" << endl;
+	cout << "ofAVFoundationGrabber listDevices" << endl;
     std::vector <std::string> deviceNames;
 	NSArray * devices;
 	if (@available(macOS 10.15, *)) {

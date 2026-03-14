@@ -120,7 +120,7 @@ std::vector<ofVideoDevice> ofDirectShowGrabber::listDevices() const {
 	std::size_t i = 0;
 	for (const auto & device : VI.getDeviceList()) {
 		ofVideoDevice vd;
-		vd.deviceName = device;;
+		vd.deviceName = device;
 		vd.id = i;
 		vd.bAvailable = true;
 		

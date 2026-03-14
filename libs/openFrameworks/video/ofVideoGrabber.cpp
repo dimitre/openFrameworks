@@ -386,11 +386,17 @@ bool ofVideoGrabber::setDeviceByName(const std::string & name) {
 			break;
 		}
 	}
+	cout << "setDeviceByName " << name << " deviceID = " << deviceID << endl;
 	if (deviceID != -1) {
 		setDeviceID(deviceID);
 	}
 	return deviceID != -1;
 }
+
+bool ofVideoGrabber::setDeviceByID(const std::string & camID) {
+	
+}
+
 
 bool ofVideoGrabber::setDeviceByNames(const std::vector<std::string> & names) {
 	int deviceID = -1;

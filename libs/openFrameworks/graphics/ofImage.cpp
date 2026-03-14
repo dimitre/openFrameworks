@@ -197,7 +197,6 @@ using namespace mango::image;
 
 template <typename PixelType>
 static mango::image::Format getMangoFormat(const ofPixels_<PixelType> & pix) {
-	int numChannels = pix.getNumChannels();
 	int bitsPerChannel = sizeof(PixelType) * 8;
 
 	// Determine format based on number of channels
@@ -210,18 +209,35 @@ static mango::image::Format getMangoFormat(const ofPixels_<PixelType> & pix) {
 		type = mango::image::Format::SNORM;
 	}
 
-	// Create format based on channel count
-	switch (numChannels) {
-	case 1:
+	// Create format based on pixel format to preserve channel order
+	switch (pix.getPixelFormat()) {
+	case OF_PIXELS_GRAY:
 		return mango::image::Format(bitsPerChannel, type, mango::image::Format::R, bitsPerChannel);
-	case 2:
+	case OF_PIXELS_GRAY_ALPHA:
 		return mango::image::Format(bitsPerChannel * 2, type, mango::image::Format::RG, bitsPerChannel, bitsPerChannel);
-	case 3:
+	case OF_PIXELS_RGB:
 		return mango::image::Format(bitsPerChannel * 3, type, mango::image::Format::RGB, bitsPerChannel, bitsPerChannel, bitsPerChannel);
-	case 4:
+	case OF_PIXELS_BGR:
+		return mango::image::Format(bitsPerChannel * 3, type, mango::image::Format::BGR, bitsPerChannel, bitsPerChannel, bitsPerChannel);
+	case OF_PIXELS_RGBA:
 		return mango::image::Format(bitsPerChannel * 4, type, mango::image::Format::RGBA, bitsPerChannel, bitsPerChannel, bitsPerChannel, bitsPerChannel);
+	case OF_PIXELS_BGRA:
+		return mango::image::Format(bitsPerChannel * 4, type, mango::image::Format::BGRA, bitsPerChannel, bitsPerChannel, bitsPerChannel, bitsPerChannel);
 	default:
-		return mango::image::Format(bitsPerChannel, type, mango::image::Format::R, bitsPerChannel);
+		// Fallback to channel-count based approach
+		int numChannels = pix.getNumChannels();
+		switch (numChannels) {
+		case 1:
+			return mango::image::Format(bitsPerChannel, type, mango::image::Format::R, bitsPerChannel);
+		case 2:
+			return mango::image::Format(bitsPerChannel * 2, type, mango::image::Format::RG, bitsPerChannel, bitsPerChannel);
+		case 3:
+			return mango::image::Format(bitsPerChannel * 3, type, mango::image::Format::RGB, bitsPerChannel, bitsPerChannel, bitsPerChannel);
+		case 4:
+			return mango::image::Format(bitsPerChannel * 4, type, mango::image::Format::RGBA, bitsPerChannel, bitsPerChannel, bitsPerChannel, bitsPerChannel);
+		default:
+			return mango::image::Format(bitsPerChannel, type, mango::image::Format::R, bitsPerChannel);
+		}
 	}
 }
 
