@@ -1149,7 +1149,7 @@ ofMesh ofTexture::getMeshForSubsection(float x, float y, float z, float w, float
 	GLfloat offsetw { 0.0f };
 	GLfloat offseth { 0.0f };
 
-	if (!ofGLSupportsNPOTTextures() && bTexHackEnabled) {
+	if (texData.textureTarget == GL_TEXTURE_2D && bTexHackEnabled) {
 		offsetw = 1.0f / (texData.tex_w);
 		offseth = 1.0f / (texData.tex_h);
 	}
