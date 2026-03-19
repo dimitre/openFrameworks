@@ -102,7 +102,7 @@ void ofTemplateChalet::load() {
 			}
 
 			// Target standard Windows icon sizes (0 in ICO means 256)
-			const std::vector<int> targets = { 16, 32, 48, 64, 128, 256 };
+			const std::vector<int> targets = { 16, 24, 32, 48, 64, 128, 256 };
 			struct Image {
 				int size;
 				std::vector<uint8_t> bgra;
