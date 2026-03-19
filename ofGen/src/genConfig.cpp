@@ -239,6 +239,19 @@ int genConfig::build() {
 	return -1;
 }
 
+void genConfig::run() {
+	for (auto & t : templates) {
+		if (t->commands.count("run")) {
+			int result = std::system(t->commands["run"].c_str());
+			if (result == 0) {
+				std::cout << "Success." << std::endl;
+			} else {
+				std::cerr << "Fail with error " << result << std::endl;
+			}
+		}
+	}
+}
+
 bool genConfig::bundleProject() {
 	// alert("bundleProject", 5);
 	for (auto & t : templates) {
@@ -251,17 +264,56 @@ bool genConfig::bundleProject() {
 	return false;
 }
 
-void genConfig::run() {
-	for (auto & t : templates) {
-		if (t->commands.count("run")) {
-			int result = std::system(t->commands["run"].c_str());
-			if (result == 0) {
-				std::cout << "Success." << std::endl;
-			} else {
-				std::cerr << "Fail with error " << result << std::endl;
-			}
-		}
+bool genConfig::bump() {
+	fs::path configFile { "of.yml" };
+	
+	// Load existing YAML or create new node
+	YAML::Node yaml;
+	if (fs::exists(configFile)) {
+		yaml = YAML::LoadFile(configFile.string());
 	}
+	
+	// Get current version or default to 0.0.0
+	std::string version = "0.0.0";
+	if (yaml["version"]) {
+		version = yaml["version"].as<std::string>();
+	}
+	
+	// Parse version (format: major.minor.patch)
+	std::vector<std::string> parts = ofSplitString(version, ".");
+	while (parts.size() < 3) {
+		parts.emplace_back("0");
+	}
+	
+	// Increment patch version (minor bump)
+	try {
+		int patch = std::stoi(parts[2]);
+		patch++;
+		parts[2] = std::to_string(patch);
+	} catch (...) {
+		parts[2] = "1";
+	}
+	
+	// Reconstruct version string
+	std::string newVersion = parts[0] + "." + parts[1] + "." + parts[2];
+	yaml["version"] = newVersion;
+	
+	// Write back to file
+	std::ofstream outFile(configFile);
+	if (!outFile.is_open()) {
+		std::cerr << "Failed to open " << configFile << " for writing" << std::endl;
+		return false;
+	}
+	
+	outFile << yaml;
+	outFile.close();
+	
+	alert("Bumped version: " + version + " -> " + newVersion, 92);
+	
+	// Update settings so buildProject sees the new version
+	settings["version"] = newVersion;
+	
+	return true;
 }
 
 bool genConfig::buildProject() {

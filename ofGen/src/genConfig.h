@@ -166,6 +166,8 @@ ofGen templates=zed,macos,chalet addons=ofxMidi,ofxOpencv ofpath=../../.. path=/
 	int build();
 	bool bundleProject();
 	void run();
+	// bump version in of.yml and build project again
+	bool bump();
 
 	void import();
 	bool loadYML();

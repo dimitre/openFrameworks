@@ -107,6 +107,10 @@ int main(const int argc, const char * argv[]) {
 		} else if (conf.singleParameter == "build") {
 			conf.buildProject();
 			conf.build();
+		} else if (conf.singleParameter == "bump") {
+			conf.bump();
+			conf.buildProject();
+			conf.build();
 		} else if (conf.singleParameter == "buildrun") {
 			conf.buildProject();
 			int result = conf.build();
