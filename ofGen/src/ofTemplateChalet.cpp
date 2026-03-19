@@ -16,9 +16,15 @@ ofTemplateChalet::ofTemplateChalet() {
 	path = conf.getTemplatesFolder() / name;
 
 	// openCommand = "chalet . ";
-	buildCommand = "chalet build";
-	runCommand = "chalet buildrun";
-	cleanCommand = "chalet clean --all";
+	commands["build"] = "chalet build";
+	commands["run"] = "chalet buildrun";
+	commands["clean"] = "chalet clean --all";
+	commands["bundle"] = "chalet bundle; cp -r dist/* bin";
+
+	// buildCommand = "chalet build";
+	// runCommand = "chalet buildrun";
+	// cleanCommand = "chalet clean --all";
+	// bundleCommand = "chalet bundle; cp dist/* bin";
 }
 
 std::string timeString() {

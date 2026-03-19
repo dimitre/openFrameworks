@@ -65,13 +65,6 @@ struct genConfig {
 	// vector<std::string> singleParameters;
 	std::string singleParameter;
 
-	std::string openCommand;
-	std::string buildCommand;
-	std::string runCommand;
-
-
-
-
 	void parseParameters(const int argc, const char * argv[]) {
 		// alert ("platform string " + getPlatformString(), 95);
 		// alert("parseParameters", 92);
@@ -169,53 +162,10 @@ ofGen templates=zed,macos,chalet addons=ofxMidi,ofxOpencv ofpath=../../.. path=/
 )" << endl;
 	}
 
-	// void open();
-	void open() {
-		if (!empty(openCommand)) {
-			int result = std::system(openCommand.c_str());
-			if (result != 0) {
-				std::cerr << "Warning: Failed to execute command: " << openCommand
-						  << " (exit code: " << result << ")" << std::endl;
-			}
-		}
-	}
-
-	int build() {
-
-		std::cout << std::endl;
-		alert("BUILDING", 5);
-		if (!empty(buildCommand)) {
-			return std::system(buildCommand.c_str());
-		}
-		return -1;
-		// std::string command = "open " + projectName + ".xcodeproj";
-		// cout << command << endl;
-		// system("xcodebuild");
-	}
-
-	void run() {
-		if (!empty(runCommand)) {
-			int result = std::system(runCommand.c_str());
-			if (result == 0) {
-				std::cout << "Success." << std::endl;
-			} else {
-				std::cerr << "Fail with error " << result << std::endl;
-				// Further analysis of the return code might be needed based on the command
-			}
-		}
-		// projectName = fs::current_path().filename().string();
-		// std::string command = "open -n bin/" + projectName + ".app";
-		// cout << command << endl;
-		// system(command.c_str());
-	}
-
-	// void buildrun() {
-	// 	std::string command { buildCommand };
-	// 	if (!empty(runCommand)) {
-	// 		command = " && " + runCommand;
-	// 	}
-	// 	std::system(command.c_str());
-	// }
+	void open();
+	int build();
+	bool bundleProject();
+	void run();
 
 	void import();
 	bool loadYML();

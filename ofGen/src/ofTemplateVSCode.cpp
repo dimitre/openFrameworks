@@ -5,7 +5,7 @@
 ofTemplateVSCode::ofTemplateVSCode() {
 	name = "vscode";
 	path = conf.getTemplatesFolder() / name;
-	openCommand = "vscode . ";
+	commands["open"] = "vscode .";
 }
 
 void ofTemplateVSCode::save() {

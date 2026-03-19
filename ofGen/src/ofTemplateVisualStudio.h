@@ -1,4 +1,6 @@
-#include "templates.h"
+#pragma once
+
+#include "ofTemplate.h"
 struct genConfig;
 extern genConfig conf;
 

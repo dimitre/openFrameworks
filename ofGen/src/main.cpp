@@ -97,6 +97,10 @@ int main(const int argc, const char * argv[]) {
 			conf.help();
 		}
 		// Now building projects
+		else if (conf.singleParameter == "bundle") {
+			conf.buildProject();
+			conf.bundleProject();
+		}
 		else if (conf.singleParameter == "open") {
 			conf.buildProject();
 			conf.open();
@@ -115,11 +119,18 @@ int main(const int argc, const char * argv[]) {
 		}
 
 		// FIXME: finish this way of displaying the command to build and run to be used in bash
-		else if (conf.singleParameter == "echobuildrun") {
-			conf.buildProject();
-			cout << conf.buildCommand << endl;
-			exit(1);
-		} else if (conf.singleParameter == "cleantemplates") {
+		// else if (conf.singleParameter == "echobuildrun") {
+		// 	conf.buildProject();
+		// 	for (auto & t : conf.templates) {
+		// 		if (t->commands.count("build")) {
+		// 			cout << t->commands["build"] << endl;
+		// 			break;
+		// 		}
+		// 	}
+		// 	exit(1);
+		// }
+
+		else if (conf.singleParameter == "cleantemplates") {
 			conf.project.cleanTemplates();
 		}
 

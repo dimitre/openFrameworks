@@ -21,9 +21,9 @@ using nlohmann::json;
 ofTemplateMacos::ofTemplateMacos() {
 	name = "macos";
 	path = conf.getTemplatesFolder() / name;
-	openCommand = "open " + conf.projectName + ".xcodeproj";
-	buildCommand = "xcodebuild";
-	runCommand = "open -n bin/" + conf.projectName + ".app";
+	commands["open"] = "open " + conf.projectName + ".xcodeproj";
+	commands["build"] = "xcodebuild";
+	commands["run"] = "open -n bin/" + conf.projectName + ".app";
 }
 
 std::string generateUUID(const std::string & input) {
@@ -98,11 +98,11 @@ std::string ofTemplateMacos::addFile(const fs::path & path, const fs::path & fol
 		}
 
 		addCommand("Add :objects:" + UUID + ":name string " + ofPathToString(path.filename()));
-		// cout << commands.back() << endl;
+		// cout << xcodeCommands.back() << endl;
 
 		if (!empty(fileType)) {
 			addCommand("Add :objects:" + UUID + ":lastKnownFileType string " + fileType);
-			// cout << commands.back() << endl;
+			// cout << xcodeCommands.back() << endl;
 		}
 		if (fp.absolute || fp.isRelativeToSDK || path.is_absolute()) { //
 			// FIXME: Still some confusion here about relative to source or absolute.
@@ -375,7 +375,7 @@ void ofTemplateMacos::addAddon(ofAddon * a) {
 				// FIXME: add array here if it doesnt exist. Test with multiple lines
 				for (const auto & flag : a->addonProperties[param.first]) {
 					addCommand("Add :objects:" + c + ":buildSettings:" + param.second + ": string " + flag);
-					// alert(commands.back(), 95);
+					// alert(xcodeCommands.back(), 95);
 				}
 			}
 		}
@@ -460,7 +460,7 @@ void ofTemplateMacos::edit(std::string & str) {
 		// std::cerr << contents.rdbuf() << std::endl;
 	}
 
-	for (auto & c : commands) {
+	for (auto & c : xcodeCommands) {
 		if (c == "" || c[0] == '#') {
 			continue;
 		}
@@ -876,6 +876,6 @@ void ofTemplateMacos::save() {
 		copyTemplateFiles[0].appends.emplace_back("MARKETING_VERSION = " + conf.settings["version"]);
 	}
 
-	//	for (auto & c : commands) cout << c << endl;
+	//	for (auto & c : xcodeCommands) cout << c << endl;
 	// return true;
 }

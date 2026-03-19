@@ -7,9 +7,9 @@ ofTemplateMake::ofTemplateMake() {
 	name = "make";
 	path = conf.getTemplatesFolder() / name;
 
-	buildCommand = "make -j";
-	runCommand = "make RunRelease";
-	cleanCommand = "make clean";
+	commands["build"] = "make -j";
+	commands["run"] = "make RunRelease";
+	commands["clean"] = "make clean";
 }
 
 void ofTemplateMake::load() {

@@ -6,11 +6,11 @@ ofTemplateVisualStudio::ofTemplateVisualStudio() {
 	name = "visualstudio";
 	path = conf.getTemplatesFolder() / name;
 	//FIXME - implement
-	openCommand = "open " + conf.projectName + ".xcodeproj";
+	commands["open"] = "open " + conf.projectName + ".xcodeproj";
 	// buildCommand = "msbuild";
-	buildCommand = "powershell -c \"msbuild\"";
+	commands["build"] = "powershell -c \"msbuild\"";
 	// Untested
-	cleanCommand = "powershell -c \"msbuild *.sln -t:Clean\"";
+	commands["clean"] = "powershell -c \"msbuild *.sln -t:Clean\"";
 }
 
 

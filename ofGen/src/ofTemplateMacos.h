@@ -1,4 +1,6 @@
-#include "templates.h"
+#pragma once
+
+#include "ofTemplate.h"
 struct genConfig;
 extern genConfig conf;
 #include <map>
@@ -53,14 +55,14 @@ public:
 
 	std::string getFolderUUID(const fs::path & folder, fs::path base);
 
-	std::vector<std::string> commands;
+	std::vector<std::string> xcodeCommands;
 	bool debugCommands = false;
 
 	void addCommand(const std::string & command) {
 		if (debugCommands) {
 			alert(command, 31);
 		}
-		commands.emplace_back(command);
+		xcodeCommands.emplace_back(command);
 	}
 
 	fs::path getPathTo(fs::path path, std::string limit) {

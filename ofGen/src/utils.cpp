@@ -1,6 +1,6 @@
 #include "utils.h"
 #include "addons.h"
-#include "templates.h"
+#include "ofTemplate.h"
 
 #include <fstream> // ifstream
 #include <iostream> // cout

@@ -1,6 +1,6 @@
 #include "genConfig.h"
 genConfig conf;
-#include "templates.h"
+#include "ofTemplate.h"
 
 #include "ofTemplateChalet.h"
 #include "ofTemplateMacos.h"
@@ -216,6 +216,54 @@ std::vector<fs::path> genConfig::nodeToPaths(const std::string & index) {
 	return out;
 }
 
+void genConfig::open() {
+	for (auto & t : templates) {
+		if (t->commands.count("open")) {
+			int result = std::system(t->commands["open"].c_str());
+			if (result != 0) {
+				std::cerr << "Warning: Failed to execute command: " << t->commands["open"]
+						  << " (exit code: " << result << ")" << std::endl;
+			}
+		}
+	}
+}
+
+int genConfig::build() {
+	std::cout << std::endl;
+	alert("BUILDING", 5);
+	for (auto & t : templates) {
+		if (t->commands.count("build")) {
+			return std::system(t->commands["build"].c_str());
+		}
+	}
+	return -1;
+}
+
+bool genConfig::bundleProject() {
+	// alert("bundleProject", 5);
+	for (auto & t : templates) {
+		// alert(t->name, 5);
+		if (t->commands.count("bundle")) {
+			// alert(t->commands["bundle"], 5);
+			return std::system(t->commands["bundle"].c_str());
+		}
+	}
+	return false;
+}
+
+void genConfig::run() {
+	for (auto & t : templates) {
+		if (t->commands.count("run")) {
+			int result = std::system(t->commands["run"].c_str());
+			if (result == 0) {
+				std::cout << "Success." << std::endl;
+			} else {
+				std::cerr << "Fail with error " << result << std::endl;
+			}
+		}
+	}
+}
+
 bool genConfig::buildProject() {
 
 	// ofProject project;
@@ -317,17 +365,7 @@ bool genConfig::buildProject() {
 			// std::exit(1);
 		}
 
-		if (empty(openCommand) && !empty(templates.back()->openCommand)) {
-			openCommand = templates.back()->openCommand;
-		}
 
-		if (empty(buildCommand) && !empty(templates.back()->buildCommand)) {
-			buildCommand = templates.back()->buildCommand;
-		}
-
-		if (empty(runCommand) && !empty(templates.back()->runCommand)) {
-			runCommand = templates.back()->runCommand;
-		}
 	}
 
 	// load templates, show info of each template

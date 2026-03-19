@@ -1,13 +1,13 @@
 [
 	{
 		"label": "Build ofGen",
-		"command": "./compile.sh", //&& ./ofbuild
+		"command": "./compile.sh --force", //&& ./ofbuild
 		"use_new_terminal": false,
 		"allow_concurrent_runs": false,
 		"reveal": "always",
 		"hide": "never",
 		"shell": "system",
-		"show_summary": true
+		"show_summary": true,
 	},
 	{
 		"label": "Build ofGen and Run",
@@ -17,6 +17,6 @@
 		"reveal": "always",
 		"hide": "never",
 		"shell": "system",
-		"show_summary": true
-	}
+		"show_summary": true,
+	},
 ]

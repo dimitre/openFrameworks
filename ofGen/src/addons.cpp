@@ -1,5 +1,5 @@
 #include "addons.h"
-#include "templates.h"
+#include "ofTemplate.h"
 #include "genConfig.h"
 #include <algorithm>
 
