@@ -19,7 +19,9 @@ ofTemplateChalet::ofTemplateChalet() {
 	commands["build"] = "chalet build";
 	commands["run"] = "chalet buildrun";
 	commands["clean"] = "chalet clean --all";
-	commands["bundle"] = "chalet bundle; cp -r dist/* bin";
+	// commands["bundle"] = "chalet bundle; cp -r dist/* bin";
+	commands["bundle"] = "chalet bundle; mv -i -n dist/* bin; rm -rf dist";
+
 
 	// buildCommand = "chalet build";
 	// runCommand = "chalet buildrun";
@@ -102,7 +104,9 @@ void ofTemplateChalet::load() {
 			}
 
 			// Target standard Windows icon sizes (0 in ICO means 256)
-			const std::vector<int> targets = { 16, 24, 32, 48, 64, 128, 256 };
+			// const std::vector<int> targets = { 16, 24, 32, 48, 64, 128, 256 };
+			const std::vector<int> targets = { 8, 10, 14, 16, 20, 24, 32, 40, 48, 64, 96, 128, 256 };
+			// https://learn.microsoft.com/en-us/windows/win32/uxguide/vis-icons
 			struct Image {
 				int size;
 				std::vector<uint8_t> bgra;

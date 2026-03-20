@@ -8,17 +8,18 @@
 
 #include "genConfig.h"
 
-
 const std::string sign = colorText(R"(
  ░░░  ▒▒▒▒  ▓▓▓  ████ █   █ 〇
 ░   ░ ▒    ▓     █    ██  █
 ░   ░ ▒▒▒  ▓  ▓▓ ███  █ █ █
 ░   ░ ▒    ▓   ▓ █    █  ██
  ░░░  ▒     ▓▓▓  ████ █   █
-)", 32) // 91
-    + R"(
+)",
+							 32) // 91
+	+ R"(
 Project Generator for ofWorks (OpenFrameworks fork)
-                 Prototype )" + version
+                 Prototype )"
+	+ version
 
 	+ colorText(R"(
                  Report issues or suggestions on
@@ -55,8 +56,6 @@ inline void testColors() {
 	cout << endl;
 }
 
-
-
 int main(const int argc, const char * argv[]) {
 	auto t1 = std::chrono::high_resolution_clock::now();
 
@@ -71,8 +70,7 @@ int main(const int argc, const char * argv[]) {
 		// cout << getVersion() << endl;
 		cout << version << endl;
 		std::exit(0);
-	}
-	else if (conf.singleParameter == "yaml-addons-ls") {
+	} else if (conf.singleParameter == "yaml-addons-ls") {
 		// Pure Yaml output goes here, before the header SIGN
 		conf.listAddonsAsYaml();
 		std::exit(0);
@@ -81,13 +79,35 @@ int main(const int argc, const char * argv[]) {
 	std::cout << sign << std::endl; // HEADER
 	bool build = true;
 
-
-
 	if (!empty(conf.singleParameter)) {
 		alert("single parameter: " + conf.singleParameter);
 		build = false;
 
 		// First parameters without bulding project.
+		if (conf.singleParameter == "rm") {
+			if (fs::exists("of.yml")) {
+				std::vector<std::string> lines {
+					"rm addons.make",
+					"rm App.xcconfig",
+					"rm chalet.yaml",
+					"rm compile_flags.txt",
+					"rm config.make",
+					"rm Makefile",
+					"rm of.entitlements",
+					"rm openFrameworks-Info.plist",
+					"rm Project.xcconfig",
+					"rm -rf build",
+					"rm -rf *.xcodeproj"
+				};
+
+				for (const auto & l : lines) {
+					std::system(l.c_str());
+				}
+			} else {
+				alert("no of.yml present, exiting", 96);
+				std::exit(0);
+			}
+		}
 
 		if (conf.singleParameter == "colors") {
 			testColors();
@@ -100,8 +120,7 @@ int main(const int argc, const char * argv[]) {
 		else if (conf.singleParameter == "bundle") {
 			conf.buildProject();
 			conf.bundleProject();
-		}
-		else if (conf.singleParameter == "open") {
+		} else if (conf.singleParameter == "open") {
 			conf.buildProject();
 			conf.open();
 		} else if (conf.singleParameter == "build") {
