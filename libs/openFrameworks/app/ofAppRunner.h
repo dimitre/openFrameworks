@@ -169,14 +169,12 @@ public:
 	fs::path appFolder; // exeDir
 	std::string appName;
 
-	//	fs::path dataFolder; // defaultDataPath
 	fs::path dataPath;
 	fs::path defaultWorkingDirectory;
 	bool enableDataPath = true;
 	
 	// ofToDataPath equivalent now.
 	fs::path toDataPath(const fs::path & path) {
-//		cout << "toDataPath dataPath = " << dataPath << endl;
 		return dataPath / path;
 	}
 	
@@ -196,31 +194,24 @@ public:
 		
 		appPath = getAppPath();
 		appName = appPath.stem().string();
-//		cout << "ofCore init appPath = " << appPath << endl;
 		appFolder = appPath.parent_path();
 
 #if defined(TARGET_OSX)
 		bool isMacOSBundle = isInsideAppBundle(appPath);
 		if (isMacOSBundle) {
 			appFolder = appPath.parent_path().parent_path().parent_path().parent_path();
-//			cout << "YES isMacOSBundle, appFolder = " << appFolder.string() << endl;
-		} else {
-//			cout << "NO isMacOSBundle " << endl;
 		}
 #endif
 		
-		// Detect if it is build by Chalet (
+		// Detect if it is build by Chalet
 		if (appFolder.parent_path().stem() == "build") {
 			std::string appFolderNameString { appFolder.stem().string() };
 			if (std::count(appFolderNameString.begin(), appFolderNameString.end(),
 						   '-') >= 2) {
 				appFolder = appFolder.parent_path().parent_path() / "bin" ;
-//				cout << "DATA " << fs::absolute(appFolder) << endl;
 			}
 		}
-
 		dataPath = appFolder / "data";
-
 		defaultWorkingDirectory = fs::absolute(fs::current_path());
 	}
 
@@ -248,8 +239,6 @@ public:
 };
 
 extern ofCoreInternal ofCore;
-
-
 
 
 
@@ -385,3 +374,5 @@ void * ofGetCocoaWindow();
 HGLRC ofGetWGLContext();
 HWND ofGetWin32Window();
 #endif
+
+std::string ofGetAppName();

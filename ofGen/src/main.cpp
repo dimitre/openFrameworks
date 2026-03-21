@@ -97,12 +97,21 @@ int main(const int argc, const char * argv[]) {
 					"rm openFrameworks-Info.plist",
 					"rm Project.xcconfig",
 					"rm -rf build",
-					"rm -rf *.xcodeproj"
+					"rm -rf *.xcodeproj",
+					"rm -rf .vscode",
+					"rm -rf .cache",
+					"rm *.sln",
+					"rm *.vcxproj",
+					"rm *.filters",
+					"rm *.user",
+					"rm icon.rc",
 				};
 
 				for (const auto & l : lines) {
 					std::system(l.c_str());
 				}
+				std::exit(0);
+
 			} else {
 				alert("no of.yml present, exiting", 96);
 				std::exit(0);

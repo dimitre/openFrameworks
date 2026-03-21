@@ -524,3 +524,7 @@ HWND ofGetWin32Window() {
 	return ofCore.getCurrentWindow()->getWin32Window();
 }
 #endif
+
+std::string ofGetAppName() {
+	return ofCore.appName;
+}

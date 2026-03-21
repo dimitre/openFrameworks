@@ -10,6 +10,17 @@ OF_LIBS_COMMIT_FILE=".oflibs"
 WGET2VERSION=v2.2.1
 # check new versions here : https://github.com/rockdaboot/wget2/releases/
 
+# Function to get the latest Chalet version from GitHub
+get_latest_chalet_version() {
+	local latest_version=""
+	if command -v curl &>/dev/null; then
+		latest_version=$(curl -s "https://api.github.com/repos/chalet-org/chalet/releases/latest" 2>/dev/null | grep -o '"tag_name": "[^"]*"' | head -1 | cut -d'"' -f4 | sed 's/^v//')
+	fi
+	echo "${latest_version:-0.8.18}"
+}
+
+CHALETVERSION=$(get_latest_chalet_version)
+
 wipeDownloads=true
 wipeDownloadsAfterInstall=true
 # wipeDownloads=false
@@ -88,6 +99,12 @@ if [[ -f "$OF_LIBS_COMMIT_FILE" ]]; then
 	sectionOk "Stored commit: ${STORED_COMMIT:-none}"
 fi
 
+# Get the currently installed Chalet version
+INSTALLED_CHALET_VERSION=""
+if command -v chalet &>/dev/null; then
+	INSTALLED_CHALET_VERSION=$(chalet --version 2>/dev/null | awk '{print $3}')
+fi
+
 # Get the latest commit from remote
 section "Checking latest commit from ${OF_LIBS_REPO}..."
 REMOTE_COMMIT=$(get_remote_commit)
@@ -97,15 +114,31 @@ if [[ -z "$REMOTE_COMMIT" ]]; then
 else
 	sectionOk "Remote commit: $REMOTE_COMMIT"
 
-	# Compare commits and skip if same
+	# Compare commits and Chalet version, skip only if both are the same
+	LIBS_UP_TO_DATE=false
+	CHALET_UP_TO_DATE=false
+
 	if [[ -n "$STORED_COMMIT" && "$STORED_COMMIT" == "$REMOTE_COMMIT" ]]; then
+		LIBS_UP_TO_DATE=true
+	fi
+
+	if [[ -n "$INSTALLED_CHALET_VERSION" && "$INSTALLED_CHALET_VERSION" == "$CHALETVERSION" ]]; then
+		CHALET_UP_TO_DATE=true
+	fi
+
+	if [[ "$LIBS_UP_TO_DATE" == true && "$CHALET_UP_TO_DATE" == true ]]; then
 		sectionOk "Libraries are up-to-date (commit: $REMOTE_COMMIT)"
+		sectionOk "Chalet is up-to-date (version: $CHALETVERSION)"
 		sectionOk "Skipping installation. Delete $OF_LIBS_COMMIT_FILE to force reinstall."
 		exit 0
 	fi
 
-	if [[ -n "$STORED_COMMIT" ]]; then
+	if [[ "$LIBS_UP_TO_DATE" == false && -n "$STORED_COMMIT" ]]; then
 		section "New commit detected: $STORED_COMMIT -> $REMOTE_COMMIT"
+	fi
+
+	if [[ "$CHALET_UP_TO_DATE" == false && -n "$INSTALLED_CHALET_VERSION" ]]; then
+		section "New Chalet version detected: $INSTALLED_CHALET_VERSION -> $CHALETVERSION"
 	fi
 fi
 
