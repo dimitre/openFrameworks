@@ -4,23 +4,23 @@ set -e
 
 git pull
 
-# Source libs.sh to inherit PATH changes (chalet installation)
-source ./libs/libs.sh
+# Run libs.sh and capture CHALET_PATH output
+CHALET_PATH=$(./libs/libs.sh | grep "^CHALET_PATH=" | cut -d= -f2 || true)
 
-# Also source the chalet PATH export if it exists
-if [[ -f ./libs/.tools/export_path.sh ]]; then
-    source ./libs/.tools/export_path.sh
+# Add chalet to PATH if found
+if [[ -n "$CHALET_PATH" ]]; then
+    export PATH="$CHALET_PATH:$PATH"
 fi
 
 cd ofGen
 ./compile.sh
-#cd ../examples/demos/flechilhas
+
 cd ../examples/demos/organicText
 
-if command -v ofgen &>/dev/null; then
-	ofgen templates=chalet buildrun
+if command -v ofgen >/dev/null 2>&1; then
+    ofgen templates=chalet buildrun
 else
-	../../../ofgen/dist/ofgen templates=chalet buildrun
+    ../../../ofgen/dist/ofgen templates=chalet buildrun
 fi
 
 cd ../../..

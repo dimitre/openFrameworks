@@ -731,21 +731,11 @@ fi
 
 sectionOk "Install ofLibs done"
 
-# For Windows: create a sourceable file with PATH update
-# This allows parent scripts to pick up the chalet PATH
+# Output chalet PATH for parent scripts (Windows only)
 if [[ "$PLATFORM" == "vs" ]]; then
-	CHALET_EXPORT_FILE="./.tools/export_path.sh"
-	mkdir -p "./.tools"
 	CHALET_DIR_ABS="$(cd ./.tools/chalet 2>/dev/null && pwd || echo "")"
 	if [[ -n "$CHALET_DIR_ABS" ]]; then
-		echo "export PATH=\"$CHALET_DIR_ABS:\$PATH\"" > "$CHALET_EXPORT_FILE"
-	fi
-
-	if ! command -v chalet &>/dev/null; then
-		echo ""
-		alert "WARNING: chalet was installed but is not available in the current PATH."
-		alert "If running from a script, use: source $(cd ./.tools && pwd)/export_path.sh"
-		alert "Or restart your terminal."
+		echo "CHALET_PATH=$CHALET_DIR_ABS"
 	fi
 fi
 
