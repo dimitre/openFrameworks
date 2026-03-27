@@ -4,7 +4,7 @@ set -eu
 
 LIBSVERSION=v1.0
 OF_FOLDER=..
-CHALETVERSION=0.8.17
+# CHALETVERSION=0.8.17
 OF_LIBS_REPO="ofWorks/ofLibs"
 OF_LIBS_COMMIT_FILE=".oflibs"
 WGET2VERSION=v2.2.1
@@ -324,8 +324,17 @@ case "$PLATFORM" in
 					section "Fetching chalet ${CHALETVERSION} for Windows..."
 					mkdir -p "$CHALET_DIR"
 
-					wget2 -O "$CHALET_DIR/chalet.zip" \
-						"https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet-x86_64-pc-windows-msvc.zip"
+					if ! command -v wget2 &>/dev/null; then
+						echo "Error: wget2 not found. Cannot download chalet."
+						exit 1
+					fi
+
+					if ! wget2 -O "$CHALET_DIR/chalet.zip" \
+						"https://github.com/chalet-org/chalet/releases/download/v${CHALETVERSION}/chalet-x86_64-pc-windows-msvc.zip"; then
+						echo "Error: Failed to download chalet."
+						rm -rf "$CHALET_DIR"
+						exit 1
+					fi
 
 					# Verify it's a valid zip before extracting
 					if ! unzip -t "$CHALET_DIR/chalet.zip" > /dev/null 2>&1; then
@@ -336,6 +345,13 @@ case "$PLATFORM" in
 
 					unzip -o "$CHALET_DIR/chalet.zip" -d "$CHALET_DIR"
 					rm -f "$CHALET_DIR/chalet.zip"
+
+					# Verify chalet.exe exists after extraction
+					if [[ ! -x "$CHALET_DIR/chalet.exe" ]]; then
+						echo "Error: chalet.exe not found after extraction."
+						rm -rf "$CHALET_DIR"
+						exit 1
+					fi
 				fi
 
 				# inject into PATH for this session (convert to absolute path)
@@ -343,7 +359,16 @@ case "$PLATFORM" in
 				[[ ":$PATH:" != *":$CHALET_DIR_ABS:"* ]] && export PATH="$CHALET_DIR_ABS:$PATH"
 
 				# Add to Windows SYSTEM PATH permanently using PowerShell (requires admin)
-				CHALET_DIR_WIN=$(cygpath -w "$CHALET_DIR_ABS")
+				# Convert to Windows path format (handle both cygpath and manual conversion)
+				if command -v cygpath &>/dev/null; then
+					CHALET_DIR_WIN=$(cygpath -w "$CHALET_DIR_ABS")
+				else
+					# Manual conversion for Git Bash: /c/path -> C:/path
+					CHALET_DIR_WIN="$CHALET_DIR_ABS"
+					if [[ "$CHALET_DIR_WIN" =~ ^/([a-zA-Z])/(.*) ]]; then
+						CHALET_DIR_WIN="${BASH_REMATCH[1]^^}:/${BASH_REMATCH[2]}"
+					fi
+				fi
 				section "Adding chalet to Windows PATH: $CHALET_DIR_WIN"
 				powershell.exe -Command "
 					\$currentPath = [Environment]::GetEnvironmentVariable('Path', 'Machine')
