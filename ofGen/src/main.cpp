@@ -105,6 +105,8 @@ int main(const int argc, const char * argv[]) {
 					"rm *.filters",
 					"rm *.user",
 					"rm icon.rc",
+					"rm config.make",
+					"rm Makefile",
 				};
 
 				for (const auto & l : lines) {
@@ -126,9 +128,10 @@ int main(const int argc, const char * argv[]) {
 			conf.help();
 		}
 		// Now building projects
-		else if (conf.singleParameter == "bundle") {
+		else if (conf.singleParameter == "bundle" || conf.singleParameter == "dist") {
 			conf.buildProject();
 			conf.bundleProject();
+			conf.dist();
 		} else if (conf.singleParameter == "open") {
 			conf.buildProject();
 			conf.open();
@@ -137,8 +140,8 @@ int main(const int argc, const char * argv[]) {
 			conf.build();
 		} else if (conf.singleParameter == "bump") {
 			conf.bump();
-			conf.buildProject();
-			conf.build();
+			// conf.buildProject();
+			// conf.build();
 		} else if (conf.singleParameter == "buildrun") {
 			conf.buildProject();
 			int result = conf.build();

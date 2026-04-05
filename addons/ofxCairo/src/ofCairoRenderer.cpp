@@ -9,6 +9,7 @@
 #include "ofMesh.h"
 #include "ofTrueTypeFont.h"
 #include "ofVideoBaseTypes.h"
+#include "ofFileUtils.h"
 
 #include <glm/gtc/type_ptr.hpp> //make_mat4
 

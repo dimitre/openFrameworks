@@ -30,6 +30,7 @@ struct genConfig {
 	std::map<std::string, std::string> settings;
 	// 19 jan 2026
 	std::map<std::string, std::string> infoPlist;
+	std::string agentsContent;
 
 
 	std::string projectName { "" };
@@ -165,6 +166,7 @@ ofGen templates=zed,macos,chalet addons=ofxMidi,ofxOpencv ofpath=../../.. path=/
 	void open();
 	int build();
 	bool bundleProject();
+	bool dist();
 	void run();
 	// bump version in of.yml and build project again
 	bool bump();

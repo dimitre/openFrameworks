@@ -7,6 +7,9 @@
 // Ok, added file_scan_exclusions, 06/11/2025
 {
 	"file_scan_exclusions": ["build/**"],
+	"search.exclude": {
+		"build/**": true
+	},
 	"diagnostics": {
 		"include_warnings": true,
 	},

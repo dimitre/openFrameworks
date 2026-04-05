@@ -120,6 +120,17 @@ bool genConfig::loadYML() {
 			}
 		}
 
+		if (pImpl->ofYaml["agents"]) {
+			YAML::Node agentsNode = pImpl->ofYaml["agents"];
+			if (agentsNode.IsScalar()) {
+				agentsContent = agentsNode.as<std::string>();
+			} else if (agentsNode.IsSequence()) {
+				for (std::size_t i = 0; i < agentsNode.size(); i++) {
+					agentsContent += agentsNode[i].as<std::string>() + "\n\n";
+				}
+			}
+		}
+
 		conf.addonsNames = nodeToStrings("addons");
 
 		if (pImpl->ofYaml["addonsSources"]) {
@@ -252,12 +263,23 @@ void genConfig::run() {
 	}
 }
 
+bool genConfig::dist() {
+	alert("distProject", 95);
+	if (pImpl->ofYaml["distFolder"]) {
+		std::string folder { pImpl->ofYaml["distFolder"].as<std::string>() };
+		std::string command { "cp -rP bin/*.app " + folder };
+		alert(command, 95);
+		return std::system(command.c_str());
+	}
+	return false;
+}
+
 bool genConfig::bundleProject() {
-	// alert("bundleProject", 5);
+	alert("bundleProject", 5);
 	for (auto & t : templates) {
 		// alert(t->name, 5);
 		if (t->commands.count("bundle")) {
-			// alert(t->commands["bundle"], 5);
+			alert(t->commands["bundle"], 95);
 			return std::system(t->commands["bundle"].c_str());
 		}
 	}
@@ -266,25 +288,25 @@ bool genConfig::bundleProject() {
 
 bool genConfig::bump() {
 	fs::path configFile { "of.yml" };
-	
+
 	// Load existing YAML or create new node
 	YAML::Node yaml;
 	if (fs::exists(configFile)) {
 		yaml = YAML::LoadFile(configFile.string());
 	}
-	
+
 	// Get current version or default to 0.0.0
 	std::string version = "0.0.0";
 	if (yaml["version"]) {
 		version = yaml["version"].as<std::string>();
 	}
-	
+
 	// Parse version (format: major.minor.patch)
 	std::vector<std::string> parts = ofSplitString(version, ".");
 	while (parts.size() < 3) {
 		parts.emplace_back("0");
 	}
-	
+
 	// Increment patch version (minor bump)
 	try {
 		int patch = std::stoi(parts[2]);
@@ -293,26 +315,26 @@ bool genConfig::bump() {
 	} catch (...) {
 		parts[2] = "1";
 	}
-	
+
 	// Reconstruct version string
 	std::string newVersion = parts[0] + "." + parts[1] + "." + parts[2];
 	yaml["version"] = newVersion;
-	
+
 	// Write back to file
 	std::ofstream outFile(configFile);
 	if (!outFile.is_open()) {
 		std::cerr << "Failed to open " << configFile << " for writing" << std::endl;
 		return false;
 	}
-	
+
 	outFile << yaml;
 	outFile.close();
-	
+
 	alert("Bumped version: " + version + " -> " + newVersion, 92);
-	
+
 	// Update settings so buildProject sees the new version
 	settings["version"] = newVersion;
-	
+
 	return true;
 }
 
@@ -527,6 +549,57 @@ bool genConfig::buildProject() {
 
 	// pass files to projects.
 	project.build();
+
+	if (!agentsContent.empty()) {
+		std::ofstream agentsFile("AGENTS.md");
+		if (agentsFile.is_open()) {
+			agentsFile << R"(# Project Context
+
+This is an **ofWorks** project (an openFrameworks fork).
+
+## Math Types
+
+Do **not** use legacy openFrameworks math types. Use their GLM equivalents instead:
+
+| Don't use | Use instead |
+|-----------|-------------|
+| `ofPoint` | `glm::vec3` |
+| `ofVec2f` | `glm::vec2` |
+| `ofVec3f` | `glm::vec3` |
+| `ofVec4f` | `glm::vec4` |
+| `ofMatrix3x3` | `glm::mat3` |
+| `ofMatrix4x4` | `glm::mat4` |
+| `ofQuaternion` | `glm::quat` |
+| `ofVectorMath` | GLM equivalents |
+
+## Math Constants
+
+Use GLM constants instead of legacy ones:
+
+| Don't use | Use instead |
+|-----------|-------------|
+| `PI` | `glm::pi<float>()` |
+| `M_PI` | `glm::pi<float>()` |
+| `TWO_PI` | `glm::two_pi<float>()` |
+| `HALF_PI` | `glm::half_pi<float>()` |
+
+## Build Workflow
+
+Project files (Chalet, Xcode) are **auto-generated** by `ofgen` from `of.yml`. Do **not** manually edit `chalet.yaml` or `.xcodeproj` files.
+
+```sh
+ofgen             # regenerate project files
+chalet buildrun   # build and run
+```
+
+## Project-specific notes
+
+)";
+			agentsFile << agentsContent << "\n";
+			agentsFile.close();
+			alert("Generated AGENTS.md", 92);
+		}
+	}
 
 	return true;
 }
