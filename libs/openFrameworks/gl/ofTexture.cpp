@@ -293,6 +293,7 @@ void ofTexture::clear() {
 	texData.bUseExternalTextureID = false;
 	texData.textureID = 0;
 	texData.bAllocated = false;
+	meshCache.valid = false;
 }
 
 //----------------------------------------------------------
