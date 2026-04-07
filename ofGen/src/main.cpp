@@ -87,26 +87,35 @@ int main(const int argc, const char * argv[]) {
 		if (conf.singleParameter == "rm") {
 			if (fs::exists("of.yml")) {
 				std::vector<std::string> lines {
+					"rm .DS_Store",
 					"rm addons.make",
-					"rm App.xcconfig",
+
+					"rm .chaletrc",
 					"rm chalet.yaml",
 					"rm compile_flags.txt",
+					"rm -rf build",
+
+					// MAKE
 					"rm config.make",
 					"rm Makefile",
+
+					// XCODE
 					"rm of.entitlements",
 					"rm openFrameworks-Info.plist",
+					"rm App.xcconfig",
 					"rm Project.xcconfig",
-					"rm -rf build",
 					"rm -rf *.xcodeproj",
+
 					"rm -rf .vscode",
+					"rm -rf .zed",
 					"rm -rf .cache",
+
+					// VisualStudio
 					"rm *.sln",
 					"rm *.vcxproj",
 					"rm *.filters",
 					"rm *.user",
 					"rm icon.rc",
-					"rm config.make",
-					"rm Makefile",
 				};
 
 				for (const auto & l : lines) {
