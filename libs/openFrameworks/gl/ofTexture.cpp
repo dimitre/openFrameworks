@@ -224,6 +224,8 @@ ofTexture & ofTexture::operator=(const ofTexture & mom) {
 	bAnchorIsPct = mom.bAnchorIsPct;
 	texData = mom.texData;
 	bWantsMipmap = mom.bWantsMipmap;
+	// Invalidate mesh cache when texture data changes
+	meshCache.valid = false;
 	retain(texData.textureID);
 #ifdef TARGET_ANDROID
 	unregisterTexture(this);
@@ -240,6 +242,8 @@ ofTexture & ofTexture::operator=(ofTexture && mom) {
 	bAnchorIsPct = mom.bAnchorIsPct;
 	texData = mom.texData;
 	bWantsMipmap = mom.bWantsMipmap;
+	// Invalidate mesh cache when texture data changes
+	meshCache.valid = false;
 	mom.texData.bAllocated = 0;
 	mom.texData.textureID = 0;
 #ifdef TARGET_ANDROID
@@ -422,6 +426,9 @@ void ofTexture::allocate(const ofTextureData & textureData, int glFormat, int pi
 			return;
 		}
 	}
+
+	// Invalidate mesh cache when texture is reallocated
+	meshCache.valid = false;
 
 	texData = textureData;
 	//our graphics card might not support arb so we have to see if it is supported.
