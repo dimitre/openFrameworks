@@ -1,5 +1,10 @@
 #pragma once
 
+// Suppress Winsock deprecation warnings on Windows
+#ifdef _WIN32
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+#endif
+
 //////////////////////////////////////////////////////////////////////////////////////
 // Original author: ???????? we think Christian Naglhofer
 // Crossplatform port by: Theodore Watson May 2007 - update Jan 2008
