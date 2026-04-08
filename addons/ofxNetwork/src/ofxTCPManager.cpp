@@ -206,30 +206,18 @@ bool ofxTCPManager::Accept(ofxTCPManager& sConnect)
 bool ofxTCPManager::Connect(const char *pAddrStr, unsigned short usPort)
 {
   sockaddr_in addr_in= {0};
+  struct hostent *he;
 
   if (m_hSocket == INVALID_SOCKET){
 	  return(false);
   }
 
-	#ifdef TARGET_WIN32
-		ADDRINFOA hints = {0};
-		hints.ai_family = AF_INET;
-		hints.ai_socktype = SOCK_STREAM;
-		PADDRINFOA result = NULL;
-		if (GetAddrInfoA(pAddrStr, NULL, &hints, &result) != 0 || result == NULL) {
-			return false;
-		}
-		addr_in.sin_addr = ((sockaddr_in*)result->ai_addr)->sin_addr;
-		FreeAddrInfoA(result);
-	#else
-		struct hostent *he;
-		if ((he = gethostbyname(pAddrStr)) == NULL)
-			return(false);
-		addr_in.sin_addr  = *((struct in_addr *)he->h_addr);
-	#endif
+  if ((he = gethostbyname(pAddrStr)) == NULL)
+    return(false);
 
 	addr_in.sin_family= AF_INET; // host byte order
 	addr_in.sin_port  = htons(usPort); // short, network byte order
+	addr_in.sin_addr  = *((struct in_addr *)he->h_addr);
 
 	// set to non-blocking before connect
     bool wasBlocking = nonBlocking;
@@ -621,20 +609,10 @@ int ofxTCPManager::GetMaxConnections() {
 }
 
 bool ofxTCPManager::CheckHost(const char *pAddrStr) {
-	#ifdef TARGET_WIN32
-		ADDRINFOA hints = {0};
-		hints.ai_family = AF_INET;
-		hints.ai_socktype = SOCK_STREAM;
-		PADDRINFOA result = NULL;
-		bool ret = (GetAddrInfoA(pAddrStr, NULL, &hints, &result) == 0 && result != NULL);
-		if (result) FreeAddrInfoA(result);
-		return ret;
-	#else
-		hostent * hostEntry;
-		in_addr iaHost;
-		inet_pton(AF_INET, pAddrStr, &iaHost);
-		hostEntry = gethostbyaddr((const char *)&iaHost, sizeof(struct in_addr), AF_INET);
-		return ((!hostEntry) ? false : true);
-	#endif
+  hostent * hostEntry;
+  in_addr iaHost;
+  inet_pton(AF_INET, pAddrStr, &iaHost);
+  hostEntry = gethostbyaddr((const char *)&iaHost, sizeof(struct in_addr), AF_INET);
+  return ((!hostEntry) ? false : true);
 }
 

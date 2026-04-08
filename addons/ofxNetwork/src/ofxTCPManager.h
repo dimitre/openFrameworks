@@ -83,8 +83,6 @@ SetTimeoutReceive()
 	#endif
 	#include <winsock2.h>
 	#include <ws2tcpip.h>		// TCP/IP annex needed for multicasting
-	#include <ws2ipdef.h>
-	#include <ip2string.h>
 #endif
 
 //--------------------------------------------------------------------------------
@@ -129,34 +127,20 @@ public:
 		memset(this, 0, sizeof(InetAddr));
 		sin_family= AF_INET;
 		sin_port= htons(usPort);
-		#ifdef TARGET_WIN32
-			InetPton(AF_INET, szStrIP, &sin_addr);
-		#else
-			inet_pton(AF_INET, szStrIP, &sin_addr);
-		#endif
+		inet_pton(AF_INET, szStrIP, &sin_addr);
 	}
 
 	InetAddr(const char* pStrIP, const unsigned short usPort= 0) {
 		memset(this, 0, sizeof(InetAddr));
 		sin_family= AF_INET;
 		sin_port= htons(usPort);
-		#ifdef TARGET_WIN32
-			InetPton(AF_INET, pStrIP, &sin_addr);
-		#else
-			inet_pton(AF_INET, pStrIP, &sin_addr);
-		#endif
+		inet_pton(AF_INET, pStrIP, &sin_addr);
 	}
 	/// returns the address in dotted-decimal format
 	char* DottedDecimal() {
-		#ifdef TARGET_WIN32
-			static char buf[INET_ADDRSTRLEN];
-			RtlIpv4AddressToStringA(&sin_addr, buf);
-			return buf;
-		#else
-			static char buf[INET_ADDRSTRLEN];
-			inet_ntop(AF_INET, &sin_addr, buf, INET_ADDRSTRLEN);
-			return buf;
-		#endif
+		static char buf[INET_ADDRSTRLEN];
+		inet_ntop(AF_INET, &sin_addr, buf, INET_ADDRSTRLEN);
+		return buf;
 	}
 	unsigned short GetPort() const { return ntohs(sin_port); }
 	unsigned long GetIpAddr() const { return ntohl(sin_addr.s_addr); }
