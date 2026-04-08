@@ -1,5 +1,9 @@
 #define _CRT_SECURE_NO_DEPRECATE
 
+#ifdef TARGET_WIN32
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+#endif
+
 #include "ofxUDPManager.h"
 #include "ofxNetworkUtils.h"
 #include "ofxNetwork.h"
