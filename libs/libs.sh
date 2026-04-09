@@ -311,7 +311,9 @@ case "$PLATFORM" in
 					version=$("$CHALET_DIR/chalet.exe" --version 2>/dev/null | awk '{print $3}')
 					if [ "$CHALETVERSION" != "$version" ]; then
 						section "chalet version mismatch ($version != $CHALETVERSION), updating..."
-						rm -rf "$CHALET_DIR"
+						if [[ -d "$CHALET_DIR" ]]; then
+							rm -rf "$CHALET_DIR"
+						fi
 						NEED_INSTALL=true
 					else
 						sectionOk "chalet already installed ($version)"
