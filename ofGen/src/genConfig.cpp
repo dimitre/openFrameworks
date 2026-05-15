@@ -53,11 +53,14 @@ void genConfig::import() {
 			// alert("⚠️  Not an ofWorks project folder, no action taken", 94);
 
 		} else {
+
 			std::ifstream file("addons.make");
 			YAML::Node node;
 			node["ofpath"] = "../../..";
 			node["version"] = "0.0.1";
 			node["templates"] = std::vector { "chalet", "zed" };
+
+
 
 			if (file.is_open()) {
 				std::string line;
@@ -354,6 +357,11 @@ bool genConfig::buildProject() {
 		// build = false;
 		return false;
 		// conf.help();
+	}
+
+	if (!fs::exists("bin")) {
+		alert("Creating folder bin/data", 95);
+		fs::create_directories("bin/data");
 	}
 
 	bool hasYml = loadYML();
