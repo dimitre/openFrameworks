@@ -39,7 +39,7 @@ CLANG_CXX_LANGUAGE_STANDARD = c++20
 MACOSX_DEPLOYMENT_TARGET = 11.6
 
 HEADER_OF = $(OF_PATH)/libs/openFrameworks/**
-HEADER_OF_LIBS = $(OF_PATH)/libs/macos/include/**
+HEADER_OF_LIBS = $(OF_PATH)/libs/macos/include $(OF_PATH)/libs/macos/include/freetype2 
 
 //------- Libraries
 OF_CORE_LIBS = $(OF_PATH)/libs/openFrameworksCompiled/lib/macos/openFrameworks.a
@@ -94,8 +94,8 @@ ENABLE_TESTABILITY = YES
 //GCC_OPTIMIZATION_LEVEL[config=Debug] = 0
 //GCC_OPTIMIZATION_LEVEL[config=Release] = 3
 
-CC = $(OF_PATH)/scripts/macos/cc.sh
-CXX = $(OF_PATH)/scripts/macos/cxx.sh
+//CC = $(OF_PATH)/scripts/macos/cc.sh
+//CXX = $(OF_PATH)/scripts/macos/cxx.sh
 
 // Great for disabling and addressing all warnings
 GCC_WARN_64_TO_32_BIT_CONVERSION = YES
