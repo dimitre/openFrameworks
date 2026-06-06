@@ -19,8 +19,9 @@ ofTemplateChalet::ofTemplateChalet() {
 	commands["build"] = "chalet build";
 	commands["run"] = "chalet buildrun";
 	commands["clean"] = "chalet clean --all";
-	// commands["bundle"] = "chalet bundle; cp -r dist/* bin";
-	commands["bundle"] = "chalet bundle; mv -i -n dist/* bin; rm -rf dist";
+	// The dist/ -> bin/ move and dist/ cleanup are done in genConfig::bundleProject()
+	// with std::filesystem (portable, safe on paths with spaces).
+	commands["bundle"] = "chalet bundle";
 
 
 	// buildCommand = "chalet build";

@@ -4,7 +4,6 @@
 
 #include <fstream> // ifstream
 #include <iostream> // cout
-#include <regex>
 #include <vector>
 
 #include <fmt/format.h>
@@ -50,10 +49,6 @@ std::string ofPathToString(const fs::path & path) {
 	return {};
 }
 
-std::string stringReplace(const std::string & strIn, const std::string & from, const std::string & to) {
-	return std::regex_replace(strIn, std::regex(from), to);
-}
-
 bool ofIsPathInPath(const fs::path & path, const fs::path & base) {
 	if (path == base) {
 		return true;
@@ -64,10 +59,6 @@ bool ofIsPathInPath(const fs::path & path, const fs::path & base) {
 
 	return !rel.empty() && rel.native()[0] != '.';
 }
-// std::string stringReplace(const std::string & strIn, const std::string & from, const std::string & to) {
-// 	return std::regex_replace(strIn, std::regex(from), to);
-// }
-//
 
 std::string textToString(const fs::path & file) {
 	std::ifstream fileFrom(file);
@@ -95,6 +86,29 @@ void replaceAll(std::string & str, const std::string & from, const std::string &
 	while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
 		str.replace(start_pos, from.length(), to);
 		start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
+	}
+}
+
+bool removePath(const fs::path & path) {
+	std::error_code ec;
+	auto count = fs::remove_all(path, ec);
+	if (ec) {
+		alert("could not remove " + path.string() + " : " + ec.message(), 91);
+		return false;
+	}
+	if (count > 0) {
+		alert("removed " + path.string(), 90);
+	}
+	return count > 0;
+}
+
+void removePathsByExtension(const fs::path & dir, const std::string & ext) {
+	std::error_code ec;
+	if (!fs::exists(dir, ec)) return;
+	for (const auto & entry : fs::directory_iterator(dir, ec)) {
+		if (entry.path().extension() == ext) {
+			removePath(entry.path());
+		}
 	}
 }
 

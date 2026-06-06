@@ -266,13 +266,36 @@ void genConfig::run() {
 	}
 }
 
+// Copy `from` to `dest`, replacing any existing entry (clean copy, like `cp -rP`).
+// Recurses into directories and preserves symlinks (so .app bundles stay intact).
+static bool copyReplace(const fs::path & from, const fs::path & dest) {
+	std::error_code ec;
+	fs::remove_all(dest, ec);
+	fs::copy(from, dest,
+		fs::copy_options::recursive | fs::copy_options::copy_symlinks, ec);
+	if (ec) {
+		alert("could not copy " + from.string() + " -> " + dest.string() + " : " + ec.message(), 91);
+		return false;
+	}
+	alert("copied " + from.string() + " -> " + dest.string(), 90);
+	return true;
+}
+
 bool genConfig::dist() {
 	alert("distProject", 95);
 	if (pImpl->ofYaml["distFolder"]) {
-		std::string folder { pImpl->ofYaml["distFolder"].as<std::string>() };
-		std::string command { "cp -rP bin/*.app " + folder };
-		alert(command, 95);
-		return std::system(command.c_str());
+		fs::path folder { pImpl->ofYaml["distFolder"].as<std::string>() };
+		std::error_code ec;
+		fs::create_directories(folder, ec);
+
+		bool any = false;
+		if (fs::exists("bin", ec)) {
+			for (const auto & entry : fs::directory_iterator("bin", ec)) {
+				if (entry.path().extension() != ".app") continue;
+				any |= copyReplace(entry.path(), folder / entry.path().filename());
+			}
+		}
+		return any;
 	}
 	return false;
 }
@@ -283,7 +306,36 @@ bool genConfig::bundleProject() {
 		// alert(t->name, 5);
 		if (t->commands.count("bundle")) {
 			alert(t->commands["bundle"], 95);
-			return std::system(t->commands["bundle"].c_str());
+			// Run the external bundler (e.g. `chalet bundle`).
+			if (std::system(t->commands["bundle"].c_str()) != 0) {
+				return false;
+			}
+
+			// Move bundled artifacts from dist/ into bin/, then remove dist/.
+			// no-clobber: existing entries in bin/ are kept (matches old `mv -n`).
+			std::error_code ec;
+			if (fs::exists("dist", ec)) {
+				fs::create_directories("bin", ec);
+				for (const auto & entry : fs::directory_iterator("dist", ec)) {
+					fs::path dest { fs::path("bin") / entry.path().filename() };
+					if (fs::exists(dest, ec)) {
+						alert("keeping existing " + dest.string(), 90);
+						continue;
+					}
+					fs::rename(entry.path(), dest, ec);
+					if (ec) {
+						// rename fails across filesystems; fall back to copy.
+						ec.clear();
+						if (copyReplace(entry.path(), dest)) {
+							fs::remove_all(entry.path(), ec);
+						}
+					} else {
+						alert("moved " + entry.path().string() + " -> " + dest.string(), 90);
+					}
+				}
+				fs::remove_all("dist", ec);
+			}
+			return true;
 		}
 	}
 	return false;

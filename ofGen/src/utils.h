@@ -37,9 +37,15 @@ inline void alert(std::string msg, int color = 2) {
 
 std::string textToString(const fs::path & file);
 bool ofIsPathInPath(const fs::path & path, const fs::path & base);
-std::string stringReplace(const std::string & strIn, const std::string & from, const std::string & to);
 std::vector<std::string> textToVector(const fs::path & file);
 void replaceAll(std::string & str, const std::string & from, const std::string & to);
+
+// Remove a file or directory (recursively). No-op if it doesn't exist.
+// Returns true if something was actually removed.
+bool removePath(const fs::path & path);
+// Remove every entry in `dir` whose extension matches `ext` (e.g. ".xcodeproj").
+// Handles both files (*.sln) and directories (*.xcodeproj).
+void removePathsByExtension(const fs::path & dir, const std::string & ext);
 
 void ltrim(std::string & s);
 void rtrim(std::string & s);

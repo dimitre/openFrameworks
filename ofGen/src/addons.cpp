@@ -262,13 +262,16 @@ void ofAddon::loadAddonConfig() {
 			continue;
 		}
 
-		line = stringReplace(line, " \\= ", "=");
-		line = stringReplace(line, "\\= ", "=");
-		line = stringReplace(line, " \\=", "=");
-		line = stringReplace(line, " \\+\\= ", "+=");
-		line = stringReplace(line, " \\+\\=", "+=");
-		line = stringReplace(line, "\\+\\= ", "+=");
-		// line = stringReplace(line, "\\$(OF_ROOT)", conf.ofPath.string());
+		// Normalize whitespace around assignment operators so the `=` / `+=`
+		// split below works regardless of spacing in addon_config.mk.
+		// (Same passes, same order as the old regex version — literal now.)
+		replaceAll(line, " = ", "=");
+		replaceAll(line, "= ", "=");
+		replaceAll(line, " =", "=");
+		replaceAll(line, " += ", "+=");
+		replaceAll(line, " +=", "+=");
+		replaceAll(line, "+= ", "+=");
+		// replaceAll(line, "$(OF_ROOT)", conf.ofPath.string());
 
 		replaceAll(line, "$(OF_ROOT)", conf.ofPath.string());
 		// cout << line << endl;
@@ -326,7 +329,8 @@ void ofAddon::loadAddonConfig() {
 		if (addonProperties.contains(e.first)) {
 			// alert(e.first + " not empty");
 			for (auto & a : addonProperties[e.first]) {
-			std::string value = stringReplace(a, "%", "");
+			std::string value = a;
+			replaceAll(value, "%", "");
 				//alert("exclusions " + e.first + " : " + value, 95);
 				exclusionsMap[e.second].emplace_back(value);
 			}
