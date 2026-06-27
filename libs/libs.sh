@@ -451,6 +451,7 @@ case "$PLATFORM" in
 			if [ -f "/etc/arch-release" ]; then
 				${SUDO_CMD} pacman -Syu --noconfirm
 
+				# Includes Wayland support (wayland libxkbcommon)
 				${SUDO_CMD} pacman -S --noconfirm --needed \
 					gcc unzip ninja wget \
 					fontconfig \
@@ -459,10 +460,9 @@ case "$PLATFORM" in
 					freeglut libxmu libxxf86vm \
 					libxcursor libxi libxinerama \
 					libunwind \
-					glib2 glib2-devel \
+					glib2 \
 					gstreamer gst-plugins-base gst-plugins-bad gst-plugins-good gst-libav \
 					openal libsndfile \
-					# Wayland support
 					wayland libxkbcommon
 			else
 				# Check which packages are missing before installing
