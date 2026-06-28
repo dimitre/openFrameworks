@@ -2,6 +2,17 @@
 cd "$(dirname "$0")"
 set -eu
 
+# chalet detects the C++ compiler by running `g++ -v` and searching its output
+# for the literal English word "version". Under a non-English locale GCC
+# localizes that banner, so detection fails with:
+#   "Error getting the version and description for: '/usr/bin/g++'"
+# Force a stable C locale on Linux so any chalet/compiler probing here is
+# always parseable. (C.UTF-8 keeps UTF-8 path handling; scoped to Linux
+# because macOS lacks that locale.)
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+	export LC_ALL=C.UTF-8
+fi
+
 LIBSVERSION=v1.0
 OF_FOLDER=..
 # CHALETVERSION=0.8.17
