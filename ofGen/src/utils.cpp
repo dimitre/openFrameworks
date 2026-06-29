@@ -2,6 +2,7 @@
 #include "addons.h"
 #include "ofTemplate.h"
 
+#include <algorithm> // find_if, remove_if
 #include <fstream> // ifstream
 #include <iostream> // cout
 #include <vector>
