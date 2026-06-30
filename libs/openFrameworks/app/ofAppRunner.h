@@ -9,6 +9,10 @@
 	#include <limits.h>        /* PATH_MAX */
 #endif
 
+#if defined(TARGET_LINUX) || defined(TARGET_ANDROID)
+	#include <unistd.h>       /* readlink */
+#endif
+
 
 #include <string>
 #ifdef _WIN32
