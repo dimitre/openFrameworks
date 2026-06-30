@@ -369,9 +369,20 @@ void ofAppGLFWWindow::setup(const ofWindowSettings & _settings) {
 		glewExperimental = GL_TRUE;
 		GLenum err = glewInit();
 		if (GLEW_OK != err) {
-			/* Problem: glewInit failed, something is seriously wrong. */
-			ofLogError("ofAppRunner") << "couldn't init GLEW: " << glewGetErrorString(err);
-			return;
+#if defined(TARGET_LINUX) && defined(GLEW_ERROR_NO_GLX_DISPLAY)
+			// On Wayland/EGL there is no GLX display, so glewInit() returns
+			// GLEW_ERROR_NO_GLX_DISPLAY *after* it has already loaded the core GL
+			// entry points. The GLX-specific extensions it couldn't wrangle are
+			// irrelevant under EGL, so treat this as non-fatal. See wayland.md #6.
+			if (err == GLEW_ERROR_NO_GLX_DISPLAY) {
+				ofLogNotice("ofAppRunner") << "GLEW: no GLX display (Wayland/EGL) — continuing";
+			} else
+#endif
+			{
+				/* Problem: glewInit failed, something is seriously wrong. */
+				ofLogError("ofAppRunner") << "couldn't init GLEW: " << glewGetErrorString(err);
+				return;
+			}
 		}
 		inited = true;
 		std::cout << "[ofAppGLFWWindow] GLEW initialized" << std::endl;
@@ -489,73 +500,7 @@ ofCoreEvents & ofAppGLFWWindow::events() {
 //--------------------------------------------
 void ofAppGLFWWindow::update() {
 	events().notifyUpdate();
-	
-#if defined(TARGET_LINUX)
-	// On Wayland, poll keyboard state directly since keyboard_cb may not fire reliably
-	#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4)
-	if (windowP && glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
-		// Initialize key state tracking on first call
-		if (waylandKeyStates.empty()) {
-			waylandKeyStates.resize(WAYLAND_KEY_COUNT, GLFW_RELEASE);
-		}
-		
-		// Poll common keys only (avoid invalid keycodes)
-		static const int keysToPoll[] = {
-			GLFW_KEY_SPACE, GLFW_KEY_APOSTROPHE, GLFW_KEY_COMMA, GLFW_KEY_MINUS, GLFW_KEY_PERIOD,
-			GLFW_KEY_SLASH, GLFW_KEY_0, GLFW_KEY_1, GLFW_KEY_2, GLFW_KEY_3, GLFW_KEY_4,
-			GLFW_KEY_5, GLFW_KEY_6, GLFW_KEY_7, GLFW_KEY_8, GLFW_KEY_9, GLFW_KEY_SEMICOLON,
-			GLFW_KEY_EQUAL, GLFW_KEY_A, GLFW_KEY_B, GLFW_KEY_C, GLFW_KEY_D, GLFW_KEY_E,
-			GLFW_KEY_F, GLFW_KEY_G, GLFW_KEY_H, GLFW_KEY_I, GLFW_KEY_J, GLFW_KEY_K,
-			GLFW_KEY_L, GLFW_KEY_M, GLFW_KEY_N, GLFW_KEY_O, GLFW_KEY_P, GLFW_KEY_Q,
-			GLFW_KEY_R, GLFW_KEY_S, GLFW_KEY_T, GLFW_KEY_U, GLFW_KEY_V, GLFW_KEY_W,
-			GLFW_KEY_X, GLFW_KEY_Y, GLFW_KEY_Z, GLFW_KEY_LEFT_BRACKET, GLFW_KEY_BACKSLASH,
-			GLFW_KEY_RIGHT_BRACKET, GLFW_KEY_GRAVE_ACCENT, GLFW_KEY_ESCAPE, GLFW_KEY_ENTER,
-			GLFW_KEY_TAB, GLFW_KEY_BACKSPACE, GLFW_KEY_INSERT, GLFW_KEY_DELETE, GLFW_KEY_RIGHT,
-			GLFW_KEY_LEFT, GLFW_KEY_DOWN, GLFW_KEY_UP, GLFW_KEY_PAGE_UP, GLFW_KEY_PAGE_DOWN,
-			GLFW_KEY_HOME, GLFW_KEY_END, GLFW_KEY_CAPS_LOCK, GLFW_KEY_SCROLL_LOCK,
-			GLFW_KEY_NUM_LOCK, GLFW_KEY_PRINT_SCREEN, GLFW_KEY_PAUSE, GLFW_KEY_F1,
-			GLFW_KEY_F2, GLFW_KEY_F3, GLFW_KEY_F4, GLFW_KEY_F5, GLFW_KEY_F6, GLFW_KEY_F7,
-			GLFW_KEY_F8, GLFW_KEY_F9, GLFW_KEY_F10, GLFW_KEY_F11, GLFW_KEY_F12,
-			GLFW_KEY_LEFT_SHIFT, GLFW_KEY_LEFT_CONTROL, GLFW_KEY_LEFT_ALT, GLFW_KEY_LEFT_SUPER,
-			GLFW_KEY_RIGHT_SHIFT, GLFW_KEY_RIGHT_CONTROL, GLFW_KEY_RIGHT_ALT, GLFW_KEY_RIGHT_SUPER
-		};
-		for (size_t i = 0; i < sizeof(keysToPoll)/sizeof(keysToPoll[0]); i++) {
-			int keycode = keysToPoll[i];
-			if (keycode >= (int)waylandKeyStates.size()) continue;
-			
-			int state = glfwGetKey(windowP, keycode);
-			int prevState = waylandKeyStates[keycode];
-			
-			if (state != prevState) {
-				waylandKeyStates[keycode] = state;
-				
-				// Only process press/release
-				if (state == GLFW_PRESS || state == GLFW_RELEASE) {
-					// Get modifiers
-					int mods = 0;
-					if (glfwGetKey(windowP, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS || glfwGetKey(windowP, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS)
-						mods |= GLFW_MOD_SHIFT;
-					if (glfwGetKey(windowP, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS || glfwGetKey(windowP, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS)
-						mods |= GLFW_MOD_CONTROL;
-					if (glfwGetKey(windowP, GLFW_KEY_LEFT_ALT) == GLFW_PRESS || glfwGetKey(windowP, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS)
-						mods |= GLFW_MOD_ALT;
-					if (glfwGetKey(windowP, GLFW_KEY_LEFT_SUPER) == GLFW_PRESS || glfwGetKey(windowP, GLFW_KEY_RIGHT_SUPER) == GLFW_PRESS)
-						mods |= GLFW_MOD_SUPER;
-					
-					// Call keyboard callback to handle the event
-					#if (GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 3)
-					int scancode = glfwGetKeyScancode(keycode);
-					#else
-					int scancode = keycode;
-					#endif
-					keyboard_cb(windowP, keycode, scancode, state, mods);
-				}
-			}
-		}
-	}
-	#endif  // GLFW 3.4+
-#endif  // TARGET_LINUX
-	
+
 	//show the window right before the first draw call.
 	if (bWindowNeedsShowing && windowP) {
 		// not working.
