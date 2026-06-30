@@ -242,6 +242,25 @@ public:
 		return { 0, 0, 0, 0 };
 	}
 
+	// Returns the GLFWmonitor* whose area contains the center of rect, or the
+	// primary monitor as a fallback. Used for real fullscreen via glfwSetWindowMonitor.
+	[[nodiscard]] GLFWmonitor * getMonitorForScreenRect(const ofRectangle & rect) {
+		int count = 0;
+		GLFWmonitor ** mons = glfwGetMonitors(&count);
+		for (int i = 0; i < count; i++) {
+			int mx = 0, my = 0;
+			glfwGetMonitorPos(mons[i], &mx, &my);
+			const GLFWvidmode * mode = glfwGetVideoMode(mons[i]);
+			if (mode) {
+				ofRectangle mrect(mx, my, mode->width, mode->height);
+				if (mrect.inside(rect.getCenter())) {
+					return mons[i];
+				}
+			}
+		}
+		return glfwGetPrimaryMonitor();
+	}
+
 	[[nodiscard]] ofRectangle getRectForAllMonitors() const {
 		return allMonitorsRect;
 	}

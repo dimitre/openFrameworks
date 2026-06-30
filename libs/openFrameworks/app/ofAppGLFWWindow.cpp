@@ -694,7 +694,7 @@ int ofAppGLFWWindow::getPixelScreenCoordScale() const {
 ofRectangle ofAppGLFWWindow::getWindowRect() const {
 //	return windowRect;
 
-	glm::ivec2 pos;
+	glm::ivec2 pos { 0, 0 };
 #if defined(TARGET_LINUX)
 	// Wayland does not support getting window position
 	if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
@@ -717,7 +717,7 @@ glm::ivec2 ofAppGLFWWindow::getWindowSize() const {
 
 //------------------------------------------------------------
 glm::ivec2 ofAppGLFWWindow::getWindowPosition() const {
-	glm::ivec2 pos;
+	glm::ivec2 pos { 0, 0 };
 #if defined(TARGET_LINUX)
 	// Wayland does not support getting window position
 	if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
@@ -1032,7 +1032,36 @@ void ofAppGLFWWindow::setFullscreen(bool fullscreen) {
 //	-(display);
 //
 //	//	setWindowShape(windowW, windowH);
-	setFSTarget(targetWindowMode);
+
+	// Real fullscreen via GLFW. glfwSetWindowMonitor abstracts the X11/Wayland
+	// difference internally (the EWMH path above is X11-only; left for reference).
+	// See wayland.md #2.
+	if (targetWindowMode == OF_FULLSCREEN) {
+		windowRectBackup = getWindowRect(); // restore on exit
+
+		GLFWmonitor * monitor = nullptr;
+		if (settings.fullscreenDisplays.size()) {
+			ofRectangle r = allMonitors.getRectFromMonitors(settings.fullscreenDisplays);
+			monitor = allMonitors.getMonitorForScreenRect(r);
+		} else {
+			monitor = allMonitors.getMonitorForScreenRect(getWindowRect());
+		}
+		if (!monitor) monitor = glfwGetPrimaryMonitor();
+
+		const GLFWvidmode * mode = monitor ? glfwGetVideoMode(monitor) : nullptr;
+		if (mode) {
+			glfwSetWindowMonitor(windowP, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+			windowRect = ofRectangle(0, 0, mode->width, mode->height);
+		}
+		// NOTE: spanning multiMonitorFullScreen needs X11 _NET_WM_FULLSCREEN_MONITORS
+		// and has no Wayland equivalent; single-monitor fullscreen only here.
+	} else if (targetWindowMode == OF_WINDOW) {
+		glfwSetWindowMonitor(windowP, NULL,
+			windowRectBackup.x, windowRectBackup.y,
+			windowRectBackup.width, windowRectBackup.height, GLFW_DONT_CARE);
+		windowRect = windowRectBackup;
+		setWindowTitle(settings.title);
+	}
 
 #endif
 	settings.windowMode = targetWindowMode;
@@ -1128,6 +1157,26 @@ namespace {
 		}
 		return modifiers;
 	}
+
+#ifdef TARGET_LINUX
+	// Decode the first UTF-8 codepoint from a NUL-terminated string (for glfwGetKeyName).
+	uint32_t utf8FirstCodepoint(const char * s) {
+		if (!s || !*s) return 0;
+		const unsigned char * u = reinterpret_cast<const unsigned char *>(s);
+		uint32_t c = u[0];
+		if (c < 0x80) return c;
+		int extra;
+		if ((c & 0xE0) == 0xC0) { c &= 0x1F; extra = 1; }
+		else if ((c & 0xF0) == 0xE0) { c &= 0x0F; extra = 2; }
+		else if ((c & 0xF8) == 0xF0) { c &= 0x07; extra = 3; }
+		else return 0;
+		for (int i = 0; i < extra; ++i) {
+			if ((u[i + 1] & 0xC0) != 0x80) return 0;
+			c = (c << 6) | (u[i + 1] & 0x3F);
+		}
+		return c;
+	}
+#endif
 
 unsigned long keycodeToUnicode([[maybe_unused]] ofAppGLFWWindow * window, int scancode, int modifier) {
 #ifdef TARGET_LINUX
@@ -1558,9 +1607,15 @@ void ofAppGLFWWindow::keyboard_cb(GLFWwindow * windowP_, int keycode, int scanco
 		// On Wayland, don't use X11-based keycodeToUnicode
 		#if defined(TARGET_LINUX)
 		if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
-			// For printable ASCII keys, use the keycode directly
-			if (keycode >= 32 && keycode <= 126) {
-				codepoint = keycode;
+			// glfwGetKeyName resolves the layout-correct base glyph via xkbcommon
+			// (unshifted; NULL for non-printable keys).
+			const char * keyName = glfwGetKeyName(keycode, scancode);
+			if (keyName) {
+				codepoint = utf8FirstCodepoint(keyName);
+				// glfwGetKeyName returns the unshifted glyph; apply Shift for ASCII letters.
+				if ((mods & GLFW_MOD_SHIFT) && codepoint >= 'a' && codepoint <= 'z') {
+					codepoint -= 32;
+				}
 			}
 			key = codepoint;
 		} else
