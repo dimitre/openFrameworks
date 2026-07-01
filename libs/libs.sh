@@ -186,9 +186,9 @@ if [[ -n "$PLATFORM" ]]; then
 	section "Using manually specified platform: $PLATFORM"
 else
 	# Auto-detect platform
-	if [[ "$OSTYPE" == "msys"* ]]; then
+	if [[ "$OSTYPE" == "cygwin"* ]]; then
 		PLATFORM=vs
-	elif [[ "$OSTYPE" == "cygwin"* ]]; then
+	elif [[ "$OSTYPE" == "msys"* ]]; then
 		PLATFORM=msys2
 	elif [[ "$OSTYPE" == "darwin"* ]]; then
 		PLATFORM=macos
