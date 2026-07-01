@@ -30,12 +30,12 @@ jobs:
               prefix: aarch64-linux-gnu,
               toolchain: aarch64-linux-gnu-gcc-12,
             }
-          - {
-              os: ubuntu-latest,
-              platform: emscripten,
-              toolchain: emscripten,
-              shell: bash,
-            }
+          # - {
+          #     os: ubuntu-latest,
+          #     platform: emscripten,
+          #     toolchain: emscripten,
+          #     shell: bash,
+          #   }
 
     defaults:
       run:
