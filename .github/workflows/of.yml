@@ -122,7 +122,7 @@ jobs:
 
       - name: Libs
         shell: bash
-        run: ./libs/libs.sh
+        run: ./libs/libs.sh --platform ${{ matrix.platform }}
 
       # - name: LS Libs
       #   shell: bash
