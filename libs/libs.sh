@@ -27,7 +27,7 @@ get_latest_chalet_version() {
 	if command -v curl &>/dev/null; then
 		latest_version=$(curl -s "https://api.github.com/repos/chalet-org/chalet/releases/latest" 2>/dev/null | grep -o '"tag_name": "[^"]*"' | head -1 | cut -d'"' -f4 | sed 's/^v//')
 	fi
-	echo "${latest_version:-0.8.18}"
+	echo "${latest_version:-0.8.19}"
 }
 
 CHALETVERSION=$(get_latest_chalet_version)
