@@ -241,6 +241,14 @@ void ofTemplateChalet::load() {
 		projectYaml["targets"]["empty"]["settings:Cxx"]["defines"].push_back(d);
 	}
 
+	// Precompiled header: opt-in by convention. If the project maintains its own
+	// src/pch.h, force-include it into every file in the target — no of.yml key
+	// needed, the project owns the contents of the PCH manually.
+	if (fs::exists("src/pch.h")) {
+		alert("	▸ src/pch.h found, enabling precompiledHeader", 94);
+		projectYaml["targets"]["empty"]["settings:Cxx"]["precompiledHeader"] = "src/pch.h";
+	}
+
 	// for (auto & f : conf.frameworks) {
 	// 	projectYaml["abstracts:*"]["appleFrameworks"].push_back(f);
 	// }
