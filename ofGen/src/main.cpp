@@ -150,7 +150,9 @@ int main(const int argc, const char * argv[]) {
 			conf.build();
 		} else if (conf.singleParameter == "bump") {
 			conf.bump();
-			// conf.buildProject();
+			// Regenerate chalet.yaml so the new version propagates to it.
+			conf.templateNames = { "chalet" };
+			conf.buildProject();
 			// conf.build();
 		} else if (conf.singleParameter == "buildrun") {
 			conf.buildProject();
@@ -196,6 +198,9 @@ int main(const int argc, const char * argv[]) {
 	// }
 
 	std::cout << std::endl;
+	if (!conf.bumpMessage.empty()) {
+		alert(conf.bumpMessage, 92); // reprint so it isn't buried in build output
+	}
 	alert(getVersion(), 92);
 	alert("https://ofworks.cc", 94);
 	std::cout << std::endl;

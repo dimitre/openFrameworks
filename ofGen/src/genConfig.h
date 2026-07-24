@@ -31,6 +31,7 @@ struct genConfig {
 	// 19 jan 2026
 	std::map<std::string, std::string> infoPlist;
 	std::string agentsContent;
+	std::string bumpMessage; // set by bump(), reprinted at the end so it isn't buried
 
 
 	std::string projectName { "" };

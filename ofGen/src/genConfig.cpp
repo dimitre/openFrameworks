@@ -385,7 +385,8 @@ bool genConfig::bump() {
 	outFile << yaml;
 	outFile.close();
 
-	alert("Bumped version: " + version + " -> " + newVersion, 92);
+	bumpMessage = "Bumped version: " + version + " -> " + newVersion;
+	alert(bumpMessage, 92);
 
 	// Update settings so buildProject sees the new version
 	settings["version"] = newVersion;
