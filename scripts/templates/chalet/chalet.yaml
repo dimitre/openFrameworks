@@ -246,8 +246,8 @@ abstracts:*:
       # - ${var:ofPath}/libs/${var:platform}/lib/kissfft-float.lib
 
       # - ${var:ofPath}/libs/${var:platform}/lib/mango.lib
-      - ${var:ofPath}/libs/${var:platform}/lib/mango-core.a
-      - ${var:ofPath}/libs/${var:platform}/lib/mango-image.a
+      - ${var:ofPath}/libs/${var:platform}/lib/mango-core.lib
+      - ${var:ofPath}/libs/${var:platform}/lib/mango-image.lib
       - ${var:ofPath}/libs/${var:platform}/lib/bz2_static.lib
       - ${var:ofPath}/libs/${var:platform}/lib/deflatestatic.lib
       - ${var:ofPath}/libs/${var:platform}/lib/lcms2.lib
