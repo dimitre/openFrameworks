@@ -186,10 +186,10 @@ if [[ -n "$PLATFORM" ]]; then
 	section "Using manually specified platform: $PLATFORM"
 else
 	# Auto-detect platform
-	if [[ "$OSTYPE" == "cygwin"* ]]; then
+	# Windows: cygwin, msys2 and git-bash (mingw) all use the vs libs,
+	# they are the only ones published by ofLibs for Windows.
+	if [[ "$OSTYPE" == "cygwin"* || "$OSTYPE" == "msys"* || "$OSTYPE" == "mingw"* || "$OSTYPE" == "win32" ]]; then
 		PLATFORM=vs
-	elif [[ "$OSTYPE" == "msys"* ]]; then
-		PLATFORM=msys2
 	elif [[ "$OSTYPE" == "darwin"* ]]; then
 		PLATFORM=macos
 	elif [[ "$OSTYPE" == "linux-gnu"* ]]; then

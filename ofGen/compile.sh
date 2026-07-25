@@ -35,10 +35,8 @@ sectionInstall() {
 }
 
 # Auto-detect platform
-if [[ "$OSTYPE" == "cygwin"* ]]; then
+if [[ "$OSTYPE" == "cygwin"* || "$OSTYPE" == "msys"* || "$OSTYPE" == "mingw"* || "$OSTYPE" == "win32" ]]; then
 	PLATFORM=vs
-elif [[ "$OSTYPE" == "msys"* ]]; then
-	PLATFORM=msys2
 elif [[ "$OSTYPE" == "darwin"* ]]; then
 	PLATFORM=macos
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
